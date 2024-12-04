@@ -1,4 +1,5 @@
 using AI.Interfaces;
+using Impacts.Interfaces;
 using Projectiles.Interfaces;
 using UnityEngine;
 using Weapons.Interfaces;
@@ -61,10 +62,9 @@ namespace Projectiles.Base
 
 			if (Impact != "")
 			{
-				var impact = Instantiate(Resources.Load<GameObject>($"Impact/{Impact}"));
-				var impactTr = impact.transform;
-				impactTr.position = transform.position;
-				impactTr.eulerAngles = transform.eulerAngles;
+				var go = Instantiate(Resources.Load<GameObject>($"Impacts/{Impact}"));
+				var im = go.GetComponent<IImpact>();
+				im.Spawn(this, transform.position, transform.eulerAngles);
 			}
 			
 			destroyed = true;
