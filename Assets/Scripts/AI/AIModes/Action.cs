@@ -43,7 +43,7 @@ namespace AI.AIModes
 
 		private void endActionIfNeeded()
 		{
-			if (!Owner.ActionModes[Owner.ActionMode].ReturnAfterTargetGone)
+			if (!Owner.EndActionWithoutTarget)
 				return;
 				
 			Owner.ReturnAIMode(true);

@@ -6,8 +6,6 @@ namespace AI.ActionModes
 	public class None : IActionMode
 	{
 		public NPC Owner { get; set; }
-
-		public bool ReturnAfterTargetGone => true;
 		
 		public void Enabled(NPC owner)
 		{

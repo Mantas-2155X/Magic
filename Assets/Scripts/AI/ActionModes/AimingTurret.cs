@@ -8,9 +8,7 @@ namespace AI.ActionModes
 	public class AimingTurret : IActionMode
 	{
 		public NPC Owner { get; set; }
-
-		public bool ReturnAfterTargetGone => true;
-
+		
 		private readonly AimAt aimAt = new (9f, 12f);
 		private readonly WithinRange withinRange = new (15f);
 		private readonly HasSight hasSight = new (5f, 11f);

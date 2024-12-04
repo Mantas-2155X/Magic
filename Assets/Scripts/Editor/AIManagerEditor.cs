@@ -141,7 +141,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Attack(aiManager.Player, EActionMode.ChaseAndKill);
+					npc.Act(aiManager.Player, EActionMode.ChaseAndKill, true);
 				}
 			}
 						
@@ -152,7 +152,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Attack(aiManager.Player, EActionMode.AimingTurret);
+					npc.Act(aiManager.Player, EActionMode.AimingTurret, true);
 				}
 			}
 			
@@ -163,7 +163,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Attack(null, EActionMode.RageTurret);
+					npc.Act(null, EActionMode.RageTurret, false);
 				}
 			}
 			

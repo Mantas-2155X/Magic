@@ -8,8 +8,6 @@ namespace AI.ActionModes
 	{
 		public NPC Owner { get; set; }
 		
-		public bool ReturnAfterTargetGone => false;
-
 		private readonly Vector2 degreesRange = new (9f, 12f);
 		
 		public void Enabled(NPC owner)

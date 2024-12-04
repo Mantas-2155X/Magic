@@ -6,8 +6,6 @@ namespace AI.Interfaces
 	{
 		public NPC Owner { get; set; }
 		
-		public bool ReturnAfterTargetGone { get; }
-		
 		public void Enabled(NPC owner);
 		
 		public void Disabled();

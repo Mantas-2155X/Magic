@@ -8,8 +8,6 @@ namespace AI.ActionModes
 	public class ChaseAndKill : IActionMode
 	{
 		public NPC Owner { get; set; }
-
-		public bool ReturnAfterTargetGone => true;
 		
 		private readonly AimAt aimAt = new (9f, 12f);
 		private readonly WithinRange withinRange = new (25f);

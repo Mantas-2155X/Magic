@@ -26,6 +26,8 @@ namespace AI
 		public Component Target { get; private set; }
 		public Vector3 Destination { get; private set; }
 		
+		public bool EndActionWithoutTarget { get; private set; }
+		
 		public readonly Dictionary<EAIMode, IAIMode> AIModes = new ()
 		{
 			{ EAIMode.Idle, new Idle() },
@@ -57,11 +59,13 @@ namespace AI
 			setAIMode(EAIMode.Walking);
 		}
 		
-		public void Attack(Component target, EActionMode mode)
+		public void Act(Component target, EActionMode mode, bool endWithoutTarget)
 		{
 			if (!IsAlive)
 				return;
 
+			EndActionWithoutTarget = endWithoutTarget;
+			
 			setTarget(target);
 			setActionMode(mode);
 			setAIMode(EAIMode.Action);
@@ -115,7 +119,7 @@ namespace AI
 			if (previousAIMode == EAIMode.Action)
 			{
 				// Protect from an infinite loop of walk-action when the target is gone and the action mode returns after target death
-				if (ActionModes[ActionMode].ReturnAfterTargetGone && Target == null)
+				if (EndActionWithoutTarget && Target == null)
 				{
 					setActionMode(EActionMode.None);
 					setAIMode(EAIMode.Idle);
@@ -168,6 +172,9 @@ namespace AI
 		{
 			if (ActionMode == mode)
 				return;
+
+			if (mode == EActionMode.None)
+				EndActionWithoutTarget = true;
 			
 			previousActionMode = ActionMode;
 			
