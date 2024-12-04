@@ -6,9 +6,6 @@ namespace Weapons.Base
 {
 	public class BaseProjectileWeapon : BaseWeapon
 	{
-		public virtual string Projectile { get; set; }
-		public virtual float Force { get; set; }
-
 		public override bool Attack()
 		{
 			var success = base.Attack();
@@ -24,9 +21,7 @@ namespace Weapons.Base
 			var go = Instantiate(Resources.Load<GameObject>($"Projectiles/{Projectile}"));
 
 			var pj = go.GetComponent<IProjectile>();
-			pj.Source = this;
-			pj.Owner = Owner;
-			pj.Spawn(Ray.origin + Ray.direction * 1f, Ray.direction * Force);
+			pj.Spawn(this, Ray.origin + Ray.direction * 1f, Ray.direction * Force);
 			
 			return true;
 		}

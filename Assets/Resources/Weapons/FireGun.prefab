@@ -647,6 +647,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90973ba9642e4ee08af061597bc181f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Force>k__BackingField: 7.5
+  <Projectile>k__BackingField: FireBall
+  <TimeBetweenAttacks>k__BackingField: 0.25
 --- !u!1 &7629905129422091128
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,17 +10,16 @@ namespace Projectiles.Base
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; private set; }
 		
-		public IWeapon Source { get; set; }
-
-		public IAlive Owner { get; set; }
+		public IWeapon Source { get; private set; }
 		
-		public virtual float Range { get; set; }
-		
-		public virtual float Lifetime { get; set; }
-		
-		public virtual int Damage { get; set; }
-		
-		public virtual string Impact { get; set; }
+		[field: SerializeField]
+		public float Range { get; private set; }
+		[field: SerializeField]
+		public float Lifetime { get; private set; }
+		[field: SerializeField]
+		public int Damage { get; private set; }
+		[field: SerializeField]
+		public string Impact { get; private set; }
 
 		private bool spawned;
 		private bool destroyed;
@@ -50,9 +49,9 @@ namespace Projectiles.Base
 				var alive = rb.GetComponent<IAlive>();
 				if (alive != null)
 				{
-					if (alive == Owner)
+					if (alive == Source.Owner)
 					{
-						Debug.Log($"[BaseProjectile {Owner.GetGameObject().name}] Not colliding with owner");
+						Debug.Log($"[BaseProjectile {Source.Owner.GetGameObject().name}] Not colliding with owner");
 						return;
 					}
 					
@@ -71,15 +70,17 @@ namespace Projectiles.Base
 			destroyed = true;
 			Destroy(gameObject);
 			
-			Debug.Log($"[BaseProjectile {Owner.GetGameObject().name}] Collided with {collision.transform.name}");
+			Debug.Log($"[BaseProjectile {Source.Owner.GetGameObject().name}] Collided with {collision.transform.name}");
 		}
 
-		public void Spawn(Vector3 origin, Vector3 force)
+		public void Spawn(IWeapon source, Vector3 origin, Vector3 force)
 		{
+			Source = source;
+			startingPosition = origin;
+			
 			Rigidbody.MovePosition(origin);
 			Rigidbody.AddForce(force, ForceMode.Impulse);
 			
-			startingPosition = origin;
 			spawned = true;
 			
 			Destroy(gameObject, Lifetime);

@@ -1,4 +1,3 @@
-using System;
 using Managers;
 using Tools;
 using UnityEngine;
@@ -8,8 +7,6 @@ namespace Weapons
 {
 	public class Creator : BaseWeapon
 	{
-		public override float TimeBetweenAttacks => 0.25f;
-
 		public override bool Attack()
 		{
 			var success = base.Attack();

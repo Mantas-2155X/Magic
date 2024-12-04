@@ -7,8 +7,6 @@ namespace Weapons
 {
 	public class Destroyer : BaseWeapon
 	{
-		public override float TimeBetweenAttacks => 0.25f;
-
 		public override bool Attack()
 		{
 			var success = base.Attack();

@@ -9,8 +9,6 @@ namespace Weapons
 {
 	public class Command : BaseWeapon
 	{
-		public override float TimeBetweenAttacks => 0.25f;
-
 		public override bool Attack()
 		{
 			var success = base.Attack();

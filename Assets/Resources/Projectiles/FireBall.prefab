@@ -4876,7 +4876,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Rigidbody>k__BackingField: {fileID: -6803533052199284734}
-  <ParticleSystem>k__BackingField: {fileID: 17089712329238078}
+  <Range>k__BackingField: 11
+  <Lifetime>k__BackingField: 1
+  <Damage>k__BackingField: 10
+  <Impact>k__BackingField: FireBall
 --- !u!135 &7443144026641663299
 SphereCollider:
   m_ObjectHideFlags: 0

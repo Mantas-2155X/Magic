@@ -1,4 +1,3 @@
-using AI.Interfaces;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -8,19 +7,14 @@ namespace Projectiles.Interfaces
 	{
 		public Rigidbody Rigidbody { get; }
 		
-		public IWeapon Source { get; set; }
+		public IWeapon Source { get; }
 		
-		public IAlive Owner { get; set; }
-
-		public float Range { get; set; }
-
-		public float Lifetime { get; set; }
+		public float Range { get; }
+		public float Lifetime { get; }
+		public int Damage { get; }
+		public string Impact { get; }
 		
-		public int Damage { get; set; }
-
-		public string Impact { get; set; }
-		
-		public void Spawn(Vector3 origin, Vector3 force);
+		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
 		
 		public GameObject GetGameObject();
 	}

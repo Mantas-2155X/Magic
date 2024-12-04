@@ -11,12 +11,17 @@ namespace Weapons.Base
 	public class BaseWeapon : MonoBehaviour, IWeapon
 	{
 		public IAlive Owner { get; private set; }
-		public virtual float TimeBetweenAttacks { get; private set; }
+		
+		[field: SerializeField]
+		public float Force { get; private set; }
+		[field: SerializeField]
+		public string Projectile { get; private set; }
+		[field: SerializeField]
+		public float TimeBetweenAttacks { get; private set; }
 		
 		public Ray Ray { get; private set; }
+		public float LastAttackTime { get; private set; }
 
-		private float lastAttackTime;
-		
 		public virtual void Take(IAlive alive)
 		{
 			if (alive == null || Owner != null)
@@ -71,7 +76,7 @@ namespace Weapons.Base
 			if (Owner == null)
 				return false;
 
-			return Time.time >= lastAttackTime + TimeBetweenAttacks;
+			return Time.time >= LastAttackTime + TimeBetweenAttacks;
 		}
 		
 		public virtual bool Attack()
@@ -81,7 +86,7 @@ namespace Weapons.Base
 
 			calculateRay();
 			
-			lastAttackTime = Time.time;
+			LastAttackTime = Time.time;
 			return true;
 		}
 		
