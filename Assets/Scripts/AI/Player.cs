@@ -43,7 +43,7 @@ namespace AI
 		public float MovementForce = 1f;
 		
 		[SerializeField]
-		public float JumpForce = 55f;
+		public float JumpForce = 80f;
 
 		[SerializeField]
 		public float SprintMultiplier = 1.25f;

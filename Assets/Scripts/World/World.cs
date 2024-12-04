@@ -24,6 +24,9 @@ namespace World
 
 		[SerializeField]
 		public Transform Ragdolls;
+
+		[SerializeField]
+		public float AdditionalGravity = -0.1f;
 		
 		public void Awake()
 		{
@@ -33,6 +36,27 @@ namespace World
 		public void Start()
 		{
 			AIManager.Instance.CreatePlayer(SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount)));
+		}
+		
+		public void FixedUpdate()
+		{
+			// Simulate an additional gravity that affects all beings
+			
+			var aiManager = AIManager.Instance;
+			var npcs = aiManager.NPCs;
+			var player = aiManager.Player;
+
+			if (player.IsAlive && !player.IsNoclip)
+				player.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);
+
+			for (var i = 0; i < npcs.Count; i++)
+			{
+				var npc = npcs[i];
+				if (!npc.IsAlive || npc.Agent.enabled || npc.IsNoclip)
+					continue;
+
+				npc.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);
+			}
 		}
 	}
 }
