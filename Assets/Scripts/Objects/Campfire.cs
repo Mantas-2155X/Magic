@@ -12,7 +12,7 @@ namespace Objects
 		[SerializeField]
 		public int Damage = 3;
 
-		private List<IAlive> alives = new ();
+		private readonly List<IAlive> alives = new ();
 		
 		private int duration;
 

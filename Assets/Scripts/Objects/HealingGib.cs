@@ -6,11 +6,11 @@ namespace Objects
 {
 	public class HealingGib : BaseUsable
 	{
+		public override bool DestroyAfterUse => true;
+
 		[SerializeField]
 		public int HealAmount = 10;
 		
-		public override bool DestroyAfterUse => true;
-
 		public override void Use(IAlive user)
 		{
 			user.Heal(HealAmount, this);

@@ -6,7 +6,8 @@ namespace Objects.Base
 {
 	public class BaseUsable : MonoBehaviour, IUsable
 	{
-		public virtual bool DestroyAfterUse { get; private set; } = true;
+		[field: SerializeField]
+		public virtual bool DestroyAfterUse { get; private set; }
 
 		public virtual void Use(IAlive user)
 		{

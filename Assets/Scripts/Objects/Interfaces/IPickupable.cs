@@ -5,8 +5,8 @@ namespace Objects.Interfaces
 {
 	public interface IPickupable
 	{
-		public string[] PickupLayers { get; }
-		
+		public LayerMask PickupLayers { get; }
+		public float PickupableAfter { get; }
 		public bool DestroyAfterPickup { get; }
 		
 		public bool CanPickup(IAlive user);

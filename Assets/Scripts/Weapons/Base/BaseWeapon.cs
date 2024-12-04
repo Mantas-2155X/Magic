@@ -13,11 +13,11 @@ namespace Weapons.Base
 		public IAlive Owner { get; private set; }
 		
 		[field: SerializeField]
-		public float Force { get; private set; }
+		public virtual float Force { get; private set; }
 		[field: SerializeField]
-		public string Projectile { get; private set; }
+		public virtual string Projectile { get; private set; }
 		[field: SerializeField]
-		public float TimeBetweenAttacks { get; private set; }
+		public virtual float TimeBetweenAttacks { get; private set; }
 		
 		public Ray Ray { get; private set; }
 		public float LastAttackTime { get; private set; }
@@ -46,7 +46,7 @@ namespace Weapons.Base
 			}
 			
 			var ownerTr = Owner.GetGameObject().transform;
-			var go = Instantiate(Resources.Load<GameObject>("DroppedWeapon"));
+			var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
 			var addPos = Vector3.zero;
 			
 			if (Physics.Raycast(new Ray(ownerTr.position, ownerTr.forward), 1f, ~LayerMaskTools.Mask2))

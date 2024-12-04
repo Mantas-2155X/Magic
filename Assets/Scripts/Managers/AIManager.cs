@@ -21,7 +21,7 @@ namespace Managers
 
 		public NPC CreateNPC(Vector3 position, Vector3 angles)
 		{
-			var go = Instantiate(Resources.Load<GameObject>("NPC"));
+			var go = Instantiate(Resources.Load<GameObject>("Alives/NPC"));
 			go.name = $"NPC {NPCs.Count}";
 			
 			var tr = go.transform;
@@ -52,7 +52,7 @@ namespace Managers
 				Player = null;
 			}
 			
-			var go = Instantiate(Resources.Load<GameObject>("Player"));
+			var go = Instantiate(Resources.Load<GameObject>("Alives/Player"));
 			go.name = "Player";
 			
 			var tr = go.transform;

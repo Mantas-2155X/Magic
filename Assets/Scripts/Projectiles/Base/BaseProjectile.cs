@@ -14,13 +14,13 @@ namespace Projectiles.Base
 		public IWeapon Source { get; private set; }
 		
 		[field: SerializeField]
-		public float Range { get; private set; }
+		public virtual float Range { get; private set; }
 		[field: SerializeField]
-		public float Lifetime { get; private set; }
+		public virtual float Lifetime { get; private set; }
 		[field: SerializeField]
-		public int Damage { get; private set; }
+		public virtual int Damage { get; private set; }
 		[field: SerializeField]
-		public string Impact { get; private set; }
+		public virtual string Impact { get; private set; }
 
 		private bool spawned;
 		private bool destroyed;

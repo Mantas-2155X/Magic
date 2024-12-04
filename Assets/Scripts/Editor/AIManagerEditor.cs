@@ -197,7 +197,7 @@ namespace Editor
 
 				foreach (var tr in trs)
 				{
-					var go = Instantiate(Resources.Load<GameObject>("DroppedWeapon"));
+					var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
 					var dropped = go.GetComponent<DroppedWeapon>();
 					dropped.Weapon = Weapon;
 					dropped.Pickup(tr.GetComponent<IAlive>());

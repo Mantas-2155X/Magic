@@ -8,18 +8,17 @@ namespace Objects.Base
 {
 	public class BasePickupable : MonoBehaviour, IPickupable
 	{
-		[SerializeField]
-		public float PickupableAfter = 1;
+		[field: SerializeField]
+		public virtual LayerMask PickupLayers { get; private set; }
+		[field: SerializeField]
+		public virtual float PickupableAfter { get; private set; }
+		[field: SerializeField]
+		public virtual bool DestroyAfterPickup { get; private set; }
 
-		public virtual string[] PickupLayers { get; private set; } = {"NPC", "Player"};
-		public virtual bool DestroyAfterPickup { get; private set; } = true;
-
-		private LayerMask filterMask;
 		private bool pickupable;
 
 		public void Awake()
 		{
-			filterMask = LayerMask.GetMask(PickupLayers);
 			setPickupable().Forget();
 		}
 
@@ -51,7 +50,7 @@ namespace Objects.Base
 				return;
 			
 			var alive = other.GetComponent<IAlive>();
-			if (alive == null || !filterMask.ContainsLayer(other.gameObject.layer))
+			if (alive == null || !PickupLayers.ContainsLayer(other.gameObject.layer))
 				return;
 
 			Pickup(alive);

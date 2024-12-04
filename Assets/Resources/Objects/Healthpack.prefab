@@ -342,7 +342,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a3373c1334431c91fd9228defa266a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickupableAfter: 1
+  <PickupLayers>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 192
+  <PickupableAfter>k__BackingField: 1
+  <DestroyAfterPickup>k__BackingField: 1
   HealAmount: 25
 --- !u!54 &3316694170350746493
 Rigidbody:
