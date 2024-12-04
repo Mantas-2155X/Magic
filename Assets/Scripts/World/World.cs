@@ -26,6 +26,9 @@ namespace World
 		public Transform Ragdolls;
 
 		[SerializeField]
+		public Transform Dropped;
+
+		[SerializeField]
 		public float AdditionalGravity = -0.1f;
 		
 		public void Awake()

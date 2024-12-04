@@ -22,6 +22,9 @@ namespace Projectiles.Base
 		[field: SerializeField]
 		public virtual string Impact { get; private set; }
 
+		private IAlive owner;
+		private string ownerName;
+		
 		private bool spawned;
 		private bool destroyed;
 
@@ -50,9 +53,9 @@ namespace Projectiles.Base
 				var alive = rb.GetComponent<IAlive>();
 				if (alive != null)
 				{
-					if (alive == Source.Owner)
+					if (alive == owner)
 					{
-						Debug.Log($"[BaseProjectile {Source.Owner.GetGameObject().name}] Not colliding with owner");
+						Debug.Log($"[BaseProjectile {ownerName}] Not colliding with owner");
 						return;
 					}
 					
@@ -70,13 +73,16 @@ namespace Projectiles.Base
 			destroyed = true;
 			Destroy(gameObject);
 			
-			Debug.Log($"[BaseProjectile {Source.Owner.GetGameObject().name}] Collided with {collision.transform.name}");
+			Debug.Log($"[BaseProjectile {ownerName}] Collided with {collision.transform.name}");
 		}
 
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force)
 		{
 			Source = source;
 			startingPosition = origin;
+
+			owner = Source.Owner;
+			ownerName = owner.GetGameObject().name;
 			
 			Rigidbody.MovePosition(origin);
 			Rigidbody.AddForce(force, ForceMode.Impulse);

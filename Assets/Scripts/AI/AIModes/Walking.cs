@@ -96,6 +96,9 @@ namespace AI.AIModes
 			var normalizedTime = 0.0f;
 			while (normalizedTime < 1.0f)
 			{
+				if (Owner == null)
+					return;
+
 				if (Owner.AIMode != EAIMode.Walking || !Owner.IsAlive)
 				{
 					forceFinishJump();
@@ -126,6 +129,9 @@ namespace AI.AIModes
 			
 			while (Quaternion.Angle(transform.rotation, targetRotation) > 5f)
 			{
+				if (Owner == null)
+					return;
+
 				if (Owner.AIMode != EAIMode.Walking)
 				{
 					forceFinishJump();

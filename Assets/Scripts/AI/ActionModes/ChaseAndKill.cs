@@ -113,10 +113,7 @@ namespace AI.ActionModes
 			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(9f, 12f));
 			
 			if (Quaternion.Angle(transform.rotation, targetRotation) < 5f)
-			{
-				Debug.Log($"Attacking at distance {Vector3.Distance(transform.position, target.position)}");
 				weapon?.Attack();
-			}
 		}
 		
 		public void TargetChanged(Component previousTarget, Component newTarget)

@@ -696,6 +696,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4151727681016426355, guid: 7b59211443c8dcd36b3362fd344e70b9, type: 3}
   m_PrefabInstance: {fileID: 148462020}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &174416575
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 174416576}
+  m_Layer: 0
+  m_Name: Dropped
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &174416576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174416575}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &182522617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1797,6 +1828,7 @@ MonoBehaviour:
   SpawnPoints: {fileID: 1548703818}
   Characters: {fileID: 544258523}
   Ragdolls: {fileID: 1178675831}
+  Dropped: {fileID: 174416576}
   AdditionalGravity: -0.1
 --- !u!4 &646561133
 Transform:
@@ -5893,6 +5925,7 @@ SceneRoots:
   - {fileID: 1548703818}
   - {fileID: 544258523}
   - {fileID: 1178675831}
+  - {fileID: 174416576}
   - {fileID: 410087041}
   - {fileID: 646561133}
   - {fileID: 1036530119}

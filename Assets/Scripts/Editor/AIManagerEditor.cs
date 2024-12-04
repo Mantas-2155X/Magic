@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using AI.Enums;
 using AI.Interfaces;
 using Managers;
 using Objects;
 using Tools;
-using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -22,7 +20,7 @@ namespace Editor
 			var aiManager = AIManager.Instance;
 			var world = World.World.Instance;
 			
-			if (aiManager == null || world == null)
+			if (aiManager == null || world == null || aiManager.Player == null)
 			{
 				base.OnInspectorGUI();
 				serializedObject.ApplyModifiedProperties();
@@ -62,9 +60,6 @@ namespace Editor
 
 			if (GUILayout.Button("Create at cam target"))
 			{
-				if (aiManager.Player == null)
-					return;
-				
 				var ray = aiManager.Player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 				var pos = Vector3.zero;
 
@@ -102,9 +97,6 @@ namespace Editor
 
 			if (GUILayout.Button("Camera target"))
 			{
-				if (aiManager.Player == null)
-					return;
-
 				var ray = aiManager.Player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 				var pos = Vector3.zero;
 
@@ -181,26 +173,37 @@ namespace Editor
 
 			GUILayout.BeginHorizontal();
 			
-			Weapon = EditorGUILayout.TextField(Weapon);
-			if (GUILayout.Button("Give everyone Weapon"))
+			EditorGUIUtility.labelWidth = 75f;
+			Weapon = EditorGUILayout.TextField("Weapon", Weapon);
+			EditorGUIUtility.labelWidth = 0f;
+
+			if (GUILayout.Button("Give Player"))
 			{
-				var trs = new List<Transform>();
-				trs.Add(aiManager.Player.transform);
+				var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
 				
+				var tr = go.transform;
+				tr.SetParent(World.World.Instance.Dropped);
+				
+				var dropped = go.GetComponent<DroppedWeapon>();
+				dropped.Weapon = Weapon;
+				dropped.Pickup(aiManager.Player.transform.GetComponent<IAlive>());
+			}
+			
+			if (GUILayout.Button("Give NPCs"))
+			{
 				foreach (var npc in aiManager.NPCs)
 				{
 					if (!npc.IsAlive)
 						continue;
 
-					trs.Add(npc.transform);
-				}
-
-				foreach (var tr in trs)
-				{
 					var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
+					
+					var tr = go.transform;
+					tr.SetParent(World.World.Instance.Dropped);
+
 					var dropped = go.GetComponent<DroppedWeapon>();
 					dropped.Weapon = Weapon;
-					dropped.Pickup(tr.GetComponent<IAlive>());
+					dropped.Pickup(npc.transform.GetComponent<IAlive>());
 				}
 			}
 			
@@ -208,7 +211,6 @@ namespace Editor
 			
 			GUILayout.Label("Status:", EditorStyles.boldLabel);
 			
-			if (aiManager.Player != null)
 			{
 				GUILayout.BeginHorizontal();
 

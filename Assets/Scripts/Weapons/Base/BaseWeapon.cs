@@ -45,9 +45,8 @@ namespace Weapons.Base
 				return;
 			}
 			
-			var ownerTr = Owner.GetGameObject().transform;
-			var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
 			var addPos = Vector3.zero;
+			var ownerTr = Owner.GetGameObject().transform;
 			
 			if (Physics.Raycast(new Ray(ownerTr.position, ownerTr.forward), 1f, ~LayerMaskTools.Mask2))
 			{
@@ -58,8 +57,13 @@ namespace Weapons.Base
 				addPos = ownerTr.forward * 0.65f;
 			}
 			
-			go.transform.position = ownerTr.position + addPos;
-			go.transform.eulerAngles = ownerTr.eulerAngles;
+			var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
+			
+			var tr = go.transform;
+			tr.SetParent(World.World.Instance.Dropped);
+
+			tr.position = ownerTr.position + addPos;
+			tr.eulerAngles = ownerTr.eulerAngles;
 			
 			var rb = go.GetComponent<Rigidbody>();
 			rb.MovePosition(ownerTr.position + addPos);
