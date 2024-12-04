@@ -19,6 +19,8 @@ namespace Projectiles.Base
 		public virtual float Lifetime { get; set; }
 		
 		public virtual int Damage { get; set; }
+		
+		public virtual string Impact { get; set; }
 
 		private bool spawned;
 		private bool destroyed;
@@ -56,6 +58,14 @@ namespace Projectiles.Base
 					
 					alive.Damage(Damage, this);
 				}
+			}
+
+			if (Impact != "")
+			{
+				var impact = Instantiate(Resources.Load<GameObject>($"Impact/{Impact}"));
+				var impactTr = impact.transform;
+				impactTr.position = transform.position;
+				impactTr.eulerAngles = transform.eulerAngles;
 			}
 			
 			destroyed = true;

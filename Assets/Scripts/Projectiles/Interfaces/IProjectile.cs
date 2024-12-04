@@ -18,6 +18,8 @@ namespace Projectiles.Interfaces
 		
 		public int Damage { get; set; }
 
+		public string Impact { get; set; }
+		
 		public void Spawn(Vector3 origin, Vector3 force);
 		
 		public GameObject GetGameObject();
