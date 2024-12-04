@@ -9,6 +9,8 @@ namespace AI.ActionModes
 		public NPC Owner { get; set; }
 		
 		public bool ReturnAfterTargetGone => false;
+
+		private readonly Vector2 degreesRange = new (9f, 12f);
 		
 		public void Enabled(NPC owner)
 		{
@@ -31,11 +33,9 @@ namespace AI.ActionModes
 				return;
 			
 			var transform = Owner.transform;
-			var weapon = Owner.Weapon;
+			transform.Rotate(transform.up, Random.Range(degreesRange.x, degreesRange.y));
 			
-			transform.Rotate(transform.up, Random.Range(9f, 12f));
-			
-			weapon?.Attack();
+			Owner.Weapon?.Attack();
 		}
 
 		public void TargetChanged(Component previousTarget, Component newTarget)

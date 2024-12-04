@@ -1,3 +1,4 @@
+using AI.ActionModes.Shared;
 using AI.Enums;
 using AI.Interfaces;
 using UnityEngine;
@@ -10,16 +11,17 @@ namespace AI.ActionModes
 
 		public bool ReturnAfterTargetGone => true;
 		
-		private float followRange = 25f;
-		private float stopAt = 10f;
-
-		private bool currentlyFollowing;
-		private float currentStopAt;
+		private readonly AimAt aimAt = new (9f, 12f);
+		private readonly WithinRange withinRange = new (25f);
+		private readonly HasSight hasSight = new (5f, 11f);
+		private readonly Chase chase = new (10f);
+		
+		private bool shouldReach;
 		
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
-			currentStopAt = stopAt;
+			chase.ResetCurrentStopAt();
 		}
 		
 		public void Disabled()
@@ -34,86 +36,29 @@ namespace AI.ActionModes
 
 			var target = Owner.Target.transform;
 			var transform = Owner.transform;
-			var targetToOwnerDistance = Vector3.Distance(target.position, transform.position);
-			
-			// Target too far, give up chasing
-			if (targetToOwnerDistance > followRange)
-			{
-				currentlyFollowing = false;
+
+			shouldReach = withinRange.DistanceCheck(transform, target);
+			if (!shouldReach)
 				return;
-			}
-			
-			currentlyFollowing = true;
 
-			// Try to stop at this distance
-			var currentStopTarget = currentStopAt + Owner.Agent.stoppingDistance;
-			
-			// NPC not within target range, keep walking
-			if (targetToOwnerDistance > currentStopTarget)
-			{
-				// Target within destination range, keep current path
-				if (Vector3.Distance(target.position, Owner.Destination) <= currentStopAt + Owner.Agent.stoppingDistance)
-				{
-					if (Owner.AIMode != EAIMode.Walking)
-						Owner.Walk(target.position);
-
-					return;
-				}
-				
-				// Target moved away from destination range, reset the path
-				if (currentStopAt < stopAt)
-				{
-					currentStopAt = stopAt;
-					Debug.Log($"[NPC {transform.name}] Resetting ChaseAndKill chase range because target moved away");
-				}
-
-				Owner.Walk(target.position);
+			var reachedTarget = chase.TryReachTarget(Owner, target);
+			if (!reachedTarget)
 				return;
-			}
 
-			// Within range but can't see the target, reduce the stop range to walk closer to the target
-			if (!Owner.HasSightOf(Owner.Target, stopAt + Owner.Agent.stoppingDistance))
-			{
-				currentStopAt /= 1.2f;
-				Debug.Log($"[NPC {transform.name}] Reducing ChaseAndKill chase range to {currentStopAt}");
-
-				if (Owner.AIMode != EAIMode.Walking)
-					Owner.Walk(target.position);
-				
-				return;
-			}
-
-			currentStopAt = stopAt;
-
-			// Reached walking range
 			if (Owner.AIMode == EAIMode.Walking)
-			{
-				// Performing jump, stay on walking state
-				if (Owner.Agent.isOnOffMeshLink)
-					return;
-				
-				// Go back to action
 				Owner.ReturnAIMode();
-			}
 		}
 		
 		public void FixedUpdate()
 		{
-			if (Owner.AIMode != EAIMode.Action || Owner.Target == null || !currentlyFollowing)
+			if (Owner.AIMode != EAIMode.Action || Owner.Target == null || !shouldReach)
 				return;
-
+			
 			var target = Owner.Target.transform;
-			var transform = Owner.transform;
-			var weapon = Owner.Weapon;
-
-			var targetPosition = target.position - transform.position;
-			targetPosition.y = 0;
+			var lookRotation = aimAt.AimStep(Owner.transform, target);
 			
-			var targetRotation = Quaternion.LookRotation(targetPosition);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(9f, 12f));
-			
-			if (Quaternion.Angle(transform.rotation, targetRotation) < 5f)
-				weapon?.Attack();
+			if (hasSight.SightCheck(Owner, target, lookRotation))
+				Owner.Weapon?.Attack();
 		}
 		
 		public void TargetChanged(Component previousTarget, Component newTarget)

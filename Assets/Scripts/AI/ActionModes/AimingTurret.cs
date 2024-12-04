@@ -1,3 +1,4 @@
+using AI.ActionModes.Shared;
 using AI.Enums;
 using AI.Interfaces;
 using UnityEngine;
@@ -9,11 +10,11 @@ namespace AI.ActionModes
 		public NPC Owner { get; set; }
 
 		public bool ReturnAfterTargetGone => true;
+
+		private readonly AimAt aimAt = new (9f, 12f);
+		private readonly WithinRange withinRange = new (15f);
+		private readonly HasSight hasSight = new (5f, 11f);
 		
-		private float followRange = 15f;
-
-		private bool currentlyFollowing;
-
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
@@ -26,27 +27,24 @@ namespace AI.ActionModes
 		
 		public void Update()
 		{
-			var targetToOwnerDistance = Vector3.Distance(Owner.Target.transform.position, Owner.transform.position);
-			currentlyFollowing = targetToOwnerDistance <= followRange;
+			
 		}
 		
 		public void FixedUpdate()
 		{
-			if (Owner.AIMode != EAIMode.Action || Owner.Target == null || !currentlyFollowing)
+			if (Owner.AIMode != EAIMode.Action || Owner.Target == null)
 				return;
 			
-			var target = Owner.Target.transform;
 			var transform = Owner.transform;
-			var weapon = Owner.Weapon;
+			var target = Owner.Target.transform;
+			
+			if (!withinRange.DistanceCheck(transform, target))
+				return;
 
-			var targetPosition = target.position - transform.position;
-			targetPosition.y = 0;
+			var lookRotation = aimAt.AimStep(transform, target);
 			
-			var targetRotation = Quaternion.LookRotation(targetPosition);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(9f, 12f));
-			
-			if (Quaternion.Angle(transform.rotation, targetRotation) < 5f && Owner.HasSightOf(Owner.Target, 11f))
-				weapon?.Attack();
+			if (hasSight.SightCheck(Owner, target, lookRotation))
+				Owner.Weapon?.Attack();
 		}
 		
 		public void TargetChanged(Component previousTarget, Component newTarget)
