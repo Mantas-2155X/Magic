@@ -217,11 +217,8 @@ namespace AI
 			if (!IsAlive)
 				return;
 
-			if (Target != null)
-			{
-				if (Target is IAlive alive && !alive.IsAlive)
-					setTarget(null);
-			}
+			if (Target != null && Target is IAlive alive && !alive.IsAlive)
+				setTarget(null);
 			
 			if (Agent.hasPath)
 				ShouldSway = true;

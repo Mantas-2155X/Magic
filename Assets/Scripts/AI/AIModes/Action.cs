@@ -22,7 +22,7 @@ namespace AI.AIModes
 		
 		public void Update()
 		{
-			Owner.ActionModes[Owner.ActionMode].Update();
+			
 		}
 		
 		public void FixedUpdate()
