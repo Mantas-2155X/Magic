@@ -1,0 +1,352 @@
+using AI.Base;
+using Objects.Interfaces;
+using Tools;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace AI
+{
+	public class Player : BaseAlive
+	{
+		#region Input
+
+		[SerializeField]
+		public InputActionReference LookAction;
+		
+		[SerializeField]
+		public InputActionReference MoveAction;
+
+		[SerializeField]
+		public InputActionReference JumpAction;
+		
+		[SerializeField]
+		public InputActionReference FallAction;
+		
+		[SerializeField]
+		public InputActionReference SprintAction;
+
+		[SerializeField]
+		public InputActionReference UseAction;
+
+		[SerializeField]
+		public InputActionReference AttackAction;
+		
+		[SerializeField]
+		public InputActionReference NoclipAction;
+
+		[SerializeField]
+		public InputActionReference DropAction;
+
+		#endregion
+
+		[SerializeField]
+		public float MovementForce = 1f;
+		
+		[SerializeField]
+		public float JumpForce = 55f;
+
+		[SerializeField]
+		public float SprintMultiplier = 1.25f;
+
+		[SerializeField]
+		public float LookSensitivity = 0.1f;
+		
+		[SerializeField]
+		public float StopSlide = 0.65f;
+		
+		[SerializeField]
+		public float AirMovement = 0.1f;
+
+		[SerializeField]
+		public float SpeedClampModifier = 0.91f;
+		
+		public Camera Camera { get; private set; }
+		public Transform CameraTr { get; private set; }
+
+		private bool walking;
+		private bool jumpPressed;
+		private bool fallPressed;
+		
+		private Vector2 lookDirection;
+		private Vector2 moveDirection;
+		
+		// Smooth movement with first person camera and rigidbodies
+		//
+		// RigidBody:
+		// 1. Enable Interpolation
+		//
+		// FixedUpdate:
+		// 1. Rotate the object according to mouse direction
+		//
+		// LateUpdate:
+		// 1. Rotate the camera according to mouse direction
+		// 2. Set the camera position according to object position
+
+		#region MonoBehaviour
+
+		public void Awake()
+		{
+			Camera = Camera.main;
+			CameraTr = Camera!.transform;
+			lookDirection = new Vector2(transform.eulerAngles.x, transform.eulerAngles.y);
+		}
+		
+		public void LateUpdate()
+		{
+			if (!IsAlive)
+				return;
+
+			CameraTr.eulerAngles = new Vector3(lookDirection.x, lookDirection.y, 0f);
+			CameraTr.position = transform.position + transform.up * 0.5f + transform.forward * 0.25f;
+		}
+
+		public void FixedUpdate()
+		{
+			if (!IsAlive)
+				return;
+
+			transform.eulerAngles = new Vector3(0, lookDirection.y, 0f);
+
+			if (IsNoclip)
+			{
+				Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * SprintMultiplier : 1f), ForceMode.VelocityChange);
+				
+				if (jumpPressed)
+					Rigidbody.AddForce(0f, 1f, 0f, ForceMode.VelocityChange);
+				else if (fallPressed)
+					Rigidbody.AddForce(0f, -1f, 0f, ForceMode.VelocityChange);
+				
+				return;
+			}
+			
+			var grounded = IsGrounded();
+
+			if (moveDirection == Vector2.zero)
+			{
+				if (!grounded)
+					return;
+
+				// Adjust how fast the rigidbody stops after letting go of controls
+				var velocity = Rigidbody.linearVelocity;
+				velocity.x *= StopSlide;
+				velocity.z *= StopSlide;
+				
+				Rigidbody.linearVelocity = velocity;
+				
+				// Jump now since the rest of the code isn't ran
+				if (jumpPressed)
+					Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
+
+				return;
+			}
+
+			var movement = MovementForce;
+			
+			// Adjust how much control force is weakened if not grounded
+			if (!grounded)
+				movement *= AirMovement;
+			
+			Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * movement, ForceMode.VelocityChange);
+			
+			if (!grounded)
+				return;
+			
+			// Limit the rigidbody walking speed
+			var maxSpeed = SprintAction.action.IsPressed() ? MaximumSpeed * SprintMultiplier : MaximumSpeed;
+			Rigidbody.linearVelocity = Vector3.ClampMagnitude(Rigidbody.linearVelocity, maxSpeed * SpeedClampModifier);
+
+			// Jump after speed limits and other forces to prevent irregularity
+			if (jumpPressed)
+				Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
+		}
+		
+		#endregion
+
+		#region Input
+
+		private void enableInput()
+		{
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+
+			var look = LookAction.action;
+			look.performed += onLookPerformed;
+			look.Enable();
+			
+			var move = MoveAction.action;
+			move.performed += onMovePerformed;
+			move.canceled += onMoveCanceled;
+			move.Enable();
+			
+			var jump = JumpAction.action;
+			jump.performed += onJumpPerformed;
+			jump.canceled += onJumpCanceled;
+			jump.Enable();
+			
+			var fall = FallAction.action;
+			fall.performed += onFallPerformed;
+			fall.canceled += onFallCanceled;
+			fall.Enable();
+			
+			var use = UseAction.action;
+			use.performed += onUse;
+			use.Enable();
+			
+			var attack = AttackAction.action;
+			attack.performed += onAttack;
+			attack.Enable();
+			
+			var noclip = NoclipAction.action;
+			noclip.performed += onNoclip;
+			noclip.Enable();
+			
+			var drop = DropAction.action;
+			drop.performed += onDrop;
+			drop.Enable();
+			
+			var sprint = SprintAction.action;
+			sprint.Enable();
+		}
+
+		private void disableInput()
+		{
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
+
+			var look = LookAction.action;
+			look.performed -= onLookPerformed;
+			look.Disable();
+			
+			var move = MoveAction.action;
+			move.performed -= onMovePerformed;
+			move.canceled -= onMoveCanceled;
+			move.Disable();
+			
+			var jump = JumpAction.action;
+			jump.performed -= onJumpPerformed;
+			jump.canceled -= onJumpCanceled;
+			jump.Disable();
+			
+			var fall = FallAction.action;
+			fall.performed -= onFallPerformed;
+			fall.canceled -= onFallCanceled;
+			fall.Disable();
+			
+			var use = UseAction.action;
+			use.performed -= onUse;
+			use.Disable();
+			
+			var attack = AttackAction.action;
+			attack.performed -= onAttack;
+			attack.Disable();
+						
+			var noclip = NoclipAction.action;
+			noclip.performed -= onNoclip;
+			noclip.Disable();
+			
+			var drop = DropAction.action;
+			drop.performed -= onDrop;
+			drop.Disable();
+
+			var sprint = SprintAction.action;
+			sprint.Disable();
+		}
+
+		private void onLookPerformed(InputAction.CallbackContext ctx)
+		{
+			var value = ctx.ReadValue<Vector2>();
+			lookDirection += new Vector2(-value.y, value.x) * LookSensitivity;
+
+			if (lookDirection.x > 85)
+				lookDirection.x = 85;
+			
+			if (lookDirection.x < -85)
+				lookDirection.x = -85;
+		}
+
+		private void onMovePerformed(InputAction.CallbackContext ctx)
+		{
+			moveDirection = ctx.ReadValue<Vector2>();
+			walking = true;
+			ShouldSway = true;
+		}
+		
+		private void onMoveCanceled(InputAction.CallbackContext ctx)
+		{
+			moveDirection = Vector2.zero;
+			walking = false;
+		}
+		
+		private void onJumpPerformed(InputAction.CallbackContext ctx)
+		{
+			jumpPressed = true;
+		}
+		
+		private void onJumpCanceled(InputAction.CallbackContext ctx)
+		{
+			jumpPressed = false;
+		}
+		
+		private void onFallPerformed(InputAction.CallbackContext ctx)
+		{
+			fallPressed = true;
+		}
+
+		private void onFallCanceled(InputAction.CallbackContext ctx)
+		{
+			fallPressed = false;
+		}
+		
+		private void onUse(InputAction.CallbackContext ctx)
+		{
+			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, 1.5f, ~LayerMaskTools.Mask1))
+				return;
+
+			var rb = hit.rigidbody;
+			if (rb == null)
+				return;
+			
+			var usable = rb.GetComponent<IUsable>();
+			usable?.Use(this);
+		}
+		
+		private void onAttack(InputAction.CallbackContext ctx)
+		{
+			Weapon?.Attack();
+		}
+		
+		private void onNoclip(InputAction.CallbackContext ctx)
+		{
+			SetNoclip(!IsNoclip);
+		}
+		
+		private void onDrop(InputAction.CallbackContext ctx)
+		{
+			DropWeapon();
+		}
+
+		#endregion
+		
+		#region IAlive
+		
+		public override Color EyesColor => Color.blue;
+
+		public override float CurrentSpeed => walking ? Rigidbody.linearVelocity.magnitude : MaximumSpeed;
+
+		public override bool IsWalking => walking;
+
+		public override void Spawn(int startingHealth, int overloadHealth, float maximumSpeed)
+		{
+			base.Spawn(startingHealth, overloadHealth, maximumSpeed);
+			enableInput();
+		}
+		
+		public override void Kill(object source)
+		{
+			disableInput();
+			base.Kill(source);
+		}
+
+		#endregion
+	}
+}
