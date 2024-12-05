@@ -88,7 +88,7 @@ namespace Weapons.Base
 			if (!CanAttack())
 				return false;
 
-			calculateRay();
+			CalculateRay();
 			
 			LastAttackTime = Time.time;
 			return true;
@@ -99,9 +99,17 @@ namespace Weapons.Base
 			return gameObject;
 		}
 
-		private void calculateRay()
+		public virtual void CalculateRay()
 		{
 			Ray = default;
+			
+			var ownerTr = Owner.GetGameObject().transform;
+			
+			if (!Owner.IsAiming)
+			{
+				Ray = new Ray(ownerTr.position + ownerTr.up * 0.5f, ownerTr.forward);
+				return;
+			}
 			
 			switch (Owner)
 			{
@@ -109,10 +117,17 @@ namespace Weapons.Base
 					Ray = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 					break;
 				case NPC npc:
-					var ownerTr = npc.transform;
-					var direction = npc.Target == null ? ownerTr.forward : (((Component)npc.Target).transform.position - ownerTr.position).normalized;
+				{
+					Vector3 direction;
+					
+					if (npc.Target == null)
+						direction = ownerTr.forward;
+					else
+						direction = (npc.Target.transform.position - ownerTr.position).normalized;
+					
 					Ray = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;
+				}
 				default:
 					throw new NotImplementedException();
 			}

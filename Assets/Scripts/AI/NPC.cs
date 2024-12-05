@@ -81,8 +81,9 @@ namespace AI
 			if (!IsAlive)
 				return;
 
+			IsAiming = false;
 			EndActionWithoutTarget = false;
-			
+
 			setTarget(null);
 			setActionMode(EActionMode.RageTurret);
 			setAIMode(EAIMode.Action);
@@ -93,6 +94,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 
+			IsAiming = true;
 			EndActionWithoutTarget = endActionWithoutTarget;
 			
 			setTarget(target);
@@ -105,6 +107,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 
+			IsAiming = true;
 			EndActionWithoutTarget = endActionWithoutTarget;
 			
 			setTarget(target);
@@ -217,7 +220,10 @@ namespace AI
 				return;
 
 			if (mode == EActionMode.None)
+			{
+				IsAiming = true;
 				EndActionWithoutTarget = true;
+			}
 			
 			previousActionMode = ActionMode;
 			

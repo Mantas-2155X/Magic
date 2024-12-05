@@ -57,6 +57,7 @@ namespace AI.Base
 		public bool IsInvulnerable { get; private set; }
 		public bool IsNoclip { get; private set; }
 		public virtual bool IsWalking { get; private set; }
+		public bool IsAiming { get; set; }
 
 		public void SetInvulnerable(bool value)
 		{
@@ -112,7 +113,8 @@ namespace AI.Base
 			CurrentHealth = startingHealth;
 			StartingHealth = startingHealth;
 			OverloadHealth = overloadHealth;
-			
+
+			IsAiming = true;
 			IsAlive = true;
 			
 			OnSpawnEvent?.Invoke(this);

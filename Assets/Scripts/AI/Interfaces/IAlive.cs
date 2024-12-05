@@ -20,6 +20,7 @@ namespace AI.Interfaces
 		public bool IsInvulnerable { get; }
 		public bool IsNoclip { get; }
 		public bool IsWalking { get; }
+		public bool IsAiming { get; }
 		
 		public void SetInvulnerable(bool value);
 		public void SetNoclip(bool value);
