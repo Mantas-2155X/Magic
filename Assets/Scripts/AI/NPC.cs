@@ -233,7 +233,10 @@ namespace AI
 			while (IsAlive)
 			{
 				if (AutoTarget == EAutoTarget.None)
+				{
+					await UniTask.WaitForSeconds(AutoTargetEvery);
 					continue;
+				}
 				
 				targets.Clear();
 
