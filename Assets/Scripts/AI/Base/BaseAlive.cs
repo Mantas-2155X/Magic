@@ -10,42 +10,6 @@ namespace AI.Base
 {
 	public class BaseAlive : MonoBehaviour, IAlive
 	{
-		[SerializeField]
-		public Rigidbody Rigidbody;
-
-		[SerializeField]
-		public Collider Collider;
-		
-		[SerializeField]
-		public Renderer[] Eyes;
-		
-		[SerializeField]
-		public Transform[] Shoulders;
-		
-		[SerializeField]
-		public Transform[] Legs;
-
-		[SerializeField]
-		public Collider[] Feet;
-		
-		[SerializeField]
-		public Vector2 SwayAngles = new (30f, 15f);
-
-		[SerializeField]
-		public float SwaySpeedMultiplier = 1f;
-
-		[SerializeField]
-		public float BlinkEvery = 3f;
-		
-		[SerializeField]
-		public float BlinkDuration = 0.2f;
-
-		[SerializeField]
-		public float BlinkVariation = 2f;
-		
-		[HideInInspector]
-		public bool ShouldSway;
-		
 		public static readonly OnHealEvent OnHealEvent = new ();
 		public static readonly OnDamageEvent OnDamageEvent = new ();
 		public static readonly OnDeathEvent OnDeathEvent = new ();
@@ -55,40 +19,8 @@ namespace AI.Base
 		private readonly List<Collider> collidingState = new ();
 
 		private LayerMask previousExcludeLayers;
-
-		private bool swayDirection;
-		private bool blinking;
 		
-		private float blinkStartTime;
-		private float blinkFinishTime;
-
 		#region MonoBehaviour
-
-		public virtual void Update()
-		{
-			if (!IsAlive)
-				return;
-			
-			if (blinking && Time.time >= blinkStartTime + BlinkDuration)
-			{
-				foreach (var eye in Eyes)
-					eye.material.color = EyesColor;
-				
-				blinking = false;
-				blinkFinishTime = Time.time + Random.Range(-BlinkVariation, BlinkVariation);
-			}
-			else if (!blinking && Time.time >= blinkFinishTime + BlinkEvery)
-			{
-				foreach (var eye in Eyes)
-					eye.material.color = Color.black;
-				
-				blinking = true;
-				blinkStartTime = Time.time;
-			}
-			
-			if (ShouldSway)
-				swayLimbs();
-		}
 
 		public void OnCollisionStay(Collision collision)
 		{
@@ -106,79 +38,12 @@ namespace AI.Base
 		}
 
 		#endregion
-
-		private void swayLimbs()
-		{
-			var incrementAmount = CurrentSpeed * SwaySpeedMultiplier * Time.deltaTime;
-			
-			if (swayDirection)
-				incrementAmount = -incrementAmount;
-			
-			var incrementShoulders = new Vector3(incrementAmount * SwayAngles.x, 0, 0);
-			var incrementLegs = new Vector3(incrementAmount * SwayAngles.y, 0, 0);
-
-			Shoulders[0].localEulerAngles += incrementShoulders;
-			Shoulders[1].localEulerAngles -= incrementShoulders;
-			
-			Legs[0].localEulerAngles -= incrementLegs;
-			Legs[1].localEulerAngles += incrementLegs;
-
-			var currentAngle = Shoulders[0].localEulerAngles.x;
-			
-			if (currentAngle > 180)
-				currentAngle -= 360;
-
-			if (!IsWalking && Mathf.Abs(currentAngle) < 1.5f)
-			{
-				ShouldSway = false;
-				resetLimbs();
-				return;
-			}
-			
-			if (currentAngle > SwayAngles.x || currentAngle < -SwayAngles.x)
-				swayDirection = !swayDirection;
-			
-			clampLimbsSway();
-		}
-
-		private void clampLimbsSway()
-		{
-			foreach (var shoulder in Shoulders)
-			{
-				var currentAngle = shoulder.localEulerAngles.x;
-				
-				if (currentAngle > 180)
-					currentAngle -= 360;
-				
-				currentAngle = Mathf.Clamp(currentAngle, -SwayAngles.x, SwayAngles.x);
-				shoulder.localEulerAngles = new Vector3(currentAngle, 0, 0);
-			}
-			
-			foreach (var leg in Legs)
-			{
-				var currentAngle = leg.localEulerAngles.x;
-				
-				if (currentAngle > 180)
-					currentAngle -= 360;
-				
-				currentAngle = Mathf.Clamp(currentAngle, -SwayAngles.y, SwayAngles.y);
-				leg.localEulerAngles = new Vector3(currentAngle, 0, 0);
-			}
-		}
-
-		private void resetLimbs()
-		{
-			foreach (var shoulder in Shoulders)
-				shoulder.localEulerAngles = Vector3.zero;
-			
-			foreach (var leg in Legs)
-				leg.localEulerAngles = Vector3.zero;
-		}
 		
 		#region IAlive
 
 		[field: SerializeField]
-		public Transform WeaponContainer { get; private set; }
+		public Body Body { get; private set; }
+		
 		public IWeapon Weapon { get; private set; }
 
 		public virtual Color EyesColor { get; private set; }
@@ -209,20 +74,20 @@ namespace AI.Base
 			
 			IsNoclip = value;
 
-			Rigidbody.useGravity = !value;
-			Collider.enabled = !value;
+			Body.Rigidbody.useGravity = !value;
+			Body.Collider.enabled = !value;
 
-			for (var i = 0; i < Feet.Length; i++)
-				Feet[i].enabled = !value;
+			for (var i = 0; i < Body.Feet.Length; i++)
+				Body.Feet[i].enabled = !value;
 			
 			if (value)
 			{
 				collidingState.Clear();
-				previousExcludeLayers = Rigidbody.excludeLayers;
+				previousExcludeLayers = Body.Rigidbody.excludeLayers;
 			}
 			else
 			{
-				Rigidbody.excludeLayers = previousExcludeLayers;
+				Body.Rigidbody.excludeLayers = previousExcludeLayers;
 			}
 		}
 
@@ -289,12 +154,12 @@ namespace AI.Base
 			CurrentHealth = 0;
 			IsAlive = false;
 			
-			Rigidbody.constraints = RigidbodyConstraints.None;
+			Body.Rigidbody.constraints = RigidbodyConstraints.None;
 
-			Rigidbody.isKinematic = false;
-			Rigidbody.AddForce(Random.Range(-25f, 25f), 100f, Random.Range(-25f, 25f), ForceMode.Impulse);
+			Body.Rigidbody.isKinematic = false;
+			Body.Rigidbody.AddForce(Random.Range(-25f, 25f), 100f, Random.Range(-25f, 25f), ForceMode.Impulse);
 
-			Collider.material = null;
+			Body.Collider.material = null;
 			
 			var ragdolls = World.World.Instance.Ragdolls;
 			
@@ -332,9 +197,9 @@ namespace AI.Base
 
 		public bool IsGrounded()
 		{
-			for (var i = 0; i < Feet.Length; i++)
+			for (var i = 0; i < Body.Feet.Length; i++)
 			{
-				if (!collidingState.Contains(Feet[i]))
+				if (!collidingState.Contains(Body.Feet[i]))
 					continue;
 
 				return true;

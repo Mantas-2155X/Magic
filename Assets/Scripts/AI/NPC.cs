@@ -300,10 +300,8 @@ namespace AI
 
 		#region MonoBehaviour
 
-		public override void Update()
+		public void Update()
 		{
-			base.Update();
-
 			if (!IsAlive)
 				return;
 
@@ -311,7 +309,7 @@ namespace AI
 				setTarget(null);
 			
 			if (Agent.hasPath)
-				ShouldSway = true;
+				Body.ShouldSway = true;
 			
 			ActionModes[ActionMode].Update();
 			AIModes[AIMode].Update();

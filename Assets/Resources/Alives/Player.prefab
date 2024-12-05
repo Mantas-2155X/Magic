@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: Alive
+      value: 
+      objectReference: {fileID: 4568386568268556787}
     - target: {fileID: 1578906078410702355, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -135,6 +139,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3760131923968823566, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
   m_PrefabInstance: {fileID: 4407915526272526395}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3399031844389436054 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+  m_PrefabInstance: {fileID: 4407915526272526395}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8475379242147071745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8b59232c5647598acb747fcd45cc32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &3564169610119411647 stripped
 CapsuleCollider:
   m_CorrespondingSourceObject: {fileID: 890154380233269124, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -212,6 +227,7 @@ MonoBehaviour:
   BlinkDuration: 0.2
   BlinkVariation: 2
   ShouldSway: 0
+  <Body>k__BackingField: {fileID: 3399031844389436054}
   <WeaponContainer>k__BackingField: {fileID: 537698926144967774}
   LookAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   MoveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}

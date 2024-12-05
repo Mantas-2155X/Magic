@@ -204,7 +204,6 @@ Transform:
   m_Children:
   - {fileID: 4880514639947750160}
   - {fileID: 6953281930574864824}
-  - {fileID: 2984293455474985760}
   m_Father: {fileID: 267989786726104979}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2748694003045599063
@@ -598,37 +597,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.55
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &5206265112837022464
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2984293455474985760}
-  m_Layer: 0
-  m_Name: HatContainer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2984293455474985760
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5206265112837022464}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2230819132751065594}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5238415708173528890
 GameObject:
   m_ObjectHideFlags: 0
@@ -642,8 +610,9 @@ GameObject:
   - component: {fileID: 6154689916666021878}
   - component: {fileID: 779082925154528359}
   - component: {fileID: 8598778091971049270}
+  - component: {fileID: 1299225429599949485}
   m_Layer: 0
-  m_Name: Body
+  m_Name: BaseAlive
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -772,6 +741,40 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1299225429599949485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5238415708173528890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8b59232c5647598acb747fcd45cc32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Alive: {fileID: 0}
+  Rigidbody: {fileID: 9196623204031514355}
+  Collider: {fileID: 8598778091971049270}
+  Eyes:
+  - {fileID: 4543690042529208239}
+  - {fileID: 6362056708018927886}
+  Shoulders:
+  - {fileID: 3760131923968823566}
+  - {fileID: 8437561409191317033}
+  Legs:
+  - {fileID: 109099294140091109}
+  - {fileID: 5313810489724381644}
+  Feet:
+  - {fileID: 36329325502326166}
+  - {fileID: 890154380233269124}
+  WeaponContainer: {fileID: 4204749627684944997}
+  SwayAngles: {x: 30, y: 15}
+  SwaySpeedMultiplier: 1
+  BlinkEvery: 3
+  BlinkDuration: 0.2
+  BlinkVariation: 2
+  ShouldSway: 0
 --- !u!1 &5352134489899751883
 GameObject:
   m_ObjectHideFlags: 0

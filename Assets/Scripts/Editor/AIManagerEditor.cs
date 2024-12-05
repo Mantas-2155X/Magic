@@ -278,7 +278,7 @@ namespace Editor
 				GUILayout.Label("Player", GUILayout.Width(50));
 				GUILayout.Label($"{(aiManager.Player.IsAlive ? "Alive" : "Dead")}", GUILayout.Width(40));
 				GUILayout.Label($"HP: {aiManager.Player.CurrentHealth}", GUILayout.Width(50));
-				GUILayout.Label($"Vel: {aiManager.Player.Rigidbody.linearVelocity.magnitude:0.0000}", GUILayout.Width(80));
+				GUILayout.Label($"Vel: {aiManager.Player.Body.Rigidbody.linearVelocity.magnitude:0.0000}", GUILayout.Width(80));
 				GUILayout.FlexibleSpace();
 				var invulnerable = GUILayout.Toggle(aiManager.Player.IsInvulnerable, "Invulnerable", GUILayout.Width(100));
 				aiManager.Player.SetInvulnerable(invulnerable);

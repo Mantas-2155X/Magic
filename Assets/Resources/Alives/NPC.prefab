@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: Alive
+      value: 
+      objectReference: {fileID: 5086737948386064533}
     - target: {fileID: 1578906078410702355, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -108,6 +112,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5086737948386064533}
   m_SourcePrefab: {fileID: 100100000, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+--- !u!114 &42988670619036741 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+  m_PrefabInstance: {fileID: 1341931207900315368}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6498104957624570322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8b59232c5647598acb747fcd45cc32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &1305601917834386302 stripped
 CapsuleCollider:
   m_CorrespondingSourceObject: {fileID: 36329325502326166, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -202,6 +217,7 @@ MonoBehaviour:
   BlinkDuration: 0.2
   BlinkVariation: 2
   ShouldSway: 0
+  <Body>k__BackingField: {fileID: 42988670619036741}
   <WeaponContainer>k__BackingField: {fileID: 2937819000856724109}
   Agent: {fileID: 7175161009213997453}
   JumpCurve:

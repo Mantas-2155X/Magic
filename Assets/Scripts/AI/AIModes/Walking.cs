@@ -66,7 +66,7 @@ namespace AI.AIModes
 				return;
 			
 			Owner.Agent.enabled = state;
-			Owner.Rigidbody.isKinematic = state;
+			Owner.Body.Rigidbody.isKinematic = state;
 		}
 
 		private void forceFinishJump()

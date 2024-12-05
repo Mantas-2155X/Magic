@@ -31,7 +31,7 @@ namespace Weapons.Base
 
 			var previousAngles = transform.localEulerAngles;
 			
-			transform.SetParent(Owner.WeaponContainer, true);
+			transform.SetParent(Owner.Body.WeaponContainer, true);
 			
 			transform.localEulerAngles = previousAngles;
 			transform.localPosition = Vector3.zero;

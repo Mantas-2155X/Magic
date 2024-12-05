@@ -50,7 +50,7 @@ namespace World
 			var player = aiManager.Player;
 
 			if (player.IsAlive && !player.IsNoclip)
-				player.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);
+				player.Body.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);
 
 			for (var i = 0; i < npcs.Count; i++)
 			{
@@ -58,7 +58,7 @@ namespace World
 				if (!npc.IsAlive || npc.Agent.enabled || npc.IsNoclip)
 					continue;
 
-				npc.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);
+				npc.Body.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);
 			}
 		}
 	}

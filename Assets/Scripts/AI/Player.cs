@@ -109,12 +109,12 @@ namespace AI
 
 			if (IsNoclip)
 			{
-				Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * SprintMultiplier : 1f), ForceMode.VelocityChange);
+				Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * SprintMultiplier : 1f), ForceMode.VelocityChange);
 				
 				if (jumpPressed)
-					Rigidbody.AddForce(0f, 1f, 0f, ForceMode.VelocityChange);
+					Body.Rigidbody.AddForce(0f, 1f, 0f, ForceMode.VelocityChange);
 				else if (fallPressed)
-					Rigidbody.AddForce(0f, -1f, 0f, ForceMode.VelocityChange);
+					Body.Rigidbody.AddForce(0f, -1f, 0f, ForceMode.VelocityChange);
 				
 				return;
 			}
@@ -127,15 +127,15 @@ namespace AI
 					return;
 
 				// Adjust how fast the rigidbody stops after letting go of controls
-				var velocity = Rigidbody.linearVelocity;
+				var velocity = Body.Rigidbody.linearVelocity;
 				velocity.x *= StopSlide;
 				velocity.z *= StopSlide;
 				
-				Rigidbody.linearVelocity = velocity;
+				Body.Rigidbody.linearVelocity = velocity;
 				
 				// Jump now since the rest of the code isn't ran
 				if (jumpPressed)
-					Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
+					Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
 
 				return;
 			}
@@ -146,18 +146,18 @@ namespace AI
 			if (!grounded)
 				movement *= AirMovement;
 			
-			Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * movement, ForceMode.VelocityChange);
+			Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * movement, ForceMode.VelocityChange);
 			
 			if (!grounded)
 				return;
 			
 			// Limit the rigidbody walking speed
 			var maxSpeed = SprintAction.action.IsPressed() ? MaximumSpeed * SprintMultiplier : MaximumSpeed;
-			Rigidbody.linearVelocity = Vector3.ClampMagnitude(Rigidbody.linearVelocity, maxSpeed * SpeedClampModifier);
+			Body.Rigidbody.linearVelocity = Vector3.ClampMagnitude(Body.Rigidbody.linearVelocity, maxSpeed * SpeedClampModifier);
 
 			// Jump after speed limits and other forces to prevent irregularity
 			if (jumpPressed)
-				Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
+				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
 		}
 		
 		#endregion
@@ -268,7 +268,7 @@ namespace AI
 		{
 			moveDirection = ctx.ReadValue<Vector2>();
 			walking = true;
-			ShouldSway = true;
+			Body.ShouldSway = true;
 		}
 		
 		private void onMoveCanceled(InputAction.CallbackContext ctx)
@@ -331,7 +331,7 @@ namespace AI
 		
 		public override Color EyesColor => Color.blue;
 
-		public override float CurrentSpeed => walking ? Rigidbody.linearVelocity.magnitude : MaximumSpeed;
+		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : MaximumSpeed;
 
 		public override bool IsWalking => walking;
 

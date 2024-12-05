@@ -5,7 +5,8 @@ namespace AI.Interfaces
 {
 	public interface IAlive
 	{
-		public Transform WeaponContainer { get; }
+		public Body Body { get; }
+		
 		public IWeapon Weapon { get; }
 
 		public Color EyesColor { get; }
