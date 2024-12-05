@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AI.ActionModes;
+using AI.ActionModes.Shared;
 using AI.AIModes;
 using AI.Base;
 using AI.Enums;
@@ -17,27 +18,80 @@ namespace AI
 		[SerializeField]
 		public NavMeshAgent Agent;
 
+		#region Jump
+
 		[SerializeField]
 		public AnimationCurve JumpCurve;
 
 		[SerializeField]
 		public float JumpDuration = 0.75f;
 
+		#endregion
+		
+		#region Auto Target
+
 		[SerializeField]
-		public EAutoTarget AutoTarget = EAutoTarget.Player;
+		public EAutoTarget AutoTarget = EAutoTarget.None;
 
 		[SerializeField]
 		public float AutoTargetRange = 25f;
 
 		[SerializeField]
 		public float AutoTargetEvery = 0.5f;
+
+		#endregion
+		
+		#region Action Mode Parameters
+
+		/// <summary>
+		/// Distance around itself that the npc can sense targets in
+		/// (WithinRange)
+		/// </summary>
+		[SerializeField]
+		public float SenseRange = 25f;
+
+		/// <summary>
+		/// Maximum distance from the npc to the target via a direct raycast determining if the target can be seen
+		/// (HasSight)
+		/// </summary>
+		[SerializeField]
+		public float SightRange = 11f;
+
+		/// <summary>
+		/// Distance between the npc and the target at which the npc counts the target to be in range and stops going closer
+		/// (Chase)
+		/// </summary>
+		[SerializeField]
+		public float ChaseRange = 10f;
+
+		/// <summary>
+		/// Min-Max range of how many degrees per step can the npc rotate when performing an action
+		/// (AimAt, Spin)
+		/// </summary>
+		[SerializeField]
+		public Vector2 RotationStep = new (9f, 12f);
+
+		/// <summary>
+		/// Maximum look angle between the npc and the target which the npc deems accurate enough
+		/// (AimAt)
+		/// </summary>
+		[SerializeField]
+		public float AimAngle = 5f;
+		
+		#endregion
 		
 		public EAIMode AIMode { get; private set; }
 		public EActionMode ActionMode { get; private set; }
 		public Component Target { get; private set; }
 		public Vector3 Destination { get; private set; }
-		
-		public bool EndActionWithoutTarget { get; private set; }
+		public bool AimLimited { get; private set; }
+		public bool ActWithoutTarget { get; private set; }
+
+		public Spin Spin { get; private set; }
+		public AimAt AimAt { get; private set; }
+		public Chase Chase { get; private set; }
+		public HasSight HasSight { get; private set; }
+		public WithinRange WithinRange { get; private set; }
 		
 		public readonly Dictionary<EAIMode, IAIMode> AIModes = new ()
 		{
@@ -53,17 +107,58 @@ namespace AI
 			{ EActionMode.AimingTurret, new AimingTurret() },
 			{ EActionMode.FindAndKill, new FindAndKill() }
 		};
-
-		private readonly Dictionary<IAlive, float> targets = new ();
-
-		private float lastAutoTarget;
 		
 		private EAIMode previousAIMode;
 		private EActionMode previousActionMode;
 		private Component previousTarget;
 		private Vector3 previousDestination;
 
+		private readonly Dictionary<IAlive, float> targets = new ();
+
 		#region AI
+		
+		#region Action Modes
+
+		public void RageTurret(Component target = null, bool aimLimited = true, bool actWithoutTarget = true)
+		{
+			if (!IsAlive)
+				return;
+
+			AimLimited = aimLimited;
+			ActWithoutTarget = actWithoutTarget;
+			
+			setTarget(target);
+			setActionMode(EActionMode.RageTurret);
+			setAIMode(EAIMode.Action);
+		}
+		
+		public void AimingTurret(Component target, bool aimLimited = false, bool actWithoutTarget = false)
+		{
+			if (!IsAlive)
+				return;
+			
+			AimLimited = aimLimited;
+			ActWithoutTarget = actWithoutTarget;
+			
+			setTarget(target);
+			setActionMode(EActionMode.AimingTurret);
+			setAIMode(EAIMode.Action);
+		}
+
+		public void FindAndKill(Component target, bool aimLimited = false, bool actWithoutTarget = false)
+		{
+			if (!IsAlive)
+				return;
+			
+			AimLimited = aimLimited;
+			ActWithoutTarget = actWithoutTarget;
+			
+			setTarget(target);
+			setActionMode(EActionMode.FindAndKill);
+			setAIMode(EAIMode.Action);
+		}
+
+		#endregion
 		
 		public void Walk(Vector3 destination)
 		{
@@ -74,49 +169,6 @@ namespace AI
 			setAIMode(EAIMode.Walking);
 		}
 
-		#region Action Modes
-
-		public void RageTurret()
-		{
-			if (!IsAlive)
-				return;
-
-			IsAiming = false;
-			EndActionWithoutTarget = false;
-
-			setTarget(null);
-			setActionMode(EActionMode.RageTurret);
-			setAIMode(EAIMode.Action);
-		}
-		
-		public void AimingTurret(Component target, bool endActionWithoutTarget)
-		{
-			if (!IsAlive)
-				return;
-
-			IsAiming = true;
-			EndActionWithoutTarget = endActionWithoutTarget;
-			
-			setTarget(target);
-			setActionMode(EActionMode.AimingTurret);
-			setAIMode(EAIMode.Action);
-		}
-
-		public void FindAndKill(Component target, bool endActionWithoutTarget)
-		{
-			if (!IsAlive)
-				return;
-
-			IsAiming = true;
-			EndActionWithoutTarget = endActionWithoutTarget;
-			
-			setTarget(target);
-			setActionMode(EActionMode.FindAndKill);
-			setAIMode(EAIMode.Action);
-		}
-
-		#endregion
-
 		public void Chill()
 		{
 			if (!IsAlive)
@@ -125,10 +177,10 @@ namespace AI
 			setActionMode(EActionMode.None);
 			setAIMode(EAIMode.Idle);
 		}
-
+		
 		public bool HasSightOf(Component target, float maxRange)
 		{
-			if (target == null)
+			if (!IsAlive || target == null)
 				return false;
 			
 			var ownerTr = transform;
@@ -165,7 +217,7 @@ namespace AI
 			if (previousAIMode == EAIMode.Action)
 			{
 				// Protect from an infinite loop of walk-action when the target is gone and the action mode returns after target death
-				if (EndActionWithoutTarget && Target == null)
+				if (!ActWithoutTarget && Target == null)
 				{
 					setActionMode(EActionMode.None);
 					setAIMode(EAIMode.Idle);
@@ -199,7 +251,7 @@ namespace AI
 			
 			setDestination(previousDestination);
 		}
-
+		
 		private void setAIMode(EAIMode mode)
 		{
 			if (AIMode == mode)
@@ -218,12 +270,6 @@ namespace AI
 		{
 			if (ActionMode == mode)
 				return;
-
-			if (mode == EActionMode.None)
-			{
-				IsAiming = true;
-				EndActionWithoutTarget = true;
-			}
 			
 			previousActionMode = ActionMode;
 			
@@ -261,7 +307,7 @@ namespace AI
 
 			Debug.Log($"[NPC {gameObject.name}] Changed Destination from {previousDestination} to {Destination}");
 		}
-
+		
 		private async UniTask autoTarget()
 		{
 			while (IsAlive)
@@ -276,7 +322,7 @@ namespace AI
 
 				var pos = transform.position;
 
-				if (AutoTarget.HasFlag(EAutoTarget.Player))
+				if ((AutoTarget & EAutoTarget.Player) != 0)
 				{
 					var player = AIManager.Instance.Player;
 					if (player != null && player.IsAlive)
@@ -291,7 +337,7 @@ namespace AI
 					setTarget(null);
 				}
 
-				if (AutoTarget.HasFlag(EAutoTarget.NPCs))
+				if ((AutoTarget & EAutoTarget.NPCs) != 0)
 				{
 					var npcs = AIManager.Instance.NPCs;
 
@@ -370,8 +416,15 @@ namespace AI
 		public override bool IsWalking => Agent.hasPath;
 
 		public override void Spawn(int startingHealth, int overloadHealth, float maximumSpeed)
-		{
+		{ 
+			Spin = new Spin(this);
+			AimAt = new AimAt(this);
+			Chase = new Chase(this);
+			HasSight = new HasSight(this);
+			WithinRange = new WithinRange(this);
+
 			Agent.speed = maximumSpeed;
+			
 			base.Spawn(startingHealth, overloadHealth, maximumSpeed);
 			
 			autoTarget().Forget();

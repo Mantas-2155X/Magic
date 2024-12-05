@@ -5,15 +5,15 @@ namespace AI.ActionModes.Shared
 {
 	public class Chase
 	{
-		private readonly float stopAt;
+		private readonly NPC owner;
 
-		public Chase(float stopAt)
+		public Chase(NPC owner)
 		{
-			this.stopAt = stopAt;
+			this.owner = owner;
 		}
 
-		private float currentStopAt;
-
+		private float currentChaseRange;
+		
 		/// <summary>
 		/// Has the npc try to chase and reach the specified target
 		/// This only does one step of trying and should be placed in Update
@@ -25,13 +25,13 @@ namespace AI.ActionModes.Shared
 			var transform = npc.transform;
 			
 			// Try to stop at this distance
-			var currentStopTarget = currentStopAt + agent.stoppingDistance;
+			var currentStopTarget = currentChaseRange + agent.stoppingDistance;
 			
 			// NPC not within target range, keep walking
 			if (Vector3.Distance(target.position, transform.position) > currentStopTarget)
 			{
 				// Target within destination range, keep current path
-				if (Vector3.Distance(target.position, npc.Destination) <= currentStopAt + agent.stoppingDistance)
+				if (Vector3.Distance(target.position, npc.Destination) <= currentChaseRange + agent.stoppingDistance)
 				{
 					if (npc.AIMode != EAIMode.Walking)
 						npc.Walk(target.position);
@@ -40,17 +40,17 @@ namespace AI.ActionModes.Shared
 				}
 				
 				// Target moved away from destination range, reset the path
-				if (currentStopAt < stopAt)
-					ResetCurrentStopAt();
+				if (currentChaseRange < owner.ChaseRange)
+					ResetChaseRange();
 
 				npc.Walk(target.position);
 				return false;
 			}
 
 			// Within range but can't see the target, reduce the stop range to walk closer to the target
-			if (!npc.HasSightOf(target, stopAt + agent.stoppingDistance))
+			if (!npc.HasSightOf(target, owner.ChaseRange + agent.stoppingDistance))
 			{
-				currentStopAt /= 1.2f;
+				currentChaseRange /= 1.2f;
 
 				if (npc.AIMode != EAIMode.Walking)
 					npc.Walk(target.position);
@@ -58,7 +58,7 @@ namespace AI.ActionModes.Shared
 				return false;
 			}
 
-			ResetCurrentStopAt();
+			ResetChaseRange();
 			
 			// Performing jump, stay on walking state until thats done
 			if (agent.isOnOffMeshLink)
@@ -69,11 +69,11 @@ namespace AI.ActionModes.Shared
 		}
 		
 		/// <summary>
-		/// Reset the potentially reduced stop range back to the initial value
+		/// Reset the potentially reduced chase range back to the initial value
 		/// </summary>
-		public void ResetCurrentStopAt()
+		public void ResetChaseRange()
 		{
-			currentStopAt = stopAt;
+			currentChaseRange = owner.ChaseRange;
 		}
 	}
 }

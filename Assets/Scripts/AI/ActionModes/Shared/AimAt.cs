@@ -4,13 +4,11 @@ namespace AI.ActionModes.Shared
 {
 	public class AimAt
 	{
-		private readonly Vector2 degreesRange;
-		private readonly float maximumAngle;
+		private readonly NPC owner;
 
-		public AimAt(float minDegree, float maxDegree, float maximumAngle)
+		public AimAt(NPC owner)
 		{
-			degreesRange = new Vector2(minDegree, maxDegree);
-			this.maximumAngle = maximumAngle;
+			this.owner = owner;
 		}
 		
 		/// <summary>
@@ -24,9 +22,9 @@ namespace AI.ActionModes.Shared
 			targetPosition.y = 0;
 			
 			var targetRotation = Quaternion.LookRotation(targetPosition);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(degreesRange.x, degreesRange.y));
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(owner.RotationStep.x, owner.RotationStep.y));
 			
-			return Quaternion.Angle(transform.rotation, targetRotation) < maximumAngle;
+			return Quaternion.Angle(transform.rotation, targetRotation) < owner.AimAngle;
 		}
 	}
 }

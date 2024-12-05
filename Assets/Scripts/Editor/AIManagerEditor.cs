@@ -142,7 +142,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.FindAndKill(npc.Target, true);
+					npc.FindAndKill(npc.Target);
 				}
 			}
 						
@@ -153,7 +153,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.AimingTurret(npc.Target, true);
+					npc.AimingTurret(npc.Target);
 				}
 			}
 			
@@ -165,6 +165,22 @@ namespace Editor
 						continue;
 
 					npc.RageTurret();
+				}
+			}
+			
+			if (GUILayout.Button("Deathmatch"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.SenseRange = 9999;
+					
+					npc.AutoTargetRange = 9999;
+					npc.AutoTarget = EAutoTarget.NPCs;
+					
+					npc.FindAndKill(npc.Target, false, true);
 				}
 			}
 
@@ -268,6 +284,9 @@ namespace Editor
 			
 			foreach (var npc in aiManager.NPCs)
 			{
+				if (!npc.IsAlive)
+					continue;
+				
 				GUILayout.BeginHorizontal();
 
 				GUILayout.Label(npc.gameObject.name, GUILayout.Width(50));

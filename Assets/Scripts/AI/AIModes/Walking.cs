@@ -89,8 +89,10 @@ namespace AI.AIModes
 
 			agent.updateRotation = false;
 			await lookAtLink(data);
+
+			var agentTr = agent.transform;
 			
-			var startPos = agent.transform.position;
+			var startPos = agentTr.position;
 			var endPos = data.endPos + Vector3.up * agent.baseOffset;
 			
 			var normalizedTime = 0.0f;
@@ -106,7 +108,7 @@ namespace AI.AIModes
 				}
 				
 				var yOffset = Owner.JumpCurve.Evaluate(normalizedTime);
-				agent.transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
+				agentTr.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
 				
 				normalizedTime += Time.deltaTime / Owner.JumpDuration;
 				await UniTask.NextFrame();

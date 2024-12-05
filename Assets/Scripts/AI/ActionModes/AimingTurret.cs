@@ -9,10 +9,6 @@ namespace AI.ActionModes
 	{
 		public NPC Owner { get; set; }
 		
-		private readonly AimAt aimAt = new (9f, 12f, 5f);
-		private readonly HasSight hasSight = new (11f);
-		private readonly WithinRange withinRange = new (15f);
-		
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
@@ -36,13 +32,13 @@ namespace AI.ActionModes
 			var transform = Owner.transform;
 			var target = Owner.Target.transform;
 			
-			if (!withinRange.DistanceCheck(transform, target))
+			if (!Owner.WithinRange.DistanceCheck(transform, target))
 				return;
 
-			if (!aimAt.AimTowardsTarget(transform, target))
+			if (!Owner.AimAt.AimTowardsTarget(transform, target))
 				return;
 			
-			if (hasSight.SightCheck(Owner, target))
+			if (Owner.HasSight.SightCheck(Owner, target))
 				Owner.Weapon?.Attack();
 		}
 		

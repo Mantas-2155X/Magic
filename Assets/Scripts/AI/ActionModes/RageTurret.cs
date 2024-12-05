@@ -9,8 +9,6 @@ namespace AI.ActionModes
 	{
 		public NPC Owner { get; set; }
 		
-		private readonly Spin spin = new (9f, 12f);
-		
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
@@ -31,8 +29,7 @@ namespace AI.ActionModes
 			if (Owner.AIMode != EAIMode.Action)
 				return;
 			
-			spin.SpinEndlessly(Owner.transform);
-			
+			Owner.Spin.SpinEndlessly(Owner.transform);
 			Owner.Weapon?.Attack();
 		}
 

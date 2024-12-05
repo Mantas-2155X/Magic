@@ -42,7 +42,7 @@ namespace Weapons
 				if (!npc.IsAlive || (IAlive)npc == alive)
 					continue;
 				
-				npc.FindAndKill((Component)alive, true);
+				npc.FindAndKill((Component)alive);
 			}
 
 			return true;

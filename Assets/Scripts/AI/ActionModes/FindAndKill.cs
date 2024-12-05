@@ -9,17 +9,12 @@ namespace AI.ActionModes
 	{
 		public NPC Owner { get; set; }
 		
-		private readonly AimAt aimAt = new (9f, 12f, 5f);
-		private readonly WithinRange withinRange = new (25f);
-		private readonly HasSight hasSight = new (11f);
-		private readonly Chase chase = new (10f);
-		
 		private bool shouldReach;
 		
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
-			chase.ResetCurrentStopAt();
+			Owner.Chase.ResetChaseRange();
 		}
 		
 		public void Disabled()
@@ -35,11 +30,11 @@ namespace AI.ActionModes
 			var target = Owner.Target.transform;
 			var transform = Owner.transform;
 
-			shouldReach = withinRange.DistanceCheck(transform, target);
+			shouldReach = Owner.WithinRange.DistanceCheck(transform, target);
 			if (!shouldReach)
 				return;
 
-			var reachedTarget = chase.ChaseTarget(Owner, target);
+			var reachedTarget = Owner.Chase.ChaseTarget(Owner, target);
 			if (!reachedTarget)
 				return;
 
@@ -54,10 +49,10 @@ namespace AI.ActionModes
 			
 			var target = Owner.Target.transform;
 			
-			if (!aimAt.AimTowardsTarget(Owner.transform, target))
+			if (!Owner.AimAt.AimTowardsTarget(Owner.transform, target))
 				return;
 			
-			if (hasSight.SightCheck(Owner, target))
+			if (Owner.HasSight.SightCheck(Owner, target))
 				Owner.Weapon?.Attack();
 		}
 		

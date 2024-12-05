@@ -57,7 +57,6 @@ namespace AI.Base
 		public bool IsInvulnerable { get; private set; }
 		public bool IsNoclip { get; private set; }
 		public virtual bool IsWalking { get; private set; }
-		public bool IsAiming { get; set; }
 
 		public void SetInvulnerable(bool value)
 		{
@@ -114,7 +113,6 @@ namespace AI.Base
 			StartingHealth = startingHealth;
 			OverloadHealth = overloadHealth;
 
-			IsAiming = true;
 			IsAlive = true;
 			
 			OnSpawnEvent?.Invoke(this);
@@ -155,6 +153,7 @@ namespace AI.Base
 			IsAlive = false;
 			
 			Body.Rigidbody.constraints = RigidbodyConstraints.None;
+			Body.Rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
 
 			Body.Rigidbody.isKinematic = false;
 			Body.Rigidbody.AddForce(Random.Range(-25f, 25f), 100f, Random.Range(-25f, 25f), ForceMode.Impulse);

@@ -4,11 +4,11 @@ namespace AI.ActionModes.Shared
 {
 	public class Spin
 	{
-		private readonly Vector2 degreesRange;
+		private readonly NPC owner;
 
-		public Spin(float minDegree, float maxDegree)
+		public Spin(NPC owner)
 		{
-			degreesRange = new Vector2(minDegree, maxDegree);
+			this.owner = owner;
 		}
 		
 		/// <summary>
@@ -17,7 +17,7 @@ namespace AI.ActionModes.Shared
 		/// </summary>
 		public void SpinEndlessly(Transform transform)
 		{
-			transform.Rotate(transform.up, Random.Range(degreesRange.x, degreesRange.y));
+			transform.Rotate(transform.up, Random.Range(owner.RotationStep.x, owner.RotationStep.y));
 		}
 	}
 }

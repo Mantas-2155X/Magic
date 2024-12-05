@@ -4,11 +4,11 @@ namespace AI.ActionModes.Shared
 {
 	public class WithinRange
 	{
-		private readonly float range;
+		private readonly NPC owner;
 
-		public WithinRange(float range)
+		public WithinRange(NPC owner)
 		{
-			this.range = range;
+			this.owner = owner;
 		}
 		
 		/// <summary>
@@ -16,7 +16,7 @@ namespace AI.ActionModes.Shared
 		/// </summary>
 		public bool DistanceCheck(Transform transform, Transform target)
 		{
-			return Vector3.Distance(transform.position, target.position) < range;
+			return Vector3.Distance(transform.position, target.position) < owner.SenseRange;
 		}
 	}
 }

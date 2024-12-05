@@ -99,17 +99,9 @@ namespace Weapons.Base
 			return gameObject;
 		}
 
-		public virtual void CalculateRay()
+		public void CalculateRay()
 		{
 			Ray = default;
-			
-			var ownerTr = Owner.GetGameObject().transform;
-			
-			if (!Owner.IsAiming)
-			{
-				Ray = new Ray(ownerTr.position + ownerTr.up * 0.5f, ownerTr.forward);
-				return;
-			}
 			
 			switch (Owner)
 			{
@@ -117,17 +109,10 @@ namespace Weapons.Base
 					Ray = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 					break;
 				case NPC npc:
-				{
-					Vector3 direction;
-					
-					if (npc.Target == null)
-						direction = ownerTr.forward;
-					else
-						direction = (npc.Target.transform.position - ownerTr.position).normalized;
-					
+					var ownerTr = Owner.GetGameObject().transform;
+					var direction = npc.AimLimited || npc.Target == null ? ownerTr.forward : (npc.Target.transform.position - ownerTr.position).normalized;
 					Ray = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;
-				}
 				default:
 					throw new NotImplementedException();
 			}
