@@ -15,8 +15,9 @@ namespace Objects.Base
 		[field: SerializeField]
 		public virtual bool DestroyAfterPickup { get; private set; }
 
+		private bool destroyed;
 		private bool pickupable;
-
+		
 		public void Awake()
 		{
 			setPickupable().Forget();
@@ -24,7 +25,7 @@ namespace Objects.Base
 
 		public virtual bool CanPickup(IAlive user)
 		{
-			return user.IsAlive;
+			return !destroyed && pickupable && user.IsAlive;
 		}
 		
 		public virtual bool Pickup(IAlive user)
@@ -35,7 +36,9 @@ namespace Objects.Base
 			if (!DestroyAfterPickup)
 				return true;
 
+			destroyed = true;
 			Destroy(gameObject);
+			
 			return true;
 		}
 
@@ -46,9 +49,6 @@ namespace Objects.Base
 		
 		public void OnTriggerEnter(Collider other)
 		{
-			if (!pickupable)
-				return;
-			
 			var alive = other.GetComponent<IAlive>();
 			if (alive == null || !PickupLayers.ContainsLayer(other.gameObject.layer))
 				return;

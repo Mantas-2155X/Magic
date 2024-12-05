@@ -11,11 +11,14 @@ namespace Objects
 		[SerializeField]
 		public int HealAmount = 10;
 		
-		public override void Use(IAlive user)
+		public override bool Use(IAlive user)
 		{
+			var success = base.Use(user);
+			if (!success)
+				return false;
+
 			user.Heal(HealAmount, this);
-			
-			base.Use(user);
+			return true;
 		}
 	}
 }
