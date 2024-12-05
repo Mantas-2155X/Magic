@@ -36,6 +36,9 @@ namespace AI
 		public float SwaySpeedMultiplier = 1f;
 
 		[SerializeField]
+		public Color EyesColor;
+
+		[SerializeField]
 		public float BlinkEvery = 3f;
 		
 		[SerializeField]
@@ -61,7 +64,7 @@ namespace AI
 			if (blinking && Time.time >= blinkStartTime + BlinkDuration)
 			{
 				foreach (var eye in Eyes)
-					eye.material.color = Alive.EyesColor;
+					eye.material.color = EyesColor;
 				
 				blinking = false;
 				blinkFinishTime = Time.time + Random.Range(-BlinkVariation, BlinkVariation);

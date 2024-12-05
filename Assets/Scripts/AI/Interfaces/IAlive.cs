@@ -8,8 +8,6 @@ namespace AI.Interfaces
 		public Body Body { get; }
 		
 		public IWeapon Weapon { get; }
-
-		public Color EyesColor { get; }
 		
 		public float CurrentSpeed { get; }
 		public float MaximumSpeed { get; }

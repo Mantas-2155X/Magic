@@ -329,8 +329,6 @@ namespace AI
 		
 		#region IAlive
 		
-		public override Color EyesColor => Color.blue;
-
 		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : MaximumSpeed;
 
 		public override bool IsWalking => walking;

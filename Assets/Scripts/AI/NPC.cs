@@ -327,9 +327,7 @@ namespace AI
 		#endregion
 		
 		#region IAlive
-
-		public override Color EyesColor => Color.red;
-
+		
 		public override float CurrentSpeed => !IsWalking ? Agent.speed : Agent.velocity.magnitude;
 		
 		public override bool IsWalking => Agent.hasPath;

@@ -45,9 +45,7 @@ namespace AI.Base
 		public Body Body { get; private set; }
 		
 		public IWeapon Weapon { get; private set; }
-
-		public virtual Color EyesColor { get; private set; }
-
+		
 		public virtual float CurrentSpeed { get; private set; }
 		public float MaximumSpeed { get; private set; }
 
