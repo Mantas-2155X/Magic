@@ -138,11 +138,6 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4543690042529208239, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
   m_PrefabInstance: {fileID: 1341931207900315368}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4320403693426226632 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2984293455474985760, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
-  m_PrefabInstance: {fileID: 1341931207900315368}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &5392479515932051430 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6362056708018927886, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -208,7 +203,6 @@ MonoBehaviour:
   BlinkVariation: 2
   ShouldSway: 0
   <WeaponContainer>k__BackingField: {fileID: 2937819000856724109}
-  <HatContainer>k__BackingField: {fileID: 4320403693426226632}
   Agent: {fileID: 7175161009213997453}
   JumpCurve:
     serializedVersion: 2
@@ -244,6 +238,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   JumpDuration: 0.75
+  AutoTarget: 2
+  AutoTargetRange: 25
+  AutoTargetEvery: 0.5
 --- !u!4 &6566544224180541220 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5313810489724381644, guid: a346750b223c8888ab19d1ae288889e7, type: 3}

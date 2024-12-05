@@ -167,6 +167,17 @@ namespace Editor
 				}
 			}
 			
+			if (GUILayout.Button("Deathmatch"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.Act(aiManager.Player, EActionMode.ChaseAndKill, false);
+				}
+			}
+			
 			GUILayout.EndHorizontal();
 			
 			GUILayout.Label("Misc", EditorStyles.boldLabel);
@@ -204,6 +215,56 @@ namespace Editor
 					var dropped = go.GetComponent<DroppedWeapon>();
 					dropped.Weapon = Weapon;
 					dropped.Pickup(npc.transform.GetComponent<IAlive>());
+				}
+			}
+			
+			GUILayout.EndHorizontal();
+			
+			GUILayout.Label("Auto Target", EditorStyles.boldLabel);
+
+			GUILayout.BeginHorizontal();
+
+			if (GUILayout.Button("None"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.AutoTarget = EAutoTarget.None;
+				}
+			}
+			
+			if (GUILayout.Button("Player"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.AutoTarget = EAutoTarget.Player;
+				}
+			}
+			
+			if (GUILayout.Button("NPCs"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.AutoTarget = EAutoTarget.NPCs;
+				}
+			}
+			
+			if (GUILayout.Button("Everyone"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.AutoTarget = EAutoTarget.Player | EAutoTarget.NPCs;
 				}
 			}
 			

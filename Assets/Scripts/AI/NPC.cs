@@ -4,6 +4,8 @@ using AI.AIModes;
 using AI.Base;
 using AI.Enums;
 using AI.Interfaces;
+using Cysharp.Threading.Tasks;
+using Managers;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -20,6 +22,15 @@ namespace AI
 
 		[SerializeField]
 		public float JumpDuration = 0.75f;
+
+		[SerializeField]
+		public EAutoTarget AutoTarget = EAutoTarget.Player;
+
+		[SerializeField]
+		public float AutoTargetRange = 25f;
+
+		[SerializeField]
+		public float AutoTargetEvery = 0.5f;
 		
 		public EAIMode AIMode { get; private set; }
 		public EActionMode ActionMode { get; private set; }
@@ -43,6 +54,10 @@ namespace AI
 			{ EActionMode.ChaseAndKill, new ChaseAndKill() }
 		};
 
+		private readonly Dictionary<IAlive, float> targets = new ();
+
+		private float lastAutoTarget;
+		
 		private EAIMode previousAIMode;
 		private EActionMode previousActionMode;
 		private Component previousTarget;
@@ -212,6 +227,63 @@ namespace AI
 
 			Debug.Log($"[NPC {gameObject.name}] Changed Destination from {previousDestination} to {Destination}");
 		}
+
+		private async UniTask autoTarget()
+		{
+			while (IsAlive)
+			{
+				if (AutoTarget == EAutoTarget.None)
+					continue;
+				
+				targets.Clear();
+
+				var pos = transform.position;
+
+				if (AutoTarget.HasFlag(EAutoTarget.Player))
+				{
+					var player = AIManager.Instance.Player;
+					if (player != null && player.IsAlive)
+					{
+						var dist = Vector3.Distance(player.transform.position, pos);
+						if (dist < AutoTargetRange)
+							targets.Add(player, dist);
+					}
+				}
+
+				if (AutoTarget.HasFlag(EAutoTarget.NPCs))
+				{
+					var npcs = AIManager.Instance.NPCs;
+
+					for (var i = 0; i < npcs.Count; i++)
+					{
+						var npc = npcs[i];
+						if (npc == null || !npc.IsAlive || npc == this)
+							continue;
+
+						var dist = Vector3.Distance(npc.transform.position, pos);
+						if (dist < AutoTargetRange)
+							targets.Add(npc, dist);
+					}
+				}
+
+				var closestDistance = Mathf.Infinity;
+				IAlive closestAlive = null;
+
+				foreach (var target in targets)
+				{
+					if (target.Value > closestDistance)
+						continue;
+					
+					closestAlive = target.Key;
+					closestDistance = target.Value;
+				}
+
+				if (closestAlive != null)
+					setTarget((Component)closestAlive);
+				
+				await UniTask.WaitForSeconds(AutoTargetEvery);
+			}
+		}
 		
 		#endregion
 
@@ -257,6 +329,8 @@ namespace AI
 		{
 			Agent.speed = maximumSpeed;
 			base.Spawn(startingHealth, overloadHealth, maximumSpeed);
+			
+			autoTarget().Forget();
 		}
 
 		public override void Kill(object source)
