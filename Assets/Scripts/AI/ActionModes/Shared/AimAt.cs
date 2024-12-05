@@ -18,7 +18,7 @@ namespace AI.ActionModes.Shared
 		/// This only does one step of aiming and should be placed in FixedUpdate
 		/// Returns true if angle between npc and target is within specified maximum angle
 		/// </summary>
-		public bool RotateTowardsTarget(Transform transform, Transform target)
+		public bool AimTowardsTarget(Transform transform, Transform target)
 		{
 			var targetPosition = target.position - transform.position;
 			targetPosition.y = 0;

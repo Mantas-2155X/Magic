@@ -54,7 +54,7 @@ namespace AI.ActionModes
 			
 			var target = Owner.Target.transform;
 			
-			if (!aimAt.RotateTowardsTarget(Owner.transform, target))
+			if (!aimAt.AimTowardsTarget(Owner.transform, target))
 				return;
 			
 			if (hasSight.SightCheck(Owner, target))

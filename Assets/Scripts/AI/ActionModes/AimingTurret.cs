@@ -39,7 +39,7 @@ namespace AI.ActionModes
 			if (!withinRange.DistanceCheck(transform, target))
 				return;
 
-			if (!aimAt.RotateTowardsTarget(transform, target))
+			if (!aimAt.AimTowardsTarget(transform, target))
 				return;
 			
 			if (hasSight.SightCheck(Owner, target))
