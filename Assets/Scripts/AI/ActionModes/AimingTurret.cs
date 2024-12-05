@@ -9,9 +9,9 @@ namespace AI.ActionModes
 	{
 		public NPC Owner { get; set; }
 		
-		private readonly AimAt aimAt = new (9f, 12f);
+		private readonly AimAt aimAt = new (9f, 12f, 5f);
+		private readonly HasSight hasSight = new (11f);
 		private readonly WithinRange withinRange = new (15f);
-		private readonly HasSight hasSight = new (5f, 11f);
 		
 		public void Enabled(NPC owner)
 		{
@@ -39,9 +39,10 @@ namespace AI.ActionModes
 			if (!withinRange.DistanceCheck(transform, target))
 				return;
 
-			var lookRotation = aimAt.AimStep(transform, target);
+			if (!aimAt.RotateTowardsTarget(transform, target))
+				return;
 			
-			if (hasSight.SightCheck(Owner, target, lookRotation))
+			if (hasSight.SightCheck(Owner, target))
 				Owner.Weapon?.Attack();
 		}
 		

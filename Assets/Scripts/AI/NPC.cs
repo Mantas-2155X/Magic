@@ -51,7 +51,7 @@ namespace AI
 			{ EActionMode.None, new None() },
 			{ EActionMode.RageTurret, new RageTurret() },
 			{ EActionMode.AimingTurret, new AimingTurret() },
-			{ EActionMode.ChaseAndKill, new ChaseAndKill() }
+			{ EActionMode.FindAndKill, new FindAndKill() }
 		};
 
 		private readonly Dictionary<IAlive, float> targets = new ();
@@ -73,18 +73,46 @@ namespace AI
 			setDestination(destination);
 			setAIMode(EAIMode.Walking);
 		}
-		
-		public void Act(Component target, EActionMode mode, bool endWithoutTarget)
+
+		#region Action Modes
+
+		public void RageTurret()
 		{
 			if (!IsAlive)
 				return;
 
-			EndActionWithoutTarget = endWithoutTarget;
+			EndActionWithoutTarget = false;
 			
-			setTarget(target);
-			setActionMode(mode);
+			setTarget(null);
+			setActionMode(EActionMode.RageTurret);
 			setAIMode(EAIMode.Action);
 		}
+		
+		public void AimingTurret(Component target, bool endActionWithoutTarget)
+		{
+			if (!IsAlive)
+				return;
+
+			EndActionWithoutTarget = endActionWithoutTarget;
+			
+			setTarget(target);
+			setActionMode(EActionMode.AimingTurret);
+			setAIMode(EAIMode.Action);
+		}
+
+		public void FindAndKill(Component target, bool endActionWithoutTarget)
+		{
+			if (!IsAlive)
+				return;
+
+			EndActionWithoutTarget = endActionWithoutTarget;
+			
+			setTarget(target);
+			setActionMode(EActionMode.FindAndKill);
+			setAIMode(EAIMode.Action);
+		}
+
+		#endregion
 
 		public void Chill()
 		{

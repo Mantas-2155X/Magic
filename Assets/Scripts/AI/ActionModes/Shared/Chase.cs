@@ -19,7 +19,7 @@ namespace AI.ActionModes.Shared
 		/// This only does one step of trying and should be placed in Update
 		/// Returns true if the npc has chased and reached the target
 		/// </summary>
-		public bool TryReachTarget(NPC npc, Transform target)
+		public bool ChaseTarget(NPC npc, Transform target)
 		{
 			var agent = npc.Agent;
 			var transform = npc.transform;

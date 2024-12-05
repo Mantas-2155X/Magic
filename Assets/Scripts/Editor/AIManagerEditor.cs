@@ -5,6 +5,7 @@ using Objects;
 using Tools;
 using UnityEditor;
 using UnityEngine;
+using Weapons.Interfaces;
 using Random = UnityEngine.Random;
 
 namespace Editor
@@ -134,14 +135,14 @@ namespace Editor
 
 			GUILayout.BeginHorizontal();
 			
-			if (GUILayout.Button("Chase and Kill"))
+			if (GUILayout.Button("Find and Kill"))
 			{
 				foreach (var npc in aiManager.NPCs)
 				{
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Act(aiManager.Player, EActionMode.ChaseAndKill, true);
+					npc.FindAndKill(npc.Target, true);
 				}
 			}
 						
@@ -152,7 +153,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Act(aiManager.Player, EActionMode.AimingTurret, true);
+					npc.AimingTurret(npc.Target, true);
 				}
 			}
 			
@@ -163,21 +164,10 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Act(null, EActionMode.RageTurret, false);
+					npc.RageTurret();
 				}
 			}
-			
-			if (GUILayout.Button("Deathmatch"))
-			{
-				foreach (var npc in aiManager.NPCs)
-				{
-					if (!npc.IsAlive)
-						continue;
 
-					npc.Act(aiManager.Player, EActionMode.ChaseAndKill, false);
-				}
-			}
-			
 			GUILayout.EndHorizontal();
 			
 			GUILayout.Label("Misc", EditorStyles.boldLabel);
@@ -190,14 +180,7 @@ namespace Editor
 
 			if (GUILayout.Button("Give Player"))
 			{
-				var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
-				
-				var tr = go.transform;
-				tr.SetParent(World.World.Instance.Dropped);
-				
-				var dropped = go.GetComponent<DroppedWeapon>();
-				dropped.Weapon = Weapon;
-				dropped.Pickup(aiManager.Player.transform.GetComponent<IAlive>());
+				aiManager.Player.TakeWeapon(Instantiate(Resources.Load<GameObject>($"Weapons/{Weapon}")).GetComponent<IWeapon>());
 			}
 			
 			if (GUILayout.Button("Give NPCs"))
@@ -206,15 +189,8 @@ namespace Editor
 				{
 					if (!npc.IsAlive)
 						continue;
-
-					var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
 					
-					var tr = go.transform;
-					tr.SetParent(World.World.Instance.Dropped);
-
-					var dropped = go.GetComponent<DroppedWeapon>();
-					dropped.Weapon = Weapon;
-					dropped.Pickup(npc.transform.GetComponent<IAlive>());
+					npc.TakeWeapon(Instantiate(Resources.Load<GameObject>($"Weapons/{Weapon}")).GetComponent<IWeapon>());
 				}
 			}
 			

@@ -5,6 +5,6 @@ namespace AI.Enums
 		None,
 		RageTurret,
 		AimingTurret,
-		ChaseAndKill
+		FindAndKill
 	}
 }

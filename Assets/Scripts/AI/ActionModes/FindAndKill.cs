@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace AI.ActionModes
 {
-	public class ChaseAndKill : IActionMode
+	public class FindAndKill : IActionMode
 	{
 		public NPC Owner { get; set; }
 		
-		private readonly AimAt aimAt = new (9f, 12f);
+		private readonly AimAt aimAt = new (9f, 12f, 5f);
 		private readonly WithinRange withinRange = new (25f);
-		private readonly HasSight hasSight = new (5f, 11f);
+		private readonly HasSight hasSight = new (11f);
 		private readonly Chase chase = new (10f);
 		
 		private bool shouldReach;
@@ -39,7 +39,7 @@ namespace AI.ActionModes
 			if (!shouldReach)
 				return;
 
-			var reachedTarget = chase.TryReachTarget(Owner, target);
+			var reachedTarget = chase.ChaseTarget(Owner, target);
 			if (!reachedTarget)
 				return;
 
@@ -53,9 +53,11 @@ namespace AI.ActionModes
 				return;
 			
 			var target = Owner.Target.transform;
-			var lookRotation = aimAt.AimStep(Owner.transform, target);
 			
-			if (hasSight.SightCheck(Owner, target, lookRotation))
+			if (!aimAt.RotateTowardsTarget(Owner.transform, target))
+				return;
+			
+			if (hasSight.SightCheck(Owner, target))
 				Owner.Weapon?.Attack();
 		}
 		

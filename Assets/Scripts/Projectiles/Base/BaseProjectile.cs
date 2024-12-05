@@ -72,8 +72,6 @@ namespace Projectiles.Base
 			
 			destroyed = true;
 			Destroy(gameObject);
-			
-			Debug.Log($"[BaseProjectile {ownerName}] Collided with {collision.transform.name}");
 		}
 
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force)
