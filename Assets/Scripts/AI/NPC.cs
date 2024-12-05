@@ -249,6 +249,10 @@ namespace AI
 							targets.Add(player, dist);
 					}
 				}
+				else if (Target is Player)
+				{
+					setTarget(null);
+				}
 
 				if (AutoTarget.HasFlag(EAutoTarget.NPCs))
 				{
@@ -265,7 +269,14 @@ namespace AI
 							targets.Add(npc, dist);
 					}
 				}
+				else if (Target is NPC)
+				{
+					setTarget(null);
+				}
 
+				if (Target != null && Vector3.Distance(Target.transform.position, pos) >= AutoTargetRange)
+					setTarget(null);
+				
 				var closestDistance = Mathf.Infinity;
 				IAlive closestAlive = null;
 
