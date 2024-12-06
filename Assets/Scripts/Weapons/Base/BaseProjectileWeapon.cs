@@ -1,3 +1,4 @@
+using Managers;
 using Projectiles.Interfaces;
 using Tools;
 using UnityEngine;
@@ -17,9 +18,14 @@ namespace Weapons.Base
 				Debug.Log($"[BaseProjectileWeapon {Owner.GetGameObject().name}] Too close to fire");
 				return false;
 			}
-			
-			var pj = Instantiate(Resources.Load<GameObject>($"Projectiles/{Projectile}")).GetComponent<IProjectile>();
-			pj.Spawn(this, Ray.origin + Ray.direction * 1f, Ray.direction * Force);
+
+			if (Projectile != null)
+			{
+				var pooled = PoolingManager.Instance.TakeFromPool(Projectile, false);
+				
+				var projectile = pooled != null ? pooled.GetComponent<IProjectile>() : Instantiate(Resources.Load<GameObject>($"Projectiles/{Projectile.Name}")).GetComponent<IProjectile>();
+				projectile.Spawn(this, Ray.origin + Ray.direction * 1f, Ray.direction * Force);
+			}
 			
 			return true;
 		}

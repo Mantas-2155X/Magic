@@ -15,7 +15,6 @@ namespace Projectiles.Interfaces
 		public Type Impact { get; }
 		
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
-		public void Pool();
 
 		public GameObject GetGameObject();
 	}

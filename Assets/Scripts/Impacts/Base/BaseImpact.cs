@@ -11,7 +11,7 @@ namespace Impacts.Base
 		
 		public void OnDisable()
 		{
-			Pool();
+			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 		
 		public void Spawn(IProjectile source, Vector3 position, Vector3 angles)
@@ -26,11 +26,6 @@ namespace Impacts.Base
 			gameObject.SetActive(true);
 		}
 
-		public void Pool()
-		{
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
-		}
-		
 		public GameObject GetGameObject()
 		{
 			return gameObject;

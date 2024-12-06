@@ -14,8 +14,7 @@ namespace Weapons.Base
 		
 		[field: SerializeField]
 		public virtual float Force { get; private set; }
-		[field: SerializeField]
-		public virtual string Projectile { get; private set; }
+		public virtual Type Projectile { get; private set; }
 		[field: SerializeField]
 		public virtual float TimeBetweenAttacks { get; private set; }
 		

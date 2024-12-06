@@ -1,3 +1,4 @@
+using System;
 using AI.Interfaces;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Weapons.Interfaces
 		public IAlive Owner { get; }
 
 		public float Force { get; }
-		public string Projectile { get; }
+		public Type Projectile { get; }
 		public float TimeBetweenAttacks { get; }
 
 		public void Take(IAlive alive);

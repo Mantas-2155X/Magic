@@ -47,13 +47,13 @@ namespace Projectiles.Base
 			if (Impact != null)
 			{
 				var tr = transform;
-				var pooled = PoolingManager.Instance.TakeFromPool(Impact);
+				var pooled = PoolingManager.Instance.TakeFromPool(Impact, false);
 				
 				var impact = pooled != null ? pooled.GetComponent<IImpact>() : Instantiate(Resources.Load<GameObject>($"Impacts/{Impact.Name}")).GetComponent<IImpact>();
 				impact.Spawn(this, tr.position, tr.eulerAngles);
 			}
 
-			Pool();
+			clearVelocityAndPool().Forget();
 		}
 
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force)
@@ -62,19 +62,16 @@ namespace Projectiles.Base
 
 			owner = Source.Owner;
 			ownerName = owner.GetGameObject().name;
-			
-			transform.SetParent(World.World.Instance.Projectiles);
+
+			var tr = transform;
+			tr.SetParent(World.World.Instance.Projectiles);
+			tr.position = origin;
+			tr.eulerAngles = Vector3.zero;
 			
 			gameObject.SetActive(true);
-			poolDelayed().Forget();
+			waitLifetimeAndPool().Forget();
 
-			Rigidbody.MovePosition(origin);
 			Rigidbody.AddForce(force, ForceMode.Impulse);
-		}
-		
-		public void Pool()
-		{
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 		
 		public GameObject GetGameObject()
@@ -82,11 +79,20 @@ namespace Projectiles.Base
 			return gameObject;
 		}
 
-		private async UniTask poolDelayed()
+		private async UniTask waitLifetimeAndPool()
 		{
 			await UniTask.WaitForSeconds(Lifetime);
+			await clearVelocityAndPool();
+		}
+
+		private async UniTask clearVelocityAndPool()
+		{
+			Rigidbody.linearVelocity = Vector3.zero;
+			Rigidbody.angularVelocity = Vector3.zero;
 			
-			Pool();
+			await UniTask.WaitForFixedUpdate();
+			
+			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 	}
 }

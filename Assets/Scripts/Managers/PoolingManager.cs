@@ -33,10 +33,9 @@ namespace Managers
 				go.SetActive(false);
 			
 			list.Add(go);
-			Debug.Log($"[PoolingManager] Added {type} {go} to pool");
 		}
 
-		public GameObject TakeFromPool(Type type, bool enable = true)
+		public GameObject TakeFromPool(Type type, bool enable)
 		{
 			if (!Pool.TryGetValue(type, out var list) || list.Count == 0)
 				return null;
@@ -47,7 +46,6 @@ namespace Managers
 			if (enable)
 				go.SetActive(true);
 			
-			Debug.Log($"[PoolingManager] Taken {type} {go} from pool");
 			return go;
 		}
 		
