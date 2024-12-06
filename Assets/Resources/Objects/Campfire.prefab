@@ -4976,8 +4976,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecd4b2328a614804a4e907800b9e4a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StayDuration: 5
-  Damage: 3
+  DamageRate: 0.15
+  Damage: 7
 --- !u!135 &8835514454057814530
 SphereCollider:
   m_ObjectHideFlags: 0

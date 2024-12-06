@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AI.Interfaces;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace World
@@ -7,33 +8,18 @@ namespace World
 	public class Water : MonoBehaviour
 	{
 		[SerializeField]
-		public int StayDuration = 5;
+		public float DamageRate = 0.1f;
 
 		[SerializeField]
-		public int Damage = 10;
+		public int Damage = 12;
 
 		private List<IAlive> alives = new ();
 		
-		private int duration;
-
-		public void FixedUpdate()
+		public void Awake()
 		{
-			duration++;
-			
-			if (duration < StayDuration)
-				return;
-			
-			duration = 0;
-
-			foreach (var alive in alives)
-			{
-				if (alive == null || !alive.IsAlive)
-					continue;
-				
-				alive.Damage(Damage, this);
-			}
+			damage().Forget();
 		}
-		
+
 		public void OnTriggerEnter(Collider other)
 		{
 			var alive = other.GetComponent<IAlive>();
@@ -52,5 +38,20 @@ namespace World
 			alives.Remove(alive);
 		}
 
+		private async UniTask damage()
+		{
+			while (enabled)
+			{
+				await UniTask.WaitForSeconds(DamageRate);
+			
+				foreach (var alive in alives)
+				{
+					if (alive == null || !alive.IsAlive)
+						continue;
+				
+					alive.Damage(Damage, this);
+				}
+			}
+		}
 	}
 }
