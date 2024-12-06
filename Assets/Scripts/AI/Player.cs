@@ -74,18 +74,6 @@ namespace AI
 		private readonly List<ContactPoint> contactPoints = new ();
 		private readonly List<Collider> collidingState = new ();
 		
-		// Smooth movement with first person camera and rigidbodies
-		//
-		// RigidBody:
-		// 1. Enable Interpolation
-		//
-		// FixedUpdate:
-		// 1. Rotate the rigidbody according to mouse direction
-		//
-		// LateUpdate:
-		// 1. Rotate the camera according to mouse direction
-		// 2. Set the camera position according to object position
-
 		#region MonoBehaviour
 
 		public void Awake()
@@ -110,17 +98,17 @@ namespace AI
 			if (!IsAlive)
 				return;
 
+			Body.Rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0f, lookDirection.y, 0f)));
+
 			CameraTr.eulerAngles = new Vector3(lookDirection.x, lookDirection.y, 0f);
-			CameraTr.position = transform.position + transform.up * 0.5f + transform.forward * 0.25f;
+			CameraTr.position = transform.position + Vector3.up * 0.5f;
 		}
 
 		public void FixedUpdate()
 		{
 			if (!IsAlive)
 				return;
-
-			Body.Rigidbody.rotation = Quaternion.Euler(new Vector3(0f, lookDirection.y, 0f));
-
+			
 			if (IsNoclip)
 			{
 				Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * SprintMultiplier : 1f), ForceMode.VelocityChange);
