@@ -12,7 +12,6 @@ using Managers;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 
 namespace AI
 {

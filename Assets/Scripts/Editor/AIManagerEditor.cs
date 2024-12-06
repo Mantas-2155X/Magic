@@ -1,7 +1,5 @@
 using AI.Enums;
-using AI.Interfaces;
 using Managers;
-using Objects;
 using Tools;
 using UnityEditor;
 using UnityEngine;
