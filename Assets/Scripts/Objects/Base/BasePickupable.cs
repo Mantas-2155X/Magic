@@ -60,9 +60,6 @@ namespace Objects.Base
 		{
 			await UniTask.WaitForSeconds(PickupableAfter);
 			
-			if (this == null)
-				return;
-
 			pickupable = true;
 		}
 	}

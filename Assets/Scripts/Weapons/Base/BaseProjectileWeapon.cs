@@ -18,8 +18,7 @@ namespace Weapons.Base
 				return false;
 			}
 			
-			var go = Instantiate(Resources.Load<GameObject>($"Projectiles/{Projectile}"));
-			var pj = go.GetComponent<IProjectile>();
+			var pj = Instantiate(Resources.Load<GameObject>($"Projectiles/{Projectile}")).GetComponent<IProjectile>();
 			pj.Spawn(this, Ray.origin + Ray.direction * 1f, Ray.direction * Force);
 			
 			return true;

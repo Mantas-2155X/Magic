@@ -27,6 +27,12 @@ namespace World
 
 		[SerializeField]
 		public Transform Dropped;
+		
+		[SerializeField]
+		public Transform Projectiles;
+
+		[SerializeField]
+		public Transform Impacts;
 
 		[SerializeField]
 		public float AdditionalGravity = -0.1f;

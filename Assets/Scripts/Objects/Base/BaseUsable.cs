@@ -48,9 +48,6 @@ namespace Objects.Base
 		{
 			await UniTask.WaitForSeconds(UsableAfter);
 			
-			if (this == null)
-				return;
-
 			usable = true;
 		}
 	}

@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8675571272634498981
 Transform:
   m_ObjectHideFlags: 0
@@ -4876,8 +4876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Rigidbody>k__BackingField: {fileID: -6803533052199284734}
-  <Range>k__BackingField: 11
-  <Lifetime>k__BackingField: 1
+  <Lifetime>k__BackingField: 0.5
   <Damage>k__BackingField: 10
   <Impact>k__BackingField: FireBall
 --- !u!135 &7443144026641663299

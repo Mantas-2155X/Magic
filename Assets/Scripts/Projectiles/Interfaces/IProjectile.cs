@@ -9,13 +9,13 @@ namespace Projectiles.Interfaces
 		
 		public IWeapon Source { get; }
 		
-		public float Range { get; }
 		public float Lifetime { get; }
 		public int Damage { get; }
 		public string Impact { get; }
 		
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
-		
+		public void Pool();
+
 		public GameObject GetGameObject();
 	}
 }
