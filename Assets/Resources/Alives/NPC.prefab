@@ -213,3 +213,8 @@ MonoBehaviour:
   AutoTarget: 0
   AutoTargetRange: 25
   AutoTargetEvery: 0.5
+  SenseRange: 25
+  SightRange: 11
+  ChaseRange: 10
+  RotationStep: {x: 400, y: 500}
+  AimAngle: 5

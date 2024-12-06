@@ -9,8 +9,6 @@ namespace AI.ActionModes
 	{
 		public NPC Owner { get; set; }
 		
-		private bool shouldReach;
-		
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
@@ -30,30 +28,26 @@ namespace AI.ActionModes
 			var target = Owner.Target.transform;
 			var transform = Owner.transform;
 
-			shouldReach = Owner.WithinRange.DistanceCheck(transform, target);
-			if (!shouldReach)
+			if (!Owner.WithinRange.DistanceCheck(transform, target))
 				return;
 
-			var reachedTarget = Owner.Chase.ChaseTarget(Owner, target);
-			if (!reachedTarget)
+			if (!Owner.Chase.ChaseTarget(Owner, target))
 				return;
 
 			if (Owner.AIMode == EAIMode.Walking)
+			{
 				Owner.ReturnAIMode();
-		}
-		
-		public void FixedUpdate()
-		{
-			if (Owner.AIMode != EAIMode.Action || Owner.Target == null || !shouldReach)
 				return;
+			}
 			
-			var target = Owner.Target.transform;
+			if (Owner.AIMode == EAIMode.Action)
+			{
+				if (!Owner.AimAt.AimTowardsTarget(Owner.transform, target))
+					return;
 			
-			if (!Owner.AimAt.AimTowardsTarget(Owner.transform, target))
-				return;
-			
-			if (Owner.HasSight.SightCheck(Owner, target))
-				Owner.Weapon?.Attack();
+				if (Owner.HasSight.SightCheck(Owner, target))
+					Owner.Weapon?.Attack();
+			}
 		}
 		
 		public void TargetChanged(Component previousTarget, Component newTarget)

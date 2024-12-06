@@ -12,6 +12,7 @@ using Managers;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace AI
 {
@@ -67,11 +68,11 @@ namespace AI
 		public float ChaseRange = 10f;
 
 		/// <summary>
-		/// Min-Max range of how many degrees per step can the npc rotate when performing an action
+		/// Min-Max range of how fast can the npc rotate when performing an action
 		/// (AimAt, Spin)
 		/// </summary>
 		[SerializeField]
-		public Vector2 RotationStep = new (9f, 12f);
+		public Vector2 RotationSpeed = new (400f, 500f);
 
 		/// <summary>
 		/// Maximum look angle between the npc and the target which the npc deems accurate enough
@@ -192,20 +193,7 @@ namespace AI
 			if (!Physics.Raycast(ray, out var hit, maxRange, ~LayerMaskTools.Mask2))
 				return false;
 			
-			var rb = hit.rigidbody;
-			if (rb == null)
-				return false;
-
-			var components = rb.GetComponents<Component>();
-			foreach (var component in components)
-			{
-				if (component != target)
-					continue;
-
-				return true;
-			}
-
-			return false;
+			return hit.collider.GetComponent(target.GetType()) == target;
 		}
 		
 		public void ReturnAIMode(bool resetAction = false)
@@ -402,15 +390,6 @@ namespace AI
 			
 			ActionModes[ActionMode].Update();
 			AIModes[AIMode].Update();
-		}
-
-		public void FixedUpdate()
-		{
-			if (!IsAlive)
-				return;
-
-			ActionModes[ActionMode].FixedUpdate();
-			AIModes[AIMode].FixedUpdate();
 		}
 
 		#endregion

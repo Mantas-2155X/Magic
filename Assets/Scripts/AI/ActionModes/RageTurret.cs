@@ -21,11 +21,6 @@ namespace AI.ActionModes
 		
 		public void Update()
 		{
-			
-		}
-		
-		public void FixedUpdate()
-		{
 			if (Owner.AIMode != EAIMode.Action)
 				return;
 			

@@ -13,11 +13,11 @@ namespace AI.ActionModes.Shared
 		
 		/// <summary>
 		/// Endlessly rotates the transform with the specified degrees range
-		/// This only does one step of spinning and should be placed in FixedUpdate
+		/// This only does one step of spinning and should be placed in Update
 		/// </summary>
 		public void SpinEndlessly(Transform transform)
 		{
-			transform.Rotate(transform.up, Random.Range(owner.RotationStep.x, owner.RotationStep.y));
+			transform.Rotate(transform.up, Random.Range(owner.RotationSpeed.x, owner.RotationSpeed.y) * Time.deltaTime);
 		}
 	}
 }

@@ -21,12 +21,7 @@ namespace AI.ActionModes
 		{
 
 		}
-		
-		public void FixedUpdate()
-		{
 
-		}
-		
 		public void TargetChanged(Component previousTarget, Component newTarget)
 		{
 

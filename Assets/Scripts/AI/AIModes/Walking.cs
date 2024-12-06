@@ -44,12 +44,7 @@ namespace AI.AIModes
 			// Reached destination, go back to what was being done earlier
 			Owner.ReturnAIMode();
 		}
-		
-		public void FixedUpdate()
-		{
-			
-		}
-		
+
 		public void TargetChanged(Component previousTarget, Component newTarget)
 		{
 			
@@ -143,7 +138,7 @@ namespace AI.AIModes
 					return;
 				}
 				
-				transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(9f, 12f) * 50f * Time.deltaTime);
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(Owner.RotationSpeed.x, Owner.RotationSpeed.y) * Time.deltaTime);
 			}
 		}
 	}

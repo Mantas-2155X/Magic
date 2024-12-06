@@ -21,11 +21,6 @@ namespace AI.ActionModes
 		
 		public void Update()
 		{
-			
-		}
-		
-		public void FixedUpdate()
-		{
 			if (Owner.AIMode != EAIMode.Action || Owner.Target == null)
 				return;
 			
@@ -41,7 +36,7 @@ namespace AI.ActionModes
 			if (Owner.HasSight.SightCheck(Owner, target))
 				Owner.Weapon?.Attack();
 		}
-		
+
 		public void TargetChanged(Component previousTarget, Component newTarget)
 		{
 			
