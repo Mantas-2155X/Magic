@@ -1,5 +1,7 @@
+using System;
 using Managers;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace World
 {
@@ -36,6 +38,11 @@ namespace World
 
 		[SerializeField]
 		public float AdditionalGravity = -0.1f;
+
+		[SerializeField]
+		public float TimeScale = 1f;
+
+		private float previousTimeScale;
 		
 		public void Awake()
 		{
@@ -45,6 +52,15 @@ namespace World
 		public void Start()
 		{
 			AIManager.Instance.CreatePlayer(SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount)));
+		}
+		
+		public void Update()
+		{
+			if (TimeScale == previousTimeScale)
+				return;
+
+			previousTimeScale = TimeScale;
+			Time.timeScale = TimeScale;
 		}
 		
 		public void FixedUpdate()

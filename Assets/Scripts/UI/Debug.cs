@@ -19,7 +19,7 @@ namespace UI
 		{
 			if (count < AverageOver)
 			{
-				time += Time.deltaTime;
+				time += Time.unscaledDeltaTime;
 				count++;
 			}
 			else
