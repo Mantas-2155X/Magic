@@ -1,3 +1,4 @@
+using Managers;
 using TMPro;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace UI
 	public class Debug : MonoBehaviour
 	{
 		[SerializeField]
-		public TMP_Text FPS;
+		public TMP_Text Text;
 
 		[SerializeField]
 		public int AverageOver = 5;
@@ -23,7 +24,7 @@ namespace UI
 			}
 			else
 			{
-				FPS.text = $"FPS: {(int)(count / time)}";
+				Text.text = $"NPCs: {AIManager.Instance.NPCs.Count}\nFPS: {(int)(count / time)}";
 				
 				time = 0f;
 				count = 0;
