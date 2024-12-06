@@ -1,5 +1,7 @@
+using System;
 using AI.Base;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace AI
 {
@@ -55,7 +57,15 @@ namespace AI
 		
 		private float blinkStartTime;
 		private float blinkFinishTime;
-		
+
+		private Material eyeMaterial;
+
+		public void Awake()
+		{
+			eyeMaterial = Eyes[0].material;
+			Eyes[1].material = eyeMaterial;
+		}
+
 		public void Update()
 		{
 			if (!Alive.IsAlive)
@@ -63,16 +73,14 @@ namespace AI
 			
 			if (blinking && Time.time >= blinkStartTime + BlinkDuration)
 			{
-				foreach (var eye in Eyes)
-					eye.material.color = EyesColor;
+				eyeMaterial.color = EyesColor;
 				
 				blinking = false;
 				blinkFinishTime = Time.time + Random.Range(-BlinkVariation, BlinkVariation);
 			}
 			else if (!blinking && Time.time >= blinkFinishTime + BlinkEvery)
 			{
-				foreach (var eye in Eyes)
-					eye.material.color = Color.black;
+				eyeMaterial.color = Color.black;
 				
 				blinking = true;
 				blinkStartTime = Time.time;

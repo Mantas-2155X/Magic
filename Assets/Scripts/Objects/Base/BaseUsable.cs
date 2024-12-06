@@ -17,7 +17,10 @@ namespace Objects.Base
 
 		public void Awake()
 		{
-			setUsable().Forget();
+			if (UsableAfter == 0f)
+				usable = true;
+			else
+				setUsable().Forget();
 		}
 
 		public virtual bool CanUse(IAlive user)

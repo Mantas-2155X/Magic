@@ -20,7 +20,10 @@ namespace Objects.Base
 		
 		public void Awake()
 		{
-			setPickupable().Forget();
+			if (PickupableAfter == 0f)
+				pickupable = true;
+			else
+				setPickupable().Forget();
 		}
 
 		public virtual bool CanPickup(IAlive user)

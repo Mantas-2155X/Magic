@@ -61,7 +61,7 @@ namespace World
 			for (var i = 0; i < npcs.Count; i++)
 			{
 				var npc = npcs[i];
-				if (!npc.IsAlive || npc.Agent.enabled || npc.IsNoclip)
+				if (!npc.IsAlive || npc.IsNoclip)
 					continue;
 
 				npc.Body.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);

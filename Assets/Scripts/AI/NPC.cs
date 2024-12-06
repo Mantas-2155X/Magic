@@ -95,14 +95,14 @@ namespace AI
 		public HasSight HasSight { get; private set; }
 		public WithinRange WithinRange { get; private set; }
 		
-		public readonly Dictionary<EAIMode, IAIMode> AIModes = new ()
+		public readonly Dictionary<EAIMode, IAIMode> AIModes = new (new EAIModeComparer())
 		{
 			{ EAIMode.Idle, new Idle() },
 			{ EAIMode.Walking, new Walking() },
 			{ EAIMode.Action, new Action() }
 		};
 		
-		public readonly Dictionary<EActionMode, IActionMode> ActionModes = new ()
+		public readonly Dictionary<EActionMode, IActionMode> ActionModes = new (new EActionModeComparer())
 		{
 			{ EActionMode.None, new None() },
 			{ EActionMode.RageTurret, new RageTurret() },
