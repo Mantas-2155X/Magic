@@ -80,7 +80,7 @@ namespace AI
 		// 1. Enable Interpolation
 		//
 		// FixedUpdate:
-		// 1. Rotate the object according to mouse direction
+		// 1. Rotate the rigidbody according to mouse direction
 		//
 		// LateUpdate:
 		// 1. Rotate the camera according to mouse direction
@@ -119,7 +119,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 
-			transform.eulerAngles = new Vector3(0, lookDirection.y, 0f);
+			Body.Rigidbody.rotation = Quaternion.Euler(new Vector3(0f, lookDirection.y, 0f));
 
 			if (IsNoclip)
 			{
