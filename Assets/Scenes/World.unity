@@ -1712,7 +1712,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1783
+    m_Bits: 1779
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2412,6 +2412,7 @@ MonoBehaviour:
   Projectiles: {fileID: 13660899}
   Impacts: {fileID: 1393974972}
   AdditionalGravity: -0.1
+  TimeScale: 1
 --- !u!4 &646561133
 Transform:
   m_ObjectHideFlags: 0

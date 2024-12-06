@@ -4,6 +4,7 @@ using Objects.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Weapons.Interfaces;
 
 namespace AI
 {
@@ -355,6 +356,15 @@ namespace AI
 			
 			if (value)
 				collidingState.Clear();
+		}
+		
+		public override void TakeWeapon(IWeapon weapon)
+		{
+			base.TakeWeapon(weapon);
+			
+			var transforms = Body.WeaponContainer.GetComponentsInChildren<Transform>();
+			foreach (var tr in transforms)
+				tr.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 		}
 		
 		public override void Spawn(int startingHealth, int overloadHealth, float maximumSpeed)

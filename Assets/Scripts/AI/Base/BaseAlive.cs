@@ -63,7 +63,7 @@ namespace AI.Base
 				Body.Rigidbody.excludeLayers = previousExcludeLayers;
 		}
 
-		public void TakeWeapon(IWeapon weapon)
+		public virtual void TakeWeapon(IWeapon weapon)
 		{
 			DropWeapon();
 			
