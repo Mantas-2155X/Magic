@@ -98,6 +98,8 @@ namespace AI.AIModes
 			var normalizedTime = 0.0f;
 			while (normalizedTime < 1.0f)
 			{
+				await UniTask.NextFrame();
+
 				if (Owner == null)
 					return;
 
@@ -111,7 +113,6 @@ namespace AI.AIModes
 				agentTr.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
 				
 				normalizedTime += Time.deltaTime / Owner.JumpDuration;
-				await UniTask.NextFrame();
 			}
 			
 			agent.CompleteOffMeshLink();
@@ -131,6 +132,8 @@ namespace AI.AIModes
 			
 			while (Quaternion.Angle(transform.rotation, targetRotation) > 5f)
 			{
+				await UniTask.NextFrame();
+
 				if (Owner == null)
 					return;
 
@@ -141,7 +144,6 @@ namespace AI.AIModes
 				}
 				
 				transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(9f, 12f) * 50f * Time.deltaTime);
-				await UniTask.NextFrame();
 			}
 		}
 	}

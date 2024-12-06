@@ -321,11 +321,10 @@ namespace AI
 		{
 			while (IsAlive)
 			{
+				await UniTask.WaitForSeconds(AutoTargetEvery);
+
 				if (AutoTarget == EAutoTarget.None)
-				{
-					await UniTask.WaitForSeconds(AutoTargetEvery);
 					continue;
-				}
 				
 				targets.Clear();
 
@@ -383,8 +382,6 @@ namespace AI
 
 				if (closestAlive != null)
 					setTarget((Component)closestAlive);
-				
-				await UniTask.WaitForSeconds(AutoTargetEvery);
 			}
 		}
 		
