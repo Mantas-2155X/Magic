@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -11,7 +12,7 @@ namespace Projectiles.Interfaces
 		
 		public float Lifetime { get; }
 		public int Damage { get; }
-		public string Impact { get; }
+		public Type Impact { get; }
 		
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
 		public void Pool();

@@ -28,27 +28,26 @@ namespace Managers
 				list = new List<GameObject>();
 				Pool[type] = list;
 			}
-
-			Debug.Log($"[PoolingManager] Adding {type} {go} to pool");
-
+			
 			if (disable)
 				go.SetActive(false);
 			
 			list.Add(go);
+			Debug.Log($"[PoolingManager] Added {type} {go} to pool");
 		}
 
-		public GameObject TakeFromPool(Type type, GameObject go, bool enable = true)
+		public GameObject TakeFromPool(Type type, bool enable = true)
 		{
-			if (!Pool.TryGetValue(type, out var list))
+			if (!Pool.TryGetValue(type, out var list) || list.Count == 0)
 				return null;
 
-			Debug.Log($"[PoolingManager] Taking {type} {go} from pool");
-
+			var go = list[0];
 			list.Remove(go);
 			
 			if (enable)
 				go.SetActive(true);
 			
+			Debug.Log($"[PoolingManager] Taken {type} {go} from pool");
 			return go;
 		}
 		

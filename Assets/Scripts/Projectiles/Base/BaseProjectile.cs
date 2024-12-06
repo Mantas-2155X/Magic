@@ -1,3 +1,4 @@
+using System;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Impacts.Interfaces;
@@ -19,8 +20,8 @@ namespace Projectiles.Base
 		public virtual float Lifetime { get; private set; }
 		[field: SerializeField]
 		public virtual int Damage { get; private set; }
-		[field: SerializeField]
-		public virtual string Impact { get; private set; }
+
+		public virtual Type Impact { get; private set; }
 		
 		private IAlive owner;
 		private string ownerName;
@@ -43,14 +44,15 @@ namespace Projectiles.Base
 				}
 			}
 
-			if (Impact != "")
+			if (Impact != null)
 			{
 				var tr = transform;
+				var pooled = PoolingManager.Instance.TakeFromPool(Impact);
 				
-				var im = Instantiate(Resources.Load<GameObject>($"Impacts/{Impact}")).GetComponent<IImpact>();
-				im.Spawn(this, tr.position, tr.eulerAngles);
+				var impact = pooled != null ? pooled.GetComponent<IImpact>() : Instantiate(Resources.Load<GameObject>($"Impacts/{Impact.Name}")).GetComponent<IImpact>();
+				impact.Spawn(this, tr.position, tr.eulerAngles);
 			}
-			
+
 			Pool();
 		}
 
