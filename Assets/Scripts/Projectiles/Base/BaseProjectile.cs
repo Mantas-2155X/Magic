@@ -1,3 +1,5 @@
+//#define DEBUG_BaseProjectile
+
 using System;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -36,7 +38,9 @@ namespace Projectiles.Base
 				{
 					if (alive == owner)
 					{
+#if DEBUG_BaseProjectile
 						Debug.Log($"[BaseProjectile {ownerName}] Not colliding with owner");
+#endif
 						return;
 					}
 					

@@ -1,3 +1,5 @@
+//#define DEBUG_BaseWeapon
+
 using System;
 using AI;
 using AI.Interfaces;
@@ -49,7 +51,9 @@ namespace Weapons.Base
 			
 			if (Physics.Raycast(new Ray(ownerTr.position, ownerTr.forward), 1f, ~LayerMaskTools.Mask2))
 			{
+#if DEBUG_BaseWeapon
 				Debug.Log($"[BaseWeapon {Owner.GetGameObject().name}] Too close to drop forward");
+#endif
 			}
 			else
 			{

@@ -415,14 +415,6 @@ namespace AI
 			ActionModes[ActionMode].FixedUpdate();
 			AIModes[AIMode].FixedUpdate();
 		}
-		
-		public override void OnCollisionStay(Collision collision)
-		{
-			if (Agent.enabled)
-				return;
-			
-			base.OnCollisionStay(collision);
-		}
 
 		#endregion
 		
@@ -455,7 +447,11 @@ namespace AI
 		
 		public override bool IsGrounded()
 		{
-			return Agent.enabled || base.IsGrounded();
+			if (Agent.enabled)
+				return true;
+			
+			// TODO: implement simple raycast, collisions are too heavy for lots of NPCs
+			return false;
 		}
 
 		#endregion

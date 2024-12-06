@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AI.Events;
 using AI.Interfaces;
@@ -15,29 +16,7 @@ namespace AI.Base
 		public static readonly OnDeathEvent OnDeathEvent = new ();
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
 		
-		private readonly List<ContactPoint> contactPoints = new ();
-		private readonly List<Collider> collidingState = new ();
-
 		private LayerMask previousExcludeLayers;
-		
-		#region MonoBehaviour
-
-		public virtual void OnCollisionStay(Collision collision)
-		{
-			var count = collision.GetContacts(contactPoints);
-			for (var i = 0; i < count; i++)
-			{
-				var contactPoint = contactPoints[i];
-				collidingState.Add(contactPoint.thisCollider);
-			}
-		}
-		
-		public virtual void OnCollisionExit(Collision _)
-		{
-			collidingState.Clear();
-		}
-
-		#endregion
 		
 		#region IAlive
 
@@ -65,7 +44,7 @@ namespace AI.Base
 			
 			IsInvulnerable = value;
 		}
-		public void SetNoclip(bool value)
+		public virtual void SetNoclip(bool value)
 		{
 			if (!IsAlive || IsNoclip == value)
 				return;
@@ -79,14 +58,9 @@ namespace AI.Base
 				Body.Feet[i].enabled = !value;
 			
 			if (value)
-			{
-				collidingState.Clear();
 				previousExcludeLayers = Body.Rigidbody.excludeLayers;
-			}
 			else
-			{
 				Body.Rigidbody.excludeLayers = previousExcludeLayers;
-			}
 		}
 
 		public void TakeWeapon(IWeapon weapon)
@@ -196,14 +170,6 @@ namespace AI.Base
 
 		public virtual bool IsGrounded()
 		{
-			for (var i = 0; i < Body.Feet.Length; i++)
-			{
-				if (!collidingState.Contains(Body.Feet[i]))
-					continue;
-
-				return true;
-			}
-
 			return false;
 		}
 		

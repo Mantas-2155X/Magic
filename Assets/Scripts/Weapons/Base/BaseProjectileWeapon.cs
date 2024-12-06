@@ -1,3 +1,5 @@
+//#define DEBUG_BaseProjectileWeapon
+
 using Managers;
 using Projectiles.Interfaces;
 using Tools;
@@ -15,7 +17,9 @@ namespace Weapons.Base
 
 			if (Physics.Raycast(Ray, 1f, ~LayerMaskTools.Mask2))
 			{
+#if DEBUG_BaseProjectileWeapon
 				Debug.Log($"[BaseProjectileWeapon {Owner.GetGameObject().name}] Too close to fire");
+#endif
 				return false;
 			}
 

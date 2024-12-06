@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AI.Base;
 using Objects.Interfaces;
 using Tools;
@@ -69,6 +70,9 @@ namespace AI
 		
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
+		
+		private readonly List<ContactPoint> contactPoints = new ();
+		private readonly List<Collider> collidingState = new ();
 		
 		// Smooth movement with first person camera and rigidbodies
 		//
@@ -168,6 +172,27 @@ namespace AI
 			// Jump after speed limits and other forces to prevent irregularity
 			if (jumpPressed)
 				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
+		}
+		
+		public void OnCollisionStay(Collision collision)
+		{
+			if (!IsAlive)
+				return;
+		
+			var count = collision.GetContacts(contactPoints);
+			for (var i = 0; i < count; i++)
+			{
+				var contactPoint = contactPoints[i];
+				collidingState.Add(contactPoint.thisCollider);
+			}
+		}
+		
+		public void OnCollisionExit(Collision _)
+		{
+			if (!IsAlive)
+				return;
+
+			collidingState.Clear();
 		}
 		
 		#endregion
@@ -336,6 +361,14 @@ namespace AI
 
 		public override bool IsWalking => walking;
 
+		public override void SetNoclip(bool value)
+		{
+			base.SetNoclip(value);
+			
+			if (value)
+				collidingState.Clear();
+		}
+		
 		public override void Spawn(int startingHealth, int overloadHealth, float maximumSpeed)
 		{
 			base.Spawn(startingHealth, overloadHealth, maximumSpeed);
@@ -347,7 +380,23 @@ namespace AI
 			disableInput();
 			base.Kill(source);
 		}
+		
+		public override bool IsGrounded()
+		{
+			if (!IsAlive)
+				return false;
+			
+			for (var i = 0; i < Body.Feet.Length; i++)
+			{
+				if (!collidingState.Contains(Body.Feet[i]))
+					continue;
 
+				return true;
+			}
+
+			return false;
+		}
+		
 		#endregion
 	}
 }
