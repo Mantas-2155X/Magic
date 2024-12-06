@@ -47,16 +47,29 @@ namespace Projectiles.Base
 			if (Impact != null)
 			{
 				var tr = transform;
-				var pooled = PoolingManager.Instance.TakeFromPool(Impact, false);
 				
-				var impact = pooled != null ? pooled.GetComponent<IImpact>() : Instantiate(Resources.Load<GameObject>($"Impacts/{Impact.Name}")).GetComponent<IImpact>();
-				impact.Spawn(this, tr.position, tr.eulerAngles);
+				IImpact impact;
+				bool parent;
+				
+				var pooled = PoolingManager.Instance.TakeFromPool(Impact, false);
+				if (pooled != null)
+				{
+					impact = pooled.GetComponent<IImpact>();
+					parent = false;
+				}
+				else
+				{
+					impact = Instantiate(Resources.Load<GameObject>($"Impacts/{Impact.Name}")).GetComponent<IImpact>();
+					parent = true;
+				}
+				
+				impact.Spawn(this, tr.position, tr.eulerAngles, parent);
 			}
 
 			clearVelocityAndPool().Forget();
 		}
 
-		public void Spawn(IWeapon source, Vector3 origin, Vector3 force)
+		public void Spawn(IWeapon source, Vector3 origin, Vector3 force, bool parent)
 		{
 			Source = source;
 
@@ -64,7 +77,10 @@ namespace Projectiles.Base
 			ownerName = owner.GetGameObject().name;
 
 			var tr = transform;
-			tr.SetParent(World.World.Instance.Projectiles);
+			
+			if (parent)
+				tr.SetParent(World.World.Instance.Projectiles);
+			
 			tr.position = origin;
 			tr.eulerAngles = Vector3.zero;
 			

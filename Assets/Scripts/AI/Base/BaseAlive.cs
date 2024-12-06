@@ -22,7 +22,7 @@ namespace AI.Base
 		
 		#region MonoBehaviour
 
-		public void OnCollisionStay(Collision collision)
+		public virtual void OnCollisionStay(Collision collision)
 		{
 			var count = collision.GetContacts(contactPoints);
 			for (var i = 0; i < count; i++)
@@ -32,7 +32,7 @@ namespace AI.Base
 			}
 		}
 		
-		private void OnCollisionExit(Collision _)
+		public virtual void OnCollisionExit(Collision _)
 		{
 			collidingState.Clear();
 		}
@@ -194,7 +194,7 @@ namespace AI.Base
 			OnDeathEvent?.Invoke(this, source);
 		}
 
-		public bool IsGrounded()
+		public virtual bool IsGrounded()
 		{
 			for (var i = 0; i < Body.Feet.Length; i++)
 			{

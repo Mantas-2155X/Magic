@@ -14,12 +14,15 @@ namespace Impacts.Base
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 		
-		public void Spawn(IProjectile source, Vector3 position, Vector3 angles)
+		public void Spawn(IProjectile source, Vector3 position, Vector3 angles, bool parent)
 		{
 			Source = source;
 
 			var tr = transform;
-			tr.SetParent(World.World.Instance.Impacts);
+			
+			if (parent)
+				tr.SetParent(World.World.Instance.Impacts);
+			
 			tr.position = position;
 			tr.eulerAngles = angles;
 			

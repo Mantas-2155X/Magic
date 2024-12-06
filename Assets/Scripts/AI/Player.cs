@@ -90,6 +90,16 @@ namespace AI
 			CameraTr = Camera!.transform;
 			lookDirection = new Vector2(transform.eulerAngles.x, transform.eulerAngles.y);
 		}
+
+		public void Update()
+		{
+			if (!IsAlive)
+				return;
+
+			// Where is the Held mode for the input action?
+			if (AttackAction.action.IsPressed())
+				Weapon?.Attack();
+		}
 		
 		public void LateUpdate()
 		{
@@ -193,7 +203,6 @@ namespace AI
 			use.Enable();
 			
 			var attack = AttackAction.action;
-			attack.performed += onAttack;
 			attack.Enable();
 			
 			var noclip = NoclipAction.action;
@@ -237,7 +246,6 @@ namespace AI
 			use.Disable();
 			
 			var attack = AttackAction.action;
-			attack.performed -= onAttack;
 			attack.Disable();
 						
 			var noclip = NoclipAction.action;
@@ -309,12 +317,7 @@ namespace AI
 			var usable = rb.GetComponent<IUsable>();
 			usable?.Use(this);
 		}
-		
-		private void onAttack(InputAction.CallbackContext ctx)
-		{
-			Weapon?.Attack();
-		}
-		
+
 		private void onNoclip(InputAction.CallbackContext ctx)
 		{
 			SetNoclip(!IsNoclip);

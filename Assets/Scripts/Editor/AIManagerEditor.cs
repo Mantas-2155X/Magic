@@ -15,6 +15,9 @@ namespace Editor
 	{
 		[SerializeField]
 		public string Weapon;
+
+		[SerializeField]
+		public bool ShowStats;
 		
 		public override void OnInspectorGUI()
 		{
@@ -262,6 +265,14 @@ namespace Editor
 			
 			GUILayout.EndHorizontal();
 			
+			ShowStats = EditorGUILayout.ToggleLeft("Show Stats", ShowStats);
+			if (!ShowStats)
+			{
+				base.OnInspectorGUI();
+				serializedObject.ApplyModifiedProperties();
+				return;
+			}
+
 			GUILayout.Label("Status:", EditorStyles.boldLabel);
 			
 			{

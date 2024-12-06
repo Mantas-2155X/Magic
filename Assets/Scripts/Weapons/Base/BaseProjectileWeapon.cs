@@ -21,10 +21,22 @@ namespace Weapons.Base
 
 			if (Projectile != null)
 			{
+				IProjectile projectile;
+				bool parent;
+
 				var pooled = PoolingManager.Instance.TakeFromPool(Projectile, false);
+				if (pooled != null)
+				{
+					projectile = pooled.GetComponent<IProjectile>();
+					parent = false;
+				}
+				else
+				{
+					projectile = Instantiate(Resources.Load<GameObject>($"Projectiles/{Projectile.Name}")).GetComponent<IProjectile>();
+					parent = true;
+				}
 				
-				var projectile = pooled != null ? pooled.GetComponent<IProjectile>() : Instantiate(Resources.Load<GameObject>($"Projectiles/{Projectile.Name}")).GetComponent<IProjectile>();
-				projectile.Spawn(this, Ray.origin + Ray.direction * 1f, Ray.direction * Force);
+				projectile.Spawn(this, Ray.origin + Ray.direction * 1f, Ray.direction * Force, parent);
 			}
 			
 			return true;

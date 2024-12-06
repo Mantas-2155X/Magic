@@ -14,7 +14,7 @@ namespace Projectiles.Interfaces
 		public int Damage { get; }
 		public Type Impact { get; }
 		
-		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
+		public void Spawn(IWeapon source, Vector3 origin, Vector3 force, bool parent);
 
 		public GameObject GetGameObject();
 	}

@@ -1,3 +1,5 @@
+//#define DEBUG_NPC
+
 using System.Collections.Generic;
 using AI.ActionModes;
 using AI.ActionModes.Shared;
@@ -263,7 +265,9 @@ namespace AI
 			AIMode = mode;
 			AIModes[AIMode].Enabled(this);
 
+#if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed AI Mode from {previousAIMode} to {AIMode}");
+#endif
 		}
 		
 		private void setActionMode(EActionMode mode)
@@ -276,8 +280,9 @@ namespace AI
 			ActionModes[ActionMode].Disabled();
 			ActionMode = mode;
 			ActionModes[ActionMode].Enabled(this);
-			
+#if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Action Mode from {previousActionMode} to {ActionMode}");
+#endif
 		}
 
 		private void setTarget(Component target)
@@ -291,7 +296,9 @@ namespace AI
 			ActionModes[ActionMode].TargetChanged(previousTarget, Target);
 			AIModes[AIMode].TargetChanged(previousTarget, Target);
 
+#if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Target from {previousTarget} to {Target}");
+#endif
 		}
 		
 		private void setDestination(Vector3 destination)
@@ -304,8 +311,10 @@ namespace AI
 			
 			ActionModes[ActionMode].DestinationChanged(previousDestination, Destination);
 			AIModes[AIMode].DestinationChanged(previousDestination, Destination);
-
+		
+#if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Destination from {previousDestination} to {Destination}");
+#endif
 		}
 		
 		private async UniTask autoTarget()
@@ -407,6 +416,14 @@ namespace AI
 			AIModes[AIMode].FixedUpdate();
 		}
 		
+		public override void OnCollisionStay(Collision collision)
+		{
+			if (Agent.enabled)
+				return;
+			
+			base.OnCollisionStay(collision);
+		}
+
 		#endregion
 		
 		#region IAlive
@@ -434,6 +451,11 @@ namespace AI
 		{
 			Agent.enabled = false;
 			base.Kill(source);
+		}
+		
+		public override bool IsGrounded()
+		{
+			return Agent.enabled || base.IsGrounded();
 		}
 
 		#endregion

@@ -7,7 +7,7 @@ namespace Impacts.Interfaces
 	{
 		public IProjectile Source { get; }
 		
-		public void Spawn(IProjectile source, Vector3 position, Vector3 angles);
+		public void Spawn(IProjectile source, Vector3 position, Vector3 angles, bool parent);
 		
 		public GameObject GetGameObject();
 	}
