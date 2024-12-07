@@ -25,7 +25,7 @@ namespace AI
 		public Transform[] Legs;
 
 		[SerializeField]
-		public Collider[] Feet;
+		public Transform[] Feet;
  
 		[SerializeField]
 		public Transform WeaponContainer;

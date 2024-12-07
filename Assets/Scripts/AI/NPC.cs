@@ -425,8 +425,7 @@ namespace AI
 			if (Agent.enabled)
 				return true;
 			
-			// TODO: implement simple raycast, collisions are too heavy for lots of NPCs
-			return false;
+			return base.IsGrounded();
 		}
 
 		#endregion

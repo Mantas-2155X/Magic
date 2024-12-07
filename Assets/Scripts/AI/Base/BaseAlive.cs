@@ -1,6 +1,7 @@
 using AI.Events;
 using AI.Interfaces;
 using Objects;
+using Tools;
 using UnityEngine;
 using Weapons.Interfaces;
 using Random = UnityEngine.Random;
@@ -51,9 +52,6 @@ namespace AI.Base
 
 			Body.Rigidbody.useGravity = !value;
 			Body.Collider.enabled = !value;
-
-			for (var i = 0; i < Body.Feet.Length; i++)
-				Body.Feet[i].enabled = !value;
 			
 			if (value)
 				previousExcludeLayers = Body.Rigidbody.excludeLayers;
@@ -168,6 +166,16 @@ namespace AI.Base
 
 		public virtual bool IsGrounded()
 		{
+			var feet = Body.Feet;
+			for (var i = 0; i < feet.Length; i++)
+			{
+				var foot = feet[i];
+				if (!Physics.SphereCast(foot.position, 0.0925f, -foot.up, out _, 0.123f, ~LayerMaskTools.Mask2))
+					continue;
+
+				return true;
+			}
+			
 			return false;
 		}
 		

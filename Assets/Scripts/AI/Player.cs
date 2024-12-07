@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AI.Base;
 using Objects.Interfaces;
 using Tools;
@@ -45,7 +44,7 @@ namespace AI
 		public float MovementForce = 1f;
 		
 		[SerializeField]
-		public float JumpForce = 80f;
+		public float JumpForce = 135f;
 
 		[SerializeField]
 		public float SprintMultiplier = 1.25f;
@@ -71,9 +70,6 @@ namespace AI
 		
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
-		
-		private readonly List<ContactPoint> contactPoints = new ();
-		private readonly List<Collider> collidingState = new ();
 		
 		#region MonoBehaviour
 
@@ -138,7 +134,10 @@ namespace AI
 				
 				// Jump now since the rest of the code isn't ran
 				if (jumpPressed)
+				{
 					Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
+					jumpPressed = false;
+				}
 
 				return;
 			}
@@ -160,28 +159,10 @@ namespace AI
 
 			// Jump after speed limits and other forces to prevent irregularity
 			if (jumpPressed)
-				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
-		}
-		
-		public void OnCollisionStay(Collision collision)
-		{
-			if (!IsAlive)
-				return;
-		
-			var count = collision.GetContacts(contactPoints);
-			for (var i = 0; i < count; i++)
 			{
-				var contactPoint = contactPoints[i];
-				collidingState.Add(contactPoint.thisCollider);
+				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
+				jumpPressed = false;
 			}
-		}
-		
-		public void OnCollisionExit(Collision _)
-		{
-			if (!IsAlive)
-				return;
-
-			collidingState.Clear();
 		}
 		
 		#endregion
@@ -350,14 +331,6 @@ namespace AI
 
 		public override bool IsWalking => walking;
 
-		public override void SetNoclip(bool value)
-		{
-			base.SetNoclip(value);
-			
-			if (value)
-				collidingState.Clear();
-		}
-		
 		public override void TakeWeapon(IWeapon weapon)
 		{
 			base.TakeWeapon(weapon);
@@ -377,22 +350,6 @@ namespace AI
 		{
 			disableInput();
 			base.Kill(source);
-		}
-		
-		public override bool IsGrounded()
-		{
-			if (!IsAlive)
-				return false;
-			
-			for (var i = 0; i < Body.Feet.Length; i++)
-			{
-				if (!collidingState.Contains(Body.Feet[i]))
-					continue;
-
-				return true;
-			}
-
-			return false;
 		}
 		
 		#endregion
