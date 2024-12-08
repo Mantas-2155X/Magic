@@ -48,6 +48,12 @@ namespace AI
 		[SerializeField]
 		public float BlinkVariation = 2f;
 		
+		[SerializeField]
+		public float FallMinimumVelocity = 8f;
+		
+		[SerializeField]
+		public float FallDamageMultiplier = 3.5f;
+		
 		[HideInInspector]
 		public bool ShouldSway;
 		

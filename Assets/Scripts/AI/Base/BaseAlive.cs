@@ -17,6 +17,19 @@ namespace AI.Base
 		
 		private LayerMask previousExcludeLayers;
 		
+		public void OnCollisionEnter(Collision coll)
+		{
+			if (!IsAlive)
+				return;
+
+			var velocity = coll.relativeVelocity.y - Body.FallMinimumVelocity;
+			if (velocity < 0f)
+				return;
+
+			var damage = Mathf.FloorToInt(Body.FallDamageMultiplier * (velocity * velocity));
+			Damage(damage, null);
+		}
+
 		#region IAlive
 
 		[field: SerializeField]
