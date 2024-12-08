@@ -29,13 +29,11 @@ namespace Weapons.Base
 				return;
 			
 			Owner = alive;
-
-			var previousAngles = transform.localEulerAngles;
 			
-			transform.SetParent(Owner.Body.WeaponContainer, true);
+			transform.SetParent(Owner.Body.WeaponContainer);
 			
-			transform.localEulerAngles = previousAngles;
 			transform.localPosition = Vector3.zero;
+			transform.localEulerAngles = Vector3.zero;
 		}
 		
 		public virtual void Drop()
