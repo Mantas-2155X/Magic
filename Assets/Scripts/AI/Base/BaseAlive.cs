@@ -57,6 +57,10 @@ namespace AI.Base
 				previousExcludeLayers = Body.Rigidbody.excludeLayers;
 			else
 				Body.Rigidbody.excludeLayers = previousExcludeLayers;
+
+			var feet = Body.Feet;
+			for (var i = 0; i < feet.Length; i++)
+				feet[i].GetComponent<Collider>().enabled = !value;
 		}
 
 		public virtual void TakeWeapon(IWeapon weapon)
@@ -166,6 +170,9 @@ namespace AI.Base
 
 		public virtual bool IsGrounded()
 		{
+			if (IsNoclip)
+				return false;
+			
 			var feet = Body.Feet;
 			for (var i = 0; i < feet.Length; i++)
 			{
