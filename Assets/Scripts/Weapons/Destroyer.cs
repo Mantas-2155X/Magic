@@ -15,12 +15,8 @@ namespace Weapons
 			
 			if (!Physics.Raycast(Ray, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
 				return false;
-
-			var rb = hit.rigidbody;
-			if (rb == null)
-				return false;
-
-			var alive = rb.GetComponent<IAlive>();
+			
+			var alive = hit.collider.GetComponent<IAlive>();
 			alive?.Kill(this);
 
 			return true;

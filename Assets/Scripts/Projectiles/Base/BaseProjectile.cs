@@ -5,6 +5,7 @@ using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Impacts.Interfaces;
 using Managers;
+using Objects.Interfaces;
 using Projectiles.Interfaces;
 using UnityEngine;
 using Weapons.Interfaces;
@@ -30,11 +31,10 @@ namespace Projectiles.Base
 		
 		public void OnCollisionEnter(Collision collision)
 		{
-			var rb = collision.rigidbody;
-			if (rb != null)
+			var coll = collision.collider;
+			if (coll != null)
 			{
-				var alive = rb.GetComponent<IAlive>();
-				if (alive != null)
+				if (coll.TryGetComponent<IAlive>(out var alive))
 				{
 					if (alive == owner)
 					{
@@ -45,6 +45,10 @@ namespace Projectiles.Base
 					}
 					
 					alive.Damage(Damage, this);
+				}
+				else if (coll.TryGetComponent<IBreakable>(out var breakable))
+				{
+					breakable.Damage(Damage, this);
 				}
 			}
 

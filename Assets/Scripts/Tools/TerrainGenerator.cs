@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace World
+namespace Tools
 {
 	public class TerrainGenerator : MonoBehaviour
 	{

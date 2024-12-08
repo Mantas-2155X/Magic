@@ -43,11 +43,7 @@ namespace UI
 			
 			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.Mask1))
 			{
-				var rb = hit.rigidbody;
-				if (rb == null)
-					return;
-				
-				var pickupable = rb.GetComponent<IPickupable>();
+				var pickupable = hit.collider.GetComponent<IPickupable>();
 				if (pickupable == null)
 					return;
 

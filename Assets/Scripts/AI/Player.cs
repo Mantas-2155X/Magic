@@ -304,12 +304,8 @@ namespace AI
 		{
 			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, 1.5f, ~LayerMaskTools.Mask1))
 				return;
-
-			var rb = hit.rigidbody;
-			if (rb == null)
-				return;
 			
-			var usable = rb.GetComponent<IUsable>();
+			var usable = hit.collider.GetComponent<IUsable>();
 			usable?.Use(this);
 		}
 

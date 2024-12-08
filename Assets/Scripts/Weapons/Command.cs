@@ -17,31 +17,27 @@ namespace Weapons
 			if (!Physics.Raycast(Ray, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
 				return false;
 			
-			var rb = hit.rigidbody;
-			if (rb == null)
+			var alive = hit.collider.GetComponent<IAlive>();
+			if (alive != null)
 			{
 				foreach (var npc in AIManager.Instance.NPCs)
 				{
-					if (!npc.IsAlive)
+					if (!npc.IsAlive || (IAlive)npc == alive)
 						continue;
 
-					npc.Chill();
-					npc.Walk(hit.point);
+					npc.FindAndKill((Component)alive);
 				}
-
+				
 				return true;
 			}
-
-			var alive = rb.GetComponent<IAlive>();
-			if (alive == null)
-				return false;
 			
 			foreach (var npc in AIManager.Instance.NPCs)
 			{
-				if (!npc.IsAlive || (IAlive)npc == alive)
+				if (!npc.IsAlive)
 					continue;
-				
-				npc.FindAndKill((Component)alive);
+
+				npc.Chill();
+				npc.Walk(hit.point);
 			}
 
 			return true;
