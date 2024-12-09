@@ -20,12 +20,13 @@ namespace Weapons.Base
 			if (!success)
 				return false;
 
-			if (Physics.Raycast(Ray, 1f, ~LayerMaskTools.Mask2))
+			if (Physics.Raycast(Ray, out var hit, 1f, ~LayerMaskTools.Mask2))
 			{
 #if DEBUG_BaseProjectileWeapon
-				Debug.Log($"[BaseProjectileWeapon {Owner.GetGameObject().name}] Too close to fire");
+				Debug.Log($"[BaseProjectileWeapon {Owner.GetGameObject().name}] Too close to fire, spawning at ray");
 #endif
-				return false;
+				ObjectManager.Instance.CreateProjectile(Projectile, this, hit.point, Ray.direction * 1f);
+				return true;
 			}
 
 			ObjectManager.Instance.CreateProjectile(Projectile, this, Ray.origin + Ray.direction * 1f, Ray.direction * Force);
