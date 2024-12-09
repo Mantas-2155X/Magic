@@ -61,6 +61,9 @@ namespace AI
 		[SerializeField]
 		public float SpeedClampModifier = 0.91f;
 		
+		[SerializeField]
+		public float UseDistance = 1.5f;
+
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
 
@@ -290,7 +293,7 @@ namespace AI
 		
 		private void onUse(InputAction.CallbackContext ctx)
 		{
-			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, 1.5f, ~LayerMaskTools.Mask1))
+			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.Mask1))
 				return;
 			
 			var usable = hit.collider.GetComponent<IUsable>();
