@@ -1,5 +1,6 @@
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Objects.Enums;
 using Objects.Interfaces;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Objects.Base
 		[field: SerializeField]
 		public virtual float UsableAfter { get; private set; }
 		[field: SerializeField]
-		public virtual bool DestroyAfterUse { get; private set; }
+		public virtual EDestroyType DestroyAfterUse { get; private set; }
 
 		private bool destroyed;
 		private bool usable;
@@ -33,12 +34,20 @@ namespace Objects.Base
 			if (!CanUse(user))
 				return false;
 			
-			if (!DestroyAfterUse)
-				return true;
+			switch (DestroyAfterUse)
+			{
+				case EDestroyType.None:
+					return true;
+				case EDestroyType.GameObject:
+					destroyed = true;
+					Destroy(gameObject);
+					break;
+				case EDestroyType.Component:
+					destroyed = true;
+					Destroy(this);
+					break;
+			}
 			
-			destroyed = true;
-			Destroy(gameObject);
-
 			return true;
 		}
 		

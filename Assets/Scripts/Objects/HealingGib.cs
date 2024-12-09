@@ -1,12 +1,14 @@
 using AI.Interfaces;
 using Objects.Base;
+using Objects.Enums;
 using UnityEngine;
 
 namespace Objects
 {
 	public class HealingGib : BaseUsable
 	{
-		public override bool DestroyAfterUse => true;
+		public override float UsableAfter => 0.1f;
+		public override EDestroyType DestroyAfterUse => EDestroyType.GameObject;
 
 		[SerializeField]
 		public int HealAmount = 10;
