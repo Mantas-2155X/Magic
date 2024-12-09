@@ -32,6 +32,8 @@ namespace Weapons.Base
 				return;
 			
 			Owner = alive;
+			
+			Destroy(GetComponent<DroppedWeapon>());
 			Destroy(GetComponent<Rigidbody>());
 
 			for (var i = 0; i < Colliders.Length; i++)
@@ -61,11 +63,12 @@ namespace Weapons.Base
 			for (var i = 0; i < Colliders.Length; i++)
 				Colliders[i].enabled = true;
 
+			go.AddComponent<DroppedWeapon>();
+			
 			var rb = go.AddComponent<Rigidbody>();
 			rb.interpolation = RigidbodyInterpolation.Interpolate;
 			rb.mass = 5f;
 
-			go.AddComponent<DroppedWeapon>();
 			Owner = null;
 		}
 		
