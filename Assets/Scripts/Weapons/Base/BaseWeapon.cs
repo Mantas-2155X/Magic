@@ -20,6 +20,9 @@ namespace Weapons.Base
 		[field: SerializeField]
 		public virtual float TimeBetweenAttacks { get; private set; }
 		
+		[field: SerializeField]
+		public int ManaCost { get; private set; }
+
 		public Ray Ray { get; private set; }
 		public float LastAttackTime { get; private set; }
 
@@ -74,7 +77,7 @@ namespace Weapons.Base
 			if (Owner == null)
 				return false;
 
-			return Time.time >= LastAttackTime + TimeBetweenAttacks;
+			return Time.time >= LastAttackTime + TimeBetweenAttacks && Owner.CurrentMana >= ManaCost;
 		}
 		
 		public virtual bool Attack()
@@ -83,7 +86,7 @@ namespace Weapons.Base
 				return false;
 
 			CalculateRay();
-			
+			Owner.UseMana(ManaCost, this);
 			LastAttackTime = Time.time;
 			return true;
 		}

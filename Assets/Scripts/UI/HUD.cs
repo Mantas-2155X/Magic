@@ -39,7 +39,7 @@ namespace UI
 			if (player == null)
 				return;
 
-			Crosshair.color = player.IsGrounded() ? Color.white : Color.blue;
+			Crosshair.color = player.IsGrounded() ? Color.white : Color.red;
 			
 			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.Mask1))
 			{

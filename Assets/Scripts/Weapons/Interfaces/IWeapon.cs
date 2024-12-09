@@ -10,6 +10,8 @@ namespace Weapons.Interfaces
 		public Collider[] Colliders { get; }
 
 		public float TimeBetweenAttacks { get; }
+		
+		public int ManaCost { get; }
 
 		public void Take(IAlive alive);
 		public void Drop();

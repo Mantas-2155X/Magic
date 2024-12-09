@@ -279,10 +279,13 @@ namespace Editor
 				GUILayout.Label("Player", GUILayout.Width(50));
 				GUILayout.Label($"{(aiManager.Player.IsAlive ? "Alive" : "Dead")}", GUILayout.Width(40));
 				GUILayout.Label($"HP: {aiManager.Player.CurrentHealth}", GUILayout.Width(50));
+				GUILayout.Label($"MP: {aiManager.Player.CurrentMana}", GUILayout.Width(50));
 				GUILayout.Label($"Vel: {aiManager.Player.Body.Rigidbody.linearVelocity.magnitude:0.0000}", GUILayout.Width(80));
 				GUILayout.FlexibleSpace();
 				var invulnerable = GUILayout.Toggle(aiManager.Player.IsInvulnerable, "Invulnerable", GUILayout.Width(100));
 				aiManager.Player.SetInvulnerable(invulnerable);
+				var powerful = GUILayout.Toggle(aiManager.Player.IsPowerful, "Powerful", GUILayout.Width(75));
+				aiManager.Player.SetPowerful(powerful);
 				var noclip = GUILayout.Toggle(aiManager.Player.IsNoclip, "Noclip", GUILayout.Width(75));
 				aiManager.Player.SetNoclip(noclip);
 				
@@ -301,10 +304,13 @@ namespace Editor
 				GUILayout.Label(npc.gameObject.name, GUILayout.Width(50));
 				GUILayout.Label($"{(npc.IsAlive ? "Alive" : "Dead")}", GUILayout.Width(40));
 				GUILayout.Label($"HP: {npc.CurrentHealth}", GUILayout.Width(50));
+				GUILayout.Label($"MP: {npc.CurrentMana}", GUILayout.Width(50));
 				GUILayout.Label($"Vel: {npc.Agent.velocity.magnitude:0.0000}", GUILayout.Width(80));
 				GUILayout.FlexibleSpace();
 				var invulnerable = GUILayout.Toggle(npc.IsInvulnerable, "Invulnerable", GUILayout.Width(100));
 				npc.SetInvulnerable(invulnerable);
+				var powerful = GUILayout.Toggle(npc.IsPowerful, "Powerful", GUILayout.Width(75));
+				npc.SetPowerful(powerful);
 				var noclip = GUILayout.Toggle(npc.IsNoclip, "Noclip", GUILayout.Width(75));
 				npc.SetNoclip(noclip);
 				

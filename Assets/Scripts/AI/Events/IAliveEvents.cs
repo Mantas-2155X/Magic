@@ -11,6 +11,12 @@ namespace AI.Events
 	public class OnDamageEvent : UnityEvent<IAlive, int, object> { }
 	
 	[Serializable]
+	public class OnManaGenerateEvent : UnityEvent<IAlive, int, object> { }
+	
+	[Serializable]
+	public class OnManaUseEvent : UnityEvent<IAlive, int, object> { }
+
+	[Serializable]
 	public class OnDeathEvent : UnityEvent<IAlive, object> { }
 	
 	[Serializable]

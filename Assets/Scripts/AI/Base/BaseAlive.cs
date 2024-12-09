@@ -1,5 +1,6 @@
 using AI.Events;
 using AI.Interfaces;
+using Cysharp.Threading.Tasks;
 using Objects;
 using Tools;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace AI.Base
 	{
 		public static readonly OnHealEvent OnHealEvent = new ();
 		public static readonly OnDamageEvent OnDamageEvent = new ();
+		public static readonly OnManaGenerateEvent OnManaGenerateEvent = new ();
+		public static readonly OnManaUseEvent OnManaUseEvent = new ();
 		public static readonly OnDeathEvent OnDeathEvent = new ();
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
 		
@@ -30,6 +33,20 @@ namespace AI.Base
 			Damage(damage, null);
 		}
 
+		private async UniTask generateManaLoop()
+		{
+			while (IsAlive)
+			{
+				await UniTask.WaitForSeconds(0.25f);
+
+				var amount = Random.Range(1, 4);
+				if (amount + CurrentMana >= StartingMana)
+					continue;
+
+				GenerateMana(amount, null);
+			}
+		}
+		
 		#region IAlive
 
 		[field: SerializeField]
@@ -44,8 +61,12 @@ namespace AI.Base
 		public int StartingHealth { get; private set; }
 		public int OverloadHealth { get; private set; }
 		
+		public int CurrentMana { get; private set; }
+		public int StartingMana { get; private set; }
+
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
+		public bool IsPowerful { get; private set; }
 		public bool IsNoclip { get; private set; }
 		public virtual bool IsWalking { get; private set; }
 
@@ -55,6 +76,13 @@ namespace AI.Base
 				return;
 			
 			IsInvulnerable = value;
+		}
+		public void SetPowerful(bool value)
+		{
+			if (!IsAlive || IsPowerful == value)
+				return;
+			
+			IsPowerful = value;
 		}
 		public virtual void SetNoclip(bool value)
 		{
@@ -89,7 +117,7 @@ namespace AI.Base
 			Weapon = null;
 		}
 
-		public virtual void Spawn(int startingHealth, int overloadHealth, float maximumSpeed)
+		public virtual void Spawn(int startingHealth, int overloadHealth, int startingMana, float maximumSpeed)
 		{
 			if (IsAlive)
 				return;
@@ -100,9 +128,13 @@ namespace AI.Base
 			StartingHealth = startingHealth;
 			OverloadHealth = overloadHealth;
 
+			CurrentMana = startingMana;
+			StartingMana = startingMana;
+
 			IsAlive = true;
-			
 			OnSpawnEvent?.Invoke(this);
+			
+			generateManaLoop().Forget();
 		}
 		public virtual void Heal(int health, object source)
 		{
@@ -128,6 +160,23 @@ namespace AI.Base
 			
 			Kill(source);
 		}
+		public virtual void GenerateMana(int mana, object source)
+		{
+			if (!IsAlive || mana < 0)
+				return;
+			
+			CurrentMana += mana;
+			OnManaGenerateEvent?.Invoke(this, mana, source);
+		}
+		public virtual void UseMana(int mana, object source)
+		{
+			if (!IsAlive || mana < 0 || IsPowerful)
+				return;
+			
+			CurrentMana -= mana;
+			OnManaUseEvent?.Invoke(this, mana, source);
+		}
+
 		public virtual void Kill(object source)
 		{
 			if (!IsAlive)
@@ -137,6 +186,7 @@ namespace AI.Base
 			DropWeapon();
 
 			CurrentHealth = 0;
+			CurrentMana = 0;
 			IsAlive = false;
 			
 			Body.Rigidbody.constraints = RigidbodyConstraints.None;

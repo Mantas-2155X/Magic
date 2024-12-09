@@ -336,9 +336,9 @@ namespace AI
 			base.DropWeapon();
 		}
 		
-		public override void Spawn(int startingHealth, int overloadHealth, float maximumSpeed)
+		public override void Spawn(int startingHealth, int overloadHealth, int startingMana, float maximumSpeed)
 		{
-			base.Spawn(startingHealth, overloadHealth, maximumSpeed);
+			base.Spawn(startingHealth, overloadHealth, startingMana, maximumSpeed);
 			enableInput();
 		}
 		
