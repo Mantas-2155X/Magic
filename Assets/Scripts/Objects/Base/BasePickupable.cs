@@ -1,5 +1,7 @@
+using System;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Objects.Enums;
 using Objects.Interfaces;
 using Tools;
 using UnityEngine;
@@ -9,16 +11,14 @@ namespace Objects.Base
 	public class BasePickupable : MonoBehaviour, IPickupable
 	{
 		[field: SerializeField]
-		public virtual LayerMask PickupLayers { get; private set; }
-		[field: SerializeField]
 		public virtual float PickupableAfter { get; private set; }
 		[field: SerializeField]
-		public virtual bool DestroyAfterPickup { get; private set; }
+		public virtual EDestroyType DestroyAfterPickup { get; private set; }
 
 		private bool destroyed;
 		private bool pickupable;
 		
-		public void Awake()
+		public void Start()
 		{
 			if (PickupableAfter == 0f)
 				pickupable = true;
@@ -36,11 +36,19 @@ namespace Objects.Base
 			if (!CanPickup(user))
 				return false;
 			
-			if (!DestroyAfterPickup)
-				return true;
-
-			destroyed = true;
-			Destroy(gameObject);
+			switch (DestroyAfterPickup)
+			{
+				case EDestroyType.None:
+					return true;
+				case EDestroyType.GameObject:
+					destroyed = true;
+					Destroy(gameObject);
+					break;
+				case EDestroyType.Component:
+					destroyed = true;
+					Destroy(this);
+					break;
+			}
 			
 			return true;
 		}
@@ -53,7 +61,7 @@ namespace Objects.Base
 		public void OnTriggerEnter(Collider other)
 		{
 			var alive = other.GetComponent<IAlive>();
-			if (alive == null || !PickupLayers.ContainsLayer(other.gameObject.layer))
+			if (alive == null)
 				return;
 
 			Pickup(alive);

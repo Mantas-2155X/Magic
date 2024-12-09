@@ -15,6 +15,9 @@ namespace Weapons.Base
 		public IAlive Owner { get; private set; }
 		
 		[field: SerializeField]
+		public Collider[] Colliders { get; set; }
+		
+		[field: SerializeField]
 		public virtual float Force { get; private set; }
 		public virtual Type Projectile { get; private set; }
 		[field: SerializeField]
@@ -29,11 +32,15 @@ namespace Weapons.Base
 				return;
 			
 			Owner = alive;
+			Destroy(GetComponent<Rigidbody>());
+
+			for (var i = 0; i < Colliders.Length; i++)
+				Colliders[i].enabled = false;
 			
-			transform.SetParent(Owner.Body.WeaponContainer);
-			
-			transform.localPosition = Vector3.zero;
-			transform.localEulerAngles = Vector3.zero;
+			var tr = transform;
+			tr.SetParent(Owner.Body.WeaponContainer);
+			tr.localPosition = Vector3.zero;
+			tr.localEulerAngles = Vector3.zero;
 		}
 		
 		public virtual void Drop()
@@ -44,35 +51,21 @@ namespace Weapons.Base
 				return;
 			}
 			
-			var addPos = Vector3.zero;
-			var ownerTr = Owner.GetGameObject().transform;
+			var go = gameObject;
 			
-			if (Physics.Raycast(new Ray(ownerTr.position, ownerTr.forward), 1f, ~LayerMaskTools.Mask2))
-			{
-#if DEBUG_BaseWeapon
-				Debug.Log($"[BaseWeapon {Owner.GetGameObject().name}] Too close to drop forward");
-#endif
-			}
-			else
-			{
-				addPos = ownerTr.forward * 0.65f;
-			}
-			
-			var go = Instantiate(Resources.Load<GameObject>("Objects/DroppedWeapon"));
-			
-			var tr = go.transform;
+			var tr = transform;
 			tr.SetParent(World.World.Instance.Dropped);
-
-			tr.position = ownerTr.position + addPos;
-			tr.eulerAngles = ownerTr.eulerAngles;
+			tr.position = Owner.Body.WeaponContainer.position + Vector3.down * 0.1f;
+			tr.eulerAngles = Owner.Body.WeaponContainer.eulerAngles;
 			
-			var rb = go.GetComponent<Rigidbody>();
-			rb.MovePosition(ownerTr.position + addPos);
+			for (var i = 0; i < Colliders.Length; i++)
+				Colliders[i].enabled = true;
 
-			var dropped = go.GetComponent<DroppedWeapon>();
-			dropped.Weapon = GetType().Name;
-			
-			Destroy(gameObject);
+			var rb = go.AddComponent<Rigidbody>();
+			rb.interpolation = RigidbodyInterpolation.Interpolate;
+			rb.mass = 5f;
+
+			go.AddComponent<DroppedWeapon>();
 			Owner = null;
 		}
 		

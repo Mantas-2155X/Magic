@@ -83,7 +83,7 @@ namespace AI.Base
 			Weapon = weapon;
 			Weapon?.Take(this);
 		}
-		public void DropWeapon()
+		public virtual void DropWeapon()
 		{
 			Weapon?.Drop();
 			Weapon = null;

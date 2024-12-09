@@ -50,7 +50,7 @@ namespace UI
 				switch (pickupable)
 				{
 					case DroppedWeapon weapon:
-						LookTarget.text = weapon.Weapon;
+						LookTarget.text = weapon.Weapon.GetType().Name;
 						break;
 					default:
 						LookTarget.text = pickupable.GetGameObject().name;

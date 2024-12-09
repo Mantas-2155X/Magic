@@ -15,7 +15,7 @@ namespace Objects.Base
 		private bool destroyed;
 		private bool usable;
 
-		public void Awake()
+		public void Start()
 		{
 			if (UsableAfter == 0f)
 				usable = true;

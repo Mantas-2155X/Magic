@@ -336,6 +336,15 @@ namespace AI
 				tr.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 		}
 		
+		public override void DropWeapon()
+		{
+			var transforms = Body.WeaponContainer.GetComponentsInChildren<Transform>();
+			foreach (var tr in transforms)
+				tr.gameObject.layer = 0;
+			
+			base.DropWeapon();
+		}
+		
 		public override void Spawn(int startingHealth, int overloadHealth, float maximumSpeed)
 		{
 			base.Spawn(startingHealth, overloadHealth, maximumSpeed);

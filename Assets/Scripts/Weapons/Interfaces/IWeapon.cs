@@ -7,6 +7,8 @@ namespace Weapons.Interfaces
 	public interface IWeapon
 	{
 		public IAlive Owner { get; }
+		
+		public Collider[] Colliders { get; }
 
 		public float Force { get; }
 		public Type Projectile { get; }

@@ -1,13 +1,13 @@
 using AI.Interfaces;
+using Objects.Enums;
 using UnityEngine;
 
 namespace Objects.Interfaces
 {
 	public interface IPickupable
 	{
-		public LayerMask PickupLayers { get; }
 		public float PickupableAfter { get; }
-		public bool DestroyAfterPickup { get; }
+		public EDestroyType DestroyAfterPickup { get; }
 		
 		public bool CanPickup(IAlive user);
 		public bool Pickup(IAlive user);
