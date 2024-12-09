@@ -18,9 +18,6 @@ namespace Weapons.Base
 		public Collider[] Colliders { get; set; }
 		
 		[field: SerializeField]
-		public virtual float Force { get; private set; }
-		public virtual Type Projectile { get; private set; }
-		[field: SerializeField]
 		public virtual float TimeBetweenAttacks { get; private set; }
 		
 		public Ray Ray { get; private set; }
