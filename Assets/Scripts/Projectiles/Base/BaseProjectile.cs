@@ -1,6 +1,7 @@
 //#define DEBUG_BaseProjectile
 
 using System;
+using System.Threading;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Impacts.Interfaces;
@@ -25,6 +26,8 @@ namespace Projectiles.Base
 		public virtual int Damage { get; private set; }
 
 		public virtual Type Impact { get; private set; }
+
+		private CancellationTokenSource lifetimeToken;
 		
 		private IAlive owner;
 		private string ownerName;
@@ -105,12 +108,23 @@ namespace Projectiles.Base
 
 		private async UniTask waitLifetimeAndPool()
 		{
+			lifetimeToken?.Dispose();
+			lifetimeToken = new CancellationTokenSource();
+			
 			await UniTask.WaitForSeconds(Lifetime);
 			await clearVelocityAndPool();
 		}
 
 		private async UniTask clearVelocityAndPool()
 		{
+			if (lifetimeToken != null)
+			{
+				if (lifetimeToken.IsCancellationRequested)
+					return;
+				
+				lifetimeToken.Cancel();
+			}
+			
 			Rigidbody.linearVelocity = Vector3.zero;
 			Rigidbody.angularVelocity = Vector3.zero;
 			
