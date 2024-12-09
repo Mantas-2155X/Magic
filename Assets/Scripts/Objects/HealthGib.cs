@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Objects
 {
-	public class HealingGib : BaseUsable
+	public class HealthGib : BaseUsable
 	{
 		public override float UsableAfter => 0.1f;
 		public override EDestroyType DestroyAfterUse => EDestroyType.GameObject;
 
 		[SerializeField]
-		public int HealAmount = 10;
+		public int HealAmount;
 		
 		public override bool Use(IAlive user)
 		{

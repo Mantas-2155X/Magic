@@ -18,7 +18,8 @@ namespace AI.Interfaces
 
 		public int CurrentMana { get; }
 		public int StartingMana { get; }
-		
+		public int OverloadMana { get; }
+
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
 		public bool IsPowerful { get; }
@@ -32,7 +33,7 @@ namespace AI.Interfaces
 		public void TakeWeapon(IWeapon weapon);
 		public void DropWeapon();
 
-		public void Spawn(int startingHealth, int overloadHealth, int startingMana, float maximumSpeed);
+		public void Spawn(int startingHealth, int overloadHealth, int startingMana, int overloadMana, float maximumSpeed);
 		public void Heal(int health, object source);
 		public void Damage(int damage, object source);
 		public void GenerateMana(int mana, object source);

@@ -63,6 +63,7 @@ namespace AI.Base
 		
 		public int CurrentMana { get; private set; }
 		public int StartingMana { get; private set; }
+		public int OverloadMana { get; private set; }
 
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
@@ -117,7 +118,7 @@ namespace AI.Base
 			Weapon = null;
 		}
 
-		public virtual void Spawn(int startingHealth, int overloadHealth, int startingMana, float maximumSpeed)
+		public virtual void Spawn(int startingHealth, int overloadHealth, int startingMana, int overloadMana, float maximumSpeed)
 		{
 			if (IsAlive)
 				return;
@@ -130,6 +131,7 @@ namespace AI.Base
 
 			CurrentMana = startingMana;
 			StartingMana = startingMana;
+			OverloadMana = overloadMana;
 
 			IsAlive = true;
 			OnSpawnEvent?.Invoke(this);
@@ -167,6 +169,9 @@ namespace AI.Base
 			
 			CurrentMana += mana;
 			OnManaGenerateEvent?.Invoke(this, mana, source);
+			
+			if (CurrentMana >= OverloadMana)
+				Kill(this);
 		}
 		public virtual void UseMana(int mana, object source)
 		{
@@ -196,38 +201,32 @@ namespace AI.Base
 			Body.Rigidbody.AddForce(Random.Range(-25f, 25f), 100f, Random.Range(-25f, 25f), ForceMode.Impulse);
 
 			Body.Collider.material = null;
-			
+
 			var ragdolls = World.World.Instance.Ragdolls;
-			
-			var transforms = GetComponentsInChildren<Transform>();
-			foreach (var tr in transforms)
+			var length = Body.Gibs.Length;
+
+			for (var i = 0; i < length; i++)
 			{
-				var go = tr.gameObject;
+				var gib = Body.Gibs[i];
+				gib.enabled = true;
+
+				var go = gib.gameObject;
 				go.layer = 0;
 
 				var coll = go.GetComponent<Collider>();
-				if (coll == null)
-					continue;
-
-				coll.enabled = true;
 				coll.excludeLayers = 0;
-				
-				go.AddComponent<HealingGib>();
+				coll.enabled = true;
 
-				var rb = go.GetComponent<Rigidbody>();
-				if (rb == null)
-				{
-					rb = go.AddComponent<Rigidbody>();
-					rb.mass = 5;
-				}
-					
+				var rb = i == length - 1 ? Body.Rigidbody : go.AddComponent<Rigidbody>();
 				rb.interpolation = RigidbodyInterpolation.Interpolate;
 				rb.automaticInertiaTensor = false;
 				rb.excludeLayers = 0;
-				
+				rb.mass = 5;
+
+				var tr = go.transform;
 				tr.parent = ragdolls;
 			}
-			
+
 			OnDeathEvent?.Invoke(this, source);
 		}
 

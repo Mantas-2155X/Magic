@@ -19,12 +19,12 @@ namespace Managers
 			Instance = this;
 		}
 
-		public NPC CreateNPC(Transform spawnPoint, int health = 50, int overload = 100, int mana = 250, float speed = 7f)
+		public NPC CreateNPC(Transform spawnPoint, int health = 50, int overload = 100, int mana = 250, int overloadMana = 500, float speed = 7f)
 		{
-			return CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, health, overload, mana, speed);
+			return CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, health, overload, mana, overloadMana, speed);
 		}
 		
-		public NPC CreateNPC(Vector3 position, Vector3 angles, int health = 50, int overload = 100, int mana = 250, float speed = 7f)
+		public NPC CreateNPC(Vector3 position, Vector3 angles, int health = 50, int overload = 100, int mana = 250, int overloadMana = 500, float speed = 7f)
 		{
 			var go = Instantiate(Resources.Load<GameObject>("Alives/NPC"));
 			go.name = $"NPC {NPCs.Count}";
@@ -36,18 +36,18 @@ namespace Managers
 			
 			var npc = go.GetComponent<NPC>();
 			npc.Body.Rigidbody.MovePosition(position);
-			npc.Spawn(health, overload, mana, speed);
+			npc.Spawn(health, overload, mana, overloadMana, speed);
 
 			NPCs.Add(npc);
 			return npc;
 		}
 
-		public Player CreatePlayer(Transform spawnPoint, int health = 100, int overload = 200, int mana = 100, float speed = 7f)
+		public Player CreatePlayer(Transform spawnPoint, int health = 100, int overload = 200, int mana = 100, int overloadMana = 200, float speed = 7f)
 		{
-			return CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, health, overload, mana, speed);
+			return CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, health, overload, mana, overloadMana, speed);
 		}
 		
-		public Player CreatePlayer(Vector3 position, Vector3 angles, int health = 100, int overload = 200, int mana = 100, float speed = 7f)
+		public Player CreatePlayer(Vector3 position, Vector3 angles, int health = 100, int overload = 200, int mana = 100, int overloadMana = 200, float speed = 7f)
 		{
 			if (Player != null)
 			{
@@ -67,7 +67,7 @@ namespace Managers
 
 			var player = go.GetComponent<Player>();
 			player.Body.Rigidbody.MovePosition(position);
-			player.Spawn(health, overload, mana, speed);
+			player.Spawn(health, overload, mana, overloadMana, speed);
 
 			Player = player;
 			return player;

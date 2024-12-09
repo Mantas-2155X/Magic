@@ -16,6 +16,9 @@ namespace AI
 		public Collider Collider;
 
 		[SerializeField]
+		public MonoBehaviour[] Gibs;
+		
+		[SerializeField]
 		public Renderer[] Eyes;
 		
 		[SerializeField]
