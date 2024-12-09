@@ -131,14 +131,6 @@ namespace AI
 				velocity.z *= StopSlide;
 				
 				Body.Rigidbody.linearVelocity = velocity;
-				
-				// Jump now since the rest of the code isn't ran
-				if (jumpPressed)
-				{
-					Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
-					jumpPressed = false;
-				}
-
 				return;
 			}
 
@@ -156,13 +148,6 @@ namespace AI
 			// Limit the rigidbody walking speed
 			var maxSpeed = SprintAction.action.IsPressed() ? MaximumSpeed * SprintMultiplier : MaximumSpeed;
 			Body.Rigidbody.linearVelocity = Vector3.ClampMagnitude(Body.Rigidbody.linearVelocity, maxSpeed * SpeedClampModifier);
-
-			// Jump after speed limits and other forces to prevent irregularity
-			if (jumpPressed)
-			{
-				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
-				jumpPressed = false;
-			}
 		}
 		
 		#endregion
@@ -283,6 +268,9 @@ namespace AI
 		private void onJumpPerformed(InputAction.CallbackContext ctx)
 		{
 			jumpPressed = true;
+			
+			if (!IsNoclip && IsGrounded())
+				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
 		}
 		
 		private void onJumpCanceled(InputAction.CallbackContext ctx)

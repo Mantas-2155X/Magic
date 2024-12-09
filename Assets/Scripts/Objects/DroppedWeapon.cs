@@ -7,7 +7,7 @@ namespace Objects
 {
 	public class DroppedWeapon : BasePickupable
 	{
-		public override float PickupableAfter => 1f;
+		public override float PickupableAfter => 0.5f;
 		public override EDestroyType DestroyAfterPickup => EDestroyType.Component;
 		
 		public IWeapon Weapon { get; private set; }
