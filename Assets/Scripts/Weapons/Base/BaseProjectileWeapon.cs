@@ -23,26 +23,7 @@ namespace Weapons.Base
 				return false;
 			}
 
-			if (Projectile != null)
-			{
-				IProjectile projectile;
-				bool parent;
-
-				var pooled = PoolingManager.Instance.TakeFromPool(Projectile, false);
-				if (pooled != null)
-				{
-					projectile = pooled.GetComponent<IProjectile>();
-					parent = false;
-				}
-				else
-				{
-					projectile = Instantiate(Resources.Load<GameObject>($"Projectiles/{Projectile.Name}")).GetComponent<IProjectile>();
-					parent = true;
-				}
-				
-				projectile.Spawn(this, Ray.origin + Ray.direction * 1f, Ray.direction * Force, parent);
-			}
-			
+			ObjectManager.Instance.CreateProjectile(Projectile, this, Ray.origin + Ray.direction * 1f, Ray.direction * Force);
 			return true;
 		}
 	}

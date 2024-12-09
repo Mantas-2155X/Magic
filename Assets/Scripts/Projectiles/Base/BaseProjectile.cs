@@ -55,28 +55,7 @@ namespace Projectiles.Base
 				}
 			}
 
-			if (Impact != null)
-			{
-				var tr = transform;
-				
-				IImpact impact;
-				bool parent;
-				
-				var pooled = PoolingManager.Instance.TakeFromPool(Impact, false);
-				if (pooled != null)
-				{
-					impact = pooled.GetComponent<IImpact>();
-					parent = false;
-				}
-				else
-				{
-					impact = Instantiate(Resources.Load<GameObject>($"Impacts/{Impact.Name}")).GetComponent<IImpact>();
-					parent = true;
-				}
-				
-				impact.Spawn(this, tr.position, tr.eulerAngles, parent);
-			}
-
+			ObjectManager.Instance.CreateImpact(Impact, this, transform.position, transform.eulerAngles);
 			clearVelocityAndPool().Forget();
 		}
 
