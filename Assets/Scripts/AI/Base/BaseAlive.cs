@@ -215,6 +215,7 @@ namespace AI.Base
 
 				var coll = go.GetComponent<Collider>();
 				coll.excludeLayers = 0;
+				coll.material = null;
 				coll.enabled = true;
 
 				var rb = i == length - 1 ? Body.Rigidbody : go.AddComponent<Rigidbody>();
@@ -239,7 +240,7 @@ namespace AI.Base
 			for (var i = 0; i < feet.Length; i++)
 			{
 				var foot = feet[i];
-				if (!Physics.SphereCast(foot.position, 0.0925f, -foot.up, out _, 0.123f, ~LayerMaskTools.Mask2))
+				if (!Physics.SphereCast(foot.position, 0.1375f, Vector3.down, out _, 0.15f, ~LayerMaskTools.Mask2))
 					continue;
 
 				return true;
