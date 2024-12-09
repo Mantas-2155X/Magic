@@ -197,7 +197,7 @@ namespace Editor
 
 			if (GUILayout.Button("Give Player"))
 			{
-				aiManager.Player.TakeWeapon(Instantiate(Resources.Load<GameObject>($"Weapons/{Weapon}")).GetComponent<IWeapon>());
+				aiManager.Player.TakeWeapon(ObjectManager.Instance.CreateWeapon(TypeTools.FindType(Weapon), Vector3.zero, Vector3.zero));
 			}
 			
 			if (GUILayout.Button("Give NPCs"))
@@ -207,7 +207,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.TakeWeapon(Instantiate(Resources.Load<GameObject>($"Weapons/{Weapon}")).GetComponent<IWeapon>());
+					npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(TypeTools.FindType(Weapon), Vector3.zero, Vector3.zero));
 				}
 			}
 			

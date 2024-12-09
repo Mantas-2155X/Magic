@@ -3,8 +3,8 @@
 using System;
 using AI;
 using AI.Interfaces;
+using Managers;
 using Objects;
-using Tools;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -113,6 +113,12 @@ namespace Weapons.Base
 				default:
 					throw new NotImplementedException();
 			}
+		}
+
+		public void OnDisable()
+		{
+			LastAttackTime = 0f;
+			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 	}
 }

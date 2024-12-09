@@ -712,6 +712,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Deathmatch
       objectReference: {fileID: 0}
+    - target: {fileID: 8891709933729494013, guid: 444793d66d2aed59b8e668c5218289f5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1199,6 +1203,10 @@ PrefabInstance:
     - target: {fileID: 9150455038998059246, guid: f971b26fad26bba8d81414c29e5ad0e1, type: 3}
       propertyPath: m_Name
       value: Command
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150455038998059246, guid: f971b26fad26bba8d81414c29e5ad0e1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3014,6 +3022,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Creator
       objectReference: {fileID: 0}
+    - target: {fileID: 7597140966588050046, guid: 5731456074053b206a3a537927e17074, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3203,6 +3215,7 @@ GameObject:
   - component: {fileID: 891401688}
   - component: {fileID: 891401689}
   - component: {fileID: 891401690}
+  - component: {fileID: 891401691}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -3249,6 +3262,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 307ab7cb5289471c869baf84d268431f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &891401691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891401686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f52447bebe4a4ca9bf6e184bd328c632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &907824972
@@ -3302,6 +3327,10 @@ PrefabInstance:
     - target: {fileID: 3200840523429498350, guid: 12f23534cefe5e064810cdfc5c4c75fb, type: 3}
       propertyPath: m_Name
       value: Destroyer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3200840523429498350, guid: 12f23534cefe5e064810cdfc5c4c75fb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6402,6 +6431,10 @@ PrefabInstance:
     - target: {fileID: 2785414141410019460, guid: f57ed2e8d70a64c7190af68660d0067f, type: 3}
       propertyPath: m_Name
       value: FireGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785414141410019460, guid: f57ed2e8d70a64c7190af68660d0067f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3309045991044829758, guid: f57ed2e8d70a64c7190af68660d0067f, type: 3}
       propertyPath: m_LocalPosition.x

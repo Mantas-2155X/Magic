@@ -2,7 +2,6 @@ using AI.Enums;
 using Managers;
 using UnityEngine;
 using Weapons.Base;
-using Weapons.Interfaces;
 
 namespace Weapons
 {
@@ -24,7 +23,7 @@ namespace Weapons
 				npc.AutoTargetRange = 9999;
 				npc.AutoTarget = EAutoTarget.NPCs;
 				
-				npc.TakeWeapon(Instantiate(Resources.Load<GameObject>("Weapons/FireGun")).GetComponent<IWeapon>());
+				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(typeof(FireGun), Vector3.zero, Vector3.zero));
 				npc.FindAndKill(npc.Target, false, true);
 			}
 

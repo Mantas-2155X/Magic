@@ -56,5 +56,40 @@ namespace Managers
 			impact.Spawn(projectile, position, angles, parent);
 			return impact;
 		}
+		
+		public IWeapon CreateWeapon(Type type, Vector3 position, Vector3 angles)
+		{
+			IWeapon weapon;
+			bool parent;
+				
+			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
+			if (pooled != null)
+			{
+				weapon = pooled.GetComponent<IWeapon>();
+				parent = false;
+			}
+			else
+			{
+				weapon = Instantiate(Resources.Load<GameObject>($"Weapons/{type.Name}")).GetComponent<IWeapon>();
+				parent = true;
+			}
+
+			var go = weapon.GetGameObject();
+			var tr = go.transform;
+
+			if (parent)
+				tr.SetParent(World.World.Instance.Dropped);
+			
+			tr.position = position;
+			tr.eulerAngles = angles;
+			
+			gameObject.SetActive(true);
+
+			var rb = go.GetComponent<Rigidbody>();
+			rb.MovePosition(position);
+			rb.MoveRotation(Quaternion.Euler(angles));
+			
+			return weapon;
+		}
 	}
 }
