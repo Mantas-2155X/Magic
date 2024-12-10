@@ -104,6 +104,8 @@ namespace Projectiles.Base
 				lifetimeToken.Cancel();
 			}
 			
+			await UniTask.NextFrame();
+
 			Rigidbody.linearVelocity = Vector3.zero;
 			Rigidbody.angularVelocity = Vector3.zero;
 			

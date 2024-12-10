@@ -4810,7 +4810,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8f2c211fb53da7642b455c6c3c52b9e5, type: 2}
+  - {fileID: 2100000, guid: 17c2c82d5117e474b9b7e4ae6e327f9e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4878,7 +4878,6 @@ MonoBehaviour:
   <Rigidbody>k__BackingField: {fileID: -6803533052199284734}
   <Lifetime>k__BackingField: 0.5
   <Damage>k__BackingField: 10
-  <Impact>k__BackingField: FireBall
 --- !u!135 &7443144026641663299
 SphereCollider:
   m_ObjectHideFlags: 0

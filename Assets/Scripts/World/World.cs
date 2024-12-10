@@ -36,6 +36,9 @@ namespace World
 		public Transform Impacts;
 
 		[SerializeField]
+		public Transform Other;
+
+		[SerializeField]
 		public float TimeScale = 1f;
 
 		private float previousTimeScale;

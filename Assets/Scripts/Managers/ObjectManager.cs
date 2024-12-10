@@ -96,17 +96,23 @@ namespace Managers
 		public Portal CreatePortal(Vector3 position)
 		{
 			Portal portal;
-				
+			bool parent;
+
 			var pooled = PoolingManager.Instance.TakeFromPool(typeof(Portal), false);
 			if (pooled != null)
 			{
 				portal = pooled.GetComponent<Portal>();
+				parent = false;
 			}
 			else
 			{
 				portal = Instantiate(Resources.Load<GameObject>("Points/Portal")).GetComponent<Portal>();
+				parent = true;
 			}
-				
+			
+			if (parent)
+				portal.transform.SetParent(World.World.Instance.Other);
+
 			portal.Spawn(position);
 			return portal;
 		}
