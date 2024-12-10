@@ -38,7 +38,8 @@ namespace UI
 		
 		public void OnRespawnClicked()
 		{
-			AIManager.Instance.CreatePlayer(World.World.Instance.SpawnPoints.GetChild(Random.Range(0, World.World.Instance.SpawnPoints.childCount)));
+			var spawnPoint = World.World.Instance.SpawnPoints.GetChild(Random.Range(0, World.World.Instance.SpawnPoints.childCount));
+			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles);
 		}
 	}
 }

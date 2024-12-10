@@ -1,7 +1,6 @@
 using AI.Events;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
-using Objects;
 using Tools;
 using UnityEngine;
 using Weapons.Interfaces;
@@ -19,7 +18,9 @@ namespace AI.Base
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
 		
 		private LayerMask previousExcludeLayers;
-		
+
+		#region MonoBehaviour
+
 		public void OnCollisionEnter(Collision coll)
 		{
 			if (!IsAlive)
@@ -33,19 +34,7 @@ namespace AI.Base
 			Damage(damage, null);
 		}
 
-		private async UniTask generateManaLoop()
-		{
-			while (IsAlive)
-			{
-				await UniTask.WaitForSeconds(0.25f);
-
-				var amount = Random.Range(1, 4);
-				if (amount + CurrentMana >= StartingMana)
-					continue;
-
-				GenerateMana(amount, null);
-			}
-		}
+		#endregion
 		
 		#region IAlive
 
@@ -60,10 +49,12 @@ namespace AI.Base
 		public float CurrentHealth { get; private set; }
 		public float StartingHealth { get; private set; }
 		public float OverloadHealth { get; private set; }
+		public float RegenerateHealth { get; private set; }
 		
 		public float CurrentMana { get; private set; }
 		public float StartingMana { get; private set; }
 		public float OverloadMana { get; private set; }
+		public float RegenerateMana { get; private set; }
 
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
@@ -118,7 +109,7 @@ namespace AI.Base
 			Weapon = null;
 		}
 
-		public virtual void Spawn(float startingHealth, float overloadHealth, float startingMana, float overloadMana, float maximumSpeed)
+		public virtual void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{
 			if (IsAlive)
 				return;
@@ -136,7 +127,7 @@ namespace AI.Base
 			IsAlive = true;
 			OnSpawnEvent?.Invoke(this);
 			
-			generateManaLoop().Forget();
+			regenerateLoop().Forget();
 		}
 		public virtual void Heal(float health, object source)
 		{
@@ -254,6 +245,20 @@ namespace AI.Base
 			return gameObject;
 		}
 
+		private async UniTask regenerateLoop()
+		{
+			while (IsAlive)
+			{
+				await UniTask.WaitForSeconds(0.25f);
+
+				if (RegenerateMana + CurrentMana <= StartingMana)
+					GenerateMana(RegenerateMana, this);
+				
+				if (RegenerateHealth + CurrentHealth <= StartingHealth)
+					Heal(RegenerateHealth, this);
+			}
+		}
+		
 		#endregion
 	}
 }

@@ -15,10 +15,12 @@ namespace AI.Interfaces
 		public float CurrentHealth { get; }
 		public float StartingHealth { get; }
 		public float OverloadHealth { get; }
+		public float RegenerateHealth { get; }
 
 		public float CurrentMana { get; }
 		public float StartingMana { get; }
 		public float OverloadMana { get; }
+		public float RegenerateMana { get; }
 
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
@@ -33,7 +35,7 @@ namespace AI.Interfaces
 		public void TakeWeapon(IWeapon weapon);
 		public void DropWeapon();
 
-		public void Spawn(float startingHealth, float overloadHealth, float startingMana, float overloadMana, float maximumSpeed);
+		public void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed);
 		public void Heal(float health, object source);
 		public void Damage(float damage, object source);
 		public void GenerateMana(float mana, object source);

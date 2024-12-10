@@ -18,13 +18,8 @@ namespace Managers
 		{
 			Instance = this;
 		}
-
-		public NPC CreateNPC(Transform spawnPoint, float health = 50, float overload = 100, float mana = 250, float overloadMana = 500, float speed = 7f)
-		{
-			return CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, health, overload, mana, overloadMana, speed);
-		}
 		
-		public NPC CreateNPC(Vector3 position, Vector3 angles, float health = 50, float overload = 100, float mana = 250, float overloadMana = 500, float speed = 7f)
+		public NPC CreateNPC(Vector3 position, Vector3 angles, float startingHealth = 50, float overloadHealth = 100, float regenerateHealth = 4, float startingMana = 250, float overloadMana = 500, float regenerateMana = 6, float speed = 7f)
 		{
 			var go = Instantiate(Resources.Load<GameObject>("Alives/NPC"));
 			go.name = $"NPC {NPCs.Count}";
@@ -36,18 +31,12 @@ namespace Managers
 			
 			var npc = go.GetComponent<NPC>();
 			npc.Body.Rigidbody.MovePosition(position);
-			npc.Spawn(health, overload, mana, overloadMana, speed);
+			npc.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed);
 
 			NPCs.Add(npc);
 			return npc;
 		}
-
-		public Player CreatePlayer(Transform spawnPoint, float health = 100, float overload = 200, float mana = 100, float overloadMana = 200, float speed = 7f)
-		{
-			return CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, health, overload, mana, overloadMana, speed);
-		}
-		
-		public Player CreatePlayer(Vector3 position, Vector3 angles, float health = 100, float overload = 200, float mana = 100, float overloadMana = 200, float speed = 7f)
+		public Player CreatePlayer(Vector3 position, Vector3 angles, float startingHealth = 100, float overloadHealth = 200, float regenerateHealth = 4, float startingMana = 100, float overloadMana = 200, float regenerateMana = 5, float speed = 7f)
 		{
 			if (Player != null)
 			{
@@ -67,7 +56,7 @@ namespace Managers
 
 			var player = go.GetComponent<Player>();
 			player.Body.Rigidbody.MovePosition(position);
-			player.Spawn(health, overload, mana, overloadMana, speed);
+			player.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed);
 
 			Player = player;
 			return player;

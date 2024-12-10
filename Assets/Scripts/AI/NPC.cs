@@ -399,7 +399,7 @@ namespace AI
 		
 		public override bool IsWalking => Agent.hasPath;
 
-		public override void Spawn(float startingHealth, float overloadHealth, float startingMana, float overloadMana, float maximumSpeed)
+		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{ 
 			Spin = new Spin(this);
 			AimAt = new AimAt(this);
@@ -409,8 +409,7 @@ namespace AI
 
 			Agent.speed = maximumSpeed;
 			
-			base.Spawn(startingHealth, overloadHealth, startingMana, overloadMana, maximumSpeed);
-			
+			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed);
 			autoTarget().Forget();
 		}
 
