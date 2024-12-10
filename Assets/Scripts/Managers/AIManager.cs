@@ -21,6 +21,8 @@ namespace Managers
 		
 		public NPC CreateNPC(Vector3 position, Vector3 angles, float startingHealth = 50, float overloadHealth = 100, float regenerateHealth = 0.5f, float startingMana = 250, float overloadMana = 500, float regenerateMana = 9, float speed = 7f)
 		{
+			ObjectManager.Instance.CreatePortal(position);
+			
 			var go = Instantiate(Resources.Load<GameObject>("Alives/NPC"));
 			go.name = $"NPC {NPCs.Count}";
 			

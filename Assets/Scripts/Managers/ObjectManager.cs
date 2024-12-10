@@ -1,5 +1,6 @@
 using System;
 using Impacts.Interfaces;
+using Objects;
 using Projectiles.Interfaces;
 using UnityEngine;
 using Weapons.Interfaces;
@@ -90,6 +91,24 @@ namespace Managers
 			rb.MoveRotation(Quaternion.Euler(angles));
 			
 			return weapon;
+		}
+		
+		public Portal CreatePortal(Vector3 position)
+		{
+			Portal portal;
+				
+			var pooled = PoolingManager.Instance.TakeFromPool(typeof(Portal), false);
+			if (pooled != null)
+			{
+				portal = pooled.GetComponent<Portal>();
+			}
+			else
+			{
+				portal = Instantiate(Resources.Load<GameObject>("Points/Portal")).GetComponent<Portal>();
+			}
+				
+			portal.Spawn(position);
+			return portal;
 		}
 	}
 }
