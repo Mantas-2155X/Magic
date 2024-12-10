@@ -24,7 +24,7 @@ namespace UI
 			BaseAlive.OnSpawnEvent.AddListener(OnSpawn);
 		}
 		
-		public void OnHeal(IAlive alive, int health, object source)
+		public void OnHeal(IAlive alive, float health, object source)
 		{
 			if (alive is not Player player)
 				return;
@@ -32,7 +32,7 @@ namespace UI
 			setHealth(player.CurrentHealth);
 		}
 		
-		public void OnDamage(IAlive alive, int damage, object source)
+		public void OnDamage(IAlive alive, float damage, object source)
 		{
 			if (alive is not Player player)
 				return;
@@ -40,7 +40,7 @@ namespace UI
 			setHealth(player.CurrentHealth);
 		}
 		
-		public void OnManaGenerate(IAlive alive, int generated, object source)
+		public void OnManaGenerate(IAlive alive, float generated, object source)
 		{
 			if (alive is not Player player)
 				return;
@@ -48,7 +48,7 @@ namespace UI
 			setMana(player.CurrentMana);
 		}
 		
-		public void OnManaUse(IAlive alive, int used, object source)
+		public void OnManaUse(IAlive alive, float used, object source)
 		{
 			if (alive is not Player player)
 				return;
@@ -74,7 +74,7 @@ namespace UI
 			setMana(player.CurrentMana);
 		}
 		
-		private void setHealth(int health)
+		private void setHealth(float health)
 		{
 			var color = Health.color;
 			color.a = Mathf.SmoothStep(0f, 1f, 1f - (health / 100f));
@@ -82,7 +82,7 @@ namespace UI
 			Health.color = color;
 		}
 		
-		private void setMana(int mana)
+		private void setMana(float mana)
 		{
 			Mana.fillAmount = Mathf.SmoothStep(0f, 1f, (mana / 100f));
 		}

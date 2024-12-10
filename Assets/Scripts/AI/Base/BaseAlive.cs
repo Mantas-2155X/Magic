@@ -57,13 +57,13 @@ namespace AI.Base
 		public virtual float CurrentSpeed { get; private set; }
 		public float MaximumSpeed { get; private set; }
 
-		public int CurrentHealth { get; private set; }
-		public int StartingHealth { get; private set; }
-		public int OverloadHealth { get; private set; }
+		public float CurrentHealth { get; private set; }
+		public float StartingHealth { get; private set; }
+		public float OverloadHealth { get; private set; }
 		
-		public int CurrentMana { get; private set; }
-		public int StartingMana { get; private set; }
-		public int OverloadMana { get; private set; }
+		public float CurrentMana { get; private set; }
+		public float StartingMana { get; private set; }
+		public float OverloadMana { get; private set; }
 
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
@@ -118,7 +118,7 @@ namespace AI.Base
 			Weapon = null;
 		}
 
-		public virtual void Spawn(int startingHealth, int overloadHealth, int startingMana, int overloadMana, float maximumSpeed)
+		public virtual void Spawn(float startingHealth, float overloadHealth, float startingMana, float overloadMana, float maximumSpeed)
 		{
 			if (IsAlive)
 				return;
@@ -138,7 +138,7 @@ namespace AI.Base
 			
 			generateManaLoop().Forget();
 		}
-		public virtual void Heal(int health, object source)
+		public virtual void Heal(float health, object source)
 		{
 			if (!IsAlive || health < 0)
 				return;
@@ -149,7 +149,7 @@ namespace AI.Base
 			if (CurrentHealth >= OverloadHealth)
 				Kill(this);
 		}
-		public virtual void Damage(int damage, object source)
+		public virtual void Damage(float damage, object source)
 		{
 			if (!IsAlive || damage < 0 || IsInvulnerable)
 				return;
@@ -162,7 +162,7 @@ namespace AI.Base
 			
 			Kill(source);
 		}
-		public virtual void GenerateMana(int mana, object source)
+		public virtual void GenerateMana(float mana, object source)
 		{
 			if (!IsAlive || mana < 0)
 				return;
@@ -173,7 +173,7 @@ namespace AI.Base
 			if (CurrentMana >= OverloadMana)
 				Kill(this);
 		}
-		public virtual void UseMana(int mana, object source)
+		public virtual void UseMana(float mana, object source)
 		{
 			if (!IsAlive || mana < 0 || IsPowerful)
 				return;

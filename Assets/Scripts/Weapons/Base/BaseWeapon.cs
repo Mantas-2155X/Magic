@@ -21,7 +21,7 @@ namespace Weapons.Base
 		public virtual float TimeBetweenAttacks { get; private set; }
 		
 		[field: SerializeField]
-		public int ManaCost { get; private set; }
+		public float ManaCost { get; private set; }
 
 		public Ray Ray { get; private set; }
 		public float LastAttackTime { get; private set; }

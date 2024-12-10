@@ -6,11 +6,11 @@ namespace Objects.Base
 	public class BaseBreakable : MonoBehaviour, IBreakable
 	{
 		[field: SerializeField]
-		public int Health { get; private set; }
+		public float Health { get; private set; }
 
 		public bool IsBroken { get; private set; }
 		
-		public virtual void Damage(int damage, object source)
+		public virtual void Damage(float damage, object source)
 		{
 			if (IsBroken || damage < 0)
 				return;

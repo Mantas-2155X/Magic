@@ -19,12 +19,12 @@ namespace Managers
 			Instance = this;
 		}
 
-		public NPC CreateNPC(Transform spawnPoint, int health = 50, int overload = 100, int mana = 250, int overloadMana = 500, float speed = 7f)
+		public NPC CreateNPC(Transform spawnPoint, float health = 50, float overload = 100, float mana = 250, float overloadMana = 500, float speed = 7f)
 		{
 			return CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, health, overload, mana, overloadMana, speed);
 		}
 		
-		public NPC CreateNPC(Vector3 position, Vector3 angles, int health = 50, int overload = 100, int mana = 250, int overloadMana = 500, float speed = 7f)
+		public NPC CreateNPC(Vector3 position, Vector3 angles, float health = 50, float overload = 100, float mana = 250, float overloadMana = 500, float speed = 7f)
 		{
 			var go = Instantiate(Resources.Load<GameObject>("Alives/NPC"));
 			go.name = $"NPC {NPCs.Count}";
@@ -42,12 +42,12 @@ namespace Managers
 			return npc;
 		}
 
-		public Player CreatePlayer(Transform spawnPoint, int health = 100, int overload = 200, int mana = 100, int overloadMana = 200, float speed = 7f)
+		public Player CreatePlayer(Transform spawnPoint, float health = 100, float overload = 200, float mana = 100, float overloadMana = 200, float speed = 7f)
 		{
 			return CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, health, overload, mana, overloadMana, speed);
 		}
 		
-		public Player CreatePlayer(Vector3 position, Vector3 angles, int health = 100, int overload = 200, int mana = 100, int overloadMana = 200, float speed = 7f)
+		public Player CreatePlayer(Vector3 position, Vector3 angles, float health = 100, float overload = 200, float mana = 100, float overloadMana = 200, float speed = 7f)
 		{
 			if (Player != null)
 			{

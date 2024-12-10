@@ -11,7 +11,7 @@ namespace World
 		public float DamageRate = 0.1f;
 
 		[SerializeField]
-		public int Damage = 12;
+		public float Damage = 12;
 
 		private List<IAlive> alives = new ();
 		

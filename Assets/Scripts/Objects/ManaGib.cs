@@ -11,7 +11,7 @@ namespace Objects
 		public override EDestroyType DestroyAfterUse => EDestroyType.GameObject;
 
 		[SerializeField]
-		public int GenerateAmount;
+		public float GenerateAmount;
 		
 		public override bool Use(IAlive user)
 		{

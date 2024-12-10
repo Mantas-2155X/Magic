@@ -11,7 +11,7 @@ namespace Objects
 		public override EDestroyType DestroyAfterUse => EDestroyType.GameObject;
 
 		[SerializeField]
-		public int HealAmount;
+		public float HealAmount;
 		
 		public override bool Use(IAlive user)
 		{

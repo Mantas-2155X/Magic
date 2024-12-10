@@ -399,7 +399,7 @@ namespace AI
 		
 		public override bool IsWalking => Agent.hasPath;
 
-		public override void Spawn(int startingHealth, int overloadHealth, int startingMana, int overloadMana, float maximumSpeed)
+		public override void Spawn(float startingHealth, float overloadHealth, float startingMana, float overloadMana, float maximumSpeed)
 		{ 
 			Spin = new Spin(this);
 			AimAt = new AimAt(this);

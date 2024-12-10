@@ -23,7 +23,7 @@ namespace Projectiles.Base
 		[field: SerializeField]
 		public virtual float Lifetime { get; private set; }
 		[field: SerializeField]
-		public virtual int Damage { get; private set; }
+		public virtual float Damage { get; private set; }
 
 		public virtual Type Impact { get; private set; }
 

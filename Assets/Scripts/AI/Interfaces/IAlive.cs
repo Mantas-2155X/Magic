@@ -12,13 +12,13 @@ namespace AI.Interfaces
 		public float CurrentSpeed { get; }
 		public float MaximumSpeed { get; }
 
-		public int CurrentHealth { get; }
-		public int StartingHealth { get; }
-		public int OverloadHealth { get; }
+		public float CurrentHealth { get; }
+		public float StartingHealth { get; }
+		public float OverloadHealth { get; }
 
-		public int CurrentMana { get; }
-		public int StartingMana { get; }
-		public int OverloadMana { get; }
+		public float CurrentMana { get; }
+		public float StartingMana { get; }
+		public float OverloadMana { get; }
 
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
@@ -33,11 +33,11 @@ namespace AI.Interfaces
 		public void TakeWeapon(IWeapon weapon);
 		public void DropWeapon();
 
-		public void Spawn(int startingHealth, int overloadHealth, int startingMana, int overloadMana, float maximumSpeed);
-		public void Heal(int health, object source);
-		public void Damage(int damage, object source);
-		public void GenerateMana(int mana, object source);
-		public void UseMana(int mana, object source);
+		public void Spawn(float startingHealth, float overloadHealth, float startingMana, float overloadMana, float maximumSpeed);
+		public void Heal(float health, object source);
+		public void Damage(float damage, object source);
+		public void GenerateMana(float mana, object source);
+		public void UseMana(float mana, object source);
 		public void Kill(object source);
 		
 		public bool IsGrounded();

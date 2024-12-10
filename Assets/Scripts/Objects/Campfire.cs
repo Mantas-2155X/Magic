@@ -11,7 +11,7 @@ namespace Objects
 		public float DamageRate = 0.15f;
 
 		[SerializeField]
-		public int Damage = 7;
+		public float Damage = 7;
 
 		private readonly List<IAlive> alives = new ();
 

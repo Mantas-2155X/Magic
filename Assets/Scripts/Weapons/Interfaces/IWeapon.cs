@@ -11,7 +11,7 @@ namespace Weapons.Interfaces
 
 		public float TimeBetweenAttacks { get; }
 		
-		public int ManaCost { get; }
+		public float ManaCost { get; }
 
 		public void Take(IAlive alive);
 		public void Drop();
