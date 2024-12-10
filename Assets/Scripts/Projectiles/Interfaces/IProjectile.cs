@@ -10,7 +10,7 @@ namespace Projectiles.Interfaces
 		
 		public IWeapon Source { get; }
 		
-		public float Lifetime { get; }
+		public float Distance { get; }
 		public float Damage { get; }
 		public Type Impact { get; }
 		

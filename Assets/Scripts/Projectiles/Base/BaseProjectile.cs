@@ -4,7 +4,6 @@ using System;
 using System.Threading;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
-using Impacts.Interfaces;
 using Managers;
 using Objects.Interfaces;
 using Projectiles.Interfaces;
@@ -20,17 +19,16 @@ namespace Projectiles.Base
 		
 		public IWeapon Source { get; private set; }
 
-		[field: SerializeField]
-		public virtual float Lifetime { get; private set; }
-		[field: SerializeField]
+		public virtual float Distance { get; private set; }
 		public virtual float Damage { get; private set; }
-
 		public virtual Type Impact { get; private set; }
 
-		private CancellationTokenSource lifetimeToken;
+		private CancellationTokenSource distanceToken;
 		
 		private IAlive owner;
 		private string ownerName;
+
+		private Vector3 startingPosition;
 		
 		public void OnCollisionEnter(Collision collision)
 		{
@@ -59,12 +57,22 @@ namespace Projectiles.Base
 			clearVelocityAndPool().Forget();
 		}
 
+		public void Update()
+		{
+			var distance = Vector3.Distance(startingPosition, transform.position);
+			if (distance < Distance)
+				return;
+
+			clearVelocityAndPool().Forget();
+		}
+		
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force, bool parent)
 		{
 			Source = source;
 
 			owner = Source.Owner;
 			ownerName = owner.GetGameObject().name;
+			startingPosition = origin;
 
 			var tr = transform;
 			
@@ -75,7 +83,6 @@ namespace Projectiles.Base
 			tr.eulerAngles = Vector3.zero;
 			
 			gameObject.SetActive(true);
-			waitLifetimeAndPool().Forget();
 
 			Rigidbody.AddForce(force, ForceMode.Impulse);
 		}
@@ -85,25 +92,18 @@ namespace Projectiles.Base
 			return gameObject;
 		}
 
-		private async UniTask waitLifetimeAndPool()
-		{
-			lifetimeToken?.Dispose();
-			lifetimeToken = new CancellationTokenSource();
-			
-			await UniTask.WaitForSeconds(Lifetime);
-			await clearVelocityAndPool();
-		}
-
 		private async UniTask clearVelocityAndPool()
 		{
-			if (lifetimeToken != null)
+			if (distanceToken != null)
 			{
-				if (lifetimeToken.IsCancellationRequested)
+				if (distanceToken.IsCancellationRequested)
 					return;
 				
-				lifetimeToken.Cancel();
+				distanceToken.Cancel();
 			}
 			
+			gameObject.SetActive(false);
+
 			await UniTask.NextFrame();
 
 			Rigidbody.linearVelocity = Vector3.zero;
