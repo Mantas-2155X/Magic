@@ -20,7 +20,7 @@ namespace UI
 		public Image Crosshair;
 
 		[SerializeField]
-		public float LookTargetDistance = 3f;
+		public float LookTargetDistance = 2f;
 		
 		public void Awake()
 		{

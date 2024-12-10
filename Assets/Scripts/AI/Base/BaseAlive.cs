@@ -119,10 +119,12 @@ namespace AI.Base
 			CurrentHealth = startingHealth;
 			StartingHealth = startingHealth;
 			OverloadHealth = overloadHealth;
+			RegenerateHealth = regenerateHealth;
 
 			CurrentMana = startingMana;
 			StartingMana = startingMana;
 			OverloadMana = overloadMana;
+			RegenerateMana = regenerateMana;
 
 			IsAlive = true;
 			OnSpawnEvent?.Invoke(this);
@@ -249,7 +251,7 @@ namespace AI.Base
 		{
 			while (IsAlive)
 			{
-				await UniTask.WaitForSeconds(0.25f);
+				await UniTask.WaitForSeconds(0.5f);
 
 				if (RegenerateMana + CurrentMana <= StartingMana)
 					GenerateMana(RegenerateMana, this);
