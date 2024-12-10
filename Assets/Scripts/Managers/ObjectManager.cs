@@ -85,11 +85,6 @@ namespace Managers
 			tr.eulerAngles = angles;
 			
 			gameObject.SetActive(true);
-
-			var rb = go.GetComponent<Rigidbody>();
-			rb.MovePosition(position);
-			rb.MoveRotation(Quaternion.Euler(angles));
-			
 			return weapon;
 		}
 		

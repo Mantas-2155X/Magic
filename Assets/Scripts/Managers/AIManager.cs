@@ -31,8 +31,9 @@ namespace Managers
 			tr.position = position;
 			tr.eulerAngles = angles;
 			
+			go.SetActive(true);
+			
 			var npc = go.GetComponent<NPC>();
-			npc.Body.Rigidbody.MovePosition(position);
 			npc.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed);
 
 			NPCs.Add(npc);
@@ -56,8 +57,9 @@ namespace Managers
 			tr.position = position;
 			tr.eulerAngles = angles;
 
+			go.SetActive(true);
+			
 			var player = go.GetComponent<Player>();
-			player.Body.Rigidbody.MovePosition(position);
 			player.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed);
 
 			Player = player;

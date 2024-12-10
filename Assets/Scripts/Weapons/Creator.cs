@@ -16,7 +16,7 @@ namespace Weapons
 			if (!Physics.Raycast(Ray, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
 				return false;
 
-			AIManager.Instance.CreateNPC(hit.point + Vector3.up * 1.25f, Vector3.zero);
+			AIManager.Instance.CreateNPC(hit.point + Vector3.up * 1.25f, new Vector3(0, Owner.GetGameObject().transform.eulerAngles.y, 0));
 			return true;
 		}
 	}
