@@ -1,4 +1,5 @@
 using AI.Base;
+using AI.Enums;
 using Objects.Interfaces;
 using Tools;
 using UnityEngine;
@@ -44,7 +45,7 @@ namespace AI
 		public float MovementForce = 1f;
 		
 		[SerializeField]
-		public float JumpForce = 135f;
+		public float JumpForce = 115f;
 
 		[SerializeField]
 		public float SprintMultiplier = 1.25f;
@@ -109,7 +110,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
-			if (IsNoclip)
+			if (MovementType == EMovementType.Noclip)
 			{
 				Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * SprintMultiplier : 1f), ForceMode.VelocityChange);
 				
@@ -272,7 +273,7 @@ namespace AI
 		{
 			jumpPressed = true;
 			
-			if (!IsNoclip && IsGrounded())
+			if (MovementType == EMovementType.Normal && IsGrounded())
 				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
 		}
 		
@@ -302,7 +303,15 @@ namespace AI
 
 		private void onNoclip(InputAction.CallbackContext ctx)
 		{
-			SetNoclip(!IsNoclip);
+			switch (MovementType)
+			{
+				case EMovementType.Normal:
+					SetMovementType(EMovementType.Noclip);
+					break;
+				case EMovementType.Noclip:
+					SetMovementType(EMovementType.Normal);
+					break;
+			}
 		}
 		
 		private void onDrop(InputAction.CallbackContext ctx)

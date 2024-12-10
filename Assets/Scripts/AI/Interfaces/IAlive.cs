@@ -1,3 +1,4 @@
+using AI.Enums;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -22,15 +23,16 @@ namespace AI.Interfaces
 		public float OverloadMana { get; }
 		public float RegenerateMana { get; }
 
+		public EMovementType MovementType { get; }
+		
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
 		public bool IsPowerful { get; }
-		public bool IsNoclip { get; }
 		public bool IsWalking { get; }
 		
 		public void SetInvulnerable(bool value);
 		public void SetPowerful(bool value);
-		public void SetNoclip(bool value);
+		public void SetMovementType(EMovementType value);
 		
 		public void TakeWeapon(IWeapon weapon);
 		public void DropWeapon();

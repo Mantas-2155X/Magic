@@ -1,3 +1,4 @@
+using AI.Enums;
 using AI.Events;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -56,10 +57,11 @@ namespace AI.Base
 		public float OverloadMana { get; private set; }
 		public float RegenerateMana { get; private set; }
 
+		public EMovementType MovementType { get; private set; }
+
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
 		public bool IsPowerful { get; private set; }
-		public bool IsNoclip { get; private set; }
 		public virtual bool IsWalking { get; private set; }
 
 		public void SetInvulnerable(bool value)
@@ -76,24 +78,24 @@ namespace AI.Base
 			
 			IsPowerful = value;
 		}
-		public virtual void SetNoclip(bool value)
+		public virtual void SetMovementType(EMovementType value)
 		{
-			if (!IsAlive || IsNoclip == value)
+			if (!IsAlive || MovementType == value)
 				return;
 			
-			IsNoclip = value;
+			MovementType = value;
 
-			Body.Rigidbody.useGravity = !value;
-			Body.Collider.enabled = !value;
+			Body.Rigidbody.useGravity = MovementType == EMovementType.Normal;
+			Body.Collider.enabled = MovementType == EMovementType.Normal;
 			
-			if (value)
+			if (MovementType != EMovementType.Normal)
 				previousExcludeLayers = Body.Rigidbody.excludeLayers;
 			else
 				Body.Rigidbody.excludeLayers = previousExcludeLayers;
 
 			var feet = Body.Feet;
 			for (var i = 0; i < feet.Length; i++)
-				feet[i].GetComponent<Collider>().enabled = !value;
+				feet[i].GetComponent<Collider>().enabled = MovementType == EMovementType.Normal;
 		}
 
 		public virtual void TakeWeapon(IWeapon weapon)
@@ -180,7 +182,7 @@ namespace AI.Base
 			if (!IsAlive)
 				return;
 			
-			SetNoclip(false);
+			SetMovementType(EMovementType.Normal);
 			DropWeapon();
 
 			CurrentHealth = 0;
@@ -226,7 +228,7 @@ namespace AI.Base
 
 		public virtual bool IsGrounded()
 		{
-			if (IsNoclip)
+			if (MovementType != EMovementType.Normal)
 				return false;
 			
 			var feet = Body.Feet;

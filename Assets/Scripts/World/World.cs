@@ -36,9 +36,6 @@ namespace World
 		public Transform Impacts;
 
 		[SerializeField]
-		public float AdditionalGravity = -0.1f;
-
-		[SerializeField]
 		public float TimeScale = 1f;
 
 		private float previousTimeScale;
@@ -61,27 +58,6 @@ namespace World
 
 			previousTimeScale = TimeScale;
 			Time.timeScale = TimeScale;
-		}
-		
-		public void FixedUpdate()
-		{
-			// Simulate an additional gravity that affects all beings
-			
-			var aiManager = AIManager.Instance;
-			var npcs = aiManager.NPCs;
-			var player = aiManager.Player;
-
-			if (player.IsAlive && !player.IsNoclip)
-				player.Body.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);
-
-			for (var i = 0; i < npcs.Count; i++)
-			{
-				var npc = npcs[i];
-				if (!npc.IsAlive || npc.IsNoclip)
-					continue;
-
-				npc.Body.Rigidbody.AddForce(0, AdditionalGravity, 0, ForceMode.VelocityChange);
-			}
 		}
 	}
 }

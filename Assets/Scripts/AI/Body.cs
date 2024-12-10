@@ -52,7 +52,7 @@ namespace AI
 		public float BlinkVariation = 2f;
 		
 		[SerializeField]
-		public float FallMinimumVelocity = 8f;
+		public float FallMinimumVelocity = 7f;
 		
 		[SerializeField]
 		public float FallDamageMultiplier = 3.5f;
