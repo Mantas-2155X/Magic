@@ -133,10 +133,19 @@ namespace AI.Base
 			
 			regenerateLoop().Forget();
 		}
-		public virtual void Heal(float health, object source)
+		public virtual void Heal(float health, object source, bool clamp = false)
 		{
 			if (!IsAlive || health < 0)
 				return;
+			
+			if (clamp)
+			{
+				if (CurrentHealth >= StartingHealth)
+					return;
+
+				if (CurrentHealth + health >= StartingHealth)
+					health = StartingHealth - CurrentHealth;
+			}
 			
 			CurrentHealth += health;
 			OnHealEvent?.Invoke(this, health, source);
@@ -157,10 +166,19 @@ namespace AI.Base
 			
 			Kill(source);
 		}
-		public virtual void GenerateMana(float mana, object source)
+		public virtual void GenerateMana(float mana, object source, bool clamp = false)
 		{
 			if (!IsAlive || mana < 0)
 				return;
+
+			if (clamp)
+			{
+				if (CurrentMana >= StartingMana)
+					return;
+
+				if (CurrentMana + mana >= StartingMana)
+					mana = StartingMana - CurrentMana;
+			}
 			
 			CurrentMana += mana;
 			OnManaGenerateEvent?.Invoke(this, mana, source);
@@ -255,11 +273,8 @@ namespace AI.Base
 			{
 				await UniTask.WaitForSeconds(0.5f);
 
-				if (RegenerateMana + CurrentMana <= StartingMana)
-					GenerateMana(RegenerateMana, this);
-				
-				if (RegenerateHealth + CurrentHealth <= StartingHealth)
-					Heal(RegenerateHealth, this);
+				GenerateMana(RegenerateMana, this, true);
+				Heal(RegenerateHealth, this, true);
 			}
 		}
 		
