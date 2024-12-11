@@ -4,7 +4,6 @@ using Objects.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Weapons.Interfaces;
 
 namespace AI
 {
@@ -260,7 +259,7 @@ namespace AI
 		{
 			moveDirection = ctx.ReadValue<Vector2>();
 			walking = true;
-			Body.ShouldSway = true;
+			//Body.ShouldSway = true;
 		}
 		
 		private void onMoveCanceled(InputAction.CallbackContext ctx)
@@ -326,24 +325,6 @@ namespace AI
 		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : MaximumSpeed;
 
 		public override bool IsWalking => walking;
-
-		public override void TakeWeapon(IWeapon weapon)
-		{
-			base.TakeWeapon(weapon);
-			
-			var transforms = Body.WeaponContainer.GetComponentsInChildren<Transform>();
-			foreach (var tr in transforms)
-				tr.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-		}
-		
-		public override void DropWeapon()
-		{
-			var transforms = Body.WeaponContainer.GetComponentsInChildren<Transform>();
-			foreach (var tr in transforms)
-				tr.gameObject.layer = 0;
-			
-			base.DropWeapon();
-		}
 		
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{

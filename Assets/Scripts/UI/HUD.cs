@@ -19,9 +19,6 @@ namespace UI
 		
 		[SerializeField]
 		public Image Crosshair;
-
-		[SerializeField]
-		public Image Weapon;
 		
 		[SerializeField]
 		public float LookTargetDistance = 2f;
@@ -60,16 +57,6 @@ namespace UI
 						LookTarget.text = pickupable.GetGameObject().name;
 						break;
 				}
-			}
-
-			if (player.Weapon != null)
-			{
-				Weapon.sprite = player.Weapon.Icon;
-				Weapon.gameObject.SetActive(true);
-			}
-			else if (Weapon.isActiveAndEnabled)
-			{
-				Weapon.gameObject.SetActive(false);
 			}
 		}
 		
