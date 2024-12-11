@@ -15,6 +15,9 @@ namespace Weapons.Base
 		public IAlive Owner { get; private set; }
 		
 		[field: SerializeField]
+		public Sprite Icon { get; private set; }
+
+		[field: SerializeField]
 		public Collider[] Colliders { get; set; }
 		
 		[field: SerializeField]

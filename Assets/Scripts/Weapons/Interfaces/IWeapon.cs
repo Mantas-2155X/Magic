@@ -7,6 +7,8 @@ namespace Weapons.Interfaces
 	{
 		public IAlive Owner { get; }
 		
+		public Sprite Icon { get; }
+		
 		public Collider[] Colliders { get; }
 
 		public float TimeBetweenAttacks { get; }
