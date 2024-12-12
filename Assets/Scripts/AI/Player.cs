@@ -78,6 +78,9 @@ namespace AI
 		[SerializeField]
 		public Vector3 CastViewmodelAngles = new (50f, -20.1f, 0f);
 		
+		[SerializeField]
+		public Transform DropWeaponTr;
+
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
 

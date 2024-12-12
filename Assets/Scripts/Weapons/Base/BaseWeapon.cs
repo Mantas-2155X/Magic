@@ -93,12 +93,17 @@ namespace Weapons.Base
 			
 			CancelCasting();
 			
+			var dropTr = Owner is Player player ? player.DropWeaponTr : Owner.Body.WeaponContainer;
+
+			var movePos = dropTr.position + (Vector3.down * 0.1f) + (dropTr.right * 0.1f);
+			var moveAng = dropTr.eulerAngles;
+
 			var go = gameObject;
 			
 			var tr = transform;
 			tr.SetParent(World.World.Instance.Dropped);
-			tr.position = Owner.Body.WeaponContainer.position + Vector3.down * 0.1f;
-			tr.eulerAngles = Owner.Body.WeaponContainer.eulerAngles;
+			tr.position = movePos;
+			tr.eulerAngles = moveAng;
 			
 			for (var i = 0; i < Colliders.Length; i++)
 				Colliders[i].enabled = true;
@@ -109,6 +114,9 @@ namespace Weapons.Base
 			Rigidbody.detectCollisions = true;
 			Rigidbody.constraints = RigidbodyConstraints.None;
 			Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+			
+			Rigidbody.MovePosition(movePos);
+			Rigidbody.MoveRotation(Quaternion.Euler(moveAng));
 
 			Owner = null;
 		}
