@@ -41,15 +41,22 @@ namespace Weapons.Base
 			if (Time.time < LastStartedCast + CastingTime)
 				return;
 
-			if (Owner is Player player)
+			switch (Owner)
 			{
-				if (player.AttackAction.action.IsPressed())
-					FinishCasting();
-			}
-			else if (Owner is NPC npc)
-			{
-				if (npc.Target != null)
-					FinishCasting();
+				case Player player:
+				{
+					if (player.AttackAction.action.IsPressed())
+						FinishCasting();
+					break;
+				}
+				case NPC npc:
+				{
+					if (npc.Target != null)
+						FinishCasting();
+					break;
+				}
+				default:
+					throw new NotImplementedException();
 			}
 		}
 
