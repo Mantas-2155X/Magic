@@ -70,6 +70,12 @@ namespace AI
 		[SerializeField]
 		public Vector3 ViewmodelAngles = new (15.4f, -20.1f, 0f);
 		
+		[SerializeField]
+		public Vector3 CastViewmodelPosition = new (0.76f, -1.24f, 1.09f);
+		
+		[SerializeField]
+		public Vector3 CastViewmodelAngles = new (50f, -20.1f, 0f);
+		
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
 
@@ -302,11 +308,17 @@ namespace AI
 		
 		private void onAttackPerformed(InputAction.CallbackContext ctx)
 		{
+			Body.WeaponContainer.localPosition = CastViewmodelPosition;
+			Body.WeaponContainer.localEulerAngles = CastViewmodelAngles;
+
 			Weapon?.StartCasting();
 		}
 
 		private void onAttackCanceled(InputAction.CallbackContext ctx)
 		{
+			Body.WeaponContainer.localPosition = ViewmodelPosition;
+			Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
+
 			Weapon?.CancelCasting();
 		}
 
@@ -351,7 +363,7 @@ namespace AI
 			
 			Body.WeaponContainer.localPosition = ViewmodelPosition;
 			Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
-			
+
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed);
 			enableInput();
 		}
