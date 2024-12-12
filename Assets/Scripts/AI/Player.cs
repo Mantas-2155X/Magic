@@ -64,6 +64,12 @@ namespace AI
 		[SerializeField]
 		public float UseDistance = 1.5f;
 
+		[SerializeField]
+		public Vector3 ViewmodelPosition = new (0.76f, -1.24f, 1.09f);
+		
+		[SerializeField]
+		public Vector3 ViewmodelAngles = new (15.4f, -20.1f, 0f);
+		
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
 
@@ -328,12 +334,18 @@ namespace AI
 		
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{
+			Body.WeaponContainer.parent = CameraTr;
+			
+			Body.WeaponContainer.localPosition = ViewmodelPosition;
+			Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
+			
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed);
 			enableInput();
 		}
 		
 		public override void Kill(object source)
 		{
+			Body.WeaponContainer.parent = Body.Shoulders[1];
 			disableInput();
 			base.Kill(source);
 		}
