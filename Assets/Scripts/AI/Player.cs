@@ -4,6 +4,8 @@ using Objects.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using Weapons.Interfaces;
 
 namespace AI
 {
@@ -356,7 +358,25 @@ namespace AI
 		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : MaximumSpeed;
 
 		public override bool IsWalking => walking;
+
+		public override void TakeWeapon(IWeapon weapon)
+		{
+			base.TakeWeapon(weapon);
+			
+			var renderers = Body.WeaponContainer.GetComponentsInChildren<Renderer>(true);
+			foreach (var rend in renderers)
+				rend.shadowCastingMode = ShadowCastingMode.Off;
+		}
 		
+		public override void DropWeapon()
+		{
+			var renderers = Body.WeaponContainer.GetComponentsInChildren<Renderer>(true);
+			foreach (var rend in renderers)
+				rend.shadowCastingMode = ShadowCastingMode.On;
+
+			base.DropWeapon();
+		}
+
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{
 			Body.WeaponContainer.parent = CameraTr;
