@@ -248,16 +248,12 @@ namespace AI.Base
 		{
 			if (MovementType != EMovementType.Normal)
 				return false;
-			
-			var feet = Body.Feet;
-			for (var i = 0; i < feet.Length; i++)
-			{
-				var foot = feet[i];
-				if (!Physics.SphereCast(foot.position, 0.1375f, Vector3.down, out _, 0.15f, ~LayerMaskTools.Mask2))
-					continue;
 
+			var origin = transform.position + new Vector3(0f, -1.02f, 0f);
+			var extents = new Vector3(0.6f, 0.05f, 0.2f) / 2f;
+			
+			if (Physics.CheckBox(origin, extents, transform.rotation, ~LayerMaskTools.Mask1))
 				return true;
-			}
 			
 			return false;
 		}
