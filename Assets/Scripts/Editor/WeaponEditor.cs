@@ -28,9 +28,9 @@ namespace Editor
 				for (var i = 0; i < weapon.Colliders.Length; i++)
 					weapon.Colliders[i].enabled = true;
 				
-				var rb = go.AddComponent<Rigidbody>();
-				rb.interpolation = RigidbodyInterpolation.Interpolate;
-				rb.mass = 5f;
+				weapon.Rigidbody = go.AddComponent<Rigidbody>();
+				weapon.Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+				weapon.Rigidbody.mass = 5f;
 
 				go.AddComponent<DroppedWeapon>();
 				

@@ -204,10 +204,10 @@ PrefabInstance:
       addedObject: {fileID: 4364782190655819929}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2910990682299897297}
+      addedObject: {fileID: 4733048724523980908}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1687951315820785611}
+      addedObject: {fileID: 6883118425558741724}
     - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1531224876057879590}
@@ -237,6 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d401b1e8e3a42c1916d24fcea079543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Rigidbody>k__BackingField: {fileID: 4733048724523980908}
   <Colliders>k__BackingField:
   - {fileID: 1531224876057879590}
   - {fileID: 2241740109451088481}
@@ -246,7 +247,7 @@ MonoBehaviour:
   Rings:
   - {fileID: 795004714111284796}
   - {fileID: 577680839158016261}
---- !u!54 &2910990682299897297
+--- !u!54 &4733048724523980908
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -273,7 +274,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1687951315820785611
+--- !u!114 &6883118425558741724
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

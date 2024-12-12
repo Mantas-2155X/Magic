@@ -15,6 +15,9 @@ namespace Weapons.Base
 		public IAlive Owner { get; private set; }
 		
 		[field: SerializeField]
+		public Rigidbody Rigidbody { get; set; }
+
+		[field: SerializeField]
 		public Collider[] Colliders { get; set; }
 		
 		[field: SerializeField]
@@ -66,9 +69,13 @@ namespace Weapons.Base
 				return;
 			
 			Owner = alive;
-			
+
 			Destroy(GetComponent<DroppedWeapon>());
-			Destroy(GetComponent<Rigidbody>());
+
+			Rigidbody.isKinematic = true;
+			Rigidbody.detectCollisions = false;
+			Rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+			Rigidbody.interpolation = RigidbodyInterpolation.None;
 
 			for (var i = 0; i < Colliders.Length; i++)
 				Colliders[i].enabled = false;
@@ -82,10 +89,7 @@ namespace Weapons.Base
 		public virtual void Drop()
 		{
 			if (Owner == null)
-			{
-				Destroy(gameObject);
 				return;
-			}
 			
 			CancelCasting();
 			
@@ -101,9 +105,10 @@ namespace Weapons.Base
 
 			go.AddComponent<DroppedWeapon>();
 			
-			var rb = go.AddComponent<Rigidbody>();
-			rb.interpolation = RigidbodyInterpolation.Interpolate;
-			rb.mass = 5f;
+			Rigidbody.isKinematic = false;
+			Rigidbody.detectCollisions = true;
+			Rigidbody.constraints = RigidbodyConstraints.None;
+			Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 
 			Owner = null;
 		}
