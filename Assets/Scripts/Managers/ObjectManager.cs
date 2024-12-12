@@ -1,6 +1,7 @@
 using System;
 using Impacts.Interfaces;
 using Objects;
+using Objects.Base;
 using Projectiles.Interfaces;
 using UnityEngine;
 using Weapons.Interfaces;
@@ -84,7 +85,7 @@ namespace Managers
 			tr.position = position;
 			tr.eulerAngles = angles;
 			
-			gameObject.SetActive(true);
+			go.SetActive(true);
 			return weapon;
 		}
 		
@@ -110,6 +111,35 @@ namespace Managers
 
 			portal.Spawn(position);
 			return portal;
+		}
+		
+		public BasePool CreatePool(Type type, Vector3 position)
+		{
+			BasePool pool;
+			bool parent;
+				
+			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
+			if (pooled != null)
+			{
+				pool = pooled.GetComponent<BasePool>();
+				parent = false;
+			}
+			else
+			{
+				pool = Instantiate(Resources.Load<GameObject>($"Objects/{type.Name}")).GetComponent<BasePool>();
+				parent = true;
+			}
+
+			var go = pool.gameObject;
+			var tr = go.transform;
+
+			if (parent)
+				tr.SetParent(World.World.Instance.Objects);
+			
+			tr.position = position;
+			
+			go.SetActive(true);
+			return pool;
 		}
 	}
 }

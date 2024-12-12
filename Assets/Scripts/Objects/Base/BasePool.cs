@@ -1,24 +1,26 @@
+using System;
 using System.Collections.Generic;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Managers;
 using Objects.Enums;
 using UnityEngine;
 
-namespace Objects
+namespace Objects.Base
 {
-	public class Pool : MonoBehaviour
+	public class BasePool : MonoBehaviour
 	{
 		[SerializeField]
 		public Collider[] Colliders;
 
-		[SerializeField]
-		public EPoolType Type = EPoolType.Health;
+		[field: SerializeField]
+		public virtual EPoolType Type { get; private set; }
 		
-		[SerializeField]
-		public float Rate = 0.5f;
+		[field: SerializeField]
+		public virtual float Rate { get; private set; }
 
-		[SerializeField]
-		public float Amount = 2f;
+		[field: SerializeField]
+		public virtual float Amount { get; private set; }
 		
 		private List<IAlive> alives = new ();
 
@@ -26,7 +28,12 @@ namespace Objects
 		{
 			loop().Forget();
 		}
-		
+
+		public void OnDisable()
+		{
+			PoolingManager.Instance.AddToPool(GetType(), gameObject);
+		}
+
 		public void OnTriggerEnter(Collider other)
 		{
 			var alive = other.GetComponent<IAlive>();
@@ -52,6 +59,11 @@ namespace Objects
 			alives.Remove(alive);
 		}
 
+		public virtual void OnPoolLooped(IAlive alive)
+		{
+			
+		}
+		
 		private async UniTask loop()
 		{
 			while (enabled)
@@ -63,15 +75,7 @@ namespace Objects
 					if (alive == null || !alive.IsAlive)
 						continue;
 
-					switch (Type)
-					{
-						case EPoolType.Health:
-							alive.Heal(Amount, this, true);
-							break;
-						case EPoolType.Mana:
-							alive.GenerateMana(Amount, this, true);
-							break;
-					}
+					OnPoolLooped(alive);
 				}
 			}
 		}

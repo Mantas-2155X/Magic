@@ -787,6 +787,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ManaPool
       objectReference: {fileID: 0}
+    - target: {fileID: 3523939064151980886, guid: 2ff14fe6e2fd5493aa632d0690e49f23, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7134174960870428385, guid: 2ff14fe6e2fd5493aa632d0690e49f23, type: 3}
       propertyPath: m_LocalPosition.x
       value: 61.951664
@@ -1154,6 +1158,7 @@ MonoBehaviour:
   Projectiles: {fileID: 13660899}
   Impacts: {fileID: 1393974972}
   Other: {fileID: 1552302691}
+  Objects: {fileID: 1596912788}
   TimeScale: 1
 --- !u!4 &646561133
 Transform:
@@ -7459,6 +7464,10 @@ PrefabInstance:
     - target: {fileID: 3523939064151980886, guid: 7aead1f94c85a1a088fa21996c0c56f7, type: 3}
       propertyPath: m_Name
       value: HealthPool
+      objectReference: {fileID: 0}
+    - target: {fileID: 3523939064151980886, guid: 7aead1f94c85a1a088fa21996c0c56f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7134174960870428385, guid: 7aead1f94c85a1a088fa21996c0c56f7, type: 3}
       propertyPath: m_LocalPosition.x

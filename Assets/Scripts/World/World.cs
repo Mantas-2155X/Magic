@@ -39,6 +39,9 @@ namespace World
 		public Transform Other;
 
 		[SerializeField]
+		public Transform Objects;
+		
+		[SerializeField]
 		public float TimeScale = 1f;
 
 		private float previousTimeScale;
