@@ -45,10 +45,7 @@ namespace AI.ActionModes
 					return;
 			
 				if (Owner.HasSight.SightCheck(Owner, target))
-				{
 					Owner.Weapon?.StartCasting();
-					Owner.Weapon?.FinishCasting();
-				}
 			}
 		}
 		

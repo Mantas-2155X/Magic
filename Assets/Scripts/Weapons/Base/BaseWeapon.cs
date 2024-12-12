@@ -35,16 +35,22 @@ namespace Weapons.Base
 
 		public virtual void Update()
 		{
-			if (!IsCasting || Owner is not Player player || !player.IsAlive)
+			if (!IsCasting || Owner == null || !Owner.IsAlive)
 				return;
 
 			if (Time.time < LastStartedCast + CastingTime)
 				return;
 
-			if (player.AttackAction.action.IsPressed())
-				FinishCasting();
-			else
-				CancelCasting();
+			if (Owner is Player player)
+			{
+				if (player.AttackAction.action.IsPressed())
+					FinishCasting();
+			}
+			else if (Owner is NPC npc)
+			{
+				if (npc.Target != null)
+					FinishCasting();
+			}
 		}
 
 		public virtual void Take(IAlive alive)

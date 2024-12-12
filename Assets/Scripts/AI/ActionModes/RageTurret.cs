@@ -24,9 +24,7 @@ namespace AI.ActionModes
 				return;
 			
 			Owner.Spin.SpinEndlessly(Owner.transform);
-			
 			Owner.Weapon?.StartCasting();
-			Owner.Weapon?.FinishCasting();
 		}
 
 		public void TargetChanged(Component previousTarget, Component newTarget)

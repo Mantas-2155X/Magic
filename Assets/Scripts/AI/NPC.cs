@@ -246,6 +246,7 @@ namespace AI
 			if (AIMode == mode)
 				return;
 			
+			Weapon?.CancelCasting();
 			previousAIMode = AIMode;
 			
 			AIModes[AIMode].Disabled();
@@ -262,6 +263,7 @@ namespace AI
 			if (ActionMode == mode)
 				return;
 			
+			Weapon?.CancelCasting();
 			previousActionMode = ActionMode;
 			
 			ActionModes[ActionMode].Disabled();
@@ -277,6 +279,7 @@ namespace AI
 			if (Target == target)
 				return;
 			
+			Weapon?.CancelCasting();
 			previousTarget = Target;
 			Target = target;
 			
