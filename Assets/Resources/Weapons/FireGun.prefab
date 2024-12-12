@@ -237,12 +237,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90973ba9642e4ee08af061597bc181f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Icon>k__BackingField: {fileID: 21300000, guid: a01ee700d0a84c0df957d944979ccb23, type: 3}
   <Colliders>k__BackingField:
   - {fileID: 1531224876057879590}
   - {fileID: 2241740109451088481}
-  <TimeBetweenAttacks>k__BackingField: 0.25
-  <ManaCost>k__BackingField: 8
+  <TimeBetweenAttacks>k__BackingField: 0
+  <CastingTime>k__BackingField: 0.5
+  <ManaCost>k__BackingField: 15
   <Force>k__BackingField: 7.5
   Rings:
   - {fileID: 795004714111284796}

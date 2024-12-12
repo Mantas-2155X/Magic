@@ -19,7 +19,7 @@ namespace Managers
 			Instance = this;
 		}
 		
-		public NPC CreateNPC(Vector3 position, Vector3 angles, float startingHealth = 50, float overloadHealth = 100, float regenerateHealth = 0.5f, float startingMana = 250, float overloadMana = 500, float regenerateMana = 9, float speed = 7f)
+		public NPC CreateNPC(Vector3 position, Vector3 angles, float startingHealth = 50, float overloadHealth = 76, float regenerateHealth = 0.5f, float startingMana = 250, float overloadMana = 376, float regenerateMana = 7, float speed = 7f)
 		{
 			ObjectManager.Instance.CreatePortal(position);
 			
@@ -39,7 +39,7 @@ namespace Managers
 			NPCs.Add(npc);
 			return npc;
 		}
-		public Player CreatePlayer(Vector3 position, Vector3 angles, float startingHealth = 100, float overloadHealth = 200, float regenerateHealth = 0.5f, float startingMana = 100, float overloadMana = 200, float regenerateMana = 7, float speed = 7f)
+		public Player CreatePlayer(Vector3 position, Vector3 angles, float startingHealth = 100, float overloadHealth = 151, float regenerateHealth = 0.5f, float startingMana = 100, float overloadMana = 151, float regenerateMana = 5, float speed = 7f)
 		{
 			if (Player != null)
 			{

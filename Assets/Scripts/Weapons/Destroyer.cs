@@ -7,19 +7,15 @@ namespace Weapons
 {
 	public class Destroyer : BaseWeapon
 	{
-		public override bool Attack()
+		public override void FinishCasting()
 		{
-			var success = base.Attack();
-			if (!success)
-				return false;
-			
-			if (!Physics.Raycast(Ray, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
-				return false;
+			base.FinishCasting();
+
+			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
+				return;
 			
 			var alive = hit.collider.GetComponent<IAlive>();
 			alive?.Kill(this);
-
-			return true;
 		}
 	}
 }

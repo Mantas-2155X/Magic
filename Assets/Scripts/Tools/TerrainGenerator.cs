@@ -80,7 +80,7 @@ namespace Tools
 					{
 						var layer = Layers[i];
 
-						var noise = remap(Mathf.PerlinNoise(x * PaintNoise, y * PaintNoise), 0f, 1f, 0.5f, 1f);
+						var noise = MathTools.Remap(Mathf.PerlinNoise(x * PaintNoise, y * PaintNoise), 0f, 1f, 0.5f, 1f);
 						
 						var startingHeight = (layer.StartingHeight * noise) - (layer.Overlay * noise);
 						var nextStartingHeight = i == Layers.Length - 1 ? 0f : (Layers[i].StartingHeight * noise) + (Layers[i].Overlay * noise);
@@ -141,11 +141,6 @@ namespace Tools
 				values[i] /= total;
 			
 			return values;
-		}
-
-		private float remap(float value, float startingMin, float startingMax, float targetMin, float targetMax)
-		{
-			return (value - startingMin) * (targetMax - targetMin) / (startingMax - startingMin) + targetMin;
 		}
 	}
 }

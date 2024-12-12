@@ -1,6 +1,7 @@
 using AI;
 using AI.Base;
 using AI.Interfaces;
+using Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,10 +10,13 @@ namespace UI
 	public class Stats : MonoBehaviour
 	{
 		[SerializeField]
-		public Image Health;
+		public Image Red;
 
 		[SerializeField]
-		public Image Mana;
+		public RectTransform HealthBottle;
+
+		[SerializeField]
+		public RectTransform ManaBottle;
 
 		public void Awake()
 		{
@@ -29,7 +33,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth);
+			setHealth(player.CurrentHealth, player.OverloadHealth);
 		}
 		
 		public void OnDamage(IAlive alive, float damage, object source)
@@ -37,7 +41,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth);
+			setHealth(player.CurrentHealth, player.OverloadHealth);
 		}
 		
 		public void OnManaGenerate(IAlive alive, float generated, object source)
@@ -45,7 +49,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setMana(player.CurrentMana);
+			setMana(player.CurrentMana, player.OverloadMana);
 		}
 		
 		public void OnManaUse(IAlive alive, float used, object source)
@@ -53,7 +57,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setMana(player.CurrentMana);
+			setMana(player.CurrentMana, player.OverloadMana);
 		}
 		
 		public void OnDeath(IAlive alive, object source)
@@ -61,8 +65,8 @@ namespace UI
 			if (alive is not Player)
 				return;
 			
-			setHealth(0);
-			setMana(0);
+			setHealth(0, 100);
+			setMana(0, 100);
 		}
 		
 		public void OnSpawn(IAlive alive)
@@ -70,21 +74,33 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth);
-			setMana(player.CurrentMana);
+			setHealth(player.CurrentHealth, player.OverloadHealth);
+			setMana(player.CurrentMana, player.OverloadMana);
 		}
 		
-		private void setHealth(float health)
+		private void setHealth(float amount, float overload)
 		{
-			var color = Health.color;
-			color.a = Mathf.SmoothStep(0f, 1f, 1f - (health / 100f));
+			if (amount > overload)
+				amount = overload;
+
+			var color = Red.color;
+			color.a = Mathf.SmoothStep(0f, 1f, 1f - (amount / 100f));
+			Red.color = color;
 			
-			Health.color = color;
+			var offset = HealthBottle.offsetMax;
+			offset.y = -MathTools.Remap(amount, 0f, overload, 111f, 0f);
+			HealthBottle.offsetMax = offset;
 		}
 		
-		private void setMana(float mana)
+		private void setMana(float amount, float overload)
 		{
-			Mana.fillAmount = Mathf.SmoothStep(0f, 1f, (mana / 100f));
+			if (amount > overload)
+				amount = overload;
+			
+			var offset = ManaBottle.offsetMax;
+			offset.y = -MathTools.Remap(amount, 0f, overload, 111f, 0f);
+
+			ManaBottle.offsetMax = offset;
 		}
 	}
 }

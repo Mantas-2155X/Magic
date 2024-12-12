@@ -13,12 +13,12 @@ namespace Weapons
 		[SerializeField]
 		public Transform[] Rings;
 		
-		public void Update()
+		public override void Update()
 		{
+			base.Update();
+
 			for (var i = 0; i < Rings.Length; i++)
-			{
 				Rings[i].Rotate(new Vector3(Random.Range(1f, 3f), Random.Range(1f, 3f), Random.Range(1f, 3f)) * (32f * Time.deltaTime));
-			}
 		}
 	}
 }

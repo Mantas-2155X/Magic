@@ -94,9 +94,8 @@ namespace AI
 			if (!IsAlive)
 				return;
 
-			// Where is the Held mode for the input action?
 			if (AttackAction.action.IsPressed())
-				Weapon?.Attack();
+				Weapon?.StartCasting();
 		}
 		
 		public void LateUpdate()
@@ -192,6 +191,8 @@ namespace AI
 			use.Enable();
 			
 			var attack = AttackAction.action;
+			attack.performed += onAttackPerformed;
+			attack.canceled += onAttackCanceled;
 			attack.Enable();
 			
 			var noclip = NoclipAction.action;
@@ -235,6 +236,8 @@ namespace AI
 			use.Disable();
 			
 			var attack = AttackAction.action;
+			attack.performed -= onAttackPerformed;
+			attack.canceled -= onAttackCanceled;
 			attack.Disable();
 						
 			var noclip = NoclipAction.action;
@@ -297,6 +300,16 @@ namespace AI
 			fallPressed = false;
 		}
 		
+		private void onAttackPerformed(InputAction.CallbackContext ctx)
+		{
+			Weapon?.StartCasting();
+		}
+
+		private void onAttackCanceled(InputAction.CallbackContext ctx)
+		{
+			Weapon?.CancelCasting();
+		}
+
 		private void onUse(InputAction.CallbackContext ctx)
 		{
 			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.Mask1))

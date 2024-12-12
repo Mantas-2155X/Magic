@@ -21,6 +21,9 @@ namespace UI
 		public Image Crosshair;
 		
 		[SerializeField]
+		public Image Cast;
+
+		[SerializeField]
 		public float LookTargetDistance = 2f;
 		
 		public void Awake()
@@ -40,6 +43,29 @@ namespace UI
 			if (player == null)
 				return;
 
+			var weapon = player.Weapon;
+			if (weapon != null)
+			{
+				if (weapon.IsCasting)
+				{
+					var startingTime = weapon.LastStartedCast;
+					var targetTime = startingTime + weapon.CastingTime;
+					
+					var amount = MathTools.Remap(Time.time, startingTime, targetTime, 0f, 1f);
+					amount = Mathf.Clamp01(amount);
+					
+					Cast.fillAmount = amount;
+				}
+				else
+				{
+					Cast.fillAmount = 0f;
+				}
+			}
+			else
+			{
+				Cast.fillAmount = 0f;
+			}
+			
 			Crosshair.color = player.IsGrounded() ? Color.white : Color.red;
 			
 			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.Mask1))
@@ -50,8 +76,8 @@ namespace UI
 
 				switch (pickupable)
 				{
-					case DroppedWeapon weapon:
-						LookTarget.text = weapon.Weapon.GetType().Name;
+					case DroppedWeapon droppedWeapon:
+						LookTarget.text = droppedWeapon.Weapon.GetType().Name;
 						break;
 					default:
 						LookTarget.text = pickupable.GetGameObject().name;

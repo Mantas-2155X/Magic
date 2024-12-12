@@ -7,17 +7,14 @@ namespace Weapons
 {
 	public class Creator : BaseWeapon
 	{
-		public override bool Attack()
+		public override void FinishCasting()
 		{
-			var success = base.Attack();
-			if (!success)
-				return false;
+			base.FinishCasting();
 
-			if (!Physics.Raycast(Ray, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
-				return false;
+			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
+				return;
 
 			AIManager.Instance.CreateNPC(hit.point + Vector3.up * 1.25f, new Vector3(0, Owner.GetGameObject().transform.eulerAngles.y, 0));
-			return true;
 		}
 	}
 }

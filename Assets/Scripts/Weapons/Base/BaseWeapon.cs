@@ -21,10 +21,31 @@ namespace Weapons.Base
 		public virtual float TimeBetweenAttacks { get; private set; }
 		
 		[field: SerializeField]
-		public float ManaCost { get; private set; }
+		public virtual float CastingTime { get; private set; }
 
-		public Ray Ray { get; private set; }
-		public float LastAttackTime { get; private set; }
+		[field: SerializeField]
+		public virtual float ManaCost { get; private set; }
+
+		public bool IsCasting { get; private set; }
+		
+		public Ray FinishedRay { get; private set; }
+
+		public float LastStartedCast { get; private set; }
+		public float LastFinishedCast { get; private set; }
+
+		public virtual void Update()
+		{
+			if (!IsCasting || Owner is not Player player || !player.IsAlive)
+				return;
+
+			if (Time.time < LastStartedCast + CastingTime)
+				return;
+
+			if (player.AttackAction.action.IsPressed())
+				FinishCasting();
+			else
+				CancelCasting();
+		}
 
 		public virtual void Take(IAlive alive)
 		{
@@ -53,6 +74,8 @@ namespace Weapons.Base
 				return;
 			}
 			
+			CancelCasting();
+			
 			var go = gameObject;
 			
 			var tr = transform;
@@ -72,23 +95,41 @@ namespace Weapons.Base
 			Owner = null;
 		}
 		
-		public virtual bool CanAttack()
+		public virtual bool CanCast()
 		{
-			if (Owner == null)
+			if (IsCasting || Owner == null)
 				return false;
 
-			return Time.time >= LastAttackTime + TimeBetweenAttacks && Owner.CurrentMana >= ManaCost;
+			return Time.time >= LastFinishedCast + TimeBetweenAttacks && Owner.CurrentMana >= ManaCost;
 		}
 		
-		public virtual bool Attack()
+		public virtual void StartCasting()
 		{
-			if (!CanAttack())
-				return false;
+			if (!CanCast())
+				return;
+
+			IsCasting = true;
+			LastStartedCast = Time.time;
+		}
+		
+		public virtual void FinishCasting()
+		{
+			if (!IsCasting)
+				return;
+
+			IsCasting = false;
+			LastFinishedCast = Time.time;
 
 			CalculateRay();
 			Owner.UseMana(ManaCost, this);
-			LastAttackTime = Time.time;
-			return true;
+		}
+		
+		public virtual void CancelCasting()
+		{
+			if (!IsCasting)
+				return;
+			
+			IsCasting = false;
 		}
 		
 		public GameObject GetGameObject()
@@ -98,17 +139,17 @@ namespace Weapons.Base
 
 		public void CalculateRay()
 		{
-			Ray = default;
+			FinishedRay = default;
 			
 			switch (Owner)
 			{
 				case Player player:
-					Ray = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+					FinishedRay = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 					break;
 				case NPC npc:
 					var ownerTr = Owner.GetGameObject().transform;
 					var direction = npc.AimLimited || npc.Target == null ? ownerTr.forward : (npc.Target.transform.position - ownerTr.position).normalized;
-					Ray = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
+					FinishedRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;
 				default:
 					throw new NotImplementedException();
@@ -117,7 +158,9 @@ namespace Weapons.Base
 
 		public void OnDisable()
 		{
-			LastAttackTime = 0f;
+			LastStartedCast = 0f;
+			LastFinishedCast = 0f;
+			IsCasting = false;
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 	}

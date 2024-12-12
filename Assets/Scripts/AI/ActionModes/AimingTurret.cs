@@ -33,7 +33,10 @@ namespace AI.ActionModes
 				return;
 			
 			if (Owner.HasSight.SightCheck(Owner, target))
-				Owner.Weapon?.Attack();
+			{
+				Owner.Weapon?.StartCasting();
+				Owner.Weapon?.FinishCasting();
+			}
 		}
 
 		public void TargetChanged(Component previousTarget, Component newTarget)
