@@ -33,8 +33,8 @@ namespace Weapons.Base
 		
 		public Ray FinishedRay { get; private set; }
 
-		public float LastStartedCast { get; private set; }
-		public float LastFinishedCast { get; private set; }
+		public float LastStartedCast { get; private set; } = -1f;
+		public float LastFinishedCast { get; private set; } = -1f;
 
 		public virtual void Update()
 		{
@@ -184,8 +184,8 @@ namespace Weapons.Base
 
 		public void OnDisable()
 		{
-			LastStartedCast = 0f;
-			LastFinishedCast = 0f;
+			LastStartedCast = -1f;
+			LastFinishedCast = -1f;
 			IsCasting = false;
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}

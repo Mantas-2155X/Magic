@@ -24,6 +24,9 @@ namespace UI
 		public Image Cast;
 
 		[SerializeField]
+		public Image Cooldown;
+
+		[SerializeField]
 		public float LookTargetDistance = 2f;
 		
 		public void Awake()
@@ -60,10 +63,26 @@ namespace UI
 				{
 					Cast.fillAmount = 0f;
 				}
+
+				if (weapon.LastFinishedCast < 0)
+				{
+					Cooldown.fillAmount = 0f;
+				}
+				else
+				{
+					var finishTime = weapon.LastFinishedCast;
+					var cooldownTime = finishTime + weapon.TimeBetweenAttacks;
+
+					var amount = MathTools.Remap(Time.time, finishTime, cooldownTime, 1f, 0f);
+					amount = Mathf.Clamp01(amount);
+					
+					Cooldown.fillAmount = amount;
+				}
 			}
 			else
 			{
 				Cast.fillAmount = 0f;
+				Cooldown.fillAmount = 0f;
 			}
 			
 			Crosshair.color = player.IsGrounded() ? Color.white : Color.red;
