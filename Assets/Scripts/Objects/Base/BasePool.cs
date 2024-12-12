@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -22,11 +21,17 @@ namespace Objects.Base
 		[field: SerializeField]
 		public virtual float Amount { get; private set; }
 		
+		[field: SerializeField]
+		public virtual float Lifetime { get; set; }
+		
 		private List<IAlive> alives = new ();
 
-		public void Awake()
+		public void OnEnable()
 		{
 			loop().Forget();
+			
+			if (Lifetime > 0f)
+				lifetime().Forget();
 		}
 
 		public void OnDisable()
@@ -78,6 +83,13 @@ namespace Objects.Base
 					OnPoolLooped(alive);
 				}
 			}
+		}
+
+		private async UniTask lifetime()
+		{
+			await UniTask.WaitForSeconds(Lifetime);
+			
+			gameObject.SetActive(false);
 		}
 	}
 }

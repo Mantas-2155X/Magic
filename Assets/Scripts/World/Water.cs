@@ -15,7 +15,7 @@ namespace World
 
 		private List<IAlive> alives = new ();
 		
-		public void Awake()
+		public void OnEnable()
 		{
 			damage().Forget();
 		}

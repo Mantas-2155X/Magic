@@ -113,7 +113,7 @@ namespace Managers
 			return portal;
 		}
 		
-		public BasePool CreatePool(Type type, Vector3 position)
+		public BasePool CreatePool(Type type, Vector3 position, float lifetime)
 		{
 			BasePool pool;
 			bool parent;
@@ -130,6 +130,8 @@ namespace Managers
 				parent = true;
 			}
 
+			pool.Lifetime = lifetime;
+			
 			var go = pool.gameObject;
 			var tr = go.transform;
 

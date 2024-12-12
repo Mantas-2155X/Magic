@@ -1,9 +1,7 @@
-using System;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Objects.Enums;
 using Objects.Interfaces;
-using Tools;
 using UnityEngine;
 
 namespace Objects.Base
@@ -18,7 +16,7 @@ namespace Objects.Base
 		private bool destroyed;
 		private bool pickupable;
 		
-		public void Start()
+		public virtual void OnEnable()
 		{
 			if (PickupableAfter == 0f)
 				pickupable = true;

@@ -12,9 +12,10 @@ namespace Objects
 		
 		public IWeapon Weapon { get; private set; }
 
-		public void Awake()
+		public override void OnEnable()
 		{
 			Weapon = GetComponent<IWeapon>();
+			base.OnEnable();
 		}
 		
 		public override bool CanPickup(IAlive user)

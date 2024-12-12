@@ -16,7 +16,7 @@ namespace Objects.Base
 		private bool destroyed;
 		private bool usable;
 
-		public void Start()
+		public virtual void OnEnable()
 		{
 			if (UsableAfter == 0f)
 				usable = true;

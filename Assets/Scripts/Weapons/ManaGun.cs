@@ -11,6 +11,9 @@ namespace Weapons
 		[SerializeField]
 		public Transform[] Rings;
 		
+		[SerializeField]
+		public float Lifetime = 15f;
+
 		public override void Update()
 		{
 			base.Update();
@@ -26,7 +29,7 @@ namespace Weapons
 			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
 				return;
 
-			ObjectManager.Instance.CreatePool(typeof(ManaPool), hit.point + Vector3.up * 0.06f);
+			ObjectManager.Instance.CreatePool(typeof(ManaPool), hit.point + Vector3.up * 0.06f, Lifetime);
 		}
 	}
 }
