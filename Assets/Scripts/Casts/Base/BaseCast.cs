@@ -1,6 +1,4 @@
-using System;
 using Casts.Interfaces;
-using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
 using Weapons.Interfaces;
@@ -14,6 +12,15 @@ namespace Casts.Base
 
 		public IWeapon Source { get; private set; }
 
+		public void Update()
+		{
+			if (Source == null || Source.Owner == null)
+				return;
+
+			var tr = Source.Owner.GetGameObject().transform;
+			transform.position = tr.position + Vector3.down * 0.98f;
+		}
+		
 		public void OnParticleSystemStopped()
 		{
 			gameObject.SetActive(false);
@@ -21,18 +28,15 @@ namespace Casts.Base
 
 		public void OnDisable()
 		{
-			poolDelayed().Forget();
+			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 		
-		public void Spawn(IWeapon source)
+		public void Spawn(IWeapon source, bool parent)
 		{
 			Source = source;
-
-			var tr = transform;
-			tr.SetParent(Source.Owner.GetGameObject().transform);
 			
-			tr.localPosition = Vector3.down * 0.98f;
-			tr.localEulerAngles = Vector3.zero;
+			if (parent)
+				transform.SetParent(World.World.Instance.Other);
 			
 			gameObject.SetActive(true);
 			System.Play(true);
@@ -46,14 +50,6 @@ namespace Casts.Base
 		public GameObject GetGameObject()
 		{
 			return gameObject;
-		}
-
-		private async UniTask poolDelayed()
-		{
-			await UniTask.NextFrame();
-			
-			transform.SetParent(World.World.Instance.Other);
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 	}
 }

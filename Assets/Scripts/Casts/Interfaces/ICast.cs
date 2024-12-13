@@ -9,7 +9,7 @@ namespace Casts.Interfaces
 		
 		public IWeapon Source { get; }
 		
-		public void Spawn(IWeapon source);
+		public void Spawn(IWeapon source, bool parent);
 
 		public void StopParticles();
 		

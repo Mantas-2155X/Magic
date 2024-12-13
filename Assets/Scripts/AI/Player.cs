@@ -382,7 +382,7 @@ namespace AI
 
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{
-			Body.WeaponContainer.parent = CameraTr;
+			Body.WeaponContainer.SetParent(CameraTr);
 			
 			Body.WeaponContainer.localPosition = ViewmodelPosition;
 			Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
@@ -393,7 +393,7 @@ namespace AI
 		
 		public override void Kill(object source)
 		{
-			Body.WeaponContainer.parent = Body.Shoulders[1];
+			Body.WeaponContainer.SetParent(Body.Shoulders[1]);
 			disableInput();
 			base.Kill(source);
 		}

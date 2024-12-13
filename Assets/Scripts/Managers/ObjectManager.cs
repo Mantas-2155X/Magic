@@ -107,10 +107,7 @@ namespace Managers
 				parent = true;
 			}
 			
-			if (parent)
-				portal.transform.SetParent(World.World.Instance.Other);
-
-			portal.Spawn(position);
+			portal.Spawn(position, parent);
 			return portal;
 		}
 		
@@ -127,7 +124,7 @@ namespace Managers
 			}
 			else
 			{
-				pool = Instantiate(Resources.Load<GameObject>($"Objects/{type.Name}")).GetComponent<BasePool>();
+				pool = Instantiate(Resources.Load<GameObject>($"Pools/{type.Name}")).GetComponent<BasePool>();
 				parent = true;
 			}
 
@@ -137,7 +134,7 @@ namespace Managers
 			var tr = go.transform;
 
 			if (parent)
-				tr.SetParent(World.World.Instance.Objects);
+				tr.SetParent(World.World.Instance.Other);
 			
 			tr.position = position;
 			
@@ -148,18 +145,21 @@ namespace Managers
 		public ICast CreateCast(Type type, IWeapon weapon)
 		{
 			ICast cast;
-			
+			bool parent;
+
 			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
 			if (pooled != null)
 			{
 				cast = pooled.GetComponent<ICast>();
+				parent = false;
 			}
 			else
 			{
 				cast = Instantiate(Resources.Load<GameObject>($"Casts/{type.Name}")).GetComponent<ICast>();
+				parent = true;
 			}
 			
-			cast.Spawn(weapon);
+			cast.Spawn(weapon, parent);
 			return cast;
 		}
 	}

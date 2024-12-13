@@ -237,8 +237,7 @@ namespace AI.Base
 				rb.excludeLayers = 0;
 				rb.mass = 5;
 
-				var tr = go.transform;
-				tr.parent = ragdolls;
+				go.transform.SetParent(ragdolls);
 			}
 
 			OnDeathEvent?.Invoke(this, source);
