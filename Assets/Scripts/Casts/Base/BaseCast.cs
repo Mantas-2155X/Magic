@@ -12,13 +12,17 @@ namespace Casts.Base
 
 		public IWeapon Source { get; private set; }
 
+		[SerializeField]
+		public float Rotation;
+		
 		public void Update()
 		{
+			transform.Rotate(Vector3.up, Rotation * Time.deltaTime);
+
 			if (Source == null || Source.Owner == null)
 				return;
 
-			var tr = Source.Owner.GetGameObject().transform;
-			transform.position = tr.position + Vector3.down * 0.975f;
+			setPosition();
 		}
 		
 		public void OnParticleSystemStopped()
@@ -38,6 +42,8 @@ namespace Casts.Base
 			if (parent)
 				transform.SetParent(World.World.Instance.Other);
 			
+			setPosition();
+			
 			gameObject.SetActive(true);
 			System.Play(true);
 		}
@@ -50,6 +56,12 @@ namespace Casts.Base
 		public GameObject GetGameObject()
 		{
 			return gameObject;
+		}
+
+		private void setPosition()
+		{
+			var tr = Source.Owner.GetGameObject().transform;
+			transform.position = tr.position + Vector3.down * 0.95f;
 		}
 	}
 }
