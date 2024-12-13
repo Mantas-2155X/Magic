@@ -1,4 +1,6 @@
 using System;
+using AI.Interfaces;
+using Attacks.Interfaces;
 using Casts.Interfaces;
 using Impacts.Interfaces;
 using Objects;
@@ -161,6 +163,27 @@ namespace Managers
 			
 			cast.Spawn(weapon, parent);
 			return cast;
+		}
+		
+		public IAttack CreateAttack(Type type, IAlive owner, Vector3 position)
+		{
+			IAttack attack;
+			bool parent;
+
+			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
+			if (pooled != null)
+			{
+				attack = pooled.GetComponent<IAttack>();
+				parent = false;
+			}
+			else
+			{
+				attack = Instantiate(Resources.Load<GameObject>($"Attacks/{type.Name}")).GetComponent<IAttack>();
+				parent = true;
+			}
+			
+			attack.Spawn(owner, position, parent);
+			return attack;
 		}
 	}
 }

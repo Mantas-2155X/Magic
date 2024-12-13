@@ -1,4 +1,6 @@
 using AI.Interfaces;
+using Attacks;
+using Managers;
 using Tools;
 using UnityEngine;
 using Weapons.Base;
@@ -14,8 +16,12 @@ namespace Weapons
 			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
 				return;
 			
+			/*
 			var alive = hit.collider.GetComponent<IAlive>();
 			alive?.Kill(this);
+			*/
+
+			ObjectManager.Instance.CreateAttack(typeof(Fire), Owner, hit.point);
 		}
 	}
 }
