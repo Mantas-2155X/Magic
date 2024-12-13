@@ -107,6 +107,17 @@ namespace AI
 
 			if (AttackAction.action.IsPressed())
 				Weapon?.StartCasting();
+
+			if (Weapon != null && Weapon.IsCasting)
+			{
+				Body.WeaponContainer.localPosition = CastViewmodelPosition;
+				Body.WeaponContainer.localEulerAngles = CastViewmodelAngles;
+			}
+			else
+			{
+				Body.WeaponContainer.localPosition = ViewmodelPosition;
+				Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
+			}
 		}
 		
 		public void LateUpdate()
@@ -313,17 +324,11 @@ namespace AI
 		
 		private void onAttackPerformed(InputAction.CallbackContext ctx)
 		{
-			Body.WeaponContainer.localPosition = CastViewmodelPosition;
-			Body.WeaponContainer.localEulerAngles = CastViewmodelAngles;
-
 			Weapon?.StartCasting();
 		}
 
 		private void onAttackCanceled(InputAction.CallbackContext ctx)
 		{
-			Body.WeaponContainer.localPosition = ViewmodelPosition;
-			Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
-
 			Weapon?.CancelCasting();
 		}
 
