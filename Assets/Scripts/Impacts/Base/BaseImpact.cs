@@ -14,7 +14,7 @@ namespace Impacts.Base
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 		
-		public void Spawn(IProjectile source, Vector3 position, Vector3 angles, bool parent)
+		public void Spawn(IProjectile source, Vector3 position, Quaternion angles, bool parent)
 		{
 			Source = source;
 
@@ -24,7 +24,7 @@ namespace Impacts.Base
 				tr.SetParent(World.World.Instance.Impacts);
 			
 			tr.position = position;
-			tr.eulerAngles = angles;
+			tr.rotation = angles;
 			
 			gameObject.SetActive(true);
 		}

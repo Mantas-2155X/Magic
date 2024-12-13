@@ -53,7 +53,8 @@ namespace Projectiles.Base
 				}
 			}
 
-			ObjectManager.Instance.CreateImpact(Impact, this, transform.position, transform.eulerAngles);
+			var contact = collision.contacts[0];
+			ObjectManager.Instance.CreateImpact(Impact, this, transform.position, Quaternion.FromToRotation(Vector3.up, contact.normal));
 			clearVelocityAndPool().Forget();
 		}
 

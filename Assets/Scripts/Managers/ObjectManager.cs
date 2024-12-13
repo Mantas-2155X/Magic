@@ -39,7 +39,7 @@ namespace Managers
 			return projectile;
 		}
 
-		public IImpact CreateImpact(Type type, IProjectile projectile, Vector3 position, Vector3 angles)
+		public IImpact CreateImpact(Type type, IProjectile projectile, Vector3 position, Quaternion angles)
 		{
 			IImpact impact;
 			bool parent;

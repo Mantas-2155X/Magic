@@ -18,7 +18,7 @@ namespace Casts.Base
 				return;
 
 			var tr = Source.Owner.GetGameObject().transform;
-			transform.position = tr.position + Vector3.down * 0.98f;
+			transform.position = tr.position + Vector3.down * 0.975f;
 		}
 		
 		public void OnParticleSystemStopped()
