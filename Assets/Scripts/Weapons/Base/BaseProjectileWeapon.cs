@@ -17,17 +17,25 @@ namespace Weapons.Base
 		public override void FinishCasting()
 		{
 			base.FinishCasting();
+
+			Vector3 origin;
+			Vector3 force;
 			
 			if (Physics.Raycast(FinishedRay, out var hit, 1f, ~LayerMaskTools.Mask2))
 			{
 #if DEBUG_BaseProjectileWeapon
 				Debug.Log($"[BaseProjectileWeapon {Owner.GetGameObject().name}] Too close to fire, spawning at ray");
 #endif
-				ObjectManager.Instance.CreateProjectile(Projectile, this, hit.point, FinishedRay.direction * 1f);
-				return;
+				origin = hit.point;
+				force = FinishedRay.direction * 1f;
+			}
+			else
+			{
+				origin = FinishedRay.origin + FinishedRay.direction * 1f;
+				force = FinishedRay.direction * Force;
 			}
 
-			ObjectManager.Instance.CreateProjectile(Projectile, this, FinishedRay.origin + FinishedRay.direction * 1f, FinishedRay.direction * Force);
+			ObjectManager.Instance.CreateProjectile(Projectile, this, origin, force);
 		}
 	}
 }
