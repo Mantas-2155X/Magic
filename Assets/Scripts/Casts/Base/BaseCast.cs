@@ -31,7 +31,7 @@ namespace Casts.Base
 			var tr = transform;
 			tr.SetParent(Source.Owner.GetGameObject().transform);
 			
-			tr.localPosition = Vector3.down * 0.985f;
+			tr.localPosition = Vector3.down * 0.98f;
 			tr.localEulerAngles = Vector3.zero;
 			
 			gameObject.SetActive(true);
