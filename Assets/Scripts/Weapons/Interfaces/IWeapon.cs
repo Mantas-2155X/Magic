@@ -1,3 +1,4 @@
+using System;
 using AI.Interfaces;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace Weapons.Interfaces
 		public float CastingTime { get; }
 		
 		public float ManaCost { get; }
+
+		public Type Cast { get; }
 
 		public bool IsCasting { get; }
 		

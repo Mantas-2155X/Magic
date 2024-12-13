@@ -1,13 +1,18 @@
+using System;
+using Casts;
 using Managers;
 using Objects;
 using Tools;
 using UnityEngine;
 using Weapons.Base;
+using Random = UnityEngine.Random;
 
 namespace Weapons
 {
 	public class ManaGun : BaseWeapon
 	{
+		public override Type Cast => typeof(ManaRing);
+
 		[SerializeField]
 		public Transform[] Rings;
 		

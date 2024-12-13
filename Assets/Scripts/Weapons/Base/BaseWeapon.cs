@@ -3,6 +3,7 @@
 using System;
 using AI;
 using AI.Interfaces;
+using Casts.Interfaces;
 using Managers;
 using Objects;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace Weapons.Base
 		[field: SerializeField]
 		public virtual float ManaCost { get; private set; }
 
+		public virtual Type Cast { get; private set; }
+
 		public bool IsCasting { get; private set; }
 		
 		public Ray FinishedRay { get; private set; }
@@ -36,6 +39,8 @@ namespace Weapons.Base
 		public float LastStartedCast { get; private set; } = -1f;
 		public float LastFinishedCast { get; private set; } = -1f;
 
+		private ICast currentCast;
+		
 		public virtual void Update()
 		{
 			if (!IsCasting || Owner == null || !Owner.IsAlive)
@@ -136,6 +141,12 @@ namespace Weapons.Base
 
 			IsCasting = true;
 			LastStartedCast = Time.time;
+			
+			if (Cast != null)
+			{
+				clearCast();
+				currentCast = ObjectManager.Instance.CreateCast(Cast, this);
+			}
 		}
 		
 		public virtual void FinishCasting()
@@ -148,6 +159,7 @@ namespace Weapons.Base
 
 			CalculateRay();
 			Owner.UseMana(ManaCost, this);
+			clearCast();
 		}
 		
 		public virtual void CancelCasting()
@@ -156,6 +168,7 @@ namespace Weapons.Base
 				return;
 			
 			IsCasting = false;
+			clearCast();
 		}
 		
 		public GameObject GetGameObject()
@@ -184,10 +197,20 @@ namespace Weapons.Base
 
 		public void OnDisable()
 		{
+			clearCast();
 			LastStartedCast = -1f;
 			LastFinishedCast = -1f;
 			IsCasting = false;
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
+		}
+
+		private void clearCast()
+		{
+			if (currentCast == null)
+				return;
+
+			currentCast.StopParticles();
+			currentCast = null;
 		}
 	}
 }

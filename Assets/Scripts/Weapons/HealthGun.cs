@@ -1,13 +1,18 @@
+using System;
+using Casts;
 using Managers;
 using Objects;
 using Tools;
 using UnityEngine;
 using Weapons.Base;
+using Random = UnityEngine.Random;
 
 namespace Weapons
 {
 	public class HealthGun : BaseWeapon
 	{
+		public override Type Cast => typeof(HealthRing);
+
 		[SerializeField]
 		public Transform[] Rings;
 

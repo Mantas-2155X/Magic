@@ -1,4 +1,5 @@
 using System;
+using Casts.Interfaces;
 using Impacts.Interfaces;
 using Objects;
 using Objects.Base;
@@ -142,6 +143,24 @@ namespace Managers
 			
 			go.SetActive(true);
 			return pool;
+		}
+		
+		public ICast CreateCast(Type type, IWeapon weapon)
+		{
+			ICast cast;
+			
+			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
+			if (pooled != null)
+			{
+				cast = pooled.GetComponent<ICast>();
+			}
+			else
+			{
+				cast = Instantiate(Resources.Load<GameObject>($"Casts/{type.Name}")).GetComponent<ICast>();
+			}
+			
+			cast.Spawn(weapon);
+			return cast;
 		}
 	}
 }
