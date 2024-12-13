@@ -10,6 +10,9 @@ namespace Objects.Base
 	public class BasePool : MonoBehaviour
 	{
 		[SerializeField]
+		public ParticleSystem System;
+		
+		[SerializeField]
 		public Collider[] Colliders;
 
 		[field: SerializeField]
@@ -28,13 +31,15 @@ namespace Objects.Base
 
 		public void OnEnable()
 		{
+			System.Play();
+			
 			loop().Forget();
 			
 			if (Lifetime > 0f)
 				lifetime().Forget();
 		}
 
-		public void OnDisable()
+		public void OnParticleSystemStopped()
 		{
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
@@ -89,7 +94,7 @@ namespace Objects.Base
 		{
 			await UniTask.WaitForSeconds(Lifetime);
 			
-			gameObject.SetActive(false);
+			System.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 		}
 	}
 }
