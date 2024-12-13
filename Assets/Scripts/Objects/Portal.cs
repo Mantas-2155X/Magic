@@ -18,7 +18,7 @@ namespace Objects
 			tr.position = position;
 			
 			gameObject.SetActive(true);
-			System.Play();
+			System.Play(true);
 		}
 		
 		public void OnParticleSystemStopped()

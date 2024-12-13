@@ -31,7 +31,7 @@ namespace Objects.Base
 
 		public void OnEnable()
 		{
-			System.Play();
+			System.Play(true);
 			
 			loop().Forget();
 			
