@@ -241,12 +241,13 @@ MonoBehaviour:
   <Colliders>k__BackingField:
   - {fileID: 1531224876057879590}
   - {fileID: 2241740109451088481}
-  <TimeBetweenAttacks>k__BackingField: 10
-  <CastingTime>k__BackingField: 5
+  <TimeBetweenAttacks>k__BackingField: 30
+  <CastingTime>k__BackingField: 3.5
   <ManaCost>k__BackingField: 60
   Rings:
   - {fileID: 795004714111284796}
   - {fileID: 577680839158016261}
+  Lifetime: 15
 --- !u!54 &3546475930211366373
 Rigidbody:
   m_ObjectHideFlags: 0

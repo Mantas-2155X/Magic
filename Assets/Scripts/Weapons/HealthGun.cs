@@ -11,7 +11,7 @@ namespace Weapons
 {
 	public class HealthGun : BaseWeapon
 	{
-		public override Type Cast => typeof(HealthRing);
+		public override Type Cast => typeof(HealthSpring);
 
 		[SerializeField]
 		public Transform[] Rings;
