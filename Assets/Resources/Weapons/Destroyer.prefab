@@ -99,9 +99,9 @@ MonoBehaviour:
   <Colliders>k__BackingField:
   - {fileID: 8434275448109667988}
   - {fileID: 4770080679020496873}
-  <TimeBetweenAttacks>k__BackingField: 0.25
-  <CastingTime>k__BackingField: 0
-  <ManaCost>k__BackingField: 1
+  <TimeBetweenAttacks>k__BackingField: 7.5
+  <CastingTime>k__BackingField: 1.5
+  <ManaCost>k__BackingField: 50
 --- !u!54 &9157576084289497446
 Rigidbody:
   m_ObjectHideFlags: 0
