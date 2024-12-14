@@ -1,4 +1,3 @@
-using AI.Interfaces;
 using Attacks.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -8,7 +7,7 @@ namespace Attacks.Base
 {
 	public class BaseAttack : MonoBehaviour, IAttack
 	{
-		public IAlive Owner { get; private set; }
+		public Component Source { get; private set; }
 
 		[field: SerializeField]
 		public ParticleSystem System { get; private set; }
@@ -19,10 +18,14 @@ namespace Attacks.Base
 		public float EnableTriggerAfter { get; private set; }
 		[field: SerializeField]
 		public float DisableTriggerAfter { get; private set; }
+
+		private Transform target;
 		
-		public virtual void Spawn(IAlive owner, Vector3 position, Quaternion angles, bool parent)
+		public virtual void Spawn(Component source, Vector3 position, Quaternion angles, bool parent)
 		{
-			Owner = owner;
+			Source = source;
+
+			target = null;
 
 			var tr = transform;
 			
@@ -42,6 +45,34 @@ namespace Attacks.Base
 			System.Play(true);
 		}
 		
+		public virtual void Spawn(Component source, Transform attach, bool parent)
+		{
+			Source = source;
+
+			target = attach;
+
+			var tr = transform;
+			
+			if (parent)
+				tr.SetParent(World.World.Instance.Other);
+
+			FollowTarget();
+			
+			if (Trigger != null)
+			{
+				Trigger.enabled = false;
+				trigger().Forget();
+			}
+
+			gameObject.SetActive(true);
+			System.Play(true);
+		}
+		
+		public void Update()
+		{
+			FollowTarget();
+		}
+
 		public void OnParticleSystemStopped()
 		{
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
@@ -55,6 +86,14 @@ namespace Attacks.Base
 		public virtual void OnTriggerDisabled()
 		{
 			Trigger.enabled = false;
+		}
+		
+		public void FollowTarget()
+		{
+			if (target == null)
+				return;
+			
+			transform.position = target.position + Vector3.down * 0.95f;
 		}
 		
 		private async UniTask trigger()

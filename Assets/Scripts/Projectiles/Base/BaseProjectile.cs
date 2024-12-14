@@ -51,7 +51,7 @@ namespace Projectiles.Base
 			if (Attack != null)
 			{
 				var contact = collision.contacts[0];
-				ObjectManager.Instance.CreateAttack(Attack, Source.Owner, contact.point, Quaternion.FromToRotation(Vector3.up, contact.normal));
+				ObjectManager.Instance.CreateAttack(Attack, (Component)Source, contact.point, Quaternion.FromToRotation(Vector3.up, contact.normal));
 			}
 				
 			clearVelocityAndPool().Forget();

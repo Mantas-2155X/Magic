@@ -5,11 +5,11 @@ namespace Casts.Interfaces
 {
 	public interface ICast
 	{
-		public IWeapon Source { get; }
+		public Component Source { get; }
 
 		public ParticleSystem System { get; }
 		
-		public void Spawn(IWeapon source, bool parent);
+		public void Spawn(Component source, bool parent);
 
 		public void StopParticles();
 		

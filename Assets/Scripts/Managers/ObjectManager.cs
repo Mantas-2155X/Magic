@@ -1,5 +1,4 @@
 using System;
-using AI.Interfaces;
 using Attacks.Interfaces;
 using Casts.Interfaces;
 using Objects;
@@ -122,7 +121,7 @@ namespace Managers
 			return pool;
 		}
 		
-		public ICast CreateCast(Type type, IWeapon weapon)
+		public ICast CreateCast(Type type, Component source)
 		{
 			ICast cast;
 			bool parent;
@@ -139,11 +138,11 @@ namespace Managers
 				parent = true;
 			}
 			
-			cast.Spawn(weapon, parent);
+			cast.Spawn(source, parent);
 			return cast;
 		}
 		
-		public IAttack CreateAttack(Type type, IAlive owner, Vector3 position, Quaternion angles)
+		public IAttack CreateAttack(Type type, Component source, Vector3 position, Quaternion angles)
 		{
 			IAttack attack;
 			bool parent;
@@ -160,7 +159,28 @@ namespace Managers
 				parent = true;
 			}
 			
-			attack.Spawn(owner, position, angles, parent);
+			attack.Spawn(source, position, angles, parent);
+			return attack;
+		}
+		
+		public IAttack CreateAttack(Type type, Component source, Transform attach)
+		{
+			IAttack attack;
+			bool parent;
+
+			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
+			if (pooled != null)
+			{
+				attack = pooled.GetComponent<IAttack>();
+				parent = false;
+			}
+			else
+			{
+				attack = Instantiate(Resources.Load<GameObject>($"Attacks/{type.Name}")).GetComponent<IAttack>();
+				parent = true;
+			}
+			
+			attack.Spawn(source, attach, parent);
 			return attack;
 		}
 	}

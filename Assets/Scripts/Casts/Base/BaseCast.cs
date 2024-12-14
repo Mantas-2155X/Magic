@@ -7,7 +7,7 @@ namespace Casts.Base
 {
 	public class BaseCast : MonoBehaviour, ICast
 	{
-		public IWeapon Source { get; private set; }
+		public Component Source { get; private set; }
 
 		[field: SerializeField]
 		public ParticleSystem System { get; private set; }
@@ -17,12 +17,13 @@ namespace Casts.Base
 		
 		public void Update()
 		{
-			transform.Rotate(Vector3.up, Rotation * Time.deltaTime);
-
-			if (Source == null || Source.Owner == null)
+			if (Source == null)
 				return;
 
-			setPosition();
+			if (Rotation > 0f)
+				transform.Rotate(Vector3.up, Rotation * Time.deltaTime);
+
+			FollowOwner();
 		}
 		
 		public void OnParticleSystemStopped()
@@ -35,14 +36,14 @@ namespace Casts.Base
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 		
-		public void Spawn(IWeapon source, bool parent)
+		public void Spawn(Component source, bool parent)
 		{
 			Source = source;
 			
 			if (parent)
 				transform.SetParent(World.World.Instance.Other);
 			
-			setPosition();
+			FollowOwner();
 			
 			gameObject.SetActive(true);
 			System.Play(true);
@@ -58,9 +59,15 @@ namespace Casts.Base
 			return gameObject;
 		}
 
-		private void setPosition()
+		public void FollowOwner()
 		{
-			var tr = Source.Owner.GetGameObject().transform;
+			Transform tr;
+			
+			if (Source is IWeapon weapon)
+				tr = weapon.Owner.GetGameObject().transform;
+			else
+				tr = Source.transform;
+			
 			transform.position = tr.position + Vector3.down * 0.95f;
 		}
 	}

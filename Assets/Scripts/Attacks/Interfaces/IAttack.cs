@@ -1,11 +1,10 @@
-using AI.Interfaces;
 using UnityEngine;
 
 namespace Attacks.Interfaces
 {
 	public interface IAttack
 	{
-		public IAlive Owner { get; }
+		public Component Source { get; }
 
 		public ParticleSystem System { get; }
 		public Collider Trigger { get; }
@@ -13,6 +12,7 @@ namespace Attacks.Interfaces
 		public float EnableTriggerAfter { get; }
 		public float DisableTriggerAfter { get; }
 		
-		public void Spawn(IAlive owner, Vector3 position, Quaternion angles, bool parent);
+		public void Spawn(Component source, Vector3 position, Quaternion angles, bool parent);
+		public void Spawn(Component source, Transform attach, bool parent);
 	}
 }
