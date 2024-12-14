@@ -20,7 +20,7 @@ namespace Attacks.Base
 		[field: SerializeField]
 		public float DisableTriggerAfter { get; private set; }
 		
-		public virtual void Spawn(IAlive owner, Vector3 position, bool parent)
+		public virtual void Spawn(IAlive owner, Vector3 position, Quaternion angles, bool parent)
 		{
 			Owner = owner;
 
@@ -30,15 +30,16 @@ namespace Attacks.Base
 				tr.SetParent(World.World.Instance.Other);
 
 			tr.position = position + Vector3.up * 0.1f;
-			tr.eulerAngles = Vector3.zero;
-
-			Trigger.enabled = false;
+			tr.rotation = angles;
+			
+			if (Trigger != null)
+			{
+				Trigger.enabled = false;
+				trigger().Forget();
+			}
 
 			gameObject.SetActive(true);
 			System.Play(true);
-			
-			if (Trigger != null)
-				trigger().Forget();
 		}
 		
 		public void OnParticleSystemStopped()

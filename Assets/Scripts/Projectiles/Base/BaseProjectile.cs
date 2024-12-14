@@ -24,7 +24,6 @@ namespace Projectiles.Base
 		[field: SerializeField]
 		public virtual float Damage { get; private set; }
 		
-		public virtual Type Impact { get; private set; }
 		public virtual Type Attack { get; private set; }
 
 		private CancellationTokenSource distanceToken;
@@ -48,14 +47,12 @@ namespace Projectiles.Base
 					}
 				}
 			}
-
-			var contact = collision.contacts[0];
-			
-			if (Impact != null)
-				ObjectManager.Instance.CreateImpact(Impact, this, transform.position, Quaternion.FromToRotation(Vector3.up, contact.normal));
 			
 			if (Attack != null)
-				ObjectManager.Instance.CreateAttack(Attack, Source.Owner, contact.point);
+			{
+				var contact = collision.contacts[0];
+				ObjectManager.Instance.CreateAttack(Attack, Source.Owner, contact.point, Quaternion.FromToRotation(Vector3.up, contact.normal));
+			}
 				
 			clearVelocityAndPool().Forget();
 		}

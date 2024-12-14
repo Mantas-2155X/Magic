@@ -2,7 +2,6 @@ using System;
 using AI.Interfaces;
 using Attacks.Interfaces;
 using Casts.Interfaces;
-using Impacts.Interfaces;
 using Objects;
 using Objects.Base;
 using Projectiles.Interfaces;
@@ -39,27 +38,6 @@ namespace Managers
 				
 			projectile.Spawn(weapon, origin, force, parent);
 			return projectile;
-		}
-
-		public IImpact CreateImpact(Type type, IProjectile projectile, Vector3 position, Quaternion angles)
-		{
-			IImpact impact;
-			bool parent;
-				
-			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
-			if (pooled != null)
-			{
-				impact = pooled.GetComponent<IImpact>();
-				parent = false;
-			}
-			else
-			{
-				impact = Instantiate(Resources.Load<GameObject>($"Impacts/{type.Name}")).GetComponent<IImpact>();
-				parent = true;
-			}
-				
-			impact.Spawn(projectile, position, angles, parent);
-			return impact;
 		}
 		
 		public IWeapon CreateWeapon(Type type, Vector3 position, Vector3 angles)
@@ -165,7 +143,7 @@ namespace Managers
 			return cast;
 		}
 		
-		public IAttack CreateAttack(Type type, IAlive owner, Vector3 position)
+		public IAttack CreateAttack(Type type, IAlive owner, Vector3 position, Quaternion angles)
 		{
 			IAttack attack;
 			bool parent;
@@ -182,7 +160,7 @@ namespace Managers
 				parent = true;
 			}
 			
-			attack.Spawn(owner, position, parent);
+			attack.Spawn(owner, position, angles, parent);
 			return attack;
 		}
 	}
