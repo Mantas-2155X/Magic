@@ -30,11 +30,7 @@ namespace Weapons
 		public override void FinishCasting()
 		{
 			base.FinishCasting();
-
-			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue))
-				return;
-
-			ObjectManager.Instance.CreatePool(typeof(ManaPool), hit.point + Vector3.up * 0.06f, Lifetime);
+			ObjectManager.Instance.CreatePool(typeof(ManaPool), LastHit.point + Vector3.up * 0.06f, Lifetime);
 		}
 	}
 }

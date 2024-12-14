@@ -4,10 +4,8 @@ namespace Tools
 {
 	public static class LayerMaskTools
 	{
-		public static bool ContainsLayer(this LayerMask mask, int layer)
-		{
-			return ContainsLayer(mask.value, layer);
-		}
+		public static LayerMask GetMask() => LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile");
+		public static LayerMask GetMaskWithPlayer() => LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Player");
 		
 		public static bool ContainsLayer(this int mask, int layer)
 		{

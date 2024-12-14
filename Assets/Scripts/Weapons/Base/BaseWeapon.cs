@@ -6,6 +6,7 @@ using AI.Interfaces;
 using Casts.Interfaces;
 using Managers;
 using Objects;
+using Tools;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -34,7 +35,8 @@ namespace Weapons.Base
 
 		public bool IsCasting { get; private set; }
 		
-		public Ray FinishedRay { get; private set; }
+		public Ray LastRay { get; private set; }
+		public RaycastHit LastHit { get; private set; }
 
 		public float LastStartedCast { get; private set; } = float.NegativeInfinity;
 		public float LastFinishedCast { get; private set; } = float.NegativeInfinity;
@@ -157,8 +159,10 @@ namespace Weapons.Base
 			IsCasting = false;
 			LastFinishedCast = Time.time;
 
-			CalculateRay();
 			Owner.UseMana(ManaCost, this);
+			
+			CalculateHit();
+			
 			clearCast();
 		}
 		
@@ -176,23 +180,27 @@ namespace Weapons.Base
 			return gameObject;
 		}
 
-		public void CalculateRay()
+		public void CalculateHit()
 		{
-			FinishedRay = default;
+			LastRay = default;
+			LastHit = default;
 			
 			switch (Owner)
 			{
 				case Player player:
-					FinishedRay = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+					LastRay = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 					break;
 				case NPC npc:
 					var ownerTr = Owner.GetGameObject().transform;
 					var direction = npc.AimLimited || npc.Target == null ? ownerTr.forward : (npc.Target.transform.position - ownerTr.position).normalized;
-					FinishedRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
+					LastRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;
 				default:
 					throw new NotImplementedException();
 			}
+
+			Physics.Raycast(LastRay, out var hit, float.MaxValue, ~LayerMaskTools.GetMask());
+			LastHit = hit;
 		}
 
 		public void OnDisable()

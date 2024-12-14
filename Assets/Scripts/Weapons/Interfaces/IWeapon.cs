@@ -22,7 +22,8 @@ namespace Weapons.Interfaces
 
 		public bool IsCasting { get; }
 		
-		public Ray FinishedRay { get; }
+		public Ray LastRay { get; }
+		public RaycastHit LastHit { get; }
 
 		public float LastStartedCast { get; }
 		public float LastFinishedCast { get; }

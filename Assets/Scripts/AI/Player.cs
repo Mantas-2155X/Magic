@@ -334,7 +334,7 @@ namespace AI
 
 		private void onUse(InputAction.CallbackContext ctx)
 		{
-			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance))
+			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithPlayer()))
 				return;
 			
 			var usable = hit.collider.GetComponent<IUsable>();
@@ -401,6 +401,20 @@ namespace AI
 			Body.WeaponContainer.SetParent(Body.Shoulders[1]);
 			disableInput();
 			base.Kill(source);
+		}
+
+		public override bool IsGrounded()
+		{
+			if (MovementType != EMovementType.Normal)
+				return false;
+
+			var origin = transform.position + new Vector3(0f, -1.02f, 0f);
+			var extents = new Vector3(0.6f, 0.05f, 0.2f) / 2f;
+			
+			if (Physics.CheckBox(origin, extents, transform.rotation, ~LayerMaskTools.GetMaskWithPlayer()))
+				return true;
+			
+			return false;
 		}
 		
 		#endregion

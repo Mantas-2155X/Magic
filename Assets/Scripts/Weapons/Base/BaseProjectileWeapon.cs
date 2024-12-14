@@ -1,8 +1,5 @@
-//#define DEBUG_BaseProjectileWeapon
-
 using System;
 using Managers;
-using Tools;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -18,22 +15,8 @@ namespace Weapons.Base
 		{
 			base.FinishCasting();
 
-			Vector3 origin;
-			Vector3 force;
-			
-			if (Physics.Raycast(FinishedRay, out var hit, 1f))
-			{
-#if DEBUG_BaseProjectileWeapon
-				Debug.Log($"[BaseProjectileWeapon {Owner.GetGameObject().name}] Too close to fire, spawning at ray");
-#endif
-				origin = hit.point;
-				force = FinishedRay.direction * 1f;
-			}
-			else
-			{
-				origin = FinishedRay.origin + FinishedRay.direction * 1f;
-				force = FinishedRay.direction * Force;
-			}
+			var origin = LastRay.origin + LastRay.direction * 1f;
+			var force = LastRay.direction * Force;
 
 			ObjectManager.Instance.CreateProjectile(Projectile, this, origin, force);
 		}

@@ -189,7 +189,7 @@ namespace AI
 			var direction = (target.transform.position - ownerTr.position).normalized;
 			var ray = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 
-			if (!Physics.Raycast(ray, out var hit, maxRange))
+			if (!Physics.Raycast(ray, out var hit, maxRange, ~LayerMaskTools.GetMask()))
 				return false;
 			
 			return hit.collider.GetComponent(target.GetType()) == target;
@@ -424,10 +424,7 @@ namespace AI
 		
 		public override bool IsGrounded()
 		{
-			if (Agent.enabled)
-				return true;
-			
-			return base.IsGrounded();
+			return true;
 		}
 
 		#endregion

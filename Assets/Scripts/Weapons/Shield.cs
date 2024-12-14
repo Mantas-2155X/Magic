@@ -14,11 +14,7 @@ namespace Weapons
 		public override void FinishCasting()
 		{
 			base.FinishCasting();
-
-			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue))
-				return;
-			
-			ObjectManager.Instance.CreateAttack(typeof(Attacks.Shield), Owner, hit.point, Owner.GetGameObject().transform.eulerAngles);
+			ObjectManager.Instance.CreateAttack(typeof(Attacks.Shield), Owner, LastHit.point, Owner.GetGameObject().transform.eulerAngles);
 		}
 	}
 }

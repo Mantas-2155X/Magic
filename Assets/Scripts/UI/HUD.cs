@@ -87,7 +87,7 @@ namespace UI
 			
 			Crosshair.color = player.IsGrounded() ? Color.white : Color.red;
 			
-			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance))
+			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.GetMaskWithPlayer()))
 			{
 				var pickupable = hit.collider.GetComponent<IPickupable>();
 				if (pickupable == null)

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4016873035938560545}
   - component: {fileID: 6988819606295250597}
   - component: {fileID: 1232133860467358791}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4844,7 +4844,7 @@ GameObject:
   - component: {fileID: 7950339056889817598}
   - component: {fileID: 7691211787437824404}
   - component: {fileID: 3940531222785163382}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9679,7 +9679,7 @@ GameObject:
   - component: {fileID: 2232679192998384522}
   - component: {fileID: 3716721897733238632}
   - component: {fileID: 2981882103111915862}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Incinerate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14529,7 +14529,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
