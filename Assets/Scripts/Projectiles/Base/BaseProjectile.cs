@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using AI.Interfaces;
+using Attacks.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Interfaces;
@@ -23,9 +24,8 @@ namespace Projectiles.Base
 		public virtual float Distance { get; private set; }
 		[field: SerializeField]
 		public virtual float Damage { get; private set; }
-		[field: SerializeField]
-		public virtual bool UseNormalAngle { get; private set; }
-
+		
+		public virtual EAttackAngle AttackAngle { get; private set; }
 		public virtual Type Attack { get; private set; }
 
 		private CancellationTokenSource distanceToken;
@@ -54,10 +54,24 @@ namespace Projectiles.Base
 			{
 				var contact = collision.contacts[0];
 				
-				var origin = contact.point;
-				var angles = UseNormalAngle ? Quaternion.FromToRotation(Vector3.up, contact.normal) : Quaternion.identity;
+				Quaternion angles;
+
+				switch (AttackAngle)
+				{
+					case EAttackAngle.Identity:
+						angles = Quaternion.identity;
+						break;
+					case EAttackAngle.HitNormal:
+						angles = Quaternion.FromToRotation(Vector3.up, contact.normal);
+						break;
+					case EAttackAngle.Owner:
+						angles = Source.Owner.GetGameObject().transform.rotation;
+						break;
+					default:
+						throw new NotImplementedException();
+				}
 				
-				ObjectManager.Instance.CreateAttack(Attack, (Component)Source, origin, angles, contact.otherCollider.transform);
+				ObjectManager.Instance.CreateAttack(Attack, (Component)Source, contact.point, angles, contact.otherCollider.transform);
 			}
 				
 			clearVelocityAndPool().Forget();

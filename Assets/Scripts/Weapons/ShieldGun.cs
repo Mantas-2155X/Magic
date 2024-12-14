@@ -1,5 +1,6 @@
 using System;
 using Attacks;
+using Attacks.Enums;
 using Casts;
 using Weapons.Base;
 
@@ -9,5 +10,6 @@ namespace Weapons
 	{
 		public override Type Cast => typeof(ManaRing);
 		public override Type Attack => typeof(Shield);
+		public override EAttackAngle AttackAngle => EAttackAngle.Owner;
 	}
 }
