@@ -165,6 +165,10 @@ namespace AI
 			}
 
 			var movement = MovementForce;
+
+			// Prevent movement when bound
+			if (MaximumSpeed == 0f)
+				movement = 0;
 			
 			// Adjust how much control force is weakened if not grounded
 			if (!grounded)
@@ -303,7 +307,7 @@ namespace AI
 		{
 			jumpPressed = true;
 			
-			if (MovementType == EMovementType.Normal && IsGrounded())
+			if (MovementType == EMovementType.Normal && IsGrounded() && MaximumSpeed != 0f)
 				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
 		}
 		

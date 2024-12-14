@@ -402,6 +402,12 @@ namespace AI
 		
 		public override bool IsWalking => Agent.hasPath;
 
+		public override void SetMaxSpeed(float maximumSpeed)
+		{
+			base.SetMaxSpeed(maximumSpeed);
+			Agent.speed = maximumSpeed;
+		}
+		
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{ 
 			Spin = new Spin(this);
@@ -409,8 +415,6 @@ namespace AI
 			Chase = new Chase(this);
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
-
-			Agent.speed = maximumSpeed;
 			
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed);
 			autoTarget().Forget();

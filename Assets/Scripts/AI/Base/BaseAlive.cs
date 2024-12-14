@@ -98,6 +98,11 @@ namespace AI.Base
 				feet[i].GetComponent<Collider>().enabled = MovementType == EMovementType.Normal;
 		}
 
+		public virtual void SetMaxSpeed(float maximumSpeed)
+		{
+			MaximumSpeed = maximumSpeed;
+		}
+
 		public virtual void TakeWeapon(IWeapon weapon)
 		{
 			DropWeapon();
@@ -116,7 +121,7 @@ namespace AI.Base
 			if (IsAlive)
 				return;
 
-			MaximumSpeed = maximumSpeed;
+			SetMaxSpeed(maximumSpeed);
 
 			CurrentHealth = startingHealth;
 			StartingHealth = startingHealth;

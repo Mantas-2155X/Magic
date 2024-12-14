@@ -33,6 +33,8 @@ namespace AI.Interfaces
 		public void SetInvulnerable(bool value);
 		public void SetPowerful(bool value);
 		public void SetMovementType(EMovementType value);
+
+		public void SetMaxSpeed(float maximumSpeed);
 		
 		public void TakeWeapon(IWeapon weapon);
 		public void DropWeapon();
