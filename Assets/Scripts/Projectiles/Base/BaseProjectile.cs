@@ -55,7 +55,7 @@ namespace Projectiles.Base
 				ObjectManager.Instance.CreateImpact(Impact, this, transform.position, Quaternion.FromToRotation(Vector3.up, contact.normal));
 			
 			if (Attack != null)
-				ObjectManager.Instance.CreateAttack(Attack, Source.Owner, contact.point, Vector3.zero);
+				ObjectManager.Instance.CreateAttack(Attack, Source.Owner, contact.point);
 				
 			clearVelocityAndPool().Forget();
 		}

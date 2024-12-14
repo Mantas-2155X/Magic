@@ -13,7 +13,7 @@ namespace Weapons.Base
 		{
 			base.FinishCasting();
 			
-			ObjectManager.Instance.CreateAttack(Attack, Owner, LastHit.point, Vector3.zero);
+			ObjectManager.Instance.CreateAttack(Attack, Owner, LastHit.point);
 		}
 	}
 }

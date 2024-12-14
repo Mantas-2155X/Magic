@@ -20,7 +20,7 @@ namespace Attacks.Base
 		[field: SerializeField]
 		public float DisableTriggerAfter { get; private set; }
 		
-		public virtual void Spawn(IAlive owner, Vector3 position, Vector3 angles, bool parent)
+		public virtual void Spawn(IAlive owner, Vector3 position, bool parent)
 		{
 			Owner = owner;
 
@@ -30,7 +30,7 @@ namespace Attacks.Base
 				tr.SetParent(World.World.Instance.Other);
 
 			tr.position = position + Vector3.up * 0.1f;
-			tr.eulerAngles = angles;
+			tr.eulerAngles = Vector3.zero;
 
 			Trigger.enabled = false;
 

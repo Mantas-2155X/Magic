@@ -13,6 +13,6 @@ namespace Attacks.Interfaces
 		public float EnableTriggerAfter { get; }
 		public float DisableTriggerAfter { get; }
 		
-		public void Spawn(IAlive owner, Vector3 position, Vector3 angles, bool parent);
+		public void Spawn(IAlive owner, Vector3 position, bool parent);
 	}
 }

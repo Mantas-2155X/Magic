@@ -165,7 +165,7 @@ namespace Managers
 			return cast;
 		}
 		
-		public IAttack CreateAttack(Type type, IAlive owner, Vector3 position, Vector3 angles)
+		public IAttack CreateAttack(Type type, IAlive owner, Vector3 position)
 		{
 			IAttack attack;
 			bool parent;
@@ -182,7 +182,7 @@ namespace Managers
 				parent = true;
 			}
 			
-			attack.Spawn(owner, position, angles, parent);
+			attack.Spawn(owner, position, parent);
 			return attack;
 		}
 	}
