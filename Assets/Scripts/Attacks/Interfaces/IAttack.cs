@@ -12,7 +12,8 @@ namespace Attacks.Interfaces
 		public float EnableTriggerAfter { get; }
 		public float DisableTriggerAfter { get; }
 		
-		public void Spawn(Component source, Vector3 position, Quaternion angles);
-		public void Spawn(Component source, Transform attach);
+		public bool Attach { get; }
+		
+		public void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach);
 	}
 }

@@ -103,7 +103,7 @@ namespace Managers
 			return cast;
 		}
 		
-		public IAttack CreateAttack(Type type, Component source, Vector3 position, Quaternion angles)
+		public IAttack CreateAttack(Type type, Component source, Vector3 position, Quaternion angles, Transform attach)
 		{
 			IAttack attack;
 
@@ -113,21 +113,7 @@ namespace Managers
 			else
 				attack = Instantiate(Resources.Load<GameObject>($"Attacks/{type.Name}")).GetComponent<IAttack>();
 			
-			attack.Spawn(source, position, angles);
-			return attack;
-		}
-		
-		public IAttack CreateAttack(Type type, Component source, Transform attach)
-		{
-			IAttack attack;
-
-			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
-			if (pooled != null)
-				attack = pooled.GetComponent<IAttack>();
-			else
-				attack = Instantiate(Resources.Load<GameObject>($"Attacks/{type.Name}")).GetComponent<IAttack>();
-			
-			attack.Spawn(source, attach);
+			attack.Spawn(source, position, angles, attach);
 			return attack;
 		}
 	}

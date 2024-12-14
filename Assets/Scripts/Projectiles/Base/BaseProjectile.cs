@@ -23,7 +23,9 @@ namespace Projectiles.Base
 		public virtual float Distance { get; private set; }
 		[field: SerializeField]
 		public virtual float Damage { get; private set; }
-		
+		[field: SerializeField]
+		public virtual bool UseNormalAngle { get; private set; }
+
 		public virtual Type Attack { get; private set; }
 
 		private CancellationTokenSource distanceToken;
@@ -51,7 +53,11 @@ namespace Projectiles.Base
 			if (Attack != null)
 			{
 				var contact = collision.contacts[0];
-				ObjectManager.Instance.CreateAttack(Attack, (Component)Source, contact.point, Quaternion.FromToRotation(Vector3.up, contact.normal));
+				
+				var origin = contact.point;
+				var angles = UseNormalAngle ? Quaternion.FromToRotation(Vector3.up, contact.normal) : Quaternion.identity;
+				
+				ObjectManager.Instance.CreateAttack(Attack, (Component)Source, origin, angles, contact.otherCollider.transform);
 			}
 				
 			clearVelocityAndPool().Forget();

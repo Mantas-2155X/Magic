@@ -19,39 +19,29 @@ namespace Attacks.Base
 		[field: SerializeField]
 		public float DisableTriggerAfter { get; private set; }
 
+		[field: SerializeField]
+		public bool Attach { get; private set; }
+
 		private Transform target;
 		
-		public virtual void Spawn(Component source, Vector3 position, Quaternion angles)
+		public virtual void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
 		{
 			Source = source;
 
-			target = null;
+			target = Attach ? attach : null;
 
 			var tr = transform;
 			tr.SetParent(World.World.Instance.Other);
-			tr.position = position + Vector3.up * 0.1f;
-			tr.rotation = angles;
-			
-			if (Trigger != null)
+
+			if (target == null)
 			{
-				Trigger.enabled = false;
-				trigger().Forget();
+				tr.position = position + Vector3.up * 0.1f;
+				tr.rotation = angles;
 			}
-
-			gameObject.SetActive(true);
-			System.Play(true);
-		}
-		
-		public virtual void Spawn(Component source, Transform attach)
-		{
-			Source = source;
-
-			target = attach;
-
-			var tr = transform;
-			tr.SetParent(World.World.Instance.Other);
-
-			FollowTarget();
+			else
+			{
+				FollowTarget();
+			}
 			
 			if (Trigger != null)
 			{

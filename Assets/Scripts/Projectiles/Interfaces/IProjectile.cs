@@ -13,6 +13,7 @@ namespace Projectiles.Interfaces
 		
 		public float Distance { get; }
 		public float Damage { get; }
+		public bool UseNormalAngle { get; }
 		
 		public Type Attack { get; }
 		

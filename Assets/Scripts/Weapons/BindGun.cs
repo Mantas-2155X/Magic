@@ -1,13 +1,13 @@
 using System;
-using Attacks;
 using Casts;
+using Projectiles;
 using Weapons.Base;
 
 namespace Weapons
 {
-	public class BindGun : BaseAttackWeapon
+	public class BindGun : BaseProjectileWeapon
 	{
 		public override Type Cast => typeof(ManaRing);
-		public override Type Attack => typeof(Bind);
+		public override Type Projectile => typeof(ManaBall);
 	}
 }

@@ -9,8 +9,8 @@ namespace Weapons
 {
 	public class FireGun : BaseProjectileWeapon
 	{
-		public override Type Projectile => typeof(FireBall);
 		public override Type Cast => typeof(FireRing);
+		public override Type Projectile => typeof(FireBall);
 
 		[SerializeField]
 		public Transform[] Rings;
