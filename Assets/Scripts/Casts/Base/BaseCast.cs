@@ -36,12 +36,12 @@ namespace Casts.Base
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 		
-		public void Spawn(Component source, bool parent)
+		public void Spawn(Component source)
 		{
 			Source = source;
 			
-			if (parent)
-				transform.SetParent(World.World.Instance.Other);
+			var tr = transform;
+			tr.SetParent(World.World.Instance.Other);
 			
 			FollowOwner();
 			

@@ -66,7 +66,7 @@ namespace Projectiles.Base
 			clearVelocityAndPool().Forget();
 		}
 		
-		public void Spawn(IWeapon source, Vector3 origin, Vector3 force, bool parent)
+		public void Spawn(IWeapon source, Vector3 origin, Vector3 force)
 		{
 			Source = source;
 
@@ -76,10 +76,7 @@ namespace Projectiles.Base
 			Physics.IgnoreCollision(ignoreCollider, Collider, true);
 
 			var tr = transform;
-			
-			if (parent)
-				tr.SetParent(World.World.Instance.Projectiles);
-			
+			tr.SetParent(World.World.Instance.Projectiles);
 			tr.position = origin;
 			tr.eulerAngles = Vector3.zero;
 			

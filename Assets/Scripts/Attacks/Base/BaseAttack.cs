@@ -21,17 +21,14 @@ namespace Attacks.Base
 
 		private Transform target;
 		
-		public virtual void Spawn(Component source, Vector3 position, Quaternion angles, bool parent)
+		public virtual void Spawn(Component source, Vector3 position, Quaternion angles)
 		{
 			Source = source;
 
 			target = null;
 
 			var tr = transform;
-			
-			if (parent)
-				tr.SetParent(World.World.Instance.Other);
-
+			tr.SetParent(World.World.Instance.Other);
 			tr.position = position + Vector3.up * 0.1f;
 			tr.rotation = angles;
 			
@@ -45,16 +42,14 @@ namespace Attacks.Base
 			System.Play(true);
 		}
 		
-		public virtual void Spawn(Component source, Transform attach, bool parent)
+		public virtual void Spawn(Component source, Transform attach)
 		{
 			Source = source;
 
 			target = attach;
 
 			var tr = transform;
-			
-			if (parent)
-				tr.SetParent(World.World.Instance.Other);
+			tr.SetParent(World.World.Instance.Other);
 
 			FollowTarget();
 			

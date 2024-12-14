@@ -8,13 +8,10 @@ namespace Objects
 		[SerializeField]
 		public ParticleSystem System;
 
-		public void Spawn(Vector3 position, bool parent)
+		public void Spawn(Vector3 position)
 		{
 			var tr = transform;
-			
-			if (parent)
-				tr.SetParent(World.World.Instance.Other);
-
+			tr.SetParent(World.World.Instance.Other);
 			tr.position = position;
 			
 			gameObject.SetActive(true);

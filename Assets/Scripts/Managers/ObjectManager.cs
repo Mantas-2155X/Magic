@@ -21,47 +21,31 @@ namespace Managers
 		public IProjectile CreateProjectile(Type type, IWeapon weapon, Vector3 origin, Vector3 force)
 		{
 			IProjectile projectile;
-			bool parent;
 
 			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
 			if (pooled != null)
-			{
 				projectile = pooled.GetComponent<IProjectile>();
-				parent = false;
-			}
 			else
-			{
 				projectile = Instantiate(Resources.Load<GameObject>($"Projectiles/{type.Name}")).GetComponent<IProjectile>();
-				parent = true;
-			}
 				
-			projectile.Spawn(weapon, origin, force, parent);
+			projectile.Spawn(weapon, origin, force);
 			return projectile;
 		}
 		
 		public IWeapon CreateWeapon(Type type, Vector3 position, Vector3 angles)
 		{
 			IWeapon weapon;
-			bool parent;
 				
 			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
 			if (pooled != null)
-			{
 				weapon = pooled.GetComponent<IWeapon>();
-				parent = false;
-			}
 			else
-			{
 				weapon = Instantiate(Resources.Load<GameObject>($"Weapons/{type.Name}")).GetComponent<IWeapon>();
-				parent = true;
-			}
 
 			var go = weapon.GetGameObject();
-			var tr = go.transform;
-
-			if (parent)
-				tr.SetParent(World.World.Instance.Dropped);
 			
+			var tr = go.transform;
+			tr.SetParent(World.World.Instance.Dropped);
 			tr.position = position;
 			tr.eulerAngles = angles;
 			
@@ -72,49 +56,33 @@ namespace Managers
 		public Portal CreatePortal(Vector3 position)
 		{
 			Portal portal;
-			bool parent;
 
 			var pooled = PoolingManager.Instance.TakeFromPool(typeof(Portal), false);
 			if (pooled != null)
-			{
 				portal = pooled.GetComponent<Portal>();
-				parent = false;
-			}
 			else
-			{
 				portal = Instantiate(Resources.Load<GameObject>("Points/Portal")).GetComponent<Portal>();
-				parent = true;
-			}
 			
-			portal.Spawn(position, parent);
+			portal.Spawn(position);
 			return portal;
 		}
 		
 		public BasePool CreatePool(Type type, Vector3 position, float lifetime)
 		{
 			BasePool pool;
-			bool parent;
 				
 			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
 			if (pooled != null)
-			{
 				pool = pooled.GetComponent<BasePool>();
-				parent = false;
-			}
 			else
-			{
 				pool = Instantiate(Resources.Load<GameObject>($"Pools/{type.Name}")).GetComponent<BasePool>();
-				parent = true;
-			}
-
+			
 			pool.Lifetime = lifetime;
 			
 			var go = pool.gameObject;
-			var tr = go.transform;
-
-			if (parent)
-				tr.SetParent(World.World.Instance.Other);
 			
+			var tr = go.transform;
+			tr.SetParent(World.World.Instance.Other);
 			tr.position = position;
 			
 			go.SetActive(true);
@@ -124,63 +92,42 @@ namespace Managers
 		public ICast CreateCast(Type type, Component source)
 		{
 			ICast cast;
-			bool parent;
 
 			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
 			if (pooled != null)
-			{
 				cast = pooled.GetComponent<ICast>();
-				parent = false;
-			}
 			else
-			{
 				cast = Instantiate(Resources.Load<GameObject>($"Casts/{type.Name}")).GetComponent<ICast>();
-				parent = true;
-			}
 			
-			cast.Spawn(source, parent);
+			cast.Spawn(source);
 			return cast;
 		}
 		
 		public IAttack CreateAttack(Type type, Component source, Vector3 position, Quaternion angles)
 		{
 			IAttack attack;
-			bool parent;
 
 			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
 			if (pooled != null)
-			{
 				attack = pooled.GetComponent<IAttack>();
-				parent = false;
-			}
 			else
-			{
 				attack = Instantiate(Resources.Load<GameObject>($"Attacks/{type.Name}")).GetComponent<IAttack>();
-				parent = true;
-			}
 			
-			attack.Spawn(source, position, angles, parent);
+			attack.Spawn(source, position, angles);
 			return attack;
 		}
 		
 		public IAttack CreateAttack(Type type, Component source, Transform attach)
 		{
 			IAttack attack;
-			bool parent;
 
 			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
 			if (pooled != null)
-			{
 				attack = pooled.GetComponent<IAttack>();
-				parent = false;
-			}
 			else
-			{
 				attack = Instantiate(Resources.Load<GameObject>($"Attacks/{type.Name}")).GetComponent<IAttack>();
-				parent = true;
-			}
 			
-			attack.Spawn(source, attach, parent);
+			attack.Spawn(source, attach);
 			return attack;
 		}
 	}

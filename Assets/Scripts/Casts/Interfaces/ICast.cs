@@ -9,7 +9,7 @@ namespace Casts.Interfaces
 
 		public ParticleSystem System { get; }
 		
-		public void Spawn(Component source, bool parent);
+		public void Spawn(Component source);
 
 		public void StopParticles();
 		
