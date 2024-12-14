@@ -290,7 +290,7 @@ namespace AI
 		{
 			moveDirection = ctx.ReadValue<Vector2>();
 			walking = true;
-			//Body.ShouldSway = true;
+			Body.ShouldSway = true;
 		}
 		
 		private void onMoveCanceled(InputAction.CallbackContext ctx)
@@ -370,18 +370,12 @@ namespace AI
 		public override void TakeWeapon(IWeapon weapon)
 		{
 			base.TakeWeapon(weapon);
-			
-			var renderers = Body.WeaponContainer.GetComponentsInChildren<Renderer>(true);
-			foreach (var rend in renderers)
-				rend.shadowCastingMode = ShadowCastingMode.Off;
+			hideWeaponShadow(true);
 		}
 		
 		public override void DropWeapon()
 		{
-			var renderers = Body.WeaponContainer.GetComponentsInChildren<Renderer>(true);
-			foreach (var rend in renderers)
-				rend.shadowCastingMode = ShadowCastingMode.On;
-
+			hideWeaponShadow(false);
 			base.DropWeapon();
 		}
 
@@ -392,6 +386,7 @@ namespace AI
 			Body.WeaponContainer.localPosition = ViewmodelPosition;
 			Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
 
+			hideBodyRender(true);
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed);
 			enableInput();
 		}
@@ -399,6 +394,8 @@ namespace AI
 		public override void Kill(object source)
 		{
 			Body.WeaponContainer.SetParent(Body.Shoulders[1]);
+		
+			hideBodyRender(false);
 			disableInput();
 			base.Kill(source);
 		}
@@ -415,6 +412,20 @@ namespace AI
 				return true;
 			
 			return false;
+		}
+
+		private void hideWeaponShadow(bool state)
+		{
+			var renderers = Body.WeaponContainer.GetComponentsInChildren<Renderer>(true);
+			foreach (var rend in renderers)
+				rend.shadowCastingMode = state ? ShadowCastingMode.Off : ShadowCastingMode.On;
+		}
+
+		private void hideBodyRender(bool state)
+		{
+			var renderers = Body.GetComponentsInChildren<Renderer>(true);
+			foreach (var rend in renderers)
+				rend.shadowCastingMode = state ? ShadowCastingMode.ShadowsOnly : ShadowCastingMode.On;
 		}
 		
 		#endregion
