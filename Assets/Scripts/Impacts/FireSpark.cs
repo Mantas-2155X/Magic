@@ -2,7 +2,7 @@ using Impacts.Base;
 
 namespace Impacts
 {
-	public class FireBall : BaseImpact
+	public class FireSpark : BaseImpact
 	{
 		
 	}

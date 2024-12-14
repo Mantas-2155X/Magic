@@ -7,6 +7,6 @@ namespace Projectiles
 	{
 		public override float Distance => 10f;
 		public override float Damage => 10f;
-		public override Type Impact => typeof(Impacts.FireBall);
+		public override Type Impact => typeof(Impacts.FireSpark);
 	}
 }

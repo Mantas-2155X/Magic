@@ -19,7 +19,7 @@ namespace Weapons
 			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
 				return;
 			
-			ObjectManager.Instance.CreateAttack(typeof(Fire), Owner, hit.point, Vector3.zero);
+			ObjectManager.Instance.CreateAttack(typeof(Incinerate), Owner, hit.point, Vector3.zero);
 		}
 	}
 }

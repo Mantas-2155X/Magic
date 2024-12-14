@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Attacks
 {
-	public class Fire : BaseAttack
+	public class Incinerate : BaseAttack
 	{
 		public void OnTriggerEnter(Collider other)
 		{
