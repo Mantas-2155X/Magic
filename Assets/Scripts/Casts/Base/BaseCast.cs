@@ -7,11 +7,11 @@ namespace Casts.Base
 {
 	public class BaseCast : MonoBehaviour, ICast
 	{
-		[field: SerializeField]
-		public ParticleSystem System { get; private set; }
-
 		public IWeapon Source { get; private set; }
 
+		[field: SerializeField]
+		public ParticleSystem System { get; private set; }
+		
 		[SerializeField]
 		public float Rotation;
 		

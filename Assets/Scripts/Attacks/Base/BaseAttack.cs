@@ -1,4 +1,3 @@
-using System;
 using AI.Interfaces;
 using Attacks.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -9,9 +8,10 @@ namespace Attacks.Base
 {
 	public class BaseAttack : MonoBehaviour, IAttack
 	{
+		public IAlive Owner { get; private set; }
+
 		[field: SerializeField]
 		public ParticleSystem System { get; private set; }
-		
 		[field: SerializeField]
 		public Collider Trigger { get; private set; }
 
@@ -19,10 +19,6 @@ namespace Attacks.Base
 		public float EnableTriggerAfter { get; private set; }
 		[field: SerializeField]
 		public float DisableTriggerAfter { get; private set; }
-
-		public IAlive Owner { get; private set; }
-		
-		public virtual Type Type { get; private set; }
 		
 		public virtual void Spawn(IAlive owner, Vector3 position, Vector3 angles, bool parent)
 		{

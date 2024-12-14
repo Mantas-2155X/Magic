@@ -18,16 +18,13 @@ namespace Weapons.Base
 		
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; set; }
-
 		[field: SerializeField]
 		public Collider[] Colliders { get; set; }
 		
 		[field: SerializeField]
 		public virtual float TimeBetweenAttacks { get; private set; }
-		
 		[field: SerializeField]
 		public virtual float CastingTime { get; private set; }
-
 		[field: SerializeField]
 		public virtual float ManaCost { get; private set; }
 

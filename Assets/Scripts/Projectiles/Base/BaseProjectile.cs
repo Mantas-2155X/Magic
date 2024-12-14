@@ -12,43 +12,51 @@ namespace Projectiles.Base
 {
 	public class BaseProjectile : MonoBehaviour, IProjectile
 	{
-		[field: SerializeField]
-		public Rigidbody Rigidbody { get; private set; }
-		
-		[field: SerializeField]
-		public Collider Collider { get; private set; }
-
 		public IWeapon Source { get; private set; }
 
+		[field: SerializeField]
+		public Rigidbody Rigidbody { get; private set; }
+		[field: SerializeField]
+		public Collider Collider { get; private set; }
+		
 		[field: SerializeField]
 		public virtual float Distance { get; private set; }
 		[field: SerializeField]
 		public virtual float Damage { get; private set; }
+		
 		public virtual Type Impact { get; private set; }
+		public virtual Type Attack { get; private set; }
 
 		private CancellationTokenSource distanceToken;
-		
 		private Vector3 startingPosition;
-
 		private Collider ignoreCollider;
 		
 		public void OnCollisionEnter(Collision collision)
 		{
-			var coll = collision.collider;
-			if (coll != null)
+			if (Damage > 0)
 			{
-				if (coll.TryGetComponent<IAlive>(out var alive))
+				var coll = collision.collider;
+				if (coll != null)
 				{
-					alive.Damage(Damage, this);
-				}
-				else if (coll.TryGetComponent<IBreakable>(out var breakable))
-				{
-					breakable.Damage(Damage, this);
+					if (coll.TryGetComponent<IAlive>(out var alive))
+					{
+						alive.Damage(Damage, this);
+					}
+					else if (coll.TryGetComponent<IBreakable>(out var breakable))
+					{
+						breakable.Damage(Damage, this);
+					}
 				}
 			}
 
 			var contact = collision.contacts[0];
-			ObjectManager.Instance.CreateImpact(Impact, this, transform.position, Quaternion.FromToRotation(Vector3.up, contact.normal));
+			
+			if (Impact != null)
+				ObjectManager.Instance.CreateImpact(Impact, this, transform.position, Quaternion.FromToRotation(Vector3.up, contact.normal));
+			
+			if (Attack != null)
+				ObjectManager.Instance.CreateAttack(Attack, Source.Owner, contact.point, Vector3.zero);
+				
 			clearVelocityAndPool().Forget();
 		}
 

@@ -6,15 +6,16 @@ namespace Projectiles.Interfaces
 {
 	public interface IProjectile
 	{
-		public Rigidbody Rigidbody { get; }
-		
-		public Collider Collider { get; }
-		
 		public IWeapon Source { get; }
+
+		public Rigidbody Rigidbody { get; }
+		public Collider Collider { get; }
 		
 		public float Distance { get; }
 		public float Damage { get; }
+		
 		public Type Impact { get; }
+		public Type Attack { get; }
 		
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force, bool parent);
 

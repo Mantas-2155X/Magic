@@ -5,9 +5,9 @@ namespace Casts.Interfaces
 {
 	public interface ICast
 	{
-		public ParticleSystem System { get; }
-		
 		public IWeapon Source { get; }
+
+		public ParticleSystem System { get; }
 		
 		public void Spawn(IWeapon source, bool parent);
 

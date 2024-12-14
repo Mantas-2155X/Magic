@@ -9,13 +9,10 @@ namespace Weapons.Interfaces
 		public IAlive Owner { get; }
 		
 		public Rigidbody Rigidbody { get; }
-		
 		public Collider[] Colliders { get; }
 
 		public float TimeBetweenAttacks { get; }
-
 		public float CastingTime { get; }
-		
 		public float ManaCost { get; }
 
 		public Type Cast { get; }
