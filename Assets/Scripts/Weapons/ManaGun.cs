@@ -26,10 +26,14 @@ namespace Weapons
 				Rings[i].Rotate(new Vector3(Random.Range(1f, 3f), Random.Range(1f, 3f), Random.Range(1f, 3f)) * (32f * Time.deltaTime));
 		}
 		
-		public override void FinishCasting()
+		public override bool FinishCasting()
 		{
-			base.FinishCasting();
+			var status = base.FinishCasting();
+			if (!status)
+				return false;
+			
 			ObjectManager.Instance.CreatePool(typeof(ManaPool), LastHit.point + Vector3.up * 0.06f, Lifetime);
+			return true;
 		}
 	}
 }

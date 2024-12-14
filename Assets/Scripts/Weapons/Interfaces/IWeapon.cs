@@ -14,6 +14,7 @@ namespace Weapons.Interfaces
 		public float TimeBetweenAttacks { get; }
 		public float CastingTime { get; }
 		public float ManaCost { get; }
+		public float Distance { get; }
 
 		public Type Cast { get; }
 
@@ -30,7 +31,7 @@ namespace Weapons.Interfaces
 		
 		public bool CanCast();
 		public void StartCasting();
-		public void FinishCasting();
+		public bool FinishCasting();
 		public void CancelCasting();
 		
 		public GameObject GetGameObject();

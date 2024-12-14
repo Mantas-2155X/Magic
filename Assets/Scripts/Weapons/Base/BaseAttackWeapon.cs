@@ -8,18 +8,14 @@ namespace Weapons.Base
 {
 	public class BaseAttackWeapon : BaseWeapon, IAttackWeapon
 	{
-		[field: SerializeField]
-		public virtual float Distance { get; private set; }
-		
 		public virtual EAttackAngle AttackAngle { get; private set; }
 		public virtual Type Attack { get; private set; }
 
-		public override void FinishCasting()
+		public override bool FinishCasting()
 		{
-			base.FinishCasting();
-			
-			if (LastHit.distance > Distance)
-				return;
+			var status = base.FinishCasting();
+			if (!status)
+				return false;
 			
 			Quaternion angles;
 
@@ -39,6 +35,7 @@ namespace Weapons.Base
 			}
 			
 			ObjectManager.Instance.CreateAttack(Attack, this, LastHit.point, angles, LastHit.transform);
+			return true;
 		}
 	}
 }

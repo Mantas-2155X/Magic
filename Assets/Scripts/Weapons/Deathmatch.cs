@@ -7,9 +7,11 @@ namespace Weapons
 {
 	public class Deathmatch : BaseWeapon
 	{
-		public override void FinishCasting()
+		public override bool FinishCasting()
 		{
-			base.FinishCasting();
+			var status = base.FinishCasting();
+			if (!status)
+				return false;
 
 			foreach (var npc in AIManager.Instance.NPCs)
 			{
@@ -24,6 +26,8 @@ namespace Weapons
 				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(typeof(FireGun), Vector3.zero, Vector3.zero));
 				npc.FindAndKill(npc.Target, false, true);
 			}
+			
+			return true;
 		}
 	}
 }

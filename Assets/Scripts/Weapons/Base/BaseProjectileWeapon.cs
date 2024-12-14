@@ -11,14 +11,17 @@ namespace Weapons.Base
 		public virtual float Force { get; private set; }
 		public virtual Type Projectile { get; private set; }
 
-		public override void FinishCasting()
+		public override bool FinishCasting()
 		{
-			base.FinishCasting();
+			var status = base.FinishCasting();
+			if (!status)
+				return false;
 
 			var origin = LastRay.origin;
 			var force = LastRay.direction * Force;
 
 			ObjectManager.Instance.CreateProjectile(Projectile, this, origin, force);
+			return true;
 		}
 	}
 }

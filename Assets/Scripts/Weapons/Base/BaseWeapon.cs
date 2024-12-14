@@ -27,6 +27,8 @@ namespace Weapons.Base
 		public virtual float CastingTime { get; private set; }
 		[field: SerializeField]
 		public virtual float ManaCost { get; private set; }
+		[field: SerializeField]
+		public virtual float Distance { get; private set; }
 
 		public virtual Type Cast { get; private set; }
 
@@ -148,10 +150,10 @@ namespace Weapons.Base
 			}
 		}
 		
-		public virtual void FinishCasting()
+		public virtual bool FinishCasting()
 		{
 			if (!IsCasting)
-				return;
+				return false;
 
 			IsCasting = false;
 			LastFinishedCast = Time.time;
@@ -159,8 +161,12 @@ namespace Weapons.Base
 			Owner.UseMana(ManaCost, this);
 			
 			CalculateHit();
-			
 			clearCast();
+
+			if (Distance == 0f)
+				return true;
+			
+			return LastHit.distance <= Distance;
 		}
 		
 		public virtual void CancelCasting()
