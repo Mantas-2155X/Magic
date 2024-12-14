@@ -16,7 +16,7 @@ namespace Weapons
 		{
 			base.FinishCasting();
 
-			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
+			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue))
 				return;
 			
 			ObjectManager.Instance.CreateAttack(typeof(Incinerate), Owner, hit.point, Vector3.zero);

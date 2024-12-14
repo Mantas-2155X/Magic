@@ -251,7 +251,7 @@ namespace AI.Base
 			var origin = transform.position + new Vector3(0f, -1.02f, 0f);
 			var extents = new Vector3(0.6f, 0.05f, 0.2f) / 2f;
 			
-			if (Physics.CheckBox(origin, extents, transform.rotation, ~LayerMaskTools.Mask1))
+			if (Physics.CheckBox(origin, extents, transform.rotation))
 				return true;
 			
 			return false;

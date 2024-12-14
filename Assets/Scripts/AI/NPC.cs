@@ -189,7 +189,7 @@ namespace AI
 			var direction = (target.transform.position - ownerTr.position).normalized;
 			var ray = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 
-			if (!Physics.Raycast(ray, out var hit, maxRange, ~LayerMaskTools.Mask2))
+			if (!Physics.Raycast(ray, out var hit, maxRange))
 				return false;
 			
 			return hit.collider.GetComponent(target.GetType()) == target;
