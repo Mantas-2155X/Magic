@@ -49,6 +49,16 @@ namespace Attacks.Base
 		{
 			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
+
+		public virtual void OnTriggerEnabled()
+		{
+			Trigger.enabled = true;
+		}
+
+		public virtual void OnTriggerDisabled()
+		{
+			Trigger.enabled = false;
+		}
 		
 		private async UniTask trigger()
 		{
@@ -57,14 +67,14 @@ namespace Attacks.Base
 			if (!isActiveAndEnabled)
 				return;
 
-			Trigger.enabled = true;
+			OnTriggerEnabled();
 			
 			await UniTask.WaitForSeconds(DisableTriggerAfter);
 			
 			if (!isActiveAndEnabled)
 				return;
 
-			Trigger.enabled = false;
+			OnTriggerDisabled();
 		}
 	}
 }
