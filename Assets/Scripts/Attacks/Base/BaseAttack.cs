@@ -24,7 +24,7 @@ namespace Attacks.Base
 		
 		public virtual Type Type { get; private set; }
 		
-		public virtual void Spawn(IAlive owner, Vector3 position, bool parent)
+		public virtual void Spawn(IAlive owner, Vector3 position, Vector3 angles, bool parent)
 		{
 			Owner = owner;
 
@@ -34,7 +34,7 @@ namespace Attacks.Base
 				tr.SetParent(World.World.Instance.Other);
 
 			tr.position = position + Vector3.up * 0.1f;
-			tr.eulerAngles = Vector3.zero;
+			tr.eulerAngles = angles;
 
 			Trigger.enabled = false;
 

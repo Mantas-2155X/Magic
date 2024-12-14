@@ -1,5 +1,4 @@
 using System;
-using Attacks;
 using Casts;
 using Managers;
 using Tools;
@@ -8,9 +7,9 @@ using Weapons.Base;
 
 namespace Weapons
 {
-	public class Destroyer : BaseWeapon
+	public class Shield : BaseWeapon
 	{
-		public override Type Cast => typeof(FireRing);
+		public override Type Cast => typeof(ManaRing);
 		
 		public override void FinishCasting()
 		{
@@ -19,7 +18,7 @@ namespace Weapons
 			if (!Physics.Raycast(FinishedRay, out var hit, float.MaxValue, ~LayerMaskTools.Mask1))
 				return;
 			
-			ObjectManager.Instance.CreateAttack(typeof(Fire), Owner, hit.point, Vector3.zero);
+			ObjectManager.Instance.CreateAttack(typeof(Attacks.Shield), Owner, hit.point, Owner.GetGameObject().transform.eulerAngles);
 		}
 	}
 }

@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 319748f2f40f0529e8245fae83f5bbe4, type: 2}
     - target: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       propertyPath: m_Name
-      value: Command
+      value: Shield
       objectReference: {fileID: 0}
     - target: {fileID: 4762433505248599282, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       propertyPath: m_LocalRotation.w
@@ -93,7 +93,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7544462075667199419}
+      addedObject: {fileID: -5024712705942341227}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7542393617663950912}
@@ -160,7 +160,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
   m_PrefabInstance: {fileID: 8231906880841360831}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7544462075667199419
+--- !u!114 &-5024712705942341227
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,16 +169,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 9150455038998059246}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7664d158aee4fd3b08f300acb9f885f, type: 3}
+  m_Script: {fileID: 11500000, guid: f9f4064e22fb1db52bf63dd338a26ade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <Rigidbody>k__BackingField: {fileID: 7542393617663950912}
   <Colliders>k__BackingField:
   - {fileID: 2654227922841394834}
   - {fileID: 5829681741207111192}
-  <TimeBetweenAttacks>k__BackingField: 0.25
-  <CastingTime>k__BackingField: 0
-  <ManaCost>k__BackingField: 1
+  <TimeBetweenAttacks>k__BackingField: 15
+  <CastingTime>k__BackingField: 1.5
+  <ManaCost>k__BackingField: 50
 --- !u!54 &7542393617663950912
 Rigidbody:
   m_ObjectHideFlags: 0

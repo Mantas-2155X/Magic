@@ -17,6 +17,6 @@ namespace Attacks.Interfaces
 
 		public Type Type { get; }
 
-		public void Spawn(IAlive owner, Vector3 position, bool parent);
+		public void Spawn(IAlive owner, Vector3 position, Vector3 angles, bool parent);
 	}
 }
