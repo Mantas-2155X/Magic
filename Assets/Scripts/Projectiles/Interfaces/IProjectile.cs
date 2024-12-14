@@ -8,6 +8,8 @@ namespace Projectiles.Interfaces
 	{
 		public Rigidbody Rigidbody { get; }
 		
+		public Collider Collider { get; }
+		
 		public IWeapon Source { get; }
 		
 		public float Distance { get; }

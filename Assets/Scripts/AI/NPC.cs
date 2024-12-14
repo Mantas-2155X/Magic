@@ -57,7 +57,7 @@ namespace AI
 		/// (HasSight)
 		/// </summary>
 		[SerializeField]
-		public float SightRange = 11f;
+		public float SightRange = 15f;
 
 		/// <summary>
 		/// Distance between the npc and the target at which the npc counts the target to be in range and stops going closer

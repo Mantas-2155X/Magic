@@ -1,5 +1,3 @@
-//#define DEBUG_BaseProjectile
-
 using System;
 using System.Threading;
 using AI.Interfaces;
@@ -17,6 +15,9 @@ namespace Projectiles.Base
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; private set; }
 		
+		[field: SerializeField]
+		public Collider Collider { get; private set; }
+
 		public IWeapon Source { get; private set; }
 
 		public virtual float Distance { get; private set; }
@@ -25,10 +26,9 @@ namespace Projectiles.Base
 
 		private CancellationTokenSource distanceToken;
 		
-		private IAlive owner;
-		private string ownerName;
-
 		private Vector3 startingPosition;
+
+		private Collider ignoreCollider;
 		
 		public void OnCollisionEnter(Collision collision)
 		{
@@ -37,14 +37,6 @@ namespace Projectiles.Base
 			{
 				if (coll.TryGetComponent<IAlive>(out var alive))
 				{
-					if (alive == owner)
-					{
-#if DEBUG_BaseProjectile
-						Debug.Log($"[BaseProjectile {ownerName}] Not colliding with owner");
-#endif
-						return;
-					}
-					
 					alive.Damage(Damage, this);
 				}
 				else if (coll.TryGetComponent<IBreakable>(out var breakable))
@@ -71,9 +63,10 @@ namespace Projectiles.Base
 		{
 			Source = source;
 
-			owner = Source.Owner;
-			ownerName = owner.GetGameObject().name;
 			startingPosition = origin;
+			ignoreCollider = source.Owner.Body.Collider;
+			
+			Physics.IgnoreCollision(ignoreCollider, Collider, true);
 
 			var tr = transform;
 			
@@ -102,6 +95,8 @@ namespace Projectiles.Base
 				
 				distanceToken.Cancel();
 			}
+			
+			Physics.IgnoreCollision(ignoreCollider, Collider, false);
 			
 			gameObject.SetActive(false);
 

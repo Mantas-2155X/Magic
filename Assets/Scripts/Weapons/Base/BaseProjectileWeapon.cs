@@ -15,7 +15,7 @@ namespace Weapons.Base
 		{
 			base.FinishCasting();
 
-			var origin = LastRay.origin + LastRay.direction * 1f;
+			var origin = LastRay.origin;
 			var force = LastRay.direction * Force;
 
 			ObjectManager.Instance.CreateProjectile(Projectile, this, origin, force);
