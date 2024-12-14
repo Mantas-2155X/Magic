@@ -20,7 +20,9 @@ namespace Projectiles.Base
 
 		public IWeapon Source { get; private set; }
 
+		[field: SerializeField]
 		public virtual float Distance { get; private set; }
+		[field: SerializeField]
 		public virtual float Damage { get; private set; }
 		public virtual Type Impact { get; private set; }
 

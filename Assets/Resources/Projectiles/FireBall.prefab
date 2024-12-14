@@ -4878,6 +4878,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Rigidbody>k__BackingField: {fileID: -6803533052199284734}
   <Collider>k__BackingField: {fileID: 7443144026641663299}
+  <Distance>k__BackingField: 10
+  <Damage>k__BackingField: 10
 --- !u!135 &7443144026641663299
 SphereCollider:
   m_ObjectHideFlags: 0
