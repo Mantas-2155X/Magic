@@ -11,11 +11,16 @@ namespace Weapons.Base
 	{
 		[field: SerializeField]
 		public virtual bool Attach { get; private set; }
+		[field: SerializeField]
+		public virtual float Distance { get; private set; }
 		public virtual Type Attack { get; private set; }
 
 		public override void FinishCasting()
 		{
 			base.FinishCasting();
+			
+			if (LastHit.distance > Distance)
+				return;
 			
 			if (Attach)
 			{
