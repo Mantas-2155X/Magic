@@ -113,7 +113,7 @@ namespace AI
 		public readonly Dictionary<EActionMode, IActionMode> ActionModes = new (new EActionModeComparer())
 		{
 			{ EActionMode.None, new None() },
-			{ EActionMode.FindAndKill, new FindAndKill() }
+			{ EActionMode.WanderAggressively, new WanderAggressively() }
 		};
 		
 		private EAIMode previousAIMode;
@@ -127,16 +127,16 @@ namespace AI
 		
 		#region Action Modes
 
-		public void FindAndKill(Component target, bool aimLimited = false, bool actWithoutTarget = false)
+		public void WanderAggressively(Component target)
 		{
 			if (!IsAlive)
 				return;
 			
-			AimLimited = aimLimited;
-			ActWithoutTarget = actWithoutTarget;
+			AimLimited = false;
+			ActWithoutTarget = true;
 			
 			setTarget(target);
-			setActionMode(EActionMode.FindAndKill);
+			setActionMode(EActionMode.WanderAggressively);
 			setAIMode(EAIMode.Action);
 		}
 

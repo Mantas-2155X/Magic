@@ -142,7 +142,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.FindAndKill(npc.Target);
+					npc.WanderAggressively(npc.Target);
 				}
 			}
 			
@@ -158,7 +158,7 @@ namespace Editor
 					npc.AutoTargetRange = 9999;
 					npc.AutoTarget = EAutoTarget.NPCs;
 					
-					npc.FindAndKill(npc.Target, false, true);
+					npc.WanderAggressively(npc.Target);
 				}
 			}
 

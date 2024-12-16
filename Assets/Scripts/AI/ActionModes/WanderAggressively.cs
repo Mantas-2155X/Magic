@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AI.ActionModes
 {
-	public class FindAndKill : IActionMode
+	public class WanderAggressively : IActionMode
 	{
 		public NPC Owner { get; set; }
 		
@@ -21,6 +21,7 @@ namespace AI.ActionModes
 		
 		public void Update()
 		{
+			// No target, wander until one pops up
 			if (Owner.Target == null)
 			{
 				if (Owner.AIMode != EAIMode.Walking)
@@ -32,12 +33,15 @@ namespace AI.ActionModes
 			var target = Owner.Target.transform;
 			var transform = Owner.transform;
 
+			// Target sensed but not within chasing range, wait and hope for the target to come closer
 			if (!Owner.WithinRange.DistanceCheck(transform, target))
 				return;
 
+			// Target within range, start chasing
 			if (!Owner.Chase.ChaseTarget(Owner, target))
 				return;
 
+			// Reached target, stop walking and go into action
 			if (Owner.AIMode == EAIMode.Walking)
 			{
 				Owner.ReturnAIMode();
@@ -46,9 +50,11 @@ namespace AI.ActionModes
 			
 			if (Owner.AIMode == EAIMode.Action)
 			{
+				// Turn towards the target and aim
 				if (!Owner.AimAt.AimTowardsTarget(Owner.transform, target))
 					return;
 			
+				// Cast if there is a clear sight
 				if (Owner.HasSight.SightCheck(Owner, target))
 					Owner.Weapon?.StartCasting();
 			}

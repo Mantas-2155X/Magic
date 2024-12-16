@@ -24,7 +24,7 @@ namespace Weapons
 				npc.AutoTarget = EAutoTarget.NPCs;
 				
 				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(typeof(FireGun), Vector3.zero, Vector3.zero));
-				npc.FindAndKill(npc.Target, false, true);
+				npc.WanderAggressively(npc.Target);
 			}
 			
 			return true;
