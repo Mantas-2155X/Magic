@@ -7,8 +7,6 @@ using AI.AIModes;
 using AI.Base;
 using AI.Enums;
 using AI.Interfaces;
-using Cysharp.Threading.Tasks;
-using Managers;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -27,19 +25,6 @@ namespace AI
 
 		[SerializeField]
 		public float JumpDuration = 0.75f;
-
-		#endregion
-		
-		#region Auto Target
-
-		[SerializeField]
-		public EAutoTarget AutoTarget = EAutoTarget.None;
-
-		[SerializeField]
-		public float AutoTargetRange = 25f;
-
-		[SerializeField]
-		public float AutoTargetEvery = 0.5f;
 
 		#endregion
 		
@@ -269,74 +254,6 @@ namespace AI
 #endif
 		}
 		
-		private async UniTask autoTarget()
-		{
-			while (IsAlive)
-			{
-				await UniTask.WaitForSeconds(AutoTargetEvery);
-
-				if (AutoTarget == EAutoTarget.None)
-					continue;
-				
-				targets.Clear();
-
-				var pos = transform.position;
-
-				if ((AutoTarget & EAutoTarget.Player) != 0)
-				{
-					var player = AIManager.Instance.Player;
-					if (player != null && player.IsAlive)
-					{
-						var dist = Vector3.Distance(player.transform.position, pos);
-						if (dist < AutoTargetRange)
-							targets.Add(player, dist);
-					}
-				}
-				else if (Target is Player)
-				{
-					setTarget(null);
-				}
-
-				if ((AutoTarget & EAutoTarget.NPCs) != 0)
-				{
-					var npcs = AIManager.Instance.NPCs;
-
-					for (var i = 0; i < npcs.Count; i++)
-					{
-						var npc = npcs[i];
-						if (npc == null || !npc.IsAlive || npc == this)
-							continue;
-
-						var dist = Vector3.Distance(npc.transform.position, pos);
-						if (dist < AutoTargetRange)
-							targets.Add(npc, dist);
-					}
-				}
-				else if (Target is NPC)
-				{
-					setTarget(null);
-				}
-
-				if (Target != null && Vector3.Distance(Target.transform.position, pos) >= AutoTargetRange)
-					setTarget(null);
-				
-				var closestDistance = Mathf.Infinity;
-				IAlive closestAlive = null;
-
-				foreach (var target in targets)
-				{
-					if (target.Value > closestDistance)
-						continue;
-					
-					closestAlive = target.Key;
-					closestDistance = target.Value;
-				}
-
-				if (closestAlive != null)
-					setTarget((Component)closestAlive);
-			}
-		}
-		
 		#endregion
 
 		#region MonoBehaviour
@@ -380,7 +297,6 @@ namespace AI
 			WithinRange = new WithinRange(this);
 			
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed);
-			autoTarget().Forget();
 		}
 
 		public override void Kill(object source)

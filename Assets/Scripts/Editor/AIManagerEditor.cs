@@ -152,11 +152,6 @@ namespace Editor
 				{
 					if (!npc.IsAlive)
 						continue;
-
-					npc.SenseRange = 9999;
-					
-					npc.AutoTargetRange = 9999;
-					npc.AutoTarget = EAutoTarget.NPCs;
 					
 					npc.WanderAggressively(npc.Target);
 				}
@@ -185,56 +180,6 @@ namespace Editor
 						continue;
 					
 					npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(TypeTools.FindType(Weapon), Vector3.zero, Vector3.zero));
-				}
-			}
-			
-			GUILayout.EndHorizontal();
-			
-			GUILayout.Label("Auto Target", EditorStyles.boldLabel);
-
-			GUILayout.BeginHorizontal();
-
-			if (GUILayout.Button("None"))
-			{
-				foreach (var npc in aiManager.NPCs)
-				{
-					if (!npc.IsAlive)
-						continue;
-
-					npc.AutoTarget = EAutoTarget.None;
-				}
-			}
-			
-			if (GUILayout.Button("Player"))
-			{
-				foreach (var npc in aiManager.NPCs)
-				{
-					if (!npc.IsAlive)
-						continue;
-
-					npc.AutoTarget = EAutoTarget.Player;
-				}
-			}
-			
-			if (GUILayout.Button("NPCs"))
-			{
-				foreach (var npc in aiManager.NPCs)
-				{
-					if (!npc.IsAlive)
-						continue;
-
-					npc.AutoTarget = EAutoTarget.NPCs;
-				}
-			}
-			
-			if (GUILayout.Button("Everyone"))
-			{
-				foreach (var npc in aiManager.NPCs)
-				{
-					if (!npc.IsAlive)
-						continue;
-
-					npc.AutoTarget = EAutoTarget.Player | EAutoTarget.NPCs;
 				}
 			}
 			
