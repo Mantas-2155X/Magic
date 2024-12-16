@@ -145,28 +145,6 @@ namespace Editor
 					npc.FindAndKill(npc.Target);
 				}
 			}
-						
-			if (GUILayout.Button("Aiming Turret"))
-			{
-				foreach (var npc in aiManager.NPCs)
-				{
-					if (!npc.IsAlive)
-						continue;
-
-					npc.AimingTurret(npc.Target);
-				}
-			}
-			
-			if (GUILayout.Button("Rage Turret"))
-			{
-				foreach (var npc in aiManager.NPCs)
-				{
-					if (!npc.IsAlive)
-						continue;
-
-					npc.RageTurret();
-				}
-			}
 			
 			if (GUILayout.Button("Deathmatch"))
 			{

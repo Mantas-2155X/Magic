@@ -113,8 +113,6 @@ namespace AI
 		public readonly Dictionary<EActionMode, IActionMode> ActionModes = new (new EActionModeComparer())
 		{
 			{ EActionMode.None, new None() },
-			{ EActionMode.RageTurret, new RageTurret() },
-			{ EActionMode.AimingTurret, new AimingTurret() },
 			{ EActionMode.FindAndKill, new FindAndKill() }
 		};
 		
@@ -128,32 +126,6 @@ namespace AI
 		#region AI
 		
 		#region Action Modes
-
-		public void RageTurret(Component target = null, bool aimLimited = true, bool actWithoutTarget = true)
-		{
-			if (!IsAlive)
-				return;
-
-			AimLimited = aimLimited;
-			ActWithoutTarget = actWithoutTarget;
-			
-			setTarget(target);
-			setActionMode(EActionMode.RageTurret);
-			setAIMode(EAIMode.Action);
-		}
-		
-		public void AimingTurret(Component target, bool aimLimited = false, bool actWithoutTarget = false)
-		{
-			if (!IsAlive)
-				return;
-			
-			AimLimited = aimLimited;
-			ActWithoutTarget = actWithoutTarget;
-			
-			setTarget(target);
-			setActionMode(EActionMode.AimingTurret);
-			setAIMode(EAIMode.Action);
-		}
 
 		public void FindAndKill(Component target, bool aimLimited = false, bool actWithoutTarget = false)
 		{
