@@ -195,7 +195,7 @@ namespace Weapons.Base
 					break;
 				case NPC npc:
 					var ownerTr = Owner.GetGameObject().transform;
-					var direction = npc.AimLimited || npc.Target == null ? ownerTr.forward : (npc.Target.transform.position - ownerTr.position).normalized;
+					var direction = npc.Target == null ? ownerTr.forward : (npc.Target.transform.position - ownerTr.position).normalized;
 					LastRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;
 				default:

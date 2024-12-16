@@ -93,8 +93,6 @@ namespace AI
 		public EActionMode ActionMode { get; private set; }
 		public Component Target { get; private set; }
 		public Vector3 Destination { get; private set; }
-		public bool AimLimited { get; private set; }
-		public bool ActWithoutTarget { get; private set; }
 
 		public Spin Spin { get; private set; }
 		public AimAt AimAt { get; private set; }
@@ -131,9 +129,6 @@ namespace AI
 		{
 			if (!IsAlive)
 				return;
-			
-			AimLimited = false;
-			ActWithoutTarget = true;
 			
 			setTarget(target);
 			setActionMode(EActionMode.WanderAggressively);
@@ -175,24 +170,10 @@ namespace AI
 			return hit.collider.GetComponent(target.GetType()) == target;
 		}
 		
-		public void ReturnAIMode(bool resetAction = false)
+		public void ReturnAIMode()
 		{
 			if (!IsAlive)
 				return;
-
-			if (resetAction)
-				setActionMode(EActionMode.None);
-			
-			if (previousAIMode == EAIMode.Action)
-			{
-				// Protect from an infinite loop of walk-action when the target is gone and the action mode returns after target death
-				if (!ActWithoutTarget && Target == null)
-				{
-					setActionMode(EActionMode.None);
-					setAIMode(EAIMode.Idle);
-					return;
-				}
-			}
 			
 			setAIMode(previousAIMode);
 		}
