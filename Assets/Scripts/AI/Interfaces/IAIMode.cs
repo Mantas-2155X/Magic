@@ -5,6 +5,9 @@ namespace AI.Interfaces
 	public interface IAIMode
 	{
 		public NPC Owner { get; set; }
+
+		public float LastEntered { get; }
+		public float LastExited { get; }
 		
 		public void Enabled(NPC owner);
 		

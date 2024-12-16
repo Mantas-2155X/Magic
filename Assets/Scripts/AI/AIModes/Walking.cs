@@ -10,11 +10,16 @@ namespace AI.AIModes
 	{
 		public NPC Owner { get; set; }
 
+		public float LastEntered { get; private set; }
+		public float LastExited { get; private set; }
+		
 		private bool jumpingLink;
 		
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
+			LastEntered = Time.time;
+
 			toggleAgent(true);
 			
 			Owner.Agent.SetDestination(Owner.Destination);
@@ -27,6 +32,8 @@ namespace AI.AIModes
 			
 			toggleAgent(false);
 			Owner = null;
+			
+			LastExited = Time.time;
 		}
 		
 		public void Update()

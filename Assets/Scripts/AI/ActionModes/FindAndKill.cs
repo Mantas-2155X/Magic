@@ -22,7 +22,12 @@ namespace AI.ActionModes
 		public void Update()
 		{
 			if (Owner.Target == null)
+			{
+				if (Owner.AIMode != EAIMode.Walking)
+					Owner.Wander.WalkRandomly(false);
+				
 				return;
+			}
 
 			var target = Owner.Target.transform;
 			var transform = Owner.transform;

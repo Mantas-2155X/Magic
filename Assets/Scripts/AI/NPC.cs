@@ -79,6 +79,13 @@ namespace AI
 		/// </summary>
 		[SerializeField]
 		public float AimAngle = 5f;
+
+		/// <summary>
+		/// Wander every x seconds after the last walking state finised
+		/// (Wander)
+		/// </summary>
+		[SerializeField]
+		public float WanderEvery = 1f;
 		
 		#endregion
 		
@@ -92,6 +99,7 @@ namespace AI
 		public Spin Spin { get; private set; }
 		public AimAt AimAt { get; private set; }
 		public Chase Chase { get; private set; }
+		public Wander Wander { get; private set; }
 		public HasSight HasSight { get; private set; }
 		public WithinRange WithinRange { get; private set; }
 		
@@ -269,6 +277,7 @@ namespace AI
 			ActionModes[ActionMode].Disabled();
 			ActionMode = mode;
 			ActionModes[ActionMode].Enabled(this);
+			
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Action Mode from {previousActionMode} to {ActionMode}");
 #endif
@@ -413,6 +422,7 @@ namespace AI
 			Spin = new Spin(this);
 			AimAt = new AimAt(this);
 			Chase = new Chase(this);
+			Wander = new Wander(this);
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
 			
