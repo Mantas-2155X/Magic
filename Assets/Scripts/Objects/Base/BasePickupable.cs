@@ -65,7 +65,7 @@ namespace Objects.Base
 			Pickup(alive);
 		}
 
-		private async UniTask setPickupable()
+		private async UniTaskVoid setPickupable()
 		{
 			await UniTask.WaitForSeconds(PickupableAfter);
 			

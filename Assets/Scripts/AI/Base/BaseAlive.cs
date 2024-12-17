@@ -258,7 +258,7 @@ namespace AI.Base
 			return gameObject;
 		}
 
-		private async UniTask regenerateLoop()
+		private async UniTaskVoid regenerateLoop()
 		{
 			while (IsAlive)
 			{

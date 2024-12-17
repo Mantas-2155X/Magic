@@ -56,7 +56,7 @@ namespace Objects.Base
 			return gameObject;
 		}
 		
-		private async UniTask setUsable()
+		private async UniTaskVoid setUsable()
 		{
 			await UniTask.WaitForSeconds(UsableAfter);
 			

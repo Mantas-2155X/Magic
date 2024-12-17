@@ -38,7 +38,7 @@ namespace World
 			alives.Remove(alive);
 		}
 
-		private async UniTask damage()
+		private async UniTaskVoid damage()
 		{
 			while (enabled)
 			{

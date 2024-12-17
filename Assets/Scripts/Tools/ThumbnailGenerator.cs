@@ -14,7 +14,7 @@ namespace Tools
 			takeDelayed().Forget();
 		}
 
-		private async UniTask takeDelayed()
+		private async UniTaskVoid takeDelayed()
 		{
 			await UniTask.WaitForEndOfFrame();
 			

@@ -74,7 +74,7 @@ namespace Objects.Base
 			
 		}
 		
-		private async UniTask loop()
+		private async UniTaskVoid loop()
 		{
 			while (enabled)
 			{
@@ -90,7 +90,7 @@ namespace Objects.Base
 			}
 		}
 
-		private async UniTask lifetime()
+		private async UniTaskVoid lifetime()
 		{
 			await UniTask.WaitForSeconds(Lifetime);
 			

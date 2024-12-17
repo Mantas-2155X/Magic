@@ -82,7 +82,7 @@ namespace Attacks.Base
 			thisTr.position = target.position + Vector3.down * 0.95f;
 		}
 		
-		private async UniTask trigger()
+		private async UniTaskVoid trigger()
 		{
 			await UniTask.WaitForSeconds(EnableTriggerAfter);
 			

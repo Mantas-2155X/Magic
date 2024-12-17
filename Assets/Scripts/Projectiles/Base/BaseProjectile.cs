@@ -111,7 +111,7 @@ namespace Projectiles.Base
 			return gameObject;
 		}
 
-		private async UniTask clearVelocityAndPool()
+		private async UniTaskVoid clearVelocityAndPool()
 		{
 			if (distanceToken != null)
 			{
