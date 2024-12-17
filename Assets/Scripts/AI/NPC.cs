@@ -104,8 +104,6 @@ namespace AI
 		private Component previousTarget;
 		private Vector3 previousDestination;
 
-		private readonly Dictionary<IAlive, float> targets = new ();
-
 		#region AI
 		
 		#region Action Modes
@@ -153,6 +151,14 @@ namespace AI
 				return false;
 			
 			return hit.collider.GetComponent(target.GetType()) == target;
+		}
+
+		public void AssignTarget(Component target)
+		{
+			if (!IsAlive)
+				return;
+			
+			setTarget(target);
 		}
 		
 		public void ReturnAIMode()

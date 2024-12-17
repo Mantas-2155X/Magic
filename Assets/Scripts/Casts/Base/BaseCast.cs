@@ -63,7 +63,7 @@ namespace Casts.Base
 		{
 			Transform tr;
 			
-			if (Source is IWeapon weapon)
+			if (Source is IWeapon weapon && weapon.Owner != null)
 				tr = weapon.Owner.GetGameObject().transform;
 			else
 				tr = Source.transform;
