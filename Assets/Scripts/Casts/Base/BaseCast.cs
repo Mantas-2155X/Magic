@@ -26,7 +26,7 @@ namespace Casts.Base
 			if (Rotation > 0f)
 				thisTr.Rotate(Vector3.up, Rotation * Time.deltaTime);
 
-			thisTr.position = ownerTr.position + Vector3.down * 0.95f;
+			setPosition();
 		}
 		
 		public void OnParticleSystemStopped()
@@ -50,6 +50,8 @@ namespace Casts.Base
 			
 			thisTr = transform;
 			thisTr.SetParent(World.World.Instance.Other);
+
+			setPosition();
 			
 			gameObject.SetActive(true);
 			System.Play(true);
@@ -63,6 +65,11 @@ namespace Casts.Base
 		public GameObject GetGameObject()
 		{
 			return gameObject;
+		}
+
+		private void setPosition()
+		{
+			thisTr.position = ownerTr.position + Vector3.down * 0.95f;
 		}
 	}
 }

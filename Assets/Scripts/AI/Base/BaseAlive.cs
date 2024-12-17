@@ -1,11 +1,11 @@
+//#define BODY_GIB
+
 using AI.Enums;
 using AI.Events;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
-using Tools;
 using UnityEngine;
 using Weapons.Interfaces;
-using Random = UnityEngine.Random;
 
 namespace AI.Base
 {
@@ -212,6 +212,7 @@ namespace AI.Base
 			CurrentMana = 0;
 			IsAlive = false;
 			
+#if BODY_GIB
 			Body.Rigidbody.constraints = RigidbodyConstraints.None;
 			Body.Rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
 
@@ -244,6 +245,9 @@ namespace AI.Base
 
 				go.transform.SetParent(ragdolls);
 			}
+#else
+			gameObject.SetActive(false);
+#endif
 
 			OnDeathEvent?.Invoke(this, source);
 		}

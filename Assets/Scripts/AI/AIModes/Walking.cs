@@ -20,9 +20,8 @@ namespace AI.AIModes
 			Owner = owner;
 			LastEntered = Time.time;
 
-			toggleAgent(true);
-			
-			Owner.Agent.SetDestination(Owner.Destination);
+			if (toggleAgent(true))
+				Owner.Agent.SetDestination(Owner.Destination);
 		}
 		
 		public void Disabled()
@@ -62,13 +61,22 @@ namespace AI.AIModes
 			Owner.Agent.SetDestination(newDestination);
 		}
 		
-		private void toggleAgent(bool state)
+		private bool toggleAgent(bool state)
 		{
-			if (Owner.Agent.enabled == state)
-				return;
+			var agent = Owner.Agent;
+			if (agent.enabled == state)
+				return true;
 			
-			Owner.Agent.enabled = state;
+			agent.enabled = state;
 			Owner.Body.Rigidbody.isKinematic = state;
+
+			if (!state || agent.isOnNavMesh)
+				return true;
+
+			Debug.LogWarning($"[{Owner.name}] Agent is outside of navmesh, killing");
+			Owner.Kill(Owner);
+
+			return false;
 		}
 
 		private void forceFinishJump()
