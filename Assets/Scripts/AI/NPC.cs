@@ -76,6 +76,10 @@ namespace AI
 		
 		public EAIMode AIMode { get; private set; }
 		public EActionMode ActionMode { get; private set; }
+		
+		public IAIMode AIModeObj { get; private set; }
+		public IActionMode ActionModeObj { get; private set; }
+
 		public Component Target { get; private set; }
 		public Vector3 Destination { get; private set; }
 
@@ -202,9 +206,10 @@ namespace AI
 			Weapon?.CancelCasting();
 			previousAIMode = AIMode;
 			
-			AIModes[AIMode].Disabled();
+			AIModeObj?.Disabled();
 			AIMode = mode;
-			AIModes[AIMode].Enabled(this);
+			AIModeObj = AIModes[mode];
+			AIModeObj.Enabled(this);
 
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed AI Mode from {previousAIMode} to {AIMode}");
@@ -219,9 +224,10 @@ namespace AI
 			Weapon?.CancelCasting();
 			previousActionMode = ActionMode;
 			
-			ActionModes[ActionMode].Disabled();
+			ActionModeObj?.Disabled();
 			ActionMode = mode;
-			ActionModes[ActionMode].Enabled(this);
+			ActionModeObj = ActionModes[mode];
+			ActionModeObj.Enabled(this);
 			
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Action Mode from {previousActionMode} to {ActionMode}");
@@ -237,8 +243,8 @@ namespace AI
 			previousTarget = Target;
 			Target = target;
 			
-			ActionModes[ActionMode].TargetChanged(previousTarget, Target);
-			AIModes[AIMode].TargetChanged(previousTarget, Target);
+			ActionModeObj.TargetChanged(previousTarget, Target);
+			AIModeObj.TargetChanged(previousTarget, Target);
 
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Target from {previousTarget} to {Target}");
@@ -253,8 +259,8 @@ namespace AI
 			previousDestination = Destination;
 			Destination = destination;
 			
-			ActionModes[ActionMode].DestinationChanged(previousDestination, Destination);
-			AIModes[AIMode].DestinationChanged(previousDestination, Destination);
+			ActionModeObj.DestinationChanged(previousDestination, Destination);
+			AIModeObj.DestinationChanged(previousDestination, Destination);
 		
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Destination from {previousDestination} to {Destination}");
@@ -273,8 +279,8 @@ namespace AI
 			if (AIMode == EAIMode.Walking && Agent.hasPath)
 				Body.ShouldSway = true;
 			
-			ActionModes[ActionMode].Update();
-			AIModes[AIMode].Update();
+			ActionModeObj.Update();
+			AIModeObj.Update();
 		}
 
 		#endregion
@@ -295,6 +301,9 @@ namespace AI
 		{
 			thisTr = transform;
 			
+			AIModeObj = AIModes[AIMode];
+			ActionModeObj = ActionModes[ActionMode];
+
 			Spin = new Spin(this);
 			AimAt = new AimAt(this);
 			Chase = new Chase(this);
