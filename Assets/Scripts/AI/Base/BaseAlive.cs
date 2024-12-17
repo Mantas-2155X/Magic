@@ -57,6 +57,7 @@ namespace AI.Base
 		public float OverloadMana { get; private set; }
 		public float RegenerateMana { get; private set; }
 
+		public virtual EAIType AIType { get; private set; }
 		public EMovementType MovementType { get; private set; }
 
 		public bool IsAlive { get; private set; }

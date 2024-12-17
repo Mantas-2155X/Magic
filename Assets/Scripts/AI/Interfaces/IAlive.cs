@@ -23,6 +23,7 @@ namespace AI.Interfaces
 		public float OverloadMana { get; }
 		public float RegenerateMana { get; }
 
+		public EAIType AIType { get; }
 		public EMovementType MovementType { get; }
 		
 		public bool IsAlive { get; }

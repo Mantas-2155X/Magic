@@ -7,6 +7,7 @@ using AI.AIModes;
 using AI.Base;
 using AI.Enums;
 using AI.Interfaces;
+using Managers;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -74,6 +75,8 @@ namespace AI
 		
 		#endregion
 		
+		public EAIType AutoTarget { get; private set; }
+		
 		public EAIMode AIMode { get; private set; }
 		public EActionMode ActionMode { get; private set; }
 		
@@ -107,8 +110,6 @@ namespace AI
 		private EActionMode previousActionMode;
 		private Component previousTarget;
 		private Vector3 previousDestination;
-
-		private Transform thisTr;
 
 		#region AI
 		
@@ -150,6 +151,15 @@ namespace AI
 				return;
 			
 			setTarget(target);
+		}
+
+		public void AssignAutoTarget(EAIType flags)
+		{
+			if (!IsAlive)
+				return;
+
+			AutoTarget = flags;
+			AIManager.NativeDataDirty = true;
 		}
 		
 		public void ReturnAIMode()
@@ -277,6 +287,8 @@ namespace AI
 		
 		public override bool IsWalking => Agent.hasPath;
 
+		public override EAIType AIType => EAIType.NPC;
+
 		public override void SetMaxSpeed(float maximumSpeed)
 		{
 			base.SetMaxSpeed(maximumSpeed);
@@ -285,8 +297,6 @@ namespace AI
 		
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{
-			thisTr = transform;
-			
 			AIModeObj = AIModes[AIMode];
 			ActionModeObj = ActionModes[ActionMode];
 

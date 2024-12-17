@@ -371,6 +371,8 @@ namespace AI
 
 		public override bool IsWalking => walking;
 
+		public override EAIType AIType => EAIType.Player;
+		
 		public override void TakeWeapon(IWeapon weapon)
 		{
 			base.TakeWeapon(weapon);

@@ -131,6 +131,56 @@ namespace Editor
 
 			GUILayout.EndHorizontal();
 			
+			GUILayout.Label("Auto Target", EditorStyles.boldLabel);
+
+			GUILayout.BeginHorizontal();
+			
+			if (GUILayout.Button("None"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.AssignAutoTarget(EAIType.None);
+				}
+			}
+			
+			if (GUILayout.Button("Player"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.AssignAutoTarget(EAIType.Player);
+				}
+			}
+			
+			if (GUILayout.Button("NPCs"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.AssignAutoTarget(EAIType.NPC);
+				}
+			}
+			
+			if (GUILayout.Button("Both"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
+				}
+			}
+			
+			GUILayout.EndHorizontal();
+			
 			GUILayout.Label("Action", EditorStyles.boldLabel);
 
 			GUILayout.BeginHorizontal();
@@ -154,7 +204,8 @@ namespace Editor
 						continue;
 					
 					npc.SenseRange = 99999;
-
+					npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
+					
 					npc.WanderAggressively(npc.Target);
 				}
 			}
