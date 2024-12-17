@@ -133,6 +133,15 @@ namespace Managers
 		
 		private void onDeath(IAlive alive, object source)
 		{
+			for (var i = 0; i < NPCs.Count; i++)
+			{
+				var npc = NPCs[i];
+				if (npc.Target != (Component)alive)
+					continue;
+
+				npc.AssignTarget(null);
+			}
+			
 			nativeDataDirty = true;
 		}
 
