@@ -143,20 +143,6 @@ namespace AI
 			setActionMode(EActionMode.None);
 			setAIMode(EAIMode.Idle);
 		}
-		
-		public bool HasSightOf(Transform target, float maxRange)
-		{
-			if (!IsAlive || target == null)
-				return false;
-			
-			var direction = (target.position - thisTr.position).normalized;
-			var ray = new Ray(thisTr.position + thisTr.up * 0.5f, direction);
-
-			if (!Physics.Raycast(ray, out var hit, maxRange, ~LayerMaskTools.GetMask()))
-				return false;
-			
-			return hit.collider.transform == target;
-		}
 
 		public void AssignTarget(Component target)
 		{
