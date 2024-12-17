@@ -20,9 +20,6 @@ namespace Managers
 
 		[SerializeField]
 		public List<NPC> NPCs = new ();
-
-		[SerializeField]
-		public float AutoTargetEvery = 0.1f;
 		
 		private readonly List<Transform> transforms = new ();
 		private readonly List<IAlive> alives = new ();
@@ -35,9 +32,7 @@ namespace Managers
 		private JobHandle autoTargetPositionsHandle;
 		private JobHandle autoTargetDecisionsHandle;
 
-		private bool autoTargetComplete;
 		private bool nativeDataDirty;
-		private float lastAutoTarget;
 		
 		public void Awake()
 		{
@@ -58,13 +53,6 @@ namespace Managers
 
 		public void Update()
 		{
-			var time = Time.time;
-			
-			if (lastAutoTarget + AutoTargetEvery > time)
-				return;
-
-			lastAutoTarget = time;
-
 			if (nativeDataDirty)
 			{
 				destroyNativeData();
@@ -98,15 +86,10 @@ namespace Managers
 
 			var decisionsJob = new AutoTargetDecisionsJob { Positions = positionsNative, Decisions = decisionsNative };
 			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
-
-			autoTargetComplete = true;
 		}
 
 		public void LateUpdate()
 		{
-			if (!autoTargetComplete)
-				return;
-			
 			autoTargetPositionsHandle.Complete();
 			autoTargetDecisionsHandle.Complete();
 
@@ -119,18 +102,24 @@ namespace Managers
 						continue;
 
 					var thisAlive = alives[i];
-					if (thisAlive == null || !thisAlive.IsAlive || thisAlive is not NPC npc)
+					if (thisAlive == null || !thisAlive.IsAlive)
 						continue;
-				
+
 					var otherAlive = alives[decision];
 					if (otherAlive == null || !otherAlive.IsAlive)
 						continue;
-				
+					
+					// only npcs have auto target
+					if (thisAlive is not NPC npc)
+						continue;
+					
+					// don't interrupt casting 
+					if (npc.Weapon != null && npc.Weapon.IsCasting)
+						continue;
+
 					npc.AssignTarget((Component)otherAlive);
 				}
 			}
-			
-			autoTargetComplete = false;
 		}
 
 		private void destroyNativeData()

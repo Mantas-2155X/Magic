@@ -56,7 +56,7 @@ namespace AI
 		/// (AimAt, Spin)
 		/// </summary>
 		[SerializeField]
-		public Vector2 RotationSpeed = new (400f, 500f);
+		public Vector2 RotationSpeed = new (720f, 780f);
 
 		/// <summary>
 		/// Maximum look angle between the npc and the target which the npc deems accurate enough

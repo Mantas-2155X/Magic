@@ -22,7 +22,7 @@ namespace AI.ActionModes.Shared
 			targetPosition.y = 0;
 			
 			var targetRotation = Quaternion.LookRotation(targetPosition);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(owner.RotationSpeed.x, owner.RotationSpeed.y) * Time.deltaTime);
+			owner.Body.Rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(owner.RotationSpeed.x, owner.RotationSpeed.y) * Time.deltaTime));
 			
 			return Quaternion.Angle(transform.rotation, targetRotation) < owner.AimAngle;
 		}
