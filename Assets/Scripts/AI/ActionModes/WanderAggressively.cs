@@ -54,9 +54,7 @@ namespace AI.ActionModes
 				if (!Owner.AimAt.AimTowardsTarget(transform, target))
 					return;
 			
-				// Cast if there is a clear sight
-				if (Owner.HasSight.SightCheck(Owner, target))
-					Owner.Weapon?.StartCasting();
+				Owner.Weapon?.StartCasting();
 			}
 		}
 		
