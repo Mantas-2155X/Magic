@@ -48,11 +48,42 @@ namespace Managers
 
 		public void OnDestroy()
 		{
-			destroyNativeData();
+			autoTargetDecisionsHandle.Complete();
+			destroyNativeData(); 
 		}
 
 		public void Update()
 		{
+			autoTargetDecisionsHandle.Complete();
+
+			if (decisionsNative.IsCreated && !nativeDataDirty)
+			{
+				for (var i = 0; i < decisionsNative.Length; i++)
+				{
+					var decision = decisionsNative[i];
+					if (decision == int.MaxValue)
+						continue;
+
+					var thisAlive = alives[i];
+					if (thisAlive == null || !thisAlive.IsAlive)
+						continue;
+
+					var otherAlive = alives[decision];
+					if (otherAlive == null || !otherAlive.IsAlive)
+						continue;
+					
+					// only npcs have auto target
+					if (thisAlive is not NPC npc)
+						continue;
+					
+					// don't interrupt casting 
+					if (npc.Weapon != null && npc.Weapon.IsCasting)
+						continue;
+
+					npc.AssignTarget((Component)otherAlive);
+				}
+			}
+			
 			if (nativeDataDirty)
 			{
 				destroyNativeData();
@@ -86,40 +117,6 @@ namespace Managers
 
 			var decisionsJob = new AutoTargetDecisionsJob { Positions = positionsNative, Decisions = decisionsNative };
 			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
-		}
-
-		public void LateUpdate()
-		{
-			autoTargetPositionsHandle.Complete();
-			autoTargetDecisionsHandle.Complete();
-
-			if (decisionsNative.IsCreated)
-			{
-				for (var i = 0; i < decisionsNative.Length; i++)
-				{
-					var decision = decisionsNative[i];
-					if (decision == int.MaxValue)
-						continue;
-
-					var thisAlive = alives[i];
-					if (thisAlive == null || !thisAlive.IsAlive)
-						continue;
-
-					var otherAlive = alives[decision];
-					if (otherAlive == null || !otherAlive.IsAlive)
-						continue;
-					
-					// only npcs have auto target
-					if (thisAlive is not NPC npc)
-						continue;
-					
-					// don't interrupt casting 
-					if (npc.Weapon != null && npc.Weapon.IsCasting)
-						continue;
-
-					npc.AssignTarget((Component)otherAlive);
-				}
-			}
 		}
 
 		private void destroyNativeData()
