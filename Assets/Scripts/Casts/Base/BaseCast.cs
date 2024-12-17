@@ -14,6 +14,9 @@ namespace Casts.Base
 		
 		[SerializeField]
 		public float Rotation;
+
+		private Transform ownerTr;
+		private Transform thisTr;
 		
 		public void Update()
 		{
@@ -21,9 +24,9 @@ namespace Casts.Base
 				return;
 
 			if (Rotation > 0f)
-				transform.Rotate(Vector3.up, Rotation * Time.deltaTime);
+				thisTr.Rotate(Vector3.up, Rotation * Time.deltaTime);
 
-			FollowOwner();
+			thisTr.position = ownerTr.position + Vector3.down * 0.95f;
 		}
 		
 		public void OnParticleSystemStopped()
@@ -40,10 +43,13 @@ namespace Casts.Base
 		{
 			Source = source;
 			
-			var tr = transform;
-			tr.SetParent(World.World.Instance.Other);
+			if (Source is IWeapon weapon && weapon.Owner != null)
+				ownerTr = weapon.Owner.GetGameObject().transform;
+			else
+				ownerTr = Source.transform;
 			
-			FollowOwner();
+			thisTr = transform;
+			thisTr.SetParent(World.World.Instance.Other);
 			
 			gameObject.SetActive(true);
 			System.Play(true);
@@ -57,18 +63,6 @@ namespace Casts.Base
 		public GameObject GetGameObject()
 		{
 			return gameObject;
-		}
-
-		public void FollowOwner()
-		{
-			Transform tr;
-			
-			if (Source is IWeapon weapon && weapon.Owner != null)
-				tr = weapon.Owner.GetGameObject().transform;
-			else
-				tr = Source.transform;
-			
-			transform.position = tr.position + Vector3.down * 0.95f;
 		}
 	}
 }

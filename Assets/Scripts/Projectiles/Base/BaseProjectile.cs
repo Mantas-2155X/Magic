@@ -31,6 +31,7 @@ namespace Projectiles.Base
 		private CancellationTokenSource distanceToken;
 		private Vector3 startingPosition;
 		private Collider ignoreCollider;
+		private Transform thisTr;
 		
 		public void OnCollisionEnter(Collision collision)
 		{
@@ -79,7 +80,7 @@ namespace Projectiles.Base
 
 		public void Update()
 		{
-			var distance = Vector3.Distance(startingPosition, transform.position);
+			var distance = Vector3.Distance(startingPosition, thisTr.position);
 			if (distance < Distance)
 				return;
 
@@ -95,10 +96,10 @@ namespace Projectiles.Base
 			
 			Physics.IgnoreCollision(ignoreCollider, Collider, true);
 
-			var tr = transform;
-			tr.SetParent(World.World.Instance.Projectiles);
-			tr.position = origin;
-			tr.eulerAngles = Vector3.zero;
+			thisTr = transform;
+			thisTr.SetParent(World.World.Instance.Projectiles);
+			thisTr.position = origin;
+			thisTr.eulerAngles = Vector3.zero;
 			
 			gameObject.SetActive(true);
 

@@ -4,8 +4,26 @@ namespace Tools
 {
 	public static class LayerMaskTools
 	{
-		public static LayerMask GetMask() => LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile");
-		public static LayerMask GetMaskWithPlayer() => LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Player");
+		private static LayerMask? lmask;
+		private static LayerMask? lmaskWithPlayer;
+
+		public static LayerMask GetMask()
+		{
+			if (lmask != null)
+				return lmask.Value;
+
+			lmask = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile");
+			return lmask!.Value;
+		}
+		
+		public static LayerMask GetMaskWithPlayer()
+		{
+			if (lmaskWithPlayer != null)
+				return lmaskWithPlayer.Value;
+
+			lmaskWithPlayer = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Player");
+			return lmaskWithPlayer!.Value;
+		}
 		
 		public static bool ContainsLayer(this int mask, int layer)
 		{

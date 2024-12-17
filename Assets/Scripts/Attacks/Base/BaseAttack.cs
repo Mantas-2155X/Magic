@@ -23,6 +23,7 @@ namespace Attacks.Base
 		public bool Attach { get; private set; }
 
 		private Transform target;
+		public Transform thisTr;
 		
 		public virtual void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
 		{
@@ -30,13 +31,13 @@ namespace Attacks.Base
 
 			target = Attach ? attach : null;
 
-			var tr = transform;
-			tr.SetParent(World.World.Instance.Other);
+			thisTr = transform;
+			thisTr.SetParent(World.World.Instance.Other);
 
 			if (target == null)
 			{
-				tr.position = position + Vector3.up * 0.1f;
-				tr.rotation = angles;
+				thisTr.position = position + Vector3.up * 0.1f;
+				thisTr.rotation = angles;
 			}
 			else
 			{
@@ -78,7 +79,7 @@ namespace Attacks.Base
 			if (target == null)
 				return;
 			
-			transform.position = target.position + Vector3.down * 0.95f;
+			thisTr.position = target.position + Vector3.down * 0.95f;
 		}
 		
 		private async UniTask trigger()

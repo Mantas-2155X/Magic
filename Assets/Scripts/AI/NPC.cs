@@ -104,6 +104,8 @@ namespace AI
 		private Component previousTarget;
 		private Vector3 previousDestination;
 
+		private Transform thisTr;
+
 		#region AI
 		
 		#region Action Modes
@@ -138,19 +140,18 @@ namespace AI
 			setAIMode(EAIMode.Idle);
 		}
 		
-		public bool HasSightOf(Component target, float maxRange)
+		public bool HasSightOf(Transform target, float maxRange)
 		{
 			if (!IsAlive || target == null)
 				return false;
 			
-			var ownerTr = transform;
-			var direction = (target.transform.position - ownerTr.position).normalized;
-			var ray = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
+			var direction = (target.position - thisTr.position).normalized;
+			var ray = new Ray(thisTr.position + thisTr.up * 0.5f, direction);
 
 			if (!Physics.Raycast(ray, out var hit, maxRange, ~LayerMaskTools.GetMask()))
 				return false;
 			
-			return hit.collider.GetComponent(target.GetType()) == target;
+			return hit.collider.transform == target;
 		}
 
 		public void AssignTarget(Component target)
@@ -294,7 +295,9 @@ namespace AI
 		}
 		
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
-		{ 
+		{
+			thisTr = transform;
+			
 			Spin = new Spin(this);
 			AimAt = new AimAt(this);
 			Chase = new Chase(this);

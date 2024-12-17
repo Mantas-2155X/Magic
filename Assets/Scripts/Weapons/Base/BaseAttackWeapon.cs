@@ -28,7 +28,7 @@ namespace Weapons.Base
 					angles = Quaternion.FromToRotation(Vector3.up, LastHit.normal);
 					break;
 				case EAttackAngle.Owner:
-					angles = Owner.GetGameObject().transform.rotation;
+					angles = ownerTr.rotation;
 					break;
 				default:
 					throw new NotImplementedException();

@@ -153,6 +153,8 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
+					npc.SenseRange = 99999;
+
 					npc.WanderAggressively(npc.Target);
 				}
 			}

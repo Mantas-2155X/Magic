@@ -20,7 +20,7 @@ namespace Attacks
 
 			target = alive;
 			previousMaxSpeed = alive.MaximumSpeed;
-			transform.position = alive.GetGameObject().transform.position + Vector3.down * 1f;
+			thisTr.position = alive.GetGameObject().transform.position + Vector3.down * 1f;
 			alive.SetMaxSpeed(0f);
 		}
 

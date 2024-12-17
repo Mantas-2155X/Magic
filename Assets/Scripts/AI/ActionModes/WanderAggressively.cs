@@ -51,7 +51,7 @@ namespace AI.ActionModes
 			if (Owner.AIMode == EAIMode.Action)
 			{
 				// Turn towards the target and aim
-				if (!Owner.AimAt.AimTowardsTarget(Owner.transform, target))
+				if (!Owner.AimAt.AimTowardsTarget(transform, target))
 					return;
 			
 				// Cast if there is a clear sight

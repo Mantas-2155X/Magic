@@ -42,6 +42,8 @@ namespace Weapons.Base
 
 		private ICast currentCast;
 		
+		public Transform ownerTr;
+
 		public virtual void Update()
 		{
 			if (!IsCasting || Owner == null || !Owner.IsAlive)
@@ -76,6 +78,8 @@ namespace Weapons.Base
 			
 			Owner = alive;
 
+			ownerTr = Owner.GetGameObject().transform;
+			
 			Destroy(GetComponent<DroppedWeapon>());
 
 			Rigidbody.isKinematic = true;
@@ -194,7 +198,6 @@ namespace Weapons.Base
 					LastRay = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 					break;
 				case NPC npc:
-					var ownerTr = Owner.GetGameObject().transform;
 					var direction = npc.Target == null ? ownerTr.forward : (npc.Target.transform.position - ownerTr.position).normalized;
 					LastRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;
