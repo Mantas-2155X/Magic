@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using AI;
+using AI.Base;
+using AI.Interfaces;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -18,97 +20,134 @@ namespace Managers
 
 		[SerializeField]
 		public List<NPC> NPCs = new ();
-		
-		private readonly List<Transform> aliveTransforms = new ();
-		private readonly List<NPC> aliveNPCs = new ();
 
-		private TransformAccessArray aliveTransformsNative;
+		[SerializeField]
+		public float AutoTargetEvery = 0.1f;
 		
-		private NativeArray<float3> alivePositionsNative;
-		private NativeArray<int> aliveDecisionsNative;
+		private readonly List<Transform> transforms = new ();
+		private readonly List<IAlive> alives = new ();
+
+		private TransformAccessArray transformsNative;
+		
+		private NativeArray<float3> positionsNative;
+		private NativeArray<int> decisionsNative;
 		
 		private JobHandle autoTargetPositionsHandle;
 		private JobHandle autoTargetDecisionsHandle;
+
+		private bool autoTargetComplete;
+		private bool nativeDataDirty;
+		private float lastAutoTarget;
 		
 		public void Awake()
 		{
 			Instance = this;
 			
-			aliveTransformsNative = new TransformAccessArray();
+			transformsNative = new TransformAccessArray();
 			
-			alivePositionsNative = new NativeArray<float3>(0, Allocator.Persistent);
-			aliveDecisionsNative = new NativeArray<int>(0, Allocator.Persistent);
+			positionsNative = new NativeArray<float3>(0, Allocator.Persistent);
+			decisionsNative = new NativeArray<int>(0, Allocator.Persistent);
+			
+			BaseAlive.OnDeathEvent.AddListener(onDeath);
 		}
 
 		public void OnDestroy()
 		{
-			if (aliveTransformsNative.isCreated)
-				aliveTransformsNative.Dispose();
-			
-			if (alivePositionsNative.IsCreated)
-				alivePositionsNative.Dispose();
-			
-			if (aliveDecisionsNative.IsCreated)
-				aliveDecisionsNative.Dispose();
+			destroyNativeData();
 		}
 
 		public void Update()
 		{
-			if (aliveTransformsNative.isCreated)
-				aliveTransformsNative.Dispose();
+			var time = Time.time;
+			
+			if (lastAutoTarget + AutoTargetEvery > time)
+				return;
 
-			if (alivePositionsNative.IsCreated)
-				alivePositionsNative.Dispose();
-			
-			if (aliveDecisionsNative.IsCreated)
-				aliveDecisionsNative.Dispose();
-			
-			aliveTransforms.Clear();
-			aliveNPCs.Clear();
-			
-			for (var i = 0; i < NPCs.Count; i++)
+			lastAutoTarget = time;
+
+			if (nativeDataDirty)
 			{
-				var npc = NPCs[i];
-				if (!npc.IsAlive)
-					continue;
+				destroyNativeData();
+			
+				transforms.Clear();
+				alives.Clear();
+			
+				transforms.Add(Player.transform);
+				alives.Add(Player);
+			
+				for (var i = 0; i < NPCs.Count; i++)
+				{
+					var npc = NPCs[i];
+					if (!npc.IsAlive)
+						continue;
 				
-				aliveTransforms.Add(npc.transform);
-				aliveNPCs.Add(npc);
+					transforms.Add(npc.transform);
+					alives.Add(npc);
+				}
+
+				transformsNative = new TransformAccessArray(transforms.ToArray());
+			
+				positionsNative = new NativeArray<float3>(transforms.Count, Allocator.Persistent);
+				decisionsNative = new NativeArray<int>(transforms.Count, Allocator.Persistent);
+
+				nativeDataDirty = false;
 			}
 
-			aliveTransformsNative = new TransformAccessArray(aliveTransforms.ToArray());
-			
-			alivePositionsNative = new NativeArray<float3>(aliveTransforms.Count, Allocator.Persistent);
-			aliveDecisionsNative = new NativeArray<int>(aliveTransforms.Count, Allocator.Persistent);
+			var positionsJob = new AutoTargetPositionsJob { Positions = positionsNative };
+			autoTargetPositionsHandle = positionsJob.Schedule(transformsNative);
 
-			var positionsJob = new AutoTargetPositionsJob { Positions = alivePositionsNative };
-			autoTargetPositionsHandle = positionsJob.Schedule(aliveTransformsNative);
+			var decisionsJob = new AutoTargetDecisionsJob { Positions = positionsNative, Decisions = decisionsNative };
+			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
 
-			var decisionsJob = new AutoTargetDecisionsJob { Positions = alivePositionsNative, Decisions = aliveDecisionsNative };
-			autoTargetDecisionsHandle = decisionsJob.Schedule(aliveTransformsNative, autoTargetPositionsHandle);
+			autoTargetComplete = true;
 		}
 
 		public void LateUpdate()
 		{
+			if (!autoTargetComplete)
+				return;
+			
 			autoTargetPositionsHandle.Complete();
 			autoTargetDecisionsHandle.Complete();
-			
-			for (var i = 0; i < aliveDecisionsNative.Length; i++)
-			{
-				var decision = aliveDecisionsNative[i];
-				if (decision == int.MaxValue)
-					continue;
 
-				var thisNPC = aliveNPCs[i];
-				if (!thisNPC.IsAlive)
-					continue;
+			if (decisionsNative.IsCreated)
+			{
+				for (var i = 0; i < decisionsNative.Length; i++)
+				{
+					var decision = decisionsNative[i];
+					if (decision == int.MaxValue)
+						continue;
+
+					var thisAlive = alives[i];
+					if (thisAlive == null || !thisAlive.IsAlive || thisAlive is not NPC npc)
+						continue;
 				
-				var otherNPC = aliveNPCs[decision];
-				if (!otherNPC.IsAlive)
-					continue;
+					var otherAlive = alives[decision];
+					if (otherAlive == null || !otherAlive.IsAlive)
+						continue;
 				
-				thisNPC.AssignTarget(otherNPC);
+					npc.AssignTarget((Component)otherAlive);
+				}
 			}
+			
+			autoTargetComplete = false;
+		}
+
+		private void destroyNativeData()
+		{
+			if (transformsNative.isCreated)
+				transformsNative.Dispose();
+
+			if (positionsNative.IsCreated)
+				positionsNative.Dispose();
+			
+			if (decisionsNative.IsCreated)
+				decisionsNative.Dispose();
+		}
+		
+		private void onDeath(IAlive alive, object source)
+		{
+			nativeDataDirty = true;
 		}
 
 		[BurstCompile]
@@ -146,7 +185,7 @@ namespace Managers
 					
 					var otherPosition = Positions[i];
 					
-					var distance = math.distance(thisPosition, otherPosition);
+					var distance = math.distancesq(thisPosition, otherPosition);
 					if (distance < smallestDistance)
 					{
 						smallestDistance = distance;
@@ -176,6 +215,7 @@ namespace Managers
 			npc.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed);
 
 			NPCs.Add(npc);
+			nativeDataDirty = true;
 			return npc;
 		}
 		public Player CreatePlayer(Vector3 position, Vector3 angles, float startingHealth = 100, float overloadHealth = 151, float regenerateHealth = 0.5f, float startingMana = 100, float overloadMana = 151, float regenerateMana = 5, float speed = 7f)
@@ -202,6 +242,7 @@ namespace Managers
 			player.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed);
 
 			Player = player;
+			nativeDataDirty = true;
 			return player;
 		}
 	}
