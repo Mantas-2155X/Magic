@@ -18,8 +18,8 @@ namespace Weapons
 				if (!npc.IsAlive)
 					continue;
 
-				npc.SenseRange = 99999;
-				npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
+				npc.SenseRange = 250;
+				npc.AutoTarget = EAIType.NPC | EAIType.Player;
 				
 				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(typeof(FireGun), Vector3.zero, Vector3.zero));
 				npc.WanderAggressively(npc.Target);

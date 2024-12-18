@@ -142,7 +142,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.AssignAutoTarget(EAIType.None);
+					npc.AutoTarget = EAIType.None;
 				}
 			}
 			
@@ -153,7 +153,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.AssignAutoTarget(EAIType.Player);
+					npc.AutoTarget = EAIType.Player;
 				}
 			}
 			
@@ -164,7 +164,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.AssignAutoTarget(EAIType.NPC);
+					npc.AutoTarget = EAIType.NPC;
 				}
 			}
 			
@@ -175,7 +175,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
+					npc.AutoTarget = EAIType.NPC | EAIType.Player;
 				}
 			}
 			
@@ -203,8 +203,8 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.SenseRange = 99999;
-					npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
+					npc.SenseRange = 250;
+					npc.AutoTarget = EAIType.NPC | EAIType.Player;
 					
 					npc.WanderAggressively(npc.Target);
 				}
