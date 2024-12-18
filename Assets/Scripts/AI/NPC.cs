@@ -75,7 +75,7 @@ namespace AI
 		
 		#endregion
 		
-		public EAIType AutoTarget { get; set; }
+		public EAIType AutoTarget { get; private set; }
 		
 		public EAIMode AIMode { get; private set; }
 		public EActionMode ActionMode { get; private set; }
@@ -144,6 +144,23 @@ namespace AI
 			setAIMode(EAIMode.Idle);
 		}
 
+		public void AssignTarget(Component target)
+		{
+			if (!IsAlive)
+				return;
+			
+			setTarget(target);
+		}
+
+		public void AssignAutoTarget(EAIType flags)
+		{
+			if (!IsAlive)
+				return;
+
+			AutoTarget = flags;
+			AIManager.NativeDataDirty = true;
+		}
+		
 		public void ReturnAIMode()
 		{
 			if (!IsAlive)
