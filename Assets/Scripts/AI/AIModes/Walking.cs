@@ -153,7 +153,7 @@ namespace AI.AIModes
 					return;
 				}
 				
-				transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Random.Range(Owner.RotationSpeed.x, Owner.RotationSpeed.y) * Time.deltaTime);
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Owner.RotationSpeed * Time.deltaTime);
 			}
 		}
 	}

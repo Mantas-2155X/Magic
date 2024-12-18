@@ -57,7 +57,7 @@ namespace AI
 		/// (AimAt, Spin)
 		/// </summary>
 		[SerializeField]
-		public Vector2 RotationSpeed = new (720f, 780f);
+		public float RotationSpeed = 720f;
 
 		/// <summary>
 		/// Maximum look angle between the npc and the target which the npc deems accurate enough
@@ -86,7 +86,6 @@ namespace AI
 		public Component Target { get; private set; }
 		public Vector3 Destination { get; private set; }
 
-		public Spin Spin { get; private set; }
 		public AimAt AimAt { get; private set; }
 		public Chase Chase { get; private set; }
 		public Wander Wander { get; private set; }
@@ -300,7 +299,6 @@ namespace AI
 			AIModeObj = AIModes[AIMode];
 			ActionModeObj = ActionModes[ActionMode];
 
-			Spin = new Spin(this);
 			AimAt = new AimAt(this);
 			Chase = new Chase(this);
 			Wander = new Wander(this);
