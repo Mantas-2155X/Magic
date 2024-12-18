@@ -79,19 +79,21 @@ namespace AI
 			if (!Alive.IsAlive)
 				return;
 			
-			if (blinking && Time.time >= blinkStartTime + BlinkDuration)
+			var time = Time.time;
+			
+			if (blinking && time >= blinkStartTime + BlinkDuration)
 			{
 				eyeMaterial.color = EyesColor;
 				
 				blinking = false;
-				blinkFinishTime = Time.time + Random.Range(-BlinkVariation, BlinkVariation);
+				blinkFinishTime = time + Random.Range(-BlinkVariation, BlinkVariation);
 			}
-			else if (!blinking && Time.time >= blinkFinishTime + BlinkEvery)
+			else if (!blinking && time >= blinkFinishTime + BlinkEvery)
 			{
 				eyeMaterial.color = Color.black;
 				
 				blinking = true;
-				blinkStartTime = Time.time;
+				blinkStartTime = time;
 			}
 			
 			if (ShouldSway)
