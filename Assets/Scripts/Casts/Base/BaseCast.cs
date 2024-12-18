@@ -11,9 +11,6 @@ namespace Casts.Base
 
 		[field: SerializeField]
 		public ParticleSystem System { get; private set; }
-		
-		[SerializeField]
-		public float Rotation;
 
 		private Transform ownerTr;
 		private Transform thisTr;
@@ -22,9 +19,6 @@ namespace Casts.Base
 		{
 			if (Source == null)
 				return;
-
-			if (Rotation > 0f)
-				thisTr.Rotate(Vector3.up, Rotation * Time.deltaTime);
 
 			setPosition();
 		}
