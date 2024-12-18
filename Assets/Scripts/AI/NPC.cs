@@ -84,6 +84,8 @@ namespace AI
 		public IActionMode ActionModeObj { get; private set; }
 
 		public Component Target { get; private set; }
+		public Transform TargetTransform { get; private set; }
+		
 		public Vector3 Destination { get; private set; }
 
 		public AimAt AimAt { get; private set; }
@@ -237,6 +239,7 @@ namespace AI
 			Weapon?.CancelCasting();
 			previousTarget = Target;
 			Target = target;
+			TargetTransform = target == null ? null : target.GetComponent<Transform>();
 			
 			ActionModeObj.TargetChanged(previousTarget, Target);
 			AIModeObj.TargetChanged(previousTarget, Target);

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using AI.Interfaces;
 using Attacks.Enums;
@@ -31,7 +32,11 @@ namespace Projectiles.Base
 		private CancellationTokenSource distanceToken;
 		private Vector3 startingPosition;
 		private Collider ignoreCollider;
+		
+		private GameObject thisGo;
 		private Transform thisTr;
+
+		private bool init;
 		
 		public void OnCollisionEnter(Collision collision)
 		{
@@ -66,7 +71,7 @@ namespace Projectiles.Base
 						angles = Quaternion.FromToRotation(Vector3.up, contact.normal);
 						break;
 					case EAttackAngle.Owner:
-						angles = Source.Owner.GetGameObject().transform.rotation;
+						angles = Source.Owner.GetTransform().rotation;
 						break;
 					default:
 						throw new NotImplementedException();
@@ -89,6 +94,14 @@ namespace Projectiles.Base
 		
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force)
 		{
+			if (!init)
+			{
+				thisGo = gameObject;
+				thisTr = thisGo.transform;
+				thisTr.SetParent(World.World.Instance.Projectiles);
+				init = true;
+			}
+			
 			Source = source;
 
 			startingPosition = origin;
@@ -96,20 +109,18 @@ namespace Projectiles.Base
 			
 			Physics.IgnoreCollision(ignoreCollider, Collider, true);
 
-			thisTr = transform;
-			thisTr.SetParent(World.World.Instance.Projectiles);
 			thisTr.position = origin;
 			thisTr.eulerAngles = Vector3.zero;
 			
-			gameObject.SetActive(true);
+			thisGo.SetActive(true);
 
 			Rigidbody.AddForce(force, ForceMode.Impulse);
 		}
 		
-		public GameObject GetGameObject()
-		{
-			return gameObject;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
 
 		private async UniTaskVoid clearVelocityAndPool()
 		{
@@ -123,7 +134,7 @@ namespace Projectiles.Base
 			
 			Physics.IgnoreCollision(ignoreCollider, Collider, false);
 			
-			gameObject.SetActive(false);
+			thisGo.SetActive(false);
 
 			await UniTask.NextFrame();
 
@@ -132,7 +143,7 @@ namespace Projectiles.Base
 			
 			await UniTask.WaitForFixedUpdate();
 			
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
+			PoolingManager.Instance.AddToPool(GetType(), thisGo);
 		}
 	}
 }

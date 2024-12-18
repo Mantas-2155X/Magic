@@ -12,5 +12,6 @@ namespace Objects.Interfaces
 		public void Break(object source);
 
 		public GameObject GetGameObject();
+		public Transform GetTransform();
 	}
 }

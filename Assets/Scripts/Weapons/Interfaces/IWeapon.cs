@@ -35,5 +35,6 @@ namespace Weapons.Interfaces
 		public void CancelCasting();
 		
 		public GameObject GetGameObject();
+		public Transform GetTransform();
 	}
 }

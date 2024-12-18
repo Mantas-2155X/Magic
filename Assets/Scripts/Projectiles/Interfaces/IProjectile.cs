@@ -21,5 +21,6 @@ namespace Projectiles.Interfaces
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
 
 		public GameObject GetGameObject();
+		public Transform GetTransform();
 	}
 }

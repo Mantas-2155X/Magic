@@ -8,19 +8,30 @@ namespace Objects
 		[SerializeField]
 		public ParticleSystem System;
 
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
+		
 		public void Spawn(Vector3 position)
 		{
-			var tr = transform;
-			tr.SetParent(World.World.Instance.Other);
-			tr.position = position;
+			if (!init)
+			{
+				thisGo = gameObject;
+				thisTr = thisGo.transform;
+				thisTr.SetParent(World.World.Instance.Other);
+				init = true;
+			}
 			
-			gameObject.SetActive(true);
+			thisTr.position = position;
+			
+			thisGo.SetActive(true);
 			System.Play(true);
 		}
 		
 		public void OnParticleSystemStopped()
 		{
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
+			PoolingManager.Instance.AddToPool(GetType(), thisGo);
 		}
 	}
 }

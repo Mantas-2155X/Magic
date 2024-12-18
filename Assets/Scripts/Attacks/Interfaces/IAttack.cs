@@ -15,5 +15,8 @@ namespace Attacks.Interfaces
 		public bool Attach { get; }
 		
 		public void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach);
+
+		public GameObject GetGameObject();
+		public Transform GetTransform();
 	}
 }

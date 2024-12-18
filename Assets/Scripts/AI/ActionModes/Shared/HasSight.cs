@@ -20,7 +20,7 @@ namespace AI.ActionModes.Shared
 			if (target == null)
 				return false;
 			
-			var transform = owner.transform;
+			var transform = owner.GetTransform();
 			var rb = owner.Body.Rigidbody;
 
 			var direction = (target.position - rb.position).normalized;

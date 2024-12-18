@@ -92,7 +92,7 @@ namespace Editor
 						continue;
 
 					npc.Chill();
-					npc.Walk(aiManager.Player.transform.position);
+					npc.Walk(aiManager.Player.GetTransform().position);
 				}
 			}
 

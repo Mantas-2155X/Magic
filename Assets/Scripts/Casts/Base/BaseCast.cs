@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Casts.Interfaces;
 using Managers;
 using UnityEngine;
@@ -13,7 +14,11 @@ namespace Casts.Base
 		public ParticleSystem System { get; private set; }
 
 		private Transform ownerTr;
+		
+		private GameObject thisGo;
 		private Transform thisTr;
+
+		private bool init;
 		
 		public void Update()
 		{
@@ -25,29 +30,34 @@ namespace Casts.Base
 		
 		public void OnParticleSystemStopped()
 		{
-			gameObject.SetActive(false);
+			thisGo.SetActive(false);
 		}
 
 		public void OnDisable()
 		{
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
+			PoolingManager.Instance.AddToPool(GetType(), thisGo);
 		}
 		
 		public void Spawn(Component source)
 		{
+			if (!init)
+			{
+				thisGo = gameObject;
+				thisTr = thisGo.transform;
+				thisTr.SetParent(World.World.Instance.Other);
+				init = true;
+			}
+			
 			Source = source;
 			
 			if (Source is IWeapon weapon && weapon.Owner != null)
-				ownerTr = weapon.Owner.GetGameObject().transform;
+				ownerTr = weapon.Owner.GetTransform();
 			else
 				ownerTr = Source.transform;
 			
-			thisTr = transform;
-			thisTr.SetParent(World.World.Instance.Other);
-
 			setPosition();
 			
-			gameObject.SetActive(true);
+			thisGo.SetActive(true);
 			System.Play(true);
 		}
 
@@ -56,11 +66,11 @@ namespace Casts.Base
 			System.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 		}
 
-		public GameObject GetGameObject()
-		{
-			return gameObject;
-		}
-
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
+		
 		private void setPosition()
 		{
 			thisTr.position = ownerTr.position + Vector3.down * 0.95f;

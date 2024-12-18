@@ -103,7 +103,7 @@ namespace Managers
 				aiTypes.Clear();
 				aiTargets.Clear();
 			
-				transforms.Add(Player.transform);
+				transforms.Add(Player.GetTransform());
 				alives.Add(Player);
 				aiTypes.Add(EAIType.Player);
 				aiTargets.Add(EAIType.None);
@@ -114,7 +114,7 @@ namespace Managers
 					if (!npc.IsAlive)
 						continue;
 				
-					transforms.Add(npc.transform);
+					transforms.Add(npc.GetTransform());
 					alives.Add(npc);
 					aiTypes.Add(npc.AIType);
 					aiTargets.Add(npc.AutoTarget);

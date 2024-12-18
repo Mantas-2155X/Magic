@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.CompilerServices;
 using Objects.Interfaces;
 using UnityEngine;
 
@@ -10,6 +12,21 @@ namespace Objects.Base
 
 		public bool IsBroken { get; private set; }
 		
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
+
+		public void Awake()
+		{
+			if (!init)
+			{
+				thisGo = gameObject;
+				thisTr = thisGo.transform;
+				init = true;
+			}
+		}
+
 		public virtual void Damage(float damage, object source)
 		{
 			if (IsBroken || damage < 0)
@@ -31,12 +48,12 @@ namespace Objects.Base
 			Health = 0;
 			IsBroken = true;
 			
-			Destroy(gameObject);
+			Destroy(thisGo);
 		}
 
-		public GameObject GetGameObject()
-		{
-			return gameObject;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
 	}
 }

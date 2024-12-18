@@ -13,5 +13,6 @@ namespace Objects.Interfaces
 		public bool Use(IAlive user);
 		
 		public GameObject GetGameObject();
+		public Transform GetTransform();
 	}
 }

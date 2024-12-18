@@ -22,7 +22,7 @@ namespace AI.ActionModes.Shared
 		public bool ChaseTarget(Transform target)
 		{
 			var agent = owner.Agent;
-			var transform = owner.transform;
+			var transform = owner.GetTransform();
 			
 			// Try to stop at this distance
 			var currentStopTarget = currentChaseRange + agent.stoppingDistance;

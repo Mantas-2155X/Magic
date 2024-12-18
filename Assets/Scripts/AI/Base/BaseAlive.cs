@@ -1,5 +1,6 @@
 //#define BODY_GIB
 
+using System.Runtime.CompilerServices;
 using AI.Enums;
 using AI.Events;
 using AI.Interfaces;
@@ -20,6 +21,11 @@ namespace AI.Base
 		
 		private LayerMask previousExcludeLayers;
 
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
+		
 		#region MonoBehaviour
 
 		public void OnCollisionEnter(Collision coll)
@@ -119,6 +125,13 @@ namespace AI.Base
 
 		public virtual void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
 		{
+			if (!init)
+			{
+				thisGo = gameObject;
+				thisTr = thisGo.transform;
+				init = true;
+			}
+			
 			if (IsAlive)
 				return;
 
@@ -247,7 +260,7 @@ namespace AI.Base
 				go.transform.SetParent(ragdolls);
 			}
 #else
-			gameObject.SetActive(false);
+			thisGo.SetActive(false);
 #endif
 
 			OnDeathEvent?.Invoke(this, source);
@@ -257,12 +270,13 @@ namespace AI.Base
 		{
 			return true;
 		}
-		
-		public GameObject GetGameObject()
-		{
-			return gameObject;
-		}
 
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
+		
 		private async UniTaskVoid regenerateLoop()
 		{
 			while (IsAlive)

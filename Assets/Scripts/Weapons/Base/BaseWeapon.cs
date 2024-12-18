@@ -1,6 +1,7 @@
 //#define DEBUG_BaseWeapon
 
 using System;
+using System.Runtime.CompilerServices;
 using AI;
 using AI.Interfaces;
 using Casts.Interfaces;
@@ -78,7 +79,7 @@ namespace Weapons.Base
 			
 			Owner = alive;
 
-			ownerTr = Owner.GetGameObject().transform;
+			ownerTr = Owner.GetTransform();
 			
 			Destroy(GetComponent<DroppedWeapon>());
 
@@ -90,7 +91,8 @@ namespace Weapons.Base
 			for (var i = 0; i < Colliders.Length; i++)
 				Colliders[i].enabled = false;
 			
-			var tr = transform;
+			var tr = GetTransform();
+			
 			tr.SetParent(Owner.Body.WeaponContainer);
 			tr.localPosition = Vector3.zero;
 			tr.localEulerAngles = Vector3.zero;
@@ -108,9 +110,9 @@ namespace Weapons.Base
 			var movePos = dropTr.position + (Vector3.down * 0.1f) + (dropTr.right * 0.1f);
 			var moveAng = dropTr.eulerAngles;
 
-			var go = gameObject;
+			var go = GetGameObject();
+			var tr = GetTransform();
 			
-			var tr = transform;
 			tr.SetParent(World.World.Instance.Dropped);
 			tr.position = movePos;
 			tr.eulerAngles = moveAng;
@@ -182,10 +184,10 @@ namespace Weapons.Base
 			clearCast();
 		}
 		
-		public GameObject GetGameObject()
-		{
-			return gameObject;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => gameObject;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => transform;
 
 		public void CalculateHit()
 		{
@@ -198,7 +200,7 @@ namespace Weapons.Base
 					LastRay = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 					break;
 				case NPC npc:
-					var direction = npc.Target == null ? ownerTr.forward : (npc.Target.transform.position - ownerTr.position).normalized;
+					var direction = npc.Target == null ? ownerTr.forward : (npc.TargetTransform.position - ownerTr.position).normalized;
 					LastRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;
 				default:

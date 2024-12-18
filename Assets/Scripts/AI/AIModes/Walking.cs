@@ -44,7 +44,7 @@ namespace AI.AIModes
 				return;
 			}
 			
-			if (agent.pathPending || agent.remainingDistance > agent.stoppingDistance || agent.hasPath && agent.velocity.sqrMagnitude != 0f)
+			if (agent.pathPending || !agent.isOnNavMesh || agent.remainingDistance > agent.stoppingDistance || agent.hasPath && agent.velocity.sqrMagnitude != 0f)
 				return;
 			
 			// Reached destination, go back to what was being done earlier

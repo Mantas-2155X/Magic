@@ -1,5 +1,4 @@
 using UnityEngine;
-using Weapons.Interfaces;
 
 namespace Casts.Interfaces
 {
@@ -14,5 +13,6 @@ namespace Casts.Interfaces
 		public void StopParticles();
 		
 		public GameObject GetGameObject();
+		public Transform GetTransform();
 	}
 }

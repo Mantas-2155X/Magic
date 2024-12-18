@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Attacks.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -23,16 +24,25 @@ namespace Attacks.Base
 		public bool Attach { get; private set; }
 
 		private Transform target;
-		public Transform thisTr;
+		
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
 		
 		public virtual void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
 		{
+			if (!init)
+			{
+				thisGo = gameObject;
+				thisTr = thisGo.transform;
+				thisTr.SetParent(World.World.Instance.Other);
+				init = true;
+			}
+			
 			Source = source;
 
 			target = Attach ? attach : null;
-
-			thisTr = transform;
-			thisTr.SetParent(World.World.Instance.Other);
 
 			if (target == null)
 			{
@@ -50,7 +60,7 @@ namespace Attacks.Base
 				trigger().Forget();
 			}
 
-			gameObject.SetActive(true);
+			thisGo.SetActive(true);
 			System.Play(true);
 		}
 		
@@ -61,7 +71,7 @@ namespace Attacks.Base
 
 		public void OnParticleSystemStopped()
 		{
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
+			PoolingManager.Instance.AddToPool(GetType(), thisGo);
 		}
 
 		public virtual void OnTriggerEnabled()
@@ -81,6 +91,11 @@ namespace Attacks.Base
 			
 			thisTr.position = target.position + Vector3.down * 0.95f;
 		}
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
 		
 		private async UniTaskVoid trigger()
 		{

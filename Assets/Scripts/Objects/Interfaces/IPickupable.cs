@@ -13,5 +13,6 @@ namespace Objects.Interfaces
 		public bool Pickup(IAlive user);
 		
 		public GameObject GetGameObject();
+		public Transform GetTransform();
 	}
 }

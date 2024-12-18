@@ -50,5 +50,6 @@ namespace AI.Interfaces
 		public bool IsGrounded();
 
 		public GameObject GetGameObject();
+		public Transform GetTransform();
 	}
 }

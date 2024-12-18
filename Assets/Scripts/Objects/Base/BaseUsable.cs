@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Objects.Enums;
@@ -16,6 +17,21 @@ namespace Objects.Base
 		private bool destroyed;
 		private bool usable;
 
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
+		
+		public void Awake()
+		{
+			if (!init)
+			{
+				thisGo = gameObject;
+				thisTr = thisGo.transform;
+				init = true;
+			}
+		}
+		
 		public virtual void OnEnable()
 		{
 			if (UsableAfter == 0f)
@@ -40,7 +56,7 @@ namespace Objects.Base
 					return true;
 				case EDestroyType.GameObject:
 					destroyed = true;
-					Destroy(gameObject);
+					Destroy(thisGo);
 					break;
 				case EDestroyType.Component:
 					destroyed = true;
@@ -51,10 +67,10 @@ namespace Objects.Base
 			return true;
 		}
 		
-		public GameObject GetGameObject()
-		{
-			return gameObject;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
 		
 		private async UniTaskVoid setUsable()
 		{

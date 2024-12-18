@@ -30,7 +30,7 @@ namespace AI.ActionModes
 				return;
 			}
 
-			var target = Owner.Target.transform;
+			var target = Owner.TargetTransform;
 
 			// Target sensed but not within chasing range, wait and hope for the target to come closer
 			if (!Owner.WithinRange.DistanceCheck(target))
