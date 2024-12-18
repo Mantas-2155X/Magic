@@ -93,16 +93,14 @@ namespace AI.Base
 			MovementType = value;
 
 			Body.Rigidbody.useGravity = MovementType == EMovementType.Normal;
-			Body.Collider.enabled = MovementType == EMovementType.Normal;
+			Body.BodyCollider.enabled = MovementType == EMovementType.Normal;
 			
 			if (MovementType != EMovementType.Normal)
 				previousExcludeLayers = Body.Rigidbody.excludeLayers;
 			else
 				Body.Rigidbody.excludeLayers = previousExcludeLayers;
 
-			var feet = Body.Feet;
-			for (var i = 0; i < feet.Length; i++)
-				feet[i].GetComponent<Collider>().enabled = MovementType == EMovementType.Normal;
+			Body.FeetCollider.enabled = MovementType == EMovementType.Normal;
 		}
 
 		public virtual void SetMaxSpeed(float maximumSpeed)
@@ -233,25 +231,31 @@ namespace AI.Base
 			Body.Rigidbody.isKinematic = false;
 			Body.Rigidbody.AddForce(Random.Range(-25f, 25f), 100f, Random.Range(-25f, 25f), ForceMode.Impulse);
 
-			Body.Collider.material = null;
+			Body.BodyCollider.material = null;
+			Body.FeetCollider.material = null;
 
 			var ragdolls = World.World.Instance.Ragdolls;
 			var length = Body.Gibs.Length;
 
 			for (var i = 0; i < length; i++)
 			{
+				var isLast = i == length - 1;
+				
 				var gib = Body.Gibs[i];
 				gib.enabled = true;
 
 				var go = gib.gameObject;
 				go.layer = 0;
 
-				var coll = go.GetComponent<Collider>();
-				coll.excludeLayers = 0;
-				coll.material = null;
-				coll.enabled = true;
+				if (!isLast)
+				{
+					var coll = go.GetComponent<Collider>();
+					coll.excludeLayers = 0;
+					coll.material = null;
+					coll.enabled = true;
+				}
 
-				var rb = i == length - 1 ? Body.Rigidbody : go.AddComponent<Rigidbody>();
+				var rb = isLast ? Body.Rigidbody : go.AddComponent<Rigidbody>();
 				rb.interpolation = RigidbodyInterpolation.Interpolate;
 				rb.automaticInertiaTensor = false;
 				rb.excludeLayers = 0;

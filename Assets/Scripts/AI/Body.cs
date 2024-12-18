@@ -13,7 +13,10 @@ namespace AI
 		public Rigidbody Rigidbody;
 
 		[SerializeField]
-		public Collider Collider;
+		public Collider BodyCollider;
+		
+		[SerializeField]
+		public Collider FeetCollider;
 
 		[SerializeField]
 		public MonoBehaviour[] Gibs;
@@ -26,9 +29,6 @@ namespace AI
 		
 		[SerializeField]
 		public Transform[] Legs;
-
-		[SerializeField]
-		public Transform[] Feet;
  
 		[SerializeField]
 		public Transform WeaponContainer;

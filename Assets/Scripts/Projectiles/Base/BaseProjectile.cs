@@ -31,7 +31,9 @@ namespace Projectiles.Base
 
 		private CancellationTokenSource distanceToken;
 		private Vector3 startingPosition;
-		private Collider ignoreCollider;
+
+		private Collider ignoreBodyCollider;
+		private Collider ignoreFeetCollider;
 		
 		private GameObject thisGo;
 		private Transform thisTr;
@@ -105,10 +107,15 @@ namespace Projectiles.Base
 			Source = source;
 
 			startingPosition = origin;
-			ignoreCollider = source.Owner.Body.Collider;
-			
-			Physics.IgnoreCollision(ignoreCollider, Collider, true);
 
+			var body = source.Owner.Body;
+			
+			ignoreBodyCollider = body.BodyCollider;
+			ignoreFeetCollider = body.FeetCollider;
+
+			Physics.IgnoreCollision(ignoreBodyCollider, Collider, true);
+			Physics.IgnoreCollision(ignoreFeetCollider, Collider, true);
+			
 			thisTr.position = origin;
 			thisTr.eulerAngles = Vector3.zero;
 			
@@ -132,7 +139,8 @@ namespace Projectiles.Base
 				distanceToken.Cancel();
 			}
 			
-			Physics.IgnoreCollision(ignoreCollider, Collider, false);
+			Physics.IgnoreCollision(ignoreBodyCollider, Collider, false);
+			Physics.IgnoreCollision(ignoreFeetCollider, Collider, false);
 			
 			thisGo.SetActive(false);
 

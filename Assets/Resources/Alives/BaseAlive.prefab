@@ -95,7 +95,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918261936898904529}
-  m_Material: {fileID: 13400000, guid: b7282c1091adf97acaa7bf35be876282, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -105,7 +105,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -675,6 +675,7 @@ GameObject:
   - component: {fileID: 8598778091971049270}
   - component: {fileID: 1299225429599949485}
   - component: {fileID: 2987893620165311613}
+  - component: {fileID: 4081477746048653934}
   m_Layer: 0
   m_Name: BaseAlive
   m_TagString: Untagged
@@ -821,7 +822,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Alive: {fileID: 0}
   Rigidbody: {fileID: 9196623204031514355}
-  Collider: {fileID: 8598778091971049270}
+  BodyCollider: {fileID: 8598778091971049270}
+  FeetCollider: {fileID: 4081477746048653934}
   Gibs:
   - {fileID: 109833348961273672}
   - {fileID: 3932210009244225032}
@@ -841,9 +843,6 @@ MonoBehaviour:
   Legs:
   - {fileID: 109099294140091109}
   - {fileID: 5313810489724381644}
-  Feet:
-  - {fileID: 8265837632060588755}
-  - {fileID: 5160195841046392311}
   WeaponContainer: {fileID: 4204749627684944997}
   SwayAngles: {x: 30, y: 15}
   SwaySpeedMultiplier: 1
@@ -869,6 +868,27 @@ MonoBehaviour:
   <UsableAfter>k__BackingField: 0
   <DestroyAfterUse>k__BackingField: 0
   HealAmount: 8
+--- !u!65 &4081477746048653934
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5238415708173528890}
+  m_Material: {fileID: 13400000, guid: b7282c1091adf97acaa7bf35be876282, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.63846004, y: 0.019539118, z: 0.15278322}
+  m_Center: {x: 0.000021278858, y: -1.0166734, z: 0.00011365116}
 --- !u!1 &5352134489899751883
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,7 +1017,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7186803857782215973}
-  m_Material: {fileID: 13400000, guid: b7282c1091adf97acaa7bf35be876282, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1007,7 +1027,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
