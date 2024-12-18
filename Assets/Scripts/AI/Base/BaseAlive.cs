@@ -5,6 +5,7 @@ using AI.Enums;
 using AI.Events;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Managers;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -267,6 +268,8 @@ namespace AI.Base
 			thisGo.SetActive(false);
 #endif
 
+			AIManager.Instance.AlivesColliderMap.Remove(Body.BodyCollider);
+			
 			OnDeathEvent?.Invoke(this, source);
 		}
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Managers;
 using UnityEngine;
 
 namespace World
@@ -22,8 +23,7 @@ namespace World
 
 		public void OnTriggerEnter(Collider other)
 		{
-			var alive = other.GetComponent<IAlive>();
-			if (alive == null || alives.Contains(alive))
+			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive) || alives.Contains(alive))
 				return;
 			
 			alives.Add(alive);
@@ -31,8 +31,7 @@ namespace World
 
 		public void OnTriggerExit(Collider other)
 		{
-			var alive = other.GetComponent<IAlive>();
-			if (alive == null)
+			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
 				return;
 
 			alives.Remove(alive);

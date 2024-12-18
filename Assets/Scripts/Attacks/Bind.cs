@@ -1,5 +1,6 @@
 using AI.Interfaces;
 using Attacks.Base;
+using Managers;
 using UnityEngine;
 
 namespace Attacks
@@ -11,11 +12,7 @@ namespace Attacks
 		
 		public void OnTriggerEnter(Collider other)
 		{
-			if (target != null)
-				return;
-			
-			var alive = other.GetComponent<IAlive>();
-			if (alive == null || !alive.IsAlive)
+			if (target != null || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
 				return;
 
 			target = alive;

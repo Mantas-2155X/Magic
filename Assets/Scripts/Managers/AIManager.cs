@@ -21,6 +21,9 @@ namespace Managers
 
 		[SerializeField]
 		public List<NPC> NPCs = new ();
+
+		// Body Collider -> Alive
+		public readonly Dictionary<Collider, IAlive> AlivesColliderMap = new ();
 		
 		public static bool NativeDataDirty;
 
@@ -261,6 +264,8 @@ namespace Managers
 			var npc = go.GetComponent<NPC>();
 			npc.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed);
 
+			AlivesColliderMap[npc.Body.BodyCollider] = npc;
+			
 			NPCs.Add(npc);
 			NativeDataDirty = true;
 			return npc;
@@ -287,6 +292,8 @@ namespace Managers
 			
 			var player = go.GetComponent<Player>();
 			player.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed);
+
+			AlivesColliderMap[player.Body.BodyCollider] = player;
 
 			Player = player;
 			NativeDataDirty = true;

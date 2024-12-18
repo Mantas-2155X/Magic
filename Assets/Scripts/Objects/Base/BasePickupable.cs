@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Managers;
 using Objects.Enums;
 using Objects.Interfaces;
 using UnityEngine;
@@ -74,8 +75,7 @@ namespace Objects.Base
 		
 		public void OnTriggerEnter(Collider other)
 		{
-			var alive = other.GetComponent<IAlive>();
-			if (alive == null)
+			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
 				return;
 
 			Pickup(alive);
