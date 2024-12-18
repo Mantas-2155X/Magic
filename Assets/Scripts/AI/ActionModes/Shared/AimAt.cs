@@ -16,15 +16,17 @@ namespace AI.ActionModes.Shared
 		/// This only does one step of aiming and should be placed in Update
 		/// Returns true if angle between npc and target is within specified maximum angle
 		/// </summary>
-		public bool AimTowardsTarget(Transform transform, Transform target)
+		public bool AimTowardsTarget(Transform target)
 		{
-			var targetPosition = target.position - transform.position;
+			var rb = owner.Body.Rigidbody;
+			
+			var targetPosition = target.position - rb.position;
 			targetPosition.y = 0;
 			
 			var targetRotation = Quaternion.LookRotation(targetPosition);
-			owner.Body.Rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, owner.RotationSpeed * Time.deltaTime));
+			rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, owner.RotationSpeed * Time.deltaTime));
 			
-			return Quaternion.Angle(transform.rotation, targetRotation) < owner.AimAngle;
+			return Quaternion.Angle(rb.rotation, targetRotation) < owner.AimAngle;
 		}
 	}
 }

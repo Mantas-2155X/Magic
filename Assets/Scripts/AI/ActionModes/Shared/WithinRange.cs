@@ -14,9 +14,9 @@ namespace AI.ActionModes.Shared
 		/// <summary>
 		/// Returns true if the distance between provided transforms is less than the specified range
 		/// </summary>
-		public bool DistanceCheck(Transform transform, Transform target)
+		public bool DistanceCheck(Transform target)
 		{
-			return Vector3.Distance(transform.position, target.position) < owner.SenseRange;
+			return Vector3.Distance(owner.Body.Rigidbody.position, target.position) < owner.SenseRange;
 		}
 	}
 }

@@ -31,14 +31,13 @@ namespace AI.ActionModes
 			}
 
 			var target = Owner.Target.transform;
-			var transform = Owner.transform;
 
 			// Target sensed but not within chasing range, wait and hope for the target to come closer
-			if (!Owner.WithinRange.DistanceCheck(transform, target))
+			if (!Owner.WithinRange.DistanceCheck(target))
 				return;
 
 			// Target within range, start chasing
-			if (!Owner.Chase.ChaseTarget(Owner, target))
+			if (!Owner.Chase.ChaseTarget(target))
 				return;
 
 			// Reached target, stop walking and go into action
@@ -51,7 +50,7 @@ namespace AI.ActionModes
 			if (Owner.AIMode == EAIMode.Action)
 			{
 				// Turn towards the target and aim
-				if (!Owner.AimAt.AimTowardsTarget(transform, target))
+				if (!Owner.AimAt.AimTowardsTarget(target))
 					return;
 			
 				Owner.Weapon?.StartCasting();

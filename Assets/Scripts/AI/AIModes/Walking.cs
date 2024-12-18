@@ -95,14 +95,14 @@ namespace AI.AIModes
 			jumpingLink = true;
 
 			var agent = Owner.Agent;
+			var rb = Owner.Body.Rigidbody;
+
 			var data = agent.currentOffMeshLinkData;
 
 			agent.updateRotation = false;
 			await lookAtLink(data);
-
-			var agentTr = agent.transform;
 			
-			var startPos = agentTr.position;
+			var startPos = rb.position;
 			var endPos = data.endPos + Vector3.up * agent.baseOffset;
 			
 			var normalizedTime = 0.0f;
@@ -120,7 +120,7 @@ namespace AI.AIModes
 				}
 				
 				var yOffset = Owner.JumpCurve.Evaluate(normalizedTime);
-				agentTr.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;
+				rb.MovePosition(Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up);
 				
 				normalizedTime += Time.deltaTime / Owner.JumpDuration;
 			}
@@ -133,14 +133,14 @@ namespace AI.AIModes
 
 		private async UniTask lookAtLink(OffMeshLinkData data)
 		{
-			var transform = Owner.transform;
+			var rb = Owner.Body.Rigidbody;
 			
-			var targetPosition = data.endPos - transform.position;
+			var targetPosition = data.endPos - rb.position;
 			targetPosition.y = 0;
 			
 			var targetRotation = Quaternion.LookRotation(targetPosition);
 			
-			while (Quaternion.Angle(transform.rotation, targetRotation) > 5f)
+			while (Quaternion.Angle(rb.rotation, targetRotation) > 5f)
 			{
 				await UniTask.NextFrame();
 
@@ -152,8 +152,8 @@ namespace AI.AIModes
 					forceFinishJump();
 					return;
 				}
-				
-				transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Owner.RotationSpeed * Time.deltaTime);
+
+				rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, Owner.RotationSpeed * Time.deltaTime));
 			}
 		}
 	}

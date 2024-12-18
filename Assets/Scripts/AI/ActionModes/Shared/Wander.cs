@@ -21,7 +21,7 @@ namespace AI.ActionModes.Shared
 			if (!force && Time.time < owner.AIModes[EAIMode.Walking].LastExited + owner.WanderEvery)
 				return;
 			
-			var pos = owner.transform.position;
+			var pos = owner.Body.Rigidbody.position;
 			
 			var circle = Random.insideUnitCircle;
 			circle.x *= Random.Range(owner.Agent.stoppingDistance, 15f);

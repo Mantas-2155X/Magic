@@ -19,10 +19,10 @@ namespace AI.ActionModes.Shared
 		/// This only does one step of trying and should be placed in Update
 		/// Returns true if the npc has chased and reached the target
 		/// </summary>
-		public bool ChaseTarget(NPC npc, Transform target)
+		public bool ChaseTarget(Transform target)
 		{
-			var agent = npc.Agent;
-			var transform = npc.transform;
+			var agent = owner.Agent;
+			var transform = owner.transform;
 			
 			// Try to stop at this distance
 			var currentStopTarget = currentChaseRange + agent.stoppingDistance;
@@ -31,10 +31,10 @@ namespace AI.ActionModes.Shared
 			if (Vector3.Distance(target.position, transform.position) > currentStopTarget)
 			{
 				// Target within destination range, keep current path
-				if (Vector3.Distance(target.position, npc.Destination) <= currentChaseRange + agent.stoppingDistance)
+				if (Vector3.Distance(target.position, owner.Destination) <= currentChaseRange + agent.stoppingDistance)
 				{
-					if (npc.AIMode != EAIMode.Walking)
-						npc.Walk(target.position);
+					if (owner.AIMode != EAIMode.Walking)
+						owner.Walk(target.position);
 
 					return false;
 				}
@@ -43,17 +43,17 @@ namespace AI.ActionModes.Shared
 				if (currentChaseRange < owner.ChaseRange)
 					ResetChaseRange();
 
-				npc.Walk(target.position);
+				owner.Walk(target.position);
 				return false;
 			}
 
 			// Within range but can't see the target, reduce the stop range to walk closer to the target
-			if (!npc.HasSight.SightCheck(transform, target, owner.SightRange))
+			if (!owner.HasSight.SightCheck(target, owner.SightRange))
 			{
 				currentChaseRange /= 1.2f;
 
-				if (npc.AIMode != EAIMode.Walking)
-					npc.Walk(target.position);
+				if (owner.AIMode != EAIMode.Walking)
+					owner.Walk(target.position);
 				
 				return false;
 			}

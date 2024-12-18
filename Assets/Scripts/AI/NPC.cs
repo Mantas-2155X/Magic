@@ -57,7 +57,7 @@ namespace AI
 		/// (AimAt, Spin)
 		/// </summary>
 		[SerializeField]
-		public float RotationSpeed = 720f;
+		public float RotationSpeed = 480f;
 
 		/// <summary>
 		/// Maximum look angle between the npc and the target which the npc deems accurate enough

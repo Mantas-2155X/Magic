@@ -411,7 +411,7 @@ namespace AI
 			if (MovementType != EMovementType.Normal)
 				return false;
 
-			var origin = transform.position + new Vector3(0f, -1.02f, 0f);
+			var origin = Body.Rigidbody.position + new Vector3(0f, -1.02f, 0f);
 			var extents = new Vector3(0.6f, 0.05f, 0.2f) / 2f;
 			
 			if (Physics.CheckBox(origin, extents, transform.rotation, ~LayerMaskTools.GetMaskWithPlayer()))
