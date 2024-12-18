@@ -100,12 +100,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2512761416805066730}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 106172563743282181}
     - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8067214586994987871}
-    - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 231746530646672502}
   m_SourcePrefab: {fileID: 100100000, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
 --- !u!1 &343015389287615907 stripped
 GameObject:
@@ -134,27 +134,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2557553361642007858, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
---- !u!65 &231746530646672502
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 343015389287615907}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.0035450724, y: 0.0035450729, z: 0.023495605}
-  m_Center: {x: 2.910383e-10, y: 0, z: 0.0017478005}
 --- !u!1 &7597140966588050046 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
@@ -175,11 +154,12 @@ MonoBehaviour:
   <Rigidbody>k__BackingField: {fileID: 2528636506832077283}
   <Colliders>k__BackingField:
   - {fileID: 8067214586994987871}
-  - {fileID: 231746530646672502}
+  - {fileID: 106172563743282181}
   <TimeBetweenAttacks>k__BackingField: 0.01
   <CastingTime>k__BackingField: 0
   <ManaCost>k__BackingField: 1
   <Distance>k__BackingField: 0
+  ownerTr: {fileID: 0}
 --- !u!54 &2528636506832077283
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -221,3 +201,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PickupableAfter>k__BackingField: 0
   <DestroyAfterPickup>k__BackingField: 0
+--- !u!65 &106172563743282181
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7597140966588050046}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.47064543, y: 2.4243965, z: 0.44737747}
+  m_Center: {x: -0.003418386, y: 0.17156291, z: -0.0023985952}
