@@ -1,9 +1,10 @@
 using Managers;
+using Objects.Base;
 using UnityEngine;
 
 namespace Objects
 {
-	public class Portal : MonoBehaviour
+	public class Portal : BaseObject
 	{
 		[SerializeField]
 		public ParticleSystem System;
@@ -31,7 +32,7 @@ namespace Objects
 		
 		public void OnParticleSystemStopped()
 		{
-			PoolingManager.Instance.AddToPool(GetType(), thisGo);
+			PoolingManager.Instance.AddToPool(ObjectData, thisGo);
 		}
 	}
 }

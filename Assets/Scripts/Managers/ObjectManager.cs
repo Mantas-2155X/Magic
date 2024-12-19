@@ -18,7 +18,7 @@ namespace Managers
 
 		private readonly Dictionary<string, Data> datasMap = new ();
 
-		private readonly string[] dataPaths = { "Weapons", "Casts", "Projectiles", "Attacks" };
+		private readonly string[] dataPaths = { "Objects", "Weapons", "Casts", "Projectiles", "Attacks" };
 		
 		public void Awake()
 		{
@@ -46,6 +46,11 @@ namespace Managers
 		
 		#region Get
 
+		public ObjectData GetObject(string path)
+		{
+			return (ObjectData)datasMap.GetValueOrDefault($"Objects/{path}");
+		}
+		
 		public WeaponData GetWeapon(string path)
 		{
 			return (WeaponData)datasMap.GetValueOrDefault($"Weapons/{path}");
@@ -72,13 +77,15 @@ namespace Managers
 
 		public Portal CreatePortal(Vector3 position)
 		{
+			var data = GetObject("Portal");
+			
 			Portal portal;
 
-			var pooled = PoolingManager.Instance.TakeFromPool(typeof(Portal), false);
+			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
 			if (pooled != null)
 				portal = pooled.GetComponent<Portal>();
 			else
-				portal = Instantiate(Resources.Load<GameObject>("Portal")).GetComponent<Portal>();
+				portal = Instantiate(data.Prefab).GetComponent<Portal>();
 			
 			portal.Spawn(position);
 			return portal;
