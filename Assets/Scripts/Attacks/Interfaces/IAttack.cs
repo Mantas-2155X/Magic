@@ -5,7 +5,7 @@ namespace Attacks.Interfaces
 {
 	public interface IAttack
 	{
-		public AttackData AttackData { get; set; }
+		public AttackData AttackData { get; }
 
 		public Component Source { get; }
 

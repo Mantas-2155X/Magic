@@ -5,7 +5,7 @@ namespace Casts.Interfaces
 {
 	public interface ICast
 	{
-		public CastData CastData { get; set; }
+		public CastData CastData { get; }
 
 		public Component Source { get; }
 

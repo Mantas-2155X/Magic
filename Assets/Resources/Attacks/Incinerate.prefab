@@ -14438,10 +14438,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 982c9bc6e70a43baa8301947d54810a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <AttackData>k__BackingField: {fileID: 11400000, guid: 3fc2ab69142f0010192cff2428c4b5fb, type: 2}
   <System>k__BackingField: {fileID: 6482775774062730704}
   <Trigger>k__BackingField: {fileID: 2981882103111915862}
-  <EnableTriggerAfter>k__BackingField: 1.5
-  <DisableTriggerAfter>k__BackingField: 0.75
+  Damage: 100
 --- !u!199 &3716721897733238632
 ParticleSystemRenderer:
   serializedVersion: 6

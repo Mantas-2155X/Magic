@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AI.Interfaces;
 using Attacks.Enums;
 using Attacks.Interfaces;
@@ -15,10 +16,59 @@ namespace Managers
 	{
 		public static ObjectManager Instance;
 
+		private readonly Dictionary<string, Data> datasMap = new ();
+
+		private readonly string[] dataPaths = { "Weapons", "Casts", "Projectiles", "Attacks" };
+		
 		public void Awake()
 		{
 			Instance = this;
+			setupDatasMap();
 		}
+
+		#region Init
+
+		private void setupDatasMap()
+		{
+			foreach (var dataPath in dataPaths)
+			{
+				var datas = Resources.LoadAll<Data>(dataPath);
+
+				for (var i = 0; i < datas.Length; i++)
+				{
+					var data = datas[i];
+					datasMap[$"{dataPath}/{data.Name}"] = data;
+				}
+			}
+		}
+
+		#endregion
+		
+		#region Get
+
+		public WeaponData GetWeapon(string path)
+		{
+			return (WeaponData)datasMap.GetValueOrDefault($"Weapons/{path}");
+		}
+		
+		public CastData GetCast(string path)
+		{
+			return (CastData)datasMap.GetValueOrDefault($"Casts/{path}");
+		}
+		
+		public ProjectileData GetProjectile(string path)
+		{
+			return (ProjectileData)datasMap.GetValueOrDefault($"Projectiles/{path}");
+		}
+		
+		public AttackData GetAttack(string path)
+		{
+			return (AttackData)datasMap.GetValueOrDefault($"Attacks/{path}");
+		}
+		
+		#endregion
+
+		#region Create
 
 		public Portal CreatePortal(Vector3 position)
 		{
@@ -43,9 +93,7 @@ namespace Managers
 				weapon = pooled.GetComponent<IWeapon>();
 			else
 				weapon = Instantiate(data.Prefab).GetComponent<IWeapon>();
-
-			weapon.WeaponData = data;
-
+			
 			var go = weapon.GetGameObject();
 			
 			var tr = go.transform;
@@ -67,7 +115,6 @@ namespace Managers
 			else
 				cast = Instantiate(data.Prefab).GetComponent<ICast>();
 
-			cast.CastData = data;
 			cast.Spawn(source);
 			return cast;
 		}
@@ -82,22 +129,21 @@ namespace Managers
 			else
 				projectile = Instantiate(data.Prefab).GetComponent<IProjectile>();
 			
-			projectile.ProjectileData = data;
 			projectile.Spawn(weapon, origin, direction * data.Force);
 			return projectile;
 		}
 
 		public IAttack CreateAttack(AttackData data, Component source, RaycastHit hit, Transform attach)
 		{
-			return CreateAttack(data, source, hit.point, hit.normal, attach);
+			return createAttack(data, source, hit.point, hit.normal, attach);
 		}
 
 		public IAttack CreateAttack(AttackData data, Component source, ContactPoint contact, Transform attach)
 		{
-			return CreateAttack(data, source, contact.point, contact.normal, attach);
+			return createAttack(data, source, contact.point, contact.normal, attach);
 		}
 		
-		public IAttack CreateAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
+		private IAttack createAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
 		{
 			IAttack attack;
 
@@ -138,9 +184,10 @@ namespace Managers
 					throw new NotImplementedException();
 			}
 			
-			attack.AttackData = data;
 			attack.Spawn(source, point, angles, attach);
 			return attack;
 		}
+		
+		#endregion
 	}
 }

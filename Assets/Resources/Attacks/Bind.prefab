@@ -9682,11 +9682,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c76e3231696f4eaa8201b8b4e0eb2e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <AttackData>k__BackingField: {fileID: 11400000, guid: 99774bbcb1ee25134a2f2ee2561f4266, type: 2}
   <System>k__BackingField: {fileID: 6482775774062730704}
   <Trigger>k__BackingField: {fileID: 8349859606466764673}
-  <EnableTriggerAfter>k__BackingField: 1
-  <DisableTriggerAfter>k__BackingField: 2.5
-  <Attach>k__BackingField: 1
 --- !u!135 &8349859606466764673
 SphereCollider:
   m_ObjectHideFlags: 0

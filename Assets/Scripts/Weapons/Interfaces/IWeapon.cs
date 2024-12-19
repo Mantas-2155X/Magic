@@ -6,7 +6,7 @@ namespace Weapons.Interfaces
 {
 	public interface IWeapon
 	{
-		public WeaponData WeaponData { get; set; }
+		public WeaponData WeaponData { get; }
 		
 		public IAlive Owner { get; }
 		

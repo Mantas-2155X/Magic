@@ -10,7 +10,7 @@ namespace Casts.Base
 	public class BaseCast : MonoBehaviour, ICast
 	{
 		[field: SerializeField]
-		public CastData CastData { get; set; }
+		public CastData CastData { get; private set; }
 
 		public Component Source { get; private set; }
 

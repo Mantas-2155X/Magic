@@ -22,7 +22,7 @@ namespace Weapons
 				npc.SenseRange = 99999;
 				npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
 				
-				//npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(TypeTools.FindType("FireGun"), Vector3.zero, Vector3.zero));
+				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon("Fire Gun"), Vector3.zero, Vector3.zero));
 				npc.WanderAggressively(npc.Target);
 			}
 			

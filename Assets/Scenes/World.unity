@@ -527,6 +527,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Destroyer
       objectReference: {fileID: 0}
+    - target: {fileID: 3200840523429498350, guid: 12f23534cefe5e064810cdfc5c4c75fb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -714,6 +718,10 @@ PrefabInstance:
     - target: {fileID: 8891709933729494013, guid: 444793d66d2aed59b8e668c5218289f5, type: 3}
       propertyPath: m_Name
       value: Deathmatch
+      objectReference: {fileID: 0}
+    - target: {fileID: 8891709933729494013, guid: 444793d66d2aed59b8e668c5218289f5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1232,6 +1240,10 @@ PrefabInstance:
     - target: {fileID: 7597140966588050046, guid: 5731456074053b206a3a537927e17074, type: 3}
       propertyPath: m_Name
       value: Creator
+      objectReference: {fileID: 0}
+    - target: {fileID: 7597140966588050046, guid: 5731456074053b206a3a537927e17074, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8169,6 +8181,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShieldGun
       objectReference: {fileID: 0}
+    - target: {fileID: 9150455038998059246, guid: f971b26fad26bba8d81414c29e5ad0e1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8779,6 +8795,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BindGun
       objectReference: {fileID: 0}
+    - target: {fileID: 9150455038998059246, guid: 05de131b04c29a042a9cff8a5215a5b2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8972,6 +8992,10 @@ PrefabInstance:
     - target: {fileID: 2785414141410019460, guid: f57ed2e8d70a64c7190af68660d0067f, type: 3}
       propertyPath: m_Name
       value: FireGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785414141410019460, guid: f57ed2e8d70a64c7190af68660d0067f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3309045991044829758, guid: f57ed2e8d70a64c7190af68660d0067f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9810,6 +9834,10 @@ PrefabInstance:
     - target: {fileID: 2785414141410019460, guid: d923bab5249ccebf6ae4475369f9d36a, type: 3}
       propertyPath: m_Name
       value: ManaGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785414141410019460, guid: d923bab5249ccebf6ae4475369f9d36a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3309045991044829758, guid: d923bab5249ccebf6ae4475369f9d36a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10808,6 +10836,10 @@ PrefabInstance:
     - target: {fileID: 2785414141410019460, guid: 1c64a54b71211aa49bb58e82327f579a, type: 3}
       propertyPath: m_Name
       value: HealthGun
+      objectReference: {fileID: 0}
+    - target: {fileID: 2785414141410019460, guid: 1c64a54b71211aa49bb58e82327f579a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3309045991044829758, guid: 1c64a54b71211aa49bb58e82327f579a, type: 3}
       propertyPath: m_LocalPosition.x

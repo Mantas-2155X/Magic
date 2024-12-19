@@ -17,7 +17,7 @@ namespace Weapons.Base
 	public class BaseWeapon : MonoBehaviour, IWeapon
 	{
 		[field: SerializeField]
-		public WeaponData WeaponData { get; set; }
+		public WeaponData WeaponData { get; private set; }
 
 		public IAlive Owner { get; private set; }
 		

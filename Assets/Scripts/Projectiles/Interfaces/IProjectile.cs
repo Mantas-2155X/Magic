@@ -6,7 +6,7 @@ namespace Projectiles.Interfaces
 {
 	public interface IProjectile
 	{
-		public ProjectileData ProjectileData { get; set; }
+		public ProjectileData ProjectileData { get; }
 
 		public IWeapon Source { get; }
 

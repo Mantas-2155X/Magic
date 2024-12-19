@@ -222,7 +222,7 @@ namespace Editor
 
 			if (GUILayout.Button("Give Player"))
 			{
-				//aiManager.Player.TakeWeapon(ObjectManager.Instance.CreateWeapon(TypeTools.FindType(Weapon), Vector3.zero, Vector3.zero));
+				aiManager.Player.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon(Weapon), Vector3.zero, Vector3.zero));
 			}
 			
 			if (GUILayout.Button("Give NPCs"))
@@ -232,7 +232,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					//npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(TypeTools.FindType(Weapon), Vector3.zero, Vector3.zero));
+					npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon(Weapon), Vector3.zero, Vector3.zero));
 				}
 			}
 			
