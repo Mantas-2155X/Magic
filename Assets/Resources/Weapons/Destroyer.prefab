@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Destroyer
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5638259460495948639, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
@@ -116,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5324003a3df646d882265afa899e35f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <WeaponData>k__BackingField: {fileID: 11400000, guid: 22c695b428516336c8f53a20bc11cbf2, type: 2}
   <Rigidbody>k__BackingField: {fileID: 8917575100092233325}
   <Colliders>k__BackingField:
   - {fileID: 885924708890772066}

@@ -28,7 +28,7 @@ namespace Managers
 			if (pooled != null)
 				portal = pooled.GetComponent<Portal>();
 			else
-				portal = Instantiate(Resources.Load<GameObject>("Points/Portal")).GetComponent<Portal>();
+				portal = Instantiate(Resources.Load<GameObject>("Portal")).GetComponent<Portal>();
 			
 			portal.Spawn(position);
 			return portal;

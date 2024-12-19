@@ -9,6 +9,7 @@ namespace Attacks.Base
 {
 	public class BaseAttack : MonoBehaviour, IAttack
 	{
+		[field: SerializeField]
 		public AttackData AttackData { get; set; }
 		
 		public Component Source { get; private set; }

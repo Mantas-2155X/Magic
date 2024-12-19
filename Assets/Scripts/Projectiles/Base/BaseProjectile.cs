@@ -15,6 +15,7 @@ namespace Projectiles.Base
 {
 	public class BaseProjectile : MonoBehaviour, IProjectile
 	{
+		[field: SerializeField]
 		public ProjectileData ProjectileData { get; set; }
 
 		public IWeapon Source { get; private set; }

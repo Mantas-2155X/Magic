@@ -251,7 +251,7 @@ namespace Managers
 		{
 			ObjectManager.Instance.CreatePortal(position);
 			
-			var go = Instantiate(Resources.Load<GameObject>("Alives/NPC"));
+			var go = Instantiate(Resources.Load<GameObject>("NPC"));
 			go.name = $"NPC {NPCs.Count}";
 			
 			var tr = go.transform;
@@ -280,7 +280,7 @@ namespace Managers
 				Player = null;
 			}
 			
-			var go = Instantiate(Resources.Load<GameObject>("Alives/Player"));
+			var go = Instantiate(Resources.Load<GameObject>("Player"));
 			go.name = "Player";
 			
 			var tr = go.transform;
