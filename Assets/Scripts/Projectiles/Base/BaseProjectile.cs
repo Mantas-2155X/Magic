@@ -24,8 +24,6 @@ namespace Projectiles.Base
 		[field: SerializeField]
 		public Collider Collider { get; private set; }
 		
-		public virtual EAttackAngle AttackAngle { get; private set; }
-
 		private CancellationTokenSource rangeToken;
 		private Vector3 startingPosition;
 
@@ -62,25 +60,7 @@ namespace Projectiles.Base
 			if (ProjectileData.Attack != null)
 			{
 				var contact = collision.contacts[0];
-				
-				Quaternion angles;
-
-				switch (AttackAngle)
-				{
-					case EAttackAngle.Identity:
-						angles = Quaternion.identity;
-						break;
-					case EAttackAngle.HitNormal:
-						angles = Quaternion.FromToRotation(Vector3.up, contact.normal);
-						break;
-					case EAttackAngle.Owner:
-						angles = Source.Owner.GetTransform().rotation;
-						break;
-					default:
-						throw new NotImplementedException();
-				}
-				
-				ObjectManager.Instance.CreateAttack(ProjectileData.Attack, (Component)Source, contact.point, angles, attach);
+				ObjectManager.Instance.CreateAttack(ProjectileData.Attack, (Component)Source, contact, attach);
 			}
 				
 			clearVelocityAndPool().Forget();

@@ -1,4 +1,3 @@
-using Attacks.Enums;
 using ScriptableObjects;
 using UnityEngine;
 using Weapons.Interfaces;
@@ -13,8 +12,6 @@ namespace Projectiles.Interfaces
 
 		public Rigidbody Rigidbody { get; }
 		public Collider Collider { get; }
-		
-		public EAttackAngle AttackAngle { get; }
 		
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
 

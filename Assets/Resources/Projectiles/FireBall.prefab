@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: -6803533052199284734}
   - component: {fileID: 17089712329238078}
   - component: {fileID: 2214021331141946999}
-  - component: {fileID: -5281716477926922686}
   - component: {fileID: 7443144026641663299}
+  - component: {fileID: 7802575333488667277}
   m_Layer: 8
   m_Name: FireBall
   m_TagString: Untagged
@@ -4864,23 +4864,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &-5281716477926922686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6837300406704376654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d1d0b846ab145179adde79661c865ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Rigidbody>k__BackingField: {fileID: -6803533052199284734}
-  <Collider>k__BackingField: {fileID: 7443144026641663299}
-  <Distance>k__BackingField: 10
-  <Damage>k__BackingField: 15
-  <UseNormalAngle>k__BackingField: 1
 --- !u!135 &7443144026641663299
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4902,3 +4885,17 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7802575333488667277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6837300406704376654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d16a66298d84f7e8182915241237f80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Rigidbody>k__BackingField: {fileID: -6803533052199284734}
+  <Collider>k__BackingField: {fileID: 7443144026641663299}

@@ -1,9 +1,9 @@
 using System;
-using Attacks.Base;
+using AI.Interfaces;
+using Attacks.Enums;
 using Attacks.Interfaces;
 using Casts.Interfaces;
 using Objects;
-using Objects.Base;
 using Projectiles.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
@@ -85,7 +85,17 @@ namespace Managers
 			return cast;
 		}
 		
-		public IAttack CreateAttack(AttackData data, Component source, Vector3 position, Quaternion angles, Transform attach)
+		public IAttack CreateAttack(AttackData data, Component source, RaycastHit hit, Transform attach)
+		{
+			return CreateAttack(data, source, hit.point, hit.normal, attach);
+		}
+
+		public IAttack CreateAttack(AttackData data, Component source, ContactPoint contact, Transform attach)
+		{
+			return CreateAttack(data, source, contact.point, contact.normal, attach);
+		}
+		
+		public IAttack CreateAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
 		{
 			IAttack attack;
 
@@ -95,8 +105,39 @@ namespace Managers
 			else
 				attack = Instantiate(data.Prefab).GetComponent<IAttack>();
 
+			Quaternion angles;
+
+			switch (data.AttackAngle)
+			{
+				case EAttackAngle.Identity:
+					angles = Quaternion.identity;
+					break;
+				case EAttackAngle.HitNormal:
+					angles = Quaternion.FromToRotation(Vector3.up, normal);
+					break;
+				case EAttackAngle.Owner:
+					switch (source)
+					{
+						case IAlive alive:
+							angles = alive.GetTransform().rotation;
+							break;
+						case IWeapon weapon:
+							angles = weapon.Owner.GetTransform().rotation;
+							break;
+						case IProjectile projectile:
+							angles = projectile.Source.Owner.GetTransform().rotation;
+							break;
+						default:
+							angles = source.transform.rotation;
+							break;
+					}
+					break;
+				default:
+					throw new NotImplementedException();
+			}
+			
 			attack.AttackData = data;
-			attack.Spawn(source, position, angles, attach);
+			attack.Spawn(source, point, angles, attach);
 			return attack;
 		}
 	}
