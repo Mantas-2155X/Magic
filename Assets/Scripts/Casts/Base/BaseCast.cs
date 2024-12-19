@@ -39,7 +39,7 @@ namespace Casts.Base
 
 		public void OnDisable()
 		{
-			PoolingManager.Instance.AddToPool(CastData, thisGo);
+			PoolingManager.Instance.Add(CastData, thisGo);
 		}
 		
 		public void Spawn(Component source)

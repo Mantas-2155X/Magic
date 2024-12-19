@@ -23,6 +23,8 @@ namespace Weapons.Interfaces
 		public float LastStartedCast { get; }
 		public float LastFinishedCast { get; }
 
+		public void Spawn(Vector3 position, Vector3 angles);
+
 		public void Take(IAlive alive);
 		public void Drop();
 		

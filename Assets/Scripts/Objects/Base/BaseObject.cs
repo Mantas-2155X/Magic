@@ -40,7 +40,7 @@ namespace Objects.Base
 			if (ObjectData.IsPoolable != EObjectPool.OnDisable)
 				return;
 
-			PoolingManager.Instance.AddToPool(ObjectData, thisGo);
+			PoolingManager.Instance.Add(ObjectData, thisGo);
 		}
 
 		public virtual void OnParticleSystemStopped()
@@ -48,7 +48,7 @@ namespace Objects.Base
 			if (ObjectData.IsPoolable != EObjectPool.OnParticleSystemStopped)
 				return;
 
-			PoolingManager.Instance.AddToPool(ObjectData, thisGo);
+			PoolingManager.Instance.Add(ObjectData, thisGo);
 		}
 
 		#endregion

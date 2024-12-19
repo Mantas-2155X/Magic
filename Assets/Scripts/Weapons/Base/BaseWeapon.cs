@@ -38,8 +38,15 @@ namespace Weapons.Base
 
 		private ICast currentCast;
 
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
+
 		public void Awake()
 		{
+			initializeObject();
+			
 			DroppedWeapon.Weapon = this;
 		}
 		
@@ -70,6 +77,25 @@ namespace Weapons.Base
 			}
 		}
 
+		public void OnDisable()
+		{
+			clearCast();
+			LastStartedCast = float.NegativeInfinity;
+			LastFinishedCast = float.NegativeInfinity;
+			IsCasting = false;
+			PoolingManager.Instance.Add(WeaponData, gameObject);
+		}
+
+		public virtual void Spawn(Vector3 position, Vector3 angles)
+		{
+			initializeObject();
+			
+			thisTr.position = position;
+			thisTr.eulerAngles = angles;
+			
+			thisGo.SetActive(true);
+		}
+		
 		public virtual void Take(IAlive alive)
 		{
 			if (alive == null || Owner != null)
@@ -87,11 +113,9 @@ namespace Weapons.Base
 			for (var i = 0; i < Colliders.Length; i++)
 				Colliders[i].enabled = false;
 			
-			var tr = GetTransform();
-			
-			tr.SetParent(Owner.Body.WeaponContainer);
-			tr.localPosition = Vector3.zero;
-			tr.localEulerAngles = Vector3.zero;
+			thisTr.SetParent(Owner.Body.WeaponContainer);
+			thisTr.localPosition = Vector3.zero;
+			thisTr.localEulerAngles = Vector3.zero;
 		}
 		
 		public virtual void Drop()
@@ -105,12 +129,10 @@ namespace Weapons.Base
 
 			var movePos = dropTr.position + (Vector3.down * 0.1f) + (dropTr.right * 0.1f);
 			var moveAng = dropTr.eulerAngles;
-
-			var tr = GetTransform();
 			
-			tr.SetParent(World.World.Instance.Objects);
-			tr.position = movePos;
-			tr.eulerAngles = moveAng;
+			thisTr.SetParent(World.World.Instance.Objects);
+			thisTr.position = movePos;
+			thisTr.eulerAngles = moveAng;
 			
 			for (var i = 0; i < Colliders.Length; i++)
 				Colliders[i].enabled = true;
@@ -160,7 +182,7 @@ namespace Weapons.Base
 
 			Owner.UseMana(WeaponData.ManaCost, this);
 			
-			CalculateHit();
+			calculateHit();
 			clearCast();
 
 			if (WeaponData.MaximumDistance != 0f && LastHit.distance > WeaponData.MaximumDistance)
@@ -185,11 +207,21 @@ namespace Weapons.Base
 		}
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public GameObject GetGameObject() => gameObject;
+		public GameObject GetGameObject() => thisGo;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public Transform GetTransform() => transform;
+		public Transform GetTransform() => thisTr;
 
-		public void CalculateHit()
+		private void initializeObject()
+		{
+			if (init)
+				return;
+
+			thisGo = gameObject;
+			thisTr = thisGo.transform;
+			init = true;
+		}
+		
+		private void calculateHit()
 		{
 			LastRay = default;
 			LastHit = default;
@@ -211,15 +243,6 @@ namespace Weapons.Base
 
 			Physics.Raycast(LastRay, out var hit, float.MaxValue, ~LayerMaskTools.GetMask());
 			LastHit = hit;
-		}
-
-		public void OnDisable()
-		{
-			clearCast();
-			LastStartedCast = float.NegativeInfinity;
-			LastFinishedCast = float.NegativeInfinity;
-			IsCasting = false;
-			PoolingManager.Instance.AddToPool(WeaponData, gameObject);
 		}
 
 		private void clearCast()

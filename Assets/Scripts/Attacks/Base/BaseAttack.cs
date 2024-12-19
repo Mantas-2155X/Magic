@@ -67,7 +67,7 @@ namespace Attacks.Base
 
 		public void OnParticleSystemStopped()
 		{
-			PoolingManager.Instance.AddToPool(AttackData, thisGo);
+			PoolingManager.Instance.Add(AttackData, thisGo);
 		}
 
 		public virtual void OnTriggerEnabled()

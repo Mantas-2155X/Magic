@@ -255,7 +255,6 @@ namespace Managers
 			go.name = $"NPC {NPCs.Count}";
 			
 			var tr = go.transform;
-			tr.SetParent(World.World.Instance.Characters);
 			tr.position = position;
 			tr.eulerAngles = angles;
 			
@@ -284,7 +283,6 @@ namespace Managers
 			go.name = "Player";
 			
 			var tr = go.transform;
-			tr.SetParent(World.World.Instance.Characters);
 			tr.position = position;
 			tr.eulerAngles = angles;
 

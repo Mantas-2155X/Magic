@@ -77,64 +77,33 @@ namespace Managers
 
 		public IObject CreateObject(ObjectData data, Vector3 position, Vector3 angles)
 		{
-			IObject obj;
-
-			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
-			if (pooled != null)
-				obj = pooled.GetComponent<IObject>();
-			else
-				obj = Instantiate(data.Prefab).GetComponent<IObject>();
-			
+			var obj = PoolingManager.Instance.TakeOrCreate<IObject>(data, false);
 			obj.Spawn(position, angles);
+			
 			return obj;
 		}
 		
 		public IWeapon CreateWeapon(WeaponData data, Vector3 position, Vector3 angles)
 		{
-			IWeapon weapon;
-				
-			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
-			if (pooled != null)
-				weapon = pooled.GetComponent<IWeapon>();
-			else
-				weapon = Instantiate(data.Prefab).GetComponent<IWeapon>();
+			var weapon = PoolingManager.Instance.TakeOrCreate<IWeapon>(data, false);
+			weapon.Spawn(position, angles);
 			
-			var go = weapon.GetGameObject();
-			
-			var tr = go.transform;
-			tr.SetParent(World.World.Instance.Objects);
-			tr.position = position;
-			tr.eulerAngles = angles;
-			
-			go.SetActive(true);
 			return weapon;
 		}
 		
 		public ICast CreateCast(CastData data, Component source)
 		{
-			ICast cast;
-
-			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
-			if (pooled != null)
-				cast = pooled.GetComponent<ICast>();
-			else
-				cast = Instantiate(data.Prefab).GetComponent<ICast>();
-
+			var cast = PoolingManager.Instance.TakeOrCreate<ICast>(data, false);
 			cast.Spawn(source);
+			
 			return cast;
 		}
 		
 		public IProjectile CreateProjectile(ProjectileData data, IWeapon weapon, Vector3 origin, Vector3 direction)
 		{
-			IProjectile projectile;
-
-			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
-			if (pooled != null)
-				projectile = pooled.GetComponent<IProjectile>();
-			else
-				projectile = Instantiate(data.Prefab).GetComponent<IProjectile>();
-			
+			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
 			projectile.Spawn(weapon, origin, direction * data.Force);
+			
 			return projectile;
 		}
 
@@ -150,13 +119,7 @@ namespace Managers
 		
 		private IAttack createAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
 		{
-			IAttack attack;
-
-			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
-			if (pooled != null)
-				attack = pooled.GetComponent<IAttack>();
-			else
-				attack = Instantiate(data.Prefab).GetComponent<IAttack>();
+			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);
 
 			Quaternion angles;
 

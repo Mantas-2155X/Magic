@@ -14,7 +14,7 @@ namespace Editor
 		{
 			var pool = (PoolingManager)target;
 			if (GUILayout.Button("Clear"))
-				pool.ClearPool();
+				pool.Clear();
 
 			ShowStats = EditorGUILayout.ToggleLeft("Show Stats", ShowStats);
 			if (!ShowStats)

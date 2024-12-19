@@ -1,4 +1,4 @@
-#define BODY_GIB
+//#define BODY_GIB
 
 using System.Runtime.CompilerServices;
 using AI.Enums;
@@ -128,6 +128,7 @@ namespace AI.Base
 			{
 				thisGo = gameObject;
 				thisTr = thisGo.transform;
+				thisTr.SetParent(World.World.Instance.Characters);
 				init = true;
 			}
 			

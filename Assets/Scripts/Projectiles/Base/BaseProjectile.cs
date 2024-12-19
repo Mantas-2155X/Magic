@@ -131,7 +131,7 @@ namespace Projectiles.Base
 			
 			await UniTask.WaitForFixedUpdate();
 			
-			PoolingManager.Instance.AddToPool(ProjectileData, thisGo);
+			PoolingManager.Instance.Add(ProjectileData, thisGo);
 		}
 	}
 }

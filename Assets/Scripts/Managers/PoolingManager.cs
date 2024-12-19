@@ -15,7 +15,7 @@ namespace Managers
 			Instance = this;
 		}
 
-		public void AddToPool(Data data, GameObject go, bool disable = true)
+		public void Add(Data data, GameObject go, bool disable = true)
 		{
 			if (Pool.TryGetValue(data, out var list))
 			{
@@ -34,7 +34,7 @@ namespace Managers
 			list.Add(go);
 		}
 
-		public GameObject TakeFromPool(Data data, bool enable)
+		public GameObject Take(Data data, bool enable)
 		{
 			if (!Pool.TryGetValue(data, out var list) || list.Count == 0)
 				return null;
@@ -48,12 +48,22 @@ namespace Managers
 			return go;
 		}
 		
-		public void ClearPool(Data data)
+		public T TakeOrCreate<T>(Data data, bool enablePooled)
+		{
+			var obj = Take(data, enablePooled);
+			
+			if (obj == null)
+				obj = Instantiate(data.Prefab);
+
+			return obj.GetComponent<T>();
+		}
+		
+		public void Clear(Data data)
 		{
 			Pool.Remove(data);
 		}
 
-		public void ClearPool()
+		public void Clear()
 		{
 			Pool.Clear();
 		}
