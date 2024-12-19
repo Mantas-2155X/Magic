@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8675571272634498981}
   - component: {fileID: -6803533052199284734}
   - component: {fileID: 17089712329238078}
-  - component: {fileID: 175215546004666645}
   - component: {fileID: 2214021331141946999}
   - component: {fileID: 7443144026641663299}
+  - component: {fileID: -6764840103281984022}
   m_Layer: 8
   m_Name: ManaBall
   m_TagString: Untagged
@@ -4786,22 +4786,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &175215546004666645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6837300406704376654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f877759d2e06470ebdb39ef08f48befe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Rigidbody>k__BackingField: {fileID: -6803533052199284734}
-  <Collider>k__BackingField: {fileID: 7443144026641663299}
-  <Distance>k__BackingField: 15
-  <Damage>k__BackingField: 5
 --- !u!199 &2214021331141946999
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4901,3 +4885,17 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-6764840103281984022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6837300406704376654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d16a66298d84f7e8182915241237f80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Rigidbody>k__BackingField: {fileID: -6803533052199284734}
+  <Collider>k__BackingField: {fileID: 7443144026641663299}

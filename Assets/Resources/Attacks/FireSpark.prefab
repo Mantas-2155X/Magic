@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2894096063942385108}
   - component: {fileID: 8176768647540141391}
   - component: {fileID: 5821121384264100414}
-  - component: {fileID: 5379871684110953747}
+  - component: {fileID: -6842290158623438316}
   m_Layer: 1
   m_Name: FireSpark
   m_TagString: Untagged
@@ -4834,7 +4834,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &5379871684110953747
+--- !u!114 &-6842290158623438316
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4843,10 +4843,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2895964246749410662}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da84151879254c9f8d9f112361120f22, type: 3}
+  m_Script: {fileID: 11500000, guid: a72b6aab001340ec811d664e79ea6111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <System>k__BackingField: {fileID: 8176768647540141391}
   <Trigger>k__BackingField: {fileID: 0}
-  <EnableTriggerAfter>k__BackingField: 0
-  <DisableTriggerAfter>k__BackingField: 0

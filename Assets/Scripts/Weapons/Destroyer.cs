@@ -7,6 +7,6 @@ namespace Weapons
 {
 	public class Destroyer : BaseAttackWeapon
 	{
-		public override Type Attack => typeof(Incinerate);
+		
 	}
 }

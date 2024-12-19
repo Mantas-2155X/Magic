@@ -85,16 +85,17 @@ namespace Managers
 			return cast;
 		}
 		
-		public IAttack CreateAttack(Type type, Component source, Vector3 position, Quaternion angles, Transform attach)
+		public IAttack CreateAttack(AttackData data, Component source, Vector3 position, Quaternion angles, Transform attach)
 		{
 			IAttack attack;
 
-			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
+			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
 			if (pooled != null)
 				attack = pooled.GetComponent<IAttack>();
 			else
-				attack = Instantiate(Resources.Load<GameObject>($"Attacks/{type.Name}")).GetComponent<IAttack>();
-			
+				attack = Instantiate(data.Prefab).GetComponent<IAttack>();
+
+			attack.AttackData = data;
 			attack.Spawn(source, position, angles, attach);
 			return attack;
 		}

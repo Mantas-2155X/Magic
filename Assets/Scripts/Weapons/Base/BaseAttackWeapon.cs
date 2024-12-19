@@ -1,6 +1,7 @@
 using System;
 using Attacks.Enums;
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -9,7 +10,8 @@ namespace Weapons.Base
 	public class BaseAttackWeapon : BaseWeapon, IAttackWeapon
 	{
 		public virtual EAttackAngle AttackAngle { get; private set; }
-		public virtual Type Attack { get; private set; }
+		[field: SerializeField]
+		public AttackData Attack { get; private set; }
 
 		public override bool FinishCasting()
 		{

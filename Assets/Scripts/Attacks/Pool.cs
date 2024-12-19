@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
 using AI.Interfaces;
+using Attacks.Base;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Enums;
 using UnityEngine;
 
-namespace Attacks.Base
+namespace Attacks
 {
-	public class BasePool : BaseAttack
+	public class Pool : BaseAttack
 	{
 		[SerializeField]
 		public Collider[] Colliders;
 
 		[field: SerializeField]
-		public virtual EPoolType Type { get; private set; }
+		public EPoolType Type { get; private set; }
 		
 		[field: SerializeField]
 		public virtual float Rate { get; private set; }

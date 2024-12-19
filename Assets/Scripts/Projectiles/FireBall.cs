@@ -7,7 +7,6 @@ namespace Projectiles
 {
 	public class FireBall : BaseProjectile
 	{
-		public override Type Attack => typeof(FireSpark);
 		public override EAttackAngle AttackAngle => EAttackAngle.HitNormal;
 	}
 }

@@ -25,7 +25,7 @@ namespace Projectiles.Base
 		public Collider Collider { get; private set; }
 		
 		public virtual EAttackAngle AttackAngle { get; private set; }
-		public virtual Type Attack { get; private set; }
+		public AttackData Attack { get; private set; }
 
 		private CancellationTokenSource rangeToken;
 		private Vector3 startingPosition;

@@ -16,7 +16,7 @@ namespace Projectiles.Interfaces
 		public Collider Collider { get; }
 		
 		public EAttackAngle AttackAngle { get; }
-		public Type Attack { get; }
+		public AttackData Attack { get; }
 		
 		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
 

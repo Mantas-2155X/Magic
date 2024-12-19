@@ -2,26 +2,21 @@ using System.Runtime.CompilerServices;
 using Attacks.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Attacks.Base
 {
 	public class BaseAttack : MonoBehaviour, IAttack
 	{
+		public AttackData AttackData { get; set; }
+		
 		public Component Source { get; private set; }
 
 		[field: SerializeField]
 		public ParticleSystem System { get; private set; }
 		[field: SerializeField]
 		public Collider Trigger { get; private set; }
-
-		[field: SerializeField]
-		public float EnableTriggerAfter { get; private set; }
-		[field: SerializeField]
-		public float DisableTriggerAfter { get; private set; }
-
-		[field: SerializeField]
-		public bool Attach { get; private set; }
 
 		private Transform target;
 		
@@ -42,7 +37,7 @@ namespace Attacks.Base
 			
 			Source = source;
 
-			target = Attach ? attach : null;
+			target = AttackData.AttachToTarget ? attach : null;
 
 			if (target == null)
 			{
@@ -71,7 +66,7 @@ namespace Attacks.Base
 
 		public void OnParticleSystemStopped()
 		{
-			PoolingManager.Instance.AddToPool(GetType(), thisGo);
+			PoolingManager.Instance.AddToPool(AttackData, thisGo);
 		}
 
 		public virtual void OnTriggerEnabled()
@@ -99,14 +94,14 @@ namespace Attacks.Base
 		
 		private async UniTaskVoid trigger()
 		{
-			await UniTask.WaitForSeconds(EnableTriggerAfter);
+			await UniTask.WaitForSeconds(AttackData.EnableTriggerAfter);
 			
 			if (!isActiveAndEnabled)
 				return;
 
 			OnTriggerEnabled();
 			
-			await UniTask.WaitForSeconds(DisableTriggerAfter);
+			await UniTask.WaitForSeconds(AttackData.DisableTriggerAfter);
 			
 			if (!isActiveAndEnabled)
 				return;
