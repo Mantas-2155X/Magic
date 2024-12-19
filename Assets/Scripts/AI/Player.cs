@@ -341,8 +341,10 @@ namespace AI
 			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithPlayer()))
 				return;
 			
-			var usable = hit.collider.GetComponent<IUsable>();
-			usable?.Use(this);
+			if (!hit.collider.TryGetComponent<IUsable>(out var usable))
+				return;
+
+			usable.Use(this);
 		}
 
 		private void onNoclip(InputAction.CallbackContext ctx)

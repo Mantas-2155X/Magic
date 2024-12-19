@@ -6,6 +6,8 @@ namespace Objects.Interfaces
 {
 	public interface IUsable
 	{
+		public string DisplayName { get; }
+
 		public float UsableAfter { get; }
 		public EDestroyType DestroyAfterUse { get; }
 		

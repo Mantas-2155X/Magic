@@ -12,6 +12,12 @@ namespace Objects
 
 		[SerializeField]
 		public float HealAmount;
+
+		public override void Awake()
+		{
+			base.Awake();
+			DisplayName = GetType().Name;
+		}
 		
 		public override bool Use(IAlive user)
 		{

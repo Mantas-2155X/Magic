@@ -11,6 +11,9 @@ namespace Objects.Base
 	public class BasePickupable : MonoBehaviour, IPickupable
 	{
 		[field: SerializeField]
+		public virtual string DisplayName { get; set; }
+
+		[field: SerializeField]
 		public virtual float PickupableAfter { get; private set; }
 		[field: SerializeField]
 		public virtual EDestroyType DestroyAfterPickup { get; private set; }
@@ -23,7 +26,7 @@ namespace Objects.Base
 
 		private bool init;
 		
-		public void Awake()
+		public virtual void Awake()
 		{
 			if (!init)
 			{
@@ -31,6 +34,8 @@ namespace Objects.Base
 				thisTr = thisGo.transform;
 				init = true;
 			}
+			
+			DisplayName = thisGo.name;
 		}
 		
 		public virtual void OnEnable()

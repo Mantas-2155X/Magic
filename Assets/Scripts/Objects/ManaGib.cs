@@ -13,6 +13,12 @@ namespace Objects
 		[SerializeField]
 		public float GenerateAmount;
 		
+		public override void Awake()
+		{
+			base.Awake();
+			DisplayName = GetType().Name;
+		}
+		
 		public override bool Use(IAlive user)
 		{
 			var success = base.Use(user);

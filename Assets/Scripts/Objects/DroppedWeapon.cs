@@ -15,6 +15,8 @@ namespace Objects
 		public override void OnEnable()
 		{
 			Weapon = GetComponent<IWeapon>();
+			DisplayName = Weapon.GetType().Name;
+			
 			base.OnEnable();
 		}
 		

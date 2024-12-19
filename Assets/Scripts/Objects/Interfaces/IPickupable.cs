@@ -6,6 +6,8 @@ namespace Objects.Interfaces
 {
 	public interface IPickupable
 	{
+		public string DisplayName { get; }
+		
 		public float PickupableAfter { get; }
 		public EDestroyType DestroyAfterPickup { get; }
 		

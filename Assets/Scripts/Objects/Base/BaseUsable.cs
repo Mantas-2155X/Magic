@@ -10,6 +10,9 @@ namespace Objects.Base
 	public class BaseUsable : MonoBehaviour, IUsable
 	{
 		[field: SerializeField]
+		public virtual string DisplayName { get; set; }
+
+		[field: SerializeField]
 		public virtual float UsableAfter { get; private set; }
 		[field: SerializeField]
 		public virtual EDestroyType DestroyAfterUse { get; private set; }
@@ -22,7 +25,7 @@ namespace Objects.Base
 
 		private bool init;
 		
-		public void Awake()
+		public virtual void Awake()
 		{
 			if (!init)
 			{
@@ -30,6 +33,8 @@ namespace Objects.Base
 				thisTr = thisGo.transform;
 				init = true;
 			}
+
+			DisplayName = thisGo.name;
 		}
 		
 		public virtual void OnEnable()

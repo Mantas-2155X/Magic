@@ -89,22 +89,15 @@ namespace UI
 			
 			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.GetMaskWithPlayer()))
 			{
-				var rb = hit.rigidbody;
-				if (rb == null)
-					return;
+				var coll = hit.collider;
 				
-				var pickupable = rb.GetComponent<IPickupable>();
-				if (pickupable == null)
-					return;
-
-				switch (pickupable)
+				if (coll.TryGetComponent<IPickupable>(out var pickupable) && pickupable.CanPickup(player))
 				{
-					case DroppedWeapon droppedWeapon:
-						LookTarget.text = droppedWeapon.Weapon.GetType().Name;
-						break;
-					default:
-						LookTarget.text = pickupable.GetGameObject().name;
-						break;
+					LookTarget.text = pickupable.DisplayName;
+				}
+				else if (coll.TryGetComponent<IUsable>(out var usable) && usable.CanUse(player))
+				{
+					LookTarget.text = usable.DisplayName;
 				}
 			}
 		}
