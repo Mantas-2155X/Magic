@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -5,13 +6,10 @@ using Managers;
 using Objects.Enums;
 using UnityEngine;
 
-namespace Objects.Base
+namespace Attacks.Base
 {
-	public class BasePool : MonoBehaviour
+	public class BasePool : BaseAttack
 	{
-		[SerializeField]
-		public ParticleSystem System;
-		
 		[SerializeField]
 		public Collider[] Colliders;
 
@@ -29,19 +27,14 @@ namespace Objects.Base
 		
 		private List<IAlive> alives = new ();
 
-		public void OnEnable()
+		public override void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
 		{
-			System.Play(true);
+			base.Spawn(source, position, angles, attach);
 			
 			loop().Forget();
 			
 			if (Lifetime > 0f)
 				lifetime().Forget();
-		}
-
-		public void OnParticleSystemStopped()
-		{
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
 		}
 
 		public void OnTriggerEnter(Collider other)
@@ -67,9 +60,19 @@ namespace Objects.Base
 			alives.Remove(alive);
 		}
 
-		public virtual void OnPoolLooped(IAlive alive)
+		public void OnPoolLooped(IAlive alive)
 		{
-			
+			switch (Type)
+			{
+				case EPoolType.Health:
+					alive.Heal(Amount, this, true);
+					break;
+				case EPoolType.Mana:
+					alive.GenerateMana(Amount, this, true);
+					break;
+				default:
+					throw new NotImplementedException();
+			}
 		}
 		
 		private async UniTaskVoid loop()

@@ -4846,7 +4846,7 @@ GameObject:
   - component: {fileID: 9056139635790806535}
   - component: {fileID: 8129990088420941175}
   - component: {fileID: 7437254403649912194}
-  - component: {fileID: -7805442474279044281}
+  - component: {fileID: 1121914567812427523}
   m_Layer: 1
   m_Name: HealthPool
   m_TagString: Untagged
@@ -9680,7 +9680,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -9701,7 +9701,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -9712,7 +9712,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.675
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-7805442474279044281
+--- !u!114 &1121914567812427523
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9721,14 +9721,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 3523939064151980886}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3f03d35155043719228f009f81b3cf8, type: 3}
+  m_Script: {fileID: 11500000, guid: ab2d3f7fa50247d2a00bf9a7760076aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  System: {fileID: 1415210487458940227}
+  <System>k__BackingField: {fileID: 1415210487458940227}
+  <Trigger>k__BackingField: {fileID: 0}
+  <EnableTriggerAfter>k__BackingField: 0
+  <DisableTriggerAfter>k__BackingField: 0
+  <Attach>k__BackingField: 0
   Colliders:
   - {fileID: 8129990088420941175}
   - {fileID: 7437254403649912194}
   <Type>k__BackingField: 0
   <Rate>k__BackingField: 0.15
   <Amount>k__BackingField: 1.25
-  <Lifetime>k__BackingField: 0
+  <Lifetime>k__BackingField: 15

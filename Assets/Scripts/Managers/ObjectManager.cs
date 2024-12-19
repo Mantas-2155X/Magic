@@ -1,4 +1,5 @@
 using System;
+using Attacks.Base;
 using Attacks.Interfaces;
 using Casts.Interfaces;
 using Objects;
@@ -66,28 +67,6 @@ namespace Managers
 			
 			portal.Spawn(position);
 			return portal;
-		}
-		
-		public BasePool CreatePool(Type type, Vector3 position, float lifetime)
-		{
-			BasePool pool;
-				
-			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
-			if (pooled != null)
-				pool = pooled.GetComponent<BasePool>();
-			else
-				pool = Instantiate(Resources.Load<GameObject>($"Pools/{type.Name}")).GetComponent<BasePool>();
-			
-			pool.Lifetime = lifetime;
-			
-			var go = pool.gameObject;
-			
-			var tr = go.transform;
-			tr.SetParent(World.World.Instance.Other);
-			tr.position = position;
-			
-			go.SetActive(true);
-			return pool;
 		}
 		
 		public ICast CreateCast(CastData data, Component source)
