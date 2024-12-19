@@ -44,7 +44,7 @@ namespace Projectiles.Base
 			{
 				var coll = collision.collider;
 				
-				if (coll.TryGetComponent<IAlive>(out var alive))
+				if (AIManager.Instance.AlivesColliderMap.TryGetValue(coll, out var alive))
 				{
 					attach = alive.GetTransform();
 					alive.Damage(ProjectileData.Damage, this);

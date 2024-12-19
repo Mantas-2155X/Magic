@@ -86,14 +86,17 @@ namespace UI
 			
 			Crosshair.color = player.IsGrounded() ? Color.white : Color.red;
 			
-			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.GetMaskWithPlayer()) && hit.collider.TryGetComponent<IObject>(out var obj))
+			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.GetMaskWithPlayer()))
 			{
-				if (obj.CanPickup(player) || obj.CanUse(player))
+				if (hit.collider.TryGetComponent<IObject>(out var obj))
 				{
-					if (obj is DroppedWeapon droppedWeapon)
-						LookTarget.text = droppedWeapon.Weapon.WeaponData.Name;
-					else
-						LookTarget.text = obj.ObjectData.Name;
+					if (obj.CanPickup(player) || obj.CanUse(player))
+					{
+						if (obj is DroppedWeapon droppedWeapon)
+							LookTarget.text = droppedWeapon.Weapon.WeaponData.Name;
+						else
+							LookTarget.text = obj.ObjectData.Name;
+					}
 				}
 			}
 		}

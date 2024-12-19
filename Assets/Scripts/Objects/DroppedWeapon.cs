@@ -8,12 +8,6 @@ namespace Objects
 	{
 		public IWeapon Weapon;
 
-		public override void OnEnable()
-		{
-			Weapon = GetComponent<IWeapon>();
-			base.OnEnable();
-		}
-		
 		public override bool CanPickup(IAlive user)
 		{
 			return base.CanPickup(user) && user.Weapon?.WeaponData != Weapon?.WeaponData;

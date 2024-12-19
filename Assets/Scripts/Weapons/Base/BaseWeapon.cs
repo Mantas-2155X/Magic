@@ -37,6 +37,11 @@ namespace Weapons.Base
 		public float LastFinishedCast { get; private set; } = float.NegativeInfinity;
 
 		private ICast currentCast;
+
+		public void Awake()
+		{
+			DroppedWeapon.Weapon = this;
+		}
 		
 		public virtual void Update()
 		{
