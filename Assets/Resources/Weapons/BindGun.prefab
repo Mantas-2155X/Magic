@@ -103,10 +103,10 @@ PrefabInstance:
       addedObject: {fileID: 4308003757065491323}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2204370015849155352}
+      addedObject: {fileID: 894375091383438375}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6293957136486286640}
+      addedObject: {fileID: 1451257327231773055}
     - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2654227922841394834}
@@ -177,12 +177,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <WeaponData>k__BackingField: {fileID: 11400000, guid: f9d97d9436995e760970b566bd4d326a, type: 2}
-  <Rigidbody>k__BackingField: {fileID: 2204370015849155352}
+  <Rigidbody>k__BackingField: {fileID: 894375091383438375}
   <Colliders>k__BackingField:
   - {fileID: 2886060341139500075}
   - {fileID: 2654227922841394834}
+  <DroppedWeapon>k__BackingField: {fileID: 1451257327231773055}
   ownerTr: {fileID: 0}
---- !u!54 &2204370015849155352
+--- !u!54 &894375091383438375
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -209,7 +210,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6293957136486286640
+--- !u!114 &1451257327231773055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,6 +222,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951eace190fb41e4b9c55e2551725e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DisplayName>k__BackingField: 
-  <PickupableAfter>k__BackingField: 0
-  <DestroyAfterPickup>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c7fb8b85c7c0457be9940efe08cd6a87, type: 2}

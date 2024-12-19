@@ -1,4 +1,3 @@
-using Managers;
 using Objects.Base;
 using UnityEngine;
 
@@ -9,30 +8,10 @@ namespace Objects
 		[SerializeField]
 		public ParticleSystem System;
 
-		private GameObject thisGo;
-		private Transform thisTr;
-
-		private bool init;
-		
-		public void Spawn(Vector3 position)
+		public override void Spawn(Vector3 position, Vector3 angles)
 		{
-			if (!init)
-			{
-				thisGo = gameObject;
-				thisTr = thisGo.transform;
-				thisTr.SetParent(World.World.Instance.Other);
-				init = true;
-			}
-			
-			thisTr.position = position;
-			
-			thisGo.SetActive(true);
+			base.Spawn(position, angles);
 			System.Play(true);
-		}
-		
-		public void OnParticleSystemStopped()
-		{
-			PoolingManager.Instance.AddToPool(ObjectData, thisGo);
 		}
 	}
 }

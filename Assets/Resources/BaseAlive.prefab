@@ -123,8 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e3c6a593ad4cdc803cd08c419d7ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 4
 --- !u!1 &969460342333649466
 GameObject:
@@ -343,8 +342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e3c6a593ad4cdc803cd08c419d7ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 5
 --- !u!1 &4292834630882851298
 GameObject:
@@ -501,8 +499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e3c6a593ad4cdc803cd08c419d7ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 6
 --- !u!1 &4788612110221929362
 GameObject:
@@ -657,8 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e3c6a593ad4cdc803cd08c419d7ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 5
 --- !u!1 &5238415708173528890
 GameObject:
@@ -865,8 +861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e3c6a593ad4cdc803cd08c419d7ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 8
 --- !u!65 &4081477746048653934
 BoxCollider:
@@ -1045,8 +1040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e3c6a593ad4cdc803cd08c419d7ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 4
 --- !u!1 &7661345106908029820
 GameObject:
@@ -1171,8 +1165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e3c6a593ad4cdc803cd08c419d7ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 6
 --- !u!1001 &1154177109931560609
 PrefabInstance:
@@ -1297,8 +1290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a7f263614ac4f858f3ab0cf12755962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: 96d6b50da392b7423a35d257f4b291ba, type: 2}
   GenerateAmount: 20
 --- !u!1001 &3958474374858908362
 PrefabInstance:
@@ -1423,6 +1415,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a7f263614ac4f858f3ab0cf12755962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UsableAfter>k__BackingField: 0
-  <DestroyAfterUse>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: 96d6b50da392b7423a35d257f4b291ba, type: 2}
   GenerateAmount: 20

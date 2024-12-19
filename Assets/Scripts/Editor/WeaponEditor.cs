@@ -32,7 +32,7 @@ namespace Editor
 				weapon.Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
 				weapon.Rigidbody.mass = 5f;
 
-				go.AddComponent<DroppedWeapon>();
+				weapon.DroppedWeapon = go.AddComponent<DroppedWeapon>();
 				
 				UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(weapon.gameObject.scene);
 			}

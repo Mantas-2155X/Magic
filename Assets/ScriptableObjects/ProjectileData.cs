@@ -5,6 +5,7 @@ namespace ScriptableObjects
 	[CreateAssetMenu]
 	public class ProjectileData : Data
 	{
+		[Header("Projectile")]
 		[SerializeField]
 		public float Force;
 

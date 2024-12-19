@@ -5,6 +5,7 @@ namespace ScriptableObjects
 	[CreateAssetMenu]
 	public class WeaponData : Data
 	{
+		[Header("Weapon")]
 		[SerializeField]
 		public float ManaCost;
 		

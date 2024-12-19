@@ -1,4 +1,5 @@
 using AI.Interfaces;
+using Objects;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Weapons.Interfaces
 		
 		public Rigidbody Rigidbody { get; }
 		public Collider[] Colliders { get; }
+		public DroppedWeapon DroppedWeapon { get; }
 
 		public bool IsCasting { get; }
 		

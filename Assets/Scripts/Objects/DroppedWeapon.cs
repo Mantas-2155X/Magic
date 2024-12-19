@@ -1,22 +1,16 @@
 using AI.Interfaces;
 using Objects.Base;
-using Objects.Enums;
 using Weapons.Interfaces;
 
 namespace Objects
 {
-	public class DroppedWeapon : BasePickupable
+	public class DroppedWeapon : BaseObject
 	{
-		public override float PickupableAfter => 0.5f;
-		public override EDestroyType DestroyAfterPickup => EDestroyType.Component;
-		
-		public IWeapon Weapon { get; private set; }
+		public IWeapon Weapon;
 
 		public override void OnEnable()
 		{
 			Weapon = GetComponent<IWeapon>();
-			DisplayName = Weapon.GetType().Name;
-			
 			base.OnEnable();
 		}
 		

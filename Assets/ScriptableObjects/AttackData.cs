@@ -6,6 +6,7 @@ namespace ScriptableObjects
 	[CreateAssetMenu]
 	public class AttackData : Data
 	{
+		[Header("Attack")]
 		[SerializeField]
 		public float EnableTriggerAfter;
 		

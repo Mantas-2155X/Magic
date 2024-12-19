@@ -211,10 +211,10 @@ PrefabInstance:
       addedObject: {fileID: 2402447075819818926}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8419343554347956727}
+      addedObject: {fileID: 1265006653536339082}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9082275990331772532}
+      addedObject: {fileID: 3987369785624080558}
     - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1531224876057879590}
@@ -258,12 +258,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <WeaponData>k__BackingField: {fileID: 11400000, guid: 102c057ee64c1e35aa6c9c2695462071, type: 2}
-  <Rigidbody>k__BackingField: {fileID: 8419343554347956727}
+  <Rigidbody>k__BackingField: {fileID: 1265006653536339082}
   <Colliders>k__BackingField:
   - {fileID: 5143474651447711718}
   - {fileID: 1531224876057879590}
+  <DroppedWeapon>k__BackingField: {fileID: 3987369785624080558}
   ownerTr: {fileID: 0}
---- !u!54 &8419343554347956727
+--- !u!54 &1265006653536339082
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -290,7 +291,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &9082275990331772532
+--- !u!114 &3987369785624080558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -302,9 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951eace190fb41e4b9c55e2551725e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DisplayName>k__BackingField: 
-  <PickupableAfter>k__BackingField: 0
-  <DestroyAfterPickup>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c7fb8b85c7c0457be9940efe08cd6a87, type: 2}
 --- !u!4 &3309045991044829758 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}

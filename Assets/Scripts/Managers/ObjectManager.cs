@@ -4,7 +4,7 @@ using AI.Interfaces;
 using Attacks.Enums;
 using Attacks.Interfaces;
 using Casts.Interfaces;
-using Objects;
+using Objects.Interfaces;
 using Projectiles.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
@@ -75,20 +75,18 @@ namespace Managers
 
 		#region Create
 
-		public Portal CreatePortal(Vector3 position)
+		public IObject CreateObject(ObjectData data, Vector3 position, Vector3 angles)
 		{
-			var data = GetObject("Portal");
-			
-			Portal portal;
+			IObject obj;
 
 			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
 			if (pooled != null)
-				portal = pooled.GetComponent<Portal>();
+				obj = pooled.GetComponent<IObject>();
 			else
-				portal = Instantiate(data.Prefab).GetComponent<Portal>();
+				obj = Instantiate(data.Prefab).GetComponent<IObject>();
 			
-			portal.Spawn(position);
-			return portal;
+			obj.Spawn(position, angles);
+			return obj;
 		}
 		
 		public IWeapon CreateWeapon(WeaponData data, Vector3 position, Vector3 angles)

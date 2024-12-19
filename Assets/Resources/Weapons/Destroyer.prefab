@@ -74,10 +74,10 @@ PrefabInstance:
       addedObject: {fileID: 3144674404040955451}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8917575100092233325}
+      addedObject: {fileID: 6927056870077725062}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7527365502746050096}
+      addedObject: {fileID: 4451897465419232745}
     - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8434275448109667988}
@@ -121,12 +121,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <WeaponData>k__BackingField: {fileID: 11400000, guid: 22c695b428516336c8f53a20bc11cbf2, type: 2}
-  <Rigidbody>k__BackingField: {fileID: 8917575100092233325}
+  <Rigidbody>k__BackingField: {fileID: 6927056870077725062}
   <Colliders>k__BackingField:
   - {fileID: 885924708890772066}
   - {fileID: 8434275448109667988}
+  <DroppedWeapon>k__BackingField: {fileID: 4451897465419232745}
   ownerTr: {fileID: 0}
---- !u!54 &8917575100092233325
+--- !u!54 &6927056870077725062
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,7 +154,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7527365502746050096
+--- !u!114 &4451897465419232745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,9 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951eace190fb41e4b9c55e2551725e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DisplayName>k__BackingField: 
-  <PickupableAfter>k__BackingField: 0
-  <DestroyAfterPickup>k__BackingField: 0
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c7fb8b85c7c0457be9940efe08cd6a87, type: 2}
 --- !u!1 &4739896391730965043 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}

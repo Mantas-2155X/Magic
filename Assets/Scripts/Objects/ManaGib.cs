@@ -1,23 +1,13 @@
 using AI.Interfaces;
 using Objects.Base;
-using Objects.Enums;
 using UnityEngine;
 
 namespace Objects
 {
-	public class ManaGib : BaseUsable
+	public class ManaGib : BaseObject
 	{
-		public override float UsableAfter => 0.1f;
-		public override EDestroyType DestroyAfterUse => EDestroyType.GameObject;
-
 		[SerializeField]
 		public float GenerateAmount;
-		
-		public override void Awake()
-		{
-			base.Awake();
-			DisplayName = GetType().Name;
-		}
 		
 		public override bool Use(IAlive user)
 		{

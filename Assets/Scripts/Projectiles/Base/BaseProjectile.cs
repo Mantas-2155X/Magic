@@ -43,18 +43,16 @@ namespace Projectiles.Base
 			if (ProjectileData.Damage > 0)
 			{
 				var coll = collision.collider;
-				if (coll != null)
+				
+				if (coll.TryGetComponent<IAlive>(out var alive))
 				{
-					if (coll.TryGetComponent<IAlive>(out var alive))
-					{
-						attach = alive.GetTransform();
-						alive.Damage(ProjectileData.Damage, this);
-					}
-					else if (coll.TryGetComponent<IBreakable>(out var breakable))
-					{
-						attach = breakable.GetTransform();
-						breakable.Damage(ProjectileData.Damage, this);
-					}
+					attach = alive.GetTransform();
+					alive.Damage(ProjectileData.Damage, this);
+				}
+				else if (coll.TryGetComponent<IObject>(out var obj))
+				{
+					attach = obj.GetTransform();
+					obj.Damage(ProjectileData.Damage, this);
 				}
 			}
 			

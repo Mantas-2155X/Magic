@@ -25,6 +25,8 @@ namespace Weapons.Base
 		public Rigidbody Rigidbody { get; set; }
 		[field: SerializeField]
 		public Collider[] Colliders { get; set; }
+		[field: SerializeField]
+		public DroppedWeapon DroppedWeapon { get; set; }
 
 		public bool IsCasting { get; private set; }
 		
@@ -36,8 +38,6 @@ namespace Weapons.Base
 
 		private ICast currentCast;
 		
-		public Transform ownerTr;
-
 		public virtual void Update()
 		{
 			if (!IsCasting || Owner == null || !Owner.IsAlive)
@@ -72,9 +72,7 @@ namespace Weapons.Base
 			
 			Owner = alive;
 
-			ownerTr = Owner.GetTransform();
-			
-			Destroy(GetComponent<DroppedWeapon>());
+			DroppedWeapon.enabled = false;
 
 			Rigidbody.isKinematic = true;
 			Rigidbody.detectCollisions = false;
@@ -103,7 +101,6 @@ namespace Weapons.Base
 			var movePos = dropTr.position + (Vector3.down * 0.1f) + (dropTr.right * 0.1f);
 			var moveAng = dropTr.eulerAngles;
 
-			var go = GetGameObject();
 			var tr = GetTransform();
 			
 			tr.SetParent(World.World.Instance.Dropped);
@@ -112,8 +109,6 @@ namespace Weapons.Base
 			
 			for (var i = 0; i < Colliders.Length; i++)
 				Colliders[i].enabled = true;
-
-			go.AddComponent<DroppedWeapon>();
 			
 			Rigidbody.isKinematic = false;
 			Rigidbody.detectCollisions = true;
@@ -122,6 +117,8 @@ namespace Weapons.Base
 			
 			Rigidbody.MovePosition(movePos);
 			Rigidbody.MoveRotation(Quaternion.Euler(moveAng));
+
+			DroppedWeapon.enabled = true;
 
 			Owner = null;
 		}
@@ -191,6 +188,8 @@ namespace Weapons.Base
 		{
 			LastRay = default;
 			LastHit = default;
+
+			var ownerTr = Owner.GetTransform();
 			
 			switch (Owner)
 			{

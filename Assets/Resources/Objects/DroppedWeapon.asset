@@ -10,19 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
-  m_Name: Portal
+  m_Name: DroppedWeapon
   m_EditorClassIdentifier: 
-  Name: Portal
-  Description: Particle effect of a NPC spawn
-  Prefab: {fileID: 3523939064151980886, guid: 1e9552ce2ae17308186da256bb771548, type: 3}
-  IsPoolable: 2
+  Name: Dropped Weapon
+  Description: Weapon that can be picked up
+  Prefab: {fileID: 0}
+  IsPoolable: 0
   IsBreakable: 0
   StartingHealth: 0
-  IsPickupable: 0
-  PickupableTiming: 0
-  PickupableAfter: 0
-  DestroyAfterPickup: 0
+  IsPickupable: 1
+  PickupableAfter: 0.5
+  PickupAction: 3
   IsUsable: 0
-  UsableTiming: 0
   UsableAfter: 0
-  DestroyAfterUse: 0
+  UseAction: 0
