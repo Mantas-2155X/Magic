@@ -20,7 +20,7 @@ namespace Managers
 			Instance = this;
 		}
 
-		public IProjectile CreateProjectile(ProjectileData data, IWeapon weapon, Vector3 origin, Vector3 force)
+		public IProjectile CreateProjectile(ProjectileData data, IWeapon weapon, Vector3 origin, Vector3 direction)
 		{
 			IProjectile projectile;
 
@@ -31,7 +31,7 @@ namespace Managers
 				projectile = Instantiate(data.Prefab).GetComponent<IProjectile>();
 			
 			projectile.ProjectileData = data;
-			projectile.Spawn(weapon, origin, force);
+			projectile.Spawn(weapon, origin, direction * data.Force);
 			return projectile;
 		}
 		

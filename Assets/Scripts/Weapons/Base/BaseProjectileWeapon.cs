@@ -1,4 +1,3 @@
-using System;
 using Managers;
 using ScriptableObjects;
 using UnityEngine;
@@ -9,9 +8,6 @@ namespace Weapons.Base
 	public class BaseProjectileWeapon : BaseWeapon, IProjectileWeapon
 	{
 		[field: SerializeField]
-		public virtual float Force { get; private set; }
-
-		[field: SerializeField]
 		public ProjectileData Projectile { get; private set; }
 
 		public override bool FinishCasting()
@@ -20,10 +16,7 @@ namespace Weapons.Base
 			if (!status)
 				return false;
 
-			var origin = LastRay.origin;
-			var force = LastRay.direction * Force;
-
-			ObjectManager.Instance.CreateProjectile(Projectile, this, origin, force);
+			ObjectManager.Instance.CreateProjectile(Projectile, this, LastRay.origin, LastRay.direction);
 			return true;
 		}
 	}

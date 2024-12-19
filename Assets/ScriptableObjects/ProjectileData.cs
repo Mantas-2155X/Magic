@@ -6,6 +6,9 @@ namespace ScriptableObjects
 	public class ProjectileData : Data
 	{
 		[SerializeField]
+		public float Force;
+
+		[SerializeField]
 		public float Range;
 		
 		[SerializeField]
