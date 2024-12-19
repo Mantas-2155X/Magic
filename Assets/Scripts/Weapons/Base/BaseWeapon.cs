@@ -16,24 +16,15 @@ namespace Weapons.Base
 {
 	public class BaseWeapon : MonoBehaviour, IWeapon
 	{
+		[field: SerializeField]
+		public WeaponData WeaponData { get; set; }
+
 		public IAlive Owner { get; private set; }
 		
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; set; }
 		[field: SerializeField]
 		public Collider[] Colliders { get; set; }
-		
-		[field: SerializeField]
-		public virtual float TimeBetweenAttacks { get; private set; }
-		[field: SerializeField]
-		public virtual float CastingTime { get; private set; }
-		[field: SerializeField]
-		public virtual float ManaCost { get; private set; }
-		[field: SerializeField]
-		public virtual float Distance { get; private set; }
-
-		[field: SerializeField]
-		public CastData Cast { get; private set; }
 
 		public bool IsCasting { get; private set; }
 		
@@ -52,7 +43,7 @@ namespace Weapons.Base
 			if (!IsCasting || Owner == null || !Owner.IsAlive)
 				return;
 
-			if (Time.time < LastStartedCast + CastingTime)
+			if (Time.time < LastStartedCast + WeaponData.CastingTime)
 				return;
 
 			switch (Owner)
@@ -140,7 +131,7 @@ namespace Weapons.Base
 			if (IsCasting || Owner == null)
 				return false;
 
-			return Time.time >= LastFinishedCast + TimeBetweenAttacks && Owner.CurrentMana >= ManaCost;
+			return Time.time >= LastFinishedCast + WeaponData.Cooldown && Owner.CurrentMana >= WeaponData.ManaCost;
 		}
 		
 		public virtual void StartCasting()
@@ -151,11 +142,10 @@ namespace Weapons.Base
 			IsCasting = true;
 			LastStartedCast = Time.time;
 			
-			if (Cast != null)
-			{
-				clearCast();
-				currentCast = ObjectManager.Instance.CreateCast(Cast, this);
-			}
+			clearCast();
+
+			if (WeaponData.Cast != null)
+				currentCast = ObjectManager.Instance.CreateCast(WeaponData.Cast, this);
 		}
 		
 		public virtual bool FinishCasting()
@@ -166,15 +156,21 @@ namespace Weapons.Base
 			IsCasting = false;
 			LastFinishedCast = Time.time;
 
-			Owner.UseMana(ManaCost, this);
+			Owner.UseMana(WeaponData.ManaCost, this);
 			
 			CalculateHit();
 			clearCast();
 
-			if (Distance == 0f)
-				return true;
+			if (WeaponData.MaximumDistance != 0f && LastHit.distance > WeaponData.MaximumDistance)
+				return false;
+
+			if (WeaponData.Attack != null)
+				ObjectManager.Instance.CreateAttack(WeaponData.Attack, this, LastHit, LastHit.transform);
 			
-			return LastHit.distance <= Distance;
+			if (WeaponData.Projectile != null)
+				ObjectManager.Instance.CreateProjectile(WeaponData.Projectile, this, LastRay.origin, LastRay.direction);
+			
+			return true;
 		}
 		
 		public virtual void CancelCasting()
@@ -219,7 +215,7 @@ namespace Weapons.Base
 			LastStartedCast = float.NegativeInfinity;
 			LastFinishedCast = float.NegativeInfinity;
 			IsCasting = false;
-			PoolingManager.Instance.AddToPool(GetType(), gameObject);
+			PoolingManager.Instance.AddToPool(WeaponData, gameObject);
 		}
 
 		private void clearCast()

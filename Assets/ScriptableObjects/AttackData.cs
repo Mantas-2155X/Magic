@@ -8,6 +8,7 @@ namespace ScriptableObjects
 	{
 		[SerializeField]
 		public float EnableTriggerAfter;
+		
 		[SerializeField]
 		public float DisableTriggerAfter;
 

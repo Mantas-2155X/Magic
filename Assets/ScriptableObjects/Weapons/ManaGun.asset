@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88ec3dc2c574319883846e497d7a3a6, type: 3}
+  m_Name: ManaGun
+  m_EditorClassIdentifier: 
+  Name: Mana Gun
+  Description: Creates a mana pool at the target location
+  Prefab: {fileID: 2785414141410019460, guid: d923bab5249ccebf6ae4475369f9d36a, type: 3}
+  ManaCost: 60
+  Cooldown: 30
+  CastingTime: 3.5
+  MaximumDistance: 7.5
+  Cast: {fileID: 11400000, guid: a6d0636060cf7effb8a704dfc3e62d31, type: 2}
+  Attack: {fileID: 11400000, guid: 5ae3c512afd2a7fa29db787dc16248e6, type: 2}
+  Projectile: {fileID: 0}

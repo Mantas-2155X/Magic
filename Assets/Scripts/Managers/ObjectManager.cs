@@ -20,42 +20,6 @@ namespace Managers
 			Instance = this;
 		}
 
-		public IProjectile CreateProjectile(ProjectileData data, IWeapon weapon, Vector3 origin, Vector3 direction)
-		{
-			IProjectile projectile;
-
-			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
-			if (pooled != null)
-				projectile = pooled.GetComponent<IProjectile>();
-			else
-				projectile = Instantiate(data.Prefab).GetComponent<IProjectile>();
-			
-			projectile.ProjectileData = data;
-			projectile.Spawn(weapon, origin, direction * data.Force);
-			return projectile;
-		}
-		
-		public IWeapon CreateWeapon(Type type, Vector3 position, Vector3 angles)
-		{
-			IWeapon weapon;
-				
-			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
-			if (pooled != null)
-				weapon = pooled.GetComponent<IWeapon>();
-			else
-				weapon = Instantiate(Resources.Load<GameObject>($"Weapons/{type.Name}")).GetComponent<IWeapon>();
-
-			var go = weapon.GetGameObject();
-			
-			var tr = go.transform;
-			tr.SetParent(World.World.Instance.Dropped);
-			tr.position = position;
-			tr.eulerAngles = angles;
-			
-			go.SetActive(true);
-			return weapon;
-		}
-		
 		public Portal CreatePortal(Vector3 position)
 		{
 			Portal portal;
@@ -68,6 +32,29 @@ namespace Managers
 			
 			portal.Spawn(position);
 			return portal;
+		}
+		
+		public IWeapon CreateWeapon(WeaponData data, Vector3 position, Vector3 angles)
+		{
+			IWeapon weapon;
+				
+			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
+			if (pooled != null)
+				weapon = pooled.GetComponent<IWeapon>();
+			else
+				weapon = Instantiate(data.Prefab).GetComponent<IWeapon>();
+
+			weapon.WeaponData = data;
+
+			var go = weapon.GetGameObject();
+			
+			var tr = go.transform;
+			tr.SetParent(World.World.Instance.Dropped);
+			tr.position = position;
+			tr.eulerAngles = angles;
+			
+			go.SetActive(true);
+			return weapon;
 		}
 		
 		public ICast CreateCast(CastData data, Component source)
@@ -85,6 +72,21 @@ namespace Managers
 			return cast;
 		}
 		
+		public IProjectile CreateProjectile(ProjectileData data, IWeapon weapon, Vector3 origin, Vector3 direction)
+		{
+			IProjectile projectile;
+
+			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
+			if (pooled != null)
+				projectile = pooled.GetComponent<IProjectile>();
+			else
+				projectile = Instantiate(data.Prefab).GetComponent<IProjectile>();
+			
+			projectile.ProjectileData = data;
+			projectile.Spawn(weapon, origin, direction * data.Force);
+			return projectile;
+		}
+
 		public IAttack CreateAttack(AttackData data, Component source, RaycastHit hit, Transform attach)
 		{
 			return CreateAttack(data, source, hit.point, hit.normal, attach);

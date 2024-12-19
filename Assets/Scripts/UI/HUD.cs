@@ -2,13 +2,11 @@ using AI;
 using AI.Base;
 using AI.Interfaces;
 using Managers;
-using Objects;
 using Objects.Interfaces;
 using TMPro;
 using Tools;
 using UnityEngine;
 using UnityEngine.UI;
-using Weapons.Interfaces;
 
 namespace UI
 {
@@ -52,7 +50,7 @@ namespace UI
 				if (weapon.IsCasting)
 				{
 					var startingTime = weapon.LastStartedCast;
-					var targetTime = startingTime + weapon.CastingTime;
+					var targetTime = startingTime + weapon.WeaponData.CastingTime;
 					
 					var amount = MathTools.Remap(Time.time, startingTime, targetTime, 0f, 1f);
 					amount = Mathf.Clamp01(amount);
@@ -71,7 +69,7 @@ namespace UI
 				else
 				{
 					var finishTime = weapon.LastFinishedCast;
-					var cooldownTime = finishTime + weapon.TimeBetweenAttacks;
+					var cooldownTime = finishTime + weapon.WeaponData.Cooldown;
 
 					var amount = MathTools.Remap(Time.time, finishTime, cooldownTime, 1f, 0f);
 					amount = Mathf.Clamp01(amount);

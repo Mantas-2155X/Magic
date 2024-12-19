@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88ec3dc2c574319883846e497d7a3a6, type: 3}
+  m_Name: ShieldGun
+  m_EditorClassIdentifier: 
+  Name: Shield Gun
+  Description: Creates a projectile shield at the target location
+  Prefab: {fileID: 9150455038998059246, guid: f971b26fad26bba8d81414c29e5ad0e1, type: 3}
+  ManaCost: 50
+  Cooldown: 15
+  CastingTime: 1.5
+  MaximumDistance: 7.5
+  Cast: {fileID: 11400000, guid: 8dea02d4d2d50018695eca0411d885a6, type: 2}
+  Attack: {fileID: 11400000, guid: 6c1795e77c8365f099bc517bb1c8a193, type: 2}
+  Projectile: {fileID: 0}

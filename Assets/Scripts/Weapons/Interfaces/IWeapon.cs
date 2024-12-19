@@ -1,4 +1,3 @@
-using System;
 using AI.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
@@ -7,17 +6,12 @@ namespace Weapons.Interfaces
 {
 	public interface IWeapon
 	{
+		public WeaponData WeaponData { get; set; }
+		
 		public IAlive Owner { get; }
 		
 		public Rigidbody Rigidbody { get; }
 		public Collider[] Colliders { get; }
-
-		public float TimeBetweenAttacks { get; }
-		public float CastingTime { get; }
-		public float ManaCost { get; }
-		public float Distance { get; }
-
-		public CastData Cast { get; }
 
 		public bool IsCasting { get; }
 		

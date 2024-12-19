@@ -1,5 +1,6 @@
 using AI.Enums;
 using Managers;
+using Tools;
 using UnityEngine;
 using Weapons.Base;
 
@@ -21,7 +22,7 @@ namespace Weapons
 				npc.SenseRange = 99999;
 				npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
 				
-				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(typeof(FireGun), Vector3.zero, Vector3.zero));
+				//npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(TypeTools.FindType("FireGun"), Vector3.zero, Vector3.zero));
 				npc.WanderAggressively(npc.Target);
 			}
 			
