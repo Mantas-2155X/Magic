@@ -93,16 +93,16 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -2176153060692247399}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7542393617663950912}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4586769221794607541}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2886060341139500075}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4308003757065491323}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2204370015849155352}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6293957136486286640}
     - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2654227922841394834}
@@ -139,7 +139,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
   m_PrefabInstance: {fileID: 8231906880841360831}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-2176153060692247399
+--- !u!65 &2886060341139500075
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9150455038998059246}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.47064543, y: 2.4243965, z: 0.44737747}
+  m_Center: {x: -0.003418386, y: 0.17156291, z: -0.0023985952}
+--- !u!114 &4308003757065491323
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,22 +169,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 9150455038998059246}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd892639120b4effa00eca6734ce99a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 5324003a3df646d882265afa899e35f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Rigidbody>k__BackingField: {fileID: 7542393617663950912}
+  <WeaponData>k__BackingField: {fileID: 0}
+  <Rigidbody>k__BackingField: {fileID: 2204370015849155352}
   <Colliders>k__BackingField:
-  - {fileID: 2654227922841394834}
   - {fileID: 2886060341139500075}
-  <TimeBetweenAttacks>k__BackingField: 15
-  <CastingTime>k__BackingField: 1.5
-  <ManaCost>k__BackingField: 50
-  <Distance>k__BackingField: 0
-  <Cast>k__BackingField: {fileID: 11400000, guid: 8dea02d4d2d50018695eca0411d885a6, type: 2}
+  - {fileID: 2654227922841394834}
   ownerTr: {fileID: 0}
-  <Force>k__BackingField: 7.5
-  <Projectile>k__BackingField: {fileID: 11400000, guid: 00c31891fc48e5198844a730a6bdca64, type: 2}
---- !u!54 &7542393617663950912
+--- !u!54 &2204370015849155352
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -190,7 +205,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4586769221794607541
+--- !u!114 &6293957136486286640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,24 +220,3 @@ MonoBehaviour:
   <DisplayName>k__BackingField: 
   <PickupableAfter>k__BackingField: 0
   <DestroyAfterPickup>k__BackingField: 0
---- !u!65 &2886060341139500075
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9150455038998059246}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.47064543, y: 2.4243965, z: 0.44737747}
-  m_Center: {x: -0.003418386, y: 0.17156291, z: -0.0023985952}
