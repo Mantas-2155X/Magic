@@ -2,6 +2,7 @@ using AI;
 using AI.Base;
 using AI.Interfaces;
 using Managers;
+using Objects;
 using Objects.Interfaces;
 using TMPro;
 using Tools;
@@ -88,7 +89,12 @@ namespace UI
 			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.GetMaskWithPlayer()) && hit.collider.TryGetComponent<IObject>(out var obj))
 			{
 				if (obj.CanPickup(player) || obj.CanUse(player))
-					LookTarget.text = obj.ObjectData.Name;
+				{
+					if (obj is DroppedWeapon droppedWeapon)
+						LookTarget.text = droppedWeapon.Weapon.WeaponData.Name;
+					else
+						LookTarget.text = obj.ObjectData.Name;
+				}
 			}
 		}
 		

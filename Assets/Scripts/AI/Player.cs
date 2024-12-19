@@ -341,7 +341,7 @@ namespace AI
 			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithPlayer()))
 				return;
 			
-			if (!hit.collider.TryGetComponent<IObject>(out var obj) && obj.CanUse(this))
+			if (!hit.collider.TryGetComponent<IObject>(out var obj) || !obj.CanUse(this))
 				return;
 
 			obj.Use(this);

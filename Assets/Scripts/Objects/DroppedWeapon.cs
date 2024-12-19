@@ -16,7 +16,7 @@ namespace Objects
 		
 		public override bool CanPickup(IAlive user)
 		{
-			return base.CanPickup(user) && user.Weapon?.GetType() != Weapon?.GetType();
+			return base.CanPickup(user) && user.Weapon?.WeaponData != Weapon?.WeaponData;
 		}
 		
 		public override bool Pickup(IAlive user)
