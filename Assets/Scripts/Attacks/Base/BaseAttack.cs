@@ -32,7 +32,7 @@ namespace Attacks.Base
 			{
 				thisGo = gameObject;
 				thisTr = thisGo.transform;
-				thisTr.SetParent(World.World.Instance.Other);
+				thisTr.SetParent(World.World.Instance.Attacks);
 				init = true;
 			}
 			

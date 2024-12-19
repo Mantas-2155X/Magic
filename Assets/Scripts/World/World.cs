@@ -27,16 +27,13 @@ namespace World
 		public Transform Ragdolls;
 
 		[SerializeField]
-		public Transform Dropped;
+		public Transform Attacks;
 		
 		[SerializeField]
+		public Transform Casts;
+
+		[SerializeField]
 		public Transform Projectiles;
-
-		[SerializeField]
-		public Transform Impacts;
-
-		[SerializeField]
-		public Transform Other;
 
 		[SerializeField]
 		public Transform Objects;

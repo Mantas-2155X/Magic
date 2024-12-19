@@ -69,8 +69,11 @@ namespace Objects.Base
 		{
 			initializeObject();
 			
+			thisTr.SetParent(World.World.Instance.Objects);
 			thisTr.position = position;
 			thisTr.eulerAngles = angles;
+			
+			thisGo.SetActive(true);
 		}
 
 		#endregion

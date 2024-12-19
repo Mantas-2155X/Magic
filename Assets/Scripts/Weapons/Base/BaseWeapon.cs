@@ -103,7 +103,7 @@ namespace Weapons.Base
 
 			var tr = GetTransform();
 			
-			tr.SetParent(World.World.Instance.Dropped);
+			tr.SetParent(World.World.Instance.Objects);
 			tr.position = movePos;
 			tr.eulerAngles = moveAng;
 			

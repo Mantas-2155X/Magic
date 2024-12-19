@@ -48,7 +48,7 @@ namespace Casts.Base
 			{
 				thisGo = gameObject;
 				thisTr = thisGo.transform;
-				thisTr.SetParent(World.World.Instance.Other);
+				thisTr.SetParent(World.World.Instance.Casts);
 				init = true;
 			}
 			

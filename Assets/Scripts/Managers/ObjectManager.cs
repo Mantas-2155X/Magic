@@ -102,7 +102,7 @@ namespace Managers
 			var go = weapon.GetGameObject();
 			
 			var tr = go.transform;
-			tr.SetParent(World.World.Instance.Dropped);
+			tr.SetParent(World.World.Instance.Objects);
 			tr.position = position;
 			tr.eulerAngles = angles;
 			
