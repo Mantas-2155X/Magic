@@ -1,5 +1,6 @@
 using System;
 using AI.Interfaces;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Weapons.Interfaces
@@ -16,7 +17,7 @@ namespace Weapons.Interfaces
 		public float ManaCost { get; }
 		public float Distance { get; }
 
-		public Type Cast { get; }
+		public CastData Cast { get; }
 
 		public bool IsCasting { get; }
 		

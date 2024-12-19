@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Casts.Interfaces;
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -8,6 +9,8 @@ namespace Casts.Base
 {
 	public class BaseCast : MonoBehaviour, ICast
 	{
+		public CastData CastData { get; set; }
+
 		public Component Source { get; private set; }
 
 		[field: SerializeField]
@@ -35,7 +38,7 @@ namespace Casts.Base
 
 		public void OnDisable()
 		{
-			PoolingManager.Instance.AddToPool(GetType(), thisGo);
+			PoolingManager.Instance.AddToPool(CastData, thisGo);
 		}
 		
 		public void Spawn(Component source)

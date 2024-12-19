@@ -7,6 +7,7 @@ using AI.Interfaces;
 using Casts.Interfaces;
 using Managers;
 using Objects;
+using ScriptableObjects;
 using Tools;
 using UnityEngine;
 using Weapons.Interfaces;
@@ -31,7 +32,8 @@ namespace Weapons.Base
 		[field: SerializeField]
 		public virtual float Distance { get; private set; }
 
-		public virtual Type Cast { get; private set; }
+		[field: SerializeField]
+		public CastData Cast { get; private set; }
 
 		public bool IsCasting { get; private set; }
 		

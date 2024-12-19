@@ -9,8 +9,6 @@ namespace Weapons
 {
 	public class HealthGun : BaseWeapon
 	{
-		public override Type Cast => typeof(HealthSpring);
-
 		[SerializeField]
 		public float Lifetime = 15f;
 		

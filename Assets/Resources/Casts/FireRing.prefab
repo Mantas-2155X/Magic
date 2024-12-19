@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6980029481039198556}
   - component: {fileID: 6482775774062730704}
   - component: {fileID: 3716721897733238632}
-  - component: {fileID: -949357364385244005}
+  - component: {fileID: -6650112043481284121}
   m_Layer: 1
   m_Name: FireRing
   m_TagString: Untagged
@@ -4835,7 +4835,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &-949357364385244005
+--- !u!114 &-6650112043481284121
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4844,8 +4844,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2523756766213633531}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e5fa8f27842422098dbc59d991c535a, type: 3}
+  m_Script: {fileID: 11500000, guid: a3108076ab274062951da4af58ebcf64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <System>k__BackingField: {fileID: 6482775774062730704}
-  Rotation: 360

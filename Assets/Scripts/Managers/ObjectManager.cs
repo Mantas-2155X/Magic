@@ -4,6 +4,7 @@ using Casts.Interfaces;
 using Objects;
 using Objects.Base;
 using Projectiles.Interfaces;
+using ScriptableObjects;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -89,16 +90,17 @@ namespace Managers
 			return pool;
 		}
 		
-		public ICast CreateCast(Type type, Component source)
+		public ICast CreateCast(CastData data, Component source)
 		{
 			ICast cast;
 
-			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
+			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
 			if (pooled != null)
 				cast = pooled.GetComponent<ICast>();
 			else
-				cast = Instantiate(Resources.Load<GameObject>($"Casts/{type.Name}")).GetComponent<ICast>();
-			
+				cast = Instantiate(data.Prefab).GetComponent<ICast>();
+
+			cast.CastData = data;
 			cast.Spawn(source);
 			return cast;
 		}

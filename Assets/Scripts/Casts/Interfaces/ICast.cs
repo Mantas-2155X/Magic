@@ -1,9 +1,12 @@
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Casts.Interfaces
 {
 	public interface ICast
 	{
+		public CastData CastData { get; set; }
+
 		public Component Source { get; }
 
 		public ParticleSystem System { get; }

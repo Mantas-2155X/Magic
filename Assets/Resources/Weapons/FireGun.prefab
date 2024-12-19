@@ -240,6 +240,7 @@ MonoBehaviour:
   <CastingTime>k__BackingField: 0.25
   <ManaCost>k__BackingField: 15
   <Distance>k__BackingField: 0
+  <Cast>k__BackingField: {fileID: 11400000, guid: fb9e7ef23101e539d912ddfe441a8f8c, type: 2}
   ownerTr: {fileID: 0}
   <Force>k__BackingField: 7.5
 --- !u!54 &8688014880309442133
@@ -281,6 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951eace190fb41e4b9c55e2551725e3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <DisplayName>k__BackingField: 
   <PickupableAfter>k__BackingField: 0
   <DestroyAfterPickup>k__BackingField: 0
 --- !u!65 &3806404910973051573

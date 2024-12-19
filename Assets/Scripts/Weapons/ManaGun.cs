@@ -9,8 +9,6 @@ namespace Weapons
 {
 	public class ManaGun : BaseWeapon
 	{
-		public override Type Cast => typeof(ManaSpring);
-		
 		[SerializeField]
 		public float Lifetime = 15f;
 
