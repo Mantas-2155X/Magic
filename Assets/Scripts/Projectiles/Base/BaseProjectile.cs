@@ -25,7 +25,6 @@ namespace Projectiles.Base
 		public Collider Collider { get; private set; }
 		
 		public virtual EAttackAngle AttackAngle { get; private set; }
-		public AttackData Attack { get; private set; }
 
 		private CancellationTokenSource rangeToken;
 		private Vector3 startingPosition;
@@ -40,6 +39,8 @@ namespace Projectiles.Base
 		
 		public void OnCollisionEnter(Collision collision)
 		{
+			Transform attach = null;
+			
 			if (ProjectileData.Damage > 0)
 			{
 				var coll = collision.collider;
@@ -47,16 +48,18 @@ namespace Projectiles.Base
 				{
 					if (coll.TryGetComponent<IAlive>(out var alive))
 					{
+						attach = alive.GetTransform();
 						alive.Damage(ProjectileData.Damage, this);
 					}
 					else if (coll.TryGetComponent<IBreakable>(out var breakable))
 					{
+						attach = breakable.GetTransform();
 						breakable.Damage(ProjectileData.Damage, this);
 					}
 				}
 			}
 			
-			if (Attack != null)
+			if (ProjectileData.Attack != null)
 			{
 				var contact = collision.contacts[0];
 				
@@ -77,7 +80,7 @@ namespace Projectiles.Base
 						throw new NotImplementedException();
 				}
 				
-				ObjectManager.Instance.CreateAttack(Attack, (Component)Source, contact.point, angles, contact.otherCollider.transform);
+				ObjectManager.Instance.CreateAttack(ProjectileData.Attack, (Component)Source, contact.point, angles, attach);
 			}
 				
 			clearVelocityAndPool().Forget();

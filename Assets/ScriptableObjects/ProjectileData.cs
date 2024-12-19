@@ -10,5 +10,8 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public float Damage;
+
+		[SerializeField]
+		public AttackData Attack;
 	}
 }
