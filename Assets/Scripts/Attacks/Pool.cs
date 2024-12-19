@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using AI.Interfaces;
 using Attacks.Base;
+using Attacks.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
-using Objects.Enums;
 using UnityEngine;
 
 namespace Attacks
