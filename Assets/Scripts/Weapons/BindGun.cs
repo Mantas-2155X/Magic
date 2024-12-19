@@ -7,6 +7,6 @@ namespace Weapons
 {
 	public class BindGun : BaseProjectileWeapon
 	{
-		public override Type Projectile => typeof(ManaBall);
+		
 	}
 }

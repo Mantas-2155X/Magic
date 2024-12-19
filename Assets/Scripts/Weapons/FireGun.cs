@@ -7,6 +7,6 @@ namespace Weapons
 {
 	public class FireGun : BaseProjectileWeapon
 	{
-		public override Type Projectile => typeof(FireBall);
+		
 	}
 }

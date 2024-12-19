@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Interfaces;
 using Projectiles.Interfaces;
+using ScriptableObjects;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -14,6 +15,8 @@ namespace Projectiles.Base
 {
 	public class BaseProjectile : MonoBehaviour, IProjectile
 	{
+		public ProjectileData ProjectileData { get; set; }
+
 		public IWeapon Source { get; private set; }
 
 		[field: SerializeField]
@@ -21,15 +24,10 @@ namespace Projectiles.Base
 		[field: SerializeField]
 		public Collider Collider { get; private set; }
 		
-		[field: SerializeField]
-		public virtual float Distance { get; private set; }
-		[field: SerializeField]
-		public virtual float Damage { get; private set; }
-		
 		public virtual EAttackAngle AttackAngle { get; private set; }
 		public virtual Type Attack { get; private set; }
 
-		private CancellationTokenSource distanceToken;
+		private CancellationTokenSource rangeToken;
 		private Vector3 startingPosition;
 
 		private Collider ignoreBodyCollider;
@@ -42,18 +40,18 @@ namespace Projectiles.Base
 		
 		public void OnCollisionEnter(Collision collision)
 		{
-			if (Damage > 0)
+			if (ProjectileData.Damage > 0)
 			{
 				var coll = collision.collider;
 				if (coll != null)
 				{
 					if (coll.TryGetComponent<IAlive>(out var alive))
 					{
-						alive.Damage(Damage, this);
+						alive.Damage(ProjectileData.Damage, this);
 					}
 					else if (coll.TryGetComponent<IBreakable>(out var breakable))
 					{
-						breakable.Damage(Damage, this);
+						breakable.Damage(ProjectileData.Damage, this);
 					}
 				}
 			}
@@ -88,7 +86,7 @@ namespace Projectiles.Base
 		public void Update()
 		{
 			var distance = Vector3.Distance(startingPosition, thisTr.position);
-			if (distance < Distance)
+			if (distance < ProjectileData.Range)
 				return;
 
 			clearVelocityAndPool().Forget();
@@ -131,12 +129,12 @@ namespace Projectiles.Base
 
 		private async UniTaskVoid clearVelocityAndPool()
 		{
-			if (distanceToken != null)
+			if (rangeToken != null)
 			{
-				if (distanceToken.IsCancellationRequested)
+				if (rangeToken.IsCancellationRequested)
 					return;
 				
-				distanceToken.Cancel();
+				rangeToken.Cancel();
 			}
 			
 			Physics.IgnoreCollision(ignoreBodyCollider, Collider, false);
@@ -151,7 +149,7 @@ namespace Projectiles.Base
 			
 			await UniTask.WaitForFixedUpdate();
 			
-			PoolingManager.Instance.AddToPool(GetType(), thisGo);
+			PoolingManager.Instance.AddToPool(ProjectileData, thisGo);
 		}
 	}
 }

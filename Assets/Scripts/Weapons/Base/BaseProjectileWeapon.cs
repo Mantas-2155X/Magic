@@ -1,5 +1,6 @@
 using System;
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 using Weapons.Interfaces;
 
@@ -9,7 +10,9 @@ namespace Weapons.Base
 	{
 		[field: SerializeField]
 		public virtual float Force { get; private set; }
-		public virtual Type Projectile { get; private set; }
+
+		[field: SerializeField]
+		public ProjectileData Projectile { get; private set; }
 
 		public override bool FinishCasting()
 		{

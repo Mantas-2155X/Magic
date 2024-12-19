@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd0ae0db49104ff39ef235d001464c3a, type: 3}
+  m_Name: ManaBall
+  m_EditorClassIdentifier: 
+  Name: Mana Ball
+  Description: A ball of the Mana element
+  Prefab: {fileID: 6837300406704376654, guid: 097d1cbb38d6d1c17b052a95b87f3fd9, type: 3}
+  Range: 15
+  Damage: 5

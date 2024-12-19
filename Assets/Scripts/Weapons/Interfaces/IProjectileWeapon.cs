@@ -1,12 +1,11 @@
-using System;
-using AI.Interfaces;
-using UnityEngine;
+using ScriptableObjects;
 
 namespace Weapons.Interfaces
 {
 	public interface IProjectileWeapon : IWeapon
 	{
 		public float Force { get; }
-		public Type Projectile { get; }
+		
+		public ProjectileData Projectile { get; }
 	}
 }

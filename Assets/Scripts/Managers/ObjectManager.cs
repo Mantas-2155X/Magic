@@ -20,16 +20,17 @@ namespace Managers
 			Instance = this;
 		}
 
-		public IProjectile CreateProjectile(Type type, IWeapon weapon, Vector3 origin, Vector3 force)
+		public IProjectile CreateProjectile(ProjectileData data, IWeapon weapon, Vector3 origin, Vector3 force)
 		{
 			IProjectile projectile;
 
-			var pooled = PoolingManager.Instance.TakeFromPool(type, false);
+			var pooled = PoolingManager.Instance.TakeFromPool(data, false);
 			if (pooled != null)
 				projectile = pooled.GetComponent<IProjectile>();
 			else
-				projectile = Instantiate(Resources.Load<GameObject>($"Projectiles/{type.Name}")).GetComponent<IProjectile>();
-				
+				projectile = Instantiate(data.Prefab).GetComponent<IProjectile>();
+			
+			projectile.ProjectileData = data;
 			projectile.Spawn(weapon, origin, force);
 			return projectile;
 		}
