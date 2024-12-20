@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using AI;
 using AI.Base;
-using AI.Enums;
 using AI.Interfaces;
 using Attacks.Interfaces;
 using Projectiles.Interfaces;
@@ -43,8 +42,7 @@ namespace Managers
 		private JobHandle autoTargetPositionsHandle;
 		private JobHandle autoTargetDecisionsHandle;
 
-		private bool updateDeaths;
-		private bool updateRelationshipGroups;
+		private bool updateTargets;
 		
 		public void Awake()
 		{
@@ -56,15 +54,15 @@ namespace Managers
 			decisionsNative = new NativeArray<int>(0, Allocator.Persistent);
 			relationshipGroupsNative = new NativeArray<int>(0, Allocator.Persistent);
 			
-			BaseAlive.OnDeathEvent.AddListener(onDeath);
 			BaseAlive.OnDamageEvent.AddListener(onDamage);
+			BaseAlive.OnSpawnEvent.AddListener(onSpawn);
+			BaseAlive.OnDeathEvent.AddListener(onDeath);
 			BaseAlive.OnRelationshipGroupChangedEvent.AddListener(onRelationshipGroupChanged);
 		}
 
 		public void Update()
 		{
-			handleDeaths();
-			handleRelationshipGroups();
+			handleTargets();
 			
 			if (autoTargetDecisionsHandle.IsCompleted)
 			{
@@ -159,12 +157,12 @@ namespace Managers
 				relationshipGroupsNative.Dispose();
 		}
 
-		private void handleDeaths()
+		private void handleTargets()
 		{
-			if (!updateDeaths)
+			if (!updateTargets)
 				return;
 
-			updateDeaths = false;
+			updateTargets = false;
 			
 			for (var i = 0; i < NPCs.Count; i++)
 			{
@@ -175,35 +173,16 @@ namespace Managers
 				if (npc.Target is not IAlive target)
 					continue;
 
-				if (target.IsAlive)
-					continue;
-				
-				npc.AssignTarget(null);
-				nativeDataDirty = true;
-			}
-		}
-		
-		private void handleRelationshipGroups()
-		{
-			if (!updateRelationshipGroups)
-				return;
-
-			updateRelationshipGroups = false;
-			
-			for (var i = 0; i < NPCs.Count; i++)
-			{
-				var npc = NPCs[i];
-				if (!npc.IsAlive)
-					continue;
-
-				if (npc.Target is not IAlive target)
-					continue;
-
-				if (npc.RelationshipGroup != target.RelationshipGroup)
-					continue;
-
-				npc.AssignTarget(null);
-				nativeDataDirty = true;
+				if (!target.IsAlive)
+				{
+					npc.AssignTarget(null);
+					nativeDataDirty = true;
+				}
+				else if (npc.RelationshipGroup == target.RelationshipGroup)
+				{
+					npc.AssignTarget(null);
+					nativeDataDirty = true;
+				}
 			}
 		}
 		
@@ -236,14 +215,22 @@ namespace Managers
 			npc.AssignTarget((Component)aggressor);
 		}
 
+		private void onSpawn(IAlive alive)
+		{
+			updateTargets = true;
+			nativeDataDirty = true;
+		}
+		
 		private void onDeath(IAlive alive, object source)
 		{
-			updateDeaths = true;
+			updateTargets = true;
+			nativeDataDirty = true;
 		}
 
 		private void onRelationshipGroupChanged(IAlive alive, int previousRelationshipGroup, int newRelationshipGroup)
 		{
-			updateRelationshipGroups = true;
+			updateTargets = true;
+			nativeDataDirty = true;
 		}
 
 		[BurstCompile]
