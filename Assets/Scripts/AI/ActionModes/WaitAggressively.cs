@@ -49,7 +49,7 @@ namespace AI.ActionModes
 		
 		public void TargetChanged(Component previousTarget, Component newTarget)
 		{
-			Owner.Chase.ResetChaseRange();
+			Owner.Chase.ResetChaseRange(true);
 		}
 
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination)

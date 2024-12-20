@@ -41,7 +41,7 @@ namespace AI.ActionModes.Shared
 				
 				// Target moved away from destination range, reset the path
 				if (currentChaseRange < owner.ChaseRange)
-					ResetChaseRange();
+					ResetChaseRange(true);
 
 				owner.Walk(target.position);
 				return false;
@@ -58,7 +58,8 @@ namespace AI.ActionModes.Shared
 				return false;
 			}
 
-			ResetChaseRange();
+			// Set the chase range to the full actual value since we reached the target at a lowered rate, allowing micromovements of the target while staying in range
+			ResetChaseRange(false);
 			
 			// Performing jump, stay on walking state until thats done
 			if (agent.isOnOffMeshLink)
@@ -70,10 +71,11 @@ namespace AI.ActionModes.Shared
 		
 		/// <summary>
 		/// Reset the potentially reduced chase range back to the initial value
+		/// Setting lowered to true sets the range to be slightly smaller to prevent stuttering
 		/// </summary>
-		public void ResetChaseRange()
+		public void ResetChaseRange(bool lowered)
 		{
-			currentChaseRange = owner.ChaseRange;
+			currentChaseRange = lowered ? owner.ChaseRange - 0.25f : owner.ChaseRange;
 		}
 	}
 }
