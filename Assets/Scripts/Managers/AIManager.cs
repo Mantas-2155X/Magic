@@ -202,6 +202,9 @@ namespace Managers
 			if (aggressor == null || aggressor == alive || !aggressor.IsAlive)
 				return;
 			
+			if (!npc.FriendlyFire && aggressor is NPC)
+				return;
+			
 			npc.AssignTarget((Component)aggressor);
 		}
 

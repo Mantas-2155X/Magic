@@ -241,6 +241,7 @@ namespace Editor
 						continue;
 					
 					npc.SenseRange = 99999;
+					npc.FriendlyFire = true;
 					npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
 					
 					npc.WanderAggressively(npc.Target);

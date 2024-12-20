@@ -1,5 +1,6 @@
 //#define DEBUG_NPC
 
+using System;
 using System.Collections.Generic;
 using AI.ActionModes;
 using AI.ActionModes.Shared;
@@ -10,7 +11,7 @@ using AI.Interfaces;
 using Managers;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
+using Action = AI.AIModes.Action;
 
 namespace AI
 {
@@ -74,11 +75,23 @@ namespace AI
 		public float AimAngle = 5f;
 
 		/// <summary>
-		/// Wander every x seconds after the last walking state finised
+		/// Wander every x seconds after the last walking state finished
 		/// (Wander)
 		/// </summary>
 		[SerializeField]
 		public float WanderEvery = 1f;
+		
+		/// <summary>
+		/// How far around the npc communications are received and sent
+		/// </summary>
+		[SerializeField]
+		public float CommunicateRange = 5f;
+
+		/// <summary>
+		/// If set to true, a npc damaging this npc will fight back
+		/// </summary>
+		[SerializeField]
+		public bool FriendlyFire = false;
 		
 		#endregion
 		
@@ -178,6 +191,49 @@ namespace AI
 			setAIMode(EAIMode.Idle);
 		}
 
+		public void SendCommunication(ECommunication type, object data, NPC communicator)
+		{
+			var npcs = AIManager.Instance.NPCs;
+			var pos = GetTransform().position;
+
+			for (var i = 0; i < npcs.Count; i++)
+			{
+				var npc = npcs[i];
+				if (!npc.IsAlive || npc == this)
+					continue;
+
+				// Don't communicate back to the communicator to prevent infinite comms bouncing
+				if (npc == communicator)
+					continue;
+				
+				// Don't communicate with your target
+				if (npc == Target)
+					continue;
+				
+				var distance = Vector3.Distance(pos, npc.GetTransform().position);
+				if (distance > CommunicateRange)
+					continue;
+				
+				npc.ReceiveCommunication(type, this, data);
+			}
+		}
+		
+		public void ReceiveCommunication(ECommunication type, NPC source, object data)
+		{
+#if DEBUG_NPC
+			Debug.Log($"[NPC {gameObject.name}] Received communication {type} from {source.GetGameObject().name} with data {data}");
+#endif
+			
+			switch (type)
+			{
+				case ECommunication.TargetAcquired:
+					setTarget((Component)data, source);
+					break;
+				default:
+					throw new NotImplementedException();
+			}
+		}
+		
 		public void AssignTarget(Component target)
 		{
 			if (!IsAlive)
@@ -263,9 +319,12 @@ namespace AI
 #endif
 		}
 
-		private void setTarget(Component target)
+		private void setTarget(Component target, NPC communicator = null)
 		{
 			if (Target == target)
+				return;
+			
+			if (!FriendlyFire && Target is NPC)
 				return;
 			
 			Weapon?.CancelCasting();
@@ -275,6 +334,9 @@ namespace AI
 			
 			ActionModeObj.TargetChanged(previousTarget, Target);
 			AIModeObj.TargetChanged(previousTarget, Target);
+
+			if (Target != null)
+				SendCommunication(ECommunication.TargetAcquired, Target, communicator);
 
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Target from {previousTarget} to {Target}");
