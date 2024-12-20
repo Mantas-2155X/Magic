@@ -43,6 +43,7 @@ namespace Managers
 		private JobHandle autoTargetPositionsHandle;
 		private JobHandle autoTargetDecisionsHandle;
 
+		private bool updateDeaths;
 		private bool updateRelationshipGroups;
 		
 		public void Awake()
@@ -60,14 +61,9 @@ namespace Managers
 			BaseAlive.OnRelationshipGroupChangedEvent.AddListener(onRelationshipGroupChanged);
 		}
 
-		public void OnDestroy()
-		{
-			autoTargetDecisionsHandle.Complete();
-			destroyNativeData(); 
-		}
-
 		public void Update()
 		{
+			handleDeaths();
 			handleRelationshipGroups();
 			
 			if (autoTargetDecisionsHandle.IsCompleted)
@@ -142,6 +138,51 @@ namespace Managers
 			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
 		}
 
+		public void OnDestroy()
+		{
+			autoTargetDecisionsHandle.Complete();
+			destroyNativeData(); 
+		}
+
+		private void destroyNativeData()
+		{
+			if (transformsNative.isCreated)
+				transformsNative.Dispose();
+
+			if (positionsNative.IsCreated)
+				positionsNative.Dispose();
+			
+			if (decisionsNative.IsCreated)
+				decisionsNative.Dispose();
+			
+			if (relationshipGroupsNative.IsCreated)
+				relationshipGroupsNative.Dispose();
+		}
+
+		private void handleDeaths()
+		{
+			if (!updateDeaths)
+				return;
+
+			updateDeaths = false;
+			
+			for (var i = 0; i < NPCs.Count; i++)
+			{
+				var npc = NPCs[i];
+				if (!npc.IsAlive)
+					continue;
+
+				if (npc.Target is not IAlive target)
+					continue;
+
+				if (target.IsAlive)
+					continue;
+				
+				npc.AssignTarget(null);
+				nativeDataDirty = true;
+			}
+		}
+		
 		private void handleRelationshipGroups()
 		{
 			if (!updateRelationshipGroups)
@@ -166,34 +207,6 @@ namespace Managers
 			}
 		}
 		
-		private void destroyNativeData()
-		{
-			if (transformsNative.isCreated)
-				transformsNative.Dispose();
-
-			if (positionsNative.IsCreated)
-				positionsNative.Dispose();
-			
-			if (decisionsNative.IsCreated)
-				decisionsNative.Dispose();
-			
-			if (relationshipGroupsNative.IsCreated)
-				relationshipGroupsNative.Dispose();
-		}
-		
-		private void onDeath(IAlive alive, object source)
-		{
-			for (var i = 0; i < NPCs.Count; i++)
-			{
-				var npc = NPCs[i];
-				if (npc.Target != (Component)alive)
-					continue;
-
-				npc.AssignTarget(null);
-				nativeDataDirty = true;
-			}
-		}
-
 		private void onDamage(IAlive alive, float damage, object source)
 		{
 			if (!alive.IsAlive || alive is not NPC npc)
@@ -221,6 +234,11 @@ namespace Managers
 				return;
 			
 			npc.AssignTarget((Component)aggressor);
+		}
+
+		private void onDeath(IAlive alive, object source)
+		{
+			updateDeaths = true;
 		}
 
 		private void onRelationshipGroupChanged(IAlive alive, int previousRelationshipGroup, int newRelationshipGroup)
