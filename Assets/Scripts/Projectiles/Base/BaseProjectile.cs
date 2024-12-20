@@ -104,6 +104,14 @@ namespace Projectiles.Base
 			Rigidbody.AddForce(force, ForceMode.Impulse);
 		}
 		
+		public IAlive GetAlive()
+		{
+			if (Source == null)
+				return null;
+			
+			return Source.GetAlive();
+		}
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public GameObject GetGameObject() => thisGo;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

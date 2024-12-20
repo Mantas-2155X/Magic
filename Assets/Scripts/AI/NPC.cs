@@ -10,6 +10,7 @@ using AI.Interfaces;
 using Managers;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace AI
 {

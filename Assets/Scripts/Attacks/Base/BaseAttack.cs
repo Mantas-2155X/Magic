@@ -1,9 +1,12 @@
 using System.Runtime.CompilerServices;
+using AI.Interfaces;
 using Attacks.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Projectiles.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
+using Weapons.Interfaces;
 
 namespace Attacks.Base
 {
@@ -86,6 +89,26 @@ namespace Attacks.Base
 				return;
 			
 			thisTr.position = target.position + Vector3.down * 0.95f;
+		}
+		
+		public IAlive GetAlive()
+		{
+			if (Source == null)
+				return null;
+
+			switch (Source)
+			{
+				case IAlive alive:
+					return alive;
+				case IWeapon weapon:
+					return weapon.GetAlive();
+				case IAttack attack:
+					return attack.GetAlive();
+				case IProjectile projectile:
+					return projectile.GetAlive();
+				default:
+					return null;
+			}
 		}
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

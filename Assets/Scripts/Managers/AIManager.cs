@@ -3,12 +3,15 @@ using AI;
 using AI.Base;
 using AI.Enums;
 using AI.Interfaces;
+using Attacks.Interfaces;
+using Projectiles.Interfaces;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Jobs;
+using Weapons.Interfaces;
 
 namespace Managers
 {
@@ -54,6 +57,7 @@ namespace Managers
 			aiTargetsNative = new NativeArray<EAIType>(0, Allocator.Persistent);
 			
 			BaseAlive.OnDeathEvent.AddListener(onDeath);
+			BaseAlive.OnDamageEvent.AddListener(onDamage);
 		}
 
 		public void OnDestroy()
@@ -170,6 +174,35 @@ namespace Managers
 			}
 			
 			NativeDataDirty = true;
+		}
+
+		private void onDamage(IAlive alive, float damage, object source)
+		{
+			if (!alive.IsAlive || alive is not NPC npc)
+				return;
+
+			IAlive aggressor = null;
+			
+			switch (source)
+			{
+				case IAlive aggr:
+					aggressor = aggr;
+					break;
+				case IWeapon weapon:
+					aggressor = weapon.GetAlive();
+					break;
+				case IAttack attack:
+					aggressor = attack.GetAlive();
+					break;
+				case IProjectile projectile:
+					aggressor = projectile.GetAlive();
+					break;
+			}
+			
+			if (aggressor == null || aggressor == alive || !aggressor.IsAlive)
+				return;
+			
+			npc.AssignTarget((Component)aggressor);
 		}
 
 		[BurstCompile]

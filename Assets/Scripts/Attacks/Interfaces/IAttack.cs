@@ -1,3 +1,4 @@
+using AI.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace Attacks.Interfaces
 		public Collider Trigger { get; }
 		
 		public void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach);
+
+		public IAlive GetAlive();
 
 		public GameObject GetGameObject();
 		public Transform GetTransform();

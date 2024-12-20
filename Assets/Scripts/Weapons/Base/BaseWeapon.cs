@@ -205,6 +205,11 @@ namespace Weapons.Base
 			IsCasting = false;
 			clearCast();
 		}
+
+		public IAlive GetAlive()
+		{
+			return Owner;
+		}
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public GameObject GetGameObject() => thisGo;

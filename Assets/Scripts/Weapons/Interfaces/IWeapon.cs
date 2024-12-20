@@ -32,6 +32,8 @@ namespace Weapons.Interfaces
 		public void StartCasting();
 		public bool FinishCasting();
 		public void CancelCasting();
+
+		public IAlive GetAlive();
 		
 		public GameObject GetGameObject();
 		public Transform GetTransform();
