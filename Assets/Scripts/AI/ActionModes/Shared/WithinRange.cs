@@ -12,9 +12,9 @@ namespace AI.ActionModes.Shared
 		}
 		
 		/// <summary>
-		/// Returns true if the distance between provided transforms is less than the specified range
+		/// Returns true if the distance between the npc and the target is less than the npcs sense range
 		/// </summary>
-		public bool DistanceCheck(Transform target)
+		public bool SenseDistanceCheck(Transform target)
 		{
 			return Vector3.Distance(owner.Body.Rigidbody.position, target.position) < owner.SenseRange;
 		}

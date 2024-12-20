@@ -12,7 +12,7 @@ namespace AI.ActionModes.Shared
 		}
 		
 		/// <summary>
-		/// Rotates the transform towards the target with the specified degrees range
+		/// Rotates the npc towards the target with the specified degrees range
 		/// This only does one step of aiming and should be placed in Update
 		/// Returns true if angle between npc and target is within specified maximum angle
 		/// </summary>
