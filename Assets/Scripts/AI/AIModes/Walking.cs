@@ -60,6 +60,11 @@ namespace AI.AIModes
 		{
 			Owner.Agent.SetDestination(newDestination);
 		}
+
+		public void CommunicationReceived(ECommunication type, NPC source, object data)
+		{
+			
+		}
 		
 		private bool toggleAgent(bool state)
 		{

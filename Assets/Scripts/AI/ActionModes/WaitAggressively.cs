@@ -56,5 +56,10 @@ namespace AI.ActionModes
 		{
 			
 		}
+		
+		public void CommunicationReceived(ECommunication type, NPC source, object data)
+		{
+			
+		}
 	}
 }

@@ -1,3 +1,4 @@
+using AI.Enums;
 using AI.Interfaces;
 using UnityEngine;
 
@@ -33,6 +34,11 @@ namespace AI.AIModes
 		}
 
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination)
+		{
+			
+		}
+		
+		public void CommunicationReceived(ECommunication type, NPC source, object data)
 		{
 			
 		}

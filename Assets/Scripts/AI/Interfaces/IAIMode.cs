@@ -1,3 +1,4 @@
+using AI.Enums;
 using UnityEngine;
 
 namespace AI.Interfaces
@@ -18,5 +19,7 @@ namespace AI.Interfaces
 		public void TargetChanged(Component previousTarget, Component newTarget);
 		
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination);
+		
+		public void CommunicationReceived(ECommunication type, NPC source, object data);
 	}
 }

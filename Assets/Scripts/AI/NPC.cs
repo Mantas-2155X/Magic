@@ -183,7 +183,7 @@ namespace AI
 			setAIMode(EAIMode.Idle);
 		}
 
-		public void SendCommunication(ECommunication type, object data, NPC communicator)
+		public void SendCommunication(ECommunication type, object data)
 		{
 			var npcs = AIManager.Instance.NPCs;
 			var pos = GetTransform().position;
@@ -194,14 +194,6 @@ namespace AI
 				if (!npc.IsAlive || npc == this)
 					continue;
 
-				// Don't communicate back to the communicator to prevent infinite comms bouncing
-				if (npc == communicator)
-					continue;
-				
-				// Don't communicate with your target
-				if (npc == Target)
-					continue;
-				
 				var distance = Vector3.Distance(pos, npc.GetTransform().position);
 				if (distance > CommunicateRange)
 					continue;
@@ -212,18 +204,12 @@ namespace AI
 		
 		public void ReceiveCommunication(ECommunication type, NPC source, object data)
 		{
+			ActionModeObj.CommunicationReceived(type, source, data);
+			AIModeObj.CommunicationReceived(type, source, data);
+			
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Received communication {type} from {source.GetGameObject().name} with data {data}");
 #endif
-			
-			switch (type)
-			{
-				case ECommunication.TargetAcquired:
-					setTarget((Component)data, source);
-					break;
-				default:
-					throw new NotImplementedException();
-			}
 		}
 		
 		public void AssignTarget(Component target)
@@ -302,13 +288,9 @@ namespace AI
 #endif
 		}
 
-		private void setTarget(Component target, NPC communicator = null)
+		private void setTarget(Component target)
 		{
 			if (Target == target)
-				return;
-			
-			// Don't target alives of the same relationship group
-			if (Target is IAlive alive && alive.RelationshipGroup == RelationshipGroup)
 				return;
 			
 			Weapon?.CancelCasting();
@@ -318,9 +300,6 @@ namespace AI
 			
 			ActionModeObj.TargetChanged(previousTarget, Target);
 			AIModeObj.TargetChanged(previousTarget, Target);
-
-			if (Target != null)
-				SendCommunication(ECommunication.TargetAcquired, Target, communicator);
 
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Target from {previousTarget} to {Target}");
