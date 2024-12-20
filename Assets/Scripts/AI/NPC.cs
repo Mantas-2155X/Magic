@@ -8,7 +8,6 @@ using AI.Base;
 using AI.Enums;
 using AI.Interfaces;
 using Managers;
-using Tools;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -53,6 +52,13 @@ namespace AI
 		public float ChaseRange = 10f;
 
 		/// <summary>
+		/// Distance between the npc and the patrol point at which the npc is considered to have reached the point
+		/// (Patrol)
+		/// </summary>
+		[SerializeField]
+		public float PatrolReachRange = 0.5f;
+		
+		/// <summary>
 		/// Min-Max range of how fast can the npc rotate when performing an action
 		/// (AimAt, Spin)
 		/// </summary>
@@ -91,6 +97,7 @@ namespace AI
 		public AimAt AimAt { get; private set; }
 		public Chase Chase { get; private set; }
 		public Wander Wander { get; private set; }
+		public Patrol Patrol { get; private set; }
 		public HasSight HasSight { get; private set; }
 		public WithinRange WithinRange { get; private set; }
 		
@@ -104,7 +111,8 @@ namespace AI
 		public readonly Dictionary<EActionMode, IActionMode> ActionModes = new (new EActionModeComparer())
 		{
 			{ EActionMode.None, new None() },
-			{ EActionMode.WanderAggressively, new WanderAggressively() }
+			{ EActionMode.WanderAggressively, new WanderAggressively() },
+			{ EActionMode.PatrolAggressively, new PatrolAggressively() },
 		};
 		
 		private EAIMode previousAIMode;
@@ -123,6 +131,18 @@ namespace AI
 			
 			setTarget(target);
 			setActionMode(EActionMode.WanderAggressively);
+			setAIMode(EAIMode.Action);
+		}
+
+		public void PatrolAggressively(Component target, List<Vector3> points, int startAt = -1)
+		{
+			if (!IsAlive)
+				return;
+			
+			Patrol.SetPoints(points, startAt);
+			
+			setTarget(target);
+			setActionMode(EActionMode.PatrolAggressively);
 			setAIMode(EAIMode.Action);
 		}
 
@@ -305,6 +325,7 @@ namespace AI
 			AimAt = new AimAt(this);
 			Chase = new Chase(this);
 			Wander = new Wander(this);
+			Patrol = new Patrol(this);
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
 			

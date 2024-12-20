@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AI.ActionModes
 {
-	public class WanderAggressively : IActionMode
+	public class PatrolAggressively : IActionMode
 	{
 		public NPC Owner { get; set; }
 		
@@ -22,11 +22,19 @@ namespace AI.ActionModes
 		{
 			var target = Owner.TargetTransform;
 
-			// Target does not exist or is further than the sense range, wander until one is close enough
+			// Target does not exist or is further than the sense range, patrol until one is close enough
 			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target))
 			{
-				if (Owner.AIMode != EAIMode.Walking)
-					Owner.Wander.WalkRandomly(false);
+				// Target lost, go back to the current point
+				if (Owner.AIMode == EAIMode.Action)
+				{
+					Owner.Patrol.GoToCurrentPoint();
+					return;
+				}
+
+				// Reached point, continue to the next one
+				if (Owner.Patrol.HasReachedPoint())
+					Owner.Patrol.GoToNextPoint();
 				
 				return;
 			}

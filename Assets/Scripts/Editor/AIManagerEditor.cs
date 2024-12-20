@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AI.Enums;
 using Managers;
 using Tools;
@@ -112,6 +113,8 @@ namespace Editor
 					npc.Chill();
 					npc.Walk(pos);
 				}
+
+				Debug.Log(pos);
 			}
 			
 			if (GUILayout.Button("Random spawnpoint"))
@@ -185,7 +188,7 @@ namespace Editor
 
 			GUILayout.BeginHorizontal();
 			
-			if (GUILayout.Button("Find and Kill"))
+			if (GUILayout.Button("Wander Aggressively"))
 			{
 				foreach (var npc in aiManager.NPCs)
 				{
@@ -193,6 +196,29 @@ namespace Editor
 						continue;
 
 					npc.WanderAggressively(npc.Target);
+				}
+			}
+			
+			if (GUILayout.Button("Patrol Aggressively"))
+			{
+				var points = new List<Vector3>();
+				points.Add(new Vector3(75.84f, 11.09f, 31.24f));
+				points.Add(new Vector3(61.20f, 11.08f, 24.42f));
+				points.Add(new Vector3(37.57f, 11.09f, 27.29f));
+				points.Add(new Vector3(23.58f, 11.05f, 50.46f));
+				points.Add(new Vector3(27.95f, 10.82f, 74.67f));
+				points.Add(new Vector3(37.41f, 10.77f, 83.71f));
+				points.Add(new Vector3(59.93f, 10.67f, 101.04f));
+				points.Add(new Vector3(83.47f, 10.78f, 107.34f));
+				points.Add(new Vector3(107.91f, 10.47f, 93.51f));
+				points.Add(new Vector3(111.48f, 10.22f, 68.28f));
+				
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+					
+					npc.PatrolAggressively(npc.Target, points);
 				}
 			}
 			
