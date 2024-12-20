@@ -6,7 +6,8 @@ namespace AI.Enums
 	{
 		None,
 		WanderAggressively,
-		PatrolAggressively
+		PatrolAggressively,
+		WaitAggressively,
 	}
 	
 	public struct EActionModeComparer : IEqualityComparer<EActionMode>

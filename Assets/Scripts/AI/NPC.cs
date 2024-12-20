@@ -114,6 +114,7 @@ namespace AI
 			{ EActionMode.None, new None() },
 			{ EActionMode.WanderAggressively, new WanderAggressively() },
 			{ EActionMode.PatrolAggressively, new PatrolAggressively() },
+			{ EActionMode.WaitAggressively, new WaitAggressively() }
 		};
 		
 		private EAIMode previousAIMode;
@@ -144,6 +145,16 @@ namespace AI
 			
 			setTarget(target);
 			setActionMode(EActionMode.PatrolAggressively);
+			setAIMode(EAIMode.Action);
+		}
+		
+		public void WaitAggressively(Component target)
+		{
+			if (!IsAlive)
+				return;
+			
+			setTarget(target);
+			setActionMode(EActionMode.WaitAggressively);
 			setAIMode(EAIMode.Action);
 		}
 

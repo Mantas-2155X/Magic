@@ -222,6 +222,17 @@ namespace Editor
 				}
 			}
 			
+			if (GUILayout.Button("Wait Aggressively"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.WaitAggressively(npc.Target);
+				}
+			}
+			
 			if (GUILayout.Button("Deathmatch"))
 			{
 				foreach (var npc in aiManager.NPCs)
