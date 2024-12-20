@@ -75,6 +75,9 @@ namespace Editor
 			{
 				foreach (var npc in aiManager.NPCs)
 				{
+					if (!npc.IsAlive)
+						continue;
+
 					npc.Kill(null);
 				}
 			}

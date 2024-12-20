@@ -42,6 +42,8 @@ namespace Managers
 		
 		private JobHandle autoTargetPositionsHandle;
 		private JobHandle autoTargetDecisionsHandle;
+
+		private bool updateRelationshipGroups;
 		
 		public void Awake()
 		{
@@ -66,6 +68,8 @@ namespace Managers
 
 		public void Update()
 		{
+			handleRelationshipGroups();
+			
 			if (autoTargetDecisionsHandle.IsCompleted)
 			{
 				autoTargetDecisionsHandle.Complete();
@@ -138,6 +142,30 @@ namespace Managers
 			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
 		}
 
+		private void handleRelationshipGroups()
+		{
+			if (!updateRelationshipGroups)
+				return;
+
+			updateRelationshipGroups = false;
+			
+			for (var i = 0; i < NPCs.Count; i++)
+			{
+				var npc = NPCs[i];
+				if (!npc.IsAlive)
+					continue;
+
+				if (npc.Target is not IAlive target)
+					continue;
+
+				if (npc.RelationshipGroup != target.RelationshipGroup)
+					continue;
+
+				npc.AssignTarget(null);
+				nativeDataDirty = true;
+			}
+		}
+		
 		private void destroyNativeData()
 		{
 			if (transformsNative.isCreated)
@@ -197,10 +225,7 @@ namespace Managers
 
 		private void onRelationshipGroupChanged(IAlive alive, int previousRelationshipGroup, int newRelationshipGroup)
 		{
-			if (!alive.IsAlive)
-				return;
-
-			nativeDataDirty = true;
+			updateRelationshipGroups = true;
 		}
 
 		[BurstCompile]

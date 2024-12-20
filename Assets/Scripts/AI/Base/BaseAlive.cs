@@ -146,9 +146,6 @@ namespace AI.Base
 			if (IsAlive)
 				return;
 
-			SetMaxSpeed(maximumSpeed);
-			SetRelationshipGroup(relationshipGroup);
-
 			CurrentHealth = startingHealth;
 			StartingHealth = startingHealth;
 			OverloadHealth = overloadHealth;
@@ -160,6 +157,10 @@ namespace AI.Base
 			RegenerateMana = regenerateMana;
 
 			IsAlive = true;
+			
+			SetMaxSpeed(maximumSpeed);
+			SetRelationshipGroup(relationshipGroup);
+			
 			OnSpawnEvent?.Invoke(this);
 			
 			regenerateLoop().Forget();

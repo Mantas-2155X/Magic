@@ -20,7 +20,7 @@ namespace Weapons
 					continue;
 
 				npc.SenseRange = 99999;
-				npc.SetRelationshipGroup(Random.Range(0, int.MaxValue));
+				npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
 				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon("Fire Gun"), Vector3.zero, Vector3.zero));
 				npc.WanderAggressively(npc.Target);
 			}
