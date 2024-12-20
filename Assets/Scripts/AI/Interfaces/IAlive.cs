@@ -23,8 +23,8 @@ namespace AI.Interfaces
 		public float OverloadMana { get; }
 		public float RegenerateMana { get; }
 
-		public EAIType AIType { get; }
 		public EMovementType MovementType { get; }
+		public int RelationshipGroup { get; }
 		
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
@@ -34,13 +34,14 @@ namespace AI.Interfaces
 		public void SetInvulnerable(bool value);
 		public void SetPowerful(bool value);
 		public void SetMovementType(EMovementType value);
+		public void SetRelationshipGroup(int value);
 
 		public void SetMaxSpeed(float maximumSpeed);
 		
 		public void TakeWeapon(IWeapon weapon);
 		public void DropWeapon();
 
-		public void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed);
+		public void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup);
 		public void Heal(float health, object source, bool clamp = false);
 		public void Damage(float damage, object source);
 		public void GenerateMana(float mana, object source, bool clamp = false);

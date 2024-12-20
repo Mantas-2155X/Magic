@@ -21,4 +21,7 @@ namespace AI.Events
 	
 	[Serializable]
 	public class OnSpawnEvent : UnityEvent<IAlive> { }
+	
+	[Serializable]
+	public class OnRelationshipGroupChangedEvent : UnityEvent<IAlive, int, int> { }
 }

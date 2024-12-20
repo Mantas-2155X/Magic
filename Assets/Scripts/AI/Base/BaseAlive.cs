@@ -19,6 +19,7 @@ namespace AI.Base
 		public static readonly OnManaUseEvent OnManaUseEvent = new ();
 		public static readonly OnDeathEvent OnDeathEvent = new ();
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
+		public static readonly OnRelationshipGroupChangedEvent OnRelationshipGroupChangedEvent = new ();
 		
 		private LayerMask previousExcludeLayers;
 
@@ -64,8 +65,8 @@ namespace AI.Base
 		public float OverloadMana { get; private set; }
 		public float RegenerateMana { get; private set; }
 
-		public virtual EAIType AIType { get; private set; }
 		public EMovementType MovementType { get; private set; }
+		public int RelationshipGroup { get; private set; }
 
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
@@ -103,6 +104,16 @@ namespace AI.Base
 
 			Body.FeetCollider.enabled = MovementType == EMovementType.Normal;
 		}
+		public void SetRelationshipGroup(int value)
+		{
+			if (!IsAlive || RelationshipGroup == value)
+				return;
+
+			var previousRelationshipGroup = RelationshipGroup;
+			RelationshipGroup = value;
+			
+			OnRelationshipGroupChangedEvent?.Invoke(this, previousRelationshipGroup, RelationshipGroup);
+		}
 
 		public virtual void SetMaxSpeed(float maximumSpeed)
 		{
@@ -122,7 +133,7 @@ namespace AI.Base
 			Weapon = null;
 		}
 
-		public virtual void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
+		public virtual void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
 		{
 			if (!init)
 			{
@@ -136,6 +147,7 @@ namespace AI.Base
 				return;
 
 			SetMaxSpeed(maximumSpeed);
+			SetRelationshipGroup(relationshipGroup);
 
 			CurrentHealth = startingHealth;
 			StartingHealth = startingHealth;

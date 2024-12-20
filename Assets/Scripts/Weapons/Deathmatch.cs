@@ -20,9 +20,7 @@ namespace Weapons
 					continue;
 
 				npc.SenseRange = 99999;
-				npc.FriendlyFire = true;
-				npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
-				
+				npc.SetRelationshipGroup(Random.Range(0, int.MaxValue));
 				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon("Fire Gun"), Vector3.zero, Vector3.zero));
 				npc.WanderAggressively(npc.Target);
 			}

@@ -86,16 +86,8 @@ namespace AI
 		/// </summary>
 		[SerializeField]
 		public float CommunicateRange = 5f;
-
-		/// <summary>
-		/// If set to true, a npc damaging this npc will fight back
-		/// </summary>
-		[SerializeField]
-		public bool FriendlyFire = false;
 		
 		#endregion
-		
-		public EAIType AutoTarget { get; private set; }
 		
 		public EAIMode AIMode { get; private set; }
 		public EActionMode ActionMode { get; private set; }
@@ -242,15 +234,6 @@ namespace AI
 			setTarget(target);
 		}
 
-		public void AssignAutoTarget(EAIType flags)
-		{
-			if (!IsAlive)
-				return;
-
-			AutoTarget = flags;
-			AIManager.NativeDataDirty = true;
-		}
-		
 		public void ReturnAIMode()
 		{
 			if (!IsAlive)
@@ -324,7 +307,8 @@ namespace AI
 			if (Target == target)
 				return;
 			
-			if (!FriendlyFire && Target is NPC)
+			// Don't target alives of the same relationship group
+			if (Target is IAlive alive && alive.RelationshipGroup == RelationshipGroup)
 				return;
 			
 			Weapon?.CancelCasting();
@@ -383,15 +367,13 @@ namespace AI
 		
 		public override bool IsWalking => Agent.hasPath;
 
-		public override EAIType AIType => EAIType.NPC;
-
 		public override void SetMaxSpeed(float maximumSpeed)
 		{
 			base.SetMaxSpeed(maximumSpeed);
 			Agent.speed = maximumSpeed;
 		}
 		
-		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
+		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
 		{
 			AIModeObj = AIModes[AIMode];
 			ActionModeObj = ActionModes[ActionMode];
@@ -403,7 +385,7 @@ namespace AI
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
 			
-			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed);
+			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
 		}
 
 		public override void Kill(object source)

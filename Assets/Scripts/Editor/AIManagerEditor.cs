@@ -134,51 +134,40 @@ namespace Editor
 
 			GUILayout.EndHorizontal();
 			
-			GUILayout.Label("Auto Target", EditorStyles.boldLabel);
+			GUILayout.Label("Relationship Group", EditorStyles.boldLabel);
 
 			GUILayout.BeginHorizontal();
 			
-			if (GUILayout.Button("None"))
+			if (GUILayout.Button("-1"))
 			{
 				foreach (var npc in aiManager.NPCs)
 				{
 					if (!npc.IsAlive)
 						continue;
 
-					npc.AssignAutoTarget(EAIType.None);
+					npc.SetRelationshipGroup(-1);
 				}
 			}
 			
-			if (GUILayout.Button("Player"))
+			if (GUILayout.Button("0"))
 			{
 				foreach (var npc in aiManager.NPCs)
 				{
 					if (!npc.IsAlive)
 						continue;
 
-					npc.AssignAutoTarget(EAIType.Player);
+					npc.SetRelationshipGroup(0);
 				}
 			}
 			
-			if (GUILayout.Button("NPCs"))
+			if (GUILayout.Button("Random"))
 			{
 				foreach (var npc in aiManager.NPCs)
 				{
 					if (!npc.IsAlive)
 						continue;
 
-					npc.AssignAutoTarget(EAIType.NPC);
-				}
-			}
-			
-			if (GUILayout.Button("Both"))
-			{
-				foreach (var npc in aiManager.NPCs)
-				{
-					if (!npc.IsAlive)
-						continue;
-
-					npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
+					npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
 				}
 			}
 			
@@ -241,9 +230,7 @@ namespace Editor
 						continue;
 					
 					npc.SenseRange = 99999;
-					npc.FriendlyFire = true;
-					npc.AssignAutoTarget(EAIType.NPC | EAIType.Player);
-					
+					npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
 					npc.WanderAggressively(npc.Target);
 				}
 			}

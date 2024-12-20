@@ -372,8 +372,6 @@ namespace AI
 		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : MaximumSpeed;
 
 		public override bool IsWalking => walking;
-
-		public override EAIType AIType => EAIType.Player;
 		
 		public override void TakeWeapon(IWeapon weapon)
 		{
@@ -387,7 +385,7 @@ namespace AI
 			base.DropWeapon();
 		}
 
-		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed)
+		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
 		{
 			Body.WeaponContainer.SetParent(CameraTr);
 			
@@ -395,7 +393,7 @@ namespace AI
 			Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
 
 			hideBodyRender(true);
-			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed);
+			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
 			enableInput();
 		}
 		
