@@ -24,6 +24,9 @@ namespace Managers
 		[SerializeField]
 		public List<NPC> NPCs = new ();
 
+		[SerializeField]
+		public bool AutoTarget = true;
+		
 		// Body Collider -> Alive
 		public readonly Dictionary<Collider, IAlive> AlivesColliderMap = new ();
 		
@@ -63,77 +66,13 @@ namespace Managers
 		public void Update()
 		{
 			handleTargets();
-			
-			if (autoTargetDecisionsHandle.IsCompleted)
+
+			if (AutoTarget)
 			{
-				autoTargetDecisionsHandle.Complete();
-
-				if (decisionsNative.IsCreated && !nativeDataDirty)
-				{
-					for (var i = 0; i < decisionsNative.Length; i++)
-					{
-						var decision = decisionsNative[i];
-						if (decision == int.MaxValue)
-							continue;
-
-						var thisAlive = alives[i];
-						if (thisAlive == null || !thisAlive.IsAlive)
-							continue;
-
-						var otherAlive = alives[decision];
-						if (otherAlive == null || !otherAlive.IsAlive)
-							continue;
-					
-						// only npcs have auto target
-						if (thisAlive is not NPC npc)
-							continue;
-					
-						// don't interrupt casting 
-						if (npc.Weapon != null && npc.Weapon.IsCasting)
-							continue;
-
-						npc.AssignTarget((Component)otherAlive);
-					}
-				}
+				assignAutoTargetResults();
+				prepareAutoTargetData();
+				startAutoTargetJobs();
 			}
-			
-			if (nativeDataDirty)
-			{
-				destroyNativeData();
-			
-				transforms.Clear();
-				alives.Clear();
-				relationshipGroups.Clear();
-			
-				transforms.Add(Player.GetTransform());
-				alives.Add(Player);
-				relationshipGroups.Add(Player.RelationshipGroup);
-				
-				for (var i = 0; i < NPCs.Count; i++)
-				{
-					var npc = NPCs[i];
-					if (!npc.IsAlive)
-						continue;
-				
-					transforms.Add(npc.GetTransform());
-					alives.Add(npc);
-					relationshipGroups.Add(npc.RelationshipGroup);
-				}
-
-				transformsNative = new TransformAccessArray(transforms.ToArray());
-			
-				positionsNative = new NativeArray<float3>(transforms.Count, Allocator.Persistent);
-				decisionsNative = new NativeArray<int>(transforms.Count, Allocator.Persistent);
-				relationshipGroupsNative = new NativeArray<int>(relationshipGroups.ToArray(), Allocator.Persistent);
-
-				nativeDataDirty = false;
-			}
-
-			var positionsJob = new AutoTargetPositionsJob { Positions = positionsNative };
-			autoTargetPositionsHandle = positionsJob.Schedule(transformsNative);
-
-			var decisionsJob = new AutoTargetDecisionsJob { Positions = positionsNative, Decisions = decisionsNative, RelationshipGroups = relationshipGroupsNative};
-			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
 		}
 
 		public void OnDestroy()
@@ -184,6 +123,86 @@ namespace Managers
 					nativeDataDirty = true;
 				}
 			}
+		}
+
+		private void assignAutoTargetResults()
+		{
+			if (!autoTargetDecisionsHandle.IsCompleted)
+				return;
+
+			autoTargetDecisionsHandle.Complete();
+
+			if (decisionsNative.IsCreated && !nativeDataDirty)
+			{
+				for (var i = 0; i < decisionsNative.Length; i++)
+				{
+					var decision = decisionsNative[i];
+					if (decision == int.MaxValue)
+						continue;
+
+					var thisAlive = alives[i];
+					if (thisAlive == null || !thisAlive.IsAlive)
+						continue;
+
+					var otherAlive = alives[decision];
+					if (otherAlive == null || !otherAlive.IsAlive)
+						continue;
+					
+					// only npcs have auto target
+					if (thisAlive is not NPC npc)
+						continue;
+					
+					// don't interrupt casting 
+					if (npc.Weapon != null && npc.Weapon.IsCasting)
+						continue;
+
+					npc.AssignTarget((Component)otherAlive);
+				}
+			}
+		}
+
+		private void prepareAutoTargetData()
+		{
+			if (nativeDataDirty)
+			{
+				destroyNativeData();
+			
+				transforms.Clear();
+				alives.Clear();
+				relationshipGroups.Clear();
+			
+				transforms.Add(Player.GetTransform());
+				alives.Add(Player);
+				relationshipGroups.Add(Player.RelationshipGroup);
+				
+				for (var i = 0; i < NPCs.Count; i++)
+				{
+					var npc = NPCs[i];
+					if (!npc.IsAlive)
+						continue;
+				
+					transforms.Add(npc.GetTransform());
+					alives.Add(npc);
+					relationshipGroups.Add(npc.RelationshipGroup);
+				}
+
+				transformsNative = new TransformAccessArray(transforms.ToArray());
+			
+				positionsNative = new NativeArray<float3>(transforms.Count, Allocator.Persistent);
+				decisionsNative = new NativeArray<int>(transforms.Count, Allocator.Persistent);
+				relationshipGroupsNative = new NativeArray<int>(relationshipGroups.ToArray(), Allocator.Persistent);
+
+				nativeDataDirty = false;
+			}
+		}
+
+		private void startAutoTargetJobs()
+		{
+			var positionsJob = new AutoTargetPositionsJob { Positions = positionsNative };
+			autoTargetPositionsHandle = positionsJob.Schedule(transformsNative);
+
+			var decisionsJob = new AutoTargetDecisionsJob { Positions = positionsNative, Decisions = decisionsNative, RelationshipGroups = relationshipGroupsNative};
+			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
 		}
 		
 		private void onDamage(IAlive alive, float damage, object source)
