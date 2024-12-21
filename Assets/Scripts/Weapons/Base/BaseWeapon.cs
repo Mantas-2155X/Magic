@@ -246,7 +246,7 @@ namespace Weapons.Base
 					throw new NotImplementedException();
 			}
 
-			Physics.Raycast(LastRay, out var hit, float.MaxValue, ~LayerMaskTools.GetMask());
+			Physics.Raycast(LastRay, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore);
 			LastHit = hit;
 		}
 

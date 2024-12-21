@@ -65,7 +65,7 @@ namespace Editor
 				var ray = aiManager.Player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 				var pos = Vector3.zero;
 
-				if (Physics.Raycast(ray, out var hit, float.MaxValue, ~LayerMaskTools.GetMask()))
+				if (Physics.Raycast(ray, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 					pos = hit.point + Vector3.up * 1.5f;
 
 				aiManager.CreateNPC(pos, Vector3.zero);
@@ -105,7 +105,7 @@ namespace Editor
 				var ray = aiManager.Player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 				var pos = Vector3.zero;
 
-				if (Physics.Raycast(ray, out var hit, float.MaxValue, ~LayerMaskTools.GetMask()))
+				if (Physics.Raycast(ray, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 					pos = hit.point + Vector3.up * 1.5f;
 				
 				foreach (var npc in aiManager.NPCs)

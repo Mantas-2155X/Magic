@@ -26,7 +26,7 @@ namespace AI.ActionModes.Shared
 			var direction = (target.position - rb.position).normalized;
 			var ray = new Ray(rb.position + transform.up * 0.5f, direction);
 
-			if (!Physics.Raycast(ray, out var hit, maxDistance, ~LayerMaskTools.GetMask()))
+			if (!Physics.Raycast(ray, out var hit, maxDistance, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 				return false;
 			
 			return hit.collider.transform == target;
