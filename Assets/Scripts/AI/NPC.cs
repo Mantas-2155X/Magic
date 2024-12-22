@@ -54,14 +54,14 @@ namespace AI
 		public float PatrolReachRange = 0.5f;
 		
 		/// <summary>
-		/// Min-Max range of how fast can the npc rotate when performing an action
-		/// (AimAt, Spin)
+		/// How fast can the npc rotate when performing an action
+		/// (AimAt)
 		/// </summary>
 		[SerializeField]
 		public float RotationSpeed = 480f;
 
 		/// <summary>
-		/// Maximum look angle between the npc and the target which the npc deems accurate enough
+		/// Maximum look angle between the npc and the target which the npc deems close enough
 		/// (AimAt)
 		/// </summary>
 		[SerializeField]
