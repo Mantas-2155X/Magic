@@ -281,6 +281,8 @@ namespace AI.Base
 #else
 			thisGo.SetActive(false);
 #endif
+
+			AIManager.Instance.AlivesColliderMap.Remove(Body.BodyCollider);
 			
 			OnDeathEvent?.Invoke(this, source);
 		}

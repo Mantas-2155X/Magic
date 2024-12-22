@@ -6,7 +6,6 @@ namespace Tools
 	{
 		private static LayerMask? lmask;
 		private static LayerMask? lmaskWithPlayer;
-		private static LayerMask? lmaskAlives;
 
 		public static LayerMask GetMask()
 		{
@@ -24,15 +23,6 @@ namespace Tools
 
 			lmaskWithPlayer = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Player");
 			return lmaskWithPlayer!.Value;
-		}
-		
-		public static LayerMask GetMaskAlives()
-		{
-			if (lmaskAlives != null)
-				return lmaskAlives.Value;
-
-			lmaskAlives = LayerMask.GetMask("NPC", "Player");
-			return lmaskAlives!.Value;
 		}
 		
 		public static bool ContainsLayer(this int mask, int layer)
