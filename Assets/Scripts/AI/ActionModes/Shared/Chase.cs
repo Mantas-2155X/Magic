@@ -75,7 +75,7 @@ namespace AI.ActionModes.Shared
 		/// </summary>
 		public void ResetChaseRange(bool lowered)
 		{
-			currentChaseRange = lowered ? owner.ChaseRange - 0.25f : owner.ChaseRange;
+			currentChaseRange = lowered ? owner.ChaseRange - 1.5f : owner.ChaseRange;
 		}
 	}
 }

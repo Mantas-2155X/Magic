@@ -15,6 +15,8 @@ namespace AI.AIModes
 		{
 			Owner = owner;
 			LastEntered = Time.time;
+			
+			Owner.Chase.ResetChaseRange(true);
 		}
 		
 		public void Disabled()
