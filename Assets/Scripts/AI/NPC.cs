@@ -40,13 +40,6 @@ namespace AI
 		public float SenseRange = 25f;
 
 		/// <summary>
-		/// Distance between the npc and the target at which the npc counts the target to be in range and stops going closer
-		/// (Chase)
-		/// </summary>
-		[SerializeField]
-		public float ChaseRange = 10f;
-
-		/// <summary>
 		/// Distance between the npc and the patrol point at which the npc is considered to have reached the point
 		/// (Patrol)
 		/// </summary>
@@ -176,6 +169,22 @@ namespace AI
 			setAIMode(EAIMode.Idle);
 		}
 
+		public float GetWeaponRange()
+		{
+			if (Weapon == null)
+				return float.MaxValue;
+
+			var data = Weapon.WeaponData;
+			
+			if (data.MaximumDistance != 0f)
+				return data.MaximumDistance;
+
+			if (data.Projectile != null)
+				return data.Projectile.Range;
+			
+			return float.MaxValue;
+		}
+		
 		public void SendCommunication(ECommunication type, object data)
 		{
 			var npcs = AIManager.Instance.NPCs;
