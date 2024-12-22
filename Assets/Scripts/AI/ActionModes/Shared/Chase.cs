@@ -48,7 +48,7 @@ namespace AI.ActionModes.Shared
 			}
 
 			// Within range but can't see the target, reduce the stop range to walk closer to the target
-			if (!owner.HasSight.SightCheck(target, owner.SightRange))
+			if (!owner.HasSight.SightCheck(target))
 			{
 				currentChaseRange /= 1.2f;
 

@@ -15,7 +15,7 @@ namespace AI.ActionModes.Shared
 		/// <summary>
 		/// Returns true if the npc has a clear raycast hit to the specified target
 		/// </summary>
-		public bool SightCheck(Transform target, float maxDistance)
+		public bool SightCheck(Transform target)
 		{
 			if (target == null)
 				return false;
@@ -26,7 +26,7 @@ namespace AI.ActionModes.Shared
 			var direction = (target.position - rb.position).normalized;
 			var ray = new Ray(rb.position + transform.up * 0.5f, direction);
 
-			if (!Physics.Raycast(ray, out var hit, maxDistance, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
+			if (!Physics.Raycast(ray, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 				return false;
 			
 			return hit.collider.transform == target;

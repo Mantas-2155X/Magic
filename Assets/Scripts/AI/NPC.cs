@@ -40,13 +40,6 @@ namespace AI
 		public float SenseRange = 25f;
 
 		/// <summary>
-		/// Maximum distance from the npc to the target via a direct raycast determining if the target can be seen
-		/// (HasSight)
-		/// </summary>
-		[SerializeField]
-		public float SightRange = 15f;
-
-		/// <summary>
 		/// Distance between the npc and the target at which the npc counts the target to be in range and stops going closer
 		/// (Chase)
 		/// </summary>
