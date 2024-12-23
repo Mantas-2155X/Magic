@@ -7,14 +7,14 @@ namespace ScriptableObjects
 	{
 		[Header("Weapon")]
 		[SerializeField]
-		public float ManaCost;
-		
-		[SerializeField]
 		public float Cooldown;
 		
 		[SerializeField]
 		public float CastingTime;
 		
+		[SerializeField]
+		public float CastingCost;
+
 		[SerializeField]
 		public float MaximumDistance;
 		

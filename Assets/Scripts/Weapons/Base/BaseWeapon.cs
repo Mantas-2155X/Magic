@@ -155,7 +155,7 @@ namespace Weapons.Base
 			if (IsCasting || Owner == null)
 				return false;
 
-			return Time.time >= LastFinishedCast + WeaponData.Cooldown && Owner.CurrentMana >= WeaponData.ManaCost;
+			return Time.time >= LastFinishedCast + WeaponData.Cooldown && Owner.CurrentMana >= WeaponData.CastingCost;
 		}
 		
 		public virtual void StartCasting()
@@ -180,7 +180,7 @@ namespace Weapons.Base
 			IsCasting = false;
 			LastFinishedCast = Time.time;
 
-			Owner.UseMana(WeaponData.ManaCost, this);
+			Owner.UseMana(WeaponData.CastingCost, this);
 			
 			calculateHit();
 			clearCast();
