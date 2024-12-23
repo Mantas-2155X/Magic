@@ -50,10 +50,7 @@ namespace UI
 			{
 				if (weapon.IsCasting)
 				{
-					var startingTime = weapon.LastStartedCast;
-					var targetTime = startingTime + weapon.WeaponData.CastingTime;
-					
-					var amount = MathTools.Remap(Time.time, startingTime, targetTime, 0f, 1f);
+					var amount = MathTools.Remap(Time.time, weapon.LastStartedCast, weapon.PredictFinishCast, 0f, 1f);
 					amount = Mathf.Clamp01(amount);
 					
 					Cast.fillAmount = amount;

@@ -22,6 +22,7 @@ namespace Weapons.Interfaces
 
 		public float LastStartedCast { get; }
 		public float LastFinishedCast { get; }
+		public float PredictFinishCast { get; }
 
 		public void Spawn(Vector3 position, Vector3 angles);
 

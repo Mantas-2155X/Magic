@@ -35,6 +35,7 @@ namespace Weapons.Base
 
 		public float LastStartedCast { get; private set; } = float.NegativeInfinity;
 		public float LastFinishedCast { get; private set; } = float.NegativeInfinity;
+		public float PredictFinishCast { get; private set; } = float.NegativeInfinity;
 
 		private ICast currentCast;
 
@@ -55,7 +56,7 @@ namespace Weapons.Base
 			if (!IsCasting || Owner == null || !Owner.IsAlive)
 				return;
 
-			if (Time.time < LastStartedCast + WeaponData.CastingTime)
+			if (Time.time < PredictFinishCast)
 				return;
 
 			switch (Owner)
@@ -82,6 +83,7 @@ namespace Weapons.Base
 			clearCast();
 			LastStartedCast = float.NegativeInfinity;
 			LastFinishedCast = float.NegativeInfinity;
+			PredictFinishCast = float.NegativeInfinity;
 			IsCasting = false;
 			PoolingManager.Instance.Add(WeaponData, gameObject);
 		}
@@ -165,6 +167,7 @@ namespace Weapons.Base
 
 			IsCasting = true;
 			LastStartedCast = Time.time;
+			PredictFinishCast = LastStartedCast + WeaponData.CastingTime;
 			
 			clearCast();
 
