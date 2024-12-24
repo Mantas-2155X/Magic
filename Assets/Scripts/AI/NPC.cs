@@ -1,4 +1,4 @@
-//#define DEBUG_NPC
+#define DEBUG_NPC
 
 using System.Collections.Generic;
 using AI.ActionModes;
@@ -94,6 +94,7 @@ namespace AI
 		public Patrol Patrol { get; private set; }
 		public HasSight HasSight { get; private set; }
 		public WithinRange WithinRange { get; private set; }
+		public LowResources LowResources { get; private set; }
 		
 		public readonly Dictionary<EAIMode, IAIMode> AIModes = new (new EAIModeComparer())
 		{
@@ -409,6 +410,7 @@ namespace AI
 			Patrol = new Patrol(this);
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
+			LowResources = new LowResources(this);
 			
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
 		}

@@ -22,12 +22,13 @@ namespace AI.ActionModes
 		public void Update()
 		{
 			var owner = Owner;
+			var ownerPos = owner.GetTransform().position;
 			
 			var target = owner.OtherTarget;
-			var targetTr = owner.OtherTargetTransform;
+			var targetPos = owner.OtherTargetTransform.position;
 			
-			// Nothing to use, return to previous action
-			if (target == null)
+			// Nothing to use or target is too far, return to previous action
+			if (target == null || Vector3.Distance(targetPos, ownerPos) > owner.SenseRange)
 			{
 				owner.ReturnActionMode();
 				return;
@@ -37,19 +38,19 @@ namespace AI.ActionModes
 			var stopAt = 1f + owner.Agent.stoppingDistance;
 			
 			// NPC not within target range, keep walking
-			if (Vector3.Distance(owner.GetTransform().position, targetTr.position) > stopAt)
+			if (Vector3.Distance(ownerPos, targetPos) > stopAt)
 			{
 				// Target within destination range, keep current path
-				if (Vector3.Distance(targetTr.position, owner.Destination) <= stopAt)
+				if (Vector3.Distance(targetPos, owner.Destination) <= stopAt)
 				{
 					if (owner.AIMode != EAIMode.Walking)
-						owner.Walk(targetTr.position);
+						owner.Walk(targetPos);
 
 					return;
 				}
 				
 				// Usable moved away from destination range, reset the path
-				owner.Walk(targetTr.position);
+				owner.Walk(targetPos);
 				return;
 			}
 

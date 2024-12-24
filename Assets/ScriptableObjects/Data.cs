@@ -1,3 +1,4 @@
+using ScriptableObjects.Enums;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -11,6 +12,9 @@ namespace ScriptableObjects
 		[SerializeField]
 		public string Description;
 
+		[SerializeField]
+		public ETag Tags;
+		
 		[Header("Instantiation")]
 		[SerializeField]
 		public GameObject Prefab;
