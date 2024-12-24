@@ -15,6 +15,8 @@ namespace AI.Interfaces
 		
 		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget);
 		
+		public void OtherTargetChanged(Component previousOtherTarget, Component newOtherTarget);
+		
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination);
 
 		public void CommunicationReceived(ECommunication type, NPC source, object data);

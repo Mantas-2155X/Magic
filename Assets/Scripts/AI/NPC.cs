@@ -83,6 +83,9 @@ namespace AI
 		public Component AttackTarget { get; private set; }
 		public Transform AttackTargetTransform { get; private set; }
 		
+		public Component OtherTarget { get; private set; }
+		public Transform OtherTargetTransform { get; private set; }
+		
 		public Vector3 Destination { get; private set; }
 
 		public AimAt AimAt { get; private set; }
@@ -110,6 +113,7 @@ namespace AI
 		private EAIMode previousAIMode;
 		private EActionMode previousActionMode;
 		private Component previousAttackTarget;
+		private Component previousOtherTarget;
 		private Vector3 previousDestination;
 
 		#region AI
@@ -217,6 +221,14 @@ namespace AI
 			
 			setAttackTarget(target);
 		}
+		
+		public void AssignOtherTarget(Component target)
+		{
+			if (!IsAlive)
+				return;
+			
+			setOtherTarget(target);
+		}
 
 		public void ReturnAIMode()
 		{
@@ -240,6 +252,14 @@ namespace AI
 				return;
 			
 			setAttackTarget(previousAttackTarget);
+		}
+		
+		public void ReturnOtherTarget()
+		{
+			if (!IsAlive)
+				return;
+			
+			setOtherTarget(previousOtherTarget);
 		}
 		
 		public void ReturnDestination()
@@ -300,7 +320,24 @@ namespace AI
 			AIModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
 
 #if DEBUG_NPC
-			Debug.Log($"[NPC {gameObject.name}] Changed Target from {previousAttackTarget} to {AttackTarget}");
+			Debug.Log($"[NPC {gameObject.name}] Changed Attack Target from {previousAttackTarget} to {AttackTarget}");
+#endif
+		}
+		
+		private void setOtherTarget(Component target)
+		{
+			if (OtherTarget == target)
+				return;
+			
+			previousOtherTarget = OtherTarget;
+			OtherTarget = target;
+			OtherTargetTransform = target == null ? null : target.GetComponent<Transform>();
+			
+			ActionModeObj.OtherTargetChanged(previousOtherTarget, OtherTarget);
+			AIModeObj.OtherTargetChanged(previousOtherTarget, OtherTarget);
+
+#if DEBUG_NPC
+			Debug.Log($"[NPC {gameObject.name}] Changed Other Target from {previousOtherTarget} to {OtherTarget}");
 #endif
 		}
 		

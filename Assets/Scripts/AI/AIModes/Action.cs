@@ -35,6 +35,11 @@ namespace AI.AIModes
 			
 		}
 
+		public void OtherTargetChanged(Component previousOtherTarget, Component newOtherTarget)
+		{
+			
+		}
+		
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination)
 		{
 			
