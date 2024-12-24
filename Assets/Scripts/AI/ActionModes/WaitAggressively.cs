@@ -20,14 +20,14 @@ namespace AI.ActionModes
 		
 		public void Update()
 		{
-			var target = Owner.TargetTransform;
+			var target = Owner.AttackTargetTransform;
 
 			// Target does not exist or is further than the sense range, keep waiting until one is enough
 			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target))
 				return;
 
 			// Target within sense range, chase until it is reached
-			if (!Owner.Chase.ChaseTarget(target))
+			if (!Owner.Chase.ChaseCheck(target))
 				return;
 
 			// Reached target, stop walking and go into action
@@ -40,14 +40,14 @@ namespace AI.ActionModes
 			if (Owner.AIMode == EAIMode.Action)
 			{
 				// Turn towards the target and aim
-				if (!Owner.AimAt.AimTowardsTarget(target))
+				if (!Owner.AimAt.AimTowards(target))
 					return;
 			
 				Owner.Weapon?.StartCasting();
 			}
 		}
 		
-		public void TargetChanged(Component previousTarget, Component newTarget)
+		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
 		{
 			Owner.Chase.ResetChaseRange(true);
 		}

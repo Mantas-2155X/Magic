@@ -1,6 +1,5 @@
 //#define DEBUG_NPC
 
-using System;
 using System.Collections.Generic;
 using AI.ActionModes;
 using AI.ActionModes.Shared;
@@ -81,8 +80,8 @@ namespace AI
 		public IAIMode AIModeObj { get; private set; }
 		public IActionMode ActionModeObj { get; private set; }
 
-		public Component Target { get; private set; }
-		public Transform TargetTransform { get; private set; }
+		public Component AttackTarget { get; private set; }
+		public Transform AttackTargetTransform { get; private set; }
 		
 		public Vector3 Destination { get; private set; }
 
@@ -110,41 +109,38 @@ namespace AI
 		
 		private EAIMode previousAIMode;
 		private EActionMode previousActionMode;
-		private Component previousTarget;
+		private Component previousAttackTarget;
 		private Vector3 previousDestination;
 
 		#region AI
 		
 		#region Action Modes
 
-		public void WanderAggressively(Component target)
+		public void WanderAggressively()
 		{
 			if (!IsAlive)
 				return;
 			
-			setTarget(target);
 			setActionMode(EActionMode.WanderAggressively);
 			setAIMode(EAIMode.Action);
 		}
 
-		public void PatrolAggressively(Component target, List<Vector3> points, int startAt = -1)
+		public void PatrolAggressively(List<Vector3> points, int startAt = -1)
 		{
 			if (!IsAlive)
 				return;
 			
 			Patrol.SetPoints(points, startAt);
 			
-			setTarget(target);
 			setActionMode(EActionMode.PatrolAggressively);
 			setAIMode(EAIMode.Action);
 		}
 		
-		public void WaitAggressively(Component target)
+		public void WaitAggressively()
 		{
 			if (!IsAlive)
 				return;
 			
-			setTarget(target);
 			setActionMode(EActionMode.WaitAggressively);
 			setAIMode(EAIMode.Action);
 		}
@@ -214,12 +210,12 @@ namespace AI
 #endif
 		}
 		
-		public void AssignTarget(Component target)
+		public void AssignAttackTarget(Component target)
 		{
 			if (!IsAlive)
 				return;
 			
-			setTarget(target);
+			setAttackTarget(target);
 		}
 
 		public void ReturnAIMode()
@@ -238,12 +234,12 @@ namespace AI
 			setActionMode(previousActionMode);
 		}
 		
-		public void ReturnTarget()
+		public void ReturnAttackTarget()
 		{
 			if (!IsAlive)
 				return;
 			
-			setTarget(previousTarget);
+			setAttackTarget(previousAttackTarget);
 		}
 		
 		public void ReturnDestination()
@@ -290,21 +286,21 @@ namespace AI
 #endif
 		}
 
-		private void setTarget(Component target)
+		private void setAttackTarget(Component target)
 		{
-			if (Target == target)
+			if (AttackTarget == target)
 				return;
 			
 			Weapon?.CancelCasting();
-			previousTarget = Target;
-			Target = target;
-			TargetTransform = target == null ? null : target.GetComponent<Transform>();
+			previousAttackTarget = AttackTarget;
+			AttackTarget = target;
+			AttackTargetTransform = target == null ? null : target.GetComponent<Transform>();
 			
-			ActionModeObj.TargetChanged(previousTarget, Target);
-			AIModeObj.TargetChanged(previousTarget, Target);
+			ActionModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
+			AIModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
 
 #if DEBUG_NPC
-			Debug.Log($"[NPC {gameObject.name}] Changed Target from {previousTarget} to {Target}");
+			Debug.Log($"[NPC {gameObject.name}] Changed Target from {previousAttackTarget} to {AttackTarget}");
 #endif
 		}
 		

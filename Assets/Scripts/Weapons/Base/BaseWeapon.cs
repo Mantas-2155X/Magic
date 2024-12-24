@@ -69,7 +69,7 @@ namespace Weapons.Base
 				}
 				case NPC npc:
 				{
-					if (npc.Target != null)
+					if (npc.AttackTarget != null)
 						FinishCasting();
 					break;
 				}
@@ -242,7 +242,7 @@ namespace Weapons.Base
 					LastRay = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 					break;
 				case NPC npc:
-					var direction = npc.Target == null ? ownerTr.forward : (npc.TargetTransform.position - ownerTr.position).normalized;
+					var direction = npc.AttackTarget == null ? ownerTr.forward : (npc.AttackTargetTransform.position - ownerTr.position).normalized;
 					LastRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;
 				default:

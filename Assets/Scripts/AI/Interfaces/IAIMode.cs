@@ -16,7 +16,7 @@ namespace AI.Interfaces
 		
 		public void Update();
 		
-		public void TargetChanged(Component previousTarget, Component newTarget);
+		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget);
 		
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination);
 		

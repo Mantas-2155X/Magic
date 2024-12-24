@@ -51,7 +51,7 @@ namespace AI.AIModes
 			Owner.ReturnAIMode();
 		}
 
-		public void TargetChanged(Component previousTarget, Component newTarget)
+		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
 		{
 			
 		}

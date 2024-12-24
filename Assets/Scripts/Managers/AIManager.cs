@@ -109,17 +109,17 @@ namespace Managers
 				if (!npc.IsAlive)
 					continue;
 
-				if (npc.Target is not IAlive target)
+				if (npc.AttackTarget is not IAlive target)
 					continue;
 
 				if (!target.IsAlive)
 				{
-					npc.AssignTarget(null);
+					npc.AssignAttackTarget(null);
 					nativeDataDirty = true;
 				}
 				else if (npc.RelationshipGroup == target.RelationshipGroup)
 				{
-					npc.AssignTarget(null);
+					npc.AssignAttackTarget(null);
 					nativeDataDirty = true;
 				}
 			}
@@ -156,7 +156,7 @@ namespace Managers
 					if (npc.Weapon != null && npc.Weapon.IsCasting)
 						continue;
 
-					npc.AssignTarget((Component)otherAlive);
+					npc.AssignAttackTarget((Component)otherAlive);
 				}
 			}
 		}
@@ -231,7 +231,7 @@ namespace Managers
 			if (aggressor == null || !aggressor.IsAlive || aggressor == alive || aggressor.RelationshipGroup == alive.RelationshipGroup)
 				return;
 			
-			npc.AssignTarget((Component)aggressor);
+			npc.AssignAttackTarget((Component)aggressor);
 		}
 
 		private void onSpawn(IAlive alive)

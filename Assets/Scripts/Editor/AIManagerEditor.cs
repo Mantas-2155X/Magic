@@ -187,7 +187,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.WanderAggressively(npc.Target);
+					npc.WanderAggressively();
 				}
 			}
 			
@@ -210,7 +210,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.PatrolAggressively(npc.Target, points);
+					npc.PatrolAggressively(points);
 				}
 			}
 			
@@ -221,7 +221,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.WaitAggressively(npc.Target);
+					npc.WaitAggressively();
 				}
 			}
 			
@@ -234,7 +234,7 @@ namespace Editor
 					
 					npc.SenseRange = 99999;
 					npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
-					npc.WanderAggressively(npc.Target);
+					npc.WanderAggressively();
 				}
 			}
 
@@ -316,7 +316,7 @@ namespace Editor
 				EditorGUIUtility.labelWidth = 25f;
 				EditorGUILayout.EnumPopup("Act: ", npc.ActionMode, GUILayout.Width(130f));
 				EditorGUIUtility.labelWidth = 45f;
-				EditorGUILayout.ObjectField("Target: ", npc.Target, typeof(Component), true);
+				EditorGUILayout.ObjectField("Attack: ", npc.AttackTarget, typeof(Component), true);
 				EditorGUIUtility.labelWidth = 0f;
 
 				GUILayout.EndHorizontal();

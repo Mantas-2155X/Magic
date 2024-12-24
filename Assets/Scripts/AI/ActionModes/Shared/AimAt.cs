@@ -16,7 +16,7 @@ namespace AI.ActionModes.Shared
 		/// This only does one step of aiming and should be placed in Update
 		/// Returns true if angle between npc and target is within specified maximum angle
 		/// </summary>
-		public bool AimTowardsTarget(Transform target)
+		public bool AimTowards(Transform target)
 		{
 			var rb = owner.Body.Rigidbody;
 			

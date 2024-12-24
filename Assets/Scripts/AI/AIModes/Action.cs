@@ -30,7 +30,7 @@ namespace AI.AIModes
 			
 		}
 
-		public void TargetChanged(Component previousTarget, Component newTarget)
+		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
 		{
 			
 		}
