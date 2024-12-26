@@ -1,9 +1,10 @@
-using Objects.Base;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Managers;
 using Objects.Interfaces;
 using ScriptableObjects.Enums;
+using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.AI;
-using Object = UnityEngine.Object;
 
 namespace AI.ActionModes.Shared
 {
@@ -16,71 +17,110 @@ namespace AI.ActionModes.Shared
 			this.owner = owner;
 		}
 
-		// todo: optimize this too, hell optimize this whole class
-		public IObject GrabResource()
+		private readonly List<IObject> tempResources = new ();
+		private readonly List<Vector3> tempResourcePositions = new ();
+		
+		public IObject GrabResourceIfNeeded()
 		{
 			if (IsLowHealth())
 			{
-				var currentOtherTarget = owner.OtherTarget;
-				if (currentOtherTarget != null && currentOtherTarget is IObject obj && obj.ObjectData.Tags.HasFlag(ETag.RestoresHealth) && owner.WithinRange.SenseDistanceCheck(obj.GetTransform()))
-					return obj;
+				if (CurrentResourceValid(ETag.RestoresHealth))
+					return (IObject)owner.OtherTarget;
 
-				return IsObjectNearby(ETag.RestoresHealth);
+				var resource = FindNearbyResource(ETag.RestoresHealth);
+				if (resource != null)
+					return resource;
 			}
 			
 			if (IsLowMana())
 			{
-				var currentOtherTarget = owner.OtherTarget;
-				if (currentOtherTarget != null && currentOtherTarget is IObject obj && obj.ObjectData.Tags.HasFlag(ETag.RestoresMana) && owner.WithinRange.SenseDistanceCheck(obj.GetTransform()))
-					return obj;
-
-				return IsObjectNearby(ETag.RestoresMana);
+				if (CurrentResourceValid(ETag.RestoresMana))
+					return (IObject)owner.OtherTarget;
+				
+				var resource = FindNearbyResource(ETag.RestoresMana);
+				if (resource != null)
+					return resource;
 			}
 
 			return null;
 		}
 		
-		// todo: make as a property in the npc class. Probably what's the minimum before this is true
-		public bool IsLowHealth()
+		public IObject FindNearbyResource(ETag tag)
 		{
-			return owner.CurrentHealth <= owner.StartingHealth / 2f;
-		}
+			tempResources.Clear();
+			tempResourcePositions.Clear();
 
-		// todo: make as a property in the npc class. Probably what's the minimum before this is true
-		public bool IsLowMana()
-		{
-			return owner.CurrentMana <= owner.StartingMana / 2f;
-		}
-
-		// todo: optimize this to hell, extremely inefficient. Only testing. Probably cache the objects in ObjectManager
-		public IObject IsObjectNearby(ETag tag)
-		{
-			var objects = Object.FindObjectsByType<BaseObject>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-			foreach (var obj in objects)
+			var resources = ObjectManager.Instance.GetRegisteredObjects();
+			for (var i = 0; i < resources.Count; i++)
 			{
-				if (!obj.enabled || !obj.ObjectData.Tags.HasFlag(tag))
+				var resource = resources[i];
+				if (resource == null)
 					continue;
 
-				var tr = obj.GetTransform();
-				
-				if (!owner.WithinRange.SenseDistanceCheck(tr))
+				if (!resource.ObjectData.Tags.HasFlag(tag))
 					continue;
 
-				var path = new NavMeshPath();
-
-				var prevAgent = owner.Agent.enabled;
-
-				owner.Agent.enabled = true;
-				var calc = owner.Agent.CalculatePath(tr.position, path);
-				owner.Agent.enabled = prevAgent;
-				
-				if (!calc || path.status is NavMeshPathStatus.PathInvalid or NavMeshPathStatus.PathPartial)
+				var resourceTr = resource.GetTransform();
+				if (!owner.WithinRange.SenseDistanceCheck(resourceTr))
 					continue;
 
-				return obj;
+				tempResources.Add(resource);
+				tempResourcePositions.Add(resourceTr.position);
 			}
 
-			return null;
+			if (tempResources.Count == 0)
+				return null;
+			
+			if (tempResources.Count == 1)
+				return tempResources[0];
+
+			var closestResource = -1;
+			var closestDistance = float.MaxValue;
+
+			for (var i = 0; i < tempResourcePositions.Count; i++)
+			{
+				var thisPos = tempResourcePositions[i];
+				
+				for (var k = 0; k < tempResourcePositions.Count; k++)
+				{
+					if (i == k)
+						continue;
+
+					var otherPos = tempResourcePositions[k];
+					var distance = math.distancesq(thisPos, otherPos);
+					
+					if (distance < closestDistance)
+					{
+						closestResource = i;
+						closestDistance = distance;
+					}
+				}
+			}
+
+			if (closestResource == -1)
+				return null;
+			
+			return tempResources[closestResource];
 		}
+
+		public bool CurrentResourceValid(ETag tag)
+		{
+			var resource = owner.OtherTarget;
+			if (resource == null || resource is not IObject obj)
+				return false;
+
+			if (!obj.ObjectData.Tags.HasFlag(tag))
+				return false;
+
+			if (!owner.WithinRange.SenseDistanceCheck(owner.OtherTargetTransform))
+				return false;
+				
+			return true;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public bool IsLowHealth() => owner.CurrentHealth <= owner.StartingHealth * owner.LowResourcesMultiplier;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public bool IsLowMana() => owner.CurrentMana <= owner.StartingMana * owner.LowResourcesMultiplier;
 	}
 }

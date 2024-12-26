@@ -33,10 +33,14 @@ namespace Objects.Base
 			
 			if (ObjectData.IsUsable)
 				initializeUsable();
+			
+			ObjectManager.Instance.Register(this);
 		}
 
 		public virtual void OnDisable()
 		{
+			ObjectManager.Instance.Unregister(this);
+
 			if (ObjectData.IsPoolable != EObjectPool.OnDisable)
 				return;
 
@@ -48,6 +52,7 @@ namespace Objects.Base
 			if (ObjectData.IsPoolable != EObjectPool.OnParticleSystemStopped)
 				return;
 
+			ObjectManager.Instance.Unregister(this);
 			PoolingManager.Instance.Add(ObjectData, thisGo);
 		}
 

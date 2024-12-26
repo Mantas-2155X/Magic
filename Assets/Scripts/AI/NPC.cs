@@ -71,6 +71,12 @@ namespace AI
 		/// </summary>
 		[SerializeField]
 		public float CommunicateRange = 5f;
+
+		/// <summary>
+		/// Multiplying starting value of a resource with this indicates the point when it is considered as a low resource 
+		/// </summary>
+		[SerializeField]
+		public float LowResourcesMultiplier = 0.15f;
 		
 		#endregion
 		

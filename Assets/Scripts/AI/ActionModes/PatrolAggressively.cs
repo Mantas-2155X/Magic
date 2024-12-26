@@ -21,7 +21,7 @@ namespace AI.ActionModes
 		public void Update()
 		{
 			// If low on resources, see if there's anything that can be picked up
-			var resource = Owner.LowResources.GrabResource();
+			var resource = Owner.LowResources.GrabResourceIfNeeded();
 			if (resource != null)
 			{
 				Owner.UseSomething((Component)resource);
