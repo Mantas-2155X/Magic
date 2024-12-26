@@ -20,14 +20,6 @@ namespace AI.ActionModes
 		
 		public void Update()
 		{
-			// If low on resources, see if there's anything that can be picked up
-			var resource = Owner.LowResources.GrabResourceIfNeeded();
-			if (resource != null)
-			{
-				Owner.UseSomething((Component)resource);
-				return;
-			}
-			
 			var target = Owner.AttackTargetTransform;
 
 			// Target does not exist or is further than the sense range, patrol until one is close enough

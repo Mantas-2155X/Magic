@@ -27,7 +27,12 @@ namespace AI.AIModes
 		
 		public void Update()
 		{
+			if (Owner.AIMode != EAIMode.Action)
+				return;
 			
+			// If low on resources, see if there's anything that can be picked up
+			if (Owner.ActionMode != EActionMode.UseSomething)
+				Owner.LowResources.GrabResourceIfNeeded();
 		}
 
 		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)

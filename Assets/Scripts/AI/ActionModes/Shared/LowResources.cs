@@ -20,29 +20,41 @@ namespace AI.ActionModes.Shared
 		private readonly List<IObject> tempResources = new ();
 		private readonly List<Vector3> tempResourcePositions = new ();
 		
-		public IObject GrabResourceIfNeeded()
+		public bool GrabResourceIfNeeded()
 		{
 			if (IsLowHealth())
 			{
 				if (CurrentResourceValid(ETag.RestoresHealth))
-					return (IObject)owner.OtherTarget;
+				{
+					owner.UseSomething(owner.OtherTarget);
+					return true;
+				}
 
 				var resource = FindNearbyResource(ETag.RestoresHealth);
 				if (resource != null)
-					return resource;
+				{
+					owner.UseSomething((Component)resource);
+					return true;
+				}
 			}
 			
 			if (IsLowMana())
 			{
 				if (CurrentResourceValid(ETag.RestoresMana))
-					return (IObject)owner.OtherTarget;
+				{
+					owner.UseSomething(owner.OtherTarget);
+					return true;
+				}
 				
 				var resource = FindNearbyResource(ETag.RestoresMana);
 				if (resource != null)
-					return resource;
+				{
+					owner.UseSomething((Component)resource);
+					return true;
+				}
 			}
 
-			return null;
+			return false;
 		}
 		
 		public IObject FindNearbyResource(ETag tag)

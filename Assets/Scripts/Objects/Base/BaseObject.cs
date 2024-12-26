@@ -1,3 +1,5 @@
+#define DEBUG_OBJ
+
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -115,6 +117,13 @@ namespace Objects.Base
 			Health = 0;
 			IsBroken = true;
 			
+			// Already called inside OnDisable which should be fine but timing might not be right so just do it in case
+			ObjectManager.Instance.Unregister(this);
+			
+#if DEBUG_OBJ
+			Debug.Log($"[{name}] IObject broken by {source}");
+#endif
+			
 			Destroy(thisGo);
 			enabled = false;
 		}
@@ -152,6 +161,10 @@ namespace Objects.Base
 			if (!CanPickup(user))
 				return false;
 			
+#if DEBUG_OBJ
+			Debug.Log($"[{name}] IObject picked up by {user.GetGameObject().name}");
+#endif
+			
 			switch (ObjectData.PickupAction)
 			{
 				case EAction.None:
@@ -163,6 +176,9 @@ namespace Objects.Base
 					Destroy(this);
 					break;
 			}
+
+			// Already called inside OnDisable which should be fine but timing might not be right so just do it in case
+			ObjectManager.Instance.Unregister(this);
 
 			enabled = false;
 			return true;
@@ -209,6 +225,10 @@ namespace Objects.Base
 			if (!CanUse(user))
 				return false;
 			
+#if DEBUG_OBJ
+			Debug.Log($"[{name}] IObject used by {user.GetGameObject().name}");
+#endif
+			
 			switch (ObjectData.UseAction)
 			{
 				case EAction.None:
@@ -220,6 +240,9 @@ namespace Objects.Base
 					Destroy(this);
 					break;
 			}
+			
+			// Already called inside OnDisable which should be fine but timing might not be right so just do it in case
+			ObjectManager.Instance.Unregister(this);
 			
 			enabled = false;
 			return true;
