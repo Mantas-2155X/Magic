@@ -71,13 +71,13 @@ PrefabInstance:
       addedObject: {fileID: 885924708890772066}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3144674404040955451}
+      addedObject: {fileID: 4813731835461809513}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6927056870077725062}
+      addedObject: {fileID: 3690171523883005923}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4451897465419232745}
+      addedObject: {fileID: 1801667162124486421}
     - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8434275448109667988}
@@ -108,7 +108,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.47064543, y: 2.4243965, z: 0.44737747}
   m_Center: {x: -0.003418386, y: 0.17156291, z: -0.0023985952}
---- !u!114 &3144674404040955451
+--- !u!114 &4813731835461809513
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,16 +117,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3200840523429498350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5324003a3df646d882265afa899e35f4, type: 3}
+  m_Script: {fileID: 11500000, guid: b0d09ed1cb0b46159997ba8e5e058f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <WeaponData>k__BackingField: {fileID: 11400000, guid: f8a9d25b025823532bf07a2665e2c521, type: 2}
-  <Rigidbody>k__BackingField: {fileID: 6927056870077725062}
+  <Rigidbody>k__BackingField: {fileID: 3690171523883005923}
   <Colliders>k__BackingField:
   - {fileID: 885924708890772066}
   - {fileID: 8434275448109667988}
-  <DroppedWeapon>k__BackingField: {fileID: 4451897465419232745}
---- !u!54 &6927056870077725062
+  <DroppedWeapon>k__BackingField: {fileID: 1801667162124486421}
+--- !u!54 &3690171523883005923
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,7 +153,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4451897465419232745
+--- !u!114 &1801667162124486421
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

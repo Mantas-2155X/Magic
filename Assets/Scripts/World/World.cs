@@ -47,6 +47,11 @@ namespace World
 		{
 			Instance = this;
 		}
+		
+		public void OnDisable()
+		{
+			TimeScale = 1f;
+		}
 
 		public void Start()
 		{

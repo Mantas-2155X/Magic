@@ -70,7 +70,7 @@ namespace Attacks.Base
 			FollowTarget();
 		}
 
-		public void OnDisable()
+		public virtual void OnDisable()
 		{
 			PoolingManager.Instance.Add(AttackData, thisGo);
 		}
