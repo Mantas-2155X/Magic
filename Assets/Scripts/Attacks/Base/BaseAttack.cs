@@ -60,12 +60,19 @@ namespace Attacks.Base
 			}
 
 			thisGo.SetActive(true);
-			System.Play(true);
+			
+			if (System != null)
+				System.Play(true);
 		}
 		
 		public void Update()
 		{
 			FollowTarget();
+		}
+
+		public void OnDisable()
+		{
+			PoolingManager.Instance.Add(AttackData, thisGo);
 		}
 
 		public void OnParticleSystemStopped()

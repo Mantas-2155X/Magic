@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88ec3dc2c574319883846e497d7a3a6, type: 3}
+  m_Name: TimeSlicer
+  m_EditorClassIdentifier: 
+  Name: Time Slicer
+  Description: Slows time and slices targets by accelerating time inside of them
+  Tags: 0
+  Prefab: {fileID: 2895964246749410662, guid: 14e107b897358ca58b129b275b2af6ec, type: 3}
+  Cooldown: 15
+  CastingTime: 5
+  CastingCost: 90
+  MaximumDistance: 0
+  Cast: {fileID: 11400000, guid: a6d0636060cf7effb8a704dfc3e62d31, type: 2}
+  Attack: {fileID: 11400000, guid: 5bc2555ae5ae7eb4d83c6d323c533f8f, type: 2}
+  Projectile: {fileID: 0}
