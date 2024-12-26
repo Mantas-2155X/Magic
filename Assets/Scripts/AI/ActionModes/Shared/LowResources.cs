@@ -75,7 +75,7 @@ namespace AI.ActionModes.Shared
 				var resourceTr = resource.GetTransform();
 				var resourcePos = resourceTr.position;
 				
-				if (!owner.WithinRange.SenseDistanceCheck(resourceTr) || !owner.WithinRange.IsPathValid(resourcePos))
+				if (!owner.WithinRange.SenseDistanceCheck(resourceTr))
 					continue;
 
 				tempResources.Add(resource);

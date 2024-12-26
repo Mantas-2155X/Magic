@@ -28,10 +28,6 @@ namespace AI.ActionModes.Shared
 			circle.y *= Random.Range(owner.Agent.stoppingDistance, 15f);
 
 			var target = new Vector3(pos.x + circle.x, pos.y, pos.z + circle.y);
-			
-			if (!owner.WithinRange.IsPathValid(target))
-				return;
-			
 			owner.Walk(target);
 		}
 	}
