@@ -20,7 +20,7 @@ namespace AI.AIModes
 			Owner = owner;
 			LastEntered = Time.time;
 
-			if (toggleAgent(true))
+			if (owner.ToggleAgent(true))
 				Owner.Agent.SetDestination(Owner.Destination);
 		}
 		
@@ -29,7 +29,7 @@ namespace AI.AIModes
 			if (jumpingLink)
 				forceFinishJump();
 			
-			toggleAgent(false);
+			Owner.ToggleAgent(false);
 			Owner = null;
 			
 			LastExited = Time.time;
@@ -69,24 +69,6 @@ namespace AI.AIModes
 		public void CommunicationReceived(ECommunication type, NPC source, object data)
 		{
 			
-		}
-		
-		private bool toggleAgent(bool state)
-		{
-			var agent = Owner.Agent;
-			if (agent.enabled == state)
-				return true;
-			
-			agent.enabled = state;
-			Owner.Body.Rigidbody.isKinematic = state;
-
-			if (!state || agent.isOnNavMesh)
-				return true;
-
-			Debug.LogWarning($"[{Owner.name}] Agent is outside of navmesh, killing");
-			Owner.Kill(Owner);
-
-			return false;
 		}
 
 		private void forceFinishJump()

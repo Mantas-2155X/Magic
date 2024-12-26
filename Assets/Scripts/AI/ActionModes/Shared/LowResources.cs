@@ -61,11 +61,13 @@ namespace AI.ActionModes.Shared
 					continue;
 
 				var resourceTr = resource.GetTransform();
-				if (!owner.WithinRange.SenseDistanceCheck(resourceTr))
+				var resourcePos = resourceTr.position;
+				
+				if (!owner.WithinRange.SenseDistanceCheck(resourceTr) || !owner.WithinRange.IsPathValid(resourcePos))
 					continue;
 
 				tempResources.Add(resource);
-				tempResourcePositions.Add(resourceTr.position);
+				tempResourcePositions.Add(resourcePos);
 			}
 
 			if (tempResources.Count == 0)

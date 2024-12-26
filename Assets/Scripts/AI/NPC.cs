@@ -232,6 +232,24 @@ namespace AI
 #endif
 		}
 		
+		public bool ToggleAgent(bool state)
+		{
+			var agent = Agent;
+			if (agent.enabled == state)
+				return true;
+			
+			agent.enabled = state;
+			Body.Rigidbody.isKinematic = state;
+
+			if (!state || agent.isOnNavMesh)
+				return true;
+
+			Debug.LogWarning($"[{name}] Agent is outside of navmesh, killing");
+			Kill(this);
+
+			return false;
+		}
+		
 		public void AssignAttackTarget(Component target)
 		{
 			if (!IsAlive)
