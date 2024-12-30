@@ -76,15 +76,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Drop",
-                    "type": "Button",
-                    "id": "ac10858a-8e9e-40d1-95d8-ba47195ddc04",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -437,17 +428,6 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Noclip",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7aa9720f-0b0b-4b97-9def-65e9a2684e5b",
-                    "path": "<Keyboard>/g",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
