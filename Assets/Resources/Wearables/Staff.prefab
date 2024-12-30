@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 319748f2f40f0529e8245fae83f5bbe4, type: 2}
     - target: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       propertyPath: m_Name
-      value: ShieldGun
+      value: Staff
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       propertyPath: m_IsActive
@@ -93,36 +93,37 @@ PrefabInstance:
     - {fileID: -4142970639297095382, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
     - {fileID: -8219602465628808233, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
     - {fileID: 3110346015524261535, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+    - {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4223069296182099131}
+      addedObject: {fileID: 2886060341139500075}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2207800380375180535}
+      addedObject: {fileID: 4308003757065491323}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3219804055044999109}
+      addedObject: {fileID: 8584383134835422118}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2643696544712590236}
-    - targetCorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+      addedObject: {fileID: 7635341922397970938}
+    - targetCorrespondingSourceObject: {fileID: -534632489212797966, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2654227922841394834}
+      addedObject: {fileID: 2253220343047811042}
   m_SourcePrefab: {fileID: 100100000, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
---- !u!1 &1391655958305767219 stripped
+--- !u!1 &768146469796593229 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: -2202897895521625460, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+  m_CorrespondingSourceObject: {fileID: -534632489212797966, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
   m_PrefabInstance: {fileID: 8231906880841360831}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &2654227922841394834
+--- !u!64 &2253220343047811042
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391655958305767219}
+  m_GameObject: {fileID: 768146469796593229}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -137,13 +138,13 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 2557553361642007858, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
+  m_Mesh: {fileID: -2628217982149308507, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
 --- !u!1 &9150455038998059246 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
   m_PrefabInstance: {fileID: 8231906880841360831}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &4223069296182099131
+--- !u!65 &2886060341139500075
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,9 +163,9 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.47064543, y: 2.4243965, z: 0.44737747}
-  m_Center: {x: -0.003418386, y: 0.17156291, z: -0.0023985952}
---- !u!114 &2207800380375180535
+  m_Size: {x: 0.47064543, y: 2.0828567, z: 0.44737747}
+  m_Center: {x: -0.003418386, y: 0.0007929206, z: -0.0023985952}
+--- !u!114 &4308003757065491323
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,14 +177,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5324003a3df646d882265afa899e35f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponData>k__BackingField: {fileID: 11400000, guid: c9a066c82961eb99a9083aefa469b05c, type: 2}
-  <Rigidbody>k__BackingField: {fileID: 3219804055044999109}
+  <WearableData>k__BackingField: {fileID: 11400000, guid: f9d97d9436995e760970b566bd4d326a, type: 2}
+  <Rigidbody>k__BackingField: {fileID: 8584383134835422118}
   <Colliders>k__BackingField:
-  - {fileID: 4223069296182099131}
-  - {fileID: 2654227922841394834}
-  <DroppedWeapon>k__BackingField: {fileID: 2643696544712590236}
-  ownerTr: {fileID: 0}
---- !u!54 &3219804055044999109
+  - {fileID: 2886060341139500075}
+  - {fileID: 2253220343047811042}
+  <DroppedWearable>k__BackingField: {fileID: 7635341922397970938}
+--- !u!54 &8584383134835422118
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -210,7 +210,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2643696544712590236
+--- !u!114 &7635341922397970938
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

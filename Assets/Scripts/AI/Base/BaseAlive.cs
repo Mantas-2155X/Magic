@@ -56,11 +56,10 @@ namespace AI.Base
 		[field: SerializeField]
 		public Body Body { get; private set; }
 		
-		public List<IWearable> Wearables { get; }
-		
-		public ISpell Spell { get; private set; }
-		
+		public List<IWearable> Wearables { get; private set; }
 		public List<ISpell> Spells { get; private set; }
+
+		public ISpell Spell { get; private set; }
 
 		public virtual float CurrentSpeed { get; private set; }
 		public float MaximumSpeed { get; private set; }
@@ -262,6 +261,7 @@ namespace AI.Base
 			if (IsAlive)
 				return;
 
+			Wearables = new List<IWearable>();
 			Spells = new List<ISpell>();
 			
 			CurrentHealth = startingHealth;

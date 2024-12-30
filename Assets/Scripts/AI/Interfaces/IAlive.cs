@@ -12,10 +12,9 @@ namespace AI.Interfaces
 		public Body Body { get; }
 		
 		public List<IWearable> Wearables { get; }
-		
-		public ISpell Spell { get; }
-		
 		public List<ISpell> Spells { get; }
+
+		public ISpell Spell { get; }
 
 		public float CurrentSpeed { get; }
 		public float MaximumSpeed { get; }

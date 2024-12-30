@@ -1,5 +1,6 @@
 using AI.Base;
 using AI.Interfaces;
+using ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,14 +27,14 @@ namespace Editor
 			GUILayout.Label("Spells");
 			
 			foreach (var obj in alive.Spells)
-				EditorGUILayout.ObjectField((Component)obj, typeof(Component), true);
+				EditorGUILayout.ObjectField(obj.SpellData, typeof(SpellData), true);
 			
 			GUILayout.Space(5);
 			
 			GUILayout.Label("Wearables");
 
 			foreach (var obj in alive.Wearables)
-				EditorGUILayout.ObjectField((Component)obj, typeof(Component), true);
+				EditorGUILayout.ObjectField(obj.WearableData, typeof(WearableData), true);
 			
 			GUILayout.Space(5);
 			
