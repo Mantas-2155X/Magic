@@ -47,7 +47,7 @@ namespace AI.Interfaces
 
 		public void SelectSpell(SpellData data);
 		public bool HasSpell(SpellData data);
-		public void GrantSpell(SpellData data);
+		public void GrantSpell(SpellData data, bool autoSelect);
 		public void RemoveSpell(SpellData data);
 		public void ClearSpells();
 		

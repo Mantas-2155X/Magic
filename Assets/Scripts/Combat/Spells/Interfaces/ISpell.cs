@@ -9,7 +9,7 @@ namespace Combat.Spells.Interfaces
 	{
 		public SpellData SpellData { get; set; }
 	
-		public IAlive Owner { get; }
+		public IAlive Owner { get; set; }
 
 		public Ray LastRay { get; }
 		public RaycastHit LastHit { get; }

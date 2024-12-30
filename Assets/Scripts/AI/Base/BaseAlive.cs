@@ -160,7 +160,7 @@ namespace AI.Base
 			return false;
 		}
 		
-		public virtual void GrantSpell(SpellData data)
+		public virtual void GrantSpell(SpellData data, bool autoSelect)
 		{
 			if (HasSpell(data))
 				return;
@@ -169,8 +169,12 @@ namespace AI.Base
 			
 			var spell = (ISpell)thisGo.AddComponent(type);
 			spell.SpellData = data;
+			spell.Owner = this;
 			
 			Spells.Add(spell);
+			
+			if (autoSelect)
+				SelectSpell(data);
 		}
 
 		public virtual void RemoveSpell(SpellData data)

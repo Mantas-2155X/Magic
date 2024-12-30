@@ -19,7 +19,7 @@ namespace Combat.Spells
 
 				npc.SenseRange = 99999;
 				npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
-				npc.GrantSpell(ObjectManager.Instance.GetSpell("Fire Ball"));
+				npc.GrantSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
 				npc.WanderAggressively();
 			}
 			

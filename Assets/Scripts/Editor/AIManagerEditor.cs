@@ -277,7 +277,7 @@ namespace Editor
 
 			if (GUILayout.Button("Give Player"))
 			{
-				aiManager.Player.GrantSpell(ObjectManager.Instance.GetSpell(Spell));
+				aiManager.Player.GrantSpell(ObjectManager.Instance.GetSpell(Spell), true);
 			}
 			
 			if (GUILayout.Button("Give NPCs"))
@@ -287,7 +287,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.GrantSpell(ObjectManager.Instance.GetSpell(Spell));
+					npc.GrantSpell(ObjectManager.Instance.GetSpell(Spell), true);
 				}
 			}
 			

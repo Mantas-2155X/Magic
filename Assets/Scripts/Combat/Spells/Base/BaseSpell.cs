@@ -15,7 +15,7 @@ namespace Combat.Spells.Base
 		[field: SerializeField]
 		public SpellData SpellData { get; set; }
 		
-		public IAlive Owner { get; private set; }
+		public IAlive Owner { get; set; }
 
 		public Ray LastRay { get; private set; }
 		public RaycastHit LastHit { get; private set; }
