@@ -107,9 +107,9 @@ namespace AI
 				return;
 
 			if (AttackAction.action.IsPressed())
-				Weapon?.StartCasting();
+				Spell?.StartCasting();
 
-			if (Weapon != null && Weapon.IsCasting)
+			if (Spell != null && Spell.IsCasting)
 			{
 				Body.WeaponContainer.localPosition = CastViewmodelPosition;
 				Body.WeaponContainer.localEulerAngles = CastViewmodelAngles;
@@ -329,12 +329,12 @@ namespace AI
 		
 		private void onAttackPerformed(InputAction.CallbackContext ctx)
 		{
-			Weapon?.StartCasting();
+			Spell?.StartCasting();
 		}
 
 		private void onAttackCanceled(InputAction.CallbackContext ctx)
 		{
-			Weapon?.CancelCasting();
+			Spell?.CancelCasting();
 		}
 
 		private void onUse(InputAction.CallbackContext ctx)
@@ -395,10 +395,9 @@ namespace AI
 
 			hideBodyRender(true);
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
+			enableInput();
 			
 			GrantSpell(ObjectManager.Instance.GetSpell("Fire Ball"));
-			
-			enableInput();
 		}
 		
 		public override void Kill(object source)

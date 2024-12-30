@@ -1,6 +1,9 @@
 using System.Runtime.CompilerServices;
+using AI.Interfaces;
+using Combat.Attacks.Interfaces;
 using Combat.Casts.Interfaces;
-using Combat.Weapons.Interfaces;
+using Combat.Projectiles.Interfaces;
+using Combat.Spells.Interfaces;
 using Managers;
 using ScriptableObjects;
 using UnityEngine;
@@ -53,16 +56,34 @@ namespace Combat.Casts.Base
 			}
 			
 			Source = source;
-			
-			if (Source is IWeapon weapon && weapon.Owner != null)
-				ownerTr = weapon.Owner.GetTransform();
-			else
-				ownerTr = Source.transform;
+
+			var alive = GetAlive();
+			ownerTr = alive != null ? alive.GetTransform() : Source.transform;
 			
 			setPosition();
 			
 			thisGo.SetActive(true);
 			System.Play(true);
+		}
+		
+		public IAlive GetAlive()
+		{
+			if (Source == null)
+				return null;
+
+			switch (Source)
+			{
+				case IAlive alive:
+					return alive;
+				case ISpell spell:
+					return spell.Owner;
+				case IAttack attack:
+					return attack.GetAlive();
+				case IProjectile projectile:
+					return projectile.GetAlive();
+				default:
+					return null;
+			}
 		}
 
 		public void StopParticles()

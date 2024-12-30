@@ -1,10 +1,10 @@
-using Combat.Weapons.Base;
+using Combat.Spells.Base;
 using Managers;
 using UnityEngine;
 
-namespace Combat.Weapons
+namespace Combat.Spells
 {
-	public class Creator : BaseWeapon
+	public class Creator : BaseSpell
 	{
 		public override bool FinishCasting()
 		{

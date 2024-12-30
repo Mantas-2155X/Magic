@@ -4,7 +4,7 @@ using AI.Base;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
 using Combat.Projectiles.Interfaces;
-using Combat.Weapons.Interfaces;
+using Combat.Spells.Interfaces;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -153,7 +153,7 @@ namespace Managers
 						continue;
 					
 					// don't interrupt casting 
-					if (npc.Weapon != null && npc.Weapon.IsCasting)
+					if (npc.Spell != null && npc.Spell.IsCasting)
 						continue;
 
 					npc.AssignAttackTarget((Component)otherAlive);
@@ -217,8 +217,8 @@ namespace Managers
 				case IAlive aggr:
 					aggressor = aggr;
 					break;
-				case IWeapon weapon:
-					aggressor = weapon.GetAlive();
+				case ISpell spell:
+					aggressor = spell.Owner;
 					break;
 				case IAttack attack:
 					aggressor = attack.GetAlive();

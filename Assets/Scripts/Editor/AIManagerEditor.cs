@@ -15,6 +15,9 @@ namespace Editor
 		public string Weapon;
 
 		[SerializeField]
+		public string Spell;
+
+		[SerializeField]
 		public bool ShowStats;
 		
 		public override void OnInspectorGUI()
@@ -261,6 +264,30 @@ namespace Editor
 						continue;
 					
 					npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon(Weapon), Vector3.zero, Vector3.zero));
+				}
+			}
+			
+			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+			
+			EditorGUIUtility.labelWidth = 75f;
+			Spell = EditorGUILayout.TextField("Spell", Spell);
+			EditorGUIUtility.labelWidth = 0f;
+
+			if (GUILayout.Button("Give Player"))
+			{
+				aiManager.Player.GrantSpell(ObjectManager.Instance.GetSpell(Spell));
+			}
+			
+			if (GUILayout.Button("Give NPCs"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+					
+					npc.GrantSpell(ObjectManager.Instance.GetSpell(Spell));
 				}
 			}
 			

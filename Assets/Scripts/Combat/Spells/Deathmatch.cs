@@ -1,10 +1,10 @@
-using Combat.Weapons.Base;
+using Combat.Spells.Base;
 using Managers;
 using UnityEngine;
 
-namespace Combat.Weapons
+namespace Combat.Spells
 {
-	public class Deathmatch : BaseWeapon
+	public class Deathmatch : BaseSpell
 	{
 		public override bool FinishCasting()
 		{
@@ -19,7 +19,7 @@ namespace Combat.Weapons
 
 				npc.SenseRange = 99999;
 				npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
-				npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon("Fire Gun"), Vector3.zero, Vector3.zero));
+				npc.GrantSpell(ObjectManager.Instance.GetSpell("Fire Ball"));
 				npc.WanderAggressively();
 			}
 			

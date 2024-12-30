@@ -170,8 +170,11 @@ namespace Managers
 						case IAlive alive:
 							angles = alive.GetTransform().rotation;
 							break;
-						case IWeapon weapon:
-							angles = weapon.GetAlive().GetTransform().rotation;
+						case ISpell spell:
+							angles = spell.Owner.GetTransform().rotation;
+							break;
+						case IAttack srcAttack:
+							angles = srcAttack.GetAlive().GetTransform().rotation;
 							break;
 						case IProjectile projectile:
 							angles = projectile.GetAlive().GetTransform().rotation;

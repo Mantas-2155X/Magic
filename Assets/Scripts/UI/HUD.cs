@@ -45,12 +45,12 @@ namespace UI
 			if (player == null)
 				return;
 
-			var weapon = player.Weapon;
-			if (weapon != null)
+			var spell = player.Spell;
+			if (spell != null)
 			{
-				if (weapon.IsCasting)
+				if (spell.IsCasting)
 				{
-					var amount = MathTools.Remap(Time.time, weapon.LastStartedCast, weapon.PredictFinishCast, 0f, 1f);
+					var amount = MathTools.Remap(Time.time, spell.LastStartedCast, spell.PredictFinishCast, 0f, 1f);
 					amount = Mathf.Clamp01(amount);
 					
 					Cast.fillAmount = amount;
@@ -60,14 +60,14 @@ namespace UI
 					Cast.fillAmount = 0f;
 				}
 
-				if (weapon.LastFinishedCast < 0)
+				if (spell.LastFinishedCast < 0)
 				{
 					Cooldown.fillAmount = 0f;
 				}
 				else
 				{
-					var finishTime = weapon.LastFinishedCast;
-					var cooldownTime = finishTime + weapon.WeaponData.Cooldown;
+					var finishTime = spell.LastFinishedCast;
+					var cooldownTime = finishTime + spell.SpellData.Cooldown;
 
 					var amount = MathTools.Remap(Time.time, finishTime, cooldownTime, 1f, 0f);
 					amount = Mathf.Clamp01(amount);

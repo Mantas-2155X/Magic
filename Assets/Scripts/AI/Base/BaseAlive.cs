@@ -378,6 +378,22 @@ namespace AI.Base
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Transform GetTransform() => thisTr;
 		
+		public float GetSpellRange()
+		{
+			if (Spell == null)
+				return float.MaxValue;
+
+			var data = Spell.SpellData;
+			
+			if (data.MaximumDistance != 0f)
+				return data.MaximumDistance;
+
+			if (data.Projectile != null)
+				return data.Projectile.Range;
+			
+			return float.MaxValue;
+		}
+		
 		private async UniTaskVoid regenerateLoop()
 		{
 			while (IsAlive)

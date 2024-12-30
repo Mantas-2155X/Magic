@@ -5,26 +5,6 @@ namespace ScriptableObjects
 	[CreateAssetMenu]
 	public class WeaponData : Data
 	{
-		[Header("Weapon")]
-		[SerializeField]
-		public float Cooldown;
 		
-		[SerializeField]
-		public float CastingTime;
-		
-		[SerializeField]
-		public float CastingCost;
-
-		[SerializeField]
-		public float MaximumDistance;
-		
-		[SerializeField]
-		public CastData Cast;
-
-		[SerializeField]
-		public AttackData Attack;
-
-		[SerializeField]
-		public ProjectileData Projectile;
 	}
 }

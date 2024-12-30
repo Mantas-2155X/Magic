@@ -3,7 +3,7 @@ using System.Threading;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
 using Combat.Projectiles.Interfaces;
-using Combat.Weapons.Interfaces;
+using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Interfaces;
@@ -121,8 +121,8 @@ namespace Combat.Projectiles.Base
 			{
 				case IAlive alive:
 					return alive;
-				case IWeapon weapon:
-					return weapon.GetAlive();
+				case ISpell spell:
+					return spell.Owner;
 				case IAttack attack:
 					return attack.GetAlive();
 				case IProjectile projectile:

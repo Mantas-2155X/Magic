@@ -56,7 +56,7 @@ namespace AI.ActionModes
 				if (!Owner.AimAt.AimTowards(target))
 					return;
 			
-				Owner.Weapon?.StartCasting();
+				Owner.Spell?.StartCasting();
 			}
 		}
 		

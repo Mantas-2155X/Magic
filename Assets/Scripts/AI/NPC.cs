@@ -186,22 +186,6 @@ namespace AI
 			setActionMode(EActionMode.None);
 			setAIMode(EAIMode.Idle);
 		}
-
-		public float GetWeaponRange()
-		{
-			if (Weapon == null)
-				return float.MaxValue;
-
-			var data = Weapon.WeaponData;
-			
-			if (data.MaximumDistance != 0f)
-				return data.MaximumDistance;
-
-			if (data.Projectile != null)
-				return data.Projectile.Range;
-			
-			return float.MaxValue;
-		}
 		
 		public void SendCommunication(ECommunication type, object data)
 		{
@@ -311,7 +295,7 @@ namespace AI
 			if (AIMode == mode)
 				return;
 			
-			Weapon?.CancelCasting();
+			Spell?.CancelCasting();
 			previousAIMode = AIMode;
 			
 			AIModeObj?.Disabled();
@@ -329,7 +313,7 @@ namespace AI
 			if (ActionMode == mode)
 				return;
 			
-			Weapon?.CancelCasting();
+			Spell?.CancelCasting();
 			previousActionMode = ActionMode;
 			
 			ActionModeObj?.Disabled();
@@ -347,7 +331,7 @@ namespace AI
 			if (AttackTarget == target)
 				return;
 			
-			Weapon?.CancelCasting();
+			Spell?.CancelCasting();
 			previousAttackTarget = AttackTarget;
 			AttackTarget = target;
 			AttackTargetTransform = target == null ? null : target.GetComponent<Transform>();

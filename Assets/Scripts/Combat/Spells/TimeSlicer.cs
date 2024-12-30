@@ -1,9 +1,9 @@
 using Combat.Attacks;
-using Combat.Weapons.Base;
+using Combat.Spells.Base;
 
-namespace Combat.Weapons
+namespace Combat.Spells
 {
-	public class TimeSlicer : BaseWeapon
+	public class TimeSlicer : BaseSpell
 	{
 		public override bool FinishCasting()
 		{

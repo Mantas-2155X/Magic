@@ -1,5 +1,4 @@
 using AI.Interfaces;
-using Combat.Weapons.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
 
