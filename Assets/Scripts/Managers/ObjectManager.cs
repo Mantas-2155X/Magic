@@ -5,6 +5,7 @@ using Combat.Attacks.Enums;
 using Combat.Attacks.Interfaces;
 using Combat.Casts.Interfaces;
 using Combat.Projectiles.Interfaces;
+using Combat.Spells.Interfaces;
 using Combat.Weapons.Interfaces;
 using Objects.Interfaces;
 using ScriptableObjects;
@@ -19,7 +20,7 @@ namespace Managers
 		private readonly Dictionary<string, Data> datasMap = new ();
 		private readonly List<IObject> activeObjects = new ();
 
-		private readonly string[] dataPaths = { "Objects", "Weapons", "Casts", "Projectiles", "Attacks" };
+		private readonly string[] dataPaths = { "Objects", "Weapons", "Casts", "Projectiles", "Attacks", "Spells" };
 
 		public ObjectManager()
 		{
@@ -98,6 +99,11 @@ namespace Managers
 			return (AttackData)datasMap.GetValueOrDefault($"Attacks/{path}");
 		}
 		
+		public SpellData GetSpell(string path)
+		{
+			return (SpellData)datasMap.GetValueOrDefault($"Spells/{path}");
+		}
+		
 		#endregion
 
 		#region Create
@@ -126,10 +132,18 @@ namespace Managers
 			return cast;
 		}
 		
-		public IProjectile CreateProjectile(ProjectileData data, IWeapon weapon, Vector3 origin, Vector3 direction)
+		public ISpell CreateSpell(SpellData data, IAlive owner)
+		{
+			var spell = PoolingManager.Instance.TakeOrCreate<ISpell>(data, false);
+			spell.Spawn(owner);
+			
+			return spell;
+		}
+		
+		public IProjectile CreateProjectile(ProjectileData data, Component source, Vector3 origin, Vector3 direction)
 		{
 			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
-			projectile.Spawn(weapon, origin, direction * data.Force);
+			projectile.Spawn(source, origin, direction * data.Force);
 			
 			return projectile;
 		}
@@ -165,10 +179,10 @@ namespace Managers
 							angles = alive.GetTransform().rotation;
 							break;
 						case IWeapon weapon:
-							angles = weapon.Owner.GetTransform().rotation;
+							angles = weapon.GetAlive().GetTransform().rotation;
 							break;
 						case IProjectile projectile:
-							angles = projectile.Source.Owner.GetTransform().rotation;
+							angles = projectile.GetAlive().GetTransform().rotation;
 							break;
 						default:
 							angles = source.transform.rotation;

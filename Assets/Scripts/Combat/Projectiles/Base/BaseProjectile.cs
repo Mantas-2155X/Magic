@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 using AI.Interfaces;
+using Combat.Attacks.Interfaces;
 using Combat.Projectiles.Interfaces;
 using Combat.Weapons.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Combat.Projectiles.Base
 		[field: SerializeField]
 		public ProjectileData ProjectileData { get; private set; }
 
-		public IWeapon Source { get; private set; }
+		public Component Source { get; private set; }
 
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; private set; }
@@ -72,7 +73,7 @@ namespace Combat.Projectiles.Base
 			clearVelocityAndPool().Forget();
 		}
 		
-		public void Spawn(IWeapon source, Vector3 origin, Vector3 force)
+		public void Spawn(Component source, Vector3 origin, Vector3 force)
 		{
 			if (!init)
 			{
@@ -86,13 +87,22 @@ namespace Combat.Projectiles.Base
 
 			startingPosition = origin;
 
-			var body = source.Owner.Body;
+			var alive = GetAlive();
+			if (alive != null)
+			{
+				var body = alive.Body;
 			
-			ignoreBodyCollider = body.BodyCollider;
-			ignoreFeetCollider = body.FeetCollider;
+				ignoreBodyCollider = body.BodyCollider;
+				ignoreFeetCollider = body.FeetCollider;
 
-			Physics.IgnoreCollision(ignoreBodyCollider, Collider, true);
-			Physics.IgnoreCollision(ignoreFeetCollider, Collider, true);
+				Physics.IgnoreCollision(ignoreBodyCollider, Collider, true);
+				Physics.IgnoreCollision(ignoreFeetCollider, Collider, true);
+			}
+			else
+			{
+				ignoreBodyCollider = null;
+				ignoreFeetCollider = null;
+			}
 			
 			thisTr.position = origin;
 			thisTr.eulerAngles = Vector3.zero;
@@ -106,8 +116,20 @@ namespace Combat.Projectiles.Base
 		{
 			if (Source == null)
 				return null;
-			
-			return Source.GetAlive();
+
+			switch (Source)
+			{
+				case IAlive alive:
+					return alive;
+				case IWeapon weapon:
+					return weapon.GetAlive();
+				case IAttack attack:
+					return attack.GetAlive();
+				case IProjectile projectile:
+					return projectile.GetAlive();
+				default:
+					return null;
+			}
 		}
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -125,8 +147,11 @@ namespace Combat.Projectiles.Base
 				rangeToken.Cancel();
 			}
 			
-			Physics.IgnoreCollision(ignoreBodyCollider, Collider, false);
-			Physics.IgnoreCollision(ignoreFeetCollider, Collider, false);
+			if (ignoreBodyCollider != null && ignoreFeetCollider != null)
+			{
+				Physics.IgnoreCollision(ignoreBodyCollider, Collider, false);
+				Physics.IgnoreCollision(ignoreFeetCollider, Collider, false);
+			}
 			
 			thisGo.SetActive(false);
 

@@ -9,12 +9,12 @@ namespace Combat.Projectiles.Interfaces
 	{
 		public ProjectileData ProjectileData { get; }
 
-		public IWeapon Source { get; }
+		public Component Source { get; }
 
 		public Rigidbody Rigidbody { get; }
 		public Collider Collider { get; }
 		
-		public void Spawn(IWeapon source, Vector3 origin, Vector3 force);
+		public void Spawn(Component source, Vector3 origin, Vector3 force);
 
 		public IAlive GetAlive();
 
