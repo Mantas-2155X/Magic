@@ -3,7 +3,7 @@ using Objects;
 using ScriptableObjects;
 using UnityEngine;
 
-namespace Weapons.Interfaces
+namespace Combat.Weapons.Interfaces
 {
 	public interface IWeapon
 	{

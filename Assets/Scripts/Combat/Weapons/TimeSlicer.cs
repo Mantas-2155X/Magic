@@ -1,7 +1,7 @@
-using Attacks;
-using Weapons.Base;
+using Combat.Attacks;
+using Combat.Weapons.Base;
 
-namespace Weapons
+namespace Combat.Weapons
 {
 	public class TimeSlicer : BaseWeapon
 	{

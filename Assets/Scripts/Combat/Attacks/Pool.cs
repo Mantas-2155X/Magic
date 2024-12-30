@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using AI.Interfaces;
-using Attacks.Base;
-using Attacks.Enums;
+using Combat.Attacks.Base;
+using Combat.Attacks.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
 
-namespace Attacks
+namespace Combat.Attacks
 {
 	public class Pool : BaseAttack
 	{

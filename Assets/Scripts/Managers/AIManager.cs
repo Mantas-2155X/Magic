@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using AI;
 using AI.Base;
 using AI.Interfaces;
-using Attacks.Interfaces;
-using Projectiles.Interfaces;
+using Combat.Attacks.Interfaces;
+using Combat.Projectiles.Interfaces;
+using Combat.Weapons.Interfaces;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Jobs;
-using Weapons.Interfaces;
 
 namespace Managers
 {

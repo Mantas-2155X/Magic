@@ -1,14 +1,14 @@
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
-using Attacks.Interfaces;
+using Combat.Attacks.Interfaces;
+using Combat.Projectiles.Interfaces;
+using Combat.Weapons.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
-using Projectiles.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
-using Weapons.Interfaces;
 
-namespace Attacks.Base
+namespace Combat.Attacks.Base
 {
 	public class BaseAttack : MonoBehaviour, IAttack
 	{

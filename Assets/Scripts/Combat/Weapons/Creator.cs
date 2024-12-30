@@ -1,8 +1,8 @@
+using Combat.Weapons.Base;
 using Managers;
 using UnityEngine;
-using Weapons.Base;
 
-namespace Weapons
+namespace Combat.Weapons
 {
 	public class Creator : BaseWeapon
 	{

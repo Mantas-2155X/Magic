@@ -1,7 +1,7 @@
 using ScriptableObjects;
 using UnityEngine;
 
-namespace Casts.Interfaces
+namespace Combat.Casts.Interfaces
 {
 	public interface ICast
 	{

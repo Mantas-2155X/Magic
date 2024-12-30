@@ -4,15 +4,15 @@ using System;
 using System.Runtime.CompilerServices;
 using AI;
 using AI.Interfaces;
-using Casts.Interfaces;
+using Combat.Casts.Interfaces;
+using Combat.Weapons.Interfaces;
 using Managers;
 using Objects;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
-using Weapons.Interfaces;
 
-namespace Weapons.Base
+namespace Combat.Weapons.Base
 {
 	public class BaseWeapon : MonoBehaviour, IWeapon
 	{

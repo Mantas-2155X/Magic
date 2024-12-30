@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using AI.Interfaces;
-using Attacks.Enums;
-using Attacks.Interfaces;
-using Casts.Interfaces;
+using Combat.Attacks.Enums;
+using Combat.Attacks.Interfaces;
+using Combat.Casts.Interfaces;
+using Combat.Projectiles.Interfaces;
+using Combat.Weapons.Interfaces;
 using Objects.Interfaces;
-using Projectiles.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
-using Weapons.Interfaces;
 
 namespace Managers
 {

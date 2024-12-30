@@ -1,9 +1,9 @@
 using AI.Interfaces;
+using Combat.Weapons.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
-using Weapons.Interfaces;
 
-namespace Projectiles.Interfaces
+namespace Combat.Projectiles.Interfaces
 {
 	public interface IProjectile
 	{

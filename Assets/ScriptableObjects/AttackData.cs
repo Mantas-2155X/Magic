@@ -1,4 +1,4 @@
-using Attacks.Enums;
+using Combat.Attacks.Enums;
 using UnityEngine;
 
 namespace ScriptableObjects

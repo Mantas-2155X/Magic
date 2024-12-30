@@ -1,17 +1,15 @@
-using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using AI.Interfaces;
-using Attacks.Enums;
+using Combat.Projectiles.Interfaces;
+using Combat.Weapons.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Interfaces;
-using Projectiles.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
-using Weapons.Interfaces;
 
-namespace Projectiles.Base
+namespace Combat.Projectiles.Base
 {
 	public class BaseProjectile : MonoBehaviour, IProjectile
 	{

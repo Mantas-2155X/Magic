@@ -2,7 +2,7 @@ using AI.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
 
-namespace Attacks.Interfaces
+namespace Combat.Attacks.Interfaces
 {
 	public interface IAttack
 	{

@@ -1,11 +1,11 @@
 using System.Runtime.CompilerServices;
-using Casts.Interfaces;
+using Combat.Casts.Interfaces;
+using Combat.Weapons.Interfaces;
 using Managers;
 using ScriptableObjects;
 using UnityEngine;
-using Weapons.Interfaces;
 
-namespace Casts.Base
+namespace Combat.Casts.Base
 {
 	public class BaseCast : MonoBehaviour, ICast
 	{

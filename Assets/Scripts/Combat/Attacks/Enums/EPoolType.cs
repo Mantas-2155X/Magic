@@ -1,4 +1,4 @@
-namespace Attacks.Enums
+namespace Combat.Attacks.Enums
 {
 	public enum EPoolType
 	{

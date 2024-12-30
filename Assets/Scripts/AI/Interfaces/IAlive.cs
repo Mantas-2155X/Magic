@@ -1,6 +1,6 @@
 using AI.Enums;
+using Combat.Weapons.Interfaces;
 using UnityEngine;
-using Weapons.Interfaces;
 
 namespace AI.Interfaces
 {

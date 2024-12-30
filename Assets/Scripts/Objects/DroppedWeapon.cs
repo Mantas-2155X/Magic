@@ -1,6 +1,6 @@
 using AI.Interfaces;
+using Combat.Weapons.Interfaces;
 using Objects.Base;
-using Weapons.Interfaces;
 
 namespace Objects
 {

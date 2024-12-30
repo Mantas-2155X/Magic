@@ -1,7 +1,7 @@
+using Combat.Weapons.Base;
 using Objects;
 using UnityEditor;
 using UnityEngine;
-using Weapons.Base;
 
 namespace Editor
 {

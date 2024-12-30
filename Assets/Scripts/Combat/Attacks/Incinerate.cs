@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using AI.Interfaces;
-using Attacks.Base;
+using Combat.Attacks.Base;
 using Managers;
 using UnityEngine;
 
-namespace Attacks
+namespace Combat.Attacks
 {
 	public class Incinerate : BaseAttack
 	{

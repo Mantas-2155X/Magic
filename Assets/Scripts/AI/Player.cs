@@ -1,11 +1,11 @@
 using AI.Base;
 using AI.Enums;
+using Combat.Weapons.Interfaces;
 using Objects.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
-using Weapons.Interfaces;
 
 namespace AI
 {

@@ -4,10 +4,10 @@ using System.Runtime.CompilerServices;
 using AI.Enums;
 using AI.Events;
 using AI.Interfaces;
+using Combat.Weapons.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
-using Weapons.Interfaces;
 
 namespace AI.Base
 {

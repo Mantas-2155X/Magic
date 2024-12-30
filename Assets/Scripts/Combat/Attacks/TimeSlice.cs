@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using AI.Interfaces;
-using Attacks.Base;
+using Combat.Attacks.Base;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects;
 using UnityEngine;
 
-namespace Attacks
+namespace Combat.Attacks
 {
 	public class TimeSlice : BaseAttack
 	{

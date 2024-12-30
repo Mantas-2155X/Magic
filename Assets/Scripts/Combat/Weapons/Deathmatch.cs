@@ -1,10 +1,8 @@
-using AI.Enums;
+using Combat.Weapons.Base;
 using Managers;
-using Tools;
 using UnityEngine;
-using Weapons.Base;
 
-namespace Weapons
+namespace Combat.Weapons
 {
 	public class Deathmatch : BaseWeapon
 	{
