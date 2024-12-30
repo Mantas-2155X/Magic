@@ -6,7 +6,7 @@ using Combat.Attacks.Interfaces;
 using Combat.Casts.Interfaces;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
-using Combat.Weapons.Interfaces;
+using Combat.Wearables.Interfaces;
 using Objects.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace Managers
 		private readonly Dictionary<string, Data> datasMap = new ();
 		private readonly List<IObject> activeObjects = new ();
 
-		private readonly string[] dataPaths = { "Objects", "Weapons", "Casts", "Projectiles", "Attacks", "Spells" };
+		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells" };
 
 		public ObjectManager()
 		{
@@ -79,9 +79,9 @@ namespace Managers
 			return (ObjectData)datasMap.GetValueOrDefault($"Objects/{path}");
 		}
 		
-		public WeaponData GetWeapon(string path)
+		public WearableData GetWearable(string path)
 		{
-			return (WeaponData)datasMap.GetValueOrDefault($"Weapons/{path}");
+			return (WearableData)datasMap.GetValueOrDefault($"Wearables/{path}");
 		}
 		
 		public CastData GetCast(string path)
@@ -116,12 +116,12 @@ namespace Managers
 			return obj;
 		}
 		
-		public IWeapon CreateWeapon(WeaponData data, Vector3 position, Vector3 angles)
+		public IWearable CreateWearable(WearableData data, Vector3 position, Vector3 angles)
 		{
-			var weapon = PoolingManager.Instance.TakeOrCreate<IWeapon>(data, false);
-			weapon.Spawn(position, angles);
+			var wearable = PoolingManager.Instance.TakeOrCreate<IWearable>(data, false);
+			wearable.Spawn(position, angles);
 			
-			return weapon;
+			return wearable;
 		}
 		
 		public ICast CreateCast(CastData data, Component source)

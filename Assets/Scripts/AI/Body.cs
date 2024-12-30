@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using AI.Base;
+using Combat.Wearables.Enums;
+using Combat.Wearables.Structs;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -29,9 +32,9 @@ namespace AI
 		
 		[SerializeField]
 		public Transform[] Legs;
- 
+
 		[SerializeField]
-		public Transform WeaponContainer;
+		public List<SWearableContainer> Containers;
 
 		[SerializeField]
 		public Vector2 SwayAngles = new (30f, 15f);
@@ -98,6 +101,21 @@ namespace AI
 			
 			if (ShouldSway)
 				swayLimbs();
+		}
+
+		public SWearableContainer GetContainer(EWearableType type)
+		{
+			for (var i = 0; i < Containers.Count; i++)
+			{
+				var container = Containers[i];
+				if (container.Type != type)
+					continue;
+				
+				return container;
+			}
+
+			Debug.LogWarning($"Body container for wearable {type} is missing");
+			return default;
 		}
 		
 		private void swayLimbs()

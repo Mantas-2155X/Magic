@@ -8,7 +8,7 @@ using AI.Events;
 using AI.Interfaces;
 using Combat.Spells.Base;
 using Combat.Spells.Interfaces;
-using Combat.Weapons.Interfaces;
+using Combat.Wearables.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
@@ -56,7 +56,7 @@ namespace AI.Base
 		[field: SerializeField]
 		public Body Body { get; private set; }
 		
-		public IWeapon Weapon { get; private set; }
+		public List<IWearable> Wearables { get; }
 		
 		public ISpell Spell { get; private set; }
 		
@@ -124,7 +124,6 @@ namespace AI.Base
 			
 			OnRelationshipGroupChangedEvent?.Invoke(this, previousRelationshipGroup, RelationshipGroup);
 		}
-
 		public virtual void SetMaxSpeed(float maximumSpeed)
 		{
 			MaximumSpeed = maximumSpeed;
@@ -146,7 +145,6 @@ namespace AI.Base
 				break;
 			}
 		}
-		
 		public virtual bool HasSpell(SpellData data)
 		{
 			for (var i = 0; i < Spells.Count; i++)
@@ -159,7 +157,6 @@ namespace AI.Base
 			
 			return false;
 		}
-		
 		public virtual void LearnSpell(SpellData data, bool autoSelect)
 		{
 			if (HasSpell(data))
@@ -176,7 +173,6 @@ namespace AI.Base
 			if (autoSelect)
 				SelectSpell(data);
 		}
-
 		public virtual void ForgetSpell(SpellData data)
 		{
 			for (var i = Spells.Count - 1; i >= 0; i--)
@@ -190,7 +186,6 @@ namespace AI.Base
 				Destroy((Component)spell);
 			}
 		}
-		
 		public virtual void ForgetAllSpells()
 		{
 			for (var i = Spells.Count - 1; i >= 0; i--)
@@ -202,17 +197,56 @@ namespace AI.Base
 			}
 		}
 		
-		public virtual void TakeWeapon(IWeapon weapon)
+		public virtual bool HasWearable(WearableData data)
 		{
-			DropWeapon();
+			for (var i = 0; i < Wearables.Count; i++)
+			{
+				if (Wearables[i].WearableData != data)
+					continue;
+
+				return true;
+			}
 			
-			Weapon = weapon;
-			Weapon?.Take(this);
+			return false;
 		}
-		public virtual void DropWeapon()
+		public virtual void EquipWearable(IWearable wearable)
 		{
-			Weapon?.Drop();
-			Weapon = null;
+			var data = wearable.WearableData;
+			
+			if (HasWearable(data))
+				return;
+			
+			for (var i = Wearables.Count - 1; i >= 0; i--)
+			{
+				var innerData = Wearables[i].WearableData;
+				if (innerData.WearableType != data.WearableType)
+					continue;
+
+				DropWearable(innerData);
+			}
+			
+			wearable.Equip(this);
+			
+			Wearables.Add(wearable);
+		}
+		public virtual void DropWearable(WearableData data)
+		{
+			for (var i = Wearables.Count - 1; i >= 0; i--)
+			{
+				var wearable = Wearables[i];
+				if (wearable.WearableData != data)
+					continue;
+				
+				wearable.Drop();
+				Wearables.RemoveAt(i);
+				
+				return;
+			}
+		}
+		public virtual void DropAllWearables()
+		{
+			for (var i = Wearables.Count - 1; i >= 0; i--)
+				DropWearable(Wearables[i].WearableData);
 		}
 
 		public virtual void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
@@ -317,7 +351,7 @@ namespace AI.Base
 				return;
 			
 			SetMovementType(EMovementType.Normal);
-			DropWeapon();
+			DropAllWearables();
 
 			CurrentHealth = 0;
 			CurrentMana = 0;
@@ -375,7 +409,6 @@ namespace AI.Base
 		{
 			return true;
 		}
-
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public GameObject GetGameObject() => thisGo;

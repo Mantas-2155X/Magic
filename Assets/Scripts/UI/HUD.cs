@@ -89,8 +89,8 @@ namespace UI
 				{
 					if (obj.CanPickup(player) || obj.CanUse(player))
 					{
-						if (obj is DroppedWeapon droppedWeapon)
-							LookTarget.text = droppedWeapon.Weapon.WeaponData.Name;
+						if (obj is DroppedWearable droppedWearable)
+							LookTarget.text = droppedWearable.Wearable.WearableData.Name;
 						else
 							LookTarget.text = obj.ObjectData.Name;
 					}

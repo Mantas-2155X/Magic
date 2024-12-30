@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using AI.Enums;
 using Combat.Spells.Interfaces;
-using Combat.Weapons.Interfaces;
+using Combat.Wearables.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ namespace AI.Interfaces
 	{
 		public Body Body { get; }
 		
-		public IWeapon Weapon { get; }
+		public List<IWearable> Wearables { get; }
 		
 		public ISpell Spell { get; }
 		
@@ -42,7 +42,6 @@ namespace AI.Interfaces
 		public void SetPowerful(bool value);
 		public void SetMovementType(EMovementType value);
 		public void SetRelationshipGroup(int value);
-
 		public void SetMaxSpeed(float maximumSpeed);
 
 		public void SelectSpell(SpellData data);
@@ -51,8 +50,10 @@ namespace AI.Interfaces
 		public void ForgetSpell(SpellData data);
 		public void ForgetAllSpells();
 		
-		public void TakeWeapon(IWeapon weapon);
-		public void DropWeapon();
+		public bool HasWearable(WearableData data);
+		public void EquipWearable(IWearable wearable);
+		public void DropWearable(WearableData data);
+		public void DropAllWearables();
 
 		public void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup);
 		public void Heal(float health, object source, bool clamp = false);

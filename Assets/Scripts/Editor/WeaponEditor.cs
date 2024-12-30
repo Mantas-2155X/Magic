@@ -1,12 +1,12 @@
-using Combat.Weapons.Base;
+using Combat.Wearables.Base;
 using Objects;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor
 {
-	[CustomEditor(typeof(BaseWeapon), true)]
-	public class BaseWeaponEditor : UnityEditor.Editor
+	[CustomEditor(typeof(BaseWearable), true)]
+	public class BaseWearableEditor : UnityEditor.Editor
 	{
 		public override void OnInspectorGUI()
 		{
@@ -16,25 +16,25 @@ namespace Editor
 			
 			if (GUILayout.Button("Setup"))
 			{
-				var weapon = (BaseWeapon)target;
+				var wearable = (BaseWearable)target;
 				
-				var go = weapon.gameObject;
+				var go = wearable.gameObject;
 				
-				DestroyImmediate(go.GetComponent<DroppedWeapon>());
+				DestroyImmediate(go.GetComponent<DroppedWearable>());
 				DestroyImmediate(go.GetComponent<Rigidbody>());
 				
-				weapon.Colliders = go.GetComponentsInChildren<Collider>(true);
+				wearable.Colliders = go.GetComponentsInChildren<Collider>(true);
 				
-				for (var i = 0; i < weapon.Colliders.Length; i++)
-					weapon.Colliders[i].enabled = true;
+				for (var i = 0; i < wearable.Colliders.Length; i++)
+					wearable.Colliders[i].enabled = true;
 				
-				weapon.Rigidbody = go.AddComponent<Rigidbody>();
-				weapon.Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-				weapon.Rigidbody.mass = 5f;
+				wearable.Rigidbody = go.AddComponent<Rigidbody>();
+				wearable.Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+				wearable.Rigidbody.mass = 5f;
 
-				weapon.DroppedWeapon = go.AddComponent<DroppedWeapon>();
+				wearable.DroppedWearable = go.AddComponent<DroppedWearable>();
 				
-				UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(weapon.gameObject.scene);
+				UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(wearable.gameObject.scene);
 			}
 			
 			serializedObject.ApplyModifiedProperties();

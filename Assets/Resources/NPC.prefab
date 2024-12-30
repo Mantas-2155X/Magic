@@ -88,11 +88,19 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2861370865108794479, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4192352802564906907, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4292834630882851298, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4444954623207351441, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
@@ -227,10 +235,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   JumpDuration: 0.75
   SenseRange: 25
-  SightRange: 15
-  ChaseRange: 10
   PatrolReachRange: 0.5
   RotationSpeed: 480
   AimAngle: 5
   WanderEvery: 1
-  PassiveAggressive: 1
+  CommunicateRange: 5
+  LowResourcesMultiplier: 0.15

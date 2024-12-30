@@ -1,8 +1,10 @@
 using AI.Base;
 using AI.Enums;
-using Combat.Weapons.Interfaces;
+using Combat.Wearables.Enums;
+using Combat.Wearables.Interfaces;
 using Managers;
 using Objects.Interfaces;
+using ScriptableObjects;
 using Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -37,9 +39,6 @@ namespace AI
 		
 		[SerializeField]
 		public InputActionReference NoclipAction;
-
-		[SerializeField]
-		public InputActionReference DropAction;
 
 		#endregion
 
@@ -78,9 +77,6 @@ namespace AI
 		
 		[SerializeField]
 		public Vector3 CastViewmodelAngles = new (50f, -20.1f, 0f);
-		
-		[SerializeField]
-		public Transform DropWeaponTr;
 
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
@@ -109,15 +105,17 @@ namespace AI
 			if (AttackAction.action.IsPressed())
 				Spell?.StartCasting();
 
+			var weaponContainer = Body.GetContainer(EWearableType.Weapon).Wear;
+			
 			if (Spell != null && Spell.IsCasting)
 			{
-				Body.WeaponContainer.localPosition = CastViewmodelPosition;
-				Body.WeaponContainer.localEulerAngles = CastViewmodelAngles;
+				weaponContainer.localPosition = CastViewmodelPosition;
+				weaponContainer.localEulerAngles = CastViewmodelAngles;
 			}
 			else
 			{
-				Body.WeaponContainer.localPosition = ViewmodelPosition;
-				Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
+				weaponContainer.localPosition = ViewmodelPosition;
+				weaponContainer.localEulerAngles = ViewmodelAngles;
 			}
 		}
 		
@@ -226,10 +224,6 @@ namespace AI
 			noclip.performed += onNoclip;
 			noclip.Enable();
 			
-			var drop = DropAction.action;
-			drop.performed += onDrop;
-			drop.Enable();
-			
 			var sprint = SprintAction.action;
 			sprint.Enable();
 		}
@@ -271,10 +265,6 @@ namespace AI
 			noclip.performed -= onNoclip;
 			noclip.Disable();
 			
-			var drop = DropAction.action;
-			drop.performed -= onDrop;
-			drop.Disable();
-
 			var sprint = SprintAction.action;
 			sprint.Disable();
 		}
@@ -360,11 +350,6 @@ namespace AI
 					break;
 			}
 		}
-		
-		private void onDrop(InputAction.CallbackContext ctx)
-		{
-			DropWeapon();
-		}
 
 		#endregion
 		
@@ -373,25 +358,14 @@ namespace AI
 		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : MaximumSpeed;
 
 		public override bool IsWalking => walking;
-		
-		public override void TakeWeapon(IWeapon weapon)
-		{
-			base.TakeWeapon(weapon);
-			hideWeaponShadow(true);
-		}
-		
-		public override void DropWeapon()
-		{
-			hideWeaponShadow(false);
-			base.DropWeapon();
-		}
 
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
 		{
-			Body.WeaponContainer.SetParent(CameraTr);
+			var weaponContainer = Body.GetContainer(EWearableType.Weapon).Wear;
+			weaponContainer.SetParent(CameraTr);
 			
-			Body.WeaponContainer.localPosition = ViewmodelPosition;
-			Body.WeaponContainer.localEulerAngles = ViewmodelAngles;
+			weaponContainer.localPosition = ViewmodelPosition;
+			weaponContainer.localEulerAngles = ViewmodelAngles;
 
 			hideBodyRender(true);
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
@@ -402,7 +376,7 @@ namespace AI
 		
 		public override void Kill(object source)
 		{
-			Body.WeaponContainer.SetParent(Body.Shoulders[1]);
+			Body.GetContainer(EWearableType.Weapon).Wear.SetParent(Body.Shoulders[1]);
 		
 			hideBodyRender(false);
 			disableInput();
@@ -421,13 +395,6 @@ namespace AI
 				return true;
 			
 			return false;
-		}
-
-		private void hideWeaponShadow(bool state)
-		{
-			var renderers = Body.WeaponContainer.GetComponentsInChildren<Renderer>(true);
-			foreach (var rend in renderers)
-				rend.shadowCastingMode = state ? ShadowCastingMode.Off : ShadowCastingMode.On;
 		}
 
 		private void hideBodyRender(bool state)

@@ -4,6 +4,7 @@ using Managers;
 using Tools;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Editor
@@ -12,7 +13,7 @@ namespace Editor
 	public class AIManagerEditor : UnityEditor.Editor
 	{
 		[SerializeField]
-		public string Weapon;
+		public string Wearable;
 
 		[SerializeField]
 		public string Spell;
@@ -248,12 +249,12 @@ namespace Editor
 			GUILayout.BeginHorizontal();
 			
 			EditorGUIUtility.labelWidth = 75f;
-			Weapon = EditorGUILayout.TextField("Weapon", Weapon);
+			Wearable = EditorGUILayout.TextField("Wearable", Wearable);
 			EditorGUIUtility.labelWidth = 0f;
 
 			if (GUILayout.Button("Give Player"))
 			{
-				aiManager.Player.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon(Weapon), Vector3.zero, Vector3.zero));
+				aiManager.Player.EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable(Wearable), Vector3.zero, Vector3.zero));
 			}
 			
 			if (GUILayout.Button("Give NPCs"))
@@ -263,7 +264,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.TakeWeapon(ObjectManager.Instance.CreateWeapon(ObjectManager.Instance.GetWeapon(Weapon), Vector3.zero, Vector3.zero));
+					npc.EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable(Wearable), Vector3.zero, Vector3.zero));
 				}
 			}
 			

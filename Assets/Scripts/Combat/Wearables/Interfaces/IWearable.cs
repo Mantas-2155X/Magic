@@ -3,21 +3,21 @@ using Objects;
 using ScriptableObjects;
 using UnityEngine;
 
-namespace Combat.Weapons.Interfaces
+namespace Combat.Wearables.Interfaces
 {
-	public interface IWeapon
+	public interface IWearable
 	{
-		public WeaponData WeaponData { get; }
+		public WearableData WearableData { get; }
 		
 		public IAlive Owner { get; }
 		
 		public Rigidbody Rigidbody { get; }
 		public Collider[] Colliders { get; }
-		public DroppedWeapon DroppedWeapon { get; }
+		public DroppedWearable DroppedWearable { get; }
 
 		public void Spawn(Vector3 position, Vector3 angles);
 
-		public void Take(IAlive alive);
+		public void Equip(IAlive alive);
 		public void Drop();
 
 		public IAlive GetAlive();

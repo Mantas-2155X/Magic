@@ -1,16 +1,16 @@
 using AI.Interfaces;
-using Combat.Weapons.Interfaces;
+using Combat.Wearables.Interfaces;
 using Objects.Base;
 
 namespace Objects
 {
-	public class DroppedWeapon : BaseObject
+	public class DroppedWearable : BaseObject
 	{
-		public IWeapon Weapon;
+		public IWearable Wearable;
 
 		public override bool CanPickup(IAlive user)
 		{
-			return base.CanPickup(user) && user.Weapon?.WeaponData != Weapon?.WeaponData;
+			return base.CanPickup(user) && !user.HasWearable(Wearable.WearableData);
 		}
 		
 		public override bool Pickup(IAlive user)
@@ -19,7 +19,7 @@ namespace Objects
 			if (!success)
 				return false;
 
-			user.TakeWeapon(Weapon);
+			user.EquipWearable(Wearable);
 			return true;
 		}
 	}
