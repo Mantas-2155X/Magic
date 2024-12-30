@@ -1,6 +1,7 @@
 using AI.Base;
 using AI.Enums;
 using Combat.Weapons.Interfaces;
+using Managers;
 using Objects.Interfaces;
 using Tools;
 using UnityEngine;
@@ -394,6 +395,9 @@ namespace AI
 
 			hideBodyRender(true);
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
+			
+			GrantSpell(ObjectManager.Instance.GetSpell("Fire Ball"));
+			
 			enableInput();
 		}
 		

@@ -165,7 +165,9 @@ namespace AI.Base
 			if (HasSpell(data))
 				return;
 
-			var spell = (ISpell)thisGo.AddComponent(Type.GetType(data.Type));
+			var type = data.Type == "" ? typeof(BaseSpell) : Type.GetType(data.Type);
+			
+			var spell = (ISpell)thisGo.AddComponent(type);
 			spell.SpellData = data;
 			
 			Spells.Add(spell);
