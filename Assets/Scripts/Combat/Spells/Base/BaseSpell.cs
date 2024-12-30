@@ -13,7 +13,7 @@ namespace Combat.Spells.Base
 	public class BaseSpell : MonoBehaviour, ISpell
 	{
 		[field: SerializeField]
-		public SpellData SpellData { get; private set; }
+		public SpellData SpellData { get; set; }
 		
 		public IAlive Owner { get; private set; }
 
@@ -21,6 +21,7 @@ namespace Combat.Spells.Base
 		public RaycastHit LastHit { get; private set; }
 
 		public bool IsCasting { get; private set; }
+		public bool IsSelected { get; private set; }
 
 		public float LastStartedCast { get; private set; } = float.NegativeInfinity;
 		public float LastFinishedCast { get; private set; } = float.NegativeInfinity;
@@ -32,7 +33,7 @@ namespace Combat.Spells.Base
 
 		public virtual void Update()
 		{
-			if (!IsCasting || !Owner.IsAlive)
+			if (!IsCasting || !IsSelected || !Owner.IsAlive)
 				return;
 
 			if (Time.time < PredictFinishCast)
@@ -57,7 +58,7 @@ namespace Combat.Spells.Base
 			}
 		}
 
-		public virtual void OnDisable()
+		public virtual void OnDestroy()
 		{
 			CancelCasting();
 		}
@@ -68,17 +69,19 @@ namespace Combat.Spells.Base
 		
 		public virtual void Select()
 		{
-			
+			IsSelected = true;
 		}
 		
 		public virtual void Unselect()
 		{
 			CancelCasting();
+			
+			IsSelected = false;
 		}
 		
 		public virtual bool CanCast()
 		{
-			if (IsCasting)
+			if (IsCasting || !IsSelected)
 				return false;
 
 			return Time.time >= LastFinishedCast + SpellData.Cooldown && Owner.CurrentMana >= SpellData.CastingCost;
@@ -101,7 +104,7 @@ namespace Combat.Spells.Base
 		
 		public virtual bool FinishCasting()
 		{
-			if (!IsCasting)
+			if (!IsCasting || !IsSelected)
 				return false;
 
 			IsCasting = false;

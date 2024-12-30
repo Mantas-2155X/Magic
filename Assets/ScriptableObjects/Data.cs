@@ -18,5 +18,8 @@ namespace ScriptableObjects
 		[Header("Instantiation")]
 		[SerializeField]
 		public GameObject Prefab;
+		
+		[SerializeField]
+		public string Type;
 	}
 }

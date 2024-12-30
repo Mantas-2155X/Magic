@@ -7,7 +7,7 @@ namespace Combat.Spells.Interfaces
 {
 	public interface ISpell
 	{
-		public SpellData SpellData { get; }
+		public SpellData SpellData { get; set; }
 	
 		public IAlive Owner { get; }
 
@@ -15,6 +15,7 @@ namespace Combat.Spells.Interfaces
 		public RaycastHit LastHit { get; }
 
 		public bool IsCasting { get; }
+		public bool IsSelected { get; }
 
 		public float LastStartedCast { get; }
 		public float LastFinishedCast { get; }

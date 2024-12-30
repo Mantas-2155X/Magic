@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using AI.Enums;
+using Combat.Spells.Interfaces;
 using Combat.Weapons.Interfaces;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace AI.Interfaces
@@ -10,6 +13,10 @@ namespace AI.Interfaces
 		
 		public IWeapon Weapon { get; }
 		
+		public ISpell Spell { get; }
+		
+		public List<ISpell> Spells { get; }
+
 		public float CurrentSpeed { get; }
 		public float MaximumSpeed { get; }
 
@@ -37,6 +44,11 @@ namespace AI.Interfaces
 		public void SetRelationshipGroup(int value);
 
 		public void SetMaxSpeed(float maximumSpeed);
+
+		public bool HasSpell(SpellData data);
+		public void GrantSpell(SpellData data);
+		public void RemoveSpell(SpellData data);
+		public void ClearSpells();
 		
 		public void TakeWeapon(IWeapon weapon);
 		public void DropWeapon();

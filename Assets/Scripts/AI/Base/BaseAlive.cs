@@ -1,13 +1,19 @@
 #define BODY_GIB
 
+using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Enums;
 using AI.Events;
 using AI.Interfaces;
+using Combat.Spells.Base;
+using Combat.Spells.Interfaces;
 using Combat.Weapons.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace AI.Base
 {
@@ -52,6 +58,10 @@ namespace AI.Base
 		
 		public IWeapon Weapon { get; private set; }
 		
+		public ISpell Spell { get; private set; }
+		
+		public List<ISpell> Spells { get; private set; }
+
 		public virtual float CurrentSpeed { get; private set; }
 		public float MaximumSpeed { get; private set; }
 
@@ -120,6 +130,53 @@ namespace AI.Base
 			MaximumSpeed = maximumSpeed;
 		}
 
+		public bool HasSpell(SpellData data)
+		{
+			for (var i = 0; i < Spells.Count; i++)
+			{
+				if (Spells[i].SpellData != data)
+					continue;
+
+				return true;
+			}
+			
+			return false;
+		}
+		
+		public virtual void GrantSpell(SpellData data)
+		{
+			if (HasSpell(data))
+				return;
+
+			var spell = (ISpell)thisGo.AddComponent(Type.GetType(data.Type));
+			spell.SpellData = data;
+		}
+
+		public virtual void RemoveSpell(SpellData data)
+		{
+			for (var i = Spells.Count - 1; i >= 0; i--)
+			{
+				var spell = Spells[i];
+				if (spell.SpellData != data)
+					continue;
+				
+				spell.Unselect();
+				
+				Destroy((Component)spell);
+			}
+		}
+		
+		public virtual void ClearSpells()
+		{
+			for (var i = Spells.Count - 1; i >= 0; i--)
+			{
+				var spell = Spells[i];
+				spell.Unselect();
+				
+				Destroy((Component)spell);
+			}
+		}
+		
 		public virtual void TakeWeapon(IWeapon weapon)
 		{
 			DropWeapon();
@@ -146,6 +203,8 @@ namespace AI.Base
 			if (IsAlive)
 				return;
 
+			Spells = new List<ISpell>();
+			
 			CurrentHealth = startingHealth;
 			StartingHealth = startingHealth;
 			OverloadHealth = overloadHealth;
