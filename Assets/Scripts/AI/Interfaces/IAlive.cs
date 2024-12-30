@@ -47,9 +47,9 @@ namespace AI.Interfaces
 
 		public void SelectSpell(SpellData data);
 		public bool HasSpell(SpellData data);
-		public void GrantSpell(SpellData data, bool autoSelect);
-		public void RemoveSpell(SpellData data);
-		public void ClearSpells();
+		public void LearnSpell(SpellData data, bool autoSelect);
+		public void ForgetSpell(SpellData data);
+		public void ForgetAllSpells();
 		
 		public void TakeWeapon(IWeapon weapon);
 		public void DropWeapon();

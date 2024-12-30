@@ -160,7 +160,7 @@ namespace AI.Base
 			return false;
 		}
 		
-		public virtual void GrantSpell(SpellData data, bool autoSelect)
+		public virtual void LearnSpell(SpellData data, bool autoSelect)
 		{
 			if (HasSpell(data))
 				return;
@@ -177,7 +177,7 @@ namespace AI.Base
 				SelectSpell(data);
 		}
 
-		public virtual void RemoveSpell(SpellData data)
+		public virtual void ForgetSpell(SpellData data)
 		{
 			for (var i = Spells.Count - 1; i >= 0; i--)
 			{
@@ -191,7 +191,7 @@ namespace AI.Base
 			}
 		}
 		
-		public virtual void ClearSpells()
+		public virtual void ForgetAllSpells()
 		{
 			for (var i = Spells.Count - 1; i >= 0; i--)
 			{
