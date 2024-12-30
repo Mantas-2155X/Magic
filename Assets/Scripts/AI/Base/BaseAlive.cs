@@ -130,7 +130,24 @@ namespace AI.Base
 			MaximumSpeed = maximumSpeed;
 		}
 
-		public bool HasSpell(SpellData data)
+		public virtual void SelectSpell(SpellData data)
+		{
+			Spell?.Unselect();
+
+			for (var i = 0; i < Spells.Count; i++)
+			{
+				var spell = Spells[i];
+				if (spell.SpellData != data)
+					continue;
+
+				Spell = spell;
+				Spell.Select();
+				
+				break;
+			}
+		}
+		
+		public virtual bool HasSpell(SpellData data)
 		{
 			for (var i = 0; i < Spells.Count; i++)
 			{
@@ -150,6 +167,8 @@ namespace AI.Base
 
 			var spell = (ISpell)thisGo.AddComponent(Type.GetType(data.Type));
 			spell.SpellData = data;
+			
+			Spells.Add(spell);
 		}
 
 		public virtual void RemoveSpell(SpellData data)

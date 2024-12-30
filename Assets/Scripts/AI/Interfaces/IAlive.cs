@@ -45,6 +45,7 @@ namespace AI.Interfaces
 
 		public void SetMaxSpeed(float maximumSpeed);
 
+		public void SelectSpell(SpellData data);
 		public bool HasSpell(SpellData data);
 		public void GrantSpell(SpellData data);
 		public void RemoveSpell(SpellData data);
