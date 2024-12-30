@@ -27,7 +27,6 @@ namespace Combat.Spells.Base
 		public float PredictFinishCast { get; private set; } = float.NegativeInfinity;
 		
 		private ICast cast;
-		private Transform ownerTr;
 
 		#region MonoBehaviour
 
@@ -66,13 +65,6 @@ namespace Combat.Spells.Base
 		#endregion
 
 		#region ISpell
-
-		public virtual void Spawn(IAlive owner)
-		{
-			Owner = owner;
-			
-			ownerTr = Owner.GetTransform();
-		}
 		
 		public virtual void Select()
 		{
@@ -156,6 +148,7 @@ namespace Combat.Spells.Base
 					LastRay = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 					break;
 				case NPC npc:
+					var ownerTr = Owner.GetTransform();
 					var direction = npc.AttackTarget == null ? ownerTr.forward : (npc.AttackTargetTransform.position - ownerTr.position).normalized;
 					LastRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
 					break;

@@ -19,8 +19,6 @@ namespace Combat.Spells.Interfaces
 		public float LastStartedCast { get; }
 		public float LastFinishedCast { get; }
 		public float PredictFinishCast { get; }
-
-		public void Spawn(IAlive owner);
 		
 		public void Select();
 		public void Unselect();

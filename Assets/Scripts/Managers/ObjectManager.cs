@@ -132,14 +132,6 @@ namespace Managers
 			return cast;
 		}
 		
-		public ISpell CreateSpell(SpellData data, IAlive owner)
-		{
-			var spell = PoolingManager.Instance.TakeOrCreate<ISpell>(data, false);
-			spell.Spawn(owner);
-			
-			return spell;
-		}
-		
 		public IProjectile CreateProjectile(ProjectileData data, Component source, Vector3 origin, Vector3 direction)
 		{
 			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
