@@ -13,7 +13,7 @@ namespace Combat.Projectiles.Interfaces
 		public Rigidbody Rigidbody { get; }
 		public Collider Collider { get; }
 		
-		public void Spawn(Component source, Vector3 origin, Vector3 force);
+		public void Spawn(Component source, float range, Vector3 origin, Vector3 force);
 
 		public IAlive GetAlive();
 

@@ -115,14 +115,11 @@ namespace Combat.Spells.Base
 			calculateHit();
 			clearCast();
 
-			if (SpellData.MaximumDistance != 0f && LastHit.distance > SpellData.MaximumDistance)
-				return false;
-
 			if (SpellData.Attack != null)
 				ObjectManager.Instance.CreateAttack(SpellData.Attack, this, LastHit, LastHit.transform);
 			
 			if (SpellData.Projectile != null)
-				ObjectManager.Instance.CreateProjectile(SpellData.Projectile, this, LastRay.origin, LastRay.direction);
+				ObjectManager.Instance.CreateProjectile(SpellData.Projectile, Owner.SpellRange, this, LastRay.origin, LastRay.direction);
 			
 			return true;
 		}
@@ -159,7 +156,13 @@ namespace Combat.Spells.Base
 					throw new NotImplementedException();
 			}
 
-			Physics.Raycast(LastRay, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore);
+			// Hit did not land due to distance or other reasons. Try to fill the necessary data
+			if (!Physics.Raycast(LastRay, out var hit, Owner.SpellRange, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
+			{
+				hit.point = LastRay.origin + LastRay.direction * Owner.SpellRange;
+				hit.normal = -LastRay.direction;
+			}
+
 			LastHit = hit;
 		}
 

@@ -32,6 +32,7 @@ namespace AI.Interfaces
 
 		public EMovementType MovementType { get; }
 		public int RelationshipGroup { get; }
+		public float SpellRange { get; }
 		
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }

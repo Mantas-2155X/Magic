@@ -40,7 +40,7 @@ namespace AI.ActionModes.Shared
 				}
 				
 				// Target moved away from destination range, reset the path
-				if (currentChaseRange < owner.GetSpellRange())
+				if (currentChaseRange < owner.SpellRange)
 					ResetChaseRange(true);
 
 				owner.Walk(target.position);
@@ -75,8 +75,7 @@ namespace AI.ActionModes.Shared
 		/// </summary>
 		public void ResetChaseRange(bool lowered)
 		{
-			var spellRange = owner.GetSpellRange();
-			currentChaseRange = lowered ? spellRange - 1.5f : spellRange;
+			currentChaseRange = lowered ? owner.SpellRange - 1.5f : owner.SpellRange;
 		}
 	}
 }

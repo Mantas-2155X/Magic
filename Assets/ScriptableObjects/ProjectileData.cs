@@ -8,9 +8,6 @@ namespace ScriptableObjects
 		[Header("Projectile")]
 		[SerializeField]
 		public float Force;
-
-		[SerializeField]
-		public float Range;
 		
 		[SerializeField]
 		public float Damage;

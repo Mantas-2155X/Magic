@@ -16,7 +16,7 @@ namespace ScriptableObjects
 		public float CastingCost;
 
 		[SerializeField]
-		public float MaximumDistance;
+		public float Range;
 		
 		[SerializeField]
 		public CastData Cast;

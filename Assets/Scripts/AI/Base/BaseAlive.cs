@@ -77,6 +77,7 @@ namespace AI.Base
 
 		public EMovementType MovementType { get; private set; }
 		public int RelationshipGroup { get; private set; }
+		public float SpellRange { get; private set; }
 
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
@@ -132,6 +133,7 @@ namespace AI.Base
 		public virtual void SelectSpell(SpellData data)
 		{
 			Spell?.Unselect();
+			SpellRange = float.MaxValue;
 
 			for (var i = 0; i < Spells.Count; i++)
 			{
@@ -141,6 +143,7 @@ namespace AI.Base
 
 				Spell = spell;
 				Spell.Select();
+				SpellRange = data.Range;
 				
 				break;
 			}
@@ -280,6 +283,8 @@ namespace AI.Base
 			SetMaxSpeed(maximumSpeed);
 			SetRelationshipGroup(relationshipGroup);
 			
+			SpellRange = float.MaxValue;
+			
 			OnSpawnEvent?.Invoke(this);
 			
 			regenerateLoop().Forget();
@@ -415,22 +420,6 @@ namespace AI.Base
 		public GameObject GetGameObject() => thisGo;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Transform GetTransform() => thisTr;
-		
-		public float GetSpellRange()
-		{
-			if (Spell == null)
-				return float.MaxValue;
-
-			var data = Spell.SpellData;
-			
-			if (data.MaximumDistance != 0f)
-				return data.MaximumDistance;
-
-			if (data.Projectile != null)
-				return data.Projectile.Range;
-			
-			return float.MaxValue;
-		}
 		
 		private async UniTaskVoid regenerateLoop()
 		{

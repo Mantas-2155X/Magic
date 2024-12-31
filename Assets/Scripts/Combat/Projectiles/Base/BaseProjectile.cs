@@ -34,6 +34,8 @@ namespace Combat.Projectiles.Base
 		private GameObject thisGo;
 		private Transform thisTr;
 
+		private float spellRange;
+		
 		private bool init;
 		
 		public void OnCollisionEnter(Collision collision)
@@ -68,13 +70,13 @@ namespace Combat.Projectiles.Base
 		public void Update()
 		{
 			var distance = Vector3.Distance(startingPosition, thisTr.position);
-			if (distance < ProjectileData.Range)
+			if (distance < spellRange)
 				return;
 
 			clearVelocityAndPool().Forget();
 		}
 		
-		public void Spawn(Component source, Vector3 origin, Vector3 force)
+		public void Spawn(Component source, float range, Vector3 origin, Vector3 force)
 		{
 			if (!init)
 			{
@@ -87,6 +89,7 @@ namespace Combat.Projectiles.Base
 			Source = source;
 
 			startingPosition = origin;
+			spellRange = range;
 
 			var alive = GetAlive();
 			if (alive != null)
