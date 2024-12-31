@@ -1,4 +1,4 @@
-#define DEBUG_OBJ
+//#define DEBUG_OBJ
 
 using System.Runtime.CompilerServices;
 using AI.Interfaces;

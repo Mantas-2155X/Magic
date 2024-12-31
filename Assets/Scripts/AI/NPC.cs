@@ -1,4 +1,4 @@
-#define DEBUG_NPC
+//#define DEBUG_NPC
 
 using System.Collections.Generic;
 using AI.ActionModes;
