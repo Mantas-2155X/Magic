@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: TimeSlice
   m_EditorClassIdentifier: 
   Name: Time Slice
-  Description: Slice all enemies by modifying Time
+  Description: Slice target by modifying Time
   Tags: 0
   Prefab: {fileID: 2895964246749410662, guid: 14e107b897358ca58b129b275b2af6ec, type: 3}
+  Type: 
   EnableTriggerAfter: 0
   DisableTriggerAfter: 0
-  AttachToTarget: 0
+  AttachToTarget: 1
+  Damage: 200
   AttackAngle: 0

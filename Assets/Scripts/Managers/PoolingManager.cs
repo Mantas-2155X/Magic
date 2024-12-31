@@ -19,7 +19,7 @@ namespace Managers
 		{
 			if (Pool.TryGetValue(data, out var list))
 			{
-				if (IsPooled(data, go))
+				if (list.Contains(go))
 					return;
 			}
 			else
@@ -66,11 +66,6 @@ namespace Managers
 		public void Clear()
 		{
 			Pool.Clear();
-		}
-		
-		public bool IsPooled(Data data, GameObject go)
-		{
-			return Pool.TryGetValue(data, out var list) && list.Contains(go);
 		}
 	}
 }

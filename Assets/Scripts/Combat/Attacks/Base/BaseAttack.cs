@@ -24,10 +24,10 @@ namespace Combat.Attacks.Base
 		[field: SerializeField]
 		public Collider[] Triggers { get; private set; }
 
+		public Transform Target { get; private set; }
+
 		public readonly List<IAlive> TriggeredAlives = new ();
 		public readonly List<IAlive> CurrentAlives = new ();
-
-		private Transform target;
 		
 		private GameObject thisGo;
 		private Transform thisTr;
@@ -46,9 +46,9 @@ namespace Combat.Attacks.Base
 			
 			Source = source;
 
-			target = AttackData.AttachToTarget ? attach : null;
+			Target = AttackData.AttachToTarget ? attach : null;
 
-			if (target == null)
+			if (Target == null)
 			{
 				thisTr.position = position + Vector3.up * 0.1f;
 				thisTr.rotation = angles;
@@ -136,10 +136,10 @@ namespace Combat.Attacks.Base
 		
 		public void FollowTarget()
 		{
-			if (target == null)
+			if (Target == null)
 				return;
 			
-			thisTr.position = target.position + Vector3.down * 0.95f;
+			thisTr.position = Target.position + Vector3.down * 0.95f;
 		}
 		
 		public IAlive GetAlive()

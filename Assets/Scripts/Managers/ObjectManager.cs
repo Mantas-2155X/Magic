@@ -150,6 +150,11 @@ namespace Managers
 			return createAttack(data, source, contact.point, contact.normal, attach);
 		}
 		
+		public IAttack CreateAttack(AttackData data, Component source, Transform attach)
+		{
+			return createAttack(data, source, Vector3.zero, Vector3.zero, attach);
+		}
+		
 		private IAttack createAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
 		{
 			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);
