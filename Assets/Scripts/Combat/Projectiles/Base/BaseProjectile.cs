@@ -49,19 +49,19 @@ namespace Combat.Projectiles.Base
 				if (AIManager.Instance.AlivesColliderMap.TryGetValue(coll, out var alive))
 				{
 					attach = alive.GetTransform();
-					alive.Damage(ProjectileData.Damage, this, ProjectileData.Element);
+					alive.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
 				}
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{
 					attach = obj.GetTransform();
-					obj.Damage(ProjectileData.Damage, this, ProjectileData.Element);
+					obj.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
 				}
 			}
 			
 			if (ProjectileData.Attack != null)
 			{
 				var contact = collision.contacts[0];
-				ObjectManager.Instance.CreateAttack(ProjectileData.Attack, (Component)Source, contact, attach);
+				ObjectManager.Instance.CreateAttack(ProjectileData.Attack, Source, contact, attach);
 			}
 				
 			clearVelocityAndPool().Forget();

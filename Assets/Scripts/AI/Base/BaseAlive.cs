@@ -323,7 +323,12 @@ namespace AI.Base
 			if (!IsAlive || IsInvulnerable)
 				return;
 
-			ProtectionStats[type].Convert(ref damage);
+			// Use the attackers damage stats to increase the damage they deal to this alive
+			if (source is IAlive alive)
+				alive.DamageStats[type].Add(ref damage);
+			
+			// Use this alives protection stats to reduce the damage they take from the attacker
+			ProtectionStats[type].Subtract(ref damage);
 			
 			if (damage < 0)
 				return;
@@ -469,7 +474,7 @@ namespace AI.Base
 				foreach (var pair in data.DamageStats)
 				{
 					var stat = DamageStats[pair.Key];
-					stat.Append(pair.Value);
+					stat.AppendStat(pair.Value);
 
 					DamageStats[pair.Key] = stat;
 				}
@@ -477,7 +482,7 @@ namespace AI.Base
 				foreach (var pair in data.ProtectionStats)
 				{
 					var stat = ProtectionStats[pair.Key];
-					stat.Append(pair.Value);
+					stat.AppendStat(pair.Value);
 					
 					ProtectionStats[pair.Key] = stat;
 				}
