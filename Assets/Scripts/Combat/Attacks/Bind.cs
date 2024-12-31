@@ -10,8 +10,10 @@ namespace Combat.Attacks
 		private IAlive target;
 		private float previousMaxSpeed;
 		
-		public void OnTriggerEnter(Collider other)
+		public override void OnTriggerEnter(Collider other)
 		{
+			base.OnTriggerEnter(other);
+			
 			if (target != null || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
 				return;
 
@@ -21,17 +23,17 @@ namespace Combat.Attacks
 			alive.SetMaxSpeed(0f);
 		}
 
-		public override void OnTriggerEnabled()
+		public override void OnTriggersEnabled()
 		{
 			target = null;
 			previousMaxSpeed = 0f;
-			base.OnTriggerEnabled();
+			base.OnTriggersEnabled();
 		}
 
-		public override void OnTriggerDisabled()
+		public override void OnTriggersDisabled()
 		{
 			target?.SetMaxSpeed(previousMaxSpeed);
-			base.OnTriggerDisabled();
+			base.OnTriggersDisabled();
 		}
 	}
 }

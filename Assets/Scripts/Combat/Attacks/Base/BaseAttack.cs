@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
+using Combat.Enums;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -20,7 +22,10 @@ namespace Combat.Attacks.Base
 		[field: SerializeField]
 		public ParticleSystem System { get; private set; }
 		[field: SerializeField]
-		public Collider Trigger { get; private set; }
+		public Collider[] Triggers { get; private set; }
+
+		public readonly List<IAlive> TriggeredAlives = new ();
+		public readonly List<IAlive> CurrentAlives = new ();
 
 		private Transform target;
 		
@@ -53,9 +58,11 @@ namespace Combat.Attacks.Base
 				FollowTarget();
 			}
 			
-			if (Trigger != null)
+			if (Triggers != null)
 			{
-				Trigger.enabled = false;
+				for (var i = 0; i < Triggers.Length; i++)
+					Triggers[i].enabled = false;
+				
 				trigger().Forget();
 			}
 
@@ -80,14 +87,51 @@ namespace Combat.Attacks.Base
 			PoolingManager.Instance.Add(AttackData, thisGo);
 		}
 
-		public virtual void OnTriggerEnabled()
+		public virtual void OnTriggerEnter(Collider other)
 		{
-			Trigger.enabled = true;
+			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
+				return;
+			
+			if (!TriggeredAlives.Contains(alive))
+			{
+				for (var i = 0; i < Triggers.Length; i++)
+				{
+					if (Triggers[i].bounds.Intersects(other.bounds))
+						continue;
+
+					return;
+				}
+				
+				TriggeredAlives.Add(alive);
+				
+				if (AttackData.Damage != 0f)
+					alive.Damage(AttackData.Damage, this, EDamageType.Magic);
+			}
+			
+			CurrentAlives.Add(alive);
+		}
+		
+		public virtual void OnTriggerExit(Collider other)
+		{
+			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
+				return;
+
+			CurrentAlives.Remove(alive);
 		}
 
-		public virtual void OnTriggerDisabled()
+		public virtual void OnTriggersEnabled()
 		{
-			Trigger.enabled = false;
+			TriggeredAlives.Clear();
+			CurrentAlives.Clear();
+
+			for (var i = 0; i < Triggers.Length; i++)
+				Triggers[i].enabled = true;
+		}
+
+		public virtual void OnTriggersDisabled()
+		{
+			for (var i = 0; i < Triggers.Length; i++)
+				Triggers[i].enabled = false;
 		}
 		
 		public void FollowTarget()
@@ -130,14 +174,14 @@ namespace Combat.Attacks.Base
 			if (!isActiveAndEnabled)
 				return;
 
-			OnTriggerEnabled();
+			OnTriggersEnabled();
 			
 			await UniTask.WaitForSeconds(AttackData.DisableTriggerAfter);
 			
 			if (!isActiveAndEnabled)
 				return;
 
-			OnTriggerDisabled();
+			OnTriggersDisabled();
 		}
 	}
 }

@@ -17,6 +17,9 @@ namespace ScriptableObjects
 		public bool AttachToTarget;
 
 		[SerializeField]
+		public float Damage;
+
+		[SerializeField]
 		public EAttackAngle AttackAngle;
 	}
 }

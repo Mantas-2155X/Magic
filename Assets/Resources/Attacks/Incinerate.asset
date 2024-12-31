@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Incinerate
   Description: Burns targets
+  Tags: 0
   Prefab: {fileID: 2523756766213633531, guid: 8b1ba5eb9dfdc456fb4e17c5d68d7326, type: 3}
+  Type: 
   EnableTriggerAfter: 1.5
   DisableTriggerAfter: 0.75
   AttachToTarget: 0
+  Damage: 125
   AttackAngle: 0

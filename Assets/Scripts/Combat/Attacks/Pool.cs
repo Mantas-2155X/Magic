@@ -1,19 +1,14 @@
 using System;
-using System.Collections.Generic;
 using AI.Interfaces;
 using Combat.Attacks.Base;
 using Combat.Attacks.Enums;
 using Cysharp.Threading.Tasks;
-using Managers;
 using UnityEngine;
 
 namespace Combat.Attacks
 {
 	public class Pool : BaseAttack
 	{
-		[SerializeField]
-		public Collider[] Colliders;
-
 		[field: SerializeField]
 		public EPoolType Type { get; private set; }
 		
@@ -26,8 +21,6 @@ namespace Combat.Attacks
 		[field: SerializeField]
 		public virtual float Lifetime { get; set; }
 		
-		private List<IAlive> alives = new ();
-
 		public override void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
 		{
 			base.Spawn(source, position, angles, attach);
@@ -36,29 +29,6 @@ namespace Combat.Attacks
 			
 			if (Lifetime > 0f)
 				lifetime().Forget();
-		}
-
-		public void OnTriggerEnter(Collider other)
-		{
-			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive) || alives.Contains(alive))
-				return;
-
-			for (var i = 0; i < Colliders.Length; i++)
-			{
-				var coll = Colliders[i];
-				if (!coll.bounds.Intersects(other.bounds))
-					return;
-			}
-
-			alives.Add(alive);
-		}
-
-		public void OnTriggerExit(Collider other)
-		{
-			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
-				return;
-
-			alives.Remove(alive);
 		}
 
 		public void OnPoolLooped(IAlive alive)
@@ -82,8 +52,9 @@ namespace Combat.Attacks
 			{
 				await UniTask.WaitForSeconds(Rate);
 
-				foreach (var alive in alives)
+				for (var i = 0; i < CurrentAlives.Count; i++)
 				{
+					var alive = CurrentAlives[i];
 					if (alive == null || !alive.IsAlive)
 						continue;
 

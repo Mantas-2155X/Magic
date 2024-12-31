@@ -371,7 +371,7 @@ namespace AI
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
 			enableInput();
 			
-			LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
+			LearnSpell(ObjectManager.Instance.GetSpell("Incinerate"), true);
 		}
 		
 		public override void Kill(object source)

@@ -9676,7 +9676,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6980029481039198556}
   - component: {fileID: 6482775774062730704}
-  - component: {fileID: 2232679192998384522}
+  - component: {fileID: 5187761768223125445}
   - component: {fileID: 3716721897733238632}
   - component: {fileID: 2981882103111915862}
   m_Layer: 1
@@ -14426,7 +14426,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &2232679192998384522
+--- !u!114 &5187761768223125445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14435,13 +14435,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2523756766213633531}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 982c9bc6e70a43baa8301947d54810a8, type: 3}
+  m_Script: {fileID: 11500000, guid: a72b6aab001340ec811d664e79ea6111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <AttackData>k__BackingField: {fileID: 11400000, guid: 3fc2ab69142f0010192cff2428c4b5fb, type: 2}
   <System>k__BackingField: {fileID: 6482775774062730704}
-  <Trigger>k__BackingField: {fileID: 2981882103111915862}
-  Damage: 100
+  <Triggers>k__BackingField:
+  - {fileID: 2981882103111915862}
 --- !u!199 &3716721897733238632
 ParticleSystemRenderer:
   serializedVersion: 6
