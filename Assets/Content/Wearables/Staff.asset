@@ -18,3 +18,17 @@ MonoBehaviour:
   Prefab: {fileID: 9150455038998059246, guid: 05de131b04c29a042a9cff8a5215a5b2, type: 3}
   Type: 
   WearableType: 0
+  DamageStats:
+    _serializedList:
+    - Key: 1
+      Value:
+        Add: 2
+        Multiply: 1
+  ProtectionStats:
+    _serializedList: []
+  HealingStats:
+    _serializedList:
+    - Key: 3
+      Value:
+        Add: 0
+        Multiply: 1.01
