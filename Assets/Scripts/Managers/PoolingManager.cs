@@ -28,10 +28,10 @@ namespace Managers
 				Pool[data] = list;
 			}
 			
+			list.Add(go);
+			
 			if (disable)
 				go.SetActive(false);
-			
-			list.Add(go);
 		}
 
 		public GameObject Take(Data data, bool enable)
