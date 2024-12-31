@@ -10,6 +10,7 @@ using Combat.Wearables.Interfaces;
 using Objects.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Managers
 {
@@ -38,9 +39,9 @@ namespace Managers
 		{
 			foreach (var dataPath in dataPaths)
 			{
-				var datas = Resources.LoadAll<Data>(dataPath);
+				var datas = Addressables.LoadAssetsAsync<Data>(dataPath).WaitForCompletion();
 
-				for (var i = 0; i < datas.Length; i++)
+				for (var i = 0; i < datas.Count; i++)
 				{
 					var data = datas[i];
 					datasMap[$"{dataPath}/{data.Name}"] = data;

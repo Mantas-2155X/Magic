@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_GUID: 307e6d2298af29f1b8df102b90a32237
+  m_SerializeEntries:
+  - m_GUID: 123799d12c45c605aa3ecca21093f02f
+    m_Address: Assets/Addressables/Objects
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Objects
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e9c1fc31d93972b8959212913ec3bfd
+    m_Address: Assets/Addressables/Casts
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Casts
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 667bc29483c7ff1199d857a6ffbecd21
+    m_Address: Assets/Addressables/Projectiles
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Projectiles
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acda80f884985711cad955e8a01cad02
+    m_Address: Assets/Addressables/Spells
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Spells
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9915d6c435c004aa9b798c7eb7d12b8
+    m_Address: Assets/Addressables/Attacks
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Attacks
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf1ecc50a438cb6d5a5eec2d0a6f090a
+    m_Address: Assets/Addressables/Wearables
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Wearables
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a9c353db03cd8fa9fadd4277dc07e972, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7bd19eb7b1c01cf8ea16cda85454ee61, type: 2}
+    - {fileID: 11400000, guid: 0f962f5545b4bbaab9cc39107f1d9895, type: 2}
