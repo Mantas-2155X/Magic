@@ -58,7 +58,7 @@ namespace AI.Interfaces
 
 		public void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup);
 		public void Heal(float health, object source, bool clamp = false);
-		public void Damage(float damage, object source, EDamageType type);
+		public void Damage(float damage, object source, EElement type);
 		public void GenerateMana(float mana, object source, bool clamp = false);
 		public void UseMana(float mana, object source);
 		public void Kill(object source);

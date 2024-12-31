@@ -49,12 +49,12 @@ namespace Combat.Projectiles.Base
 				if (AIManager.Instance.AlivesColliderMap.TryGetValue(coll, out var alive))
 				{
 					attach = alive.GetTransform();
-					alive.Damage(ProjectileData.Damage, this, EDamageType.Projectile);
+					alive.Damage(ProjectileData.Damage, this, ProjectileData.Element);
 				}
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{
 					attach = obj.GetTransform();
-					obj.Damage(ProjectileData.Damage, this, EDamageType.Projectile);
+					obj.Damage(ProjectileData.Damage, this, ProjectileData.Element);
 				}
 			}
 			

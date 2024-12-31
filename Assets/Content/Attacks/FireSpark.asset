@@ -14,8 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fire Spark
   Description: Visual spark for the Fire element
+  Tags: 0
   Prefab: {fileID: 2895964246749410662, guid: 03beb3e8cbee4220ab66626366e1439c, type: 3}
+  Type: 
   EnableTriggerAfter: 0
   DisableTriggerAfter: 0
   AttachToTarget: 0
+  AttachOffset: {x: 0, y: 0, z: 0}
+  Damage: 0
+  Element: 3
   AttackAngle: 1

@@ -105,7 +105,7 @@ namespace Combat.Attacks.Base
 				TriggeredAlives.Add(alive);
 				
 				if (AttackData.Damage != 0f)
-					alive.Damage(AttackData.Damage, this, EDamageType.Magic);
+					alive.Damage(AttackData.Damage, this, AttackData.Element);
 			}
 			
 			CurrentAlives.Add(alive);

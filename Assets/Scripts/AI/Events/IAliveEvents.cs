@@ -9,7 +9,7 @@ namespace AI.Events
 	public class OnHealEvent : UnityEvent<IAlive, float, object> { }
 
 	[Serializable]
-	public class OnDamageEvent : UnityEvent<IAlive, float, object, EDamageType> { }
+	public class OnDamageEvent : UnityEvent<IAlive, float, object, EElement> { }
 	
 	[Serializable]
 	public class OnManaGenerateEvent : UnityEvent<IAlive, float, object> { }

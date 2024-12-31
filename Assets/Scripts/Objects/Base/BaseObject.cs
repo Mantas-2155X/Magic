@@ -97,7 +97,7 @@ namespace Objects.Base
 			IsBroken = false;
 		}
 		
-		public virtual void Damage(float damage, object source, EDamageType type)
+		public virtual void Damage(float damage, object source, EElement type)
 		{
 			if (!ObjectData.IsBreakable || IsBroken || damage < 0)
 				return;

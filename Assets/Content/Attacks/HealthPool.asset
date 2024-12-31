@@ -14,8 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Health Pool
   Description: Regenerate Health quickly
+  Tags: 0
   Prefab: {fileID: 3523939064151980886, guid: 7aead1f94c85a1a088fa21996c0c56f7, type: 3}
+  Type: 
   EnableTriggerAfter: 0
   DisableTriggerAfter: 0
   AttachToTarget: 0
+  AttachOffset: {x: 0, y: 0, z: 0}
+  Damage: 0
+  Element: 1
   AttackAngle: 0

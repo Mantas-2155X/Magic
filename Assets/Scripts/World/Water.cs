@@ -49,7 +49,7 @@ namespace World
 					if (alive == null || !alive.IsAlive)
 						continue;
 				
-					alive.Damage(Damage, this, EDamageType.World);
+					alive.Damage(Damage, this, EElement.Unknown);
 				}
 			}
 		}

@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fire Ball
   Description: A ball of the Fire element
+  Tags: 0
   Prefab: {fileID: 6837300406704376654, guid: 097d1cbb38d6d1c17b052a95b87f3fd9, type: 3}
+  Type: 
   Force: 7.5
-  Range: 10
   Damage: 15
+  Element: 3
   Attack: {fileID: 11400000, guid: 82ca4e7d594101de386050fd25facb86, type: 2}

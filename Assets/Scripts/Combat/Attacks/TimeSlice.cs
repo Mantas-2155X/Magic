@@ -24,7 +24,7 @@ namespace Combat.Attacks
 			if (Target == null || !Target.TryGetComponent<IAlive>(out var alive))
 				return;
 			
-			alive.Damage(AttackData.Damage, GetAlive(), EDamageType.Magic);
+			alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
 		}
 	}
 }

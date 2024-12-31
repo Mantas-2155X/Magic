@@ -206,7 +206,7 @@ namespace Managers
 			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
 		}
 		
-		private void onDamage(IAlive alive, float damage, object source, EDamageType type)
+		private void onDamage(IAlive alive, float damage, object source, EElement type)
 		{
 			if (!alive.IsAlive || alive is not NPC npc)
 				return;

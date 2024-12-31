@@ -14,7 +14,7 @@ namespace Objects.Interfaces
 		public float Health { get; }
 		public bool IsBroken { get; }
 
-		public void Damage(float damage, object source, EDamageType type);
+		public void Damage(float damage, object source, EElement type);
 		public void Break(object source);
 
 		#endregion

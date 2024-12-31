@@ -47,7 +47,7 @@ namespace AI.Base
 				return;
 
 			var damage = Mathf.FloorToInt(Body.FallDamageMultiplier * (velocity * velocity));
-			Damage(damage, null, EDamageType.World);
+			Damage(damage, null, EElement.Unknown);
 		}
 
 		#endregion
@@ -309,7 +309,7 @@ namespace AI.Base
 			if (CurrentHealth >= OverloadHealth)
 				Kill(this);
 		}
-		public virtual void Damage(float damage, object source, EDamageType type)
+		public virtual void Damage(float damage, object source, EElement type)
 		{
 			if (!IsAlive || damage < 0 || IsInvulnerable)
 				return;

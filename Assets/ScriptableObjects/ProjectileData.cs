@@ -1,3 +1,4 @@
+using Combat.Enums;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -11,6 +12,9 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public float Damage;
+
+		[SerializeField]
+		public EElement Element;
 
 		[SerializeField]
 		public AttackData Attack;

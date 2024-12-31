@@ -14,8 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Shield
   Description: Mana shield that blocks projectiles
+  Tags: 0
   Prefab: {fileID: 2523756766213633531, guid: e0cb22df246897dfcaeca9d482f16ba1, type: 3}
+  Type: 
   EnableTriggerAfter: 0.15
   DisableTriggerAfter: 4.85
   AttachToTarget: 0
+  AttachOffset: {x: 0, y: 0, z: 0}
+  Damage: 0
+  Element: 2
   AttackAngle: 2

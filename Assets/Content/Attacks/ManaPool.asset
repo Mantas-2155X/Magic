@@ -14,8 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Mana Pool
   Description: Regenerate Mana quickly
+  Tags: 0
   Prefab: {fileID: 3523939064151980886, guid: 2ff14fe6e2fd5493aa632d0690e49f23, type: 3}
+  Type: 
   EnableTriggerAfter: 0
   DisableTriggerAfter: 0
   AttachToTarget: 0
+  AttachOffset: {x: 0, y: 0, z: 0}
+  Damage: 0
+  Element: 2
   AttackAngle: 0

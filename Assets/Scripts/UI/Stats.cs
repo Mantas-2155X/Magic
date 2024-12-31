@@ -37,7 +37,7 @@ namespace UI
 			setHealth(player.CurrentHealth, player.OverloadHealth);
 		}
 		
-		public void OnDamage(IAlive alive, float damage, object source, EDamageType type)
+		public void OnDamage(IAlive alive, float damage, object source, EElement type)
 		{
 			if (alive is not Player player)
 				return;
