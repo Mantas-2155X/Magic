@@ -2,6 +2,7 @@
 
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
+using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Enums;
@@ -96,7 +97,7 @@ namespace Objects.Base
 			IsBroken = false;
 		}
 		
-		public virtual void Damage(float damage, object source)
+		public virtual void Damage(float damage, object source, EDamageType type)
 		{
 			if (!ObjectData.IsBreakable || IsBroken || damage < 0)
 				return;

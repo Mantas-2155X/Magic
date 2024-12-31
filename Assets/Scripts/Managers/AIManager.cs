@@ -3,6 +3,7 @@ using AI;
 using AI.Base;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
+using Combat.Enums;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Unity.Burst;
@@ -205,7 +206,7 @@ namespace Managers
 			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
 		}
 		
-		private void onDamage(IAlive alive, float damage, object source)
+		private void onDamage(IAlive alive, float damage, object source, EDamageType type)
 		{
 			if (!alive.IsAlive || alive is not NPC npc)
 				return;

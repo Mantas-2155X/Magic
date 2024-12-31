@@ -1,4 +1,5 @@
 using AI.Interfaces;
+using Combat.Enums;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace Objects.Interfaces
 		public float Health { get; }
 		public bool IsBroken { get; }
 
-		public void Damage(float damage, object source);
+		public void Damage(float damage, object source, EDamageType type);
 		public void Break(object source);
 
 		#endregion

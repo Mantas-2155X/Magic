@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AI.Interfaces;
 using Combat.Attacks.Base;
+using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects;
@@ -69,7 +70,7 @@ namespace Combat.Attacks
 			await UniTask.WaitForSeconds(1.5f, true);
 
 			foreach (var target in targets)
-				target.Damage(150, Source);
+				target.Damage(150, Source, EDamageType.Magic);
 			
 			await UniTask.WaitForSeconds(1f, true);
 			

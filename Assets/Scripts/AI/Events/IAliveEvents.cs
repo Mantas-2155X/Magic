@@ -1,5 +1,6 @@
 using System;
 using AI.Interfaces;
+using Combat.Enums;
 using UnityEngine.Events;
 
 namespace AI.Events
@@ -8,7 +9,7 @@ namespace AI.Events
 	public class OnHealEvent : UnityEvent<IAlive, float, object> { }
 
 	[Serializable]
-	public class OnDamageEvent : UnityEvent<IAlive, float, object> { }
+	public class OnDamageEvent : UnityEvent<IAlive, float, object, EDamageType> { }
 	
 	[Serializable]
 	public class OnManaGenerateEvent : UnityEvent<IAlive, float, object> { }

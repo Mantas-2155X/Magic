@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using AI.Enums;
 using AI.Events;
 using AI.Interfaces;
+using Combat.Enums;
 using Combat.Spells.Base;
 using Combat.Spells.Interfaces;
 using Combat.Wearables.Interfaces;
@@ -46,7 +47,7 @@ namespace AI.Base
 				return;
 
 			var damage = Mathf.FloorToInt(Body.FallDamageMultiplier * (velocity * velocity));
-			Damage(damage, null);
+			Damage(damage, null, EDamageType.World);
 		}
 
 		#endregion
@@ -303,13 +304,13 @@ namespace AI.Base
 			if (CurrentHealth >= OverloadHealth)
 				Kill(this);
 		}
-		public virtual void Damage(float damage, object source)
+		public virtual void Damage(float damage, object source, EDamageType type)
 		{
 			if (!IsAlive || damage < 0 || IsInvulnerable)
 				return;
 			
 			CurrentHealth -= damage;
-			OnDamageEvent?.Invoke(this, damage, source);
+			OnDamageEvent?.Invoke(this, damage, source, type);
 
 			if (CurrentHealth > 0)
 				return;

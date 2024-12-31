@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AI.Interfaces;
+using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
@@ -48,7 +49,7 @@ namespace World
 					if (alive == null || !alive.IsAlive)
 						continue;
 				
-					alive.Damage(Damage, this);
+					alive.Damage(Damage, this, EDamageType.World);
 				}
 			}
 		}

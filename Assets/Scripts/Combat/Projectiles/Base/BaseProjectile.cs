@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
+using Combat.Enums;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -46,12 +47,12 @@ namespace Combat.Projectiles.Base
 				if (AIManager.Instance.AlivesColliderMap.TryGetValue(coll, out var alive))
 				{
 					attach = alive.GetTransform();
-					alive.Damage(ProjectileData.Damage, this);
+					alive.Damage(ProjectileData.Damage, this, EDamageType.Projectile);
 				}
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{
 					attach = obj.GetTransform();
-					obj.Damage(ProjectileData.Damage, this);
+					obj.Damage(ProjectileData.Damage, this, EDamageType.Projectile);
 				}
 			}
 			

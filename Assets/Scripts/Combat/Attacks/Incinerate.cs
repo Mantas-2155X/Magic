@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AI.Interfaces;
 using Combat.Attacks.Base;
+using Combat.Enums;
 using Managers;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ namespace Combat.Attacks
 				return;
 			
 			alives.Add(alive);
-			alive.Damage(Damage, this);
+			alive.Damage(Damage, this, EDamageType.Magic);
 		}
 		
 		public override void OnTriggerEnabled()
