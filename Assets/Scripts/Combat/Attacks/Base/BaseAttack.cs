@@ -139,7 +139,7 @@ namespace Combat.Attacks.Base
 			if (Target == null)
 				return;
 			
-			thisTr.position = Target.position + Vector3.down * 0.95f;
+			thisTr.position = Target.position + Vector3.down * 0.95f + AttackData.AttachOffset;
 		}
 		
 		public IAlive GetAlive()

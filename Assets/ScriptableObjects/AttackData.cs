@@ -17,6 +17,9 @@ namespace ScriptableObjects
 		public bool AttachToTarget;
 
 		[SerializeField]
+		public Vector3 AttachOffset;
+		
+		[SerializeField]
 		public float Damage;
 
 		[SerializeField]
