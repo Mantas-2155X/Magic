@@ -323,7 +323,7 @@ namespace AI.Base
 			if (!IsAlive || IsInvulnerable)
 				return;
 
-			damage = ProtectionStats[type].Convert(damage);
+			ProtectionStats[type].Convert(ref damage);
 			
 			if (damage < 0)
 				return;
