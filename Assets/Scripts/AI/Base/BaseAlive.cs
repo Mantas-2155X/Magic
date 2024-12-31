@@ -9,6 +9,7 @@ using AI.Interfaces;
 using Combat.Enums;
 using Combat.Spells.Base;
 using Combat.Spells.Interfaces;
+using Combat.Structs;
 using Combat.Wearables.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -56,6 +57,9 @@ namespace AI.Base
 
 		[field: SerializeField]
 		public Body Body { get; private set; }
+
+		public Dictionary<EElement, SElementStat> DamageStats { get; private set; } = new ();
+		public Dictionary<EElement, SElementStat> ProtectionStats { get; private set; } = new ();
 		
 		public List<IWearable> Wearables { get; private set; }
 		public List<ISpell> Spells { get; private set; }
@@ -229,8 +233,9 @@ namespace AI.Base
 			}
 			
 			wearable.Equip(this);
-			
 			Wearables.Add(wearable);
+			
+			recalculateStats();
 		}
 		public virtual void DropWearable(WearableData data)
 		{
@@ -245,6 +250,8 @@ namespace AI.Base
 				
 				return;
 			}
+			
+			recalculateStats();
 		}
 		public virtual void DropAllWearables()
 		{
@@ -283,6 +290,8 @@ namespace AI.Base
 			SetMaxSpeed(maximumSpeed);
 			SetRelationshipGroup(relationshipGroup);
 			
+			recalculateStats();
+			
 			SpellRange = float.MaxValue;
 			
 			OnSpawnEvent?.Invoke(this);
@@ -311,7 +320,12 @@ namespace AI.Base
 		}
 		public virtual void Damage(float damage, object source, EElement type)
 		{
-			if (!IsAlive || damage < 0 || IsInvulnerable)
+			if (!IsAlive || IsInvulnerable)
+				return;
+
+			damage = ProtectionStats[type].Convert(damage);
+			
+			if (damage < 0)
 				return;
 			
 			CurrentHealth -= damage;
@@ -429,6 +443,44 @@ namespace AI.Base
 
 				GenerateMana(RegenerateMana, this, true);
 				Heal(RegenerateHealth, this, true);
+			}
+		}
+
+		private void recalculateStats()
+		{
+			DamageStats.Clear();
+			ProtectionStats.Clear();
+
+			var values = Enum.GetValues(typeof(EElement));
+			
+			for (var i = 0; i < values.Length; i++)
+			{
+				var element = (EElement)i;
+				
+				DamageStats[element] = new SElementStat();
+				ProtectionStats[element] = new SElementStat();
+			}
+
+			for (var i = 0; i < Wearables.Count; i++)
+			{
+				var wearable = Wearables[i];
+				var data = wearable.WearableData;
+
+				foreach (var pair in data.DamageStats)
+				{
+					var stat = DamageStats[pair.Key];
+					stat.Append(pair.Value);
+
+					DamageStats[pair.Key] = stat;
+				}
+				
+				foreach (var pair in data.ProtectionStats)
+				{
+					var stat = ProtectionStats[pair.Key];
+					stat.Append(pair.Value);
+					
+					ProtectionStats[pair.Key] = stat;
+				}
 			}
 		}
 		

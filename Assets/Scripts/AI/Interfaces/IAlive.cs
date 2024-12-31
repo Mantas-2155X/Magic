@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using AI.Enums;
+using AYellowpaper.SerializedCollections;
 using Combat.Enums;
 using Combat.Spells.Interfaces;
+using Combat.Structs;
 using Combat.Wearables.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
@@ -11,6 +13,9 @@ namespace AI.Interfaces
 	public interface IAlive
 	{
 		public Body Body { get; }
+		
+		public Dictionary<EElement, SElementStat> DamageStats { get; }
+		public Dictionary<EElement, SElementStat> ProtectionStats { get; }
 		
 		public List<IWearable> Wearables { get; }
 		public List<ISpell> Spells { get; }
