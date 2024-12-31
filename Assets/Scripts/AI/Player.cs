@@ -105,7 +105,7 @@ namespace AI
 			if (AttackAction.action.IsPressed())
 				Spell?.StartCasting();
 
-			var weaponContainer = Body.GetContainer(EWearableType.Weapon).Wear;
+			var weaponContainer = Body.Containers[EWearableType.Weapon].Wear;
 			
 			if (Spell != null && Spell.IsCasting)
 			{
@@ -361,7 +361,7 @@ namespace AI
 
 		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
 		{
-			var weaponContainer = Body.GetContainer(EWearableType.Weapon).Wear;
+			var weaponContainer = Body.Containers[EWearableType.Weapon].Wear;
 			weaponContainer.SetParent(CameraTr);
 			
 			weaponContainer.localPosition = ViewmodelPosition;
@@ -376,7 +376,7 @@ namespace AI
 		
 		public override void Kill(object source)
 		{
-			Body.GetContainer(EWearableType.Weapon).Wear.SetParent(Body.Shoulders[1]);
+			Body.Containers[EWearableType.Weapon].Wear.SetParent(Body.Shoulders[1]);
 		
 			hideBodyRender(false);
 			disableInput();

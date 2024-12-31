@@ -69,7 +69,7 @@ namespace Combat.Wearables.Base
 			for (var i = 0; i < Colliders.Length; i++)
 				Colliders[i].enabled = false;
 			
-			thisTr.SetParent(Owner.Body.GetContainer(WearableData.WearableType).Wear);
+			thisTr.SetParent(Owner.Body.Containers[WearableData.WearableType].Wear);
 			thisTr.localPosition = Vector3.zero;
 			thisTr.localEulerAngles = Vector3.zero;
 
@@ -85,7 +85,7 @@ namespace Combat.Wearables.Base
 			if (Owner is Player)
 				hideShadow(false);
 
-			var dropTr = Owner.Body.GetContainer(WearableData.WearableType).Drop;
+			var dropTr = Owner.Body.Containers[WearableData.WearableType].Drop;
 
 			var movePos = dropTr.position + (Vector3.down * 0.1f) + (dropTr.right * 0.1f);
 			var moveAng = dropTr.eulerAngles;
@@ -132,7 +132,7 @@ namespace Combat.Wearables.Base
 		
 		private void hideShadow(bool state)
 		{
-			var renderers = Owner.Body.GetContainer(WearableData.WearableType).Wear.GetComponentsInChildren<Renderer>(true);
+			var renderers = Owner.Body.Containers[WearableData.WearableType].Wear.GetComponentsInChildren<Renderer>(true);
 			foreach (var rend in renderers)
 				rend.shadowCastingMode = state ? ShadowCastingMode.Off : ShadowCastingMode.On;
 		}

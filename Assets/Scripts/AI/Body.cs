@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using AI.Base;
+using AYellowpaper.SerializedCollections;
 using Combat.Wearables.Enums;
 using Combat.Wearables.Structs;
 using UnityEngine;
@@ -34,7 +34,7 @@ namespace AI
 		public Transform[] Legs;
 
 		[SerializeField]
-		public List<SWearableContainer> Containers;
+		public SerializedDictionary<EWearableType, SWearableContainer> Containers;
 
 		[SerializeField]
 		public Vector2 SwayAngles = new (30f, 15f);
@@ -103,21 +103,6 @@ namespace AI
 				swayLimbs();
 		}
 
-		public SWearableContainer GetContainer(EWearableType type)
-		{
-			for (var i = 0; i < Containers.Count; i++)
-			{
-				var container = Containers[i];
-				if (container.Type != type)
-					continue;
-				
-				return container;
-			}
-
-			Debug.LogWarning($"Body container for wearable {type} is missing");
-			return default;
-		}
-		
 		private void swayLimbs()
 		{
 			var incrementAmount = Alive.CurrentSpeed * SwaySpeedMultiplier * Time.deltaTime;

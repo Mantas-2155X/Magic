@@ -871,9 +871,11 @@ MonoBehaviour:
   - {fileID: 109099294140091109}
   - {fileID: 5313810489724381644}
   Containers:
-  - Type: 0
-    Wear: {fileID: 2218637157460867386}
-    Drop: {fileID: 1010580080414970857}
+    _serializedList:
+    - Key: 0
+      Value:
+        Wear: {fileID: 2218637157460867386}
+        Drop: {fileID: 1010580080414970857}
   SwayAngles: {x: 30, y: 15}
   SwaySpeedMultiplier: 1
   EyesColor: {r: 0, g: 0, b: 0, a: 0}
