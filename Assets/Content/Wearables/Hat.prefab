@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6787215059534197194}
   - component: {fileID: -2399338845636368930}
   - component: {fileID: 6656124334614098649}
-  - component: {fileID: 8735930322665862849}
-  - component: {fileID: 5543263879423761138}
+  - component: {fileID: 2674095172515678096}
+  - component: {fileID: 1335226118888787235}
   m_Layer: 0
   m_Name: Hat
   m_TagString: Untagged
@@ -70,12 +70,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <WearableData>k__BackingField: {fileID: 11400000, guid: eb877cbaf5e169ee884a9cdd00e1ab9f, type: 2}
-  <Rigidbody>k__BackingField: {fileID: 8735930322665862849}
+  <Rigidbody>k__BackingField: {fileID: 2674095172515678096}
   <Colliders>k__BackingField:
   - {fileID: -2399338845636368930}
-  - {fileID: 0}
-  <DroppedWearable>k__BackingField: {fileID: 5543263879423761138}
---- !u!54 &8735930322665862849
+  - {fileID: 7258286790245382415}
+  <DroppedWearable>k__BackingField: {fileID: 1335226118888787235}
+--- !u!54 &2674095172515678096
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,7 +102,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5543263879423761138
+--- !u!114 &1335226118888787235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
