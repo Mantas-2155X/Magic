@@ -34,7 +34,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth, player.StartingHealth);
+			setHealth(player.CurrentHealth, player.MaximumHealth);
 		}
 		
 		public void OnDamage(IAlive alive, float damage, object source, EElement type)
@@ -42,7 +42,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth, player.StartingHealth);
+			setHealth(player.CurrentHealth, player.MaximumHealth);
 		}
 		
 		public void OnManaGenerate(IAlive alive, float generated, object source)
@@ -50,7 +50,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setMana(player.CurrentMana, player.StartingMana);
+			setMana(player.CurrentMana, player.MaximumMana);
 		}
 		
 		public void OnManaUse(IAlive alive, float used, object source)
@@ -58,7 +58,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setMana(player.CurrentMana, player.StartingMana);
+			setMana(player.CurrentMana, player.MaximumMana);
 		}
 		
 		public void OnDeath(IAlive alive, object source)
@@ -75,8 +75,8 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth, player.StartingHealth);
-			setMana(player.CurrentMana, player.StartingMana);
+			setHealth(player.CurrentHealth, player.MaximumHealth);
+			setMana(player.CurrentMana, player.MaximumMana);
 		}
 		
 		private void setHealth(float amount, float maximum)

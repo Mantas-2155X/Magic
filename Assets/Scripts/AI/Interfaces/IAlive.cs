@@ -26,11 +26,11 @@ namespace AI.Interfaces
 		public float MaximumSpeed { get; }
 
 		public float CurrentHealth { get; }
-		public float StartingHealth { get; }
+		public float MaximumHealth { get; }
 		public float RegenerateHealth { get; }
 
 		public float CurrentMana { get; }
-		public float StartingMana { get; }
+		public float MaximumMana { get; }
 		public float RegenerateMana { get; }
 
 		public EMovementType MovementType { get; }
@@ -59,7 +59,7 @@ namespace AI.Interfaces
 		public void DropWearable(WearableData data);
 		public void DropAllWearables();
 
-		public void Spawn(float startingHealth, float regenerateHealth, float startingMana, float regenerateMana, float maximumSpeed, int relationshipGroup);
+		public void Spawn(float maximumHealth, float regenerateHealth, float maximumMana, float regenerateMana, float maximumSpeed, int relationshipGroup);
 		public void Heal(float health, object source);
 		public void Damage(float damage, object source, EElement type);
 		public void GenerateMana(float mana, object source);

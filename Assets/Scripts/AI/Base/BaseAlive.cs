@@ -70,11 +70,11 @@ namespace AI.Base
 		public float MaximumSpeed { get; private set; }
 
 		public float CurrentHealth { get; private set; }
-		public float StartingHealth { get; private set; }
+		public float MaximumHealth { get; private set; }
 		public float RegenerateHealth { get; private set; }
 		
 		public float CurrentMana { get; private set; }
-		public float StartingMana { get; private set; }
+		public float MaximumMana { get; private set; }
 		public float RegenerateMana { get; private set; }
 
 		public EMovementType MovementType { get; private set; }
@@ -257,7 +257,7 @@ namespace AI.Base
 				DropWearable(Wearables[i].WearableData);
 		}
 
-		public virtual void Spawn(float startingHealth, float regenerateHealth, float startingMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
+		public virtual void Spawn(float maximumHealth, float regenerateHealth, float maximumMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
 		{
 			if (!init)
 			{
@@ -273,12 +273,12 @@ namespace AI.Base
 			Wearables = new List<IWearable>();
 			Spells = new List<ISpell>();
 			
-			CurrentHealth = startingHealth;
-			StartingHealth = startingHealth;
+			CurrentHealth = maximumHealth;
+			MaximumHealth = maximumHealth;
 			RegenerateHealth = regenerateHealth;
 
-			CurrentMana = startingMana;
-			StartingMana = startingMana;
+			CurrentMana = maximumMana;
+			MaximumMana = maximumMana;
 			RegenerateMana = regenerateMana;
 
 			IsAlive = true;
@@ -299,11 +299,11 @@ namespace AI.Base
 			if (!IsAlive || health < 0)
 				return;
 			
-			if (CurrentHealth >= StartingHealth)
+			if (CurrentHealth >= MaximumHealth)
 				return;
 
-			if (CurrentHealth + health >= StartingHealth)
-				health = StartingHealth - CurrentHealth;
+			if (CurrentHealth + health >= MaximumHealth)
+				health = MaximumHealth - CurrentHealth;
 			
 			CurrentHealth += health;
 			OnHealEvent?.Invoke(this, health, source);
@@ -336,11 +336,11 @@ namespace AI.Base
 			if (!IsAlive || mana < 0)
 				return;
 
-			if (CurrentMana >= StartingMana)
+			if (CurrentMana >= MaximumMana)
 				return;
 
-			if (CurrentMana + mana >= StartingMana)
-				mana = StartingMana - CurrentMana;
+			if (CurrentMana + mana >= MaximumMana)
+				mana = MaximumMana - CurrentMana;
 			
 			CurrentMana += mana;
 			OnManaGenerateEvent?.Invoke(this, mana, source);

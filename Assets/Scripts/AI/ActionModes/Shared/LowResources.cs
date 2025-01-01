@@ -133,8 +133,8 @@ namespace AI.ActionModes.Shared
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public bool IsLowHealth() => owner.CurrentHealth <= owner.StartingHealth * owner.LowResourcesMultiplier;
+		public bool IsLowHealth() => owner.CurrentHealth <= owner.MaximumHealth * owner.LowResourcesMultiplier;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public bool IsLowMana() => owner.CurrentMana <= owner.StartingMana * owner.LowResourcesMultiplier;
+		public bool IsLowMana() => owner.CurrentMana <= owner.MaximumMana * owner.LowResourcesMultiplier;
 	}
 }
