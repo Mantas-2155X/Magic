@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
+  m_Name: Bind
+  m_EditorClassIdentifier: 
+  Name: Bind
+  Description: Fires a mana ball that binds targets
+  Tags: 0
+  Prefab: {fileID: 0}
+  Type: 
+  Cooldown: 5
+  CastingTime: 1
+  CastingCost: 25
+  Range: 10
+  Cast: {fileID: 11400000, guid: 8dea02d4d2d50018695eca0411d885a6, type: 2}
+  Attack: {fileID: 0}
+  Projectile: {fileID: 11400000, guid: 00c31891fc48e5198844a730a6bdca64, type: 2}

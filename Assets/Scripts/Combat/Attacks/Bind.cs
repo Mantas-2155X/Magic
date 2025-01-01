@@ -7,33 +7,36 @@ namespace Combat.Attacks
 {
 	public class Bind : BaseAttack
 	{
-		private IAlive target;
-		private float previousMaxSpeed;
+		private IAlive alive;
 		
 		public override void OnTriggerEnter(Collider other)
 		{
 			base.OnTriggerEnter(other);
 			
-			if (target != null || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
+			if (alive != null || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var targetAlive))
 				return;
 
-			target = alive;
-			previousMaxSpeed = alive.MaximumSpeed;
-			GetTransform().position = alive.GetTransform().position + Vector3.down * 1f;
-			alive.SetMaxSpeed(0f);
+			var ownerRelationship = GetAlive()?.RelationshipGroup ?? -99;
+			
+			if (targetAlive.RelationshipGroup == ownerRelationship)
+				return;
+
+			alive = targetAlive;
+			alive.SetBound(true);
+
+			Target = targetAlive.GetTransform();
 		}
 
 		public override void OnTriggersEnabled()
 		{
-			target = null;
-			previousMaxSpeed = 0f;
+			alive = null;
 			base.OnTriggersEnabled();
 		}
 
 		public override void OnTriggersDisabled()
 		{
-			target?.SetMaxSpeed(previousMaxSpeed);
 			base.OnTriggersDisabled();
+			alive?.SetBound(false);
 		}
 	}
 }

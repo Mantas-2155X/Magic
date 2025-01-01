@@ -13,6 +13,8 @@ namespace Combat.Attacks.Interfaces
 		public ParticleSystem System { get; }
 		public Collider[] Triggers { get; }
 		
+		public Transform Target { get; set; }
+
 		public void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach);
 
 		public IAlive GetAlive();

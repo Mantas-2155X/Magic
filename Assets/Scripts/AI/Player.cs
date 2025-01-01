@@ -166,7 +166,7 @@ namespace AI
 			var movement = MovementForce;
 
 			// Prevent movement when bound
-			if (MaximumSpeed == 0f)
+			if (IsBound)
 				movement = 0;
 			
 			// Adjust how much control force is weakened if not grounded
@@ -177,10 +177,12 @@ namespace AI
 			
 			if (!grounded)
 				return;
+
+			var maxSpeed = IsBound ? 0f : MaximumSpeed;
 			
 			// Limit the rigidbody walking speed
-			var maxSpeed = SprintAction.action.IsPressed() ? MaximumSpeed * SprintMultiplier : MaximumSpeed;
-			Body.Rigidbody.linearVelocity = Vector3.ClampMagnitude(Body.Rigidbody.linearVelocity, maxSpeed * SpeedClampModifier);
+			var clampSpeed = SprintAction.action.IsPressed() ? maxSpeed * SprintMultiplier : maxSpeed;
+			Body.Rigidbody.linearVelocity = Vector3.ClampMagnitude(Body.Rigidbody.linearVelocity, clampSpeed * SpeedClampModifier);
 		}
 		
 		#endregion
@@ -298,7 +300,7 @@ namespace AI
 		{
 			jumpPressed = true;
 			
-			if (MovementType == EMovementType.Normal && IsGrounded() && MaximumSpeed != 0f)
+			if (MovementType == EMovementType.Normal && !IsBound && IsGrounded())
 				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
 		}
 		
@@ -355,7 +357,7 @@ namespace AI
 		
 		#region IAlive
 		
-		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : MaximumSpeed;
+		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : (IsBound ? 0f : MaximumSpeed);
 
 		public override bool IsWalking => walking;
 
@@ -371,7 +373,7 @@ namespace AI
 			base.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, maximumSpeed, relationshipGroup);
 			enableInput();
 			
-			LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
+			LearnSpell(ObjectManager.Instance.GetSpell("Bind"), true);
 		}
 		
 		public override void Kill(object source)

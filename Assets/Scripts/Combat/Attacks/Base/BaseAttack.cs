@@ -24,7 +24,7 @@ namespace Combat.Attacks.Base
 		[field: SerializeField]
 		public Collider[] Triggers { get; private set; }
 
-		public Transform Target { get; private set; }
+		public Transform Target { get; set; }
 
 		public readonly List<IAlive> TriggeredAlives = new ();
 		public readonly List<IAlive> CurrentAlives = new ();

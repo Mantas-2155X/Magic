@@ -401,10 +401,10 @@ namespace AI
 		
 		public override bool IsWalking => Agent.hasPath;
 
-		public override void SetMaxSpeed(float maximumSpeed)
+		public override void SetBound(bool value)
 		{
-			base.SetMaxSpeed(maximumSpeed);
-			Agent.speed = maximumSpeed;
+			base.SetBound(value);
+			Agent.speed = value ? 0f : MaximumSpeed;
 		}
 		
 		public override void Spawn(float maximumHealth, float regenerateHealth, float maximumMana, float regenerateMana, float maximumSpeed, int relationshipGroup)

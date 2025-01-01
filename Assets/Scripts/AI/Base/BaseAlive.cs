@@ -85,6 +85,7 @@ namespace AI.Base
 		public bool IsInvulnerable { get; private set; }
 		public bool IsPowerful { get; private set; }
 		public virtual bool IsWalking { get; private set; }
+		public bool IsBound { get; private set; }
 
 		public void SetInvulnerable(bool value)
 		{
@@ -127,9 +128,12 @@ namespace AI.Base
 			
 			OnRelationshipGroupChangedEvent?.Invoke(this, previousRelationshipGroup, RelationshipGroup);
 		}
-		public virtual void SetMaxSpeed(float maximumSpeed)
+		public virtual void SetBound(bool value)
 		{
-			MaximumSpeed = maximumSpeed;
+			if (!IsAlive || IsBound == value)
+				return;
+			
+			IsBound = value;
 		}
 
 		public virtual void SelectSpell(SpellData data)
@@ -281,18 +285,17 @@ namespace AI.Base
 			MaximumMana = maximumMana;
 			RegenerateMana = regenerateMana;
 
+			MaximumSpeed = maximumSpeed;
+			
+			SpellRange = float.MaxValue;
 			IsAlive = true;
 			
-			SetMaxSpeed(maximumSpeed);
 			SetRelationshipGroup(relationshipGroup);
 			
 			recalculateStats();
-			
-			SpellRange = float.MaxValue;
+			regenerateLoop().Forget();
 			
 			OnSpawnEvent?.Invoke(this);
-			
-			regenerateLoop().Forget();
 		}
 		public virtual void Kill(object source)
 		{

@@ -41,12 +41,13 @@ namespace AI.Interfaces
 		public bool IsInvulnerable { get; }
 		public bool IsPowerful { get; }
 		public bool IsWalking { get; }
+		public bool IsBound { get; }
 		
 		public void SetInvulnerable(bool value);
 		public void SetPowerful(bool value);
 		public void SetMovementType(EMovementType value);
 		public void SetRelationshipGroup(int value);
-		public void SetMaxSpeed(float maximumSpeed);
+		public void SetBound(bool value);
 
 		public void SelectSpell(SpellData data);
 		public bool HasSpell(SpellData data);
