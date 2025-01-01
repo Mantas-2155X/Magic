@@ -73,7 +73,7 @@ MonoBehaviour:
   <Rigidbody>k__BackingField: {fileID: 8735930322665862849}
   <Colliders>k__BackingField:
   - {fileID: -2399338845636368930}
-  - {fileID: 8004097166034371403}
+  - {fileID: 0}
   <DroppedWearable>k__BackingField: {fileID: 5543263879423761138}
 --- !u!54 &8735930322665862849
 Rigidbody:
@@ -173,14 +173,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e23e61eb06661e784ae0f5a159ad4fd1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8004097166034371403}
+      addedObject: {fileID: 7258286790245382415}
   m_SourcePrefab: {fileID: 100100000, guid: e23e61eb06661e784ae0f5a159ad4fd1, type: 3}
 --- !u!1 &8587433550724226707 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e23e61eb06661e784ae0f5a159ad4fd1, type: 3}
   m_PrefabInstance: {fileID: 8930031685097841602}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &8004097166034371403
+--- !u!64 &7258286790245382415
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,7 +193,7 @@ MeshCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
