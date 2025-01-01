@@ -367,7 +367,7 @@ namespace AI
 			weaponContainer.localPosition = ViewmodelPosition;
 			weaponContainer.localEulerAngles = ViewmodelAngles;
 
-			hideBodyRender(true);
+			setRenderMode(ShadowCastingMode.ShadowsOnly);
 			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
 			enableInput();
 			
@@ -378,7 +378,7 @@ namespace AI
 		{
 			Body.Containers[EWearableType.Weapon].Wear.SetParent(Body.Shoulders[1]);
 		
-			hideBodyRender(false);
+			setRenderMode(ShadowCastingMode.On);
 			disableInput();
 			base.Kill(source);
 		}
@@ -397,11 +397,11 @@ namespace AI
 			return false;
 		}
 
-		private void hideBodyRender(bool state)
+		private void setRenderMode(ShadowCastingMode mode)
 		{
 			var renderers = Body.GetComponentsInChildren<Renderer>(true);
 			foreach (var rend in renderers)
-				rend.shadowCastingMode = state ? ShadowCastingMode.ShadowsOnly : ShadowCastingMode.On;
+				rend.shadowCastingMode = mode;
 		}
 		
 		#endregion

@@ -2,6 +2,7 @@ namespace Combat.Wearables.Enums
 {
 	public enum EWearableType
 	{
-		Weapon
+		Weapon,
+		Hat
 	}
 }

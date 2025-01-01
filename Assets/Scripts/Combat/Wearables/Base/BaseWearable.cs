@@ -74,7 +74,7 @@ namespace Combat.Wearables.Base
 			thisTr.localEulerAngles = Vector3.zero;
 
 			if (Owner is Player)
-				hideShadow(true);
+				setRenderMode(WearableData.WearableType == EWearableType.Weapon ? ShadowCastingMode.Off : ShadowCastingMode.ShadowsOnly);
 		}
 		
 		public virtual void Drop()
@@ -83,7 +83,7 @@ namespace Combat.Wearables.Base
 				return;
 			
 			if (Owner is Player)
-				hideShadow(false);
+				setRenderMode(ShadowCastingMode.On);
 
 			var dropTr = Owner.Body.Containers[WearableData.WearableType].Drop;
 
@@ -130,11 +130,11 @@ namespace Combat.Wearables.Base
 			init = true;
 		}
 		
-		private void hideShadow(bool state)
+		private void setRenderMode(ShadowCastingMode mode)
 		{
 			var renderers = Owner.Body.Containers[WearableData.WearableType].Wear.GetComponentsInChildren<Renderer>(true);
 			foreach (var rend in renderers)
-				rend.shadowCastingMode = state ? ShadowCastingMode.Off : ShadowCastingMode.On;
+				rend.shadowCastingMode = mode;
 		}
 	}
 }
