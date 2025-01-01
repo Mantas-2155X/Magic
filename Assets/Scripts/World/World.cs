@@ -7,15 +7,6 @@ namespace World
 	public class World : MonoBehaviour
 	{
 		public static World Instance;
-
-		[SerializeField]
-		public Light Sun;
-		
-		[SerializeField]
-		public Water Water;
-
-		[SerializeField]
-		public Terrain Terrain;
 		
 		[SerializeField]
 		public Transform SpawnPoints;
