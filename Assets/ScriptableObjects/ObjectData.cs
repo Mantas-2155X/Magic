@@ -14,7 +14,7 @@ namespace ScriptableObjects
 		public bool IsBreakable;
 
 		[SerializeField]
-		public float StartingHealth;
+		public float MaximumHealth;
 		
 		[Header("Pickupable")]
 		[SerializeField]

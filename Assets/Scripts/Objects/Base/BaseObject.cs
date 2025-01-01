@@ -93,7 +93,7 @@ namespace Objects.Base
 
 		private void initializeBreakable()
 		{
-			Health = ObjectData.StartingHealth;
+			Health = ObjectData.MaximumHealth;
 			IsBroken = false;
 		}
 		
