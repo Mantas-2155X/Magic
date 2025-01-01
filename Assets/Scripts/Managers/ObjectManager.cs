@@ -133,10 +133,10 @@ namespace Managers
 			return cast;
 		}
 		
-		public IProjectile CreateProjectile(ProjectileData data, float range, Component source, Vector3 origin, Vector3 direction)
+		public IProjectile CreateProjectile(ProjectileData data, float range, AttackData attack, Component source, Vector3 origin, Vector3 direction)
 		{
 			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
-			projectile.Spawn(source, range, origin, direction * data.Force);
+			projectile.Spawn(source, range, attack, origin, direction * data.Force);
 			
 			return projectile;
 		}

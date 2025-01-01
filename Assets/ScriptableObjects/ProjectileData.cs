@@ -15,8 +15,5 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public EElement Element;
-
-		[SerializeField]
-		public AttackData Attack;
 	}
 }

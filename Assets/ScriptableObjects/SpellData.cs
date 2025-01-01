@@ -22,9 +22,9 @@ namespace ScriptableObjects
 		public CastData Cast;
 
 		[SerializeField]
-		public AttackData Attack;
-
-		[SerializeField]
 		public ProjectileData Projectile;
+		
+		[SerializeField]
+		public AttackData Attack;
 	}
 }

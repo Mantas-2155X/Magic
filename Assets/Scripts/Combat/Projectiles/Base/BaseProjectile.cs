@@ -34,6 +34,8 @@ namespace Combat.Projectiles.Base
 		private GameObject thisGo;
 		private Transform thisTr;
 
+		private AttackData attackData;
+		
 		private float spellRange;
 		
 		private bool init;
@@ -58,10 +60,10 @@ namespace Combat.Projectiles.Base
 				}
 			}
 			
-			if (ProjectileData.Attack != null)
+			if (attackData != null)
 			{
 				var contact = collision.contacts[0];
-				ObjectManager.Instance.CreateAttack(ProjectileData.Attack, Source, contact, attach);
+				ObjectManager.Instance.CreateAttack(attackData, Source, contact, attach);
 			}
 				
 			clearVelocityAndPool().Forget();
@@ -76,7 +78,7 @@ namespace Combat.Projectiles.Base
 			clearVelocityAndPool().Forget();
 		}
 		
-		public void Spawn(Component source, float range, Vector3 origin, Vector3 force)
+		public void Spawn(Component source, float range, AttackData attack, Vector3 origin, Vector3 force)
 		{
 			if (!init)
 			{
@@ -90,6 +92,7 @@ namespace Combat.Projectiles.Base
 
 			startingPosition = origin;
 			spellRange = range;
+			attackData = attack;
 
 			var alive = GetAlive();
 			if (alive != null)

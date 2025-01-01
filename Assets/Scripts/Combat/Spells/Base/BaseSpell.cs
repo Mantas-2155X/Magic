@@ -114,12 +114,17 @@ namespace Combat.Spells.Base
 			
 			calculateHit();
 			clearCast();
-
-			if (SpellData.Attack != null)
-				ObjectManager.Instance.CreateAttack(SpellData.Attack, this, LastHit, LastHit.transform);
 			
 			if (SpellData.Projectile != null)
-				ObjectManager.Instance.CreateProjectile(SpellData.Projectile, Owner.SpellRange, this, LastRay.origin, LastRay.direction);
+			{
+				// Create a projectile which will create the attack on impact
+				ObjectManager.Instance.CreateProjectile(SpellData.Projectile, Owner.SpellRange, SpellData.Attack, this, LastRay.origin, LastRay.direction);
+			}
+			else if (SpellData.Attack != null)
+			{
+				// No projectile, create the attack straight away
+				ObjectManager.Instance.CreateAttack(SpellData.Attack, this, LastHit, LastHit.transform);
+			}
 			
 			return true;
 		}
