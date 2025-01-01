@@ -16,11 +16,6 @@ namespace Combat.Attacks
 			if (alive != null || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var targetAlive))
 				return;
 
-			var ownerRelationship = GetAlive()?.RelationshipGroup ?? -99;
-			
-			if (targetAlive.RelationshipGroup == ownerRelationship)
-				return;
-
 			alive = targetAlive;
 			alive.SetBound(true);
 
