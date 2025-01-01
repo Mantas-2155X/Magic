@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using Managers;
 using Objects.Interfaces;
 using ScriptableObjects.Enums;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace AI.ActionModes.Shared
@@ -101,7 +100,7 @@ namespace AI.ActionModes.Shared
 						continue;
 
 					var otherPos = tempResourcePositions[k];
-					var distance = math.distancesq(thisPos, otherPos);
+					var distance = Vector3.Distance(thisPos, otherPos);
 					
 					if (distance < closestDistance)
 					{
