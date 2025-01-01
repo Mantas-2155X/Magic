@@ -15,7 +15,7 @@ namespace Objects
 			if (!success)
 				return false;
 
-			user.GenerateMana(GenerateAmount, this);
+			user.RestoreMana(GenerateAmount, this);
 			return true;
 		}
 	}

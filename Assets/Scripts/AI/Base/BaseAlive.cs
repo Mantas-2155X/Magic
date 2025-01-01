@@ -294,66 +294,6 @@ namespace AI.Base
 			
 			regenerateLoop().Forget();
 		}
-		public virtual void Heal(float health, object source)
-		{
-			if (!IsAlive || health < 0)
-				return;
-			
-			if (CurrentHealth >= MaximumHealth)
-				return;
-
-			if (CurrentHealth + health >= MaximumHealth)
-				health = MaximumHealth - CurrentHealth;
-			
-			CurrentHealth += health;
-			OnHealEvent?.Invoke(this, health, source);
-		}
-		public virtual void Damage(float damage, object source, EElement type)
-		{
-			if (!IsAlive || IsInvulnerable)
-				return;
-
-			// Use the attackers damage stats to increase the damage they deal to this alive
-			if (source is IAlive alive)
-				alive.DamageStats[type].Add(ref damage);
-			
-			// Use this alives protection stats to reduce the damage they take from the attacker
-			ProtectionStats[type].Subtract(ref damage);
-			
-			if (damage < 0)
-				return;
-			
-			CurrentHealth -= damage;
-			OnDamageEvent?.Invoke(this, damage, source, type);
-
-			if (CurrentHealth > 0)
-				return;
-			
-			Kill(source);
-		}
-		public virtual void GenerateMana(float mana, object source)
-		{
-			if (!IsAlive || mana < 0)
-				return;
-
-			if (CurrentMana >= MaximumMana)
-				return;
-
-			if (CurrentMana + mana >= MaximumMana)
-				mana = MaximumMana - CurrentMana;
-			
-			CurrentMana += mana;
-			OnManaGenerateEvent?.Invoke(this, mana, source);
-		}
-		public virtual void UseMana(float mana, object source)
-		{
-			if (!IsAlive || mana < 0 || IsPowerful)
-				return;
-			
-			CurrentMana -= mana;
-			OnManaUseEvent?.Invoke(this, mana, source);
-		}
-
 		public virtual void Kill(object source)
 		{
 			if (!IsAlive)
@@ -414,6 +354,67 @@ namespace AI.Base
 			OnDeathEvent?.Invoke(this, source);
 		}
 
+		public virtual void RestoreHealth(float health, object source)
+		{
+			if (!IsAlive || health < 0)
+				return;
+			
+			if (CurrentHealth >= MaximumHealth)
+				return;
+
+			if (CurrentHealth + health >= MaximumHealth)
+				health = MaximumHealth - CurrentHealth;
+			
+			CurrentHealth += health;
+			OnHealEvent?.Invoke(this, health, source);
+		}
+		public virtual void RestoreMana(float mana, object source)
+		{
+			if (!IsAlive || mana < 0)
+				return;
+
+			if (CurrentMana >= MaximumMana)
+				return;
+
+			if (CurrentMana + mana >= MaximumMana)
+				mana = MaximumMana - CurrentMana;
+			
+			CurrentMana += mana;
+			OnManaGenerateEvent?.Invoke(this, mana, source);
+		}
+
+		public virtual void Damage(float damage, object source, EElement type)
+		{
+			if (!IsAlive || IsInvulnerable)
+				return;
+
+			// Use the attackers damage stats to increase the damage they deal to this alive
+			if (source is IAlive alive)
+				alive.DamageStats[type].Add(ref damage);
+			
+			// Use this alives protection stats to reduce the damage they take from the attacker
+			ProtectionStats[type].Subtract(ref damage);
+			
+			if (damage < 0)
+				return;
+			
+			CurrentHealth -= damage;
+			OnDamageEvent?.Invoke(this, damage, source, type);
+
+			if (CurrentHealth > 0)
+				return;
+			
+			Kill(source);
+		}
+		public virtual void TakeMana(float mana, object source)
+		{
+			if (!IsAlive || mana < 0 || IsPowerful)
+				return;
+			
+			CurrentMana -= mana;
+			OnManaUseEvent?.Invoke(this, mana, source);
+		}
+
 		public virtual bool IsGrounded()
 		{
 			return true;
@@ -430,8 +431,8 @@ namespace AI.Base
 			{
 				await UniTask.WaitForSeconds(0.5f);
 
-				GenerateMana(RegenerateMana, this);
-				Heal(RegenerateHealth, this);
+				RestoreMana(RegenerateMana, this);
+				RestoreHealth(RegenerateHealth, this);
 			}
 		}
 

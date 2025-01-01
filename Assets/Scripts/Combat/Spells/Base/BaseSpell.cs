@@ -110,7 +110,7 @@ namespace Combat.Spells.Base
 			IsCasting = false;
 			LastFinishedCast = Time.time;
 
-			Owner.UseMana(SpellData.CastingCost, this);
+			Owner.TakeMana(SpellData.CastingCost, this);
 			
 			calculateHit();
 			clearCast();

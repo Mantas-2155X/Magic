@@ -60,11 +60,13 @@ namespace AI.Interfaces
 		public void DropAllWearables();
 
 		public void Spawn(float maximumHealth, float regenerateHealth, float maximumMana, float regenerateMana, float maximumSpeed, int relationshipGroup);
-		public void Heal(float health, object source);
-		public void Damage(float damage, object source, EElement type);
-		public void GenerateMana(float mana, object source);
-		public void UseMana(float mana, object source);
 		public void Kill(object source);
+
+		public void RestoreHealth(float health, object source);
+		public void RestoreMana(float mana, object source);
+		
+		public void Damage(float damage, object source, EElement type);
+		public void TakeMana(float mana, object source);
 		
 		public bool IsGrounded();
 

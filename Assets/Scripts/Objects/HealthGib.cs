@@ -15,7 +15,7 @@ namespace Objects
 			if (!success)
 				return false;
 
-			user.Heal(HealAmount, this);
+			user.RestoreHealth(HealAmount, this);
 			return true;
 		}
 	}
