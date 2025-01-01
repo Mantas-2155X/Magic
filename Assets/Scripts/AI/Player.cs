@@ -359,7 +359,7 @@ namespace AI
 
 		public override bool IsWalking => walking;
 
-		public override void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
+		public override void Spawn(float startingHealth, float regenerateHealth, float startingMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
 		{
 			var weaponContainer = Body.Containers[EWearableType.Weapon].Wear;
 			weaponContainer.SetParent(CameraTr);
@@ -368,7 +368,7 @@ namespace AI
 			weaponContainer.localEulerAngles = ViewmodelAngles;
 
 			setRenderMode(ShadowCastingMode.ShadowsOnly);
-			base.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, maximumSpeed, relationshipGroup);
+			base.Spawn(startingHealth, regenerateHealth, startingMana, regenerateMana, maximumSpeed, relationshipGroup);
 			enableInput();
 			
 			LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);

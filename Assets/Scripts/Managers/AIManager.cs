@@ -307,7 +307,7 @@ namespace Managers
 			}
 		}
 		
-		public NPC CreateNPC(Vector3 position, Vector3 angles, float startingHealth = 50, float overloadHealth = 76, float regenerateHealth = 0.5f, float startingMana = 250, float overloadMana = 376, float regenerateMana = 7, float speed = 7f, int relationshipGroup = 0)
+		public NPC CreateNPC(Vector3 position, Vector3 angles, float startingHealth = 50, float regenerateHealth = 0.5f, float startingMana = 250, float regenerateMana = 7, float speed = 7f, int relationshipGroup = 0)
 		{
 			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("Portal"), position, Vector3.zero);
 			
@@ -321,7 +321,7 @@ namespace Managers
 			go.SetActive(true);
 			
 			var npc = go.GetComponent<NPC>();
-			npc.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed, relationshipGroup);
+			npc.Spawn(startingHealth, regenerateHealth, startingMana, regenerateMana, speed, relationshipGroup);
 
 			AlivesColliderMap[npc.Body.BodyCollider] = npc;
 			
@@ -329,7 +329,7 @@ namespace Managers
 			nativeDataDirty = true;
 			return npc;
 		}
-		public Player CreatePlayer(Vector3 position, Vector3 angles, float startingHealth = 100, float overloadHealth = 151, float regenerateHealth = 0.5f, float startingMana = 100, float overloadMana = 151, float regenerateMana = 5, float speed = 7f, int relationshipGroup = -1)
+		public Player CreatePlayer(Vector3 position, Vector3 angles, float startingHealth = 100, float regenerateHealth = 0.5f, float startingMana = 100, float regenerateMana = 5, float speed = 7f, int relationshipGroup = -1)
 		{
 			if (Player != null)
 			{
@@ -349,7 +349,7 @@ namespace Managers
 			go.SetActive(true);
 			
 			var player = go.GetComponent<Player>();
-			player.Spawn(startingHealth, overloadHealth, regenerateHealth, startingMana, overloadMana, regenerateMana, speed, relationshipGroup);
+			player.Spawn(startingHealth, regenerateHealth, startingMana, regenerateMana, speed, relationshipGroup);
 
 			AlivesColliderMap[player.Body.BodyCollider] = player;
 

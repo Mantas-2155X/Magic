@@ -34,7 +34,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth, player.OverloadHealth);
+			setHealth(player.CurrentHealth, player.StartingHealth);
 		}
 		
 		public void OnDamage(IAlive alive, float damage, object source, EElement type)
@@ -42,7 +42,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth, player.OverloadHealth);
+			setHealth(player.CurrentHealth, player.StartingHealth);
 		}
 		
 		public void OnManaGenerate(IAlive alive, float generated, object source)
@@ -50,7 +50,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setMana(player.CurrentMana, player.OverloadMana);
+			setMana(player.CurrentMana, player.StartingMana);
 		}
 		
 		public void OnManaUse(IAlive alive, float used, object source)
@@ -58,7 +58,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setMana(player.CurrentMana, player.OverloadMana);
+			setMana(player.CurrentMana, player.StartingMana);
 		}
 		
 		public void OnDeath(IAlive alive, object source)
@@ -75,31 +75,31 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
-			setHealth(player.CurrentHealth, player.OverloadHealth);
-			setMana(player.CurrentMana, player.OverloadMana);
+			setHealth(player.CurrentHealth, player.StartingHealth);
+			setMana(player.CurrentMana, player.StartingMana);
 		}
 		
-		private void setHealth(float amount, float overload)
+		private void setHealth(float amount, float maximum)
 		{
-			if (amount > overload)
-				amount = overload;
+			if (amount > maximum)
+				amount = maximum;
 
 			var color = Red.color;
 			color.a = Mathf.SmoothStep(0f, 1f, 1f - (amount / 100f));
 			Red.color = color;
 			
 			var offset = HealthBottle.offsetMax;
-			offset.y = -MathTools.Remap(amount, 0f, overload, 111f, 0f);
+			offset.y = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
 			HealthBottle.offsetMax = offset;
 		}
 		
-		private void setMana(float amount, float overload)
+		private void setMana(float amount, float maximum)
 		{
-			if (amount > overload)
-				amount = overload;
+			if (amount > maximum)
+				amount = maximum;
 			
 			var offset = ManaBottle.offsetMax;
-			offset.y = -MathTools.Remap(amount, 0f, overload, 111f, 0f);
+			offset.y = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
 
 			ManaBottle.offsetMax = offset;
 		}

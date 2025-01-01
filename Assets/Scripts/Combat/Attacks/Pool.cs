@@ -36,10 +36,10 @@ namespace Combat.Attacks
 			switch (Type)
 			{
 				case EPoolType.Health:
-					alive.Heal(Amount, this, true);
+					alive.Heal(Amount, this);
 					break;
 				case EPoolType.Mana:
-					alive.GenerateMana(Amount, this, true);
+					alive.GenerateMana(Amount, this);
 					break;
 				default:
 					throw new NotImplementedException();

@@ -71,12 +71,10 @@ namespace AI.Base
 
 		public float CurrentHealth { get; private set; }
 		public float StartingHealth { get; private set; }
-		public float OverloadHealth { get; private set; }
 		public float RegenerateHealth { get; private set; }
 		
 		public float CurrentMana { get; private set; }
 		public float StartingMana { get; private set; }
-		public float OverloadMana { get; private set; }
 		public float RegenerateMana { get; private set; }
 
 		public EMovementType MovementType { get; private set; }
@@ -259,7 +257,7 @@ namespace AI.Base
 				DropWearable(Wearables[i].WearableData);
 		}
 
-		public virtual void Spawn(float startingHealth, float overloadHealth, float regenerateHealth, float startingMana, float overloadMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
+		public virtual void Spawn(float startingHealth, float regenerateHealth, float startingMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
 		{
 			if (!init)
 			{
@@ -277,12 +275,10 @@ namespace AI.Base
 			
 			CurrentHealth = startingHealth;
 			StartingHealth = startingHealth;
-			OverloadHealth = overloadHealth;
 			RegenerateHealth = regenerateHealth;
 
 			CurrentMana = startingMana;
 			StartingMana = startingMana;
-			OverloadMana = overloadMana;
 			RegenerateMana = regenerateMana;
 
 			IsAlive = true;
@@ -298,25 +294,19 @@ namespace AI.Base
 			
 			regenerateLoop().Forget();
 		}
-		public virtual void Heal(float health, object source, bool clamp = false)
+		public virtual void Heal(float health, object source)
 		{
 			if (!IsAlive || health < 0)
 				return;
 			
-			if (clamp)
-			{
-				if (CurrentHealth >= StartingHealth)
-					return;
+			if (CurrentHealth >= StartingHealth)
+				return;
 
-				if (CurrentHealth + health >= StartingHealth)
-					health = StartingHealth - CurrentHealth;
-			}
+			if (CurrentHealth + health >= StartingHealth)
+				health = StartingHealth - CurrentHealth;
 			
 			CurrentHealth += health;
 			OnHealEvent?.Invoke(this, health, source);
-			
-			if (CurrentHealth >= OverloadHealth)
-				Kill(this);
 		}
 		public virtual void Damage(float damage, object source, EElement type)
 		{
@@ -341,25 +331,19 @@ namespace AI.Base
 			
 			Kill(source);
 		}
-		public virtual void GenerateMana(float mana, object source, bool clamp = false)
+		public virtual void GenerateMana(float mana, object source)
 		{
 			if (!IsAlive || mana < 0)
 				return;
 
-			if (clamp)
-			{
-				if (CurrentMana >= StartingMana)
-					return;
+			if (CurrentMana >= StartingMana)
+				return;
 
-				if (CurrentMana + mana >= StartingMana)
-					mana = StartingMana - CurrentMana;
-			}
+			if (CurrentMana + mana >= StartingMana)
+				mana = StartingMana - CurrentMana;
 			
 			CurrentMana += mana;
 			OnManaGenerateEvent?.Invoke(this, mana, source);
-			
-			if (CurrentMana >= OverloadMana)
-				Kill(this);
 		}
 		public virtual void UseMana(float mana, object source)
 		{
@@ -446,8 +430,8 @@ namespace AI.Base
 			{
 				await UniTask.WaitForSeconds(0.5f);
 
-				GenerateMana(RegenerateMana, this, true);
-				Heal(RegenerateHealth, this, true);
+				GenerateMana(RegenerateMana, this);
+				Heal(RegenerateHealth, this);
 			}
 		}
 
