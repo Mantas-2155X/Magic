@@ -21,10 +21,10 @@ namespace AI.Base
 {
 	public class BaseAlive : MonoBehaviour, IAlive
 	{
-		public static readonly OnHealEvent OnHealEvent = new ();
+		public static readonly OnRestoreHealthEvent OnRestoreHealthEvent = new ();
 		public static readonly OnDamageEvent OnDamageEvent = new ();
-		public static readonly OnManaGenerateEvent OnManaGenerateEvent = new ();
-		public static readonly OnManaUseEvent OnManaUseEvent = new ();
+		public static readonly OnRestoreManaEvent OnRestoreManaEvent = new ();
+		public static readonly OnTakeManaEvent OnTakeManaEvent = new ();
 		public static readonly OnDeathEvent OnDeathEvent = new ();
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
 		public static readonly OnRelationshipGroupChangedEvent OnRelationshipGroupChangedEvent = new ();
@@ -369,7 +369,7 @@ namespace AI.Base
 				health = MaximumHealth - CurrentHealth;
 			
 			CurrentHealth += health;
-			OnHealEvent?.Invoke(this, health, source);
+			OnRestoreHealthEvent?.Invoke(this, health, source);
 		}
 		public virtual void RestoreMana(float mana, object source)
 		{
@@ -383,7 +383,7 @@ namespace AI.Base
 				mana = MaximumMana - CurrentMana;
 			
 			CurrentMana += mana;
-			OnManaGenerateEvent?.Invoke(this, mana, source);
+			OnRestoreManaEvent?.Invoke(this, mana, source);
 		}
 
 		public virtual void Damage(float damage, object source, EElement type)
@@ -415,7 +415,7 @@ namespace AI.Base
 				return;
 			
 			CurrentMana -= mana;
-			OnManaUseEvent?.Invoke(this, mana, source);
+			OnTakeManaEvent?.Invoke(this, mana, source);
 		}
 
 		public virtual bool IsGrounded()

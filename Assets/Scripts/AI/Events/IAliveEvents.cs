@@ -6,16 +6,16 @@ using UnityEngine.Events;
 namespace AI.Events
 {
 	[Serializable]
-	public class OnHealEvent : UnityEvent<IAlive, float, object> { }
+	public class OnRestoreHealthEvent : UnityEvent<IAlive, float, object> { }
 
 	[Serializable]
 	public class OnDamageEvent : UnityEvent<IAlive, float, object, EElement> { }
 	
 	[Serializable]
-	public class OnManaGenerateEvent : UnityEvent<IAlive, float, object> { }
+	public class OnRestoreManaEvent : UnityEvent<IAlive, float, object> { }
 	
 	[Serializable]
-	public class OnManaUseEvent : UnityEvent<IAlive, float, object> { }
+	public class OnTakeManaEvent : UnityEvent<IAlive, float, object> { }
 
 	[Serializable]
 	public class OnDeathEvent : UnityEvent<IAlive, object> { }

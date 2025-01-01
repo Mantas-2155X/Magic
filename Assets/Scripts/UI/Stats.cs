@@ -21,15 +21,15 @@ namespace UI
 
 		public void Awake()
 		{
-			BaseAlive.OnHealEvent.AddListener(OnHeal);
+			BaseAlive.OnRestoreHealthEvent.AddListener(OnRestoreHealth);
 			BaseAlive.OnDamageEvent.AddListener(OnDamage);
-			BaseAlive.OnManaGenerateEvent.AddListener(OnManaGenerate);
-			BaseAlive.OnManaUseEvent.AddListener(OnManaUse);
+			BaseAlive.OnRestoreManaEvent.AddListener(OnRestoreMana);
+			BaseAlive.OnTakeManaEvent.AddListener(OnTakeMana);
 			BaseAlive.OnDeathEvent.AddListener(OnDeath);
 			BaseAlive.OnSpawnEvent.AddListener(OnSpawn);
 		}
 		
-		public void OnHeal(IAlive alive, float health, object source)
+		public void OnRestoreHealth(IAlive alive, float health, object source)
 		{
 			if (alive is not Player player)
 				return;
@@ -45,7 +45,7 @@ namespace UI
 			setHealth(player.CurrentHealth, player.MaximumHealth);
 		}
 		
-		public void OnManaGenerate(IAlive alive, float generated, object source)
+		public void OnRestoreMana(IAlive alive, float generated, object source)
 		{
 			if (alive is not Player player)
 				return;
@@ -53,7 +53,7 @@ namespace UI
 			setMana(player.CurrentMana, player.MaximumMana);
 		}
 		
-		public void OnManaUse(IAlive alive, float used, object source)
+		public void OnTakeMana(IAlive alive, float used, object source)
 		{
 			if (alive is not Player player)
 				return;
