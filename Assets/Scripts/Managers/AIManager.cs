@@ -6,12 +6,7 @@ using Combat.Attacks.Interfaces;
 using Combat.Enums;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
-using Unity.Burst;
-using Unity.Collections;
-using Unity.Jobs;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Jobs;
 
 namespace Managers
 {
@@ -24,39 +19,15 @@ namespace Managers
 
 		[SerializeField]
 		public List<NPC> NPCs = new ();
-
-		[SerializeField]
-		public bool AutoTarget = true;
 		
 		// Body Collider -> Alive
 		public readonly Dictionary<Collider, IAlive> AlivesColliderMap = new ();
 		
-		private static bool nativeDataDirty;
-
-		private readonly List<Transform> transforms = new ();
-		private readonly List<IAlive> alives = new ();
-		private readonly List<int> relationshipGroups = new ();
-
-		private TransformAccessArray transformsNative;
-		
-		private NativeArray<float3> positionsNative;
-		private NativeArray<int> decisionsNative;
-		private NativeArray<int> relationshipGroupsNative;
-		
-		private JobHandle autoTargetPositionsHandle;
-		private JobHandle autoTargetDecisionsHandle;
-
 		private bool updateTargets;
 		
 		public void Awake()
 		{
 			Instance = this;
-			
-			transformsNative = new TransformAccessArray();
-			
-			positionsNative = new NativeArray<float3>(0, Allocator.Persistent);
-			decisionsNative = new NativeArray<int>(0, Allocator.Persistent);
-			relationshipGroupsNative = new NativeArray<int>(0, Allocator.Persistent);
 			
 			BaseAlive.OnDamageEvent.AddListener(onDamage);
 			BaseAlive.OnSpawnEvent.AddListener(onSpawn);
@@ -67,34 +38,6 @@ namespace Managers
 		public void Update()
 		{
 			handleTargets();
-
-			if (AutoTarget)
-			{
-				assignAutoTargetResults();
-				prepareAutoTargetData();
-				startAutoTargetJobs();
-			}
-		}
-
-		public void OnDestroy()
-		{
-			autoTargetDecisionsHandle.Complete();
-			destroyNativeData(); 
-		}
-
-		private void destroyNativeData()
-		{
-			if (transformsNative.isCreated)
-				transformsNative.Dispose();
-
-			if (positionsNative.IsCreated)
-				positionsNative.Dispose();
-			
-			if (decisionsNative.IsCreated)
-				decisionsNative.Dispose();
-			
-			if (relationshipGroupsNative.IsCreated)
-				relationshipGroupsNative.Dispose();
 		}
 
 		private void handleTargets()
@@ -113,99 +56,11 @@ namespace Managers
 				if (npc.AttackTarget is not IAlive target)
 					continue;
 
-				if (!target.IsAlive)
-				{
+				if (!target.IsAlive || npc.RelationshipGroup == target.RelationshipGroup)
 					npc.AssignAttackTarget(null);
-					nativeDataDirty = true;
-				}
-				else if (npc.RelationshipGroup == target.RelationshipGroup)
-				{
-					npc.AssignAttackTarget(null);
-					nativeDataDirty = true;
-				}
 			}
 		}
 
-		private void assignAutoTargetResults()
-		{
-			if (!autoTargetDecisionsHandle.IsCompleted)
-				return;
-
-			autoTargetDecisionsHandle.Complete();
-
-			if (decisionsNative.IsCreated && !nativeDataDirty)
-			{
-				for (var i = 0; i < decisionsNative.Length; i++)
-				{
-					var decision = decisionsNative[i];
-					if (decision == int.MaxValue)
-						continue;
-
-					var thisAlive = alives[i];
-					if (thisAlive == null || !thisAlive.IsAlive)
-						continue;
-
-					var otherAlive = alives[decision];
-					if (otherAlive == null || !otherAlive.IsAlive)
-						continue;
-					
-					// only npcs have auto target
-					if (thisAlive is not NPC npc)
-						continue;
-					
-					// don't interrupt casting 
-					if (npc.Spell != null && npc.Spell.IsCasting)
-						continue;
-
-					npc.AssignAttackTarget((Component)otherAlive);
-				}
-			}
-		}
-
-		private void prepareAutoTargetData()
-		{
-			if (nativeDataDirty)
-			{
-				destroyNativeData();
-			
-				transforms.Clear();
-				alives.Clear();
-				relationshipGroups.Clear();
-			
-				transforms.Add(Player.GetTransform());
-				alives.Add(Player);
-				relationshipGroups.Add(Player.RelationshipGroup);
-				
-				for (var i = 0; i < NPCs.Count; i++)
-				{
-					var npc = NPCs[i];
-					if (!npc.IsAlive)
-						continue;
-				
-					transforms.Add(npc.GetTransform());
-					alives.Add(npc);
-					relationshipGroups.Add(npc.RelationshipGroup);
-				}
-
-				transformsNative = new TransformAccessArray(transforms.ToArray());
-			
-				positionsNative = new NativeArray<float3>(transforms.Count, Allocator.Persistent);
-				decisionsNative = new NativeArray<int>(transforms.Count, Allocator.Persistent);
-				relationshipGroupsNative = new NativeArray<int>(relationshipGroups.ToArray(), Allocator.Persistent);
-
-				nativeDataDirty = false;
-			}
-		}
-
-		private void startAutoTargetJobs()
-		{
-			var positionsJob = new AutoTargetPositionsJob { Positions = positionsNative };
-			autoTargetPositionsHandle = positionsJob.Schedule(transformsNative);
-
-			var decisionsJob = new AutoTargetDecisionsJob { Positions = positionsNative, Decisions = decisionsNative, RelationshipGroups = relationshipGroupsNative};
-			autoTargetDecisionsHandle = decisionsJob.Schedule(transformsNative, autoTargetPositionsHandle);
-		}
-		
 		private void onDamage(IAlive alive, float damage, object source, EElement type)
 		{
 			if (!alive.IsAlive || alive is not NPC npc)
@@ -238,75 +93,18 @@ namespace Managers
 		private void onSpawn(IAlive alive)
 		{
 			updateTargets = true;
-			nativeDataDirty = true;
 		}
 		
 		private void onDeath(IAlive alive, object source)
 		{
 			updateTargets = true;
-			nativeDataDirty = true;
 		}
 
 		private void onRelationshipGroupChanged(IAlive alive, int previousRelationshipGroup, int newRelationshipGroup)
 		{
 			updateTargets = true;
-			nativeDataDirty = true;
 		}
 
-		[BurstCompile]
-		public struct AutoTargetPositionsJob : IJobParallelForTransform
-		{
-			[WriteOnly]
-			public NativeArray<float3> Positions;
-		
-			public void Execute(int index, TransformAccess transform)
-			{
-				Positions[index] = transform.position;
-			}
-		}
-		
-		[BurstCompile]
-		public struct AutoTargetDecisionsJob : IJobParallelForTransform
-		{
-			[ReadOnly]
-			public NativeArray<float3> Positions;
-
-			[ReadOnly]
-			public NativeArray<int> RelationshipGroups;
-			
-			[WriteOnly]
-			public NativeArray<int> Decisions;
-		
-			public void Execute(int index, TransformAccess transform)
-			{
-				var thisRelationshipGroup = RelationshipGroups[index];
-
-				var smallestIndex = int.MaxValue;
-				var smallestDistance = float.PositiveInfinity;
-				
-				var thisPosition = transform.position;
-				
-				for (var i = 0; i < Positions.Length; i++)
-				{
-					if (index == i)
-						continue;
-					
-					// Don't target the same group
-					if (thisRelationshipGroup == RelationshipGroups[i])
-						continue;
-					
-					var distance = math.distancesq(thisPosition, Positions[i]);
-					if (distance >= smallestDistance)
-						continue;
-					
-					smallestDistance = distance;
-					smallestIndex = i;
-				}
-
-				Decisions[index] = smallestIndex;
-			}
-		}
-		
 		public NPC CreateNPC(Vector3 position, Vector3 angles, float maximumHealth = 50, float regenerateHealth = 0.5f, float maximumMana = 250, float regenerateMana = 7, float speed = 7f, int relationshipGroup = 0)
 		{
 			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("Portal"), position, Vector3.zero);
@@ -321,12 +119,11 @@ namespace Managers
 			go.SetActive(true);
 			
 			var npc = go.GetComponent<NPC>();
-			npc.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, speed, relationshipGroup);
-
 			AlivesColliderMap[npc.Body.BodyCollider] = npc;
+
+			npc.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, speed, relationshipGroup);
 			
 			NPCs.Add(npc);
-			nativeDataDirty = true;
 			return npc;
 		}
 		public Player CreatePlayer(Vector3 position, Vector3 angles, float maximumHealth = 100, float regenerateHealth = 0.5f, float maximumMana = 100, float regenerateMana = 5, float speed = 7f, int relationshipGroup = -1)
@@ -349,12 +146,11 @@ namespace Managers
 			go.SetActive(true);
 			
 			var player = go.GetComponent<Player>();
-			player.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, speed, relationshipGroup);
-
 			AlivesColliderMap[player.Body.BodyCollider] = player;
 
+			player.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, speed, relationshipGroup);
+
 			Player = player;
-			nativeDataDirty = true;
 			return player;
 		}
 	}
