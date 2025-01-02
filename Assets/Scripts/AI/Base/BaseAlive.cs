@@ -302,6 +302,7 @@ namespace AI.Base
 			if (!IsAlive)
 				return;
 			
+			Spell?.CancelCasting();
 			SetMovementType(EMovementType.Normal);
 			DropAllWearables();
 

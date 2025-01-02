@@ -58,11 +58,6 @@ namespace Combat.Spells.Base
 			}
 		}
 
-		public void OnDisable()
-		{
-			CancelCasting();
-		}
-
 		#endregion
 
 		#region ISpell
