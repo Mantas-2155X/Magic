@@ -70,15 +70,8 @@ namespace AI.Base
 		public ISpell Spell { get; private set; }
 
 		public virtual float CurrentSpeed { get; private set; }
-		public float MaximumSpeed { get; private set; }
-
 		public float CurrentHealth { get; private set; }
-		public float MaximumHealth { get; private set; }
-		public float RegenerateHealth { get; private set; }
-		
 		public float CurrentMana { get; private set; }
-		public float MaximumMana { get; private set; }
-		public float RegenerateMana { get; private set; }
 
 		public EMovementType MovementType { get; private set; }
 		public int RelationshipGroup { get; private set; }
@@ -283,14 +276,7 @@ namespace AI.Base
 			Spells = new List<ISpell>();
 			
 			CurrentHealth = data.Health;
-			MaximumHealth = data.Health;
-			RegenerateHealth = data.RegenerateHealth;
-
 			CurrentMana = data.Mana;
-			MaximumMana = data.Mana;
-			RegenerateMana = data.RegenerateMana;
-
-			MaximumSpeed = data.Speed;
 			
 			SpellRange = float.MaxValue;
 			IsAlive = true;
@@ -368,11 +354,11 @@ namespace AI.Base
 			if (!IsAlive || health < 0)
 				return;
 			
-			if (CurrentHealth >= MaximumHealth)
+			if (CurrentHealth >= Data.Health)
 				return;
 
-			if (CurrentHealth + health >= MaximumHealth)
-				health = MaximumHealth - CurrentHealth;
+			if (CurrentHealth + health >= Data.Health)
+				health = Data.Health - CurrentHealth;
 			
 			CurrentHealth += health;
 			OnRestoreHealthEvent?.Invoke(this, health, source);
@@ -382,11 +368,11 @@ namespace AI.Base
 			if (!IsAlive || mana < 0)
 				return;
 
-			if (CurrentMana >= MaximumMana)
+			if (CurrentMana >= Data.Mana)
 				return;
 
-			if (CurrentMana + mana >= MaximumMana)
-				mana = MaximumMana - CurrentMana;
+			if (CurrentMana + mana >= Data.Mana)
+				mana = Data.Mana - CurrentMana;
 			
 			CurrentMana += mana;
 			OnRestoreManaEvent?.Invoke(this, mana, source);
@@ -440,8 +426,8 @@ namespace AI.Base
 			{
 				await UniTask.WaitForSeconds(0.5f);
 
-				RestoreMana(RegenerateMana, this);
-				RestoreHealth(RegenerateHealth, this);
+				RestoreMana(Data.RegenerateMana, this);
+				RestoreHealth(Data.RegenerateHealth, this);
 			}
 		}
 

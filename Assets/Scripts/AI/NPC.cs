@@ -427,7 +427,7 @@ namespace AI
 		public override void SetBound(bool value)
 		{
 			base.SetBound(value);
-			Agent.speed = value ? 0f : MaximumSpeed;
+			Agent.speed = value ? 0f : Data.Speed;
 		}
 		
 		public override void Spawn(AliveData data, int relationshipGroup)
@@ -442,6 +442,8 @@ namespace AI
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
 			LowResources = new LowResources(this);
+			
+			Agent.speed = data.Speed;
 			
 			base.Spawn(data, relationshipGroup);
 		}

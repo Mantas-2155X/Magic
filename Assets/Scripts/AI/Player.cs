@@ -165,7 +165,7 @@ namespace AI
 			if (!grounded)
 				return;
 
-			var maxSpeed = IsBound ? 0f : MaximumSpeed;
+			var maxSpeed = IsBound ? 0f : Data.Speed;
 			
 			// Limit the rigidbody walking speed
 			var clampSpeed = SprintAction.action.IsPressed() ? maxSpeed * data.SprintMultiplier : maxSpeed;
@@ -357,7 +357,7 @@ namespace AI
 		
 		#region IAlive
 		
-		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : (IsBound ? 0f : MaximumSpeed);
+		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : (IsBound ? 0f : Data.Speed);
 
 		public override bool IsWalking => walking;
 

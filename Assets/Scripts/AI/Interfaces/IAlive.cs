@@ -25,15 +25,8 @@ namespace AI.Interfaces
 		public ISpell Spell { get; }
 
 		public float CurrentSpeed { get; }
-		public float MaximumSpeed { get; }
-
 		public float CurrentHealth { get; }
-		public float MaximumHealth { get; }
-		public float RegenerateHealth { get; }
-
 		public float CurrentMana { get; }
-		public float MaximumMana { get; }
-		public float RegenerateMana { get; }
 
 		public EMovementType MovementType { get; }
 		public int RelationshipGroup { get; }
