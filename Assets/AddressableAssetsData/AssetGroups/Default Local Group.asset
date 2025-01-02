@@ -16,37 +16,43 @@ MonoBehaviour:
   m_GUID: 307e6d2298af29f1b8df102b90a32237
   m_SerializeEntries:
   - m_GUID: 123799d12c45c605aa3ecca21093f02f
-    m_Address: Assets/Addressables/Objects
+    m_Address: Objects
     m_ReadOnly: 0
     m_SerializedLabels:
     - Objects
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3e9c1fc31d93972b8959212913ec3bfd
-    m_Address: Assets/Addressables/Casts
+    m_Address: Casts
     m_ReadOnly: 0
     m_SerializedLabels:
     - Casts
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 667bc29483c7ff1199d857a6ffbecd21
-    m_Address: Assets/Addressables/Projectiles
+    m_Address: Projectiles
     m_ReadOnly: 0
     m_SerializedLabels:
     - Projectiles
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: acda80f884985711cad955e8a01cad02
-    m_Address: Assets/Addressables/Spells
+    m_Address: Spells
     m_ReadOnly: 0
     m_SerializedLabels:
     - Spells
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad9afa7b33b3d81f5b4edfa7e2cedbcc
+    m_Address: AI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AI
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b9915d6c435c004aa9b798c7eb7d12b8
-    m_Address: Assets/Addressables/Attacks
+    m_Address: Attacks
     m_ReadOnly: 0
     m_SerializedLabels:
     - Attacks
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bf1ecc50a438cb6d5a5eec2d0a6f090a
-    m_Address: Assets/Addressables/Wearables
+    m_Address: Wearables
     m_ReadOnly: 0
     m_SerializedLabels:
     - Wearables

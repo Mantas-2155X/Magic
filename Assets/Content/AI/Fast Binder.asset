@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d095914682fd465fb83b431e5a31d2ef, type: 3}
+  m_Name: Fast Binder
+  m_EditorClassIdentifier: 
+  Name: Fast Binder
+  Description: Very fast NPC with low health that binds targets
+  Tags: 0
+  Prefab: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+  Type: 
+  Health: 35
+  Mana: 200
+  RegenerateHealth: 2
+  RegenerateMana: 10
+  Speed: 25
+  DamageStats:
+    _serializedList: []
+  ProtectionStats:
+    _serializedList: []
+  Spells:
+  - {fileID: 11400000, guid: 8c55263e0454d3d2eafbdc914d674e95, type: 2}
+  Wearables: []
+  SenseRange: 35
+  PatrolReachRange: 0.5
+  RotationSpeed: 960
+  AimAngle: 5
+  WanderEvery: 1
+  CommunicateRange: 5
+  LowResourcesMultiplier: 0.15
+  SpellCooldownVariation: 0.15

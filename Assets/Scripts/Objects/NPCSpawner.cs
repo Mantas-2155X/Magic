@@ -16,7 +16,6 @@ namespace Objects
 			var tr = GetTransform();
 			
 			var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Data);
-			npc.LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
 			npc.WaitAggressively();
 		}
 
