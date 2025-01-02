@@ -25,9 +25,6 @@ namespace AI
 		public MonoBehaviour[] Gibs;
 		
 		[SerializeField]
-		public Renderer[] Eyes;
-		
-		[SerializeField]
 		public Transform[] Shoulders;
 		
 		[SerializeField]
@@ -41,18 +38,6 @@ namespace AI
 
 		[SerializeField]
 		public float SwaySpeedMultiplier = 1f;
-
-		[SerializeField]
-		public Color EyesColor;
-
-		[SerializeField]
-		public float BlinkEvery = 3f;
-		
-		[SerializeField]
-		public float BlinkDuration = 0.2f;
-
-		[SerializeField]
-		public float BlinkVariation = 2f;
 		
 		[SerializeField]
 		public float FallMinimumVelocity = 7f;
@@ -64,40 +49,11 @@ namespace AI
 		public bool ShouldSway;
 		
 		private bool swayDirection;
-		private bool blinking;
-		
-		private float blinkStartTime;
-		private float blinkFinishTime;
-
-		private Material eyeMaterial;
-
-		public void Awake()
-		{
-			eyeMaterial = Eyes[0].material;
-			Eyes[1].material = eyeMaterial;
-		}
 
 		public void Update()
 		{
 			if (!Alive.IsAlive)
 				return;
-			
-			var time = Time.time;
-			
-			if (blinking && time >= blinkStartTime + BlinkDuration)
-			{
-				eyeMaterial.color = EyesColor;
-				
-				blinking = false;
-				blinkFinishTime = time + Random.Range(-BlinkVariation, BlinkVariation);
-			}
-			else if (!blinking && time >= blinkFinishTime + BlinkEvery)
-			{
-				eyeMaterial.color = Color.black;
-				
-				blinking = true;
-				blinkStartTime = time;
-			}
 			
 			if (ShouldSway)
 				swayLimbs();
