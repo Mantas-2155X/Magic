@@ -1,4 +1,5 @@
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -50,7 +51,7 @@ namespace World
 		public void Start()
 		{
 			var spawnPoint = SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount));
-			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles);
+			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("Player"));
 		}
 		
 		public void Update()

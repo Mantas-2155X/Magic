@@ -12,6 +12,8 @@ namespace AI.Interfaces
 {
 	public interface IAlive
 	{
+		public AliveData Data { get; }
+
 		public Body Body { get; }
 		
 		public Dictionary<EElement, SElementStat> DamageStats { get; }
@@ -60,7 +62,7 @@ namespace AI.Interfaces
 		public void DropWearable(WearableData data);
 		public void DropAllWearables();
 
-		public void Spawn(float maximumHealth, float regenerateHealth, float maximumMana, float regenerateMana, float maximumSpeed, int relationshipGroup);
+		public void Spawn(AliveData data, int relationshipGroup);
 		public void Kill(object source);
 
 		public void RestoreHealth(float health, object source);

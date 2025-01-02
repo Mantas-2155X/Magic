@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49ca5ec8ea540b9b47ca95df9359b7a, type: 3}
+  m_Name: Player
+  m_EditorClassIdentifier: 
+  Name: Player
+  Description: Default player data
+  Prefab: {fileID: 8475379242147071745, guid: 6624d910fd63315dda7f8e60b973cacf, type: 3}
+  Health: 100
+  Mana: 100
+  RegenerateHealth: 0.5
+  RegenerateMana: 5
+  Speed: 7
+  DamageStats:
+    _serializedList: []
+  ProtectionStats:
+    _serializedList: []
+  MovementForce: 1
+  JumpForce: 115
+  SprintMultiplier: 1.25
+  StopSlide: 0.65
+  AirMovement: 0.1
+  SpeedClampModifier: 0.91

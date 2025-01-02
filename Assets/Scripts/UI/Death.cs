@@ -2,6 +2,7 @@ using AI;
 using AI.Base;
 using AI.Interfaces;
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -36,7 +37,7 @@ namespace UI
 		public void OnRespawnClicked()
 		{
 			var spawnPoint = World.World.Instance.SpawnPoints.GetChild(Random.Range(0, World.World.Instance.SpawnPoints.childCount));
-			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles);
+			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)AIManager.Instance.Player.Data);
 		}
 	}
 }

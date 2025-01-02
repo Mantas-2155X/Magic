@@ -8,6 +8,7 @@ using AI.Base;
 using AI.Enums;
 using AI.Interfaces;
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.AI;
 using Action = AI.AIModes.Action;
@@ -483,7 +484,7 @@ namespace AI
 			Agent.speed = value ? 0f : MaximumSpeed;
 		}
 		
-		public override void Spawn(float maximumHealth, float regenerateHealth, float maximumMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
+		public override void Spawn(AliveData data, int relationshipGroup)
 		{
 			AIModeObj = AIModes[AIMode];
 			ActionModeObj = ActionModes[ActionMode];
@@ -496,7 +497,7 @@ namespace AI
 			WithinRange = new WithinRange(this);
 			LowResources = new LowResources(this);
 			
-			base.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, maximumSpeed, relationshipGroup);
+			base.Spawn(data, relationshipGroup);
 		}
 
 		public override void Kill(object source)

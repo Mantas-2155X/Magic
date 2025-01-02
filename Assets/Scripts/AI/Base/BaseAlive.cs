@@ -56,6 +56,9 @@ namespace AI.Base
 		#region IAlive
 
 		[field: SerializeField]
+		public AliveData Data { get; private set; }
+
+		[field: SerializeField]
 		public Body Body { get; private set; }
 
 		public Dictionary<EElement, SElementStat> DamageStats { get; private set; } = new ();
@@ -261,7 +264,7 @@ namespace AI.Base
 				DropWearable(Wearables[i].WearableData);
 		}
 
-		public virtual void Spawn(float maximumHealth, float regenerateHealth, float maximumMana, float regenerateMana, float maximumSpeed, int relationshipGroup)
+		public virtual void Spawn(AliveData data, int relationshipGroup)
 		{
 			if (!init)
 			{
@@ -274,18 +277,20 @@ namespace AI.Base
 			if (IsAlive)
 				return;
 
+			Data = data;
+			
 			Wearables = new List<IWearable>();
 			Spells = new List<ISpell>();
 			
-			CurrentHealth = maximumHealth;
-			MaximumHealth = maximumHealth;
-			RegenerateHealth = regenerateHealth;
+			CurrentHealth = data.Health;
+			MaximumHealth = data.Health;
+			RegenerateHealth = data.RegenerateHealth;
 
-			CurrentMana = maximumMana;
-			MaximumMana = maximumMana;
-			RegenerateMana = regenerateMana;
+			CurrentMana = data.Mana;
+			MaximumMana = data.Mana;
+			RegenerateMana = data.RegenerateMana;
 
-			MaximumSpeed = maximumSpeed;
+			MaximumSpeed = data.Speed;
 			
 			SpellRange = float.MaxValue;
 			IsAlive = true;

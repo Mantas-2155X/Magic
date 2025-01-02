@@ -21,7 +21,7 @@ namespace Managers
 		private readonly Dictionary<string, Data> datasMap = new ();
 		private readonly List<IObject> activeObjects = new ();
 
-		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells" };
+		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI" };
 
 		public ObjectManager()
 		{
@@ -103,6 +103,11 @@ namespace Managers
 		public SpellData GetSpell(string path)
 		{
 			return (SpellData)datasMap.GetValueOrDefault($"Spells/{path}");
+		}
+		
+		public AliveData GetAlive(string path)
+		{
+			return (AliveData)datasMap.GetValueOrDefault($"AI/{path}");
 		}
 		
 		#endregion

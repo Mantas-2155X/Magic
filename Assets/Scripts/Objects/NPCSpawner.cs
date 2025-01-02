@@ -1,5 +1,6 @@
 using Managers;
 using Objects.Base;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Objects
@@ -7,11 +8,14 @@ namespace Objects
 	// todo: make this configurable
 	public class NPCSpawner : BaseObject
 	{
+		[SerializeField]
+		public NPCData Data;
+		
 		public void Start()
 		{
 			var tr = GetTransform();
 			
-			var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles);
+			var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Data);
 			npc.LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
 			npc.WaitAggressively();
 		}

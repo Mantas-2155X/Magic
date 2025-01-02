@@ -6,6 +6,7 @@ using Combat.Attacks.Interfaces;
 using Combat.Enums;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Managers
@@ -105,11 +106,11 @@ namespace Managers
 			updateTargets = true;
 		}
 
-		public NPC CreateNPC(Vector3 position, Vector3 angles, float maximumHealth = 50, float regenerateHealth = 0.5f, float maximumMana = 250, float regenerateMana = 7, float speed = 7f, int relationshipGroup = 0)
+		public NPC CreateNPC(Vector3 position, Vector3 angles, NPCData data, int relationshipGroup = 0)
 		{
 			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("Portal"), position, Vector3.zero);
 			
-			var go = Instantiate(Resources.Load<GameObject>("NPC"));
+			var go = Instantiate(data.Prefab);
 			go.name = $"NPC {NPCs.Count}";
 			
 			var tr = go.transform;
@@ -121,12 +122,12 @@ namespace Managers
 			var npc = go.GetComponent<NPC>();
 			AlivesColliderMap[npc.Body.BodyCollider] = npc;
 
-			npc.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, speed, relationshipGroup);
+			npc.Spawn(data, relationshipGroup);
 			
 			NPCs.Add(npc);
 			return npc;
 		}
-		public Player CreatePlayer(Vector3 position, Vector3 angles, float maximumHealth = 150, float regenerateHealth = 0.5f, float maximumMana = 100, float regenerateMana = 5, float speed = 7f, int relationshipGroup = -1)
+		public Player CreatePlayer(Vector3 position, Vector3 angles, PlayerData data, int relationshipGroup = -1)
 		{
 			if (Player != null)
 			{
@@ -136,7 +137,7 @@ namespace Managers
 				Player = null;
 			}
 			
-			var go = Instantiate(Resources.Load<GameObject>("Player"));
+			var go = Instantiate(data.Prefab);
 			go.name = "Player";
 			
 			var tr = go.transform;
@@ -148,7 +149,7 @@ namespace Managers
 			var player = go.GetComponent<Player>();
 			AlivesColliderMap[player.Body.BodyCollider] = player;
 
-			player.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, speed, relationshipGroup);
+			player.Spawn(data, relationshipGroup);
 
 			Player = player;
 			return player;

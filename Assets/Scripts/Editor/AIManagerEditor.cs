@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AI.Enums;
 using Managers;
+using ScriptableObjects;
 using Tools;
 using UnityEditor;
 using UnityEngine;
@@ -42,7 +43,7 @@ namespace Editor
 				var spawnPoints = world.SpawnPoints;
 				var spawnPoint = spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount));
 				
-				aiManager.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles);
+				aiManager.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("Player"));
 			}
 			
 			if (GUILayout.Button("Kill"))
@@ -61,7 +62,7 @@ namespace Editor
 				var spawnPoints = world.SpawnPoints;
 				var spawnPoint = spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount));
 				
-				aiManager.CreateNPC(spawnPoint.position, spawnPoint.eulerAngles);
+				aiManager.CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, (NPCData)ObjectManager.Instance.GetAlive("NPC"));
 			}
 
 			if (GUILayout.Button("Create at cam target"))
@@ -72,7 +73,7 @@ namespace Editor
 				if (Physics.Raycast(ray, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 					pos = hit.point + Vector3.up * 1.5f;
 
-				aiManager.CreateNPC(pos, Vector3.zero);
+				aiManager.CreateNPC(pos, Vector3.zero, (NPCData)ObjectManager.Instance.GetAlive("NPC"));
 			}
 			
 			if (GUILayout.Button("Kill all"))
