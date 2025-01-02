@@ -326,7 +326,7 @@ namespace AI
 
 		private void onUse(InputAction.CallbackContext ctx)
 		{
-			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithPlayer()))
+			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithPlayerAndWater()))
 				return;
 			
 			if (!hit.collider.TryGetComponent<IObject>(out var obj) || !obj.CanUse(this))
