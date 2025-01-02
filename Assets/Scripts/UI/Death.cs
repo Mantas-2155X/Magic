@@ -3,15 +3,12 @@ using AI.Base;
 using AI.Interfaces;
 using Managers;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace UI
 {
 	public class Death : MonoBehaviour
 	{
-		public Button Respawn;
-
 		public void Awake()
 		{
 			gameObject.SetActive(false);

@@ -112,6 +112,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1756362965405201173, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1805474549466338090, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -176,6 +180,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5238415708173528890, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5352134489899751883, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -199,6 +207,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2073094155178259440, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+    - {fileID: 4683780981325718410, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5238415708173528890, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -327,9 +336,8 @@ MonoBehaviour:
   StopSlide: 0.65
   AirMovement: 0.1
   SpeedClampModifier: 0.91
-  UseDistance: 1.5
+  UseDistance: 2
   ViewmodelPosition: {x: 0.76, y: -1.24, z: 1.09}
   ViewmodelAngles: {x: 15.4, y: -20.1, z: 0}
   CastViewmodelPosition: {x: 0.76, y: -1.24, z: 1.09}
   CastViewmodelAngles: {x: 50, y: -20.1, z: 0}
-  Light: {fileID: 0}

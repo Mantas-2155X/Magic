@@ -19,6 +19,9 @@ namespace UI
 		[SerializeField]
 		public RectTransform ManaBottle;
 
+		[SerializeField]
+		public AnimationCurve HealthRedCurve;
+		
 		public void Awake()
 		{
 			BaseAlive.OnRestoreHealthEvent.AddListener(OnRestoreHealth);
@@ -85,7 +88,7 @@ namespace UI
 				amount = maximum;
 
 			var color = Red.color;
-			color.a = Mathf.SmoothStep(0f, 1f, 1f - (amount / 100f));
+			color.a = HealthRedCurve.Evaluate(1 - (amount / maximum));
 			Red.color = color;
 			
 			var offset = HealthBottle.offsetMax;

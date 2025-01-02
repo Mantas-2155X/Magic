@@ -67,7 +67,7 @@ namespace AI
 		public float SpeedClampModifier = 0.91f;
 		
 		[SerializeField]
-		public float UseDistance = 1.5f;
+		public float UseDistance = 2f;
 
 		[SerializeField]
 		public Vector3 ViewmodelPosition = new (0.76f, -1.24f, 1.09f);
@@ -390,6 +390,7 @@ namespace AI
 			enableInput();
 			
 			LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
+			EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable("Staff"), Vector3.zero, Vector3.zero));
 			EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable("Hat"), Vector3.zero, Vector3.zero));
 		}
 		

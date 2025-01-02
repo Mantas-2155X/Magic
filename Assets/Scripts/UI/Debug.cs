@@ -24,7 +24,7 @@ namespace UI
 			}
 			else
 			{
-				Text.text = $"NPCs: {AIManager.Instance.NPCs.Count}\nFPS: {(int)(count / time)}";
+				Text.text = $"Alive: {AIManager.Instance.AlivesColliderMap.Count}\nFPS: {(int)(count / time)}";
 				
 				time = 0f;
 				count = 0;

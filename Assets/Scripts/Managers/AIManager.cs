@@ -126,7 +126,7 @@ namespace Managers
 			NPCs.Add(npc);
 			return npc;
 		}
-		public Player CreatePlayer(Vector3 position, Vector3 angles, float maximumHealth = 100, float regenerateHealth = 0.5f, float maximumMana = 100, float regenerateMana = 5, float speed = 7f, int relationshipGroup = -1)
+		public Player CreatePlayer(Vector3 position, Vector3 angles, float maximumHealth = 150, float regenerateHealth = 0.5f, float maximumMana = 100, float regenerateMana = 5, float speed = 7f, int relationshipGroup = -1)
 		{
 			if (Player != null)
 			{

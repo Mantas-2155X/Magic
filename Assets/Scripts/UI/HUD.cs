@@ -24,9 +24,6 @@ namespace UI
 
 		[SerializeField]
 		public Image Cooldown;
-
-		[SerializeField]
-		public float LookTargetDistance = 2f;
 		
 		public void Awake()
 		{
@@ -83,7 +80,7 @@ namespace UI
 			
 			Crosshair.color = player.IsGrounded() ? Color.white : Color.red;
 			
-			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, LookTargetDistance, ~LayerMaskTools.GetMaskWithPlayer()))
+			if (Physics.Raycast(player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, player.UseDistance, ~LayerMaskTools.GetMaskWithPlayer()))
 			{
 				if (hit.collider.TryGetComponent<IObject>(out var obj))
 				{
