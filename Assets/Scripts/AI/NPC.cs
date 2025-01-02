@@ -377,6 +377,75 @@ namespace AI
 #endif
 		}
 		
+		private void handleAttackTarget()
+		{
+			// Don't change target when already casting
+			if (Spell != null && Spell.IsCasting)
+				return;
+
+			var forgetCurrent = false;
+			
+			// Attack target exists, check for validity
+			if (AttackTargetTransform != null)
+			{
+				// Must be within sense range
+				if (WithinRange.SenseDistanceCheck(AttackTargetTransform))
+				{
+					// Make sure it can be seen
+					if (HasSight.SightCheck(AttackTargetTransform))
+					{
+						// Must be alive and have a different relationship
+						if (AttackTarget is IAlive alive && alive.IsAlive && alive.RelationshipGroup != RelationshipGroup)
+						{
+							// Valid, keep it
+							return;
+						}
+					}
+				}
+				else
+				{
+					// Outside of sense range, forget it if one isn't found
+					forgetCurrent = true;
+				}
+			}
+			
+			var position = GetTransform().position;
+			var alivesMap = AIManager.Instance.AlivesColliderMap;
+
+			BaseAlive closestAlive = null;
+			var closestDistance = float.PositiveInfinity;
+
+			foreach (var pair in alivesMap)
+			{
+				var alive = (BaseAlive)pair.Value;
+				
+				if (this == alive || !alive.IsAlive)
+					continue;
+
+				// Don't target same relationship
+				if (RelationshipGroup == alive.RelationshipGroup)
+					continue;
+
+				var aliveTransform = alive.GetTransform();
+				
+				// Make sure its within sense range and can be seen
+				if (!WithinRange.SenseDistanceCheck(aliveTransform) || !HasSight.SightCheck(aliveTransform))
+					continue;
+				
+				var distance = Vector3.Distance(position, aliveTransform.position);
+				if (distance >= closestDistance)
+					continue;
+					
+				closestDistance = distance;
+				closestAlive = alive;
+			}
+
+			if (closestAlive != null)
+				setAttackTarget(closestAlive);
+			else if (forgetCurrent)
+				setAttackTarget(null);
+		}
+		
 		#endregion
 
 		#region MonoBehaviour
@@ -388,6 +457,8 @@ namespace AI
 			
 			if (AIMode == EAIMode.Walking && Agent.hasPath)
 				Body.ShouldSway = true;
+			
+			handleAttackTarget();
 			
 			ActionModeObj.Update();
 			AIModeObj.Update();
