@@ -80,9 +80,6 @@ namespace AI
 		
 		[SerializeField]
 		public Vector3 CastViewmodelAngles = new (50f, -20.1f, 0f);
-
-		[SerializeField]
-		public Light Light;
 		
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
@@ -369,7 +366,7 @@ namespace AI
 		
 		private void onLight(InputAction.CallbackContext ctx)
 		{
-			Light.enabled = !Light.enabled;
+			World.World.Instance.Flashlight.enabled = !World.World.Instance.Flashlight.enabled;
 		}
 
 		#endregion
@@ -400,7 +397,7 @@ namespace AI
 		{
 			Body.Containers[EWearableType.Weapon].Wear.SetParent(Body.Shoulders[1]);
 		
-			Light.enabled = false;
+			World.World.Instance.Flashlight.enabled = false;
 
 			setRenderMode(ShadowCastingMode.On);
 			disableInput();

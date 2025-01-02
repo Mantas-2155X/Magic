@@ -7,6 +7,9 @@ namespace World
 	public class World : MonoBehaviour
 	{
 		public static World Instance;
+
+		[SerializeField]
+		public Light Flashlight;
 		
 		[SerializeField]
 		public Transform SpawnPoints;

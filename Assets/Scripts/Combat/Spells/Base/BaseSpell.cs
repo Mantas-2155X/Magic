@@ -58,7 +58,7 @@ namespace Combat.Spells.Base
 			}
 		}
 
-		public virtual void OnDestroy()
+		public void OnDisable()
 		{
 			CancelCasting();
 		}
