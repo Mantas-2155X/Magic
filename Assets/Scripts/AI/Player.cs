@@ -39,6 +39,9 @@ namespace AI
 		
 		[SerializeField]
 		public InputActionReference NoclipAction;
+		
+		[SerializeField]
+		public InputActionReference LightAction;
 
 		#endregion
 
@@ -78,6 +81,9 @@ namespace AI
 		[SerializeField]
 		public Vector3 CastViewmodelAngles = new (50f, -20.1f, 0f);
 
+		[SerializeField]
+		public Light Light;
+		
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
 
@@ -226,6 +232,10 @@ namespace AI
 			noclip.performed += onNoclip;
 			noclip.Enable();
 			
+			var lightA = LightAction.action;
+			lightA.performed += onLight;
+			lightA.Enable();
+			
 			var sprint = SprintAction.action;
 			sprint.Enable();
 		}
@@ -267,6 +277,10 @@ namespace AI
 			noclip.performed -= onNoclip;
 			noclip.Disable();
 			
+			var lightA = LightAction.action;
+			lightA.performed -= onLight;
+			lightA.Disable();
+
 			var sprint = SprintAction.action;
 			sprint.Disable();
 		}
@@ -352,6 +366,11 @@ namespace AI
 					break;
 			}
 		}
+		
+		private void onLight(InputAction.CallbackContext ctx)
+		{
+			Light.enabled = !Light.enabled;
+		}
 
 		#endregion
 		
@@ -381,6 +400,8 @@ namespace AI
 		{
 			Body.Containers[EWearableType.Weapon].Wear.SetParent(Body.Shoulders[1]);
 		
+			Light.enabled = false;
+
 			setRenderMode(ShadowCastingMode.On);
 			disableInput();
 			base.Kill(source);
