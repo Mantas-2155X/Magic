@@ -282,6 +282,16 @@ namespace AI.Base
 			IsAlive = true;
 			
 			SetRelationshipGroup(relationshipGroup);
+
+			var spells = data.Spells;
+			
+			for (var i = 0; i < spells.Count; i++)
+				LearnSpell(spells[i], true);
+			
+			var wearables = data.Wearables;
+
+			for (var i = 0; i < wearables.Count; i++)
+				EquipWearable(ObjectManager.Instance.CreateWearable(wearables[i], Vector3.zero, Vector3.zero));
 			
 			recalculateStats();
 			regenerateLoop().Forget();

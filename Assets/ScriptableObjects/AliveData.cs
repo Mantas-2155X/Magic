@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using Combat.Enums;
 using Combat.Structs;
@@ -29,5 +30,13 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public SerializedDictionary<EElement, SElementStat> ProtectionStats;
+
+		[Header("Base Spells")]
+		[SerializeField]
+		public List<SpellData> Spells;
+		
+		[Header("Base Wearables")]
+		[SerializeField]
+		public List<WearableData> Wearables;
 	}
 }

@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: NPC
   Description: Default npc data
+  Tags: 0
   Prefab: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+  Type: 
   Health: 50
   Mana: 150
   RegenerateHealth: 0.5
@@ -24,6 +26,9 @@ MonoBehaviour:
     _serializedList: []
   ProtectionStats:
     _serializedList: []
+  Spells:
+  - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
+  Wearables: []
   SenseRange: 25
   PatrolReachRange: 0.5
   RotationSpeed: 480

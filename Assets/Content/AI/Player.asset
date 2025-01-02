@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Player
   Description: Default player data
+  Tags: 0
   Prefab: {fileID: 8475379242147071745, guid: 6624d910fd63315dda7f8e60b973cacf, type: 3}
+  Type: 
   Health: 100
   Mana: 100
   RegenerateHealth: 0.5
@@ -23,7 +25,19 @@ MonoBehaviour:
   DamageStats:
     _serializedList: []
   ProtectionStats:
-    _serializedList: []
+    _serializedList:
+    - Key: 4
+      Value:
+        Constant: 2
+        Percentage: 1
+    - Key: 3
+      Value:
+        Constant: 2
+        Percentage: 1
+  Spells:
+  - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
+  Wearables:
+  - {fileID: 11400000, guid: f9d97d9436995e760970b566bd4d326a, type: 2}
   MovementForce: 1
   JumpForce: 115
   SprintMultiplier: 1.25

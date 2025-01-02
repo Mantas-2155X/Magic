@@ -372,10 +372,6 @@ namespace AI
 			setRenderMode(ShadowCastingMode.ShadowsOnly);
 			base.Spawn(data, relationshipGroup);
 			enableInput();
-			
-			LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
-			EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable("Staff"), Vector3.zero, Vector3.zero));
-			EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable("Hat"), Vector3.zero, Vector3.zero));
 		}
 		
 		public override void Kill(object source)
