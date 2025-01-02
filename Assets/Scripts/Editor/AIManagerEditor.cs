@@ -237,7 +237,6 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.SenseRange = 99999;
 					npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
 					npc.WanderAggressively();
 				}

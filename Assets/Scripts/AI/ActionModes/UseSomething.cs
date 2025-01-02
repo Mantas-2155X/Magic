@@ -1,6 +1,7 @@
 using AI.Enums;
 using AI.Interfaces;
 using Objects.Interfaces;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace AI.ActionModes
@@ -26,9 +27,11 @@ namespace AI.ActionModes
 			
 			var target = owner.OtherTarget;
 			var targetPos = owner.OtherTargetTransform.position;
+
+			var senseRange = ((NPCData)owner.Data).SenseRange;
 			
 			// Nothing to use or target is too far, return to previous action
-			if (target == null || Vector3.Distance(targetPos, ownerPos) > owner.SenseRange)
+			if (target == null || Vector3.Distance(targetPos, ownerPos) > senseRange)
 			{
 				owner.ReturnActionMode();
 				return;

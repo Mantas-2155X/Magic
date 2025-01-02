@@ -1,6 +1,7 @@
 using AI.Enums;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -131,6 +132,8 @@ namespace AI.AIModes
 			targetPosition.y = 0;
 			
 			var targetRotation = Quaternion.LookRotation(targetPosition);
+
+			var rotationSpeed = ((NPCData)Owner.Data).RotationSpeed;
 			
 			while (Quaternion.Angle(rb.rotation, targetRotation) > 5f)
 			{
@@ -145,7 +148,7 @@ namespace AI.AIModes
 					return;
 				}
 
-				rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, Owner.RotationSpeed * Time.deltaTime));
+				rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime));
 			}
 		}
 	}

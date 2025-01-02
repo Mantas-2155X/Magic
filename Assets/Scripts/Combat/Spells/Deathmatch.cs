@@ -17,7 +17,6 @@ namespace Combat.Spells
 				if (!npc.IsAlive)
 					continue;
 
-				npc.SenseRange = 99999;
 				npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
 				npc.LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
 				npc.WanderAggressively();

@@ -1,3 +1,4 @@
+using ScriptableObjects;
 using UnityEngine;
 
 namespace AI.ActionModes.Shared
@@ -22,11 +23,13 @@ namespace AI.ActionModes.Shared
 			
 			var targetPosition = target.position - rb.position;
 			targetPosition.y = 0;
+
+			var npcData = (NPCData)owner.Data;
 			
 			var targetRotation = Quaternion.LookRotation(targetPosition);
-			rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, owner.RotationSpeed * Time.deltaTime));
+			rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, npcData.RotationSpeed * Time.deltaTime));
 			
-			return Quaternion.Angle(rb.rotation, targetRotation) < owner.AimAngle;
+			return Quaternion.Angle(rb.rotation, targetRotation) < npcData.AimAngle;
 		}
 	}
 }

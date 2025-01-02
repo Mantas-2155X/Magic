@@ -1,4 +1,5 @@
 using AI.Enums;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace AI.ActionModes.Shared
@@ -18,7 +19,7 @@ namespace AI.ActionModes.Shared
 		/// </summary>
 		public void WalkRandomly(bool force)
 		{
-			if (!force && Time.time < owner.AIModes[EAIMode.Walking].LastExited + owner.WanderEvery)
+			if (!force && Time.time < owner.AIModes[EAIMode.Walking].LastExited + ((NPCData)owner.Data).WanderEvery)
 				return;
 			
 			var pos = owner.Body.Rigidbody.position;

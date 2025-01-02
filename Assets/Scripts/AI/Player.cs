@@ -46,25 +46,7 @@ namespace AI
 		#endregion
 
 		[SerializeField]
-		public float MovementForce = 1f;
-		
-		[SerializeField]
-		public float JumpForce = 115f;
-
-		[SerializeField]
-		public float SprintMultiplier = 1.25f;
-
-		[SerializeField]
 		public float LookSensitivity = 0.1f;
-		
-		[SerializeField]
-		public float StopSlide = 0.65f;
-		
-		[SerializeField]
-		public float AirMovement = 0.1f;
-
-		[SerializeField]
-		public float SpeedClampModifier = 0.91f;
 		
 		[SerializeField]
 		public float UseDistance = 2f;
@@ -137,10 +119,12 @@ namespace AI
 		{
 			if (!IsAlive)
 				return;
+
+			var data = (PlayerData)Data;
 			
 			if (MovementType == EMovementType.Noclip)
 			{
-				Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * SprintMultiplier : 1f), ForceMode.VelocityChange);
+				Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * data.SprintMultiplier : 1f), ForceMode.VelocityChange);
 				
 				if (jumpPressed)
 					Body.Rigidbody.AddForce(0f, 1f, 0f, ForceMode.VelocityChange);
@@ -159,14 +143,14 @@ namespace AI
 
 				// Adjust how fast the rigidbody stops after letting go of controls
 				var velocity = Body.Rigidbody.linearVelocity;
-				velocity.x *= StopSlide;
-				velocity.z *= StopSlide;
+				velocity.x *= data.StopSlide;
+				velocity.z *= data.StopSlide;
 				
 				Body.Rigidbody.linearVelocity = velocity;
 				return;
 			}
 
-			var movement = MovementForce;
+			var movement = data.MovementForce;
 
 			// Prevent movement when bound
 			if (IsBound)
@@ -174,7 +158,7 @@ namespace AI
 			
 			// Adjust how much control force is weakened if not grounded
 			if (!grounded)
-				movement *= AirMovement;
+				movement *= data.AirMovement;
 			
 			Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * movement, ForceMode.VelocityChange);
 			
@@ -184,8 +168,8 @@ namespace AI
 			var maxSpeed = IsBound ? 0f : MaximumSpeed;
 			
 			// Limit the rigidbody walking speed
-			var clampSpeed = SprintAction.action.IsPressed() ? maxSpeed * SprintMultiplier : maxSpeed;
-			Body.Rigidbody.linearVelocity = Vector3.ClampMagnitude(Body.Rigidbody.linearVelocity, clampSpeed * SpeedClampModifier);
+			var clampSpeed = SprintAction.action.IsPressed() ? maxSpeed * data.SprintMultiplier : maxSpeed;
+			Body.Rigidbody.linearVelocity = Vector3.ClampMagnitude(Body.Rigidbody.linearVelocity, clampSpeed * data.SpeedClampModifier);
 		}
 		
 		#endregion
@@ -312,7 +296,7 @@ namespace AI
 			jumpPressed = true;
 			
 			if (MovementType == EMovementType.Normal && !IsBound && IsGrounded())
-				Body.Rigidbody.AddForce(0f, JumpForce, 0f, ForceMode.Impulse);
+				Body.Rigidbody.AddForce(0f, ((PlayerData)Data).JumpForce, 0f, ForceMode.Impulse);
 		}
 		
 		private void onJumpCanceled(InputAction.CallbackContext ctx)

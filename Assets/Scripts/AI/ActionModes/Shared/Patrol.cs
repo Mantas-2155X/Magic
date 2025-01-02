@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace AI.ActionModes.Shared
@@ -21,7 +22,7 @@ namespace AI.ActionModes.Shared
 			if (path.Count == 0)
 				return true;
 			
-			return Vector3.Distance(owner.GetTransform().position, path[CurrentPoint]) <= owner.Agent.stoppingDistance + owner.PatrolReachRange;
+			return Vector3.Distance(owner.GetTransform().position, path[CurrentPoint]) <= owner.Agent.stoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
 		}
 		
 		public void SetPoints(List<Vector3> points, int startAt)

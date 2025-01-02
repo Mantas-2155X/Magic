@@ -109,7 +109,7 @@ namespace Combat.Spells.Base
 			// Add a variation to npc spell cooldowns
 			if (Owner is NPC npc)
 			{
-				var extra = SpellData.Cooldown * Random.Range(0f, npc.SpellCooldownVariation);
+				var extra = SpellData.Cooldown * Random.Range(0f, ((NPCData)npc.Data).SpellCooldownVariation);
 				LastFinishedCast += extra;
 			}
 			
