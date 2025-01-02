@@ -7,6 +7,7 @@ using Managers;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Combat.Spells.Base
 {
@@ -105,6 +106,13 @@ namespace Combat.Spells.Base
 			IsCasting = false;
 			LastFinishedCast = Time.time;
 
+			// Add a variation to npc spell cooldowns
+			if (Owner is NPC npc)
+			{
+				var extra = SpellData.Cooldown * Random.Range(0f, npc.SpellCooldownVariation);
+				LastFinishedCast += extra;
+			}
+			
 			Owner.TakeMana(SpellData.CastingCost, this);
 			
 			calculateHit();

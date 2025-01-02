@@ -77,6 +77,11 @@ namespace AI
 		/// </summary>
 		[SerializeField]
 		public float LowResourcesMultiplier = 0.15f;
+
+		/// <summary>
+		/// Multiply cooldown time with variation to get maximum time of how long the cooldown is extended to add variance
+		/// </summary>
+		public float SpellCooldownVariation = 0.15f;
 		
 		#endregion
 		
