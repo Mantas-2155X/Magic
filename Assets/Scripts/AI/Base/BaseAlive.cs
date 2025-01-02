@@ -433,6 +433,8 @@ namespace AI.Base
 
 		private void recalculateStats()
 		{
+			#region Clear current stats
+
 			DamageStats.Clear();
 			ProtectionStats.Clear();
 
@@ -445,6 +447,30 @@ namespace AI.Base
 				DamageStats[element] = new SElementStat();
 				ProtectionStats[element] = new SElementStat();
 			}
+
+			#endregion
+
+			#region Base alive stats
+
+			foreach (var pair in Data.DamageStats)
+			{
+				var stat = DamageStats[pair.Key];
+				stat.AppendStat(pair.Value);
+
+				DamageStats[pair.Key] = stat;
+			}
+				
+			foreach (var pair in Data.ProtectionStats)
+			{
+				var stat = ProtectionStats[pair.Key];
+				stat.AppendStat(pair.Value);
+					
+				ProtectionStats[pair.Key] = stat;
+			}
+
+			#endregion
+
+			#region Wearable stats
 
 			for (var i = 0; i < Wearables.Count; i++)
 			{
@@ -467,6 +493,8 @@ namespace AI.Base
 					ProtectionStats[pair.Key] = stat;
 				}
 			}
+			
+			#endregion
 		}
 		
 		#endregion
