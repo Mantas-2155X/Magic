@@ -373,7 +373,8 @@ namespace AI
 			base.Spawn(maximumHealth, regenerateHealth, maximumMana, regenerateMana, maximumSpeed, relationshipGroup);
 			enableInput();
 			
-			LearnSpell(ObjectManager.Instance.GetSpell("Bind"), true);
+			LearnSpell(ObjectManager.Instance.GetSpell("Fire Ball"), true);
+			EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable("Hat"), Vector3.zero, Vector3.zero));
 		}
 		
 		public override void Kill(object source)
