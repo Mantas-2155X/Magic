@@ -38,7 +38,8 @@ namespace AI.Base
 		
 		#region MonoBehaviour
 
-		public void OnCollisionEnter(Collision coll)
+		// todo: needs fixing, sometimes very wrong
+		/*public void OnCollisionEnter(Collision coll)
 		{
 			if (!IsAlive)
 				return;
@@ -49,7 +50,7 @@ namespace AI.Base
 
 			var damage = Mathf.FloorToInt(Body.FallDamageMultiplier * (velocity * velocity));
 			Damage(damage, null, EElement.Unknown);
-		}
+		}*/
 
 		#endregion
 		
