@@ -204,6 +204,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 9196623204031514355, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2073094155178259440, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -319,6 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 037d1c6634654125b072698673c82ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Data>k__BackingField: {fileID: 0}
   <Body>k__BackingField: {fileID: 3399031844389436054}
   LookAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   MoveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
@@ -329,13 +334,7 @@ MonoBehaviour:
   AttackAction: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   NoclipAction: {fileID: -4065287528562978432, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   LightAction: {fileID: -4800106638473030053, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  MovementForce: 1
-  JumpForce: 115
-  SprintMultiplier: 1.25
   LookSensitivity: 0.1
-  StopSlide: 0.65
-  AirMovement: 0.1
-  SpeedClampModifier: 0.91
   UseDistance: 2
   ViewmodelPosition: {x: 0.76, y: -1.24, z: 1.09}
   ViewmodelAngles: {x: 15.4, y: -20.1, z: 0}
