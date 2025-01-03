@@ -18,6 +18,9 @@ namespace ScriptableObjects
 		public bool AttachToTarget;
 
 		[SerializeField]
+		public bool DropToGround;
+
+		[SerializeField]
 		public Vector3 AttachOffset;
 		
 		[SerializeField]

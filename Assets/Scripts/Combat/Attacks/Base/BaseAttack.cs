@@ -8,6 +8,7 @@ using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 
 namespace Combat.Attacks.Base
@@ -45,6 +46,9 @@ namespace Combat.Attacks.Base
 				thisTr.SetParent(World.World.Instance.Attacks);
 				init = true;
 			}
+
+			if (AttackData.DropToGround && Physics.Raycast(position, Vector3.down, out var hit, float.MaxValue, ~LayerMaskTools.GetMask()))
+				position = hit.point;
 			
 			Source = source;
 			
