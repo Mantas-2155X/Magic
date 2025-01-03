@@ -344,7 +344,6 @@ namespace AI.Base
 
 				var rb = isLast ? Body.Rigidbody : go.AddComponent<Rigidbody>();
 				rb.interpolation = RigidbodyInterpolation.Interpolate;
-				rb.automaticInertiaTensor = false;
 				rb.excludeLayers = 0;
 				rb.mass = 5;
 

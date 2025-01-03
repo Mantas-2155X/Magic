@@ -20,7 +20,7 @@ namespace AI.ActionModes.Shared
 		/// </summary>
 		public bool SenseDistanceCheck(Transform target)
 		{
-			return Vector3.Distance(owner.Body.Rigidbody.position, target.position) < ((NPCData)owner.Data).SenseRange;
+			return Vector3.Distance(owner.GetTransform().position, target.position) < ((NPCData)owner.Data).SenseRange;
 		}
 
 		/// <summary>

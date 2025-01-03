@@ -21,7 +21,7 @@ namespace AI.ActionModes.Shared
 				return false;
 			
 			var transform = owner.GetTransform();
-			var position = owner.Body.Rigidbody.position;
+			var position = transform.position;
 
 			var direction = target.position - position;
 			var originCenter = position + transform.up * 0.5f;
