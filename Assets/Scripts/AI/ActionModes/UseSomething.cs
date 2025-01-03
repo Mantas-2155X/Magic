@@ -26,12 +26,18 @@ namespace AI.ActionModes
 			var ownerPos = owner.GetTransform().position;
 			
 			var target = owner.OtherTarget;
+			
+			// Nothing to use, return to previous action
+			if (target == null)
+			{
+				owner.ReturnActionMode();
+				return;
+			}
+			
 			var targetPos = owner.OtherTargetTransform.position;
 
-			var senseRange = ((NPCData)owner.Data).SenseRange;
-			
-			// Nothing to use or target is too far, return to previous action
-			if (target == null || Vector3.Distance(targetPos, ownerPos) > senseRange)
+			// Target is too far, return to previous action
+			if (Vector3.Distance(targetPos, ownerPos) > ((NPCData)owner.Data).SenseRange)
 			{
 				owner.ReturnActionMode();
 				return;
