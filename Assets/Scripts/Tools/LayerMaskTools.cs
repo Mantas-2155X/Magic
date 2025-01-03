@@ -5,6 +5,7 @@ namespace Tools
 	public static class LayerMaskTools
 	{
 		private static LayerMask? lmask;
+		private static LayerMask? lmaskWithAlives;
 		private static LayerMask? lmaskWithPlayer;
 		private static LayerMask? lmaskWithPlayerAndWater;
 
@@ -15,6 +16,15 @@ namespace Tools
 
 			lmask = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile");
 			return lmask!.Value;
+		}
+		
+		public static LayerMask GetMaskWithAlives()
+		{
+			if (lmaskWithAlives != null)
+				return lmaskWithAlives.Value;
+
+			lmaskWithAlives = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "NPC", "Player");
+			return lmaskWithAlives!.Value;
 		}
 		
 		public static LayerMask GetMaskWithPlayer()

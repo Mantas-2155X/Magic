@@ -47,7 +47,7 @@ namespace Combat.Attacks.Base
 				init = true;
 			}
 
-			if (AttackData.DropToGround && Physics.Raycast(position, Vector3.down, out var hit, float.MaxValue, ~LayerMaskTools.GetMask()))
+			if (AttackData.DropToGround && Physics.Raycast(position, Vector3.down, out var hit, float.MaxValue, ~LayerMaskTools.GetMaskWithAlives()))
 				position = hit.point;
 			
 			Source = source;
