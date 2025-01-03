@@ -948,7 +948,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 375
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -1407,6 +1407,7 @@ MonoBehaviour:
   Projectiles: {fileID: 13660899}
   Objects: {fileID: 174416576}
   TimeScale: 1
+  TargetFPS: 1000
 --- !u!4 &646561133
 Transform:
   m_ObjectHideFlags: 0
