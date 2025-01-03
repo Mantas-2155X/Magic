@@ -11,7 +11,7 @@ namespace Objects
 	public class NPCSpawner : BaseObject
 	{
 		[SerializeField]
-		public NPCData Data;
+		public List<NPCData> Datas;
 
 		[SerializeField]
 		public int RelationshipGroup;
@@ -29,6 +29,9 @@ namespace Objects
 		
 		public void Start()
 		{
+			if (Datas.Count == 0)
+				return;
+			
 			spawn().Forget();
 		}
 
@@ -71,7 +74,7 @@ namespace Objects
 				if (currentlyAlive >= AliveCount)
 					continue;
 				
-				var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Data, RelationshipGroup);
+				var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], RelationshipGroup);
 				if (npc == null || !npc.IsAlive)
 				{
 					Debug.LogWarning($"[{name}] Failed creating NPC");

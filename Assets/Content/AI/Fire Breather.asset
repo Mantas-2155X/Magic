@@ -10,32 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d095914682fd465fb83b431e5a31d2ef, type: 3}
-  m_Name: Fast Binder
+  m_Name: Fire Breather
   m_EditorClassIdentifier: 
-  Name: Fast Binder
-  Description: Very fast NPC with low health that binds targets
+  Name: Fire Breather
+  Description: Fiery NPC that shoots fire balls at targets
   Tags: 0
   Prefab: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
   Type: 
-  Health: 35
-  Mana: 200
-  RegenerateHealth: 2
-  RegenerateMana: 10
-  Speed: 25
+  Health: 50
+  Mana: 150
+  RegenerateHealth: 0.5
+  RegenerateMana: 7
+  Speed: 7
   DamageStats:
     _serializedList:
-    - Key: 3
+    - Key: 4
       Value:
-        Constant: 0
-        Percentage: 2.5
+        Constant: 2
+        Percentage: 0
   ProtectionStats:
     _serializedList: []
   Spells:
-  - {fileID: 11400000, guid: 8c55263e0454d3d2eafbdc914d674e95, type: 2}
+  - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
   Wearables: []
-  SenseRange: 35
+  SenseRange: 25
   PatrolReachRange: 0.5
-  RotationSpeed: 960
+  RotationSpeed: 480
   AimAngle: 5
   WanderEvery: 1
   CommunicateRange: 5
