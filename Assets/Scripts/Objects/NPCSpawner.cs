@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using AI.Interfaces;
+using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Base;
 using ScriptableObjects;
@@ -5,18 +8,28 @@ using UnityEngine;
 
 namespace Objects
 {
-	// todo: make this configurable
 	public class NPCSpawner : BaseObject
 	{
 		[SerializeField]
 		public NPCData Data;
+
+		[SerializeField]
+		public int RelationshipGroup;
+		
+		[SerializeField]
+		public int SpawnCount = 1;
+		
+		[SerializeField]
+		public int AliveCount = 1;
+		
+		[SerializeField]
+		public float SpawnRate = 0.1f;
+
+		private readonly List<IAlive> spawned = new ();
 		
 		public void Start()
 		{
-			var tr = GetTransform();
-			
-			var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Data);
-			npc.WaitAggressively();
+			spawn().Forget();
 		}
 
 #if UNITY_EDITOR
@@ -30,5 +43,44 @@ namespace Objects
 			Gizmos.DrawLine(new Vector3(-0.5f, 0, -0.5f), new Vector3(0.5f, 0, 0));
 		}
 #endif
+
+		private async UniTaskVoid spawn()
+		{
+			var tr = GetTransform();
+			
+			while (isActiveAndEnabled)
+			{
+				await UniTask.WaitForSeconds(SpawnRate);
+				
+				// Spawn count is reached, stop
+				if (spawned.Count >= SpawnCount)
+					break;
+
+				var currentlyAlive = 0;
+				
+				for (var i = 0; i < spawned.Count; i++)
+				{
+					var alive = spawned[i];
+					if (alive == null || !alive.IsAlive)
+						continue;
+
+					currentlyAlive++;
+				}
+				
+				// Alive count is reached, pause
+				if (currentlyAlive >= AliveCount)
+					continue;
+				
+				var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Data, RelationshipGroup);
+				if (npc == null || !npc.IsAlive)
+				{
+					Debug.LogWarning($"[{name}] Failed creating NPC");
+					continue;
+				}
+				
+				npc.WaitAggressively();
+				spawned.Add(npc);
+			}
+		}
 	}
 }
