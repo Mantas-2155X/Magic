@@ -25,6 +25,8 @@ namespace Combat.Casts.Base
 		private GameObject thisGo;
 		private Transform thisTr;
 
+		private IAlive owner;
+
 		private bool init;
 		
 		public void Update()
@@ -56,9 +58,11 @@ namespace Combat.Casts.Base
 			}
 			
 			Source = source;
+			
+			owner = null;
+			owner = GetAlive();
 
-			var alive = GetAlive();
-			ownerTr = alive != null ? alive.GetTransform() : Source.transform;
+			ownerTr = owner != null ? owner.GetTransform() : Source.transform;
 			
 			setPosition();
 			
@@ -70,6 +74,9 @@ namespace Combat.Casts.Base
 		{
 			if (Source == null)
 				return null;
+
+			if (owner != null)
+				return owner;
 
 			switch (Source)
 			{

@@ -34,6 +34,8 @@ namespace Combat.Projectiles.Base
 		private GameObject thisGo;
 		private Transform thisTr;
 
+		private IAlive owner;
+
 		private AttackData attackData;
 		
 		private float spellRange;
@@ -89,15 +91,17 @@ namespace Combat.Projectiles.Base
 			}
 			
 			Source = source;
+			
+			owner = null;
+			owner = GetAlive();
 
 			startingPosition = origin;
 			spellRange = range;
 			attackData = attack;
 
-			var alive = GetAlive();
-			if (alive != null)
+			if (owner != null)
 			{
-				var body = alive.Body;
+				var body = owner.Body;
 			
 				ignoreBodyCollider = body.BodyCollider;
 				ignoreFeetCollider = body.FeetCollider;
@@ -123,6 +127,9 @@ namespace Combat.Projectiles.Base
 		{
 			if (Source == null)
 				return null;
+
+			if (owner != null)
+				return owner;
 
 			switch (Source)
 			{

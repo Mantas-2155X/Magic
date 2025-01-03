@@ -32,6 +32,8 @@ namespace Combat.Attacks.Base
 		private GameObject thisGo;
 		private Transform thisTr;
 
+		private IAlive owner;
+		
 		private bool init;
 		
 		public virtual void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
@@ -45,6 +47,9 @@ namespace Combat.Attacks.Base
 			}
 			
 			Source = source;
+			
+			owner = null;
+			owner = GetAlive();
 
 			Target = AttackData.AttachToTarget ? attach : null;
 
@@ -147,6 +152,9 @@ namespace Combat.Attacks.Base
 			if (Source == null)
 				return null;
 
+			if (owner != null)
+				return owner;
+			
 			switch (Source)
 			{
 				case IAlive alive:
