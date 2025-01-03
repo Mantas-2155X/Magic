@@ -36,7 +36,11 @@ namespace World
 		[SerializeField]
 		public float TimeScale = 1f;
 
+		[SerializeField]
+		public int TargetFPS = 1000;
+
 		private float previousTimeScale;
+		private int previousTargetFPS;
 		
 		public void Awake()
 		{
@@ -56,11 +60,17 @@ namespace World
 		
 		public void Update()
 		{
-			if (TimeScale == previousTimeScale)
-				return;
+			if (TimeScale != previousTimeScale)
+			{
+				previousTimeScale = TimeScale;
+				Time.timeScale = TimeScale;
+			}
 
-			previousTimeScale = TimeScale;
-			Time.timeScale = TimeScale;
+			if (TargetFPS != previousTargetFPS)
+			{
+				previousTargetFPS = TargetFPS;
+				Application.targetFrameRate = TargetFPS;
+			}
 		}
 	}
 }
