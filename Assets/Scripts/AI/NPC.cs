@@ -338,7 +338,7 @@ namespace AI
 		private void handleAttackTarget()
 		{
 			// Don't change target when already casting
-			if (Spell != null && Spell.IsCasting)
+			if (IsCasting)
 				return;
 
 			var forgetCurrent = false;

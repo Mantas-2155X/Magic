@@ -37,6 +37,7 @@ namespace AI.Interfaces
 		public bool IsPowerful { get; }
 		public bool IsWalking { get; }
 		public bool IsBound { get; }
+		public bool IsCasting { get; }
 		
 		public void SetInvulnerable(bool value);
 		public void SetPowerful(bool value);

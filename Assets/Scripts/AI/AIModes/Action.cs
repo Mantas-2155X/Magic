@@ -31,10 +31,9 @@ namespace AI.AIModes
 				return;
 			
 			// If low on resources, see if there's anything that can be picked up
-			if (Owner.ActionMode != EActionMode.UseSomething)
+			if (Owner.ActionMode != EActionMode.UseSomething && !Owner.IsCasting)
 			{
-				if (Owner.Spell == null || !Owner.Spell.IsCasting)
-					Owner.LowResources.GrabResourceIfNeeded();
+				Owner.LowResources.GrabResourceIfNeeded();
 			}
 		}
 

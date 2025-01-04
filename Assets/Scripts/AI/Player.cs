@@ -105,7 +105,7 @@ namespace AI
 
 			var weaponContainer = Body.Containers[EWearableType.Weapon].Wear;
 			
-			if (Spell != null && Spell.IsCasting)
+			if (IsCasting)
 			{
 				weaponContainer.localPosition = CastViewmodelPosition;
 				weaponContainer.localEulerAngles = CastViewmodelAngles;

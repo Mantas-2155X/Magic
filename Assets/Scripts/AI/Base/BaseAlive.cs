@@ -84,6 +84,7 @@ namespace AI.Base
 		public bool IsPowerful { get; private set; }
 		public virtual bool IsWalking { get; private set; }
 		public bool IsBound { get; private set; }
+		public bool IsCasting => Spell != null && Spell.IsCasting;
 
 		public virtual void SetInvulnerable(bool value)
 		{
