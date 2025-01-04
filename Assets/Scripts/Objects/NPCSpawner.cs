@@ -4,8 +4,10 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Base;
 using Objects.Enums;
+using Objects.Events;
 using ScriptableObjects;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Objects
 {
@@ -29,20 +31,53 @@ namespace Objects
 		[SerializeField]
 		public float SpawnRate = 0.1f;
 
+		[SerializeField]
+		public OnSpawnerClearedEvent OnSpawnerClearedEvent;
+
+		[SerializeField]
+		public int TriggerCount = 1;
+		
 		private readonly List<IAlive> spawned = new ();
 		
+		private bool cleared;
 		private bool activated;
+		private int triggered;
 		
 		public void Start()
 		{
-			if (!activated && Initialization == ESpawnerInitialization.OnStart)
-				spawn().Forget();
+			if (activated || Initialization != ESpawnerInitialization.OnStart)
+				return;
+			
+			spawn().Forget();
+		}
+
+		public void Update()
+		{
+			if (cleared || spawned.Count < SpawnCount)
+				return;
+
+			for (var i = 0; i < spawned.Count; i++)
+			{
+				var alive = spawned[i];
+				if (alive != null && alive.IsAlive)
+					return;
+			}
+			
+			cleared = true;
+			OnSpawnerClearedEvent?.Invoke();
 		}
 
 		public void Trigger()
 		{
-			if (!activated && Initialization == ESpawnerInitialization.OnTrigger)
-				spawn().Forget();
+			if (activated || Initialization != ESpawnerInitialization.OnTrigger)
+				return;
+
+			triggered++;
+			
+			if (triggered < TriggerCount)
+				return;
+			
+			spawn().Forget();
 		}
 
 #if UNITY_EDITOR
