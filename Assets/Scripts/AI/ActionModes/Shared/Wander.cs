@@ -1,6 +1,7 @@
 using AI.Enums;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace AI.ActionModes.Shared
 {
@@ -29,6 +30,11 @@ namespace AI.ActionModes.Shared
 			circle.y *= Random.Range(owner.Agent.stoppingDistance, 15f);
 
 			var target = new Vector3(pos.x + circle.x, pos.y, pos.z + circle.y);
+
+			// Prevent wandering picking a destination that's behind a wall
+			if (NavMesh.Raycast(pos, target, out _, NavMesh.AllAreas))
+				return;
+			
 			owner.Walk(target);
 		}
 	}
