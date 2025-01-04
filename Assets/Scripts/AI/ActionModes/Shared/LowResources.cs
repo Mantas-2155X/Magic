@@ -22,9 +22,6 @@ namespace AI.ActionModes.Shared
 		
 		public bool GrabResourceIfNeeded()
 		{
-			if (owner.Spell != null && owner.Spell.IsCasting)
-				return false;
-			
 			if (IsLowHealth())
 			{
 				if (CurrentResourceValid(ETag.RestoresHealth))

@@ -32,7 +32,10 @@ namespace AI.AIModes
 			
 			// If low on resources, see if there's anything that can be picked up
 			if (Owner.ActionMode != EActionMode.UseSomething)
-				Owner.LowResources.GrabResourceIfNeeded();
+			{
+				if (Owner.Spell == null || !Owner.Spell.IsCasting)
+					Owner.LowResources.GrabResourceIfNeeded();
+			}
 		}
 
 		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)

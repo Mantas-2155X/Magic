@@ -25,6 +25,9 @@ namespace UI
 		[SerializeField]
 		public Image Cooldown;
 		
+		[SerializeField]
+		public Hotbar.Hotbar Hotbar;
+
 		public void Awake()
 		{
 			gameObject.SetActive(false);
@@ -101,6 +104,7 @@ namespace UI
 				return;
 			
 			gameObject.SetActive(false);
+			Hotbar.OnDeath();
 		}
 		
 		public void OnSpawn(IAlive alive)
@@ -109,6 +113,7 @@ namespace UI
 				return;
 
 			gameObject.SetActive(true);
+			Hotbar.OnSpawn();
 		}
 	}
 }

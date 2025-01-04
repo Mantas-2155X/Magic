@@ -1,8 +1,6 @@
 using AI.Base;
 using AI.Enums;
 using Combat.Wearables.Enums;
-using Combat.Wearables.Interfaces;
-using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
@@ -43,6 +41,21 @@ namespace AI
 		[SerializeField]
 		public InputActionReference LightAction;
 
+		[SerializeField]
+		public InputActionReference HotbarAction1;
+		
+		[SerializeField]
+		public InputActionReference HotbarAction2;
+		
+		[SerializeField]
+		public InputActionReference HotbarAction3;
+		
+		[SerializeField]
+		public InputActionReference HotbarAction4;
+		
+		[SerializeField]
+		public InputActionReference HotbarAction5;
+		
 		#endregion
 
 		[SerializeField]
@@ -176,6 +189,25 @@ namespace AI
 
 		#region Input
 
+		public string GetHotbarKey(int index)
+		{
+			switch (index)
+			{
+				case 0:
+					return HotbarAction1.action.GetBindingDisplayString();
+				case 1:
+					return HotbarAction2.action.GetBindingDisplayString();
+				case 2:
+					return HotbarAction3.action.GetBindingDisplayString();
+				case 3:
+					return HotbarAction4.action.GetBindingDisplayString();
+				case 4:
+					return HotbarAction5.action.GetBindingDisplayString();
+			}
+
+			return "";
+		}
+		
 		private void enableInput()
 		{
 			Cursor.lockState = CursorLockMode.Locked;
@@ -219,6 +251,26 @@ namespace AI
 			
 			var sprint = SprintAction.action;
 			sprint.Enable();
+
+			var hotbar1 = HotbarAction1.action;
+			hotbar1.performed += onHotbar1;
+			hotbar1.Enable();
+			
+			var hotbar2 = HotbarAction2.action;
+			hotbar2.performed += onHotbar2;
+			hotbar2.Enable();
+			
+			var hotbar3 = HotbarAction3.action;
+			hotbar3.performed += onHotbar3;
+			hotbar3.Enable();
+			
+			var hotbar4 = HotbarAction4.action;
+			hotbar4.performed += onHotbar4;
+			hotbar4.Enable();
+			
+			var hotbar5 = HotbarAction5.action;
+			hotbar5.performed += onHotbar5;
+			hotbar5.Enable();
 		}
 
 		private void disableInput()
@@ -264,6 +316,26 @@ namespace AI
 
 			var sprint = SprintAction.action;
 			sprint.Disable();
+			
+			var hotbar1 = HotbarAction1.action;
+			hotbar1.performed -= onHotbar1;
+			hotbar1.Disable();
+			
+			var hotbar2 = HotbarAction2.action;
+			hotbar2.performed -= onHotbar2;
+			hotbar2.Disable();
+			
+			var hotbar3 = HotbarAction3.action;
+			hotbar3.performed -= onHotbar3;
+			hotbar3.Disable();
+			
+			var hotbar4 = HotbarAction4.action;
+			hotbar4.performed -= onHotbar4;
+			hotbar4.Disable();
+			
+			var hotbar5 = HotbarAction5.action;
+			hotbar5.performed -= onHotbar5;
+			hotbar5.Disable();
 		}
 
 		private void onLookPerformed(InputAction.CallbackContext ctx)
@@ -353,6 +425,31 @@ namespace AI
 		private void onLight(InputAction.CallbackContext ctx)
 		{
 			World.World.Instance.Flashlight.enabled = !World.World.Instance.Flashlight.enabled;
+		}
+		
+		private void onHotbar1(InputAction.CallbackContext ctx)
+		{
+			SelectSpell(0);
+		}
+		
+		private void onHotbar2(InputAction.CallbackContext ctx)
+		{
+			SelectSpell(1);
+		}
+		
+		private void onHotbar3(InputAction.CallbackContext ctx)
+		{
+			SelectSpell(2);
+		}
+		
+		private void onHotbar4(InputAction.CallbackContext ctx)
+		{
+			SelectSpell(3);
+		}
+		
+		private void onHotbar5(InputAction.CallbackContext ctx)
+		{
+			SelectSpell(4);
 		}
 
 		#endregion

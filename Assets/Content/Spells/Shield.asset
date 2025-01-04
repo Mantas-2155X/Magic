@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
-  m_Name: Incinerate
+  m_Name: Shield
   m_EditorClassIdentifier: 
-  Name: Incinerate
-  Description: Melts targets in a small area
-  Icon: {fileID: 21300000, guid: c8b2d81f7129455a3a857107e054f26c, type: 3}
+  Name: Shield
+  Description: Creates a mana shield that blocks projectiles
+  Icon: {fileID: 21300000, guid: 494fc58480bbd73af9a3bfed101c1d7f, type: 3}
   Tags: 0
   Prefab: {fileID: 0}
   Type: 
-  Cooldown: 2.5
+  Cooldown: 10
   CastingTime: 1
-  CastingCost: 35
-  Range: 30
-  Cast: {fileID: 11400000, guid: 3d74fb92881356673a24a288609802be, type: 2}
+  CastingCost: 20
+  Range: 5
+  Cast: {fileID: 11400000, guid: a6d0636060cf7effb8a704dfc3e62d31, type: 2}
   Projectile: {fileID: 0}
-  Attack: {fileID: 11400000, guid: 3fc2ab69142f0010192cff2428c4b5fb, type: 2}
+  Attack: {fileID: 11400000, guid: 6c1795e77c8365f099bc517bb1c8a193, type: 2}

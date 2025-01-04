@@ -44,6 +44,7 @@ namespace AI.Interfaces
 		public void SetRelationshipGroup(int value);
 		public void SetBound(bool value);
 
+		public void SelectSpell(int index);
 		public void SelectSpell(SpellData data);
 		public bool HasSpell(SpellData data);
 		public void LearnSpell(SpellData data, bool autoSelect);

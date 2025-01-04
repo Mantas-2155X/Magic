@@ -13,6 +13,9 @@ namespace ScriptableObjects
 		public string Description;
 
 		[SerializeField]
+		public Sprite Icon;
+		
+		[SerializeField]
 		public ETag Tags;
 		
 		[Header("Instantiation")]

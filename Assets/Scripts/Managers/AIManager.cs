@@ -120,11 +120,11 @@ namespace Managers
 			go.SetActive(true);
 			
 			var npc = go.GetComponent<NPC>();
+			
 			AlivesColliderMap[npc.Body.BodyCollider] = npc;
+			NPCs.Add(npc);
 
 			npc.Spawn(data, relationshipGroup);
-			
-			NPCs.Add(npc);
 			return npc;
 		}
 		public Player CreatePlayer(Vector3 position, Vector3 angles, PlayerData data, int relationshipGroup = -1)
@@ -147,11 +147,11 @@ namespace Managers
 			go.SetActive(true);
 			
 			var player = go.GetComponent<Player>();
+			
 			AlivesColliderMap[player.Body.BodyCollider] = player;
+			Player = player;
 
 			player.Spawn(data, relationshipGroup);
-
-			Player = player;
 			return player;
 		}
 	}

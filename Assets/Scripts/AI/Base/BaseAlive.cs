@@ -133,6 +133,13 @@ namespace AI.Base
 			IsBound = value;
 		}
 
+		public void SelectSpell(int index)
+		{
+			if (Spells.Count <= index)
+				return;
+			
+			SelectSpell(Spells[index].SpellData);
+		}
 		public virtual void SelectSpell(SpellData data)
 		{
 			if (Spell != null)
@@ -289,7 +296,7 @@ namespace AI.Base
 			var spells = data.Spells;
 			
 			for (var i = 0; i < spells.Count; i++)
-				LearnSpell(spells[i], true);
+				LearnSpell(spells[i], i == 0);
 			
 			var wearables = data.Wearables;
 
@@ -398,11 +405,12 @@ namespace AI.Base
 				return;
 
 			// Use the attackers damage stats to increase the damage they deal to this alive
-			if (source is IAlive alive)
-				alive.DamageStats[type].Add(ref damage);
+			if (source is IAlive alive && alive.DamageStats.TryGetValue(type, out var attackStat))
+				attackStat.Add(ref damage);
 			
 			// Use this alives protection stats to reduce the damage they take from the attacker
-			ProtectionStats[type].Subtract(ref damage);
+			if (ProtectionStats.TryGetValue(type, out var protectionStat))
+				protectionStat.Subtract(ref damage);
 			
 			if (damage < 0)
 				return;
