@@ -15,6 +15,36 @@ namespace AI.ActionModes.Shared
 		private float currentChaseRange;
 		
 		/// <summary>
+		/// Chases the target, looks at it when reached and starts attacking it
+		/// </summary>
+		/// <returns></returns>
+		public bool ChaseAndKill(Transform target)
+		{
+			// Target within sense range, chase until it is reached
+			if (!ChaseCheck(target))
+				return false;
+
+			// Reached target, stop walking and go into action
+			if (owner.AIMode == EAIMode.Walking)
+			{
+				owner.ReturnAIMode();
+				return false;
+			}
+
+			if (owner.AIMode == EAIMode.Action)
+			{
+				// Turn towards the target and aim
+				if (!owner.AimAt.AimTowards(target))
+					return false;
+
+				if (owner.Spell != null)
+					owner.Spell.StartCasting();
+			}
+
+			return true;
+		}
+		
+		/// <summary>
 		/// Has the npc try to chase and reach the specified target
 		/// This only does one step of trying and should be placed in Update
 		/// Returns true if the npc has chased and reached the target

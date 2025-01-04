@@ -254,7 +254,7 @@ namespace Editor
 
 			if (GUILayout.Button("Give Player"))
 			{
-				aiManager.Player.EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable(Wearable), Vector3.zero, Vector3.zero));
+				aiManager.Player.EquipWearable(ObjectManager.Instance.GetWearable(Wearable));
 			}
 			
 			if (GUILayout.Button("Give NPCs"))
@@ -264,7 +264,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.EquipWearable(ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable(Wearable), Vector3.zero, Vector3.zero));
+					npc.EquipWearable(ObjectManager.Instance.GetWearable(Wearable));
 				}
 			}
 			

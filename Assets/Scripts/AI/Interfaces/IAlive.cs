@@ -44,6 +44,7 @@ namespace AI.Interfaces
 		public void SetRelationshipGroup(int value);
 		public void SetBound(bool value);
 
+		public int GetSpellIndex(SpellData data);
 		public void SelectSpell(int index);
 		public void SelectSpell(SpellData data);
 		public bool HasSpell(SpellData data);
@@ -52,6 +53,7 @@ namespace AI.Interfaces
 		public void ForgetAllSpells();
 		
 		public bool HasWearable(WearableData data);
+		public void EquipWearable(WearableData data);
 		public void EquipWearable(IWearable wearable);
 		public void DropWearable(WearableData data);
 		public void DropAllWearables();

@@ -85,14 +85,14 @@ namespace AI.Base
 		public virtual bool IsWalking { get; private set; }
 		public bool IsBound { get; private set; }
 
-		public void SetInvulnerable(bool value)
+		public virtual void SetInvulnerable(bool value)
 		{
 			if (!IsAlive || IsInvulnerable == value)
 				return;
 			
 			IsInvulnerable = value;
 		}
-		public void SetPowerful(bool value)
+		public virtual void SetPowerful(bool value)
 		{
 			if (!IsAlive || IsPowerful == value)
 				return;
@@ -116,7 +116,7 @@ namespace AI.Base
 
 			Body.FeetCollider.enabled = MovementType == EMovementType.Normal;
 		}
-		public void SetRelationshipGroup(int value)
+		public virtual void SetRelationshipGroup(int value)
 		{
 			if (!IsAlive || RelationshipGroup == value)
 				return;
@@ -134,7 +134,15 @@ namespace AI.Base
 			IsBound = value;
 		}
 
-		public void SelectSpell(int index)
+		public virtual int GetSpellIndex(SpellData data)
+		{
+			for (var i = 0; i < Spells.Count; i++)
+				if (Spells[i].SpellData == data)
+					return i;
+
+			return -1;
+		}
+		public virtual void SelectSpell(int index)
 		{
 			if (Spells.Count <= index)
 				return;
@@ -229,6 +237,27 @@ namespace AI.Base
 			
 			return false;
 		}
+		public virtual void EquipWearable(WearableData data)
+		{
+			if (HasWearable(data))
+				return;
+
+			for (var i = Wearables.Count - 1; i >= 0; i--)
+			{
+				var innerData = Wearables[i].WearableData;
+				if (innerData.WearableType != data.WearableType)
+					continue;
+
+				DropWearable(innerData);
+			}
+
+			var wearable = ObjectManager.Instance.CreateWearable(data, Vector3.zero, Vector3.zero);
+			
+			wearable.Equip(this);
+			Wearables.Add(wearable);
+			
+			recalculateStats();
+		}
 		public virtual void EquipWearable(IWearable wearable)
 		{
 			var data = wearable.WearableData;
@@ -298,15 +327,15 @@ namespace AI.Base
 			
 			SetRelationshipGroup(relationshipGroup);
 
+			var wearables = data.Wearables;
+
+			for (var i = 0; i < wearables.Count; i++)
+				EquipWearable(wearables[i]);
+			
 			var spells = data.Spells;
 			
 			for (var i = 0; i < spells.Count; i++)
 				LearnSpell(spells[i], i == 0);
-			
-			var wearables = data.Wearables;
-
-			for (var i = 0; i < wearables.Count; i++)
-				EquipWearable(ObjectManager.Instance.CreateWearable(wearables[i], Vector3.zero, Vector3.zero));
 			
 			recalculateStats();
 			regenerateLoop().Forget();

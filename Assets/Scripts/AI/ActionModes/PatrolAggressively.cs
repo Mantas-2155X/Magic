@@ -39,26 +39,7 @@ namespace AI.ActionModes
 				return;
 			}
 
-			// Target within sense range, chase until it is reached
-			if (!Owner.Chase.ChaseCheck(target))
-				return;
-
-			// Reached target, stop walking and go into action
-			if (Owner.AIMode == EAIMode.Walking)
-			{
-				Owner.ReturnAIMode();
-				return;
-			}
-			
-			if (Owner.AIMode == EAIMode.Action)
-			{
-				// Turn towards the target and aim
-				if (!Owner.AimAt.AimTowards(target))
-					return;
-			
-				if (Owner.Spell != null)
-					Owner.Spell.StartCasting();
-			}
+			Owner.Chase.ChaseAndKill(target);
 		}
 		
 		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)

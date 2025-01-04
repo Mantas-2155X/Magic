@@ -31,6 +31,9 @@ namespace ScriptableObjects
 		[SerializeField]
 		public SerializedDictionary<EElement, SElementStat> ProtectionStats;
 
+		/// <summary>
+		/// First spell is classed as primary, NPCs will prefer using it
+		/// </summary>
 		[Header("Base Spells")]
 		[SerializeField]
 		public List<SpellData> Spells;
