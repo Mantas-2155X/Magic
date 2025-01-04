@@ -16,6 +16,7 @@ namespace Combat.Spells.Interfaces
 
 		public bool IsCasting { get; }
 		public bool IsSelected { get; }
+		public bool IsOnCooldown { get; }
 
 		public float LastStartedCast { get; }
 		public float LastFinishedCast { get; }

@@ -23,6 +23,7 @@ namespace Combat.Spells.Base
 
 		public bool IsCasting { get; private set; }
 		public bool IsSelected { get; private set; }
+		public bool IsOnCooldown => Time.time < LastFinishedCast + SpellData.Cooldown;
 
 		public float LastStartedCast { get; private set; } = float.NegativeInfinity;
 		public float LastFinishedCast { get; private set; } = float.NegativeInfinity;
@@ -80,7 +81,7 @@ namespace Combat.Spells.Base
 			if (IsCasting || !IsSelected)
 				return false;
 
-			return Time.time >= LastFinishedCast + SpellData.Cooldown && Owner.CurrentMana >= SpellData.CastingCost;
+			return !IsOnCooldown && Owner.CurrentMana >= SpellData.CastingCost;
 		}
 		
 		public virtual void StartCasting()
