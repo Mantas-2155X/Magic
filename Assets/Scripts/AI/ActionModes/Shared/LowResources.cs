@@ -5,6 +5,7 @@ using Objects.Interfaces;
 using ScriptableObjects;
 using ScriptableObjects.Enums;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace AI.ActionModes.Shared
 {
@@ -78,6 +79,10 @@ namespace AI.ActionModes.Shared
 				if (!owner.WithinRange.SenseDistanceCheck(resourceTr))
 					continue;
 
+				// Prevent picking a destination that's behind a wall
+				if (NavMesh.Raycast(owner.GetTransform().position, resourcePos, out _, NavMesh.AllAreas))
+					continue;
+				
 				tempResources.Add(resource);
 				tempResourcePositions.Add(resourcePos);
 			}

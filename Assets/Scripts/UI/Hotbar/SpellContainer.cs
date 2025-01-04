@@ -1,3 +1,4 @@
+using System.Globalization;
 using Combat.Spells.Interfaces;
 using Managers;
 using TMPro;
@@ -24,6 +25,9 @@ namespace UI.Hotbar
 		[SerializeField]
 		public TMP_Text Bind;
 
+		[SerializeField]
+		public TMP_Text Mana;
+		
 		public ISpell Spell { get; private set; }
 		
 		public void Update()
@@ -70,6 +74,7 @@ namespace UI.Hotbar
 			Cooldown.localScale = Vector3.one;
 			Icon.sprite = spell.SpellData.Icon;
 			Bind.text = player.GetHotbarKey(Hotbar.Containers.IndexOf(this));
+			Mana.text = spell.SpellData.CastingCost.ToString(CultureInfo.CurrentCulture);
 		}
 	}
 }

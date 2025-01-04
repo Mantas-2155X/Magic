@@ -14,26 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Incinerator
   Description: Slow but powerful fire based NPC that incinerates targets
+  Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
   Type: 
   Health: 150
-  Mana: 300
+  Mana: 500
   RegenerateHealth: 1
-  RegenerateMana: 8
+  RegenerateMana: 25
   Speed: 4
   DamageStats:
     _serializedList:
     - Key: 4
       Value:
-        Constant: 3
+        Constant: 5
         Percentage: 10
   ProtectionStats:
     _serializedList:
     - Key: 4
       Value:
-        Constant: 3
-        Percentage: 15
+        Constant: 10
+        Percentage: 25
   Spells:
   - {fileID: 11400000, guid: 7ad2cc843d9b00d8a84cc37429205c51, type: 2}
   Wearables: []

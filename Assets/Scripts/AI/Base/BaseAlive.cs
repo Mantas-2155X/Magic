@@ -28,6 +28,7 @@ namespace AI.Base
 		public static readonly OnDeathEvent OnDeathEvent = new ();
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
 		public static readonly OnRelationshipGroupChangedEvent OnRelationshipGroupChangedEvent = new ();
+		public static readonly OnSpellSelectedEvent OnSpellSelectedEvent = new ();
 		
 		private LayerMask previousExcludeLayers;
 
@@ -142,6 +143,8 @@ namespace AI.Base
 		}
 		public virtual void SelectSpell(SpellData data)
 		{
+			var previousSpell = Spell;
+			
 			if (Spell != null)
 				Spell.Unselect();
 			
@@ -159,6 +162,8 @@ namespace AI.Base
 				
 				break;
 			}
+			
+			OnSpellSelectedEvent?.Invoke(this, previousSpell, Spell);
 		}
 		public virtual bool HasSpell(SpellData data)
 		{

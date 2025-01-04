@@ -18,9 +18,9 @@ MonoBehaviour:
   Tags: 0
   Prefab: {fileID: 0}
   Type: Combat.Spells.TimeSlicer
-  Cooldown: 5
+  Cooldown: 30
   CastingTime: 2.5
-  CastingCost: 60
+  CastingCost: 100
   Range: 0
   Cast: {fileID: 11400000, guid: a6d0636060cf7effb8a704dfc3e62d31, type: 2}
   Projectile: {fileID: 0}

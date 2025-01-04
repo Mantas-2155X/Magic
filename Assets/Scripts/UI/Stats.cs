@@ -1,7 +1,9 @@
+using System.Globalization;
 using AI;
 using AI.Base;
 using AI.Interfaces;
 using Combat.Enums;
+using TMPro;
 using Tools;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +23,12 @@ namespace UI
 
 		[SerializeField]
 		public AnimationCurve HealthRedCurve;
+
+		[SerializeField]
+		public TMP_Text HealthText;
+		
+		[SerializeField]
+		public TMP_Text ManaText;
 		
 		public void Awake()
 		{
@@ -84,6 +92,8 @@ namespace UI
 		
 		private void setHealth(float amount, float maximum)
 		{
+			HealthText.text = amount.ToString("0.#");
+
 			if (amount > maximum)
 				amount = maximum;
 
@@ -98,6 +108,8 @@ namespace UI
 		
 		private void setMana(float amount, float maximum)
 		{
+			ManaText.text = amount.ToString("0.#");
+
 			if (amount > maximum)
 				amount = maximum;
 			

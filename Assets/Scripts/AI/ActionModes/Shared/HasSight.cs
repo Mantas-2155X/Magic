@@ -38,12 +38,12 @@ namespace AI.ActionModes.Shared
 			if (extraCasts)
 			{
 				var instance = hit.colliderInstanceID;
-				var originRight = originCenter + transform.right * 0.4f;
+				var originRight = originCenter + transform.right * 0.25f;
 				
 				if (!Physics.Raycast(originRight, direction, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitRight.colliderInstanceID != instance)
 					return false;
 				
-				var originLeft = originCenter - transform.right * 0.4f;
+				var originLeft = originCenter - transform.right * 0.25f;
 				
 				if (!Physics.Raycast(originLeft, direction, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitLeft.colliderInstanceID != instance)
 					return false;

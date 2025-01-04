@@ -1,6 +1,7 @@
 using System;
 using AI.Interfaces;
 using Combat.Enums;
+using Combat.Spells.Interfaces;
 using UnityEngine.Events;
 
 namespace AI.Events
@@ -25,4 +26,7 @@ namespace AI.Events
 	
 	[Serializable]
 	public class OnRelationshipGroupChangedEvent : UnityEvent<IAlive, int, int> { }
+
+	[Serializable]
+	public class OnSpellSelectedEvent : UnityEvent<IAlive, ISpell, ISpell> {}
 }
