@@ -3,6 +3,7 @@ using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Base;
+using Objects.Enums;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -13,6 +14,9 @@ namespace Objects
 		[SerializeField]
 		public List<NPCData> Datas;
 
+		[SerializeField]
+		public ESpawnerInitialization Initialization;
+		
 		[SerializeField]
 		public int RelationshipGroup;
 		
@@ -27,12 +31,18 @@ namespace Objects
 
 		private readonly List<IAlive> spawned = new ();
 		
+		private bool activated;
+		
 		public void Start()
 		{
-			if (Datas.Count == 0)
-				return;
-			
-			spawn().Forget();
+			if (!activated && Initialization == ESpawnerInitialization.OnStart)
+				spawn().Forget();
+		}
+
+		public void Trigger()
+		{
+			if (!activated && Initialization == ESpawnerInitialization.OnTrigger)
+				spawn().Forget();
 		}
 
 #if UNITY_EDITOR
@@ -49,6 +59,11 @@ namespace Objects
 
 		private async UniTaskVoid spawn()
 		{
+			activated = true;
+			
+			if (Datas.Count == 0)
+				return;
+
 			var tr = GetTransform();
 			
 			while (isActiveAndEnabled)
