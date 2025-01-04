@@ -56,7 +56,8 @@ namespace AI.ActionModes
 				if (!Owner.AimAt.AimTowards(target))
 					return;
 			
-				Owner.Spell?.StartCasting();
+				if (Owner.Spell != null)
+					Owner.Spell.StartCasting();
 			}
 		}
 		

@@ -247,7 +247,9 @@ namespace AI
 			if (AIMode == mode)
 				return;
 			
-			Spell?.CancelCasting();
+			if (Spell != null)
+				Spell.CancelCasting();
+			
 			previousAIMode = AIMode;
 			
 			AIModeObj?.Disabled();
@@ -265,7 +267,9 @@ namespace AI
 			if (ActionMode == mode)
 				return;
 			
-			Spell?.CancelCasting();
+			if (Spell != null)
+				Spell.CancelCasting();
+			
 			previousActionMode = ActionMode;
 			
 			ActionModeObj?.Disabled();
@@ -283,7 +287,9 @@ namespace AI
 			if (AttackTarget == target)
 				return;
 			
-			Spell?.CancelCasting();
+			if (Spell != null)
+				Spell.CancelCasting();
+			
 			previousAttackTarget = AttackTarget;
 			AttackTarget = target;
 			AttackTargetTransform = target == null ? null : target.GetComponent<Transform>();

@@ -31,7 +31,9 @@ namespace Combat.Attacks
 		public override void OnTriggersDisabled()
 		{
 			base.OnTriggersDisabled();
-			alive?.SetBound(false);
+
+			if (alive != null)
+				alive.SetBound(false);
 		}
 	}
 }

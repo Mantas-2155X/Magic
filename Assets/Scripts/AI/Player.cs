@@ -87,8 +87,8 @@ namespace AI
 			if (!IsAlive)
 				return;
 
-			if (AttackAction.action.IsPressed())
-				Spell?.StartCasting();
+			if (AttackAction.action.IsPressed() && Spell != null)
+				Spell.StartCasting();
 
 			var weaponContainer = Body.Containers[EWearableType.Weapon].Wear;
 			
@@ -316,12 +316,14 @@ namespace AI
 		
 		private void onAttackPerformed(InputAction.CallbackContext ctx)
 		{
-			Spell?.StartCasting();
+			if (Spell != null)
+				Spell.StartCasting();
 		}
 
 		private void onAttackCanceled(InputAction.CallbackContext ctx)
 		{
-			Spell?.CancelCasting();
+			if (Spell != null)
+				Spell.CancelCasting();
 		}
 
 		private void onUse(InputAction.CallbackContext ctx)

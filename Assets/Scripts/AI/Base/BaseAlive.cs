@@ -135,7 +135,9 @@ namespace AI.Base
 
 		public virtual void SelectSpell(SpellData data)
 		{
-			Spell?.Unselect();
+			if (Spell != null)
+				Spell.Unselect();
+			
 			SpellRange = float.MaxValue;
 
 			for (var i = 0; i < Spells.Count; i++)
@@ -304,7 +306,9 @@ namespace AI.Base
 			if (!IsAlive)
 				return;
 			
-			Spell?.CancelCasting();
+			if (Spell != null)
+				Spell.CancelCasting();
+			
 			SetMovementType(EMovementType.Normal);
 			DropAllWearables();
 
