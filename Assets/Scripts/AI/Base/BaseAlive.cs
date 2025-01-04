@@ -353,10 +353,18 @@ namespace AI.Base
 
 				if (!isLast)
 				{
-					var coll = go.GetComponent<Collider>();
-					coll.excludeLayers = 0;
-					coll.material = null;
-					coll.enabled = true;
+					var colliders = go.GetComponents<Collider>();
+					for (var k = 0; k < colliders.Length; k++)
+					{
+						var coll = colliders[k];
+						if (!coll.isTrigger)
+						{
+							coll.excludeLayers = 0;
+							coll.material = null;
+						}
+
+						coll.enabled = true;
+					}
 				}
 
 				var rb = isLast ? Body.Rigidbody : go.AddComponent<Rigidbody>();

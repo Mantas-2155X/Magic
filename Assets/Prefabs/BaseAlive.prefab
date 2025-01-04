@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7374701913626592888}
   - component: {fileID: 890154380233269124}
   - component: {fileID: 7277610291894951215}
+  - component: {fileID: 7747468937501591225}
   m_Layer: 0
   m_Name: RightFoot
   m_TagString: Untagged
@@ -125,6 +126,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 4
+--- !u!136 &7747468937501591225
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918261936898904529}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.9
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1578906078410702355
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,6 +229,7 @@ GameObject:
   - component: {fileID: 4543690042529208239}
   - component: {fileID: 6121914934348553962}
   - component: {fileID: 4579662405891315712}
+  - component: {fileID: 1656509487453732406}
   m_Layer: 0
   m_Name: LeftEye
   m_TagString: Untagged
@@ -315,6 +340,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 5
+--- !u!135 &1656509487453732406
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2748694003045599063}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2861370865108794479
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +468,7 @@ GameObject:
   - component: {fileID: 5240458502354090696}
   - component: {fileID: 2222034672959033276}
   - component: {fileID: 6999670337427561679}
+  - component: {fileID: 7122553442683222997}
   m_Layer: 0
   m_Name: RightArm
   m_TagString: Untagged
@@ -534,6 +581,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 6
+--- !u!136 &7122553442683222997
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4765344902642305140}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.9
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4788612110221929362
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,6 +649,7 @@ GameObject:
   - component: {fileID: 6362056708018927886}
   - component: {fileID: 1805474549466338090}
   - component: {fileID: 3180055987770812146}
+  - component: {fileID: 6387050982892449552}
   m_Layer: 0
   m_Name: RightEye
   m_TagString: Untagged
@@ -689,6 +760,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 5
+--- !u!135 &6387050982892449552
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4878303608568562495}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5238415708173528890
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,6 +1058,7 @@ GameObject:
   - component: {fileID: 6214098482222032939}
   - component: {fileID: 36329325502326166}
   - component: {fileID: 4150980121352697837}
+  - component: {fileID: 6966139526102207317}
   m_Layer: 0
   m_Name: LeftFoot
   m_TagString: Untagged
@@ -1078,6 +1171,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 4
+--- !u!136 &6966139526102207317
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7186803857782215973}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.9
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7553642588256471789
 GameObject:
   m_ObjectHideFlags: 0
@@ -1122,6 +1238,7 @@ GameObject:
   - component: {fileID: 3724468191582165016}
   - component: {fileID: 2096745006995001726}
   - component: {fileID: 1504740529191842669}
+  - component: {fileID: 2312222712323515687}
   m_Layer: 0
   m_Name: LeftArm
   m_TagString: Untagged
@@ -1234,6 +1351,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 6
+--- !u!136 &2312222712323515687
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661345106908029820}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.9
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7794517591078021122
 GameObject:
   m_ObjectHideFlags: 0
