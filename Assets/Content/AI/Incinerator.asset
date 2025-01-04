@@ -33,12 +33,12 @@ MonoBehaviour:
     _serializedList:
     - Key: 4
       Value:
-        Constant: 10
-        Percentage: 25
+        Constant: 5
+        Percentage: 17.5
   Spells:
   - {fileID: 11400000, guid: 7ad2cc843d9b00d8a84cc37429205c51, type: 2}
   Wearables: []
-  SenseRange: 25
+  SenseRange: 50
   PatrolReachRange: 0.5
   RotationSpeed: 480
   AimAngle: 5
