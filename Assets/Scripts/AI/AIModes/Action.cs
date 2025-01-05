@@ -1,5 +1,6 @@
 using AI.Enums;
 using AI.Interfaces;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace AI.AIModes
@@ -38,7 +39,7 @@ namespace AI.AIModes
 				return;
 			
 			// If low on resources, see if there's anything that can be picked up
-			if (Owner.ActionMode != EActionMode.UseSomething)
+			if (Owner.ActionMode != EActionMode.UseSomething && Time.time >= Owner.ActionModes[EActionMode.UseSomething].LastExited + ((NPCData)Owner.Data).UseResourceEvery)
 				Owner.LowResources.GrabResourceIfNeeded();
 
 			var spells = Owner.Spells;

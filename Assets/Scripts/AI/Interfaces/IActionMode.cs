@@ -7,6 +7,9 @@ namespace AI.Interfaces
 	{
 		public NPC Owner { get; set; }
 		
+		public float LastEntered { get; }
+		public float LastExited { get; }
+
 		public void Enabled(NPC owner);
 		
 		public void Disabled();

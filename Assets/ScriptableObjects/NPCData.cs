@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ScriptableObjects
 {
@@ -62,5 +63,11 @@ namespace ScriptableObjects
 		/// Maximum time to wait before casting after switching spell
 		/// </summary>
 		public float SpellSwitchCastCooldown = 0.25f;
+		
+		/// <summary>
+		/// Wait for x second after the last usesomething state finished
+		/// </summary>
+		[SerializeField]
+		public float UseResourceEvery = 1f;
 	}
 }

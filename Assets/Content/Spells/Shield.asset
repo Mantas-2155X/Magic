@@ -18,10 +18,11 @@ MonoBehaviour:
   Tags: 16
   Prefab: {fileID: 0}
   Type: 
-  Cooldown: 10
+  Cooldown: 12.5
   CastingTime: 1
-  CastingCost: 20
+  CastingCost: 25
   Range: 5
+  IsResource: 0
   Cast: {fileID: 11400000, guid: a6d0636060cf7effb8a704dfc3e62d31, type: 2}
   Projectile: {fileID: 0}
   Attack: {fileID: 11400000, guid: 6c1795e77c8365f099bc517bb1c8a193, type: 2}

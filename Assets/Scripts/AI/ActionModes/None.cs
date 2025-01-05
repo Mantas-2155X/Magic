@@ -8,14 +8,19 @@ namespace AI.ActionModes
 	{
 		public NPC Owner { get; set; }
 		
+		public float LastEntered { get; private set; }
+		public float LastExited { get; private set; }
+
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
+			LastEntered = Time.time;
 		}
 		
 		public void Disabled()
 		{
 			Owner = null;
+			LastExited = Time.time;
 		}
 		
 		public void Update()
