@@ -30,6 +30,9 @@ namespace AI
 		public InputActionReference SprintAction;
 
 		[SerializeField]
+		public InputActionReference ScrollAction;
+
+		[SerializeField]
 		public InputActionReference UseAction;
 
 		[SerializeField]
@@ -262,6 +265,10 @@ namespace AI
 			var sprint = SprintAction.action;
 			sprint.Enable();
 
+			var scroll = ScrollAction.action;
+			scroll.performed += onScroll;
+			scroll.Enable();
+			
 			var hotbar1 = HotbarAction1.action;
 			hotbar1.performed += onHotbar1;
 			hotbar1.Enable();
@@ -334,6 +341,10 @@ namespace AI
 
 			var sprint = SprintAction.action;
 			sprint.Disable();
+
+			var scroll = ScrollAction.action;
+			scroll.performed -= onScroll;
+			scroll.Disable();
 			
 			var hotbar1 = HotbarAction1.action;
 			hotbar1.performed -= onHotbar1;
@@ -451,6 +462,23 @@ namespace AI
 		private void onLight(InputAction.CallbackContext ctx)
 		{
 			World.World.Instance.Flashlight.enabled = !World.World.Instance.Flashlight.enabled;
+		}
+
+		private void onScroll(InputAction.CallbackContext ctx)
+		{
+			if (Spells.Count < 2)
+				return;
+			
+			var currentIndex = GetSpellIndex(Spell != null ? Spell.SpellData : null);
+			currentIndex -= (int)ctx.ReadValue<Vector2>().y;
+
+			if (currentIndex < 0)
+				currentIndex = Spells.Count - 1;
+
+			if (currentIndex >= Spells.Count)
+				currentIndex = 0;
+			
+			SelectSpell(Spells[currentIndex].SpellData);
 		}
 		
 		private void onHotbar1(InputAction.CallbackContext ctx) => SelectSpell(0);

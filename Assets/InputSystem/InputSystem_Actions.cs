@@ -109,6 +109,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Scroll"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""53706573-892a-49f6-a0d8-ce6cf7127931"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Hotbar1"",
                     ""type"": ""Button"",
                     ""id"": ""94013417-9550-43dd-9e0d-5464821a409c"",
@@ -302,6 +311,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Joystick"",
                     ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1b5d1fd8-10ce-4d83-9d4f-2129f7b53b9b"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1206,6 +1226,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Noclip = m_Player.FindAction("Noclip", throwIfNotFound: true);
         m_Player_Light = m_Player.FindAction("Light", throwIfNotFound: true);
+        m_Player_Scroll = m_Player.FindAction("Scroll", throwIfNotFound: true);
         m_Player_Hotbar1 = m_Player.FindAction("Hotbar1", throwIfNotFound: true);
         m_Player_Hotbar2 = m_Player.FindAction("Hotbar2", throwIfNotFound: true);
         m_Player_Hotbar3 = m_Player.FindAction("Hotbar3", throwIfNotFound: true);
@@ -1301,6 +1322,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Noclip;
     private readonly InputAction m_Player_Light;
+    private readonly InputAction m_Player_Scroll;
     private readonly InputAction m_Player_Hotbar1;
     private readonly InputAction m_Player_Hotbar2;
     private readonly InputAction m_Player_Hotbar3;
@@ -1321,6 +1343,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Noclip => m_Wrapper.m_Player_Noclip;
         public InputAction @Light => m_Wrapper.m_Player_Light;
+        public InputAction @Scroll => m_Wrapper.m_Player_Scroll;
         public InputAction @Hotbar1 => m_Wrapper.m_Player_Hotbar1;
         public InputAction @Hotbar2 => m_Wrapper.m_Player_Hotbar2;
         public InputAction @Hotbar3 => m_Wrapper.m_Player_Hotbar3;
@@ -1364,6 +1387,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Light.started += instance.OnLight;
             @Light.performed += instance.OnLight;
             @Light.canceled += instance.OnLight;
+            @Scroll.started += instance.OnScroll;
+            @Scroll.performed += instance.OnScroll;
+            @Scroll.canceled += instance.OnScroll;
             @Hotbar1.started += instance.OnHotbar1;
             @Hotbar1.performed += instance.OnHotbar1;
             @Hotbar1.canceled += instance.OnHotbar1;
@@ -1416,6 +1442,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Light.started -= instance.OnLight;
             @Light.performed -= instance.OnLight;
             @Light.canceled -= instance.OnLight;
+            @Scroll.started -= instance.OnScroll;
+            @Scroll.performed -= instance.OnScroll;
+            @Scroll.canceled -= instance.OnScroll;
             @Hotbar1.started -= instance.OnHotbar1;
             @Hotbar1.performed -= instance.OnHotbar1;
             @Hotbar1.canceled -= instance.OnHotbar1;
@@ -1628,6 +1657,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnNoclip(InputAction.CallbackContext context);
         void OnLight(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
         void OnHotbar1(InputAction.CallbackContext context);
         void OnHotbar2(InputAction.CallbackContext context);
         void OnHotbar3(InputAction.CallbackContext context);
