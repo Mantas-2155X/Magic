@@ -44,6 +44,8 @@ namespace AI
 		
 		public Vector3 Destination { get; private set; }
 
+		public float SwitchCastCooldown { get; private set; }
+		
 		public AimAt AimAt { get; private set; }
 		public Chase Chase { get; private set; }
 		public Wander Wander { get; private set; }
@@ -434,6 +436,17 @@ namespace AI
 		{
 			base.SetBound(value);
 			Agent.speed = value ? 0f : Data.Speed;
+		}
+		
+		public override void SelectSpell(SpellData data)
+		{
+			var previousSpell = Spell;
+			
+			base.SelectSpell(data);
+			
+			// Apply variation to add a bit of irregularity to switch-cast-switch behavior
+			if (Spell != previousSpell)
+				SwitchCastCooldown = Time.time + Random.Range(0f, ((NPCData)Data).SpellSwitchCastCooldown);
 		}
 		
 		public override void Spawn(AliveData data, int relationshipGroup)

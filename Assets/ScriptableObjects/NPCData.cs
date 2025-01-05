@@ -57,5 +57,10 @@ namespace ScriptableObjects
 		/// Multiply cooldown time with variation to get maximum time of how long the cooldown is extended to add variance
 		/// </summary>
 		public float SpellCooldownVariation = 0.15f;
+		
+		/// <summary>
+		/// Maximum time to wait before casting after switching spell
+		/// </summary>
+		public float SpellSwitchCastCooldown = 0.25f;
 	}
 }

@@ -87,7 +87,13 @@ namespace Combat.Spells.Base
 			if (IsCasting || !IsSelected)
 				return false;
 
-			return !IsOnCooldown && Owner.CurrentMana >= SpellData.CastingCost;
+			if (IsOnCooldown || Owner.CurrentMana < SpellData.CastingCost)
+				return false;
+
+			if (Owner is NPC npc && npc.SwitchCastCooldown > 0f && Time.time < npc.SwitchCastCooldown)
+				return false;
+				
+			return true;
 		}
 		
 		public virtual void StartCasting()
