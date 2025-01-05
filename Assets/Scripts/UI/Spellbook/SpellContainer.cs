@@ -3,11 +3,12 @@ using Combat.Spells.Interfaces;
 using Managers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Spellbook
 {
-	public class SpellContainer : MonoBehaviour
+	public class SpellContainer : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 	{
 		[SerializeField]
 		public Image Icon;
@@ -21,6 +22,10 @@ namespace UI.Spellbook
 		public ISpell Spell { get; private set; }
 		public int Index { get; private set; }
 
+		private bool dragging;
+		private int newSpellIndex;
+		private int currentTransformIndex;
+		
 		public void AssignSpell(ISpell spell, int index)
 		{
 			Spell = spell;
@@ -45,6 +50,42 @@ namespace UI.Spellbook
 			
 			Bind.text = AIManager.Instance.Player.GetHotbarKey(index);
 			Bind.gameObject.SetActive(true);
+		}
+
+		public void OnBeginDrag(PointerEventData eventData)
+		{
+			dragging = true;
+			newSpellIndex = Index;
+			currentTransformIndex = transform.GetSiblingIndex();
+		}
+		
+		public void OnDrag(PointerEventData eventData)
+		{
+			var pos = eventData.position;
+			var containers = Spellbook.Instance.Containers;
+
+			for (var i = 0; i < containers.Count; i++)
+			{
+				var container = containers[i];
+				var rect = (RectTransform)container.transform;
+				
+				if (!RectTransformUtility.RectangleContainsScreenPoint(rect, pos))
+					continue;
+
+				newSpellIndex = rect.GetSiblingIndex() - 1;
+				transform.SetSiblingIndex(newSpellIndex + 1);
+				break;
+			}
+		}
+		
+		public void OnEndDrag(PointerEventData eventData)
+		{
+			if (!dragging)
+				return;
+			
+			dragging = false;
+			transform.SetSiblingIndex(currentTransformIndex);
+			AIManager.Instance.Player.SetSpellIndex(Spell.SpellData, newSpellIndex);
 		}
 	}
 }

@@ -15,6 +15,8 @@ using Combat.Wearables.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
+using UI.Hotbar;
+using UI.Spellbook;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -143,6 +145,28 @@ namespace AI.Base
 					return i;
 
 			return -1;
+		}
+		public virtual void SetSpellIndex(SpellData data, int index)
+		{
+			var currentIndex = GetSpellIndex(data);
+			if (currentIndex == -1 || currentIndex == index)
+				return;
+
+			var spell = Spells[currentIndex];
+			Spells.RemoveAt(currentIndex);
+			Spells.Insert(index, spell);
+			
+			Hotbar.Instance.UpdateHotbar();
+			Spellbook.Instance.UpdateSpellbook();
+
+			if (Spell == null)
+				return;
+
+			var selectedIndex = GetSpellIndex(Spell.SpellData);
+			if (selectedIndex < Hotbar.Instance.Size)
+				return;
+			
+			SelectSpell(0);
 		}
 		public virtual void SelectSpell(int index)
 		{

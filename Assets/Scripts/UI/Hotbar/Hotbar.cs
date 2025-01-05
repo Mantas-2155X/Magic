@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AI;
 using AI.Base;
@@ -22,44 +23,64 @@ namespace UI.Hotbar
 		[SerializeField]
 		public int Size = 7;
 		
-		private readonly List<SpellContainer> containers = new ();
+		[NonSerialized]
+		public readonly List<SpellContainer> Containers = new ();
 
 		public void Awake()
 		{
 			Instance = this;
 			
-			for (var i = 0; i < Size; i++)
-			{
-				var copy = Instantiate(Template.gameObject, Template.parent);
-				copy.name = $"Container {i}";
-				
-				var container = copy.GetComponent<SpellContainer>();
-				containers.Add(container);
-			}
-			
 			BaseAlive.OnSpellSelectedEvent.AddListener(onSpellSelected);
 		}
 
-		public void OnSpawn()
+		public void SetupHotbar()
+		{
+			if (Size > Containers.Count)
+			{
+				var toCreate = Size - Containers.Count;
+				if (toCreate > 0)
+				{
+					var parent = Template.parent;
+					
+					for (var i = 0; i < Size; i++)
+					{
+						var copy = Instantiate(Template.gameObject, parent);
+						copy.name = $"Container {i}";
+				
+						var container = copy.GetComponent<SpellContainer>();
+						Containers.Add(container);
+					}
+				}
+			}
+			
+			UpdateHotbar();
+		}
+
+		public void UpdateHotbar()
 		{
 			var player = AIManager.Instance.Player;
 			var spellCount = player.Spells.Count;
 			
-			for (var i = 0; i < containers.Count; i++)
+			for (var i = 0; i < Containers.Count; i++)
 			{
 				ISpell spell = null;
 
 				if (i < spellCount)
 					spell = player.Spells[i];
 				
-				containers[i].AssignSpell(spell, i);
+				Containers[i].AssignSpell(spell, i);
 			}
+		}
+		
+		public void OnSpawn()
+		{
+			SetupHotbar();
 		}
 		
 		public void OnDeath()
 		{
-			for (var i = 0; i < containers.Count; i++)
-				containers[i].AssignSpell(null, i);
+			for (var i = 0; i < Containers.Count; i++)
+				Containers[i].AssignSpell(null, i);
 		}
 
 		private void onSpellSelected(IAlive alive, ISpell previousSpell, ISpell newSpell)

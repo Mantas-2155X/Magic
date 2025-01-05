@@ -46,6 +46,7 @@ namespace AI.Interfaces
 		public void SetBound(bool value);
 
 		public int GetSpellIndex(SpellData data);
+		public void SetSpellIndex(SpellData data, int index);
 		public void SelectSpell(int index);
 		public void SelectSpell(SpellData data);
 		public bool HasSpell(SpellData data);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Combat.Spells.Interfaces;
 using Managers;
@@ -12,11 +13,21 @@ namespace UI.Spellbook
 		[SerializeField]
 		public Transform Template;
 
-		private readonly List<SpellContainer> containers = new ();
+		[NonSerialized]
+		public readonly List<SpellContainer> Containers = new ();
 
 		public void Awake()
 		{
 			Instance = this;
+		}
+
+		public void OnDisable()
+		{
+			for (var i = 0; i < Containers.Count; i++)
+			{
+				var container = Containers[i];
+				container.OnEndDrag(null);
+			}
 		}
 
 		public void Toggle()
@@ -46,9 +57,9 @@ namespace UI.Spellbook
 			var player = AIManager.Instance.Player;
 
 			var spellCount = player.Spells.Count;
-			if (spellCount > containers.Count)
+			if (spellCount > Containers.Count)
 			{
-				var toCreate = spellCount - containers.Count;
+				var toCreate = spellCount - Containers.Count;
 				if (toCreate > 0)
 				{
 					var parent = Template.parent;
@@ -59,7 +70,7 @@ namespace UI.Spellbook
 						copy.name = $"Container {i}";
 				
 						var container = copy.GetComponent<SpellContainer>();
-						containers.Add(container);
+						Containers.Add(container);
 					}
 				}
 			}
@@ -74,14 +85,14 @@ namespace UI.Spellbook
 			var spells = player.Spells;
 			var spellCount = spells.Count;
 			
-			for (var i = 0; i < containers.Count; i++)
+			for (var i = 0; i < Containers.Count; i++)
 			{
 				ISpell spell = null;
 
 				if (i < spellCount)
 					spell = spells[i];
 				
-				containers[i].AssignSpell(spell, i);
+				Containers[i].AssignSpell(spell, i);
 			}
 		}
 
