@@ -56,6 +56,12 @@ namespace AI
 		[SerializeField]
 		public InputActionReference HotbarAction5;
 		
+		[SerializeField]
+		public InputActionReference HotbarAction6;
+
+		[SerializeField]
+		public InputActionReference HotbarAction7;
+
 		#endregion
 
 		[SerializeField]
@@ -203,6 +209,10 @@ namespace AI
 					return HotbarAction4.action.GetBindingDisplayString();
 				case 4:
 					return HotbarAction5.action.GetBindingDisplayString();
+				case 5:
+					return HotbarAction6.action.GetBindingDisplayString();
+				case 6:
+					return HotbarAction7.action.GetBindingDisplayString();
 			}
 
 			return "";
@@ -271,6 +281,14 @@ namespace AI
 			var hotbar5 = HotbarAction5.action;
 			hotbar5.performed += onHotbar5;
 			hotbar5.Enable();
+			
+			var hotbar6 = HotbarAction6.action;
+			hotbar6.performed += onHotbar6;
+			hotbar6.Enable();
+			
+			var hotbar7 = HotbarAction7.action;
+			hotbar7.performed += onHotbar7;
+			hotbar7.Enable();
 		}
 
 		private void disableInput()
@@ -336,6 +354,14 @@ namespace AI
 			var hotbar5 = HotbarAction5.action;
 			hotbar5.performed -= onHotbar5;
 			hotbar5.Disable();
+			
+			var hotbar6 = HotbarAction6.action;
+			hotbar6.performed -= onHotbar6;
+			hotbar6.Disable();
+			
+			var hotbar7 = HotbarAction7.action;
+			hotbar7.performed -= onHotbar7;
+			hotbar7.Disable();
 		}
 
 		private void onLookPerformed(InputAction.CallbackContext ctx)
@@ -427,30 +453,13 @@ namespace AI
 			World.World.Instance.Flashlight.enabled = !World.World.Instance.Flashlight.enabled;
 		}
 		
-		private void onHotbar1(InputAction.CallbackContext ctx)
-		{
-			SelectSpell(0);
-		}
-		
-		private void onHotbar2(InputAction.CallbackContext ctx)
-		{
-			SelectSpell(1);
-		}
-		
-		private void onHotbar3(InputAction.CallbackContext ctx)
-		{
-			SelectSpell(2);
-		}
-		
-		private void onHotbar4(InputAction.CallbackContext ctx)
-		{
-			SelectSpell(3);
-		}
-		
-		private void onHotbar5(InputAction.CallbackContext ctx)
-		{
-			SelectSpell(4);
-		}
+		private void onHotbar1(InputAction.CallbackContext ctx) => SelectSpell(0);
+		private void onHotbar2(InputAction.CallbackContext ctx) => SelectSpell(1);
+		private void onHotbar3(InputAction.CallbackContext ctx) => SelectSpell(2);
+		private void onHotbar4(InputAction.CallbackContext ctx) => SelectSpell(3);
+		private void onHotbar5(InputAction.CallbackContext ctx) => SelectSpell(4);
+		private void onHotbar6(InputAction.CallbackContext ctx) => SelectSpell(5);
+		private void onHotbar7(InputAction.CallbackContext ctx) => SelectSpell(6);
 
 		#endregion
 		
