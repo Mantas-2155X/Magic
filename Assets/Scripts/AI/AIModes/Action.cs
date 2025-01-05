@@ -47,33 +47,19 @@ namespace AI.AIModes
 			if (spells.Count > 1)
 			{
 				var primarySpell = Owner.Spells[0];
-				if (primarySpell.IsSelected)
+				var currentSpell = Owner.Spell;
+				
+				if (!primarySpell.IsSelected && !primarySpell.IsOnCooldown)
 				{
-					if (primarySpell.IsOnCooldown)
-					{
-						// Primary spell is on cooldown, try switching into another one if it isn't on cooldown
-						var randomSpell = spells[Random.Range(1, spells.Count)];
-						if (!randomSpell.IsOnCooldown && !randomSpell.SpellData.IsResource)
-							Owner.SelectSpell(randomSpell.SpellData);
-					}
+					// Primary spell is no longer cooldown, switch back into it
+					Owner.SelectSpell(primarySpell.SpellData);
 				}
-				else
+				else if (primarySpell.IsSelected && primarySpell.IsOnCooldown || !primarySpell.IsSelected && currentSpell.IsOnCooldown)
 				{
-					if (!primarySpell.IsOnCooldown)
-					{
-						// Primary spell is no longer cooldown, switch back into it
-						Owner.SelectSpell(primarySpell.SpellData);
-					}
-					else
-					{
-						// Both primary and current spell is on cooldown, switch into yet another one if it isn't on cooldown
-						if (Owner.Spell.IsOnCooldown)
-						{
-							var randomSpell = spells[Random.Range(1, spells.Count)];
-							if (!randomSpell.IsOnCooldown && !randomSpell.SpellData.IsResource)
-								Owner.SelectSpell(randomSpell.SpellData);
-						}
-					}
+					// Primary spell (or current one as well) is on cooldown, switch into another one
+					var randomSpell = spells[Random.Range(1, spells.Count)];
+					if (!randomSpell.IsOnCooldown && !randomSpell.SpellData.IsResource)
+						Owner.SelectSpell(randomSpell.SpellData);
 				}
 			}
 		}
