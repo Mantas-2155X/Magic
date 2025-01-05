@@ -294,6 +294,26 @@ namespace Editor
 			
 			GUILayout.EndHorizontal();
 			
+			GUILayout.BeginHorizontal();
+
+			if (GUILayout.Button("Refill Mana"))
+			{
+				aiManager.Player.RestoreMana(aiManager.Player.Data.Mana, null);
+
+				foreach (var npc in aiManager.NPCs)
+					npc.RestoreMana(npc.Data.Mana, null);
+			}
+			
+			if (GUILayout.Button("Clear Mana"))
+			{
+				aiManager.Player.TakeMana(aiManager.Player.CurrentMana, null);
+
+				foreach (var npc in aiManager.NPCs)
+					npc.TakeMana(npc.CurrentMana, null);
+			}
+			
+			GUILayout.EndHorizontal();
+			
 			ShowStats = EditorGUILayout.ToggleLeft("Show Stats", ShowStats);
 			if (!ShowStats)
 			{

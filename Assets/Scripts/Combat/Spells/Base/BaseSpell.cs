@@ -38,6 +38,12 @@ namespace Combat.Spells.Base
 			if (!IsCasting || !IsSelected || !Owner.IsAlive)
 				return;
 
+			if (Owner.CurrentMana < SpellData.CastingCost)
+			{
+				CancelCasting();
+				return;
+			}
+			
 			if (Time.time < PredictFinishCast)
 				return;
 
