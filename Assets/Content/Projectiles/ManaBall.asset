@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Mana Ball
   Description: A ball of the Mana element
+  Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 6837300406704376654, guid: 8b52a81927123d1138d8bb6469c28fd9, type: 3}
   Type: 
   Force: 7.5
-  Damage: 5
+  Damage: 15
   Element: 3
-  Attack: {fileID: 11400000, guid: 99774bbcb1ee25134a2f2ee2561f4266, type: 2}

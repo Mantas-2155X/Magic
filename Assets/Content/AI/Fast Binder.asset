@@ -30,7 +30,15 @@ MonoBehaviour:
         Constant: 0
         Percentage: 2.5
   ProtectionStats:
-    _serializedList: []
+    _serializedList:
+    - Key: 3
+      Value:
+        Constant: 3
+        Percentage: 6
+    - Key: 4
+      Value:
+        Constant: -2
+        Percentage: -5
   Spells:
   - {fileID: 11400000, guid: 8c55263e0454d3d2eafbdc914d674e95, type: 2}
   Wearables: []

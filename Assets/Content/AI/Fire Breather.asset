@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Fire Breather
   Description: Fiery NPC that shoots fire balls at targets
+  Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
   Type: 
@@ -29,7 +30,15 @@ MonoBehaviour:
         Constant: 2
         Percentage: 0
   ProtectionStats:
-    _serializedList: []
+    _serializedList:
+    - Key: 4
+      Value:
+        Constant: 5
+        Percentage: 10
+    - Key: 3
+      Value:
+        Constant: -3
+        Percentage: -5
   Spells:
   - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
   Wearables: []

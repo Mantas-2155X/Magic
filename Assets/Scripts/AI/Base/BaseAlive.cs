@@ -1,4 +1,5 @@
 #define BODY_GIB
+//#define DEBUG_DAMAGE
 
 using System;
 using System.Collections.Generic;
@@ -446,15 +447,21 @@ namespace AI.Base
 		{
 			if (!IsAlive || IsInvulnerable)
 				return;
-
+#if DEBUG_DAMAGE
+			var original = damage;
+#endif
 			// Use the attackers damage stats to increase the damage they deal to this alive
 			if (source is IAlive alive && alive.DamageStats.TryGetValue(type, out var attackStat))
 				attackStat.Add(ref damage);
-			
+#if DEBUG_DAMAGE
+			var postDamage = damage;
+#endif
 			// Use this alives protection stats to reduce the damage they take from the attacker
 			if (ProtectionStats.TryGetValue(type, out var protectionStat))
 				protectionStat.Subtract(ref damage);
-			
+#if DEBUG_DAMAGE
+			Debug.Log($"[{name}] Taking {type} damage from {source}. {original} -> {postDamage} -> {damage}");
+#endif
 			if (damage < 0)
 				return;
 			
