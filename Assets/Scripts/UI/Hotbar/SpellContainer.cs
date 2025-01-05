@@ -73,7 +73,7 @@ namespace UI.Hotbar
 			Selection.SetActive(spell == player.Spell);
 			Cooldown.localScale = Vector3.one;
 			Icon.sprite = spell.SpellData.Icon;
-			Bind.text = player.GetHotbarKey(Hotbar.Containers.IndexOf(this));
+			Bind.text = player.GetHotbarKey(Hotbar.GetContainerIndex(this));
 			Mana.text = spell.SpellData.CastingCost.ToString(CultureInfo.CurrentCulture);
 		}
 	}

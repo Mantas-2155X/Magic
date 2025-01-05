@@ -12,36 +12,55 @@ namespace UI.Hotbar
 	public class Hotbar : MonoBehaviour
 	{
 		[SerializeField]
-		public List<SpellContainer> Containers;
+		public Transform Template;
 		
 		[SerializeField]
 		public TMP_Text SelectedSpell;
 
+		[SerializeField]
+		public int Size = 7;
+		
+		private readonly List<SpellContainer> containers = new ();
+
 		public void Awake()
 		{
+			for (var i = 0; i < Size; i++)
+			{
+				var copy = Instantiate(Template.gameObject, Template.parent);
+				copy.name = $"Container {i}";
+				
+				var container = copy.GetComponent<SpellContainer>();
+				containers.Add(container);
+			}
+			
 			BaseAlive.OnSpellSelectedEvent.AddListener(onSpellSelected);
 		}
 
+		public int GetContainerIndex(SpellContainer container)
+		{
+			return containers.IndexOf(container);
+		}
+		
 		public void OnSpawn()
 		{
 			var player = AIManager.Instance.Player;
 			var spellCount = player.Spells.Count;
 			
-			for (var i = 0; i < Containers.Count; i++)
+			for (var i = 0; i < containers.Count; i++)
 			{
 				ISpell spell = null;
 
 				if (i < spellCount)
 					spell = player.Spells[i];
 				
-				Containers[i].AssignSpell(spell);
+				containers[i].AssignSpell(spell);
 			}
 		}
 		
 		public void OnDeath()
 		{
-			for (var i = 0; i < Containers.Count; i++)
-				Containers[i].AssignSpell(null);
+			for (var i = 0; i < containers.Count; i++)
+				containers[i].AssignSpell(null);
 		}
 
 		private void onSpellSelected(IAlive alive, ISpell previousSpell, ISpell newSpell)
