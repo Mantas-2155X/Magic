@@ -11,6 +11,8 @@ namespace UI.Hotbar
 {
 	public class Hotbar : MonoBehaviour
 	{
+		public static Hotbar Instance;
+		
 		[SerializeField]
 		public Transform Template;
 		
@@ -24,6 +26,8 @@ namespace UI.Hotbar
 
 		public void Awake()
 		{
+			Instance = this;
+			
 			for (var i = 0; i < Size; i++)
 			{
 				var copy = Instantiate(Template.gameObject, Template.parent);
@@ -36,11 +40,6 @@ namespace UI.Hotbar
 			BaseAlive.OnSpellSelectedEvent.AddListener(onSpellSelected);
 		}
 
-		public int GetContainerIndex(SpellContainer container)
-		{
-			return containers.IndexOf(container);
-		}
-		
 		public void OnSpawn()
 		{
 			var player = AIManager.Instance.Player;
@@ -53,14 +52,14 @@ namespace UI.Hotbar
 				if (i < spellCount)
 					spell = player.Spells[i];
 				
-				containers[i].AssignSpell(spell);
+				containers[i].AssignSpell(spell, i);
 			}
 		}
 		
 		public void OnDeath()
 		{
 			for (var i = 0; i < containers.Count; i++)
-				containers[i].AssignSpell(null);
+				containers[i].AssignSpell(null, i);
 		}
 
 		private void onSpellSelected(IAlive alive, ISpell previousSpell, ISpell newSpell)

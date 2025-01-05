@@ -11,9 +11,6 @@ namespace UI.Hotbar
 	public class SpellContainer : MonoBehaviour
 	{
 		[SerializeField]
-		public Hotbar Hotbar;
-		
-		[SerializeField]
 		public GameObject Selection;
 
 		[SerializeField]
@@ -29,7 +26,8 @@ namespace UI.Hotbar
 		public TMP_Text Mana;
 		
 		public ISpell Spell { get; private set; }
-		
+		public int Index { get; private set; }
+
 		public void Update()
 		{
 			if (Spell == null)
@@ -56,9 +54,10 @@ namespace UI.Hotbar
 			Cooldown.localScale = scale;
 		}
 		
-		public void AssignSpell(ISpell spell)
+		public void AssignSpell(ISpell spell, int index)
 		{
 			Spell = spell;
+			Index = index;
 
 			if (spell == null)
 			{
@@ -73,7 +72,7 @@ namespace UI.Hotbar
 			Selection.SetActive(spell == player.Spell);
 			Cooldown.localScale = Vector3.one;
 			Icon.sprite = spell.SpellData.Icon;
-			Bind.text = player.GetHotbarKey(Hotbar.GetContainerIndex(this));
+			Bind.text = player.GetHotbarKey(index);
 			Mana.text = spell.SpellData.CastingCost.ToString(CultureInfo.CurrentCulture);
 		}
 	}

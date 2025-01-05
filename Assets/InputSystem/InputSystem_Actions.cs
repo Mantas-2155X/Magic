@@ -179,6 +179,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spellbook"",
+                    ""type"": ""Button"",
+                    ""id"": ""290b495c-3136-481a-ad9f-c7b1d8837c0f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -630,6 +639,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Hotbar7"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97ccecb2-1b4c-4fc0-bf8c-1a5fadae708f"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Spellbook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1234,6 +1254,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Hotbar5 = m_Player.FindAction("Hotbar5", throwIfNotFound: true);
         m_Player_Hotbar6 = m_Player.FindAction("Hotbar6", throwIfNotFound: true);
         m_Player_Hotbar7 = m_Player.FindAction("Hotbar7", throwIfNotFound: true);
+        m_Player_Spellbook = m_Player.FindAction("Spellbook", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1330,6 +1351,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Hotbar5;
     private readonly InputAction m_Player_Hotbar6;
     private readonly InputAction m_Player_Hotbar7;
+    private readonly InputAction m_Player_Spellbook;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1351,6 +1373,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Hotbar5 => m_Wrapper.m_Player_Hotbar5;
         public InputAction @Hotbar6 => m_Wrapper.m_Player_Hotbar6;
         public InputAction @Hotbar7 => m_Wrapper.m_Player_Hotbar7;
+        public InputAction @Spellbook => m_Wrapper.m_Player_Spellbook;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1411,6 +1434,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Hotbar7.started += instance.OnHotbar7;
             @Hotbar7.performed += instance.OnHotbar7;
             @Hotbar7.canceled += instance.OnHotbar7;
+            @Spellbook.started += instance.OnSpellbook;
+            @Spellbook.performed += instance.OnSpellbook;
+            @Spellbook.canceled += instance.OnSpellbook;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1466,6 +1492,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Hotbar7.started -= instance.OnHotbar7;
             @Hotbar7.performed -= instance.OnHotbar7;
             @Hotbar7.canceled -= instance.OnHotbar7;
+            @Spellbook.started -= instance.OnSpellbook;
+            @Spellbook.performed -= instance.OnSpellbook;
+            @Spellbook.canceled -= instance.OnSpellbook;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1665,6 +1694,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnHotbar5(InputAction.CallbackContext context);
         void OnHotbar6(InputAction.CallbackContext context);
         void OnHotbar7(InputAction.CallbackContext context);
+        void OnSpellbook(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -4,6 +4,7 @@ using Combat.Wearables.Enums;
 using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
+using UI.Spellbook;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -64,6 +65,9 @@ namespace AI
 
 		[SerializeField]
 		public InputActionReference HotbarAction7;
+
+		[SerializeField]
+		public InputActionReference SpellbookAction;
 
 		#endregion
 
@@ -221,7 +225,7 @@ namespace AI
 			return "";
 		}
 		
-		private void enableInput()
+		public void EnableInput()
 		{
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
@@ -296,9 +300,13 @@ namespace AI
 			var hotbar7 = HotbarAction7.action;
 			hotbar7.performed += onHotbar7;
 			hotbar7.Enable();
+			
+			var spellbook = SpellbookAction.action;
+			spellbook.performed += onSpellbook;
+			spellbook.Enable();
 		}
 
-		private void disableInput()
+		public void DisableInput()
 		{
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
@@ -373,6 +381,10 @@ namespace AI
 			var hotbar7 = HotbarAction7.action;
 			hotbar7.performed -= onHotbar7;
 			hotbar7.Disable();
+			
+			var spellbook = SpellbookAction.action;
+			spellbook.performed -= onSpellbook;
+			spellbook.Disable();
 		}
 
 		private void onLookPerformed(InputAction.CallbackContext ctx)
@@ -488,6 +500,8 @@ namespace AI
 		private void onHotbar5(InputAction.CallbackContext ctx) => SelectSpell(4);
 		private void onHotbar6(InputAction.CallbackContext ctx) => SelectSpell(5);
 		private void onHotbar7(InputAction.CallbackContext ctx) => SelectSpell(6);
+		
+		private void onSpellbook(InputAction.CallbackContext ctx) => Spellbook.Instance.Toggle();
 
 		#endregion
 		
@@ -507,7 +521,9 @@ namespace AI
 
 			setRenderMode(ShadowCastingMode.ShadowsOnly);
 			base.Spawn(data, relationshipGroup);
-			enableInput();
+			
+			Spellbook.Instance.Display(false);
+			EnableInput();
 		}
 		
 		public override void Kill(object source)
@@ -515,9 +531,11 @@ namespace AI
 			Body.Containers[EWearableType.Weapon].Wear.SetParent(Body.Shoulders[1]);
 		
 			World.World.Instance.Flashlight.enabled = false;
-
+			
+			Spellbook.Instance.Display(false);
+			DisableInput();
+			
 			setRenderMode(ShadowCastingMode.On);
-			disableInput();
 			base.Kill(source);
 		}
 
