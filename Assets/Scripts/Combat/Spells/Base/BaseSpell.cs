@@ -21,6 +21,8 @@ namespace Combat.Spells.Base
 		public Ray LastRay { get; private set; }
 		public RaycastHit LastHit { get; private set; }
 
+		public float OverrideRange { get; set; } = -1f;
+
 		public bool IsCasting { get; private set; }
 		public bool IsSelected { get; private set; }
 		public bool IsOnCooldown => Time.time < LastFinishedCast + SpellData.Cooldown;
@@ -134,7 +136,7 @@ namespace Combat.Spells.Base
 			if (SpellData.Projectile != null)
 			{
 				// Create a projectile which will create the attack on impact
-				ObjectManager.Instance.CreateProjectile(SpellData.Projectile, Owner.SpellRange, SpellData.Attack, this, LastRay.origin, LastRay.direction);
+				ObjectManager.Instance.CreateProjectile(SpellData.Projectile, OverrideRange < 0f ? Owner.SpellRange : OverrideRange, SpellData.Attack, this, LastRay.origin, LastRay.direction);
 			}
 			else if (SpellData.Attack != null)
 			{
@@ -177,10 +179,12 @@ namespace Combat.Spells.Base
 					throw new NotImplementedException();
 			}
 
+			var range = OverrideRange < 0f ? Owner.SpellRange : OverrideRange;
+			
 			// Hit did not land due to distance or other reasons. Try to fill the necessary data
-			if (!Physics.Raycast(LastRay, out var hit, Owner.SpellRange, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
+			if (!Physics.Raycast(LastRay, out var hit, range, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 			{
-				hit.point = LastRay.origin + LastRay.direction * Owner.SpellRange;
+				hit.point = LastRay.origin + LastRay.direction * range;
 				hit.normal = -LastRay.direction;
 			}
 

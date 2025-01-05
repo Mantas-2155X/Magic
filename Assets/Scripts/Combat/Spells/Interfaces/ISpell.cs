@@ -14,6 +14,8 @@ namespace Combat.Spells.Interfaces
 		public Ray LastRay { get; }
 		public RaycastHit LastHit { get; }
 
+		public float OverrideRange { get; set; }
+		
 		public bool IsCasting { get; }
 		public bool IsSelected { get; }
 		public bool IsOnCooldown { get; }
