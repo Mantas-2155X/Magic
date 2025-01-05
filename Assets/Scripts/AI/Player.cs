@@ -227,6 +227,9 @@ namespace AI
 		
 		public void EnableInput()
 		{
+			// Prevent double binds
+			DisableInput();
+			
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 
@@ -306,7 +309,7 @@ namespace AI
 			spellbook.Enable();
 		}
 
-		public void DisableInput()
+		public void DisableInput(bool includePanels = true)
 		{
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
@@ -381,10 +384,13 @@ namespace AI
 			var hotbar7 = HotbarAction7.action;
 			hotbar7.performed -= onHotbar7;
 			hotbar7.Disable();
-			
-			var spellbook = SpellbookAction.action;
-			spellbook.performed -= onSpellbook;
-			spellbook.Disable();
+
+			if (includePanels)
+			{
+				var spellbook = SpellbookAction.action;
+				spellbook.performed -= onSpellbook;
+				spellbook.Disable();
+			}
 		}
 
 		private void onLookPerformed(InputAction.CallbackContext ctx)

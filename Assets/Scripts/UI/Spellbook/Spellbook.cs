@@ -41,12 +41,15 @@ namespace UI.Spellbook
 				return;
 			
 			var player = AIManager.Instance.Player;
-			player.EnableInput();
 
 			if (state)
 			{
-				player.DisableInput();
+				player.DisableInput(false);
 				SetupSpellbook();
+			}
+			else
+			{
+				player.EnableInput();
 			}
 
 			gameObject.SetActive(state);
