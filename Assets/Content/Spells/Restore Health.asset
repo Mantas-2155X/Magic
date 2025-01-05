@@ -20,8 +20,9 @@ MonoBehaviour:
   Type: 
   Cooldown: 20
   CastingTime: 0
-  CastingCost: 60
+  CastingCost: 75
   Range: 50
+  IsResource: 1
   Cast: {fileID: 0}
   Projectile: {fileID: 0}
   Attack: {fileID: 11400000, guid: 7d83ca02a8ea6b61b8238d87b7230036, type: 2}

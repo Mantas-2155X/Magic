@@ -30,6 +30,9 @@ namespace AI.AIModes
 			if (Owner.AIMode != EAIMode.Action)
 				return;
 
+			// If low on resources, see if there's any spell that can be casted
+			Owner.LowResources.UseResourceSpellIfNeeded();
+			
 			// Don't perform other actions if casting
 			if (Owner.IsCasting)
 				return;
@@ -50,7 +53,7 @@ namespace AI.AIModes
 					{
 						// Primary spell is on cooldown, try switching into another one if it isn't on cooldown
 						var randomSpell = spells[Random.Range(1, spells.Count)];
-						if (!randomSpell.IsOnCooldown)
+						if (!randomSpell.IsOnCooldown && !randomSpell.SpellData.IsResource)
 							Owner.SelectSpell(randomSpell.SpellData);
 					}
 				}
@@ -67,7 +70,7 @@ namespace AI.AIModes
 						if (Owner.Spell.IsOnCooldown)
 						{
 							var randomSpell = spells[Random.Range(1, spells.Count)];
-							if (!randomSpell.IsOnCooldown)
+							if (!randomSpell.IsOnCooldown && !randomSpell.SpellData.IsResource)
 								Owner.SelectSpell(randomSpell.SpellData);
 						}
 					}

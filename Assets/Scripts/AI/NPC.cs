@@ -44,7 +44,7 @@ namespace AI
 		
 		public Vector3 Destination { get; private set; }
 
-		public float SwitchCastCooldown { get; private set; }
+		public float SwitchCastCooldown { get; set; }
 		
 		public AimAt AimAt { get; private set; }
 		public Chase Chase { get; private set; }

@@ -19,9 +19,10 @@ MonoBehaviour:
   Prefab: {fileID: 0}
   Type: 
   Cooldown: 5
-  CastingTime: 2.5
+  CastingTime: 2
   CastingCost: 75
   Range: 30
+  IsResource: 0
   Cast: {fileID: 11400000, guid: 3d74fb92881356673a24a288609802be, type: 2}
   Projectile: {fileID: 0}
   Attack: {fileID: 11400000, guid: 3fc2ab69142f0010192cff2428c4b5fb, type: 2}

@@ -17,6 +17,9 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public float Range;
+
+		[SerializeField]
+		public bool IsResource;
 		
 		[SerializeField]
 		public CastData Cast;

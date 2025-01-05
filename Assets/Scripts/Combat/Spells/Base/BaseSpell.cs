@@ -84,7 +84,7 @@ namespace Combat.Spells.Base
 		
 		public virtual bool CanCast()
 		{
-			if (IsCasting || !IsSelected)
+			if (IsCasting)
 				return false;
 
 			if (IsOnCooldown || Owner.CurrentMana < SpellData.CastingCost)

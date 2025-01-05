@@ -20,6 +20,55 @@ namespace AI.ActionModes.Shared
 
 		private readonly List<IObject> tempResources = new ();
 		private readonly List<Vector3> tempResourcePositions = new ();
+
+		public bool UseResourceSpellIfNeeded()
+		{
+			var spells = owner.Spells;
+			
+			if (IsHalfHealth())
+			{
+				for (var i = 0; i < spells.Count; i++)
+				{
+					var spell = spells[i];
+					
+					var spellData = spell.SpellData;
+					if (!spellData.IsResource || !spell.CanCast())
+						continue;
+					
+					if (spellData.Tags.HasFlag(ETag.RestoresHealth))
+					{
+						owner.SelectSpell(spellData);
+						owner.SwitchCastCooldown = 0f;
+						owner.Spell.StartCasting();
+
+						return true;
+					}
+				}
+			}
+
+			if (IsHalfMana())
+			{
+				for (var i = 0; i < spells.Count; i++)
+				{
+					var spell = spells[i];
+
+					var spellData = spell.SpellData;
+					if (!spellData.IsResource || !spell.CanCast())
+						continue;
+					
+					if (spellData.Tags.HasFlag(ETag.RestoresMana))
+					{
+						owner.SelectSpell(spellData);
+						owner.SwitchCastCooldown = 0f;
+						owner.Spell.StartCasting();
+
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
 		
 		public bool GrabResourceIfNeeded()
 		{
@@ -141,5 +190,9 @@ namespace AI.ActionModes.Shared
 		public bool IsLowHealth() => owner.CurrentHealth <= owner.Data.Health * ((NPCData)owner.Data).LowResourcesMultiplier;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool IsLowMana() => owner.CurrentMana <= owner.Data.Mana * ((NPCData)owner.Data).LowResourcesMultiplier;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public bool IsHalfHealth() => owner.CurrentHealth <= owner.Data.Health / 2f;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public bool IsHalfMana() => owner.CurrentMana <= owner.Data.Mana / 2f;
 	}
 }
