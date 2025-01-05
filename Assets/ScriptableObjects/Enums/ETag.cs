@@ -8,5 +8,8 @@ namespace ScriptableObjects.Enums
 		None = 0,
 		RestoresHealth = 1,
 		RestoresMana = 2,
+		Damage = 4,
+		CrowdControl = 8,
+		Defense = 16
 	}
 }

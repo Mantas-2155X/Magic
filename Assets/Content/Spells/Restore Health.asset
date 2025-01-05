@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
-  m_Name: Time Slice
+  m_Name: Restore Health
   m_EditorClassIdentifier: 
-  Name: Time Slice
-  Description: Slice all targets by time imbalances around them
-  Icon: {fileID: 21300000, guid: c07c66e5df223af5aafbfb596ef94092, type: 3}
-  Tags: 4
-  Prefab: {fileID: 0}
-  Type: Combat.Spells.TimeSlicer
-  Cooldown: 30
-  CastingTime: 2.5
-  CastingCost: 100
+  Name: Restore Health
+  Description: Heals the caster
+  Icon: {fileID: 0}
+  Tags: 1
+  Prefab: {fileID: 3523939064151980886, guid: ce293cee19a10d949bb72e6f3b0db2b6, type: 3}
+  Type: 
+  Cooldown: 20
+  CastingTime: 0
+  CastingCost: 60
   Range: 50
-  Cast: {fileID: 11400000, guid: a6d0636060cf7effb8a704dfc3e62d31, type: 2}
+  Cast: {fileID: 0}
   Projectile: {fileID: 0}
-  Attack: {fileID: 0}
+  Attack: {fileID: 11400000, guid: 7d83ca02a8ea6b61b8238d87b7230036, type: 2}

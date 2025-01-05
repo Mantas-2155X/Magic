@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Multi Caster
   m_EditorClassIdentifier: 
   Name: Multi Caster
-  Description: Masterful NPC that shoots both fire and mana balls at targets
+  Description: Masterful NPC that uses both fire and mana attacks
   Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
@@ -46,6 +46,7 @@ MonoBehaviour:
   Spells:
   - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
   - {fileID: 11400000, guid: 31a3ff1fdf8907b73b368372b5e49335, type: 2}
+  - {fileID: 11400000, guid: 8c55263e0454d3d2eafbdc914d674e95, type: 2}
   Wearables: []
   SenseRange: 25
   PatrolReachRange: 0.5
