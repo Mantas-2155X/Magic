@@ -57,6 +57,9 @@ namespace Combat.Attacks.Base
 
 			Target = AttackData.AttachToTarget ? attach : null;
 
+			if (AttackData.FollowCaster && owner != null)
+				Target = owner.GetTransform();
+			
 			if (Target == null)
 			{
 				thisTr.position = position + Vector3.up * 0.1f;
@@ -99,6 +102,9 @@ namespace Combat.Attacks.Base
 		public virtual void OnTriggerEnter(Collider other)
 		{
 			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
+				return;
+
+			if (AttackData.IgnoreCaster && alive == GetAlive())
 				return;
 			
 			if (!TriggeredAlives.Contains(alive))

@@ -21,6 +21,12 @@ namespace ScriptableObjects
 		public bool DropToGround;
 
 		[SerializeField]
+		public bool IgnoreCaster;
+
+		[SerializeField]
+		public bool FollowCaster;
+		
+		[SerializeField]
 		public Vector3 AttachOffset;
 		
 		[SerializeField]

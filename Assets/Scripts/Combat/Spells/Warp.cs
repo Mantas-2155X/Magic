@@ -23,7 +23,7 @@ namespace Combat.Spells
 				return false;
 			
 			var startPos = Owner.GetTransform().position;
-			Vector3 endPos;
+			var endPos = startPos;
 			
 			switch (Owner)
 			{
@@ -41,13 +41,26 @@ namespace Combat.Spells
 				}
 				case NPC npc:
 				{
-					var circle = Random.insideUnitCircle * WarpRange;
-					
-					endPos = new Vector3(startPos.x + circle.x, startPos.y, startPos.z + circle.y);
+					var tryCircle = true;
 
-					// Prevent picking a destination that's behind a wall
-					if (NavMesh.Raycast(startPos, endPos, out _, NavMesh.AllAreas))
-						return false;
+					if (npc.AttackTarget != null)
+					{
+						endPos = npc.AttackTargetTransform.position - npc.AttackTargetTransform.forward * Random.Range(1.5f, WarpRange);
+
+						// If the destination is unreachable, try at the circle around the npc instead
+						if (!NavMesh.Raycast(startPos, endPos, out _, NavMesh.AllAreas))
+							tryCircle = false;
+					}
+
+					if (tryCircle)
+					{
+						var circle = Random.insideUnitCircle * WarpRange;
+						endPos = new Vector3(startPos.x + circle.x, startPos.y, startPos.z + circle.y);
+
+						// Prevent picking a destination that's behind a wall
+						if (NavMesh.Raycast(startPos, endPos, out _, NavMesh.AllAreas))
+							return false;
+					}
 
 					endPos += Vector3.up * 0.5f;
 					

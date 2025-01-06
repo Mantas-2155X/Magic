@@ -20,8 +20,6 @@ namespace Combat.Attacks
 			var alive = GetAlive();
 			if (alive == null)
 				return;
-
-			Target = alive.GetTransform();
 			
 			switch (Type)
 			{
