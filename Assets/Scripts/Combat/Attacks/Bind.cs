@@ -17,7 +17,7 @@ namespace Combat.Attacks
 				return;
 
 			alive = targetAlive;
-			alive.SetBound(true);
+			alive.AddBindSource(GetInstanceID());
 
 			Target = targetAlive.GetTransform();
 		}
@@ -33,7 +33,7 @@ namespace Combat.Attacks
 			base.OnTriggersDisabled();
 
 			if (alive != null)
-				alive.SetBound(false);
+				alive.RemoveBindSource(GetInstanceID());
 		}
 	}
 }

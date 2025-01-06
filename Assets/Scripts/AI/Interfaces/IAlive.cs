@@ -31,6 +31,7 @@ namespace AI.Interfaces
 		public EMovementType MovementType { get; }
 		public int RelationshipGroup { get; }
 		public float SpellRange { get; }
+		public List<int> BindSources { get; }
 		
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
@@ -43,7 +44,10 @@ namespace AI.Interfaces
 		public void SetPowerful(bool value);
 		public void SetMovementType(EMovementType value);
 		public void SetRelationshipGroup(int value);
-		public void SetBound(bool value);
+		
+		public void AddBindSource(int instanceID);
+		public void RemoveBindSource(int instanceID);
+		public void ClearBindSources();
 
 		public int GetSpellIndex(SpellData data);
 		public void SetSpellIndex(SpellData data, int index);

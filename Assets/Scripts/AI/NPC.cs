@@ -432,10 +432,22 @@ namespace AI
 		
 		public override bool IsWalking => Agent.hasPath;
 
-		public override void SetBound(bool value)
+		public override void AddBindSource(int instanceID)
 		{
-			base.SetBound(value);
-			Agent.speed = value ? 0f : Data.Speed;
+			base.AddBindSource(instanceID);
+			Agent.speed = 0f;
+		}
+		public override void RemoveBindSource(int instanceID)
+		{
+			base.RemoveBindSource(instanceID);
+			
+			if (!IsBound)
+				Agent.speed = Data.Speed;
+		}
+		public override void ClearBindSources()
+		{
+			base.ClearBindSources();
+			Agent.speed = Data.Speed;
 		}
 		
 		public override void SelectSpell(SpellData data)

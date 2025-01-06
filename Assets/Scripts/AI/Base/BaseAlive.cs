@@ -15,6 +15,7 @@ using Combat.Wearables.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
+using Tools;
 using UI.Hotbar;
 using UI.Spellbook;
 using UnityEngine;
@@ -81,12 +82,13 @@ namespace AI.Base
 		public EMovementType MovementType { get; private set; }
 		public int RelationshipGroup { get; private set; }
 		public float SpellRange { get; private set; }
+		public List<int> BindSources { get; private set; } = new ();
 
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
 		public bool IsPowerful { get; private set; }
 		public virtual bool IsWalking { get; private set; }
-		public bool IsBound { get; private set; }
+		public bool IsBound => BindSources.Count > 0;
 		public bool IsCasting => Spell != null && Spell.IsCasting;
 
 		public virtual void SetInvulnerable(bool value)
@@ -130,12 +132,18 @@ namespace AI.Base
 			
 			OnRelationshipGroupChangedEvent?.Invoke(this, previousRelationshipGroup, RelationshipGroup);
 		}
-		public virtual void SetBound(bool value)
+		
+		public virtual void AddBindSource(int instanceID)
 		{
-			if (!IsAlive || IsBound == value)
-				return;
-			
-			IsBound = value;
+			BindSources.AddUnique(instanceID);
+		}
+		public virtual void RemoveBindSource(int instanceID)
+		{
+			BindSources.Remove(instanceID);
+		}
+		public virtual void ClearBindSources()
+		{
+			BindSources.Clear();
 		}
 
 		public virtual int GetSpellIndex(SpellData data)
