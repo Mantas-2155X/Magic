@@ -4,6 +4,7 @@ using Combat.Wearables.Enums;
 using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
+using UI.Hotbar;
 using UI.Spellbook;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -490,10 +491,12 @@ namespace AI
 			var currentIndex = GetSpellIndex(Spell != null ? Spell.SpellData : null);
 			currentIndex -= (int)ctx.ReadValue<Vector2>().y;
 
+			var maxSpell = Mathf.Min(Hotbar.Instance.Size, Spells.Count);
+			
 			if (currentIndex < 0)
-				currentIndex = Spells.Count - 1;
+				currentIndex = maxSpell - 1;
 
-			if (currentIndex >= Spells.Count)
+			if (currentIndex >= maxSpell)
 				currentIndex = 0;
 			
 			SelectSpell(Spells[currentIndex].SpellData);
