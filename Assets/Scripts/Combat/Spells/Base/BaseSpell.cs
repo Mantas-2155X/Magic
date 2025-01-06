@@ -205,8 +205,8 @@ namespace Combat.Spells.Base
 							var distMul = npcData.TargetPredictDistanceMultiplier;
 							var velMul = npcData.TargetPredictVelocityMultiplier;
 						
-							distance *= distMul + Random.Range(distMul * -0.1f, distMul * 0.1f);
-							velocity *= velMul + Random.Range(velMul * -0.1f, velMul * 0.1f);
+							distance *= distMul - Random.Range(0f, distMul * 0.15f);
+							velocity *= velMul - Random.Range(0f, velMul * 0.15f);
 
 							var prediction = velocity * distance;
 						
