@@ -18,8 +18,8 @@ MonoBehaviour:
   Tags: 0
   Prefab: {fileID: 8475379242147071745, guid: 6624d910fd63315dda7f8e60b973cacf, type: 3}
   Type: 
-  Health: 100
-  Mana: 100
+  Health: 110
+  Mana: 150
   RegenerateHealth: 0.5
   RegenerateMana: 5
   Speed: 7
@@ -29,12 +29,12 @@ MonoBehaviour:
     _serializedList:
     - Key: 4
       Value:
-        Constant: 6.5
-        Percentage: 12
+        Constant: 7
+        Percentage: 16
     - Key: 3
       Value:
-        Constant: 6.5
-        Percentage: 12
+        Constant: 7
+        Percentage: 16
   Spells:
   - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
   - {fileID: 11400000, guid: 7ad2cc843d9b00d8a84cc37429205c51, type: 2}
