@@ -202,7 +202,6 @@ namespace Combat.Spells.Base
 								default:
 									throw new NotImplementedException();
 							}
-						
 
 							var distMul = npcData.TargetPredictDistanceMultiplier;
 							var velMul = npcData.TargetPredictVelocityMultiplier;

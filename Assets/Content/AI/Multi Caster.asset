@@ -27,22 +27,22 @@ MonoBehaviour:
     _serializedList:
     - Key: 4
       Value:
-        Constant: 2
+        Constant: 1
         Percentage: 0
     - Key: 3
       Value:
-        Constant: 2
+        Constant: 1
         Percentage: 0
   ProtectionStats:
     _serializedList:
     - Key: 4
       Value:
-        Constant: 5
-        Percentage: 10
+        Constant: 4
+        Percentage: 7.5
     - Key: 3
       Value:
-        Constant: 5
-        Percentage: 10
+        Constant: 4
+        Percentage: 7.5
   Spells:
   - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
   - {fileID: 11400000, guid: 31a3ff1fdf8907b73b368372b5e49335, type: 2}

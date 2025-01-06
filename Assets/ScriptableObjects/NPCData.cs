@@ -74,7 +74,7 @@ namespace ScriptableObjects
 		/// How much extra inaccuracy randomness is added to next position prediction
 		/// </summary>
 		[SerializeField]
-		public float TargetPredictInaccuracy = 0.1f;
+		public float TargetPredictInaccuracy = 0.175f;
 		
 		/// <summary>
 		/// How far the target must be from the npc to start next position prediction
