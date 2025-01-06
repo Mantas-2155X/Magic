@@ -69,5 +69,23 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public float UseResourceEvery = 1f;
+		
+		/// <summary>
+		/// How far the target must be from the npc to start next position prediction
+		/// </summary>
+		[SerializeField]
+		public float TargetPredictMinimumRange = 5f;
+		
+		/// <summary>
+		/// How much the moving target velocity is multiplied by to predict next position
+		/// </summary>
+		[SerializeField]
+		public float TargetPredictVelocityMultiplier = 0.09f;
+		
+		/// <summary>
+		/// How much the moving target distance is multiplied by to predict next position
+		/// </summary>
+		[SerializeField]
+		public float TargetPredictDistanceMultiplier = 0.0775f;
 	}
 }

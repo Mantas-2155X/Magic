@@ -172,8 +172,50 @@ namespace Combat.Spells.Base
 					break;
 				case NPC npc:
 					var ownerTr = Owner.GetTransform();
-					var direction = npc.AttackTarget == null ? ownerTr.forward : (npc.AttackTargetTransform.position - ownerTr.position).normalized;
-					LastRay = new Ray(ownerTr.position + ownerTr.up * 0.5f, direction);
+					var ownerPos = ownerTr.position;
+					
+					var targetPos = Vector3.zero;
+
+					if (npc.AttackTarget != null)
+					{
+						var npcData = (NPCData)npc.Data;
+
+						var distance = Vector3.Distance(ownerPos, targetPos);
+						if (distance > npcData.TargetPredictMinimumRange)
+						{
+							Vector3 velocity;
+						
+							switch (npc.AttackTarget)
+							{
+								case Player targetPlayer:
+								{
+									velocity = targetPlayer.Body.Rigidbody.linearVelocity;
+									break;
+								}
+								case NPC targetNPC:
+								{
+									velocity = targetNPC.IsWalking ? targetNPC.Agent.velocity : targetNPC.Body.Rigidbody.linearVelocity;
+									break;
+								}
+								default:
+									throw new NotImplementedException();
+							}
+						
+
+							var distMul = npcData.TargetPredictDistanceMultiplier;
+							var velMul = npcData.TargetPredictVelocityMultiplier;
+						
+							distance *= distMul + Random.Range(distMul * -0.1f, distMul * 0.1f);
+							velocity *= velMul + Random.Range(velMul * -0.1f, velMul * 0.1f);
+
+							var prediction = velocity * distance;
+						
+							targetPos = npc.AttackTargetTransform.position + prediction;
+						}
+					}
+					
+					var direction = npc.AttackTarget == null ? ownerTr.forward : (targetPos - ownerPos).normalized;
+					LastRay = new Ray(ownerPos + ownerTr.up * 0.5f, direction);
 					break;
 				default:
 					throw new NotImplementedException();
