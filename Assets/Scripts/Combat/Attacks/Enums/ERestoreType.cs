@@ -2,6 +2,7 @@ namespace Combat.Attacks.Enums
 {
 	public enum ERestoreType
 	{
-		Health
+		Health,
+		Mana
 	}
 }
