@@ -8,8 +8,11 @@ using UnityEngine.UI;
 
 namespace UI.Spellbook
 {
-	public class SpellContainer : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+	public class SpellContainer : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler
 	{
+		[SerializeField]
+		public GameObject Hover;
+
 		[SerializeField]
 		public Image Icon;
 			
@@ -39,6 +42,7 @@ namespace UI.Spellbook
 			
 			gameObject.SetActive(true);
 			
+			Hover.SetActive(false);
 			Icon.sprite = spell.SpellData.Icon;
 			Mana.text = spell.SpellData.CastingCost.ToString(CultureInfo.CurrentCulture);
 			
@@ -86,6 +90,22 @@ namespace UI.Spellbook
 			dragging = false;
 			transform.SetSiblingIndex(currentTransformIndex);
 			AIManager.Instance.Player.SetSpellIndex(Spell.SpellData, newSpellIndex);
+		}
+
+		public void OnPointerEnter(PointerEventData eventData)
+		{
+			if (dragging)
+				return;
+			
+			Hover.SetActive(true);
+		}
+
+		public void OnPointerExit(PointerEventData eventData)
+		{
+			if (dragging)
+				return;
+			
+			Hover.SetActive(false);
 		}
 	}
 }
