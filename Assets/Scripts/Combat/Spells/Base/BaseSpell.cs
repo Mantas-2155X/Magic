@@ -178,6 +178,8 @@ namespace Combat.Spells.Base
 
 					if (npc.AttackTarget != null)
 					{
+						targetPos = npc.AttackTargetTransform.position;
+						
 						var npcData = (NPCData)npc.Data;
 
 						var distance = Vector3.Distance(ownerPos, targetPos);
@@ -205,12 +207,15 @@ namespace Combat.Spells.Base
 							var distMul = npcData.TargetPredictDistanceMultiplier;
 							var velMul = npcData.TargetPredictVelocityMultiplier;
 						
-							distance *= distMul - Random.Range(0f, distMul * 0.15f);
-							velocity *= velMul - Random.Range(0f, velMul * 0.15f);
+							var distInaccuracy = distMul * npcData.TargetPredictInaccuracy;
+							var velInaccuracy = velMul * npcData.TargetPredictInaccuracy;
+							
+							distance *= distMul + Random.Range(-distInaccuracy, distInaccuracy);
+							velocity *= velMul + Random.Range(-velInaccuracy, velInaccuracy);
 
 							var prediction = velocity * distance;
-						
-							targetPos = npc.AttackTargetTransform.position + prediction;
+							
+							targetPos += prediction;
 						}
 					}
 					
