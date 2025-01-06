@@ -21,6 +21,12 @@ namespace UI.Hotbar
 		public TMP_Text SelectedSpell;
 
 		[SerializeField]
+		public Color CanCastColor;
+		
+		[SerializeField]
+		public Color CantCastColor;
+
+		[SerializeField]
 		public int Size = 7;
 		
 		[NonSerialized]
