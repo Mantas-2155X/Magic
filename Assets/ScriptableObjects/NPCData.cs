@@ -74,7 +74,7 @@ namespace ScriptableObjects
 		/// How much extra inaccuracy randomness is added to next position prediction
 		/// </summary>
 		[SerializeField]
-		public float TargetPredictInaccuracy = 0.175f;
+		public float TargetPredictInaccuracy = 0.6f;
 		
 		/// <summary>
 		/// How far the target must be from the npc to start next position prediction
@@ -93,5 +93,17 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public float TargetPredictDistanceMultiplier = 0.0775f;
+		
+		/// <summary>
+		/// If the target is below this velocity, fake velocity is applied
+		/// </summary>
+		[SerializeField]
+		public float TargetPredictStartFakeVelocity = 4.5f;
+		
+		/// <summary>
+		/// Maximum of how much velocity should the fake prediction add
+		/// </summary>
+		[SerializeField]
+		public float TargetPredictMaximumFakeVelocity = 11f;
 	}
 }

@@ -68,6 +68,15 @@ namespace Combat.Spells.Base
 			}
 		}
 
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+		{
+			Gizmos.color = Color.red;
+			
+			Gizmos.DrawRay(LastRay.origin, LastRay.direction * SpellData.Range);
+		}
+#endif
+		
 		#endregion
 
 		#region ISpell
@@ -203,6 +212,13 @@ namespace Combat.Spells.Base
 									throw new NotImplementedException();
 							}
 
+							if (velocity.magnitude < npcData.TargetPredictStartFakeVelocity)
+							{
+								// Add some amount of fake velocity for extra inaccuracy
+								var fakeVel = npcData.TargetPredictMaximumFakeVelocity;
+								velocity = new Vector3(Random.Range(-fakeVel, fakeVel), Random.Range(-fakeVel, fakeVel), Random.Range(-fakeVel, fakeVel));
+							}
+							
 							var distMul = npcData.TargetPredictDistanceMultiplier;
 							var velMul = npcData.TargetPredictVelocityMultiplier;
 						
