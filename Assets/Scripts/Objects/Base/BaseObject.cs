@@ -24,6 +24,11 @@ namespace Objects.Base
 
 		#region MonoBehaviour
 
+		public virtual void Awake()
+		{
+			initializeObject();
+		}
+		
 		public virtual void OnEnable()
 		{
 			initializeObject();
