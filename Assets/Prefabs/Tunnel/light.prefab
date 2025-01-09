@@ -97,6 +97,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4668473219768460290}
+  - component: {fileID: 2183100833112526814}
   - component: {fileID: 4411070883382737183}
   - component: {fileID: 8548233599652122313}
   m_Layer: 0
@@ -121,6 +122,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1159493338630786410}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2183100833112526814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6609213909674793635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fbd8efb12744d89833d38c38b17cf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: c496e39271e74fe36b188bef3947509f, type: 2}
+  Light: {fileID: 4411070883382737183}
+  Enabled: 1
+  Renderer: {fileID: 8729331271185628313}
+  MaterialIndex: 1
+  OnLightEnabledEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLightDisabledEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!108 &4411070883382737183
 Light:
   m_ObjectHideFlags: 0
