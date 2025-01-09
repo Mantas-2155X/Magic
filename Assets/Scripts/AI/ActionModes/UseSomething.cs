@@ -40,8 +40,9 @@ namespace AI.ActionModes
 				owner.ReturnActionMode();
 				return;
 			}
-			
-			var targetPos = owner.OtherTargetTransform.position;
+
+			var targetTr = owner.OtherTargetTransform;
+			var targetPos = targetTr.position;
 
 			// Target is too far, return to previous action
 			if (Vector3.Distance(targetPos, ownerPos) > ((NPCData)owner.Data).SenseRange)
@@ -70,9 +71,14 @@ namespace AI.ActionModes
 				return;
 			}
 
-			// Use it if possible
+			// Turn towards the object and use it
 			if (target is IObject obj)
+			{
+				if (!owner.AimAt.AimTowards(targetTr))
+					return;
+
 				obj.Use(owner);
+			}
 			
 			// Done using it or failed, return to previous action either way
 			owner.ReturnActionMode();
