@@ -43,6 +43,8 @@ namespace Objects.Base
 		public EDoorDirection Direction { get; private set; }
 
 		[field: SerializeField]
+		public float AutoClose { get; private set; }
+		[field: SerializeField]
 		public float Amount { get; private set; } = 1f;
 		[field: SerializeField]
 		public float Duration { get; private set; } = 0.5f;
@@ -50,6 +52,8 @@ namespace Objects.Base
 		public float Normalized { get; private set; }
 		
 		private CancellationTokenSource cancellationToken = new ();
+
+		private float lastOpened;
 
 		#region MonoBehaviour
 
@@ -62,6 +66,7 @@ namespace Objects.Base
 				case EDoorState.Open:
 					Normalized = 1f;
 					Obstacle.enabled = false;
+					lastOpened = Time.time;
 					break;
 				case EDoorState.Closed:
 					Normalized = 0f;
@@ -70,6 +75,17 @@ namespace Objects.Base
 			}
 			
 			setPosition();
+		}
+
+		public void Update()
+		{
+			if (AutoClose == 0f || State != EDoorState.Open)
+				return;
+			
+			if (Time.time < AutoClose + lastOpened)
+				return;
+			
+			Close();
 		}
 
 		#endregion
@@ -207,6 +223,7 @@ namespace Objects.Base
 						Normalized = 1f;
 						setPosition();
 						Obstacle.enabled = false;
+						lastOpened = Time.time;
 						OnDoorOpenedEvent?.Invoke();
 						return;
 					case EDoorState.Closing when Normalized <= 0f:

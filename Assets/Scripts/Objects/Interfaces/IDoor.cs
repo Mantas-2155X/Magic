@@ -17,6 +17,7 @@ namespace Objects.Interfaces
 		public EDoorType Type { get; }
 		public EDoorDirection Direction { get; }
 		
+		public float AutoClose { get; }
 		public float Amount { get; }
 		public float Duration { get; }
 		

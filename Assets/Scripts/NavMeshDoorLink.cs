@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using AI;
 using AI.ActionModes;
+using AI.Base;
 using AI.Enums;
+using AI.Interfaces;
 using Managers;
 using Objects.Base;
 using Tools;
@@ -25,6 +27,11 @@ public class NavMeshDoorLink : MonoBehaviour
 	public NPC User { get; private set; }
 	
 	private readonly List<NPC> linkUsers = new ();
+	
+	public void Awake()
+	{
+		BaseAlive.OnDeathEvent.AddListener(onDeath);
+	}
 	
 	public void OnDoorOpened()
 	{
@@ -107,6 +114,14 @@ public class NavMeshDoorLink : MonoBehaviour
 		return true;
 	}
 	
+	private void onDeath(IAlive alive, object source)
+	{
+		if (alive is not NPC npc || npc != User)
+			return;
+
+		User = null;
+	}
+
 	private void toggleLink(bool state)
 	{
 		linkUsers.Clear();
