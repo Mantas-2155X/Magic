@@ -8,5 +8,11 @@ namespace Objects.Events
 	public class OnDoorOpenedEvent : UnityEvent { }
 	
 	[Serializable]
+	public class OnDoorOpeningEvent : UnityEvent { }
+	
+	[Serializable]
 	public class OnDoorClosedEvent : UnityEvent { }
+	
+	[Serializable]
+	public class OnDoorClosingEvent : UnityEvent { }
 }

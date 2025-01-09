@@ -1,7 +1,9 @@
 using AI.Enums;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Objects.Enums;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -39,10 +41,32 @@ namespace AI.AIModes
 		public void Update()
 		{
 			var agent = Owner.Agent;
-			if (agent.isOnOffMeshLink && !jumpingLink)
+			if (agent.isOnOffMeshLink)
 			{
-				jumpLink().Forget();
-				return;
+				var data = agent.currentOffMeshLinkData;
+				
+				// Jump if needed
+				if (NavMeshTools.IsJumpLink(data) && !jumpingLink)
+				{
+					jumpLink().Forget();
+					return;
+				}
+				
+				// Either open a door or wait for it to open
+				if (NavMeshTools.IsDoorLink(data))
+				{
+					var action = ((Component)data.owner).GetComponent<NavMeshDoorLink>();
+					if (action.Door.State != EDoorState.Open)
+					{
+						// Is opening or already has an user, wait
+						if (action.IsPartial || action.User != null)
+							return;
+
+						// Have the npc open it
+						if (action.TryOpen(Owner))
+							return;
+					}
+				}
 			}
 			
 			if (agent.pathPending || !agent.isOnNavMesh || agent.remainingDistance > agent.stoppingDistance || agent.hasPath && agent.velocity.sqrMagnitude != 0f)

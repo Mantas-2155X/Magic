@@ -13,6 +13,8 @@ namespace AI.ActionModes
 		public float LastEntered { get; private set; }
 		public float LastExited { get; private set; }
 
+		public Vector3? WalkAfterwards;
+
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
@@ -49,7 +51,7 @@ namespace AI.ActionModes
 			}
 
 			// Stop next to the usable
-			var stopAt = 1f + owner.Agent.stoppingDistance;
+			var stopAt = 2.5f + owner.Agent.stoppingDistance;
 			
 			// NPC not within target range, keep walking
 			if (Vector3.Distance(ownerPos, targetPos) > stopAt)
@@ -74,6 +76,13 @@ namespace AI.ActionModes
 			
 			// Done using it or failed, return to previous action either way
 			owner.ReturnActionMode();
+
+			// In case this was a button to open a door, continue to the destination
+			if (WalkAfterwards != null)
+			{
+				owner.Walk(WalkAfterwards.Value);
+				WalkAfterwards = null;
+			}
 		}
 		
 		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)

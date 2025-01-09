@@ -1,4 +1,5 @@
 using AI.Enums;
+using Tools;
 using UnityEngine;
 
 namespace AI.ActionModes.Shared
@@ -91,7 +92,7 @@ namespace AI.ActionModes.Shared
 			// Set the chase range to the full actual value since we reached the target at a lowered rate, allowing micromovements of the target while staying in range
 			ResetChaseRange(false);
 			
-			// Performing jump, stay on walking state until thats done
+			// Performing link, stay on walking state until thats done
 			if (agent.isOnOffMeshLink)
 				return false;
 				

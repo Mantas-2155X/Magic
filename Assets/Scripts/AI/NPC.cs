@@ -1,4 +1,4 @@
-//#define DEBUG_NPC
+#define DEBUG_NPC
 
 using System.Collections.Generic;
 using AI.ActionModes;
@@ -12,6 +12,7 @@ using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.AI;
 using Action = AI.AIModes.Action;
+using Random = UnityEngine.Random;
 
 namespace AI
 {
@@ -424,6 +425,14 @@ namespace AI
 			AIModeObj.Update();
 		}
 
+#if UNITY_EDITOR && DEBUG_NPC
+		public void OnDrawGizmos()
+		{
+			Gizmos.color = Color.green;
+			Gizmos.DrawLine(transform.position, Destination);
+		}
+#endif
+		
 		#endregion
 		
 		#region IAlive

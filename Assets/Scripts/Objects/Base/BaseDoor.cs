@@ -15,7 +15,13 @@ namespace Objects.Base
 		public OnDoorOpenedEvent OnDoorOpenedEvent = new ();
 		
 		[SerializeField]
+		public OnDoorOpeningEvent OnDoorOpeningEvent = new ();
+
+		[SerializeField]
 		public OnDoorClosedEvent OnDoorClosedEvent = new ();
+
+		[SerializeField]
+		public OnDoorClosingEvent OnDoorClosingEvent = new ();
 
 		[field: SerializeField]
 		public AnimationCurve Curve { get; private set; }
@@ -62,6 +68,20 @@ namespace Objects.Base
 		}
 
 		#endregion
+
+		#region IObject
+
+		public override bool Use(IAlive user)
+		{
+			var success = base.Use(user);
+			if (!success)
+				return false;
+
+			Toggle();
+			return true;
+		}
+
+		#endregion
 		
 		#region Door
 
@@ -103,6 +123,7 @@ namespace Objects.Base
 					return;
 
 				State = EDoorState.Opening;
+				OnDoorOpeningEvent?.Invoke();
 			}
 			else
 			{
@@ -110,6 +131,7 @@ namespace Objects.Base
 					return;
 
 				State = EDoorState.Closing;
+				OnDoorClosingEvent?.Invoke();
 			}
 
 			cancellationToken?.Cancel();

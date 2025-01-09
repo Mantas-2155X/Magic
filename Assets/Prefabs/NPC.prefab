@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 923e274e6c3b4bccbda3b5d3b10802b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Data>k__BackingField: {fileID: 0}
   <Body>k__BackingField: {fileID: 42988670619036741}
   Agent: {fileID: 7175161009213997453}
   JumpCurve:
@@ -233,12 +234,28 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  WalkCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   JumpDuration: 0.75
-  SenseRange: 25
-  PatrolReachRange: 0.5
-  RotationSpeed: 480
-  AimAngle: 5
-  WanderEvery: 1
-  CommunicateRange: 5
-  LowResourcesMultiplier: 0.15
-  SpellCooldownVariation: 0.15
