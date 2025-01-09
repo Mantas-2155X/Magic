@@ -151,6 +151,9 @@ namespace AI
 			
 			if (MovementType == EMovementType.Noclip)
 			{
+				if (moveDirection == Vector2.zero && !jumpPressed && !fallPressed)
+					Body.Rigidbody.linearVelocity *= data.StopSlide;
+				
 				Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * data.SprintMultiplier : 1f), ForceMode.VelocityChange);
 				
 				if (jumpPressed)
