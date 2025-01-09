@@ -5,6 +5,12 @@ public class Trigger : MonoBehaviour
 {
 	[SerializeField]
 	public OnTriggerEvent OnTriggerEvent;
+
+	[SerializeField]
+	public bool IsMultiTrigger;
+
+	[SerializeField]
+	public bool TriggerOnStay;
 	
 	private bool triggered;
 	
@@ -13,7 +19,20 @@ public class Trigger : MonoBehaviour
 		if (triggered)
 			return;
 
-		triggered = true;
+		if (!IsMultiTrigger)
+			triggered = true;
+		
+		OnTriggerEvent?.Invoke(other);
+	}
+	
+	public void OnTriggerStay(Collider other)
+	{
+		if (triggered || !TriggerOnStay)
+			return;
+
+		if (!IsMultiTrigger)
+			triggered = true;
+		
 		OnTriggerEvent?.Invoke(other);
 	}
 }

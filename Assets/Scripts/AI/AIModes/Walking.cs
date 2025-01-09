@@ -58,6 +58,10 @@ namespace AI.AIModes
 					var action = ((Component)data.owner).GetComponent<NavMeshDoorLink>();
 					if (action.Door.State != EDoorState.Open)
 					{
+						// Not usable and no buttons, likely activated by trigger so just wait for it to open
+						if (!action.Door.ObjectData.IsUsable && action.Buttons.Length == 0)
+							return;
+						
 						// Is opening or already has an user, wait
 						if (action.IsPartial || action.User != null)
 							return;
