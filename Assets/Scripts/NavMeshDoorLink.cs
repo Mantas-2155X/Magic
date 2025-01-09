@@ -28,9 +28,16 @@ public class NavMeshDoorLink : MonoBehaviour
 	
 	private readonly List<NPC> linkUsers = new ();
 	
-	public void Awake()
+	public void Update()
 	{
-		BaseAlive.OnDeathEvent.AddListener(onDeath);
+		if (User == null)
+			return;
+
+		// Dying or getting interrupted should clear the user to prevent a lock
+		if (User.IsAlive && User.ActionMode == EActionMode.UseSomething)
+			return;
+
+		User = null;
 	}
 	
 	public void OnDoorOpened()
@@ -112,14 +119,6 @@ public class NavMeshDoorLink : MonoBehaviour
 		}
 		
 		return true;
-	}
-	
-	private void onDeath(IAlive alive, object source)
-	{
-		if (alive is not NPC npc || npc != User)
-			return;
-
-		User = null;
 	}
 
 	private void toggleLink(bool state)
