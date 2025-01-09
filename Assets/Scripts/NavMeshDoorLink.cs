@@ -25,7 +25,6 @@ public class NavMeshDoorLink : MonoBehaviour
 	public NPC User { get; private set; }
 	
 	private readonly List<NPC> linkUsers = new ();
-	private readonly List<NavMeshPath> buttonPaths = new ();
 	
 	public void OnDoorOpened()
 	{
@@ -76,8 +75,6 @@ public class NavMeshDoorLink : MonoBehaviour
 			// Multiple buttons, use the cheapest one
 			default: 
 			{
-				buttonPaths.Clear();
-				
 				var position = user.GetTransform().position;
 			
 				var cheapestPath = float.MaxValue;
@@ -87,8 +84,6 @@ public class NavMeshDoorLink : MonoBehaviour
 				{
 					var buttonPosition = Buttons[i].GetTransform().position;
 					var path = new NavMeshPath();
-					
-					buttonPaths.Add(path);
 					
 					if (!NavMesh.CalculatePath(position, buttonPosition, NavMeshTools.GetAreaMask(), path))
 						continue;

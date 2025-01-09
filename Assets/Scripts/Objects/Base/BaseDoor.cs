@@ -6,6 +6,7 @@ using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Objects.Base
 {
@@ -23,6 +24,8 @@ namespace Objects.Base
 		[SerializeField]
 		public OnDoorClosingEvent OnDoorClosingEvent = new ();
 
+		[field: SerializeField]
+		public NavMeshObstacle Obstacle { get; private set; }
 		[field: SerializeField]
 		public AnimationCurve Curve { get; private set; }
 
@@ -58,9 +61,11 @@ namespace Objects.Base
 			{
 				case EDoorState.Open:
 					Normalized = 1f;
+					Obstacle.enabled = false;
 					break;
 				case EDoorState.Closed:
 					Normalized = 0f;
+					Obstacle.enabled = true;
 					break;
 			}
 			
@@ -123,6 +128,7 @@ namespace Objects.Base
 					return;
 
 				State = EDoorState.Opening;
+				Obstacle.enabled = true;
 				OnDoorOpeningEvent?.Invoke();
 			}
 			else
@@ -131,6 +137,7 @@ namespace Objects.Base
 					return;
 
 				State = EDoorState.Closing;
+				Obstacle.enabled = true;
 				OnDoorClosingEvent?.Invoke();
 			}
 
@@ -199,12 +206,14 @@ namespace Objects.Base
 						State = EDoorState.Open;
 						Normalized = 1f;
 						setPosition();
+						Obstacle.enabled = false;
 						OnDoorOpenedEvent?.Invoke();
 						return;
 					case EDoorState.Closing when Normalized <= 0f:
 						State = EDoorState.Closed;
 						Normalized = 0f;
 						setPosition();
+						Obstacle.enabled = true;
 						OnDoorClosedEvent?.Invoke();
 						return;
 				}

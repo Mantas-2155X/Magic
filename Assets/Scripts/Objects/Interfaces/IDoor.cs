@@ -1,10 +1,12 @@
 using Objects.Enums;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Objects.Interfaces
 {
 	public interface IDoor
 	{
+		public NavMeshObstacle Obstacle { get; }
 		public AnimationCurve Curve { get; }
 		
 		public EDoorState State { get; }
