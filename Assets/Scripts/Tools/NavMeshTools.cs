@@ -16,6 +16,7 @@ namespace Tools
 			areaMask = 0;
 			areaMask += 1 << NavMesh.GetAreaFromName("Walkable");
 			areaMask += 1 << NavMesh.GetAreaFromName("Jump");
+			areaMask += 1 << NavMesh.GetAreaFromName("Elevator");
 			
 			return areaMask!.Value;
 		}
@@ -34,6 +35,14 @@ namespace Tools
 				return false;
 			
 			return link.area == 3;
+		}
+		
+		public static bool IsElevatorLink(OffMeshLinkData data)
+		{
+			if (!data.valid || data.owner is not NavMeshLink link)
+				return false;
+			
+			return link.area == 4;
 		}
 		
 		// https://discussions.unity.com/t/cost-of-a-navmeshpath/643664/12

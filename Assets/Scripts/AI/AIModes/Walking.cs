@@ -62,13 +62,97 @@ namespace AI.AIModes
 						if (!action.Door.ObjectData.IsUsable && action.Buttons.Length == 0)
 							return;
 						
-						// Is opening or already has an user, wait
+						// Is opening or already has a user, wait
 						if (action.IsPartial || action.User != null)
 							return;
 
 						// Have the npc open it
 						if (action.TryOpen(Owner))
 							return;
+					}
+				}
+
+				// Raise/lower an elevator (or wait for it), get in it and raise/lower it again
+				if (NavMeshTools.IsElevatorLink(data))
+				{
+					var action = ((Component)data.owner).GetComponent<NavMeshElevatorLink>();
+
+					if (Mathf.Abs(Owner.Destination.y - action.Link.startTransform.position.y) < 1.5f)
+					{
+						if (action.PlatformUser == Owner)
+						{
+							if (action.Elevator.State == EElevatorState.Lowered)
+							{
+								// Step off the platform
+								action.GetOffPlatform();
+							}
+							else
+							{
+								// Stay on the platform
+								Owner.Body.Rigidbody.MovePosition(action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset);
+							}
+							
+							return;
+						}
+						
+						// Someone else is on the platform, wait
+						if (action.PlatformUser != null)
+							return;
+						
+						// Destination is below, call the elevator up
+						if (action.Elevator.State != EElevatorState.Elevated)
+						{
+							// Is moving or already has a button user, wait
+							if (action.IsPartial || action.ButtonUser != null)
+								return;
+
+							// Have the npc elevate it
+							if (action.TryUse(Owner, true))
+								return;
+						}
+						else
+						{
+							// Elevator is up, step on the platform and use it
+							action.GetOnPlatform(Owner, false);
+						}
+					}
+					else if (Mathf.Abs(Owner.Destination.y - action.Link.endTransform.position.y) < 1.5f)
+					{
+						if (action.PlatformUser == Owner)
+						{
+							if (action.Elevator.State == EElevatorState.Elevated)
+							{
+								// Step off the platform
+								action.GetOffPlatform();
+							}
+							else
+							{
+								// Stay on the platform
+								Owner.Body.Rigidbody.MovePosition(action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset);
+							}
+							return;
+						}
+
+						// Someone else is on the platform, wait
+						if (action.PlatformUser != null)
+							return;
+
+						// Destination is above, call the elevator down
+						if (action.Elevator.State != EElevatorState.Lowered)
+						{
+							// Is moving or already has a button user, wait
+							if (action.IsPartial || action.ButtonUser != null)
+								return;
+
+							// Have the npc elevate it
+							if (action.TryUse(Owner, false))
+								return;
+						}
+						else
+						{
+							// Elevator is down, step on the platform and use it
+							action.GetOnPlatform(Owner, true);
+						}
 					}
 				}
 			}
