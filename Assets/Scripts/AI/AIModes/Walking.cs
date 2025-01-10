@@ -106,6 +106,13 @@ namespace AI.AIModes
 							if (action.IsPartial || action.ButtonUser != null)
 								return;
 
+							// Elevate it without a button
+							if (action.ElevateButton == null)
+							{
+								action.Elevator.Elevate();
+								return;
+							}
+							
 							// Have the npc elevate it
 							if (action.TryUse(Owner, true))
 								return;
@@ -145,7 +152,14 @@ namespace AI.AIModes
 							if (action.IsPartial || action.ButtonUser != null)
 								return;
 
-							// Have the npc elevate it
+							// Lower it without a button
+							if (action.LowerButton == null)
+							{
+								action.Elevator.Lower();
+								return;
+							}
+							
+							// Have the npc lower it
 							if (action.TryUse(Owner, false))
 								return;
 						}

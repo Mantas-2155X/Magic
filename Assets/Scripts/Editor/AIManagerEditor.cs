@@ -199,8 +199,8 @@ namespace Editor
 			if (GUILayout.Button("Patrol Aggressively"))
 			{
 				var points = new List<Vector3>();
-				points.Add(new Vector3(6.17f, 1.55f, 0.02f));
-				points.Add(new Vector3(5.97f, 4.55f, 0.28f));
+				points.Add(new Vector3(-29.55f, 5.78f, -18.67f));
+				points.Add(new Vector3(-28.56f, -0.93f, -18.20f));
 				
 				foreach (var npc in aiManager.NPCs)
 				{
