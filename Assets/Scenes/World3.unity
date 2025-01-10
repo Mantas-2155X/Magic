@@ -5762,6 +5762,7 @@ GameObject:
   m_Component:
   - component: {fileID: 890461267}
   - component: {fileID: 890461268}
+  - component: {fileID: 890461269}
   m_Layer: 0
   m_Name: ElevatorContainer
   m_TagString: Untagged
@@ -5801,6 +5802,27 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 3.45, z: 0}
   m_TimeToStationary: 0.5
+--- !u!65 &890461269
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890461266}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1.125, z: 0}
 --- !u!1 &891401686
 GameObject:
   m_ObjectHideFlags: 0
@@ -6158,6 +6180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 915913718}
   - component: {fileID: 915913719}
+  - component: {fileID: 915913720}
   m_Layer: 0
   m_Name: ElevatorContainer (1)
   m_TagString: Untagged
@@ -6197,6 +6220,27 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 3.45, z: 0}
   m_TimeToStationary: 0.5
+--- !u!65 &915913720
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915913717}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1.125, z: 0}
 --- !u!1001 &948984813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7222,6 +7266,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   <RigidBody>k__BackingField: {fileID: 1055917271}
+  <AntiCrush>k__BackingField: {fileID: 890461269}
   <State>k__BackingField: 1
   <Interruptible>k__BackingField: 0
   <Locked>k__BackingField: 0
@@ -18351,6 +18396,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   <RigidBody>k__BackingField: {fileID: 1166412336}
+  <AntiCrush>k__BackingField: {fileID: 915913720}
   <State>k__BackingField: 0
   <Interruptible>k__BackingField: 0
   <Locked>k__BackingField: 0
@@ -18386,7 +18432,7 @@ Transform:
   m_GameObject: {fileID: 1166412331}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.3360076, z: 0}
+  m_LocalPosition: {x: 0, y: 0.7464508, z: 0}
   m_LocalScale: {x: 1.4, y: 0.1, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children:

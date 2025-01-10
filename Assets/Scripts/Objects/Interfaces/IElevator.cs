@@ -8,6 +8,8 @@ namespace Objects.Interfaces
 		public AnimationCurve Curve { get; }
 		
 		public Rigidbody RigidBody { get; }
+		
+		public Collider AntiCrush { get; }
 
 		public EElevatorState State { get; }
 

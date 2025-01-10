@@ -29,6 +29,9 @@ namespace Objects.Base
 		public Rigidbody RigidBody { get; private set; }
 
 		[field: SerializeField]
+		public Collider AntiCrush { get; private set; }
+
+		[field: SerializeField]
 		public EElevatorState State { get; private set; } = EElevatorState.Lowered;
 
 		[field: SerializeField]
@@ -76,6 +79,9 @@ namespace Objects.Base
 
 		public void Update()
 		{
+			var yPos = GetTransform().localPosition.y;
+			AntiCrush.enabled = State == EElevatorState.Lowering && yPos < 3.5f && yPos > 1.5f;
+			
 			if (AutoElevate != 0f && State == EElevatorState.Lowered)
 			{
 				if (Time.time >= AutoElevate + lastLowered)
