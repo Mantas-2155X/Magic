@@ -484,6 +484,7 @@ namespace AI
 			LowResources = new LowResources(this);
 			
 			Agent.speed = data.Speed;
+			Agent.angularSpeed = ((NPCData)data).RotationSpeed;
 			
 			base.Spawn(data, relationshipGroup);
 		}

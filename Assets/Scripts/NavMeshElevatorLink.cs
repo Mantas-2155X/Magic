@@ -5,6 +5,7 @@ using AI.Enums;
 using Cysharp.Threading.Tasks;
 using Objects.Base;
 using Objects.Enums;
+using ScriptableObjects;
 using Unity.AI.Navigation;
 using UnityEngine;
 
@@ -30,8 +31,6 @@ public class NavMeshElevatorLink : MonoBehaviour
 	public NPC ButtonUser { get; private set; }
 	
 	public NPC PlatformUser { get; private set; }
-
-	public bool IsFacing { get; private set; }
 
 	public bool IsSteppingOn { get; private set; }
 	
@@ -63,16 +62,29 @@ public class NavMeshElevatorLink : MonoBehaviour
 
 			if (!IsSteppingOn && !IsSteppingOff)
 			{
-				// Look at the finish position while it's moving
+				var tr = PlatformUser.GetTransform();
+				var targetPosition = Vector3.zero;
+				
 				switch (Elevator.State)
 				{
 					case EElevatorState.Elevated or EElevatorState.Elevating:
-						IsFacing = PlatformUser.AimAt.AimTowards(Link.endTransform);
+					{
+						targetPosition = Link.endTransform.position - tr.position;
 						break;
+					}
 					case EElevatorState.Lowered or EElevatorState.Lowering:
-						IsFacing = PlatformUser.AimAt.AimTowards(Link.startTransform);
+					{
+						targetPosition = Link.startTransform.position - tr.position;
 						break;
+					}
 				}
+				
+				targetPosition.y = 0;
+
+				var targetRotation = Quaternion.LookRotation(targetPosition);
+				var rotationSpeed = ((NPCData)PlatformUser.Data).RotationSpeed;
+				
+				tr.rotation = Quaternion.RotateTowards(tr.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 			}
 		}
 	}
@@ -131,7 +143,7 @@ public class NavMeshElevatorLink : MonoBehaviour
 	
 	public void GetOffPlatform()
 	{
-		if (IsSteppingOff || !IsFacing)
+		if (IsSteppingOff)
 			return;
 		
 		IsSteppingOff = true;
@@ -156,7 +168,9 @@ public class NavMeshElevatorLink : MonoBehaviour
 			
 			if (PlatformUser == null || !PlatformUser.IsAlive)
 			{
+				PlatformUser = null;
 				IsSteppingOn = false;
+				IsSteppingOff = false;
 				return;
 			}
 
@@ -197,6 +211,8 @@ public class NavMeshElevatorLink : MonoBehaviour
 			
 			if (PlatformUser == null || !PlatformUser.IsAlive)
 			{
+				PlatformUser = null;
+				IsSteppingOn = false;
 				IsSteppingOff = false;
 				return;
 			}

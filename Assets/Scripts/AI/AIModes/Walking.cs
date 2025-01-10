@@ -86,10 +86,10 @@ namespace AI.AIModes
 								// Step off the platform
 								action.GetOffPlatform();
 							}
-							else
+							else if (!action.IsSteppingOn && !action.IsSteppingOff)
 							{
 								// Stay on the platform
-								Owner.Body.Rigidbody.MovePosition(action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset);
+								Owner.GetTransform().position = action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset;
 							}
 							
 							return;
@@ -125,11 +125,12 @@ namespace AI.AIModes
 								// Step off the platform
 								action.GetOffPlatform();
 							}
-							else
+							else if (!action.IsSteppingOn && !action.IsSteppingOff)
 							{
 								// Stay on the platform
-								Owner.Body.Rigidbody.MovePosition(action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset);
+								Owner.GetTransform().position = action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset;
 							}
+							
 							return;
 						}
 
