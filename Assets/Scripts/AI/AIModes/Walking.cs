@@ -32,6 +32,8 @@ namespace AI.AIModes
 		{
 			if (jumpingLink)
 				forceFinishJump();
+
+			Owner.IsOnLink = false;
 			
 			Owner.ToggleAgent(false);
 			Owner = null;
@@ -44,6 +46,8 @@ namespace AI.AIModes
 			var agent = Owner.Agent;
 			if (agent.isOnOffMeshLink)
 			{
+				Owner.IsOnLink = true;
+				
 				var data = agent.currentOffMeshLinkData;
 				
 				// Jump if needed
@@ -140,6 +144,10 @@ namespace AI.AIModes
 							return;
 					}
 				}
+			}
+			else
+			{
+				Owner.IsOnLink = false;
 			}
 			
 			if (agent.pathPending || !agent.isOnNavMesh || agent.remainingDistance > agent.stoppingDistance || agent.hasPath && agent.velocity.sqrMagnitude != 0f)

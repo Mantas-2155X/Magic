@@ -31,6 +31,10 @@ namespace AI.ActionModes
 			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target))
 				return;
 
+			// Currently on a NavMeshLink, wait for it to complete
+			if (Owner.IsOnLink)
+				return;
+			
 			Owner.Chase.ChaseAndKill(target);
 		}
 		

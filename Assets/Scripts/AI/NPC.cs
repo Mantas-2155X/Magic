@@ -54,6 +54,8 @@ namespace AI
 		public HasSight HasSight { get; private set; }
 		public WithinRange WithinRange { get; private set; }
 		public LowResources LowResources { get; private set; }
+
+		public bool IsOnLink;
 		
 		public readonly Dictionary<EAIMode, IAIMode> AIModes = new (new EAIModeComparer())
 		{
