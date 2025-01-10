@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 8598778091971049270}
   - component: {fileID: 1299225429599949485}
   - component: {fileID: 2987893620165311613}
-  - component: {fileID: 4081477746048653934}
+  - component: {fileID: 2876092449613239704}
   m_Layer: 0
   m_Name: BaseAlive
   m_TagString: Untagged
@@ -944,7 +944,7 @@ MonoBehaviour:
   Alive: {fileID: 0}
   Rigidbody: {fileID: 9196623204031514355}
   BodyCollider: {fileID: 8598778091971049270}
-  FeetCollider: {fileID: 4081477746048653934}
+  FeetCollider: {fileID: 2876092449613239704}
   Gibs:
   - {fileID: 7110768281633782373}
   - {fileID: 6413429528327965899}
@@ -990,8 +990,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 8
---- !u!65 &4081477746048653934
-BoxCollider:
+--- !u!136 &2876092449613239704
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1008,9 +1008,11 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.63846004, y: 0.019539118, z: 0.15278322}
-  m_Center: {x: 0.000021278858, y: -1.0166734, z: 0.00011365116}
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.027, z: 0}
 --- !u!1 &5352134489899751883
 GameObject:
   m_ObjectHideFlags: 0
