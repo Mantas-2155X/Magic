@@ -26,6 +26,9 @@ namespace Objects.Base
 		public AnimationCurve Curve { get; private set; }
 
 		[field: SerializeField]
+		public Rigidbody RigidBody { get; private set; }
+
+		[field: SerializeField]
 		public EElevatorState State { get; private set; } = EElevatorState.Lowered;
 
 		[field: SerializeField]
@@ -33,6 +36,11 @@ namespace Objects.Base
 		[field: SerializeField]
 		public bool Locked { get; private set; }
 
+		[field: SerializeField]
+		public float AutoElevate { get; private set; }
+		[field: SerializeField]
+		public float AutoLower { get; private set; }
+		
 		[field: SerializeField]
 		public float Amount { get; private set; } = 1f;
 		[field: SerializeField]
@@ -42,6 +50,9 @@ namespace Objects.Base
 		
 		private CancellationTokenSource cancellationToken = new ();
 		
+		private float lastElevated;
+		private float lastLowered;
+
 		#region MonoBehaviour
 
 		public override void Awake()
@@ -52,15 +63,36 @@ namespace Objects.Base
 			{
 				case EElevatorState.Elevated:
 					Normalized = 1f;
+					lastElevated = Time.time;
 					break;
 				case EElevatorState.Lowered:
 					Normalized = 0f;
+					lastLowered = Time.time;
 					break;
 			}
 			
 			setPosition();
 		}
 
+		public void Update()
+		{
+			if (AutoElevate != 0f && State == EElevatorState.Lowered)
+			{
+				if (Time.time >= AutoElevate + lastLowered)
+				{
+					Elevate();
+				}
+			}
+			
+			if (AutoLower != 0f && State == EElevatorState.Elevated)
+			{
+				if (Time.time >= AutoLower + lastElevated)
+				{
+					Lower();
+				}
+			}
+		}
+		
 		#endregion
 
 		#region IObject
@@ -152,6 +184,8 @@ namespace Objects.Base
 			position.y = curveValue * Amount;
 
 			elevatorTr.localPosition = position;
+			
+			RigidBody.MovePosition(elevatorTr.position);
 		}
 		
 		private async UniTask perform(CancellationToken token)
@@ -170,12 +204,14 @@ namespace Objects.Base
 						State = EElevatorState.Elevated;
 						Normalized = 1f;
 						setPosition();
+						lastElevated = Time.time;
 						OnElevatorElevatedEvent?.Invoke();
 						return;
 					case EElevatorState.Lowering when Normalized <= 0f:
 						State = EElevatorState.Lowered;
 						Normalized = 0f;
 						setPosition();
+						lastLowered = Time.time;
 						OnElevatorLoweredEvent?.Invoke();
 						return;
 				}

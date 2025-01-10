@@ -25,6 +25,12 @@ public class NavMeshElevatorLink : MonoBehaviour
 
 	[SerializeField]
 	public Transform StepTarget;
+
+	[SerializeField]
+	public Transform UpperLink;
+	
+	[SerializeField]
+	public Transform LowerLink;
 	
 	public bool IsPartial { get; private set; }
 	
@@ -69,12 +75,12 @@ public class NavMeshElevatorLink : MonoBehaviour
 				{
 					case EElevatorState.Elevated or EElevatorState.Elevating:
 					{
-						targetPosition = Link.endTransform.position - tr.position;
+						targetPosition = UpperLink.position - tr.position;
 						break;
 					}
 					case EElevatorState.Lowered or EElevatorState.Lowering:
 					{
-						targetPosition = Link.startTransform.position - tr.position;
+						targetPosition = LowerLink.position - tr.position;
 						break;
 					}
 				}
@@ -111,7 +117,7 @@ public class NavMeshElevatorLink : MonoBehaviour
 		IsPartial = true;
 	}
 
-	public bool TryUse(NPC user, bool elevate)
+	public bool TryUse(NPC user, BaseButton button)
 	{
 		if (user.ActionMode == EActionMode.UseSomething)
 			return false;
@@ -121,7 +127,7 @@ public class NavMeshElevatorLink : MonoBehaviour
 		var actionMode = (UseSomething)user.ActionModes[EActionMode.UseSomething];
 		actionMode.WalkAfterwards = user.Destination;
 
-		user.UseSomething(elevate ? ElevateButton : LowerButton);
+		user.UseSomething(button);
 		return true;
 	}
 
@@ -197,10 +203,10 @@ public class NavMeshElevatorLink : MonoBehaviour
 		switch (Elevator.State)
 		{
 			case EElevatorState.Elevated or EElevatorState.Elevating:
-				endPos = Link.endTransform.position + Vector3.up * PlatformUser.Agent.baseOffset;
+				endPos = UpperLink.position + Vector3.up * PlatformUser.Agent.baseOffset;
 				break;
 			case EElevatorState.Lowered or EElevatorState.Lowering:
-				endPos = Link.startTransform.position + Vector3.up * PlatformUser.Agent.baseOffset;
+				endPos = LowerLink.position + Vector3.up * PlatformUser.Agent.baseOffset;
 				break;
 		}
 

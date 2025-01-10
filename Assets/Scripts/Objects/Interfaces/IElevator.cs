@@ -7,10 +7,15 @@ namespace Objects.Interfaces
 	{
 		public AnimationCurve Curve { get; }
 		
+		public Rigidbody RigidBody { get; }
+
 		public EElevatorState State { get; }
 
 		public bool Interruptible { get; }
 		public bool Locked { get; }
+		
+		public float AutoElevate { get; }
+		public float AutoLower { get; }
 		
 		public float Amount { get; }
 		public float Duration { get; }

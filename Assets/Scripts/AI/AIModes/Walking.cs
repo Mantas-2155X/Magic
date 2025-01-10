@@ -1,6 +1,7 @@
 using AI.Enums;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Objects.Base;
 using Objects.Enums;
 using ScriptableObjects;
 using Tools;
@@ -76,98 +77,67 @@ namespace AI.AIModes
 				if (NavMeshTools.IsElevatorLink(data))
 				{
 					var action = ((Component)data.owner).GetComponent<NavMeshElevatorLink>();
+					var state = action.Elevator.State;
 
-					if (Mathf.Abs(Owner.Destination.y - action.Link.startTransform.position.y) < 1.5f)
+					var goingDown = Mathf.Abs(Owner.Destination.y - action.LowerLink.position.y) < 1.5f;
+					var goingUp = Mathf.Abs(Owner.Destination.y - action.UpperLink.position.y) < 1.5f;
+
+					if (goingDown || goingUp)
 					{
+						// On the platform, either stay or step off
 						if (action.PlatformUser == Owner)
 						{
-							if (action.Elevator.State == EElevatorState.Lowered)
+							if (goingDown && state == EElevatorState.Lowered || goingUp && state == EElevatorState.Elevated)
 							{
-								// Step off the platform
+								// Reached destination, step off the platform
 								action.GetOffPlatform();
 							}
 							else if (!action.IsSteppingOn && !action.IsSteppingOff)
 							{
-								// Stay on the platform
+								// Moving to the destination, stay on the platform
 								Owner.GetTransform().position = action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset;
 							}
 							
 							return;
 						}
-						
+
 						// Someone else is on the platform, wait
 						if (action.PlatformUser != null)
 							return;
-						
-						// Destination is below, call the elevator up
-						if (action.Elevator.State != EElevatorState.Elevated)
-						{
-							// Is moving or already has a button user, wait
-							if (action.IsPartial || action.ButtonUser != null)
-								return;
 
-							// Elevate it without a button
-							if (action.ElevateButton == null)
-							{
-								action.Elevator.Elevate();
-								return;
-							}
-							
-							// Have the npc elevate it
-							if (action.TryUse(Owner, true))
-								return;
-						}
-						else
+						if (goingDown && state == EElevatorState.Elevated)
 						{
 							// Elevator is up, step on the platform and use it
 							action.GetOnPlatform(Owner, false);
-						}
-					}
-					else if (Mathf.Abs(Owner.Destination.y - action.Link.endTransform.position.y) < 1.5f)
-					{
-						if (action.PlatformUser == Owner)
-						{
-							if (action.Elevator.State == EElevatorState.Elevated)
-							{
-								// Step off the platform
-								action.GetOffPlatform();
-							}
-							else if (!action.IsSteppingOn && !action.IsSteppingOff)
-							{
-								// Stay on the platform
-								Owner.GetTransform().position = action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset;
-							}
-							
 							return;
 						}
-
-						// Someone else is on the platform, wait
-						if (action.PlatformUser != null)
-							return;
-
-						// Destination is above, call the elevator down
-						if (action.Elevator.State != EElevatorState.Lowered)
-						{
-							// Is moving or already has a button user, wait
-							if (action.IsPartial || action.ButtonUser != null)
-								return;
-
-							// Lower it without a button
-							if (action.LowerButton == null)
-							{
-								action.Elevator.Lower();
-								return;
-							}
-							
-							// Have the npc lower it
-							if (action.TryUse(Owner, false))
-								return;
-						}
-						else
+						
+						if (goingUp && state == EElevatorState.Lowered)
 						{
 							// Elevator is down, step on the platform and use it
 							action.GetOnPlatform(Owner, true);
+							return;
 						}
+
+						BaseButton useButton = null;
+
+						// Grab the correct button to press
+						if (goingDown && state != EElevatorState.Elevated)
+							useButton = action.ElevateButton;
+						else if (goingUp && state != EElevatorState.Lowered)
+							useButton = action.LowerButton;
+
+						// No button, likely activated by trigger so just wait for it to get there
+						if (useButton == null)
+							return;
+
+						// Is moving or already has a button user, wait
+						if (action.IsPartial || action.ButtonUser != null)
+							return;
+
+						// Have the npc use the button
+						if (action.TryUse(Owner, useButton))
+							return;
 					}
 				}
 			}
