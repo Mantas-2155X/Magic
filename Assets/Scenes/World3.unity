@@ -8,8 +8,8 @@ OcclusionCullingSettings:
     smallestOccluder: 5
     smallestHole: 0.25
     backfaceThreshold: 100
-  m_SceneGUID: 00000000000000000000000000000000
-  m_OcclusionCullingData: {fileID: 0}
+  m_SceneGUID: e62212586a5c2f3488362f46b0b1dd85
+  m_OcclusionCullingData: {fileID: 36300000, guid: 606320b20ba46d7249d1c24f2d095a1d, type: 2}
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
@@ -484,10 +484,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-3 (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 6357273992715049022, guid: 53df30807c0d73ac29431f522d9bea16, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -509,10 +505,6 @@ PrefabInstance:
     - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_Name
       value: tunnel
-      objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -575,10 +567,6 @@ PrefabInstance:
     - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_Name
       value: tunnel (11)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -724,10 +712,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel (12)
       objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -36
@@ -829,10 +813,6 @@ PrefabInstance:
     - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
       propertyPath: m_Name
       value: tunnel-joint-1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1012,10 +992,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-0 (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 2292824840864757776, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6224970206326630789, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -36
@@ -1077,10 +1053,6 @@ PrefabInstance:
     - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-1 (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 633421013708108176, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
@@ -1210,10 +1182,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel (7)
       objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -30
@@ -1275,10 +1243,6 @@ PrefabInstance:
     - target: {fileID: 2292824840864757776, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-0 (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2292824840864757776, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6224970206326630789, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1780,10 +1744,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-0 (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 2292824840864757776, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6224970206326630789, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24
@@ -2116,10 +2076,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-1 (4)
       objectReference: {fileID: 0}
-    - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2246,10 +2202,6 @@ PrefabInstance:
     - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
       propertyPath: m_Name
       value: tunnel-joint-1 (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2640,10 +2592,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel
       objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -42
@@ -2746,10 +2694,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-0-2corners
       objectReference: {fileID: 0}
-    - target: {fileID: 8043091331923500298, guid: 9050689458c81663c9ae70ba25c00b75, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2812,10 +2756,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2675145178152666230, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3022186494591517117, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_ReceiveGI
       value: 2
@@ -2827,10 +2767,6 @@ PrefabInstance:
     - target: {fileID: 6213745301316637675, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_Name
       value: Tunnel Door (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6213745301316637675, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6459338153587922746, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -3026,10 +2962,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-1 (8)
       objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
       value: -42
@@ -3091,10 +3023,6 @@ PrefabInstance:
     - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-1 (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3222,10 +3150,6 @@ PrefabInstance:
     - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5906738973711254996, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3394,10 +3318,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-1
       objectReference: {fileID: 0}
-    - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3534,10 +3454,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-3 (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 6357273992715049022, guid: 53df30807c0d73ac29431f522d9bea16, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3590,10 +3506,6 @@ PrefabInstance:
     - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_Name
       value: tunnel
-      objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3767,10 +3679,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-0-3corners
       objectReference: {fileID: 0}
-    - target: {fileID: 8527431688380212655, guid: cc69b5f1c7742622d99d76d25a97d5c4, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3940,10 +3848,6 @@ PrefabInstance:
     - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_Name
       value: tunnel (13)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4365,10 +4269,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-2 (9)
       objectReference: {fileID: 0}
-    - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8376813545723185634, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -42
@@ -4685,10 +4585,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24
@@ -4750,10 +4646,6 @@ PrefabInstance:
     - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-1 (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 633421013708108176, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
@@ -4820,10 +4712,6 @@ PrefabInstance:
     - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-1 (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5039,10 +4927,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-1 (4)
       objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 633421013708108176, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
@@ -5112,10 +4996,6 @@ PrefabInstance:
     - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-2 (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5906738973711254996, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5349,10 +5229,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2675145178152666230, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3022186494591517117, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_ReceiveGI
       value: 2
@@ -5364,10 +5240,6 @@ PrefabInstance:
     - target: {fileID: 6213745301316637675, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_Name
       value: Tunnel Door (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6213745301316637675, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6459338153587922746, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -5611,10 +5483,6 @@ PrefabInstance:
     - target: {fileID: 6357273992715049022, guid: 53df30807c0d73ac29431f522d9bea16, type: 3}
       propertyPath: m_Name
       value: tunnel-joint-3 (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6357273992715049022, guid: 53df30807c0d73ac29431f522d9bea16, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5950,10 +5818,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-1 (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6123,10 +5987,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-2 (7)
       objectReference: {fileID: 0}
-    - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8376813545723185634, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -30
@@ -6262,10 +6122,6 @@ PrefabInstance:
     - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-1
-      objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6786,10 +6642,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-1 (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 633421013708108176, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
@@ -6905,10 +6757,6 @@ PrefabInstance:
     - target: {fileID: 2292824840864757776, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2292824840864757776, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6224970206326630789, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19278,10 +19126,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-1 (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
       value: -30
@@ -19926,10 +19770,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2675145178152666230, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3022186494591517117, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_ReceiveGI
       value: 2
@@ -19941,10 +19781,6 @@ PrefabInstance:
     - target: {fileID: 6213745301316637675, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_Name
       value: Tunnel Door
-      objectReference: {fileID: 0}
-    - target: {fileID: 6213745301316637675, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6459338153587922746, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -19975,10 +19811,6 @@ PrefabInstance:
     - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_Name
       value: tunnel-joint-2 (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8376813545723185634, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20041,10 +19873,6 @@ PrefabInstance:
     - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_Name
       value: tunnel (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20309,10 +20137,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2675145178152666230, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3022186494591517117, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_ReceiveGI
       value: 2
@@ -20324,10 +20148,6 @@ PrefabInstance:
     - target: {fileID: 6213745301316637675, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_Name
       value: Tunnel Door (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6213745301316637675, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6459338153587922746, guid: 95c66ecc79a1dbb38bc03cf47242fb9b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -20428,10 +20248,6 @@ PrefabInstance:
     - target: {fileID: 2292824840864757776, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-0 (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2292824840864757776, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6224970206326630789, guid: 2eecbc9762b8162ccb726c11e4676a16, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20536,10 +20352,6 @@ PrefabInstance:
     - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-1 (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20934,10 +20746,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-4
       objectReference: {fileID: 0}
-    - target: {fileID: 7621542431988320486, guid: 649cd878b7be957d48f4c7c8af8831f0, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21035,10 +20843,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-2 (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5906738973711254996, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -42
@@ -21100,10 +20904,6 @@ PrefabInstance:
     - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_Name
       value: tunnel (9)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21528,10 +21328,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-2 (4)
       objectReference: {fileID: 0}
-    - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5906738973711254996, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24
@@ -21694,10 +21490,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-2 (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5906738973711254996, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24
@@ -21759,10 +21551,6 @@ PrefabInstance:
     - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-1 (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21961,10 +21749,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-1 (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24
@@ -22026,10 +21810,6 @@ PrefabInstance:
     - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_Name
       value: tunnel (14)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22237,10 +22017,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-2 (8)
       objectReference: {fileID: 0}
-    - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8376813545723185634, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -42
@@ -22343,10 +22119,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-1
       objectReference: {fileID: 0}
-    - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22368,10 +22140,6 @@ PrefabInstance:
     - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_Name
       value: tunnel (10)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3137736759822077531, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6296441992313141998, guid: b51b226e456cd20f48a0a3ccc8ff727b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22435,10 +22203,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-wall-1 (7)
       objectReference: {fileID: 0}
-    - target: {fileID: 326521959621299998, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2478655560226181757, guid: 168d2b23809e2f509a855d20c2dc1bee, type: 3}
       propertyPath: m_LocalPosition.x
       value: -18
@@ -22500,10 +22264,6 @@ PrefabInstance:
     - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_Name
       value: tunnel-joint-2 (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8376813545723185634, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22746,10 +22506,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-1 (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22919,10 +22675,6 @@ PrefabInstance:
     - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-2 (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5906738973711254996, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23178,10 +22930,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: tunnel-joint-1 (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 7750475075075766923, guid: aecce3572667ccaa5b2a47e0a7410511, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23207,10 +22955,6 @@ PrefabInstance:
     - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_Name
       value: tunnel-wall-2 (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5191797442765257892, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5906738973711254996, guid: 01177045ffb50808f96ee4dab557e92e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23354,10 +23098,6 @@ PrefabInstance:
     - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_Name
       value: tunnel-joint-2 (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 32765072766983273, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8376813545723185634, guid: de7954be309d74bd989d6457d4530e9c, type: 3}
       propertyPath: m_LocalPosition.x
