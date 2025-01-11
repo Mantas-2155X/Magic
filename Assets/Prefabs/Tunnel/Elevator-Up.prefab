@@ -5811,6 +5811,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1414167605636057682, guid: f6b911f3ba49378f298a863e4d681cf3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 24905837d265428afb2dda468ef8439c, type: 2}
     - target: {fileID: 9066687097647362363, guid: f6b911f3ba49378f298a863e4d681cf3, type: 3}
       propertyPath: m_Name
       value: tunnel-holeway-bridge
