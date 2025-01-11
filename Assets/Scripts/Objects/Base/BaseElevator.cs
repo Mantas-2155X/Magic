@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
+using Tools;
 using UnityEngine;
 
 namespace Objects.Base
@@ -98,6 +99,16 @@ namespace Objects.Base
 				}
 			}
 		}
+		
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+		{
+			EventTools.DrawListeners(transform, OnElevatorElevatedEvent, Color.blue);
+			EventTools.DrawListeners(transform, OnElevatorElevatingEvent, Color.cyan);
+			EventTools.DrawListeners(transform, OnElevatorLoweredEvent, Color.red);
+			EventTools.DrawListeners(transform, OnElevatorLoweringEvent, Color.yellow);
+		}
+#endif
 		
 		#endregion
 

@@ -6,6 +6,7 @@ using Objects.Base;
 using Objects.Enums;
 using Objects.Events;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -83,6 +84,8 @@ namespace Objects
 #if UNITY_EDITOR
 		public void OnDrawGizmos()
 		{
+			EventTools.DrawListeners(transform, OnSpawnerClearedEvent, Color.blue);
+
 			Gizmos.matrix = transform.localToWorldMatrix;
 
 			Gizmos.DrawWireCube(Vector3.zero, new Vector3(1, 0, 1));

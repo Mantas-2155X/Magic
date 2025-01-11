@@ -1,4 +1,5 @@
 using Objects.Events;
+using Tools;
 using UnityEngine;
 
 namespace Objects.Base
@@ -36,6 +37,14 @@ namespace Objects.Base
 			setEnabled();
 		}
 
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+		{
+			EventTools.DrawListeners(transform, OnLightEnabledEvent, Color.blue);
+			EventTools.DrawListeners(transform, OnLightDisabledEvent, Color.cyan);
+		}
+#endif
+		
 		#region Light
 
 		public void Enable()

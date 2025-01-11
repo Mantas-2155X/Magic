@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
+using Tools;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -87,6 +88,16 @@ namespace Objects.Base
 			
 			Close();
 		}
+		
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+		{
+			EventTools.DrawListeners(transform, OnDoorOpenedEvent, Color.blue);
+			EventTools.DrawListeners(transform, OnDoorOpeningEvent, Color.cyan);
+			EventTools.DrawListeners(transform, OnDoorClosedEvent, Color.red);
+			EventTools.DrawListeners(transform, OnDoorClosingEvent, Color.yellow);
+		}
+#endif
 
 		#endregion
 

@@ -1,4 +1,5 @@
 using Events;
+using Tools;
 using UnityEngine;
 
 public class Trigger : MonoBehaviour
@@ -35,4 +36,11 @@ public class Trigger : MonoBehaviour
 		
 		OnTriggerEvent?.Invoke(other);
 	}
+	
+#if UNITY_EDITOR
+	public void OnDrawGizmos()
+	{
+		EventTools.DrawListeners(transform, OnTriggerEvent, Color.blue);
+	}
+#endif
 }

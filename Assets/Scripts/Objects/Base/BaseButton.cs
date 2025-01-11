@@ -1,5 +1,6 @@
 using AI.Interfaces;
 using Objects.Events;
+using Tools;
 using UnityEngine;
 
 namespace Objects.Base
@@ -18,5 +19,12 @@ namespace Objects.Base
 			OnButtonUsedEvent?.Invoke();
 			return true;
 		}
+		
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+		{
+			EventTools.DrawListeners(transform, OnButtonUsedEvent, Color.blue);
+		}
+#endif
 	}
 }
