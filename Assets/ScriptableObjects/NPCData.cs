@@ -15,6 +15,13 @@ namespace ScriptableObjects
 		public float SenseRange = 25f;
 
 		/// <summary>
+		/// Field of view that the npc can see targets in
+		/// (WithinRange)
+		/// </summary>
+		[SerializeField]
+		public float FieldOfView = 75f;
+
+		/// <summary>
 		/// Distance between the npc and the patrol point at which the npc is considered to have reached the point
 		/// (Patrol)
 		/// </summary>

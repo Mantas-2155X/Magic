@@ -391,8 +391,8 @@ namespace AI
 
 				var aliveTransform = alive.GetTransform();
 				
-				// Make sure its within sense range and can be seen
-				if (!WithinRange.SenseDistanceCheck(aliveTransform) || !HasSight.SightCheck(aliveTransform, true))
+				// Make sure it's within sense range, field of view and can be seen
+				if (!WithinRange.SenseDistanceCheck(aliveTransform) || !WithinRange.FieldOfViewCheck(aliveTransform) || !HasSight.SightCheck(aliveTransform, true))
 					continue;
 				
 				var distance = Vector3.Distance(position, aliveTransform.position);

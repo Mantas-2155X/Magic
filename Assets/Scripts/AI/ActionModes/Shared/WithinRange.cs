@@ -12,8 +12,6 @@ namespace AI.ActionModes.Shared
 		{
 			this.owner = owner;
 		}
-
-		private readonly NavMeshPath validPath = new ();
 		
 		/// <summary>
 		/// Returns true if the distance between the npc and the target is less than the npcs sense range
@@ -24,22 +22,16 @@ namespace AI.ActionModes.Shared
 		}
 
 		/// <summary>
-		/// Returns true if the agent has a path to this target
+		/// Returns true if the angle between the npc and the target is within the field of view
 		/// </summary>
-		public bool IsPathValid(Vector3 target)
+		public bool FieldOfViewCheck(Transform target)
 		{
-			validPath.ClearCorners();
-
-			var agentState = owner.Agent.enabled;
-			var hasPath = false;
+			var ownerTr = owner.GetTransform();
 			
-			owner.ToggleAgent(true);
-
-			if (owner.Agent.CalculatePath(target, validPath) && validPath.status == NavMeshPathStatus.PathComplete)
-				hasPath = true;
+			var direction = target.position - ownerTr.position;
+			var angle = Vector3.Angle(direction, ownerTr.forward);
 			
-			owner.ToggleAgent(agentState);
-			return hasPath;
+			return angle <= ((NPCData)owner.Data).FieldOfView;
 		}
 	}
 }
