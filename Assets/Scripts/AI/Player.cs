@@ -151,16 +151,16 @@ namespace AI
 			
 			if (MovementType == EMovementType.Noclip)
 			{
-				if (moveDirection == Vector2.zero && !jumpPressed && !fallPressed)
-					Body.Rigidbody.linearVelocity *= data.StopSlide;
+				// No smoothing for noclip
+				Body.Rigidbody.linearVelocity *= data.StopSlide;
+
+				// Grab jump/fall as vertical move direction
+				var vertical = jumpPressed ? 1f : fallPressed ? -1f : 0f;
 				
-				Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * data.SprintMultiplier : 1f), ForceMode.VelocityChange);
+				var addVector = new Vector3(moveDirection.x, vertical, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * data.SprintMultiplier : 1f);
+				addVector *= 5f;
 				
-				if (jumpPressed)
-					Body.Rigidbody.AddForce(0f, 1f, 0f, ForceMode.VelocityChange);
-				else if (fallPressed)
-					Body.Rigidbody.AddForce(0f, -1f, 0f, ForceMode.VelocityChange);
-				
+				Body.Rigidbody.AddRelativeForce(addVector, ForceMode.VelocityChange);
 				return;
 			}
 			
