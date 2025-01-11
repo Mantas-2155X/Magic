@@ -33,8 +33,16 @@ namespace Objects.Base
 		public Collider AntiCrush { get; private set; }
 
 		[field: SerializeField]
+		public Parent Parent { get; private set; }
+		
+		[field: SerializeField]
 		public EElevatorState State { get; private set; } = EElevatorState.Lowered;
 
+		[field: SerializeField]
+		public bool ParentElevating { get; private set; }
+		[field: SerializeField]
+		public bool ParentLowering { get; private set; }
+		
 		[field: SerializeField]
 		public bool Interruptible { get; private set; }
 		[field: SerializeField]
@@ -67,10 +75,12 @@ namespace Objects.Base
 			{
 				case EElevatorState.Elevated:
 					Normalized = 1f;
+					Parent.Toggle(ParentLowering);
 					lastElevated = Time.time;
 					break;
 				case EElevatorState.Lowered:
 					Normalized = 0f;
+					Parent.Toggle(ParentElevating);
 					lastLowered = Time.time;
 					break;
 			}
@@ -222,6 +232,7 @@ namespace Objects.Base
 						Normalized = 1f;
 						setPosition();
 						lastElevated = Time.time;
+						Parent.Toggle(ParentLowering);
 						OnElevatorElevatedEvent?.Invoke();
 						return;
 					case EElevatorState.Lowering when Normalized <= 0f:
@@ -229,6 +240,7 @@ namespace Objects.Base
 						Normalized = 0f;
 						setPosition();
 						lastLowered = Time.time;
+						Parent.Toggle(ParentElevating);
 						OnElevatorLoweredEvent?.Invoke();
 						return;
 				}

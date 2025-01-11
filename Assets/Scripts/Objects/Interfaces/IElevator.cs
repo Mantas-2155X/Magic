@@ -11,8 +11,13 @@ namespace Objects.Interfaces
 		
 		public Collider AntiCrush { get; }
 
+		public Parent Parent { get; }
+
 		public EElevatorState State { get; }
 
+		public bool ParentElevating { get; }
+		public bool ParentLowering { get; }
+		
 		public bool Interruptible { get; }
 		public bool Locked { get; }
 		
