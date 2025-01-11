@@ -83,9 +83,21 @@ namespace AI.AIModes
 					var action = ((Component)data.owner).GetComponent<NavMeshElevatorLink>();
 					var state = action.Elevator.State;
 
-					var goingDown = Mathf.Abs(Owner.Destination.y - action.LowerLink.position.y) < 1.5f;
-					var goingUp = Mathf.Abs(Owner.Destination.y - action.UpperLink.position.y) < 1.5f;
+					var lowerDist = Mathf.Abs(Owner.Destination.y - action.LowerLink.position.y);
+					var upperDist = Mathf.Abs(Owner.Destination.y - action.UpperLink.position.y);
+					
+					var goingDown = lowerDist < 3f;
+					var goingUp = upperDist < 3f;
 
+					// Couldn't find what direction the npc is going, try picking lower distance as an alternative
+					if (!goingDown && !goingUp)
+					{
+						if (upperDist > lowerDist)
+							goingDown = true;
+						else if (lowerDist > upperDist)
+							goingUp = true;
+					}
+					
 					if (goingDown || goingUp)
 					{
 						// On the platform, either stay or step off
