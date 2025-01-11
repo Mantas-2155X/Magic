@@ -230,8 +230,8 @@ GameObject:
   - component: {fileID: 7438414152483783318}
   - component: {fileID: 5592564884707540726}
   - component: {fileID: 8875241505759051937}
-  - component: {fileID: 1119269410748875269}
-  - component: {fileID: 3583343767848765934}
+  - component: {fileID: 155913516104971226}
+  - component: {fileID: 8040881093273766306}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
@@ -287,7 +287,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 15af82a9ce38afd7eb148bfb30ad4b14, type: 2}
+  - {fileID: 2100000, guid: 4c2cf4d2e0af9445ca8377f1d8ba5a5d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -507,7 +507,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!199 &1119269410748875269
+--- !u!199 &155913516104971226
 ParticleSystemRenderer:
   serializedVersion: 6
   m_ObjectHideFlags: 0
@@ -564,7 +564,7 @@ ParticleSystemRenderer:
   m_NormalDirection: 1
   m_ShadowBias: 0
   m_RenderAlignment: 0
-  m_Pivot: {x: 0, y: -0.4, z: 0}
+  m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
@@ -584,7 +584,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!198 &3583343767848765934
+--- !u!198 &8040881093273766306
 ParticleSystem:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1221,7 +1221,7 @@ ParticleSystem:
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.1
-    m_Position: {x: 0, y: -0.5, z: 0}
+    m_Position: {x: 0, y: -1.5, z: 0}
     m_Rotation: {x: -90, y: 0, z: 0}
     m_Scale: {x: 0.9, y: 0.9, z: 1}
     placementMode: 0
