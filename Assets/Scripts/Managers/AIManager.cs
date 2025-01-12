@@ -30,7 +30,7 @@ namespace Managers
 		{
 			Instance = this;
 			
-			BaseAlive.OnDamageEvent.AddListener(onDamage);
+			//BaseAlive.OnDamageEvent.AddListener(onDamage);
 			BaseAlive.OnSpawnEvent.AddListener(onSpawn);
 			BaseAlive.OnDeathEvent.AddListener(onDeath);
 			BaseAlive.OnRelationshipGroupChangedEvent.AddListener(onRelationshipGroupChanged);
@@ -62,7 +62,7 @@ namespace Managers
 			}
 		}
 
-		private void onDamage(IAlive alive, float damage, object source, EElement type)
+		/*private void onDamage(IAlive alive, float damage, object source, EElement type)
 		{
 			if (!alive.IsAlive || alive is not NPC npc)
 				return;
@@ -89,7 +89,7 @@ namespace Managers
 				return;
 			
 			npc.AssignAttackTarget((Component)aggressor);
-		}
+		}*/
 
 		private void onSpawn(IAlive alive)
 		{
