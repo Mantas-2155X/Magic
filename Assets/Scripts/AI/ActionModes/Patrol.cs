@@ -28,18 +28,18 @@ namespace AI.ActionModes
 			var target = Owner.AttackTargetTransform;
 
 			// Target does not exist or is further than the sense range, patrol until one is close enough
-			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target))
+			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target, false))
 			{
+				// Reached point, continue to the next one
+				if (Owner.Patrolling.HasReachedPoint())
+					Owner.Patrolling.GoToNextPoint();
+				
 				// Target lost, go back to the current point
 				if (Owner.AIMode == EAIMode.Action)
 				{
 					Owner.Patrolling.GoToCurrentPoint();
 					return;
 				}
-
-				// Reached point, continue to the next one
-				if (Owner.Patrolling.HasReachedPoint())
-					Owner.Patrolling.GoToNextPoint();
 				
 				return;
 			}

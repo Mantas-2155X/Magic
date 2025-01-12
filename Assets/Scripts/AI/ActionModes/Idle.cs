@@ -28,7 +28,7 @@ namespace AI.ActionModes
 			var target = Owner.AttackTargetTransform;
 
 			// Target does not exist or is further than the sense range, keep waiting until one is enough
-			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target))
+			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target, false))
 				return;
 
 			// Currently on a NavMeshLink, wait for it to complete

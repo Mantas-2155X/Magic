@@ -388,7 +388,7 @@ namespace AI
 			if (AttackTargetTransform != null)
 			{
 				// Must be within sense range
-				if (WithinRange.SenseDistanceCheck(AttackTargetTransform))
+				if (WithinRange.SenseDistanceCheck(AttackTargetTransform, false))
 				{
 					// Make sure it can be seen
 					if (HasSight.SightCheck(AttackTargetTransform, true))
@@ -436,8 +436,8 @@ namespace AI
 
 				var aliveTransform = alive.GetTransform();
 				
-				// Make sure it's within sense range, field of view and can be seen
-				if (!WithinRange.SenseDistanceCheck(aliveTransform) || !WithinRange.FieldOfViewCheck(aliveTransform) || !HasSight.SightCheck(aliveTransform, true))
+				// Make sure it's within sense (and spot) range, field of view and can be seen
+				if (!WithinRange.SenseDistanceCheck(aliveTransform, true) || !WithinRange.FieldOfViewCheck(aliveTransform) || !HasSight.SightCheck(aliveTransform, true))
 					continue;
 				
 				var distance = Vector3.Distance(position, aliveTransform.position);
@@ -525,14 +525,18 @@ namespace AI
 			AimAt = new AimAt(this);
 			Chase = new Chase(this);
 			Wandering = new Wandering(this);
-			Patrolling = new ActionModes.Shared.Patrolling(this);
+			Patrolling = new Patrolling(this);
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
 			LowResources = new LowResources(this);
+
+			var npcData = (NPCData)data;
 			
 			Agent.speed = data.Speed;
-			Agent.angularSpeed = ((NPCData)data).RotationSpeed;
-			
+			Agent.angularSpeed = npcData.RotationSpeed;
+
+			setAggressive(npcData.Aggressive);
+
 			base.Spawn(data, relationshipGroup);
 		}
 

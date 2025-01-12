@@ -125,7 +125,7 @@ namespace AI.ActionModes.Shared
 				var resourceTr = resource.GetTransform();
 				var resourcePos = resourceTr.position;
 				
-				if (!owner.WithinRange.SenseDistanceCheck(resourceTr))
+				if (!owner.WithinRange.SenseDistanceCheck(resourceTr, false))
 					continue;
 
 				// Prevent picking a destination that's behind a wall
@@ -180,7 +180,7 @@ namespace AI.ActionModes.Shared
 			if (!obj.ObjectData.Tags.HasFlag(tag))
 				return false;
 
-			if (!owner.WithinRange.SenseDistanceCheck(owner.OtherTargetTransform))
+			if (!owner.WithinRange.SenseDistanceCheck(owner.OtherTargetTransform, false))
 				return false;
 				
 			return true;

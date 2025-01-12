@@ -7,6 +7,7 @@ namespace Tools
 	{
 		public static void DrawListeners(Transform source, UnityEventBase unityEvent, Color color)
 		{
+			var previousColor = Gizmos.color;
 			Gizmos.color = color;
 
 			var pos = source.position;
@@ -28,6 +29,8 @@ namespace Tools
 						break;
 				}
 			}
+
+			Gizmos.color = previousColor;
 		}
 	}
 }

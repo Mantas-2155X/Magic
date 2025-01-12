@@ -28,7 +28,7 @@ namespace AI.ActionModes
 			var target = Owner.AttackTargetTransform;
 
 			// Target does not exist or is further than the sense range, wander until one is close enough
-			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target))
+			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target, false))
 			{
 				if (Owner.AIMode != EAIMode.Walking)
 					Owner.Wandering.WalkRandomly(false);

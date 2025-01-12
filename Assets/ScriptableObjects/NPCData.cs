@@ -15,6 +15,13 @@ namespace ScriptableObjects
 		public float SenseRange = 25f;
 
 		/// <summary>
+		/// Distance from itself that the npc can spot new targets in
+		/// (WithinRange)
+		/// </summary>
+		[SerializeField]
+		public float SpotRange = 15f;
+
+		/// <summary>
 		/// Field of view that the npc can see targets in
 		/// (WithinRange)
 		/// </summary>
@@ -112,5 +119,11 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public float TargetPredictMaximumFakeVelocity = 11f;
+
+		/// <summary>
+		/// Starting aggressiveness parameter
+		/// </summary>
+		[SerializeField]
+		public bool Aggressive = true;
 	}
 }

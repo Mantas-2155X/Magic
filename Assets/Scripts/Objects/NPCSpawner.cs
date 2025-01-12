@@ -38,6 +38,16 @@ namespace Objects
 		[SerializeField]
 		public int TriggerCount = 1;
 		
+		[Header("AI")]
+		[SerializeField]
+		public bool WanderAction;
+
+		[SerializeField]
+		public Path PatrolAction;
+
+		[SerializeField]
+		public Component UseAction;
+		
 		private readonly List<IAlive> spawned = new ();
 		
 		private bool cleared;
@@ -134,7 +144,15 @@ namespace Objects
 					continue;
 				}
 				
-				npc.Idle();
+				if (WanderAction)
+					npc.Wander();
+				else if (PatrolAction != null)
+					npc.Patrol(PatrolAction);
+				else if (UseAction != null)
+					npc.Use(UseAction);
+				else
+					npc.Idle();
+				
 				spawned.Add(npc);
 			}
 		}

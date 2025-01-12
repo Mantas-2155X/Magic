@@ -75,7 +75,6 @@ namespace Editor
 
 					path.Points[i - 1] = currentPoint;
 					path.Points[i] = targetPoint;
-					
 					return;
 				}
 				
@@ -94,7 +93,6 @@ namespace Editor
 
 					path.Points[i + 1] = currentPoint;
 					path.Points[i] = targetPoint;
-					
 					return;
 				}
 				
@@ -110,6 +108,9 @@ namespace Editor
 			}
 			
 			GUILayout.EndVertical();
+
+			EditorUtility.SetDirty(path);
+			serializedObject.ApplyModifiedProperties();
 			
 			SceneView.RepaintAll();
 		}
@@ -117,6 +118,9 @@ namespace Editor
 		public void DrawSceneGUI(SceneView sceneView)
 		{
 			var path = (Path)target;
+
+			var previousColor = Handles.color;
+			Handles.color = Color.green;
 			
 			for (var i = 0; i < path.Points.Count; i++)
 			{
@@ -125,6 +129,8 @@ namespace Editor
 				
 				Handles.DrawLine(path.Points[i], path.Points[i + 1]);
 			}
+			
+			Handles.color = previousColor;
 			
 			if (path.Points.Count <= SelectedPoint)
 				return;
