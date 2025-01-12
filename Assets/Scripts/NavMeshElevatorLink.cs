@@ -49,7 +49,7 @@ public class NavMeshElevatorLink : MonoBehaviour
 		if (ButtonUser != null)
 		{
 			// Dying or getting interrupted should clear the user to prevent a lock
-			if (ButtonUser.IsAlive && ButtonUser.ActionMode == EActionMode.UseSomething)
+			if (ButtonUser.IsAlive && ButtonUser.ActionMode == EActionMode.Use)
 				return;
 
 			ButtonUser = null;
@@ -119,15 +119,15 @@ public class NavMeshElevatorLink : MonoBehaviour
 
 	public bool TryUse(NPC user, BaseButton button)
 	{
-		if (user.ActionMode == EActionMode.UseSomething)
+		if (user.ActionMode == EActionMode.Use)
 			return false;
 
 		ButtonUser = user;
 		
-		var actionMode = (UseSomething)user.ActionModes[EActionMode.UseSomething];
+		var actionMode = (Use)user.ActionModes[EActionMode.Use];
 		actionMode.WalkAfterwards = user.Destination;
 
-		user.UseSomething(button);
+		user.Use(button);
 		return true;
 	}
 

@@ -5,10 +5,10 @@ namespace AI.Enums
 	public enum EActionMode
 	{
 		None,
-		WanderAggressively,
-		PatrolAggressively,
-		WaitAggressively,
-		UseSomething
+		Wander,
+		Patrol,
+		Idle,
+		Use
 	}
 	
 	public struct EActionModeComparer : IEqualityComparer<EActionMode>

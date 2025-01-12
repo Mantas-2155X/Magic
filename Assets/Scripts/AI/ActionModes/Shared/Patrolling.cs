@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace AI.ActionModes.Shared
 {
-	public class Patrol
+	public class Patrolling
 	{
 		private readonly NPC owner;
 		
-		public Patrol(NPC owner)
+		public Patrolling(NPC owner)
 		{
 			this.owner = owner;
 		}

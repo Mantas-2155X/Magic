@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AI.ActionModes
 {
-	public class UseSomething : IActionMode
+	public class Use : IActionMode
 	{
 		public NPC Owner { get; set; }
 		

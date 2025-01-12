@@ -34,7 +34,7 @@ public class NavMeshDoorLink : MonoBehaviour
 			return;
 
 		// Dying or getting interrupted should clear the user to prevent a lock
-		if (User.IsAlive && User.ActionMode == EActionMode.UseSomething)
+		if (User.IsAlive && User.ActionMode == EActionMode.Use)
 			return;
 
 		User = null;
@@ -68,23 +68,23 @@ public class NavMeshDoorLink : MonoBehaviour
 
 	public bool TryOpen(NPC user)
 	{
-		if (user.ActionMode == EActionMode.UseSomething)
+		if (user.ActionMode == EActionMode.Use)
 			return false;
 
 		User = user;
 		
-		var actionMode = (UseSomething)user.ActionModes[EActionMode.UseSomething];
+		var actionMode = (Use)user.ActionModes[EActionMode.Use];
 		actionMode.WalkAfterwards = user.Destination;
 		
 		switch (Buttons.Length)
 		{
 			// No buttons, use the door
 			case 0: 
-				user.UseSomething(Door);
+				user.Use(Door);
 				break;
 			// One button, use it
 			case 1: 
-				user.UseSomething(Buttons[0]);
+				user.Use(Buttons[0]);
 				break;
 			// Multiple buttons, use the cheapest one
 			default: 
@@ -113,7 +113,7 @@ public class NavMeshDoorLink : MonoBehaviour
 					}
 				}
 				
-				user.UseSomething(Buttons[pathIndex]);
+				user.Use(Buttons[pathIndex]);
 				break;
 			}
 		}

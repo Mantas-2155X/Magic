@@ -100,7 +100,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Chill();
+					npc.Idle();
 					npc.Walk(aiManager.Player.GetTransform().position);
 				}
 			}
@@ -118,7 +118,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Chill();
+					npc.Idle();
 					npc.Walk(pos);
 				}
 
@@ -135,7 +135,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Chill();
+					npc.Idle();
 					npc.Walk(spawnPoint.position);
 				}
 			}
@@ -192,7 +192,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.SetAggressive(true);
+					npc.AssignAggressive(true);
 				}
 			}
 			
@@ -203,7 +203,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.SetAggressive(false);
+					npc.AssignAggressive(false);
 				}
 			}
 
@@ -213,18 +213,18 @@ namespace Editor
 
 			GUILayout.BeginHorizontal();
 			
-			if (GUILayout.Button("Wander Aggressively"))
+			if (GUILayout.Button("Wander"))
 			{
 				foreach (var npc in aiManager.NPCs)
 				{
 					if (!npc.IsAlive)
 						continue;
 
-					npc.WanderAggressively();
+					npc.Wander();
 				}
 			}
 			
-			if (GUILayout.Button("Patrol Aggressively"))
+			if (GUILayout.Button("Patrol"))
 			{
 				var points = new List<Vector3>();
 				points.Add(new Vector3(-28.50f, -0.93f, -16.63f));
@@ -235,18 +235,18 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.PatrolAggressively(points);
+					npc.Patrol(points);
 				}
 			}
 			
-			if (GUILayout.Button("Wait Aggressively"))
+			if (GUILayout.Button("Idle"))
 			{
 				foreach (var npc in aiManager.NPCs)
 				{
 					if (!npc.IsAlive)
 						continue;
 
-					npc.WaitAggressively();
+					npc.Idle();
 				}
 			}
 			
@@ -258,7 +258,7 @@ namespace Editor
 						continue;
 					
 					npc.SetRelationshipGroup(Random.Range(1, int.MaxValue));
-					npc.WanderAggressively();
+					npc.Wander();
 				}
 			}
 

@@ -39,7 +39,7 @@ namespace AI.AIModes
 				return;
 			
 			// If low on resources, see if there's anything that can be picked up
-			if (Owner.ActionMode != EActionMode.UseSomething && Time.time >= Owner.ActionModes[EActionMode.UseSomething].LastExited + ((NPCData)Owner.Data).UseResourceEvery)
+			if (Owner.ActionMode != EActionMode.Use && Time.time >= Owner.ActionModes[EActionMode.Use].LastExited + ((NPCData)Owner.Data).UseResourceEvery)
 				Owner.LowResources.GrabResourceIfNeeded();
 
 			var spells = Owner.Spells;

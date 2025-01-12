@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AI.ActionModes
 {
-	public class WanderAggressively : IActionMode
+	public class Wander : IActionMode
 	{
 		public NPC Owner { get; set; }
 		
@@ -31,7 +31,7 @@ namespace AI.ActionModes
 			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target))
 			{
 				if (Owner.AIMode != EAIMode.Walking)
-					Owner.Wander.WalkRandomly(false);
+					Owner.Wandering.WalkRandomly(false);
 				
 				return;
 			}

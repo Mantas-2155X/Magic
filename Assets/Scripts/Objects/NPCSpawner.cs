@@ -134,7 +134,7 @@ namespace Objects
 					continue;
 				}
 				
-				npc.WaitAggressively();
+				npc.Idle();
 				spawned.Add(npc);
 			}
 		}

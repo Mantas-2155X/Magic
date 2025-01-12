@@ -5,11 +5,11 @@ using UnityEngine.AI;
 
 namespace AI.ActionModes.Shared
 {
-	public class Wander
+	public class Wandering
 	{
 		private readonly NPC owner;
 
-		public Wander(NPC owner)
+		public Wandering(NPC owner)
 		{
 			this.owner = owner;
 		}

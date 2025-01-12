@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AI.ActionModes
 {
-	public class WaitAggressively : IActionMode
+	public class Idle : IActionMode
 	{
 		public NPC Owner { get; set; }
 		

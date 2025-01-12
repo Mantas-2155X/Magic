@@ -12,6 +12,8 @@ using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.AI;
 using Action = AI.AIModes.Action;
+using Idle = AI.ActionModes.Idle;
+using Patrol = AI.ActionModes.Patrol;
 using Random = UnityEngine.Random;
 
 namespace AI
@@ -50,8 +52,8 @@ namespace AI
 		
 		public AimAt AimAt { get; private set; }
 		public Chase Chase { get; private set; }
-		public Wander Wander { get; private set; }
-		public Patrol Patrol { get; private set; }
+		public Wandering Wandering { get; private set; }
+		public ActionModes.Shared.Patrolling Patrolling { get; private set; }
 		public HasSight HasSight { get; private set; }
 		public WithinRange WithinRange { get; private set; }
 		public LowResources LowResources { get; private set; }
@@ -60,7 +62,7 @@ namespace AI
 		
 		public readonly Dictionary<EAIMode, IAIMode> AIModes = new (new EAIModeComparer())
 		{
-			{ EAIMode.Idle, new Idle() },
+			{ EAIMode.Idle, new AIModes.Idle() },
 			{ EAIMode.Walking, new Walking() },
 			{ EAIMode.Action, new Action() }
 		};
@@ -68,10 +70,10 @@ namespace AI
 		public readonly Dictionary<EActionMode, IActionMode> ActionModes = new (new EActionModeComparer())
 		{
 			{ EActionMode.None, new None() },
-			{ EActionMode.WanderAggressively, new WanderAggressively() },
-			{ EActionMode.PatrolAggressively, new PatrolAggressively() },
-			{ EActionMode.WaitAggressively, new WaitAggressively() },
-			{ EActionMode.UseSomething, new UseSomething() }
+			{ EActionMode.Wander, new Wander() },
+			{ EActionMode.Patrol, new Patrol() },
+			{ EActionMode.Idle, new Idle() },
+			{ EActionMode.Use, new Use() }
 		};
 		
 		private EAIMode previousAIMode;
@@ -83,48 +85,44 @@ namespace AI
 
 		#region AI
 		
-		#region Action Modes
-
-		public void WanderAggressively()
+		public void Wander()
 		{
 			if (!IsAlive)
 				return;
 			
-			setActionMode(EActionMode.WanderAggressively);
+			setActionMode(EActionMode.Wander);
 			setAIMode(EAIMode.Action);
 		}
 
-		public void PatrolAggressively(List<Vector3> points, int startAt = -1)
+		public void Patrol(List<Vector3> points, int startAt = -1)
 		{
 			if (!IsAlive)
 				return;
 			
-			Patrol.SetPoints(points, startAt);
+			Patrolling.SetPoints(points, startAt);
 			
-			setActionMode(EActionMode.PatrolAggressively);
+			setActionMode(EActionMode.Patrol);
 			setAIMode(EAIMode.Action);
 		}
 		
-		public void WaitAggressively()
+		public void Idle()
 		{
 			if (!IsAlive)
 				return;
 			
-			setActionMode(EActionMode.WaitAggressively);
+			setActionMode(EActionMode.Idle);
 			setAIMode(EAIMode.Action);
 		}
 
-		public void UseSomething(Component target)
+		public void Use(Component target)
 		{
 			if (!IsAlive)
 				return;
 			
 			setOtherTarget(target);
-			setActionMode(EActionMode.UseSomething);
+			setActionMode(EActionMode.Use);
 			setAIMode(EAIMode.Action);
 		}
-
-		#endregion
 		
 		public void Walk(Vector3 destination)
 		{
@@ -133,15 +131,6 @@ namespace AI
 			
 			setDestination(destination);
 			setAIMode(EAIMode.Walking);
-		}
-
-		public void Chill()
-		{
-			if (!IsAlive)
-				return;
-
-			setActionMode(EActionMode.None);
-			setAIMode(EAIMode.Idle);
 		}
 		
 		public void SendCommunication(ECommunication type, object data)
@@ -209,7 +198,7 @@ namespace AI
 			setOtherTarget(target);
 		}
 		
-		public void SetAggressive(bool state)
+		public void AssignAggressive(bool state)
 		{
 			if (!IsAlive)
 				return;
@@ -522,8 +511,8 @@ namespace AI
 
 			AimAt = new AimAt(this);
 			Chase = new Chase(this);
-			Wander = new Wander(this);
-			Patrol = new Patrol(this);
+			Wandering = new Wandering(this);
+			Patrolling = new ActionModes.Shared.Patrolling(this);
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
 			LowResources = new LowResources(this);

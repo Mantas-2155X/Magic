@@ -76,14 +76,14 @@ namespace AI.ActionModes.Shared
 			{
 				if (CurrentResourceValid(ETag.RestoresHealth))
 				{
-					owner.UseSomething(owner.OtherTarget);
+					owner.Use(owner.OtherTarget);
 					return true;
 				}
 
 				var resource = FindNearbyResource(ETag.RestoresHealth);
 				if (resource != null)
 				{
-					owner.UseSomething((Component)resource);
+					owner.Use((Component)resource);
 					return true;
 				}
 			}
@@ -92,14 +92,14 @@ namespace AI.ActionModes.Shared
 			{
 				if (CurrentResourceValid(ETag.RestoresMana))
 				{
-					owner.UseSomething(owner.OtherTarget);
+					owner.Use(owner.OtherTarget);
 					return true;
 				}
 				
 				var resource = FindNearbyResource(ETag.RestoresMana);
 				if (resource != null)
 				{
-					owner.UseSomething((Component)resource);
+					owner.Use((Component)resource);
 					return true;
 				}
 			}

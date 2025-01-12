@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AI.ActionModes
 {
-	public class PatrolAggressively : IActionMode
+	public class Patrol : IActionMode
 	{
 		public NPC Owner { get; set; }
 		
@@ -33,13 +33,13 @@ namespace AI.ActionModes
 				// Target lost, go back to the current point
 				if (Owner.AIMode == EAIMode.Action)
 				{
-					Owner.Patrol.GoToCurrentPoint();
+					Owner.Patrolling.GoToCurrentPoint();
 					return;
 				}
 
 				// Reached point, continue to the next one
-				if (Owner.Patrol.HasReachedPoint())
-					Owner.Patrol.GoToNextPoint();
+				if (Owner.Patrolling.HasReachedPoint())
+					Owner.Patrolling.GoToNextPoint();
 				
 				return;
 			}
