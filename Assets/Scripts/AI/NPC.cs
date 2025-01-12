@@ -53,7 +53,7 @@ namespace AI
 		public AimAt AimAt { get; private set; }
 		public Chase Chase { get; private set; }
 		public Wandering Wandering { get; private set; }
-		public ActionModes.Shared.Patrolling Patrolling { get; private set; }
+		public Patrolling Patrolling { get; private set; }
 		public HasSight HasSight { get; private set; }
 		public WithinRange WithinRange { get; private set; }
 		public LowResources LowResources { get; private set; }
@@ -96,12 +96,12 @@ namespace AI
 			setAIMode(EAIMode.Action);
 		}
 
-		public void Patrol(List<Vector3> points, int startAt = -1)
+		public void Patrol(Path path, int startAt = -1)
 		{
 			if (!IsAlive)
 				return;
 			
-			Patrolling.SetPoints(points, startAt);
+			Patrolling.SetPath(path, startAt);
 			
 			setActionMode(EActionMode.Patrol);
 			setAIMode(EAIMode.Action);

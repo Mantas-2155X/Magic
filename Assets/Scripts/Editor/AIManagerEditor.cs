@@ -229,13 +229,15 @@ namespace Editor
 				var points = new List<Vector3>();
 				points.Add(new Vector3(-28.50f, -0.93f, -16.63f));
 				points.Add(new Vector3(-29.08f, 11.57f, -18.15f));
+
+				var path = Path.FromVectors(points);
 				
 				foreach (var npc in aiManager.NPCs)
 				{
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.Patrol(points);
+					npc.Patrol(path);
 				}
 			}
 			

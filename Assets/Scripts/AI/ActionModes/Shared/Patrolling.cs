@@ -14,20 +14,19 @@ namespace AI.ActionModes.Shared
 		}
 		
 		public int CurrentPoint { get; private set; }
-
-		private List<Vector3> path = new ();
+		public Path CurrentPath { get; private set; }
 
 		public bool HasReachedPoint()
 		{
-			if (path.Count == 0)
+			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
 				return true;
 			
-			return Vector3.Distance(owner.GetTransform().position, path[CurrentPoint]) <= owner.Agent.stoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
+			return Vector3.Distance(owner.GetTransform().position, CurrentPath.Points[CurrentPoint]) <= owner.Agent.stoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
 		}
 		
-		public void SetPoints(List<Vector3> points, int startAt)
+		public void SetPath(Path path, int startAt)
 		{
-			path = points;
+			CurrentPath = path;
 
 			if (startAt == -1)
 			{
@@ -42,19 +41,23 @@ namespace AI.ActionModes.Shared
 
 		public List<Vector3> GetPoints()
 		{
-			return path;
+			return CurrentPath == null ? null : CurrentPath.Points;
 		}
 
 		public int GetClosestPoint()
 		{
+			var points = GetPoints();
+			if (points == null)
+				return -1;
+			
 			var pos = owner.GetTransform().position;
 
 			var closestIndex = -1;
 			var closestDistance = float.MaxValue;
 			
-			for (var i = 0; i < path.Count; i++)
+			for (var i = 0; i < points.Count; i++)
 			{
-				var distance = Vector3.Distance(pos, path[i]);
+				var distance = Vector3.Distance(pos, points[i]);
 				if (distance < closestDistance)
 				{
 					closestIndex = i;
@@ -67,20 +70,20 @@ namespace AI.ActionModes.Shared
 		
 		public void GoToCurrentPoint()
 		{
-			if (path.Count == 0)
+			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
 				return;
 
-			owner.Walk(path[CurrentPoint]);
+			owner.Walk(CurrentPath.Points[CurrentPoint]);
 		}
 		
 		public void GoToNextPoint()
 		{
-			if (path.Count == 0)
+			if (CurrentPath == null)
 				return;
 			
 			CurrentPoint++;
 			
-			if (CurrentPoint >= path.Count)
+			if (CurrentPoint >= CurrentPath.Points.Count)
 				CurrentPoint = 0;
 			
 			GoToCurrentPoint();
@@ -88,13 +91,13 @@ namespace AI.ActionModes.Shared
 
 		public void GoToPreviousPoint()
 		{
-			if (path.Count == 0)
+			if (CurrentPath == null)
 				return;
 			
 			CurrentPoint--;
 			
 			if (CurrentPoint < 0)
-				CurrentPoint = path.Count - 1;
+				CurrentPoint = CurrentPath.Points.Count - 1;
 			
 			GoToCurrentPoint();
 		}
