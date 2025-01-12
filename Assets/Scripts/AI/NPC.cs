@@ -43,6 +43,7 @@ namespace AI
 		public Component OtherTarget { get; private set; }
 		public Transform OtherTargetTransform { get; private set; }
 		
+		public bool Aggressive { get; private set; }
 		public Vector3 Destination { get; private set; }
 
 		public float SwitchCastCooldown { get; set; }
@@ -77,6 +78,7 @@ namespace AI
 		private EActionMode previousActionMode;
 		private Component previousAttackTarget;
 		private Component previousOtherTarget;
+		private bool previousAggressive;
 		private Vector3 previousDestination;
 
 		#region AI
@@ -206,6 +208,14 @@ namespace AI
 			
 			setOtherTarget(target);
 		}
+		
+		public void SetAggressive(bool state)
+		{
+			if (!IsAlive)
+				return;
+			
+			setAggressive(state);
+		}
 
 		public void ReturnAIMode()
 		{
@@ -237,6 +247,14 @@ namespace AI
 				return;
 			
 			setOtherTarget(previousOtherTarget);
+		}
+		
+		public void ReturnAggressive()
+		{
+			if (!IsAlive)
+				return;
+			
+			setAggressive(previousAggressive);
 		}
 		
 		public void ReturnDestination()
@@ -324,6 +342,22 @@ namespace AI
 #endif
 		}
 		
+		private void setAggressive(bool aggressive)
+		{
+			if (Aggressive == aggressive)
+				return;
+			
+			previousAggressive = Aggressive;
+			Aggressive = aggressive;
+			
+			ActionModeObj.AggressiveChanged(previousAggressive, Aggressive);
+			AIModeObj.AggressiveChanged(previousAggressive, Aggressive);
+		
+#if DEBUG_NPC
+			Debug.Log($"[NPC {gameObject.name}] Changed Aggressive from {previousAggressive} to {Aggressive}");
+#endif
+		}
+		
 		private void setDestination(Vector3 destination)
 		{
 			if (Destination == destination)
@@ -370,6 +404,15 @@ namespace AI
 					// Outside of sense range, forget it if one isn't found
 					forgetCurrent = true;
 				}
+			}
+
+			// Don't look for new targets if not aggressive
+			if (!Aggressive)
+			{
+				if (forgetCurrent)
+					setAttackTarget(null);
+				
+				return;
 			}
 			
 			var position = GetTransform().position;

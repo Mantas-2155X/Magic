@@ -181,6 +181,34 @@ namespace Editor
 			
 			GUILayout.EndHorizontal();
 			
+			GUILayout.Label("Aggressive", EditorStyles.boldLabel);
+
+			GUILayout.BeginHorizontal();
+			
+			if (GUILayout.Button("Yes"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.SetAggressive(true);
+				}
+			}
+			
+			if (GUILayout.Button("No"))
+			{
+				foreach (var npc in aiManager.NPCs)
+				{
+					if (!npc.IsAlive)
+						continue;
+
+					npc.SetAggressive(false);
+				}
+			}
+
+			GUILayout.EndHorizontal();
+			
 			GUILayout.Label("Action", EditorStyles.boldLabel);
 
 			GUILayout.BeginHorizontal();
