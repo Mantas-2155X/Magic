@@ -84,7 +84,9 @@ namespace AI
 		private Vector3 previousDestination;
 
 		#region AI
-		
+
+		#region Action Modes
+
 		public void Wander()
 		{
 			if (!IsAlive)
@@ -123,6 +125,8 @@ namespace AI
 			setActionMode(EActionMode.Use);
 			setAIMode(EAIMode.Action);
 		}
+
+		#endregion
 		
 		public void Walk(Vector3 destination)
 		{
@@ -131,6 +135,15 @@ namespace AI
 			
 			setDestination(destination);
 			setAIMode(EAIMode.Walking);
+		}
+		
+		public void Chill()
+		{
+			if (!IsAlive)
+				return;
+
+			setActionMode(EActionMode.None);
+			setAIMode(EAIMode.Idle);
 		}
 		
 		public void SendCommunication(ECommunication type, object data)

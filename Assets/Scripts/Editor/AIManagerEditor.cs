@@ -100,7 +100,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Idle();
+					npc.Chill();
 					npc.Walk(aiManager.Player.GetTransform().position);
 				}
 			}
@@ -118,7 +118,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Idle();
+					npc.Chill();
 					npc.Walk(pos);
 				}
 
@@ -135,7 +135,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 
-					npc.Idle();
+					npc.Chill();
 					npc.Walk(spawnPoint.position);
 				}
 			}
