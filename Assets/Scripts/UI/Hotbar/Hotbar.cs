@@ -7,6 +7,7 @@ using Combat.Spells.Interfaces;
 using Managers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Hotbar
 {
@@ -20,6 +21,9 @@ namespace UI.Hotbar
 		[SerializeField]
 		public TMP_Text SelectedSpell;
 
+		[SerializeField]
+		public Image Background;
+		
 		[SerializeField]
 		public Color CanCastColor;
 		
@@ -66,6 +70,9 @@ namespace UI.Hotbar
 		{
 			var player = AIManager.Instance.Player;
 			var spellCount = player.Spells.Count;
+
+			SelectedSpell.gameObject.SetActive(spellCount > 0);
+			Background.enabled = spellCount > 0;
 			
 			for (var i = 0; i < Containers.Count; i++)
 			{
