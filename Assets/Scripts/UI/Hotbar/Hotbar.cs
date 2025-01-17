@@ -43,8 +43,14 @@ namespace UI.Hotbar
 			BaseAlive.OnSpellSelectedEvent.AddListener(onSpellSelected);
 		}
 
-		public void SetupHotbar()
+		public void UpdateHotbar()
 		{
+			var player = AIManager.Instance.Player;
+			var spellCount = player.Spells.Count;
+
+			SelectedSpell.gameObject.SetActive(spellCount > 0);
+			Background.enabled = spellCount > 0;
+			
 			if (Size > Containers.Count)
 			{
 				var toCreate = Size - Containers.Count;
@@ -63,17 +69,6 @@ namespace UI.Hotbar
 				}
 			}
 			
-			UpdateHotbar();
-		}
-
-		public void UpdateHotbar()
-		{
-			var player = AIManager.Instance.Player;
-			var spellCount = player.Spells.Count;
-
-			SelectedSpell.gameObject.SetActive(spellCount > 0);
-			Background.enabled = spellCount > 0;
-			
 			for (var i = 0; i < Containers.Count; i++)
 			{
 				ISpell spell = null;
@@ -87,7 +82,7 @@ namespace UI.Hotbar
 		
 		public void OnSpawn()
 		{
-			SetupHotbar();
+			UpdateHotbar();
 		}
 		
 		public void OnDeath()

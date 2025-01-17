@@ -163,18 +163,6 @@ namespace AI.Base
 			var spell = Spells[currentIndex];
 			Spells.RemoveAt(currentIndex);
 			Spells.Insert(index, spell);
-			
-			Hotbar.Instance.UpdateHotbar();
-			Spellbook.Instance.UpdateSpellbook();
-
-			if (Spell == null)
-				return;
-
-			var selectedIndex = GetSpellIndex(Spell.SpellData);
-			if (selectedIndex < Hotbar.Instance.Size)
-				return;
-			
-			SelectSpell(0);
 		}
 		public virtual void SelectSpell(int index)
 		{

@@ -523,6 +523,37 @@ namespace AI
 
 		public override bool IsWalking => walking;
 
+		public override void SetSpellIndex(SpellData data, int index)
+		{
+			if (Spell != null)
+			{
+				// Changing spell index might put it outside of hotbar size, put it to the first one if so
+				if (GetSpellIndex(Spell.SpellData) >= Hotbar.Instance.Size)
+					SelectSpell(0);
+			}
+			
+			Hotbar.Instance.UpdateHotbar();
+			Spellbook.Instance.UpdateSpellbook();
+		}
+
+		public override void LearnSpell(SpellData data, bool autoSelect)
+		{
+			Hotbar.Instance.UpdateHotbar();
+			Spellbook.Instance.UpdateSpellbook();
+		}
+
+		public override void ForgetSpell(SpellData data)
+		{
+			Hotbar.Instance.UpdateHotbar();
+			Spellbook.Instance.UpdateSpellbook();
+		}
+
+		public override void ForgetAllSpells()
+		{
+			Hotbar.Instance.UpdateHotbar();
+			Spellbook.Instance.UpdateSpellbook();
+		}
+		
 		public override void Spawn(AliveData data, int relationshipGroup)
 		{
 			var weaponContainer = Body.Containers[EWearableType.Weapon].Wear;

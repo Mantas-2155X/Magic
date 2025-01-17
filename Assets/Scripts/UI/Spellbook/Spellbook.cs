@@ -44,8 +44,12 @@ namespace UI.Spellbook
 
 			if (state)
 			{
+				// Don't show if we don't have any spells
+				if (player.Spells.Count == 0)
+					return;
+				
 				player.DisableInput(false);
-				SetupSpellbook();
+				UpdateSpellbook();
 			}
 			else
 			{
@@ -55,11 +59,13 @@ namespace UI.Spellbook
 			gameObject.SetActive(state);
 		}
 		
-		public void SetupSpellbook()
+		public void UpdateSpellbook()
 		{
 			var player = AIManager.Instance.Player;
 
-			var spellCount = player.Spells.Count;
+			var spells = player.Spells;
+			var spellCount = spells.Count;
+			
 			if (spellCount > Containers.Count)
 			{
 				var toCreate = spellCount - Containers.Count;
@@ -77,16 +83,6 @@ namespace UI.Spellbook
 					}
 				}
 			}
-			
-			UpdateSpellbook();
-		}
-
-		public void UpdateSpellbook()
-		{
-			var player = AIManager.Instance.Player;
-
-			var spells = player.Spells;
-			var spellCount = spells.Count;
 			
 			for (var i = 0; i < Containers.Count; i++)
 			{
