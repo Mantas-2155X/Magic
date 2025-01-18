@@ -1,5 +1,6 @@
 using Tools;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace AI.ActionModes.Shared
 {
@@ -37,13 +38,15 @@ namespace AI.ActionModes.Shared
 			// Projectiles have thickness so we need to cast more rays to make sure the projectile isn't going to just hit a wall. Spherecast does not work here because it spawns inside a collider and therefore it ignores the wall 
 			if (extraCasts)
 			{
+				var halfSize = NavMesh.GetSettingsByID(owner.Agent.agentTypeID).agentRadius / 2f;
+				
 				var instance = hit.colliderInstanceID;
-				var originRight = originCenter + transform.right * 0.25f;
+				var originRight = originCenter + transform.right * halfSize;
 				
 				if (!Physics.Raycast(originRight, direction, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitRight.colliderInstanceID != instance)
 					return false;
 				
-				var originLeft = originCenter - transform.right * 0.25f;
+				var originLeft = originCenter - transform.right * halfSize;
 				
 				if (!Physics.Raycast(originLeft, direction, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitLeft.colliderInstanceID != instance)
 					return false;
