@@ -2,6 +2,7 @@ using System.Threading;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Objects.Enums;
+using Objects.Events;
 using Objects.Interfaces;
 using UnityEngine;
 
@@ -9,6 +10,18 @@ namespace Objects.Base
 {
 	public class BaseConveyor : BaseObject, IConveyor
 	{
+		[SerializeField]
+		public OnConveyorRunningEvent OnConveyorRunningEvent = new ();
+		
+		[SerializeField]
+		public OnConveyorAcceleratingEvent OnConveyorAcceleratingEvent = new ();
+
+		[SerializeField]
+		public OnConveyorStoppedEvent OnConveyorStoppedEvent = new ();
+
+		[SerializeField]
+		public OnConveyorDeceleratingEvent OnConveyorDeceleratingEvent = new ();
+		
 		[field: SerializeField]
 		public AnimationCurve Curve { get; private set; }
 
@@ -86,6 +99,11 @@ namespace Objects.Base
 			return true;
 		}
 
+		public override bool CanUse(IAlive user)
+		{
+			return base.CanUse(user) && !Locked;
+		}
+
 		#endregion
 
 		#region Conveyor
@@ -128,6 +146,7 @@ namespace Objects.Base
 					return;
 
 				State = EConveyorState.Accelerating;
+				OnConveyorAcceleratingEvent?.Invoke();
 			}
 			else
 			{
@@ -135,6 +154,7 @@ namespace Objects.Base
 					return;
 
 				State = EConveyorState.Decelerating;
+				OnConveyorDeceleratingEvent?.Invoke();
 			}
 
 			cancellationToken?.Cancel();
@@ -167,10 +187,12 @@ namespace Objects.Base
 					case EConveyorState.Accelerating when Normalized >= 1f:
 						State = EConveyorState.Running;
 						Normalized = 1f;
+						OnConveyorRunningEvent?.Invoke();
 						return;
 					case EConveyorState.Decelerating when Normalized <= 0f:
 						State = EConveyorState.Stopped;
 						Normalized = 0f;
+						OnConveyorStoppedEvent?.Invoke();
 						return;
 				}
 

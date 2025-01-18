@@ -112,6 +112,11 @@ namespace Objects.Base
 			Toggle();
 			return true;
 		}
+		
+		public override bool CanUse(IAlive user)
+		{
+			return base.CanUse(user) && !Locked;
+		}
 
 		#endregion
 		
