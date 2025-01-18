@@ -154,7 +154,8 @@ namespace Combat.Attacks.Base
 			if (Target == null)
 				return;
 			
-			thisTr.position = Target.position + Vector3.down * 0.95f + AttackData.AttachOffset;
+			var scale = Target.localScale.y;
+			thisTr.position = Target.position + Vector3.down * (0.95f * scale) + (AttackData.AttachOffset * scale);
 		}
 		
 		public IAlive GetAlive()

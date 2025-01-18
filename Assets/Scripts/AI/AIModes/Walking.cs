@@ -110,8 +110,10 @@ namespace AI.AIModes
 							}
 							else if (!action.IsSteppingOn && !action.IsSteppingOff)
 							{
+								var ownerTr = Owner.GetTransform();
+								
 								// Moving to the destination, stay on the platform
-								Owner.GetTransform().position = action.StepTarget.position + Vector3.up * Owner.Agent.baseOffset;
+								ownerTr.position = action.StepTarget.position + Vector3.up * (agent.baseOffset * ownerTr.localScale.y);
 							}
 							
 							return;
@@ -217,7 +219,7 @@ namespace AI.AIModes
 			await lookAtLink(data);
 			
 			var startPos = transform.position;
-			var endPos = data.endPos + Vector3.up * agent.baseOffset;
+			var endPos = data.endPos + Vector3.up * (agent.baseOffset * transform.localScale.y);
 			
 			var normalizedTime = 0.0f;
 			while (normalizedTime < 1.0f)

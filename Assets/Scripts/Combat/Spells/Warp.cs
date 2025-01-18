@@ -62,9 +62,11 @@ namespace Combat.Spells
 							return false;
 					}
 
-					endPos += Vector3.up * 0.5f;
+					var tr = npc.GetTransform();
 					
-					npc.GetTransform().position = endPos;
+					endPos += Vector3.up * ((npc.Agent.baseOffset * tr.localScale.y) / 2f);
+					
+					tr.position = endPos;
 					npc.Body.Rigidbody.MovePosition(endPos);
 					
 					break;

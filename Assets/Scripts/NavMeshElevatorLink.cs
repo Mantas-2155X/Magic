@@ -164,7 +164,7 @@ public class NavMeshElevatorLink : MonoBehaviour
 	{
 		var tr = PlatformUser.GetTransform();
 		var startPos = tr.position;
-		var endPos = StepTarget.position + Vector3.up * PlatformUser.Agent.baseOffset;
+		var endPos = StepTarget.position + Vector3.up * (PlatformUser.Agent.baseOffset * tr.localScale.y);
 		var speed = PlatformUser.Data.Speed;
 		
 		var normalizedTime = 0.0f;
@@ -203,10 +203,10 @@ public class NavMeshElevatorLink : MonoBehaviour
 		switch (Elevator.State)
 		{
 			case EElevatorState.Elevated or EElevatorState.Elevating:
-				endPos = UpperLink.position + Vector3.up * PlatformUser.Agent.baseOffset;
+				endPos = UpperLink.position + Vector3.up * (PlatformUser.Agent.baseOffset * tr.localScale.y);
 				break;
 			case EElevatorState.Lowered or EElevatorState.Lowering:
-				endPos = LowerLink.position + Vector3.up * PlatformUser.Agent.baseOffset;
+				endPos = LowerLink.position + Vector3.up * (PlatformUser.Agent.baseOffset * tr.localScale.y);
 				break;
 		}
 
