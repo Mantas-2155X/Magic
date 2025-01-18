@@ -235,7 +235,7 @@ namespace Combat.Spells.Base
 					}
 					
 					var direction = npc.AttackTarget == null ? ownerTr.forward : (targetPos - ownerPos).normalized;
-					LastRay = new Ray(ownerPos + ownerTr.up * 0.5f, direction);
+					LastRay = new Ray(ownerPos + ownerTr.up * (npc.Agent.baseOffset / 2f), direction);
 					break;
 				default:
 					throw new NotImplementedException();

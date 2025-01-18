@@ -24,7 +24,7 @@ namespace AI.ActionModes.Shared
 			var position = transform.position;
 
 			var direction = target.position - position;
-			var originCenter = position + transform.up * 0.5f;
+			var originCenter = position + transform.up * (owner.Agent.baseOffset / 2f);
 
 			if (!Physics.Raycast(originCenter, direction, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 				return false;
