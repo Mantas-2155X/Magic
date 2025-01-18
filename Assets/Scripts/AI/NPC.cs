@@ -148,6 +148,10 @@ namespace AI
 		
 		public void SendCommunication(ECommunication type, object data)
 		{
+#if DEBUG_NPC
+			Debug.Log($"[NPC {gameObject.name}] Sending communication {type} with data {data}");
+#endif
+			
 			var npcs = AIManager.Instance.NPCs;
 			var pos = GetTransform().position;
 
@@ -156,7 +160,7 @@ namespace AI
 			for (var i = 0; i < npcs.Count; i++)
 			{
 				var npc = npcs[i];
-				if (!npc.IsAlive || npc == this)
+				if (!npc.IsAlive || npc == this || npc.RelationshipGroup != RelationshipGroup)
 					continue;
 
 				var distance = Vector3.Distance(pos, npc.GetTransform().position);
@@ -322,6 +326,11 @@ namespace AI
 			ActionModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
 			AIModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
 
+			if (AttackTarget != null)
+				SendCommunication(ECommunication.AttackTargetFound, AttackTarget);
+			else
+				SendCommunication(ECommunication.AttackTargetLost, null);
+
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Attack Target from {previousAttackTarget} to {AttackTarget}");
 #endif
@@ -339,6 +348,11 @@ namespace AI
 			ActionModeObj.OtherTargetChanged(previousOtherTarget, OtherTarget);
 			AIModeObj.OtherTargetChanged(previousOtherTarget, OtherTarget);
 
+			if (OtherTarget != null)
+				SendCommunication(ECommunication.OtherTargetFound, OtherTarget);
+			else
+				SendCommunication(ECommunication.OtherTargetLost, null);
+			
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Other Target from {previousOtherTarget} to {OtherTarget}");
 #endif
@@ -538,10 +552,14 @@ namespace AI
 			setAggressive(npcData.Aggressive);
 
 			base.Spawn(data, relationshipGroup);
+			
+			SendCommunication(ECommunication.Spawned, null);
 		}
 
 		public override void Kill(object source)
 		{
+			SendCommunication(ECommunication.Died, source);
+			
 			Agent.enabled = false;
 			base.Kill(source);
 		}
