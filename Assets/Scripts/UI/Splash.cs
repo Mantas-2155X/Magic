@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
+using Managers;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace UI
 {
@@ -13,9 +13,7 @@ namespace UI
 
 		private async UniTask loadTitleAsync()
 		{
-			var handle = Addressables.LoadSceneAsync("Scenes/Title");
-			
-			await UniTask.WaitUntil(() => handle.IsDone);
+			await SceneManager.Instance.ChangeSceneAsync("Scenes/Title", true, true, false);
 			
 			_ = Debug.Instance;
 			_ = Title.Instance;

@@ -1,10 +1,10 @@
 using System;
-using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using SceneManager = Managers.SceneManager;
 
 namespace UI
 {
@@ -55,7 +55,7 @@ namespace UI
 
 		public void Awake()
 		{
-			SceneManager.sceneLoaded += onSceneChanged;
+			UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneChanged;
 			
 			updateButtons();
 
@@ -113,7 +113,7 @@ namespace UI
 
 		public void OnNewGame()
 		{
-			loadWorldAsync("Scenes/World3").Forget();
+			SceneManager.Instance.ChangeScene("Scenes/World3", true, true, true);
 		}
 
 		public void OnContinue()
@@ -138,16 +138,12 @@ namespace UI
 
 		public void OnReturnToTitle()
 		{
-			Addressables.LoadSceneAsync("Scenes/Title");
+			SceneManager.Instance.ChangeScene("Scenes/Title", true, true, false);
 		}
 		
 		public void OnQuitGame()
 		{
-			#if UNITY_EDITOR
-				UnityEditor.EditorApplication.ExitPlaymode();
-			#else
-				Application.Quit();
-			#endif
+			SceneManager.Instance.ChangeScene("Exit", true, false, false);
 		}
 		
 		#endregion
@@ -156,7 +152,7 @@ namespace UI
 
 		private void onTitlePerformed(InputAction.CallbackContext ctx)
 		{
-			if (SceneManager.GetActiveScene().name == "Title")
+			if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title")
 				return;
 			
 			Toggle();
@@ -166,7 +162,7 @@ namespace UI
 		
 		private void updateButtons()
 		{
-			var inTitle = SceneManager.GetActiveScene().name == "Title";
+			var inTitle = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title";
 			
 			NewGameButton.SetActive(inTitle);
 			ContinueButton.SetActive(!inTitle);
@@ -183,17 +179,6 @@ namespace UI
 				return;
 			
 			updateButtons();
-		}
-		
-		private async UniTask loadWorldAsync(string world)
-		{
-			var handle = Addressables.LoadSceneAsync(world);
-			handle.Completed += delegate
-			{
-				Close();
-			};
-			
-			await UniTask.WaitUntil(() => handle.IsDone);
 		}
 	}
 }
