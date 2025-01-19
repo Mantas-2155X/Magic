@@ -32,7 +32,7 @@ namespace AI.ActionModes.Shared
 			}
 
 			// Aim at target and fire
-			return owner.KillTarget.AimAndKill(target, false, false);
+			return owner.KillTarget.AimAndKill(target, false, false, false);
 		}
 		
 		/// <summary>

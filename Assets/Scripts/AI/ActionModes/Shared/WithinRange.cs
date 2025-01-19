@@ -16,12 +16,16 @@ namespace AI.ActionModes.Shared
 		/// <summary>
 		/// Returns true if the distance between the npc and the target is less than the npcs sense range and spot range if needed
 		/// </summary>
-		public bool SenseDistanceCheck(Transform target, bool includeSpotRange)
+		public bool SenseDistanceCheck(Transform target, bool includeSpotRange, bool useSpellRange)
 		{
 			var npcData = (NPCData)owner.Data;
 			var distance = Vector3.Distance(owner.GetTransform().position, target.position);
 
 			var canSense = distance < npcData.SenseRange;
+
+			if (useSpellRange && canSense && distance > owner.SpellRange)
+				canSense = false;
+			
 			var canSpot = !includeSpotRange || distance < npcData.SpotRange;
 			
 			return canSense && canSpot;

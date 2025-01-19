@@ -15,14 +15,14 @@ namespace AI.ActionModes.Shared
 		/// <summary>
 		/// Aims at the target and shoots it
 		/// </summary>
-		public bool AimAndKill(Transform target, bool sightCheck, bool rangeCheck)
+		public bool AimAndKill(Transform target, bool sightCheck, bool rangeCheck, bool spellRange)
 		{
 			if (owner.AIMode == EAIMode.Action)
 			{
 				if (rangeCheck)
 				{
 					// Make sure the target is within sense range
-					if (!owner.WithinRange.SenseDistanceCheck(target, false))
+					if (!owner.WithinRange.SenseDistanceCheck(target, false, true))
 						return false;
 				}
 				

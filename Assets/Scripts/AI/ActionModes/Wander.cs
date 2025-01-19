@@ -29,7 +29,7 @@ namespace AI.ActionModes
 			var target = Owner.AttackTargetTransform;
 
 			// Target does not exist or is further than the sense range, wander until one is close enough
-			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target, false))
+			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target, false, false))
 			{
 				if (Owner.AIMode != EAIMode.Walking)
 					Owner.Wandering.WalkRandomly(false);
@@ -43,7 +43,7 @@ namespace AI.ActionModes
 			
 			// If stationary, just aim and kill, otherwise chase
 			if (((NPCData)Owner.Data).Stationary)
-				Owner.KillTarget.AimAndKill(target, true, false);
+				Owner.KillTarget.AimAndKill(target, true, true, true);
 			else
 				Owner.Chase.ChaseAndKill(target);
 		}
