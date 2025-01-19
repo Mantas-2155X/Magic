@@ -26,7 +26,7 @@ namespace AI.ActionModes.Shared
 
 			var npcData = (NPCData)owner.Data;
 			
-			var targetRotation = Quaternion.LookRotation(targetPosition);
+			var targetRotation = Quaternion.LookRotation(targetPosition, owner.GetTransform().up);
 			rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, npcData.RotationSpeed * Time.deltaTime));
 			
 			return Quaternion.Angle(rb.rotation, targetRotation) < npcData.AimAngle;
