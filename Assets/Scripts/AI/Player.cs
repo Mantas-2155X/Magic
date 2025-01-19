@@ -525,6 +525,8 @@ namespace AI
 
 		public override void SetSpellIndex(SpellData data, int index)
 		{
+			base.SetSpellIndex(data, index);
+			
 			if (Spell != null)
 			{
 				// Changing spell index might put it outside of hotbar size, put it to the first one if so
@@ -538,18 +540,24 @@ namespace AI
 
 		public override void LearnSpell(SpellData data, bool autoSelect)
 		{
+			base.LearnSpell(data, autoSelect);
+			
 			Hotbar.Instance.UpdateHotbar();
 			Spellbook.Instance.UpdateSpellbook();
 		}
 
 		public override void ForgetSpell(SpellData data)
 		{
+			base.ForgetSpell(data);
+			
 			Hotbar.Instance.UpdateHotbar();
 			Spellbook.Instance.UpdateSpellbook();
 		}
 
 		public override void ForgetAllSpells()
 		{
+			base.ForgetAllSpells();
+			
 			Hotbar.Instance.UpdateHotbar();
 			Spellbook.Instance.UpdateSpellbook();
 		}
