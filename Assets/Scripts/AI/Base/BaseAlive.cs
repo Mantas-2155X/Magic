@@ -384,6 +384,7 @@ namespace AI.Base
 			Body.Rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
 
 			Body.Rigidbody.isKinematic = false;
+			Body.Rigidbody.useGravity = true;
 			Body.Rigidbody.AddForce(Random.Range(-25f, 25f), 100f, Random.Range(-25f, 25f), ForceMode.Impulse);
 
 			Body.BodyCollider.material = null;

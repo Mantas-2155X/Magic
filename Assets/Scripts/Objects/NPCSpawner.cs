@@ -102,6 +102,8 @@ namespace Objects
 			
 			Gizmos.DrawLine(new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0));
 			Gizmos.DrawLine(new Vector3(-0.5f, 0, -0.5f), new Vector3(0.5f, 0, 0));
+			
+			Gizmos.DrawLine(Vector3.zero, Vector3.up);
 		}
 #endif
 
