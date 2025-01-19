@@ -39,6 +39,9 @@ namespace World
 		[SerializeField]
 		public int TargetFPS = 1000;
 
+		[SerializeField]
+		public bool SpawnPlayer = true;
+		
 		private float previousTimeScale;
 		private int previousTargetFPS;
 		
@@ -54,6 +57,9 @@ namespace World
 
 		public void Start()
 		{
+			if (!SpawnPlayer)
+				return;
+			
 			var spawnPoint = SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount));
 			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("Player"));
 		}
