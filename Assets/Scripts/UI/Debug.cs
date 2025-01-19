@@ -15,6 +15,11 @@ namespace UI
 		private float time;
 		private int count;
 		
+		public void Awake()
+		{
+			DontDestroyOnLoad(gameObject);
+		}
+
 		public void Update()
 		{
 			if (count < AverageOver)
