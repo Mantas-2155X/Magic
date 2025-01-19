@@ -105,7 +105,7 @@ namespace Combat.Casts.Base
 		
 		private void setPosition()
 		{
-			thisTr.position = ownerTr.position + Vector3.down * (0.95f * ownerTr.localScale.y);
+			thisTr.position = ownerTr.position + -ownerTr.up * (0.95f * ownerTr.localScale.y);
 		}
 	}
 }

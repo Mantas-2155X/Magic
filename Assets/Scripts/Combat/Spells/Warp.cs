@@ -63,8 +63,7 @@ namespace Combat.Spells
 					}
 
 					var tr = npc.GetTransform();
-					
-					endPos += Vector3.up * ((npc.Agent.baseOffset * tr.localScale.y) / 2f);
+					endPos += tr.up * ((npc.Agent.baseOffset * tr.localScale.y) / 2f);
 					
 					tr.position = endPos;
 					npc.Body.Rigidbody.MovePosition(endPos);
