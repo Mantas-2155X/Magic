@@ -1,4 +1,3 @@
-using System.Globalization;
 using AI;
 using AI.Base;
 using AI.Interfaces;
@@ -32,6 +31,8 @@ namespace UI
 		
 		public void Awake()
 		{
+			gameObject.SetActive(false);
+			
 			BaseAlive.OnRestoreHealthEvent.AddListener(OnRestoreHealth);
 			BaseAlive.OnDamageEvent.AddListener(OnDamage);
 			BaseAlive.OnRestoreManaEvent.AddListener(OnRestoreMana);
