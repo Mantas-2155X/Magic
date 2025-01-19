@@ -30,13 +30,17 @@ namespace Editor
 			
 			if (GUILayout.Button("Add"))
 			{
-				var vector = Vector3.zero;
+				var point = Vector3.zero;
+				var pause = 0f;
 
 				if (path.Points.Count > SelectedPoint)
-					vector = path.Points[SelectedPoint];
+				{
+					var pathPoint = path.Points[SelectedPoint];
+					point = pathPoint.Point;
+					pause = pathPoint.Pause;
+				}
 				
-				path.Points.Add(vector);
-
+				path.Points.Add(new Path.SPathPoint { Point = point, Pause = pause });
 				SelectedPoint = path.Points.Count - 1;
 			}
 
@@ -49,12 +53,14 @@ namespace Editor
 
 			for (var i = 0; i < path.Points.Count; i++)
 			{
-				var point = path.Points[i];
+				var pathPoint = path.Points[i];
 				
 				GUILayout.BeginHorizontal();
 
 				EditorGUIUtility.labelWidth = 30;
-				point = EditorGUILayout.Vector3Field($"{i}{(i == SelectedPoint ? "*" : "")}", point);
+				pathPoint.Point = EditorGUILayout.Vector3Field($"{i}{(i == SelectedPoint ? "*" : "")}", pathPoint.Point);
+				EditorGUIUtility.labelWidth = 12;
+				pathPoint.Pause = EditorGUILayout.FloatField("P", pathPoint.Pause, GUILayout.Width(55));
 				EditorGUIUtility.labelWidth = 0;
 
 				if (GUILayout.Button("Select", GUILayout.Width(55)))
@@ -104,7 +110,7 @@ namespace Editor
 
 				GUILayout.EndHorizontal();
 				
-				path.Points[i] = point;
+				path.Points[i] = pathPoint;
 			}
 			
 			GUILayout.EndVertical();
@@ -127,7 +133,7 @@ namespace Editor
 				if (i == path.Points.Count - 1)
 					continue;
 				
-				Handles.DrawLine(path.Points[i], path.Points[i + 1]);
+				Handles.DrawLine(path.Points[i].Point, path.Points[i + 1].Point);
 			}
 			
 			Handles.color = previousColor;
@@ -135,8 +141,10 @@ namespace Editor
 			if (path.Points.Count <= SelectedPoint)
 				return;
 
-			var handle = Handles.PositionHandle(path.Points[SelectedPoint], Quaternion.identity);
-			path.Points[SelectedPoint] = handle;
+			var pathPoint = path.Points[SelectedPoint];
+			pathPoint.Point = Handles.PositionHandle(pathPoint.Point, Quaternion.identity);
+			
+			path.Points[SelectedPoint] = pathPoint;
 		}
 	}
 }

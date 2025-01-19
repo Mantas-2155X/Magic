@@ -21,7 +21,7 @@ namespace AI.ActionModes.Shared
 			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
 				return true;
 			
-			return Vector3.Distance(owner.GetTransform().position, CurrentPath.Points[CurrentPoint]) <= owner.Agent.stoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
+			return Vector3.Distance(owner.GetTransform().position, CurrentPath.Points[CurrentPoint].Point) <= owner.Agent.stoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
 		}
 		
 		public void SetPath(Path path, int startAt)
@@ -39,14 +39,9 @@ namespace AI.ActionModes.Shared
 			CurrentPoint = startAt;
 		}
 
-		public List<Vector3> GetPoints()
-		{
-			return CurrentPath == null ? null : CurrentPath.Points;
-		}
-
 		public int GetClosestPoint()
 		{
-			var points = GetPoints();
+			var points = CurrentPath == null ? null : CurrentPath.Points;
 			if (points == null)
 				return -1;
 			
@@ -57,7 +52,7 @@ namespace AI.ActionModes.Shared
 			
 			for (var i = 0; i < points.Count; i++)
 			{
-				var distance = Vector3.Distance(pos, points[i]);
+				var distance = Vector3.Distance(pos, points[i].Point);
 				if (distance < closestDistance)
 				{
 					closestIndex = i;
@@ -73,7 +68,7 @@ namespace AI.ActionModes.Shared
 			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
 				return;
 
-			owner.Walk(CurrentPath.Points[CurrentPoint]);
+			owner.Walk(CurrentPath.Points[CurrentPoint].Point);
 		}
 		
 		public void GoToNextPoint()
