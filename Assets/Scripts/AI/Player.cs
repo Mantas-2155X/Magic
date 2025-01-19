@@ -4,6 +4,7 @@ using Combat.Wearables.Enums;
 using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
+using UI;
 using UI.Hotbar;
 using UI.Spellbook;
 using UnityEngine;
@@ -107,6 +108,11 @@ namespace AI
 			Camera = Camera.main;
 			CameraTr = Camera!.transform;
 			lookDirection = new Vector2(transform.eulerAngles.x, transform.eulerAngles.y);
+		}
+
+		public void OnDestroy()
+		{
+			DisableInput();
 		}
 
 		public void Update()
@@ -231,6 +237,9 @@ namespace AI
 		
 		public void EnableInput()
 		{
+			if (Title.Instance != null && Title.Instance.isActiveAndEnabled)
+				return;
+			
 			// Prevent double binds
 			DisableInput();
 			
@@ -319,81 +328,81 @@ namespace AI
 			Cursor.visible = true;
 
 			var look = LookAction.action;
-			look.performed -= onLookPerformed;
 			look.Disable();
-			
+			look.performed -= onLookPerformed;
+
 			var move = MoveAction.action;
+			move.Disable();
 			move.performed -= onMovePerformed;
 			move.canceled -= onMoveCanceled;
-			move.Disable();
-			
+
 			var jump = JumpAction.action;
+			jump.Disable();
 			jump.performed -= onJumpPerformed;
 			jump.canceled -= onJumpCanceled;
-			jump.Disable();
-			
+
 			var fall = FallAction.action;
+			fall.Disable();
 			fall.performed -= onFallPerformed;
 			fall.canceled -= onFallCanceled;
-			fall.Disable();
-			
+
 			var use = UseAction.action;
-			use.performed -= onUse;
 			use.Disable();
-			
+			use.performed -= onUse;
+
 			var attack = AttackAction.action;
+			attack.Disable();
 			attack.performed -= onAttackPerformed;
 			attack.canceled -= onAttackCanceled;
-			attack.Disable();
-						
+	
 			var noclip = NoclipAction.action;
-			noclip.performed -= onNoclip;
 			noclip.Disable();
-			
+			noclip.performed -= onNoclip;
+
 			var lightA = LightAction.action;
-			lightA.performed -= onLight;
 			lightA.Disable();
+			lightA.performed -= onLight;
 
 			var sprint = SprintAction.action;
 			sprint.Disable();
 
 			var scroll = ScrollAction.action;
-			scroll.performed -= onScroll;
 			scroll.Disable();
-			
+			scroll.performed -= onScroll;
+
 			var hotbar1 = HotbarAction1.action;
-			hotbar1.performed -= onHotbar1;
 			hotbar1.Disable();
-			
+			hotbar1.performed -= onHotbar1;
+
 			var hotbar2 = HotbarAction2.action;
-			hotbar2.performed -= onHotbar2;
 			hotbar2.Disable();
-			
+			hotbar2.performed -= onHotbar2;
+
 			var hotbar3 = HotbarAction3.action;
-			hotbar3.performed -= onHotbar3;
 			hotbar3.Disable();
-			
+			hotbar3.performed -= onHotbar3;
+
 			var hotbar4 = HotbarAction4.action;
-			hotbar4.performed -= onHotbar4;
 			hotbar4.Disable();
-			
+			hotbar4.performed -= onHotbar4;
+
 			var hotbar5 = HotbarAction5.action;
-			hotbar5.performed -= onHotbar5;
 			hotbar5.Disable();
-			
+			hotbar5.performed -= onHotbar5;
+
 			var hotbar6 = HotbarAction6.action;
-			hotbar6.performed -= onHotbar6;
 			hotbar6.Disable();
-			
+			hotbar6.performed -= onHotbar6;
+
 			var hotbar7 = HotbarAction7.action;
-			hotbar7.performed -= onHotbar7;
 			hotbar7.Disable();
+			hotbar7.performed -= onHotbar7;
 
 			if (includePanels)
 			{
 				var spellbook = SpellbookAction.action;
-				spellbook.performed -= onSpellbook;
 				spellbook.Disable();
+				spellbook.performed -= onSpellbook;
 			}
 		}
 
@@ -527,39 +536,61 @@ namespace AI
 		{
 			base.SetSpellIndex(data, index);
 			
-			if (Spell != null)
+			var hotbar = Hotbar.Instance;
+			if (hotbar != null)
 			{
-				// Changing spell index might put it outside of hotbar size, put it to the first one if so
-				if (GetSpellIndex(Spell.SpellData) >= Hotbar.Instance.Size)
-					SelectSpell(0);
+				if (Spell != null)
+				{
+					// Changing spell index might put it outside of hotbar size, put it to the first one if so
+					if (GetSpellIndex(Spell.SpellData) >= hotbar.Size)
+						SelectSpell(0);
+				}
+			
+				hotbar.UpdateHotbar();
 			}
 			
-			Hotbar.Instance.UpdateHotbar();
-			Spellbook.Instance.UpdateSpellbook();
+			var spellbook = Spellbook.Instance;
+			if (spellbook != null)
+				spellbook.UpdateSpellbook();
 		}
 
 		public override void LearnSpell(SpellData data, bool autoSelect)
 		{
 			base.LearnSpell(data, autoSelect);
 			
-			Hotbar.Instance.UpdateHotbar();
-			Spellbook.Instance.UpdateSpellbook();
+			var hotbar = Hotbar.Instance;
+			if (hotbar != null)
+				hotbar.UpdateHotbar();
+			
+			var spellbook = Spellbook.Instance;
+			if (spellbook != null)
+				spellbook.UpdateSpellbook();
 		}
 
 		public override void ForgetSpell(SpellData data)
 		{
 			base.ForgetSpell(data);
 			
-			Hotbar.Instance.UpdateHotbar();
-			Spellbook.Instance.UpdateSpellbook();
+			var hotbar = Hotbar.Instance;
+			if (hotbar != null)
+				hotbar.UpdateHotbar();
+			
+			var spellbook = Spellbook.Instance;
+			if (spellbook != null)
+				spellbook.UpdateSpellbook();
 		}
 
 		public override void ForgetAllSpells()
 		{
 			base.ForgetAllSpells();
 			
-			Hotbar.Instance.UpdateHotbar();
-			Spellbook.Instance.UpdateSpellbook();
+			var hotbar = Hotbar.Instance;
+			if (hotbar != null)
+				hotbar.UpdateHotbar();
+			
+			var spellbook = Spellbook.Instance;
+			if (spellbook != null)
+				spellbook.UpdateSpellbook();
 		}
 		
 		public override void Spawn(AliveData data, int relationshipGroup)
@@ -573,7 +604,10 @@ namespace AI
 			setRenderMode(ShadowCastingMode.ShadowsOnly);
 			base.Spawn(data, relationshipGroup);
 			
-			Spellbook.Instance.Display(false);
+			var spellbook = Spellbook.Instance;
+			if (spellbook != null)
+				spellbook.Display(false);
+			
 			EnableInput();
 		}
 		
@@ -583,7 +617,10 @@ namespace AI
 		
 			World.World.Instance.Flashlight.enabled = false;
 			
-			Spellbook.Instance.Display(false);
+			var spellbook = Spellbook.Instance;
+			if (spellbook != null)
+				spellbook.Display(false);
+			
 			DisableInput();
 			
 			setRenderMode(ShadowCastingMode.On);
@@ -592,7 +629,7 @@ namespace AI
 
 		public override bool IsGrounded()
 		{
-			if (MovementType != EMovementType.Normal)
+			if (!IsAlive || MovementType != EMovementType.Normal)
 				return false;
 
 			var origin = Body.Rigidbody.position + new Vector3(0f, -1.02f, 0f);

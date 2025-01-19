@@ -50,6 +50,8 @@ namespace UI.Hotbar
 
 			SelectedSpell.gameObject.SetActive(spellCount > 0);
 			Background.enabled = spellCount > 0;
+
+			onSpellSelected(player, null, player.Spell);
 			
 			if (Size > Containers.Count)
 			{
