@@ -87,6 +87,7 @@ namespace UI
 			if (alive is not Player player)
 				return;
 
+			gameObject.SetActive(true);
 			setHealth(player.CurrentHealth, player.Data.Health);
 			setMana(player.CurrentMana, player.Data.Mana);
 		}
