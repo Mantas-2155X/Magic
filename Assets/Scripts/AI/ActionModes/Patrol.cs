@@ -38,6 +38,10 @@ namespace AI.ActionModes
 				// Target lost, go back to the current point
 				if (Owner.AIMode == EAIMode.Action)
 				{
+					// Don't repeat going to current point if waiting
+					if (Owner.Patrolling.WaitUntil > 0f && Time.time < Owner.Patrolling.WaitUntil)
+						return;
+					
 					Owner.Patrolling.GoToCurrentPoint();
 					return;
 				}

@@ -15,8 +15,8 @@ namespace AI.ActionModes.Shared
 		public int CurrentPoint { get; private set; }
 		public Path CurrentPath { get; private set; }
 
-		private float waitUntil = -1f;
-		private bool waitNext = true;
+		public float WaitUntil { get; private set; } = -1f;
+		public bool WaitOnArrival { get; private set; } = true;
 		
 		// (Reached, Waiting)
 		public (bool, bool) HasReachedPoint()
@@ -29,23 +29,23 @@ namespace AI.ActionModes.Shared
 				return (false, false);
 
 			// If point requires waiting, handle that here
-			if (waitNext)
+			if (WaitOnArrival)
 			{
-				if (waitUntil < 0f)
+				if (WaitUntil < 0f)
 				{
 					var pauseLength = CurrentPath.Points[CurrentPoint].Pause;
 					if (pauseLength > 0f)
 					{
-						waitUntil = Time.time + pauseLength;
+						WaitUntil = Time.time + pauseLength;
 						return (true, true);
 					}
 				}
 				
-				if (Time.time < waitUntil)
+				if (Time.time < WaitUntil)
 					return (true, true);
 			
-				waitUntil = -1f;
-				waitNext = false;
+				WaitUntil = -1f;
+				WaitOnArrival = false;
 			}
 			
 			return (true, false);
@@ -97,7 +97,7 @@ namespace AI.ActionModes.Shared
 
 			var pathPoint = CurrentPath.Points[CurrentPoint];
 			if (pathPoint.Pause > 0f)
-				waitNext = true;
+				WaitOnArrival = true;
 			
 			owner.Walk(pathPoint.Point);
 		}
