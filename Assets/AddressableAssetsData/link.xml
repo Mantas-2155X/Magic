@@ -46,15 +46,13 @@
     <type fullname="UI.Spellbook.Spellbook" preserve="all" />
     <type fullname="UI.Spellbook.SpellContainer" preserve="all" />
     <type fullname="UI.Stats" preserve="all" />
+    <type fullname="UI.Title" preserve="all" />
     <type fullname="World.World" preserve="all" />
-    <type fullname="Objects.Events.OnSpawnerClearedEvent" preserve="nothing" serialized="true" />
     <type fullname="Combat.Enums.EElement" preserve="nothing" serialized="true" />
     <type fullname="Combat.Structs.SElementStat" preserve="nothing" serialized="true" />
     <type fullname="Combat.Wearables.Enums.EWearableType" preserve="nothing" serialized="true" />
     <type fullname="Combat.Wearables.Structs.SWearableContainer" preserve="nothing" serialized="true" />
-    <type fullname="ScriptableObjects.Path/SPathPoint" preserve="nothing" serialized="true" />
     <type fullname="Events.OnTriggerEvent" preserve="nothing" serialized="true" />
-    <type fullname="Objects.Events.OnButtonUsedEvent" preserve="nothing" serialized="true" />
     <type fullname="Objects.Events.OnDoorClosedEvent" preserve="nothing" serialized="true" />
     <type fullname="Objects.Events.OnDoorClosingEvent" preserve="nothing" serialized="true" />
     <type fullname="Objects.Events.OnDoorOpenedEvent" preserve="nothing" serialized="true" />
@@ -65,6 +63,9 @@
     <type fullname="Objects.Events.OnElevatorLoweringEvent" preserve="nothing" serialized="true" />
     <type fullname="Objects.Events.OnLightDisabledEvent" preserve="nothing" serialized="true" />
     <type fullname="Objects.Events.OnLightEnabledEvent" preserve="nothing" serialized="true" />
+    <type fullname="Objects.Events.OnSpawnerClearedEvent" preserve="nothing" serialized="true" />
+    <type fullname="ScriptableObjects.Path/SPathPoint" preserve="nothing" serialized="true" />
+    <type fullname="Objects.Events.OnButtonUsedEvent" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
     <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
@@ -178,8 +179,8 @@
     <type fullname="UnityEngine.Sprite" preserve="all" />
     <type fullname="UnityEngine.Texture2D" preserve="all" />
     <type fullname="UnityEngine.Transform" preserve="all" />
-    <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.Events.ArgumentCache" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.Events.PersistentListenerMode" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.RectOffset" preserve="nothing" serialized="true" />
   </assembly>
@@ -211,6 +212,7 @@
     <type fullname="UnityEngine.UI.Mask" preserve="all" />
     <type fullname="UnityEngine.UI.Scrollbar" preserve="all" />
     <type fullname="UnityEngine.UI.ScrollRect" preserve="all" />
+    <type fullname="UnityEngine.UI.VerticalLayoutGroup" preserve="all" />
     <type fullname="UnityEngine.UI.AnimationTriggers" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.UI.Button/ButtonClickedEvent" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.UI.ColorBlock" preserve="nothing" serialized="true" />
