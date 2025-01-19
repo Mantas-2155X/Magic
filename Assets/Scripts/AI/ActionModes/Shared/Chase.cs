@@ -18,7 +18,6 @@ namespace AI.ActionModes.Shared
 		/// <summary>
 		/// Chases the target, looks at it when reached and starts attacking it
 		/// </summary>
-		/// <returns></returns>
 		public bool ChaseAndKill(Transform target)
 		{
 			// Target within sense range, chase until it is reached
@@ -32,17 +31,8 @@ namespace AI.ActionModes.Shared
 				return false;
 			}
 
-			if (owner.AIMode == EAIMode.Action)
-			{
-				// Turn towards the target and aim
-				if (!owner.AimAt.AimTowards(target))
-					return false;
-
-				if (owner.Spell != null)
-					owner.Spell.StartCasting();
-			}
-
-			return true;
+			// Aim at target and fire
+			return owner.KillTarget.AimAndKill(target, false, false);
 		}
 		
 		/// <summary>

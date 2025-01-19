@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ScriptableObjects
 {
@@ -125,5 +124,11 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public bool Aggressive = true;
+
+		/// <summary>
+		/// Is the npc able to walk at all? Turning is allowed either way
+		/// </summary>
+		[SerializeField]
+		public bool Stationary;
 	}
 }

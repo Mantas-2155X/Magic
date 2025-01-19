@@ -57,6 +57,7 @@ namespace AI
 		public HasSight HasSight { get; private set; }
 		public WithinRange WithinRange { get; private set; }
 		public LowResources LowResources { get; private set; }
+		public KillTarget KillTarget { get; private set; }
 
 		public bool IsOnLink;
 		
@@ -89,7 +90,7 @@ namespace AI
 
 		public void Wander()
 		{
-			if (!IsAlive)
+			if (!IsAlive || ((NPCData)Data).Stationary)
 				return;
 			
 			setActionMode(EActionMode.Wander);
@@ -98,7 +99,7 @@ namespace AI
 
 		public void Patrol(Path path, int startAt = -1)
 		{
-			if (!IsAlive)
+			if (!IsAlive || ((NPCData)Data).Stationary)
 				return;
 			
 			Patrolling.SetPath(path, startAt);
@@ -118,7 +119,7 @@ namespace AI
 
 		public void Use(Component target)
 		{
-			if (!IsAlive)
+			if (!IsAlive || ((NPCData)Data).Stationary)
 				return;
 			
 			setOtherTarget(target);
@@ -130,7 +131,7 @@ namespace AI
 		
 		public void Walk(Vector3 destination)
 		{
-			if (!IsAlive)
+			if (!IsAlive || ((NPCData)Data).Stationary)
 				return;
 			
 			setDestination(destination);
@@ -543,6 +544,7 @@ namespace AI
 			HasSight = new HasSight(this);
 			WithinRange = new WithinRange(this);
 			LowResources = new LowResources(this);
+			KillTarget = new KillTarget(this);
 
 			var npcData = (NPCData)data;
 			

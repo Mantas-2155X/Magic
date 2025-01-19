@@ -38,9 +38,13 @@ namespace AI.AIModes
 			if (Owner.IsCasting)
 				return;
 			
-			// If low on resources, see if there's anything that can be picked up
-			if (Owner.ActionMode != EActionMode.Use && Time.time >= Owner.ActionModes[EActionMode.Use].LastExited + ((NPCData)Owner.Data).UseResourceEvery)
-				Owner.LowResources.GrabResourceIfNeeded();
+			// Non-stationary npcs can grab resources
+			if (!((NPCData)Owner.Data).Stationary)
+			{
+				// If low on resources, see if there's anything that can be picked up
+				if (Owner.ActionMode != EActionMode.Use && Time.time >= Owner.ActionModes[EActionMode.Use].LastExited + ((NPCData)Owner.Data).UseResourceEvery)
+					Owner.LowResources.GrabResourceIfNeeded();
+			}
 
 			var spells = Owner.Spells;
 			

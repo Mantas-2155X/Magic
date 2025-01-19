@@ -1,5 +1,6 @@
 using AI.Enums;
 using AI.Interfaces;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace AI.ActionModes
@@ -40,7 +41,11 @@ namespace AI.ActionModes
 			if (Owner.IsOnLink)
 				return;
 			
-			Owner.Chase.ChaseAndKill(target);
+			// If stationary, just aim and kill, otherwise chase
+			if (((NPCData)Owner.Data).Stationary)
+				Owner.KillTarget.AimAndKill(target, true, false);
+			else
+				Owner.Chase.ChaseAndKill(target);
 		}
 		
 		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
