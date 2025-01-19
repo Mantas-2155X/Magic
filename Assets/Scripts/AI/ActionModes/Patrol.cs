@@ -32,7 +32,7 @@ namespace AI.ActionModes
 			if (target == null || !Owner.WithinRange.SenseDistanceCheck(target, false, false))
 			{
 				// Reached point, continue to the next one
-				if (Owner.Patrolling.HasReachedPoint())
+				if (Owner.Patrolling.HasReachedPoint() == (true, false))
 					Owner.Patrolling.GoToNextPoint();
 				
 				// Target lost, go back to the current point

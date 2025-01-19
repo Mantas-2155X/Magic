@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -16,12 +15,40 @@ namespace AI.ActionModes.Shared
 		public int CurrentPoint { get; private set; }
 		public Path CurrentPath { get; private set; }
 
-		public bool HasReachedPoint()
+		private float waitUntil = -1f;
+		private bool waitNext = true;
+		
+		// (Reached, Waiting)
+		public (bool, bool) HasReachedPoint()
 		{
 			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
-				return true;
+				return (true, false);
 			
-			return Vector3.Distance(owner.GetTransform().position, CurrentPath.Points[CurrentPoint].Point) <= owner.Agent.stoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
+			var reached = Vector3.Distance(owner.GetTransform().position, CurrentPath.Points[CurrentPoint].Point) <= owner.Agent.stoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
+			if (!reached)
+				return (false, false);
+
+			// If point requires waiting, handle that here
+			if (waitNext)
+			{
+				if (waitUntil < 0f)
+				{
+					var pauseLength = CurrentPath.Points[CurrentPoint].Pause;
+					if (pauseLength > 0f)
+					{
+						waitUntil = Time.time + pauseLength;
+						return (true, true);
+					}
+				}
+				
+				if (Time.time < waitUntil)
+					return (true, true);
+			
+				waitUntil = -1f;
+				waitNext = false;
+			}
+			
+			return (true, false);
 		}
 		
 		public void SetPath(Path path, int startAt)
@@ -68,7 +95,11 @@ namespace AI.ActionModes.Shared
 			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
 				return;
 
-			owner.Walk(CurrentPath.Points[CurrentPoint].Point);
+			var pathPoint = CurrentPath.Points[CurrentPoint];
+			if (pathPoint.Pause > 0f)
+				waitNext = true;
+			
+			owner.Walk(pathPoint.Point);
 		}
 		
 		public void GoToNextPoint()
