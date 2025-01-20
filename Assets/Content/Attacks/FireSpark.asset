@@ -1,26 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38265b3f53394812ab2b891cb9203b15, type: 3}
-  m_Name: FireSpark
-  m_EditorClassIdentifier: 
-  Name: Fire Spark
-  Description: Visual spark for the Fire element
-  Tags: 0
-  Prefab: {fileID: 2895964246749410662, guid: 03beb3e8cbee4220ab66626366e1439c, type: 3}
-  Type: 
-  EnableTriggerAfter: 0
-  DisableTriggerAfter: 0
-  AttachToTarget: 0
-  AttachOffset: {x: 0, y: 0, z: 0}
-  Damage: 0
-  Element: 4
-  AttackAngle: 1
+version https://git-lfs.github.com/spec/v1
+oid sha256:27277e4465572e892f41e791fe17edad6edc31d22c00e0178cf984942375d9e9
+size 793

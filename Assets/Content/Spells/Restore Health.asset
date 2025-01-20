@@ -1,28 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
-  m_Name: Restore Health
-  m_EditorClassIdentifier: 
-  Name: Restore Health
-  Description: Heals the caster
-  Icon: {fileID: 21300000, guid: c9d272581b99c8c70b49b5b97f066f88, type: 3}
-  Tags: 1
-  Prefab: {fileID: 0}
-  Type: 
-  Cooldown: 10
-  CastingTime: 0
-  CastingCost: 50
-  Range: 50
-  IsResource: 1
-  Cast: {fileID: 0}
-  Projectile: {fileID: 0}
-  Attack: {fileID: 11400000, guid: 7d83ca02a8ea6b61b8238d87b7230036, type: 2}
+version https://git-lfs.github.com/spec/v1
+oid sha256:b7874ce6e89a64ac4860b3580359556f27002002be2dbaae1d427e338ad4b12e
+size 795

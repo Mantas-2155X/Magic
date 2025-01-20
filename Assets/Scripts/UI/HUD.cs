@@ -17,6 +17,9 @@ namespace UI
 		public TMP_Text LookTarget;
 		
 		[SerializeField]
+		public Localizer LookTargetLocalizer;
+
+		[SerializeField]
 		public Image Crosshair;
 		
 		[SerializeField]
@@ -90,9 +93,11 @@ namespace UI
 					if (obj.CanPickup(player) || obj.CanUse(player))
 					{
 						if (obj is DroppedWearable droppedWearable)
-							LookTarget.text = droppedWearable.Wearable.WearableData.Name;
+							LookTargetLocalizer.Key = droppedWearable.Wearable.WearableData.Name;
 						else
-							LookTarget.text = obj.ObjectData.Name;
+							LookTargetLocalizer.Key = obj.ObjectData.Name;
+						
+						LookTargetLocalizer.Apply();
 					}
 				}
 			}

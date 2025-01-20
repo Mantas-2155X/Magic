@@ -15,7 +15,6 @@ namespace UI
 		public void Awake()
 		{
 			LocalizationManager.Instance.RegisterLocalizer(this);
-			UpdateText();
 		}
 
 		public void OnDestroy()
@@ -23,9 +22,14 @@ namespace UI
 			LocalizationManager.Instance.UnregisterLocalizer(this);
 		}
 
-		public void UpdateText()
+		public void Apply()
 		{
 			Text.text = LocalizationManager.Instance.GetLocalizedEntry(Key);
+		}
+
+		public void Clear()
+		{
+			Text.text = Key;
 		}
 	}
 }

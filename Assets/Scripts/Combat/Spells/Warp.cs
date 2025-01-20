@@ -74,7 +74,7 @@ namespace Combat.Spells
 					throw new NotImplementedException();
 			}
 
-			var portal = ObjectManager.Instance.GetObject("Portal");
+			var portal = ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME");
 			
 			ObjectManager.Instance.CreateObject(portal, startPos, Vector3.zero);
 			ObjectManager.Instance.CreateObject(portal, endPos, Vector3.zero);

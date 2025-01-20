@@ -1,28 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
-  m_Name: Portal
-  m_EditorClassIdentifier: 
-  Name: Portal
-  Description: Particle effect of a NPC spawn
-  Prefab: {fileID: 3523939064151980886, guid: 1e9552ce2ae17308186da256bb771548, type: 3}
-  IsPoolable: 2
-  IsBreakable: 0
-  StartingHealth: 0
-  IsPickupable: 0
-  PickupableTiming: 0
-  PickupableAfter: 0
-  DestroyAfterPickup: 0
-  IsUsable: 0
-  UsableTiming: 0
-  UsableAfter: 0
-  DestroyAfterUse: 0
+version https://git-lfs.github.com/spec/v1
+oid sha256:d84350be9f05d6468d2637c759d94f467f523a7da295faa3e4343299ed9154ba
+size 739

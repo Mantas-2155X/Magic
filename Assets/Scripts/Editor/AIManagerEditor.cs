@@ -43,7 +43,7 @@ namespace Editor
 				var spawnPoints = world.SpawnPoints;
 				var spawnPoint = spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount));
 				
-				aiManager.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("Player"));
+				aiManager.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("AI_PLAYER_NAME"));
 			}
 			
 			if (GUILayout.Button("Kill"))
@@ -62,7 +62,7 @@ namespace Editor
 				var spawnPoints = world.SpawnPoints;
 				var spawnPoint = spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount));
 				
-				aiManager.CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, (NPCData)ObjectManager.Instance.GetAlive("NPC"));
+				aiManager.CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, (NPCData)ObjectManager.Instance.GetAlive("AI_NPC_NAME"));
 			}
 
 			if (GUILayout.Button("Create at cam target"))
@@ -73,7 +73,7 @@ namespace Editor
 				if (Physics.Raycast(ray, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 					pos = hit.point + Vector3.up * 1.5f;
 
-				aiManager.CreateNPC(pos, Vector3.zero, (NPCData)ObjectManager.Instance.GetAlive("NPC"));
+				aiManager.CreateNPC(pos, Vector3.zero, (NPCData)ObjectManager.Instance.GetAlive("AI_NPC_NAME"));
 			}
 			
 			if (GUILayout.Button("Kill all"))

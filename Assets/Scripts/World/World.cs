@@ -61,7 +61,7 @@ namespace World
 				return;
 			
 			var spawnPoint = SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount));
-			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("Player"));
+			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("AI_PLAYER_NAME"));
 		}
 		
 		public void Update()

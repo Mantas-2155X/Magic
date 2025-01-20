@@ -341,6 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Template: {fileID: 7800619268980027817}
   SelectedSpell: {fileID: 6523012229850411809}
+  SelectedSpellLocalizer: {fileID: 7246297926847856254}
   Background: {fileID: 4308103398243275223}
   CanCastColor: {r: 1, g: 1, b: 1, a: 1}
   CantCastColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
@@ -682,6 +683,7 @@ GameObject:
   - component: {fileID: 7410788420202621509}
   - component: {fileID: 6523012229850411809}
   - component: {fileID: 3204501165638907996}
+  - component: {fileID: 7246297926847856254}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -827,6 +829,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7246297926847856254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457825092090688105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481fdc55b83c4be5a207ebf1a4804df5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: {fileID: 6523012229850411809}
+  Key: 
 --- !u!1 &1584189747251011467
 GameObject:
   m_ObjectHideFlags: 0
@@ -1287,6 +1303,7 @@ GameObject:
   - component: {fileID: 6104719542622460183}
   - component: {fileID: 3017650054303361406}
   - component: {fileID: 6993665252057480553}
+  - component: {fileID: 2900104205050934756}
   m_Layer: 5
   m_Name: LookTarget
   m_TagString: Untagged
@@ -1412,6 +1429,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2900104205050934756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935730992840628740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481fdc55b83c4be5a207ebf1a4804df5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: {fileID: 6993665252057480553}
+  Key: 
 --- !u!1 &3065039587323305232
 GameObject:
   m_ObjectHideFlags: 0
@@ -3211,6 +3242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LookTarget: {fileID: 6993665252057480553}
+  LookTargetLocalizer: {fileID: 2900104205050934756}
   Crosshair: {fileID: 6545764998628969669}
   Cast: {fileID: 7756015616906997539}
   Cooldown: {fileID: 4060766268264282403}

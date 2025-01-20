@@ -1,23 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd0ae0db49104ff39ef235d001464c3a, type: 3}
-  m_Name: FireBall
-  m_EditorClassIdentifier: 
-  Name: Fire Ball
-  Description: A ball of the Fire element
-  Tags: 0
-  Prefab: {fileID: 6837300406704376654, guid: 097d1cbb38d6d1c17b052a95b87f3fd9, type: 3}
-  Type: 
-  Force: 7.5
-  Damage: 15
-  Element: 4
-  Attack: {fileID: 11400000, guid: 82ca4e7d594101de386050fd25facb86, type: 2}
+version https://git-lfs.github.com/spec/v1
+oid sha256:43c198922f807b68c056098832cd5d14c388a93dc3ffcfb841c451ae459a65ce
+size 637

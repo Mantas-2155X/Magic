@@ -1,28 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
-  m_Name: Warp
-  m_EditorClassIdentifier: 
-  Name: Warp
-  Description: Teleports the caster
-  Icon: {fileID: 21300000, guid: a7f17e42302116c1f8a959165c278b10, type: 3}
-  Tags: 16
-  Prefab: {fileID: 0}
-  Type: Combat.Spells.Warp
-  Cooldown: 9
-  CastingTime: 0
-  CastingCost: 35
-  Range: 50
-  IsResource: 0
-  Cast: {fileID: 0}
-  Projectile: {fileID: 0}
-  Attack: {fileID: 0}
+version https://git-lfs.github.com/spec/v1
+oid sha256:f8421ae76ab0736c7180e70bac9cece4bb0634cf9f4dbbde9936fd5234768c4c
+size 729

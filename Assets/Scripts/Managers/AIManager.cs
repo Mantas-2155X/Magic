@@ -108,7 +108,7 @@ namespace Managers
 
 		public NPC CreateNPC(Vector3 position, Vector3 angles, NPCData data, int relationshipGroup = 0)
 		{
-			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("Portal"), position, Vector3.zero);
+			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME"), position, Vector3.zero);
 			
 			var go = Instantiate(data.Prefab);
 			go.name = $"NPC {NPCs.Count}";

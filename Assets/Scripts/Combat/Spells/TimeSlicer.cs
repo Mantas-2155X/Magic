@@ -73,7 +73,7 @@ namespace Combat.Spells
 				targets.Add(player);
 
 			for (var i = 0; i < targets.Count; i++)
-				ObjectManager.Instance.CreateAttack(ObjectManager.Instance.GetAttack("Time Slice"), this, targets[i].GetTransform());
+				ObjectManager.Instance.CreateAttack(ObjectManager.Instance.GetAttack("ATTACK_TIMESLICE_NAME"), this, targets[i].GetTransform());
 			
 			await UniTask.WaitForSeconds(ReturnAfter, true);
 			

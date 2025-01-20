@@ -22,6 +22,9 @@ namespace UI.Hotbar
 		public TMP_Text SelectedSpell;
 
 		[SerializeField]
+		public Localizer SelectedSpellLocalizer;
+		
+		[SerializeField]
 		public Image Background;
 		
 		[SerializeField]
@@ -98,7 +101,16 @@ namespace UI.Hotbar
 			if (alive is not Player)
 				return;
 
-			SelectedSpell.text = newSpell == null ? "" : newSpell.SpellData.Name;
+			if (newSpell == null)
+			{
+				SelectedSpellLocalizer.Key = "";
+				SelectedSpellLocalizer.Clear();
+			}
+			else
+			{
+				SelectedSpellLocalizer.Key = newSpell.SpellData.Name;
+				SelectedSpellLocalizer.Apply();
+			}
 		}
 	}
 }

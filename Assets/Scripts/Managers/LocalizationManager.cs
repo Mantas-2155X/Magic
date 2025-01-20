@@ -58,7 +58,7 @@ namespace Managers
 				if (localizer == null)
 					continue;
 				
-				localizer.UpdateText();
+				localizer.Apply();
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace Managers
 			if (localizer == null)
 				return;
 
-			localizer.UpdateText();
+			localizer.Apply();
 			
 			localizers.AddUnique(localizer);
 		}
@@ -85,30 +85,41 @@ namespace Managers
 			if (!Directory.Exists(Path))
 				Directory.CreateDirectory(Path);
 
-			var files = Directory.GetFiles(Path);
-			for (var i = 0; i < files.Length; i++)
+			var directories = Directory.GetDirectories(Path);
+			for (var i = 0; i < directories.Length; i++)
 			{
-				var file = files[i];
+				var directory = directories[i];
 				
-				var fileInfo = new FileInfo(file);
-				if (!fileInfo.Exists || fileInfo.Extension != ".tsv")
+				var directoryInfo = new DirectoryInfo(directory);
+				if (!directoryInfo.Exists)
 					continue;
 
-				var name = fileInfo.Name[..^fileInfo.Extension.Length];
-				var lines = File.ReadAllLines(file);
+				var files = Directory.GetFiles(directory, "*.tsv", SearchOption.AllDirectories);
+				var lines = new List<string>();
+				
+				for (var k = 0; k < files.Length; k++)
+				{
+					var file = files[k];
+					
+					var fileinfo = new FileInfo(file);
+					if (!fileinfo.Exists)
+						continue;
 
-				setupLanguage(name, lines);
+					lines.AddRange(File.ReadAllLines(file));
+				}
+				
+				setupLanguage(directoryInfo.Name, lines);
 			}
 		}
 
-		private void setupLanguage(string language, string[] lines)
+		private void setupLanguage(string language, List<string> lines)
 		{
-			if (lines == null || lines.Length == 0)
+			if (lines == null || lines.Count == 0)
 				return;
 
 			var entries = new List<SLanguageEntry>();
 
-			for (var i = 0; i < lines.Length; i++)
+			for (var i = 0; i < lines.Count; i++)
 			{
 				var line = lines[i];
 				if (string.IsNullOrEmpty(line))

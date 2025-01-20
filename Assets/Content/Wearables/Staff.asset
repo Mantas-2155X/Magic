@@ -1,32 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88ec3dc2c574319883846e497d7a3a6, type: 3}
-  m_Name: Staff
-  m_EditorClassIdentifier: 
-  Name: Staff
-  Description: Basic Staff
-  Tags: 0
-  Prefab: {fileID: 9150455038998059246, guid: 05de131b04c29a042a9cff8a5215a5b2, type: 3}
-  Type: 
-  WearableType: 0
-  DamageStats:
-    _serializedList:
-    - Key: 4
-      Value:
-        Constant: 2
-        Percentage: 1.5
-    - Key: 3
-      Value:
-        Constant: 2
-        Percentage: 1.5
-  ProtectionStats:
-    _serializedList: []
+version https://git-lfs.github.com/spec/v1
+oid sha256:8ee2bfb6e62aa4ee85806f8b22181b2d3c72130c8edf294806b2e7bcfe07e1a3
+size 822

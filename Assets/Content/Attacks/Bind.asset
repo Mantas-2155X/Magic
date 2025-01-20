@@ -1,28 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38265b3f53394812ab2b891cb9203b15, type: 3}
-  m_Name: Bind
-  m_EditorClassIdentifier: 
-  Name: Bind
-  Description: Stops the target from moving
-  Icon: {fileID: 0}
-  Tags: 0
-  Prefab: {fileID: 2523756766213633531, guid: 27e6e5bf694a541c48ee0d6560ace44d, type: 3}
-  Type: 
-  EnableTriggerAfter: 1
-  DisableTriggerAfter: 1.25
-  AttachToTarget: 1
-  DropToGround: 0
-  AttachOffset: {x: 0, y: 0, z: 0}
-  Damage: 0
-  Element: 3
-  AttackAngle: 0
+version https://git-lfs.github.com/spec/v1
+oid sha256:a3bdf93667cf778ae6d8510163489c9793ddf3dc728b9164c0c20a2388f7c966
+size 781
