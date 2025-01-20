@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 3361868871834243744}
   - component: {fileID: 1014735727799747381}
   - component: {fileID: 3773689922169849924}
+  - component: {fileID: 5092650520136112317}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -519,6 +520,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5092650520136112317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047641375060839224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481fdc55b83c4be5a207ebf1a4804df5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: {fileID: 3773689922169849924}
+  Key: SPELLBOOK_TITLE
 --- !u!1 &1409085015042408974
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,6 +1498,7 @@ GameObject:
   - component: {fileID: 7335273765176306588}
   - component: {fileID: 5311788543660798597}
   - component: {fileID: 1633057726452109211}
+  - component: {fileID: 996427385447439071}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1608,6 +1624,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &996427385447439071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3116396103601135818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481fdc55b83c4be5a207ebf1a4804df5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: {fileID: 1633057726452109211}
+  Key: DEATH_CLICKTORESPAWN
 --- !u!1 &3556979596603034891
 GameObject:
   m_ObjectHideFlags: 0
