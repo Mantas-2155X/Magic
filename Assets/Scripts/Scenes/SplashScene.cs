@@ -1,10 +1,12 @@
 using Cysharp.Threading.Tasks;
 using Managers;
+using UI;
 using UnityEngine;
+using Debug = UI.Debug;
 
-namespace UI
+namespace Scenes
 {
-	public class Splash : MonoBehaviour
+	public class SplashScene : MonoBehaviour
 	{
 		public void Awake()
 		{
