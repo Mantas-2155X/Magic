@@ -735,6 +735,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Console",
+                    "type": "Button",
+                    "id": "888abf4d-79fc-4490-859a-7fcd95b7a862",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1164,6 +1173,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Title",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f8ec8e7-7187-42d5-b1bb-1247d88f8b32",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Console",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

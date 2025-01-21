@@ -757,6 +757,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Console"",
+                    ""type"": ""Button"",
+                    ""id"": ""888abf4d-79fc-4490-859a-7fcd95b7a862"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1188,6 +1197,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Title"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f8ec8e7-7187-42d5-b1bb-1247d88f8b32"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Console"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1288,6 +1308,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_Title = m_UI.FindAction("Title", throwIfNotFound: true);
+        m_UI_Console = m_UI.FindAction("Console", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1548,6 +1569,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_Title;
+    private readonly InputAction m_UI_Console;
     public struct UIActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1563,6 +1585,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
         public InputAction @Title => m_Wrapper.m_UI_Title;
+        public InputAction @Console => m_Wrapper.m_UI_Console;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1605,6 +1628,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Title.started += instance.OnTitle;
             @Title.performed += instance.OnTitle;
             @Title.canceled += instance.OnTitle;
+            @Console.started += instance.OnConsole;
+            @Console.performed += instance.OnConsole;
+            @Console.canceled += instance.OnConsole;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1642,6 +1668,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Title.started -= instance.OnTitle;
             @Title.performed -= instance.OnTitle;
             @Title.canceled -= instance.OnTitle;
+            @Console.started -= instance.OnConsole;
+            @Console.performed -= instance.OnConsole;
+            @Console.canceled -= instance.OnConsole;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1738,5 +1767,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
         void OnTitle(InputAction.CallbackContext context);
+        void OnConsole(InputAction.CallbackContext context);
     }
 }

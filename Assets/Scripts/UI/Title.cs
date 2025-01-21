@@ -37,6 +37,9 @@ namespace UI
 		public InputActionReference TitleAction;
 
 		[SerializeField]
+		public InputActionReference ConsoleAction;
+
+		[SerializeField]
 		public GameObject NewGameButton;		
 		[SerializeField]
 		public GameObject ContinueButton;
@@ -51,6 +54,9 @@ namespace UI
 		[SerializeField]
 		public GameObject QuitGameButton;
 
+		[SerializeField]
+		public Console Console;
+		
 		#region MonoBehaviour
 
 		public void Awake()
@@ -59,9 +65,13 @@ namespace UI
 			
 			updateButtons();
 
-			var action = TitleAction.action;
-			action.performed += onTitlePerformed;
-			action.Enable();
+			var titleAction = TitleAction.action;
+			titleAction.performed += onTitlePerformed;
+			titleAction.Enable();
+			
+			var consoleAction = ConsoleAction.action;
+			consoleAction.performed += onConsolePerformed;
+			consoleAction.Enable();
 		}
 
 		#endregion
@@ -156,6 +166,14 @@ namespace UI
 				return;
 			
 			Toggle();
+		}
+		
+		private void onConsolePerformed(InputAction.CallbackContext ctx)
+		{
+			if (Console == null)
+				return;
+			
+			Console.Toggle();
 		}
 
 		#endregion
