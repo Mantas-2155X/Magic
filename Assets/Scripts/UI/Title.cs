@@ -112,7 +112,7 @@ namespace UI
 			else
 			{
 				var player = AIManager.Instance.Player;
-				if (player != null)
+				if (player != null && player.IsAlive)
 					player.EnableInput();
 			}
 		}

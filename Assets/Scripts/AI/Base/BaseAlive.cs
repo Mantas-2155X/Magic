@@ -336,6 +336,8 @@ namespace AI.Base
 			if (IsAlive)
 				return;
 
+			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $"{name} has spawned");
+
 			Data = data;
 			
 			Wearables = new List<IWearable>();
@@ -368,6 +370,8 @@ namespace AI.Base
 		{
 			if (!IsAlive)
 				return;
+			
+			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $"{name} was killed by {source}");
 			
 			if (Spell != null)
 				Spell.CancelCasting();

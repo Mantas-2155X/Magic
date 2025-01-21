@@ -49,12 +49,12 @@ namespace Managers
 			OnConsoleClearedEvent?.Invoke();
 		}
 
-		#endregion
-
 		public List<SConsoleEntry> GetEntries()
 		{
 			return entries;
 		}
+
+		#endregion
 
 		#region Commands
 
