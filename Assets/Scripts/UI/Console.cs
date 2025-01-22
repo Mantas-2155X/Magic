@@ -45,6 +45,8 @@ namespace UI
 
 		public void OnEnable()
 		{
+			transform.SetAsLastSibling();
+			
 			if (entriesChanged)
 				refresh();
 			

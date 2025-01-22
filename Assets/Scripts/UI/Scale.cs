@@ -3,11 +3,14 @@ using UnityEngine.EventSystems;
 
 namespace UI
 {
-	public class Scale : MonoBehaviour, IBeginDragHandler, IDragHandler
+	public class Scale : MonoBehaviour, IBeginDragHandler, IDragHandler, IInitializePotentialDragHandler
 	{
 		[SerializeField]
 		public RectTransform ScaleTarget;
 
+		[SerializeField]
+		public bool UseThreshold;
+		
 		[SerializeField]
 		public Vector2 MinimumSize;
 		
@@ -15,6 +18,7 @@ namespace UI
 		
 		public void OnBeginDrag(PointerEventData eventData)
 		{
+			ScaleTarget.SetAsLastSibling();
 			beginPosition = eventData.position;
 		}
 		
@@ -39,6 +43,11 @@ namespace UI
 				ScaleTarget.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newX);
 				beginPosition.x = eventData.position.x;
 			}
+		}
+		
+		public void OnInitializePotentialDrag(PointerEventData eventData)
+		{
+			eventData.useDragThreshold = UseThreshold;
 		}
 	}
 }

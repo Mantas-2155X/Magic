@@ -56,6 +56,9 @@ namespace UI
 
 		[SerializeField]
 		public Console Console;
+
+		[SerializeField]
+		public Settings Settings;
 		
 		#region MonoBehaviour
 
@@ -143,7 +146,10 @@ namespace UI
 
 		public void OnSettings()
 		{
-			throw new NotImplementedException();
+			if (Settings == null)
+				return;
+			
+			Settings.Toggle();
 		}
 
 		public void OnReturnToTitle()
@@ -186,7 +192,7 @@ namespace UI
 			ContinueButton.SetActive(!inTitle);
 			LoadButton.SetActive(false);
 			SaveButton.SetActive(false);
-			SettingsButton.SetActive(false);
+			SettingsButton.SetActive(true);
 			ReturnToTitleButton.SetActive(!inTitle);
 			QuitGameButton.SetActive(true);
 		}
