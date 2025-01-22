@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UI
@@ -24,10 +25,19 @@ namespace UI
 		public TMP_InputField Input;
 		
 		[SerializeField]
+		public InputActionReference PreviousHistoryAction;
+		
+		[SerializeField]
+		public InputActionReference NextHistoryAction;
+
+		[SerializeField]
 		public List<TMP_Text> Items = new ();
 
 		[SerializeField]
 		public SerializedDictionary<ConsoleManager.EConsoleEntryType, Color> Colors;
+		
+		private readonly List<string> history = new ();
+		private int historyIndex = -1;
 		
 		private bool entriesChanged = true;
 		
@@ -35,6 +45,16 @@ namespace UI
 		{
 			ConsoleManager.OnConsoleEntryAddedEvent.AddListener(onConsoleEntryAdded);
 			ConsoleManager.OnConsoleClearedEvent.AddListener(onConsoleCleared);
+			
+			var previousHistoryAction = PreviousHistoryAction.action;
+			previousHistoryAction.performed += onPreviousHistoryPerformed;
+			previousHistoryAction.Enable();
+			
+			var nextHistoryAction = NextHistoryAction.action;
+			nextHistoryAction.performed += onNextHistoryPerformed;
+			nextHistoryAction.Enable();
+			
+			Input.onSubmit.AddListener(onSubmit);
 		}
 		
 		public void OnDestroy()
@@ -50,8 +70,10 @@ namespace UI
 			if (entriesChanged)
 				refresh();
 			
+			historyIndex = history.Count;
+			
 			selectDelayed().Forget();
-			scrollDown().Forget();
+			scrollDelayed().Forget();
 		}
 		
 		public void OnCloseClicked()
@@ -61,21 +83,36 @@ namespace UI
 		
 		public void OnSubmitClicked()
 		{
-			if (string.IsNullOrEmpty(Input.text))
+			var text = Input.text;
+			
+			if (string.IsNullOrEmpty(text))
 				return;
 			
-			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $">{Input.text}");
+			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $">{text}");
 
 			try
 			{
-				var result = ConsoleManager.Instance.ExecuteCommand(Input.text);
+				var result = ConsoleManager.Instance.ExecuteCommand(text);
 				switch (result)
 				{
 					case ConsoleManager.EConsoleCommandResult.NotFound:
 						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Command not found");
 						break;
 					case ConsoleManager.EConsoleCommandResult.Success:
-						// all good
+						if (history.Count > 0)
+						{
+							var lastEntry = history[^1];
+							if (lastEntry != text)
+							{
+								history.Add(text);
+								historyIndex = history.Count;
+							}
+						}
+						else
+						{
+							history.Add(text);
+							historyIndex = history.Count;
+						}
 						break;
 					case ConsoleManager.EConsoleCommandResult.IncorrectUsage:
 						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Incorrect usage");
@@ -87,13 +124,13 @@ namespace UI
 			catch (Exception e)
 			{
 				ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Error, "Failed executing command");
-				UnityEngine.Debug.LogWarning($"[Console] Failed executing command {Input.text}, {e}");
+				UnityEngine.Debug.LogWarning($"[Console] Failed executing command {text}, {e}");
 			}
 			
 			Input.SetTextWithoutNotify("");
 			
 			selectDelayed().Forget();
-			scrollDown().Forget();
+			scrollDelayed().Forget();
 		}
 
 		public void Toggle()
@@ -149,6 +186,14 @@ namespace UI
 				item.gameObject.SetActive(true);
 			}
 		}
+
+		private void onSubmit(string text)
+		{
+			if (Input.wasCanceled)
+				return;
+			
+			OnSubmitClicked();
+		}
 		
 		private void onConsoleEntryAdded(ConsoleManager.SConsoleEntry entry)
 		{
@@ -172,28 +217,76 @@ namespace UI
 			refresh();
 		}
 
+		private void onPreviousHistoryPerformed(InputAction.CallbackContext ctx)
+		{
+			if (!Input.IsActive() || !Input.isFocused)
+				return;
+
+			var historySize = history.Count;
+			if (historySize == 0)
+				return;
+
+			historyIndex--;
+
+			// Loop around if reached the end
+			if (historyIndex < 0)
+				historyIndex = historySize - 1;
+			
+			Input.SetTextWithoutNotify(history[historyIndex]);
+			moveToEndDelayed().Forget();
+		}
+		
+		private void onNextHistoryPerformed(InputAction.CallbackContext ctx)
+		{
+			if (!Input.IsActive() || !Input.isFocused)
+				return;
+
+			var historySize = history.Count;
+			if (historySize == 0)
+				return;
+
+			historyIndex++;
+
+			// Loop around if reached the end
+			if (historyIndex >= historySize)
+				historyIndex = 0;
+			
+			Input.SetTextWithoutNotify(history[historyIndex]);
+			moveToEndDelayed().Forget();
+		}
+		
 		private async UniTaskVoid selectDelayed()
 		{
 			await UniTask.NextFrame();
 			
-			if (!isActiveAndEnabled || Input == null)
+			if (this == null || !isActiveAndEnabled)
 				return;
 			
 			Input.Select();
 			Input.ActivateInputField();
 		}
 
-		private async UniTaskVoid scrollDown()
+		private async UniTaskVoid scrollDelayed()
 		{
 			await UniTask.NextFrame();
 			
-			if (!isActiveAndEnabled || ScrollRect == null)
+			if (this == null || !isActiveAndEnabled)
 				return;
 
 			Canvas.ForceUpdateCanvases();
 			
 			ScrollRect.verticalNormalizedPosition = 0f;
 			ScrollRect.horizontalNormalizedPosition = 0f;
+		}
+		
+		private async UniTaskVoid moveToEndDelayed()
+		{
+			await UniTask.NextFrame();
+			
+			if (this == null || !isActiveAndEnabled)
+				return;
+
+			Input.MoveToEndOfLine(false, false);
 		}
 	}
 }

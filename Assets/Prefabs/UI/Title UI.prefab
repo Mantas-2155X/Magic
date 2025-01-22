@@ -3533,8 +3533,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 344996a5168e48968724db07924ebf9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TitleAction: {fileID: -8443637966469494914, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  ConsoleAction: {fileID: 8311118446803101779, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  TitleAction: {fileID: -8314703597672238825, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  ConsoleAction: {fileID: -1976778421417883703, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   NewGameButton: {fileID: 1532799698335945316}
   ContinueButton: {fileID: 1806680255692218236}
   LoadButton: {fileID: 1057117038061636116}
@@ -5766,19 +5766,7 @@ MonoBehaviour:
   m_CharacterLimit: 128
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4685455758543851481}
-        m_TargetAssemblyTypeName: UI.Console, Assembly-CSharp
-        m_MethodName: OnSubmitClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -5993,6 +5981,8 @@ MonoBehaviour:
   Content: {fileID: 6529461682600518373}
   ScrollRect: {fileID: 5351607673369790966}
   Input: {fileID: 958567602048610256}
+  PreviousHistoryAction: {fileID: -575034595239653729, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  NextHistoryAction: {fileID: 1437337679111636095, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   Items: []
   Colors:
     _serializedList:

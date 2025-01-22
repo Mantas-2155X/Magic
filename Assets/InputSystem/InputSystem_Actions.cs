@@ -656,6 +656,102 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""Title"",
+            ""id"": ""0523a1bf-35ee-4225-8b53-18c10691fa74"",
+            ""actions"": [
+                {
+                    ""name"": ""Title"",
+                    ""type"": ""Button"",
+                    ""id"": ""1e1a7612-cc70-4cef-bd06-2cd332a1b20d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Console"",
+                    ""type"": ""Button"",
+                    ""id"": ""51a16b59-9d5d-43aa-ae5f-dbc406446a13"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2f85f364-816d-4195-aed3-37e150713bf5"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Title"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d577e360-b12b-405b-904c-cc826977553e"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Console"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Console"",
+            ""id"": ""f2108ddb-763f-47bb-97d0-2c6149b0e506"",
+            ""actions"": [
+                {
+                    ""name"": ""Previous Console History"",
+                    ""type"": ""Button"",
+                    ""id"": ""006a10f1-af66-4f07-bc7a-be557e03080e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Next Console History"",
+                    ""type"": ""Button"",
+                    ""id"": ""d9d612d5-7799-4364-86ad-fc33b79f3113"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c1b6e5ce-6a3f-49d5-8db0-92577dc27206"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Previous Console History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3dbf7ffc-f814-46a7-96a0-a8faf1dfa9a9"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Next Console History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""UI"",
             ""id"": ""272f6d14-89ba-496f-b7ff-215263d3219f"",
             ""actions"": [
@@ -745,24 +841,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""type"": ""PassThrough"",
                     ""id"": ""9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be"",
                     ""expectedControlType"": ""Quaternion"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Title"",
-                    ""type"": ""Button"",
-                    ""id"": ""7eee96d9-78af-4a43-bd4a-ea230fa26d4d"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Console"",
-                    ""type"": ""Button"",
-                    ""id"": ""888abf4d-79fc-4490-859a-7fcd95b7a862"",
-                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1186,28 +1264,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""52fa21bf-64a0-4afd-9745-18d17cf7ffff"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Title"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5f8ec8e7-7187-42d5-b1bb-1247d88f8b32"",
-                    ""path"": ""<Keyboard>/backquote"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Console"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1295,6 +1351,14 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Hotbar6 = m_Player.FindAction("Hotbar6", throwIfNotFound: true);
         m_Player_Hotbar7 = m_Player.FindAction("Hotbar7", throwIfNotFound: true);
         m_Player_Spellbook = m_Player.FindAction("Spellbook", throwIfNotFound: true);
+        // Title
+        m_Title = asset.FindActionMap("Title", throwIfNotFound: true);
+        m_Title_Title = m_Title.FindAction("Title", throwIfNotFound: true);
+        m_Title_Console = m_Title.FindAction("Console", throwIfNotFound: true);
+        // Console
+        m_Console = asset.FindActionMap("Console", throwIfNotFound: true);
+        m_Console_PreviousConsoleHistory = m_Console.FindAction("Previous Console History", throwIfNotFound: true);
+        m_Console_NextConsoleHistory = m_Console.FindAction("Next Console History", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1307,13 +1371,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
-        m_UI_Title = m_UI.FindAction("Title", throwIfNotFound: true);
-        m_UI_Console = m_UI.FindAction("Console", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Title.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Title.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Console.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Console.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
     }
 
@@ -1555,6 +1619,114 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     }
     public PlayerActions @Player => new PlayerActions(this);
 
+    // Title
+    private readonly InputActionMap m_Title;
+    private List<ITitleActions> m_TitleActionsCallbackInterfaces = new List<ITitleActions>();
+    private readonly InputAction m_Title_Title;
+    private readonly InputAction m_Title_Console;
+    public struct TitleActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+        public TitleActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Title => m_Wrapper.m_Title_Title;
+        public InputAction @Console => m_Wrapper.m_Title_Console;
+        public InputActionMap Get() { return m_Wrapper.m_Title; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TitleActions set) { return set.Get(); }
+        public void AddCallbacks(ITitleActions instance)
+        {
+            if (instance == null || m_Wrapper.m_TitleActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TitleActionsCallbackInterfaces.Add(instance);
+            @Title.started += instance.OnTitle;
+            @Title.performed += instance.OnTitle;
+            @Title.canceled += instance.OnTitle;
+            @Console.started += instance.OnConsole;
+            @Console.performed += instance.OnConsole;
+            @Console.canceled += instance.OnConsole;
+        }
+
+        private void UnregisterCallbacks(ITitleActions instance)
+        {
+            @Title.started -= instance.OnTitle;
+            @Title.performed -= instance.OnTitle;
+            @Title.canceled -= instance.OnTitle;
+            @Console.started -= instance.OnConsole;
+            @Console.performed -= instance.OnConsole;
+            @Console.canceled -= instance.OnConsole;
+        }
+
+        public void RemoveCallbacks(ITitleActions instance)
+        {
+            if (m_Wrapper.m_TitleActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ITitleActions instance)
+        {
+            foreach (var item in m_Wrapper.m_TitleActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_TitleActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public TitleActions @Title => new TitleActions(this);
+
+    // Console
+    private readonly InputActionMap m_Console;
+    private List<IConsoleActions> m_ConsoleActionsCallbackInterfaces = new List<IConsoleActions>();
+    private readonly InputAction m_Console_PreviousConsoleHistory;
+    private readonly InputAction m_Console_NextConsoleHistory;
+    public struct ConsoleActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+        public ConsoleActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PreviousConsoleHistory => m_Wrapper.m_Console_PreviousConsoleHistory;
+        public InputAction @NextConsoleHistory => m_Wrapper.m_Console_NextConsoleHistory;
+        public InputActionMap Get() { return m_Wrapper.m_Console; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ConsoleActions set) { return set.Get(); }
+        public void AddCallbacks(IConsoleActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ConsoleActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ConsoleActionsCallbackInterfaces.Add(instance);
+            @PreviousConsoleHistory.started += instance.OnPreviousConsoleHistory;
+            @PreviousConsoleHistory.performed += instance.OnPreviousConsoleHistory;
+            @PreviousConsoleHistory.canceled += instance.OnPreviousConsoleHistory;
+            @NextConsoleHistory.started += instance.OnNextConsoleHistory;
+            @NextConsoleHistory.performed += instance.OnNextConsoleHistory;
+            @NextConsoleHistory.canceled += instance.OnNextConsoleHistory;
+        }
+
+        private void UnregisterCallbacks(IConsoleActions instance)
+        {
+            @PreviousConsoleHistory.started -= instance.OnPreviousConsoleHistory;
+            @PreviousConsoleHistory.performed -= instance.OnPreviousConsoleHistory;
+            @PreviousConsoleHistory.canceled -= instance.OnPreviousConsoleHistory;
+            @NextConsoleHistory.started -= instance.OnNextConsoleHistory;
+            @NextConsoleHistory.performed -= instance.OnNextConsoleHistory;
+            @NextConsoleHistory.canceled -= instance.OnNextConsoleHistory;
+        }
+
+        public void RemoveCallbacks(IConsoleActions instance)
+        {
+            if (m_Wrapper.m_ConsoleActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IConsoleActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ConsoleActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ConsoleActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public ConsoleActions @Console => new ConsoleActions(this);
+
     // UI
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
@@ -1568,8 +1740,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_ScrollWheel;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
-    private readonly InputAction m_UI_Title;
-    private readonly InputAction m_UI_Console;
     public struct UIActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1584,8 +1754,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @ScrollWheel => m_Wrapper.m_UI_ScrollWheel;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
-        public InputAction @Title => m_Wrapper.m_UI_Title;
-        public InputAction @Console => m_Wrapper.m_UI_Console;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1625,12 +1793,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
-            @Title.started += instance.OnTitle;
-            @Title.performed += instance.OnTitle;
-            @Title.canceled += instance.OnTitle;
-            @Console.started += instance.OnConsole;
-            @Console.performed += instance.OnConsole;
-            @Console.canceled += instance.OnConsole;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1665,12 +1827,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
-            @Title.started -= instance.OnTitle;
-            @Title.performed -= instance.OnTitle;
-            @Title.canceled -= instance.OnTitle;
-            @Console.started -= instance.OnConsole;
-            @Console.performed -= instance.OnConsole;
-            @Console.canceled -= instance.OnConsole;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1754,6 +1910,16 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnHotbar7(InputAction.CallbackContext context);
         void OnSpellbook(InputAction.CallbackContext context);
     }
+    public interface ITitleActions
+    {
+        void OnTitle(InputAction.CallbackContext context);
+        void OnConsole(InputAction.CallbackContext context);
+    }
+    public interface IConsoleActions
+    {
+        void OnPreviousConsoleHistory(InputAction.CallbackContext context);
+        void OnNextConsoleHistory(InputAction.CallbackContext context);
+    }
     public interface IUIActions
     {
         void OnNavigate(InputAction.CallbackContext context);
@@ -1766,7 +1932,5 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnScrollWheel(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-        void OnTitle(InputAction.CallbackContext context);
-        void OnConsole(InputAction.CallbackContext context);
     }
 }
