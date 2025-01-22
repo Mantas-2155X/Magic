@@ -18,7 +18,7 @@ namespace Scenes
 
 		private async UniTask loadTitleAsync()
 		{
-			await SceneManager.Instance.ChangeSceneAsync("Scenes/Title", true, true, false);
+			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
 			
 			_ = Debug.Instance;
 			_ = Title.Instance;

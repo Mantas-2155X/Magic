@@ -189,6 +189,14 @@ namespace Managers
 							}
 							inputParameters[k] = intValue;
 							break;
+						case EConsoleCommandParameter.Bool:
+							if (!bool.TryParse(split[k + 1], out var boolValue))
+							{
+								// Command parameter should be a bool but the input parameter isn't, fail
+								return EConsoleCommandResult.IncorrectUsage;
+							}
+							inputParameters[k] = boolValue;
+							break;
 						default:
 							throw new NotImplementedException();
 					}
@@ -212,7 +220,23 @@ namespace Managers
 			
 			AddCommand("title", "Return to title", () =>
 			{
-				SceneManager.Instance.ChangeScene("Scenes/Title", true, true, false);
+				SceneManager.Instance.ChangeScene("Title", true, true, false);
+			});
+			
+			AddCommand("scene", "Changes the scene", new [] {EConsoleCommandParameter.String}, args =>
+			{
+				var scene = (string)args[0];
+
+				if (!SceneManager.Instance.SceneExists(scene))
+				{
+					AddEntry(EConsoleEntryType.Warning, "Scene not found");
+					return;
+				}
+				
+				SceneManager.Instance.ChangeScene(scene, true, true, scene != "Title");
+			}, () =>
+			{
+				AddEntry(EConsoleEntryType.Info, UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 			});
 			
 			AddCommand("noclip", "Toggle noclip mode", () =>
@@ -396,6 +420,7 @@ namespace Managers
 			String,
 			Float,
 			Int,
+			Bool
 		}
 
 		public enum EConsoleCommandResult

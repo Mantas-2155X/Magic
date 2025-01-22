@@ -329,6 +329,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  IsMultiTrigger: 0
+  TriggerOnStay: 0
 --- !u!1 &50478919
 GameObject:
   m_ObjectHideFlags: 0
@@ -2302,8 +2304,7 @@ MonoBehaviour:
   Casts: {fileID: 446806502}
   Projectiles: {fileID: 13660899}
   Objects: {fileID: 174416576}
-  TimeScale: 1
-  TargetFPS: 1000
+  SpawnPlayer: 1
 --- !u!4 &646561133
 Transform:
   m_ObjectHideFlags: 0
@@ -2352,7 +2353,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 21ef0ef672bf6f157a53dc5e82c6432d, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 2a0a280da3a89c160b3b791935ee13e0, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1001 &668726192
 PrefabInstance:
@@ -3233,8 +3234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4928b2ec474462aecbcd083e0c0ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InvertFeature: {fileID: 4147670163396297480, guid: f288ae1f4751b564a96ac7587541f7a2, type: 2}
-  InvertMaterial: {fileID: 2100000, guid: f3954a164842d623fb59b14a2887d4b3, type: 2}
 --- !u!1001 &906458482
 PrefabInstance:
   m_ObjectHideFlags: 0

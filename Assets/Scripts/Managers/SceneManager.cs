@@ -21,6 +21,17 @@ namespace Managers
 		}
 
 		private readonly float fadeDuration = 0.3f;
+
+		public bool SceneExists(string scene)
+		{
+			scene = "Scenes/" + scene;
+
+			var locations = Addressables.LoadResourceLocationsAsync(scene).WaitForCompletion();
+			if (locations == null || locations.Count == 0)
+				return false;
+			
+			return true;
+		}
 		
 		public void ChangeScene(string scene, bool fadeIn, bool fadeOut, bool closeTitle)
 		{
@@ -45,7 +56,7 @@ namespace Managers
 			var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $"Changing scene from {currentScene} to {scene}");
 			
-			var handle = Addressables.LoadSceneAsync(scene);
+			var handle = Addressables.LoadSceneAsync("Scenes/" + scene);
 
 			await UniTask.WaitUntil(() => handle.IsDone);
 

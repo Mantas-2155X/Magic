@@ -123,7 +123,7 @@ namespace UI
 
 		public void OnNewGame()
 		{
-			SceneManager.Instance.ChangeScene("Scenes/World3", true, true, true);
+			SceneManager.Instance.ChangeScene("World3", true, true, true);
 		}
 
 		public void OnContinue()
@@ -148,7 +148,7 @@ namespace UI
 
 		public void OnReturnToTitle()
 		{
-			SceneManager.Instance.ChangeScene("Scenes/Title", true, true, false);
+			SceneManager.Instance.ChangeScene("Title", true, true, false);
 		}
 		
 		public void OnQuitGame()
