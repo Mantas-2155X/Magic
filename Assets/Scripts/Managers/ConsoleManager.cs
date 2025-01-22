@@ -239,6 +239,16 @@ namespace Managers
 				AddEntry(EConsoleEntryType.Info, UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 			});
 			
+			AddCommand("scenes", "Lists all available scenes", () =>
+			{
+				AddEntry(EConsoleEntryType.Info, "Available Scenes:");
+
+				var scenes = SceneManager.Instance.GetScenes();
+				
+				for (var i = 0; i < scenes.Count; i++)
+					AddEntry(EConsoleEntryType.Info, scenes[i]);
+			});
+			
 			AddCommand("noclip", "Toggle noclip mode", () =>
 			{
 				var player = AIManager.Instance.Player;

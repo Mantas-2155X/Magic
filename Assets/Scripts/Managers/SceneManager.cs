@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UI;
 using UnityEngine;
@@ -16,21 +17,23 @@ namespace Managers
 					return instance;
 				
 				instance = new SceneManager();
+				instance.getScenes();
 				return instance;
 			}
 		}
 
 		private readonly float fadeDuration = 0.3f;
 
+		private readonly List<string> scenes = new ();
+
+		public List<string> GetScenes()
+		{
+			return scenes;
+		}
+		
 		public bool SceneExists(string scene)
 		{
-			scene = "Scenes/" + scene;
-
-			var locations = Addressables.LoadResourceLocationsAsync(scene).WaitForCompletion();
-			if (locations == null || locations.Count == 0)
-				return false;
-			
-			return true;
+			return scenes.Contains(scene);
 		}
 		
 		public void ChangeScene(string scene, bool fadeIn, bool fadeOut, bool closeTitle)
@@ -110,6 +113,28 @@ namespace Managers
 					fade.gameObject.SetActive(false);
 				}
 			}
+		}
+
+		private void getScenes()
+		{
+			var locations = Addressables.LoadResourceLocationsAsync("scenes").WaitForCompletion();
+			if (locations == null || locations.Count == 0)
+				return;
+
+			foreach (var location in locations)
+			{
+				var key = location.PrimaryKey;
+				if (!key.StartsWith("Scenes/"))
+					continue;
+
+				var trimmed = key.Replace("Scenes/", "");
+				if (trimmed == "")
+					continue;
+				
+				scenes.Add(trimmed);
+			}
+			
+			scenes.Sort();
 		}
 	}
 }
