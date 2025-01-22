@@ -226,7 +226,7 @@ namespace Managers
 							parameters += commandParameters[k];
 
 							if (k != commandParameters.Length - 1)
-								parameters += " ";
+								parameters += ", ";
 						}
 						
 						parameters += ") ";
