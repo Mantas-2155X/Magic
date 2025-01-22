@@ -2171,7 +2171,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 0}
+  m_SizeDelta: {x: 10, y: -13}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &2786817502741938434
 CanvasRenderer:
@@ -2392,7 +2392,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 10}
+  m_SizeDelta: {x: -13, y: 10}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &890514079688084695
 CanvasRenderer:
@@ -3251,10 +3251,10 @@ MonoBehaviour:
   m_Viewport: {fileID: 5929792932930339143}
   m_HorizontalScrollbar: {fileID: 3548247555691034334}
   m_VerticalScrollbar: {fileID: 5395698634643069277}
-  m_HorizontalScrollbarVisibility: 1
-  m_VerticalScrollbarVisibility: 1
-  m_HorizontalScrollbarSpacing: -3
-  m_VerticalScrollbarSpacing: -3
+  m_HorizontalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 2
+  m_HorizontalScrollbarSpacing: 3
+  m_VerticalScrollbarSpacing: 3
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3581,7 +3581,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -17}
+  m_SizeDelta: {x: -13, y: -13}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4863523836474107532
 CanvasRenderer:
@@ -3890,7 +3890,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 5, y: -5}
-  m_SizeDelta: {x: 730, y: 26}
+  m_SizeDelta: {x: 0, y: 18}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &398992563570379056
 CanvasRenderer:
@@ -3947,8 +3947,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4007,7 +4007,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: -1
-  m_PreferredHeight: 26
+  m_PreferredHeight: 18
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -5432,7 +5432,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -684, y: 10}
+  m_SizeDelta: {x: -671, y: 10}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6482038732303699248
 MonoBehaviour:

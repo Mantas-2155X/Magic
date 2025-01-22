@@ -39,8 +39,6 @@ namespace UI
 		private readonly List<string> history = new ();
 		private int historyIndex = -1;
 		
-		private bool entriesChanged = true;
-		
 		public void Awake()
 		{
 			ConsoleManager.OnConsoleEntryAddedEvent.AddListener(onConsoleEntryAdded);
@@ -66,14 +64,9 @@ namespace UI
 		public void OnEnable()
 		{
 			transform.SetAsLastSibling();
-			
-			if (entriesChanged)
-				refresh();
-			
 			historyIndex = history.Count;
-			
+			refresh();
 			selectDelayed().Forget();
-			scrollDelayed().Forget();
 		}
 		
 		public void OnCloseClicked()
@@ -123,14 +116,12 @@ namespace UI
 			}
 			catch (Exception e)
 			{
-				ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Error, "Failed executing command");
 				UnityEngine.Debug.LogWarning($"[Console] Failed executing command {text}, {e}");
 			}
 			
 			Input.SetTextWithoutNotify("");
 			
 			selectDelayed().Forget();
-			scrollDelayed().Forget();
 		}
 
 		public void Toggle()
@@ -155,8 +146,6 @@ namespace UI
 		
 		private void refresh()
 		{
-			entriesChanged = false;
-
 			for (var i = 0; i < Items.Count; i++)
 			{
 				var item = Items[i];
@@ -185,6 +174,8 @@ namespace UI
 				
 				item.gameObject.SetActive(true);
 			}
+			
+			scrollDelayed().Forget();
 		}
 
 		private void onSubmit(string text)
@@ -198,10 +189,7 @@ namespace UI
 		private void onConsoleEntryAdded(ConsoleManager.SConsoleEntry entry)
 		{
 			if (!isActiveAndEnabled)
-			{
-				entriesChanged = true;
 				return;
-			}
 			
 			refresh();
 		}
@@ -209,10 +197,7 @@ namespace UI
 		private void onConsoleCleared()
 		{
 			if (!isActiveAndEnabled)
-			{
-				entriesChanged = true;
 				return;
-			}
 			
 			refresh();
 		}

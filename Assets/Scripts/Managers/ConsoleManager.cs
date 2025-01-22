@@ -19,6 +19,7 @@ namespace Managers
 					return instance;
 				
 				instance = new ConsoleManager();
+				Application.logMessageReceived += instance.logReceived;
 				instance.setupCommands();
 				return instance;
 			}
@@ -239,6 +240,54 @@ namespace Managers
 				AddEntry(EConsoleEntryType.Info, SceneManager.Instance.GetCurrentScene());
 			});
 			
+			AddCommand("log", "Create test logs", new [] {EConsoleCommandParameter.String, EConsoleCommandParameter.Int}, args =>
+			{
+				var amount = (int)args[1];
+				if (amount <= 0)
+				{
+					AddEntry(EConsoleEntryType.Warning, "Invalid amount specified");
+					return;
+				}
+				
+				var type = (string)args[0];
+				switch (type)
+				{
+					case "error":
+					{
+						for (var i = 0; i < amount; i++) 
+							Debug.LogError("test");
+						break;
+					}
+					case "assert":
+					{
+						for (var i = 0; i < amount; i++) 
+							Debug.LogAssertion("test");
+						break;
+					}
+					case "exception":
+					{
+						for (var i = 0; i < amount; i++) 
+							Debug.LogException(new Exception("test"));
+						break;
+					}
+					case "warning":
+					{
+						for (var i = 0; i < amount; i++) 
+							Debug.LogWarning("test");
+						break;
+					}
+					case "log":
+					{
+						for (var i = 0; i < amount; i++) 
+							Debug.Log("test");
+						break;
+					}
+					default:
+						AddEntry(EConsoleEntryType.Warning, "Incorrect type specified (error, assert, exception, warning, log)");
+						return;
+				}
+			});
+			
 			AddCommand("scenes", "Lists all available scenes", () =>
 			{
 				AddEntry(EConsoleEntryType.Info, "Available Scenes:");
@@ -362,6 +411,55 @@ namespace Managers
 		}
 
 		#endregion
+
+		private void logReceived(string logString, string stackTrace, LogType type)
+		{
+			EConsoleEntryType entryType;
+
+			switch (type)
+			{
+				case LogType.Error:
+				case LogType.Assert:
+				case LogType.Exception:
+					entryType = EConsoleEntryType.Error;
+					break;
+				case LogType.Warning:
+					entryType = EConsoleEntryType.Warning;
+					break;
+				case LogType.Log:
+					entryType = EConsoleEntryType.Info;
+					break;
+				default:
+					throw new NotImplementedException();
+			}
+			
+			var logSplit = logString.Split('\n');
+
+			for (var i = 0; i < logSplit.Length; i++)
+			{
+				var str = logSplit[i];
+				
+				if (string.IsNullOrWhiteSpace(str))
+					continue;
+				
+				AddEntry(entryType, str);
+			}
+
+			if (entryType == EConsoleEntryType.Error)
+			{
+				var stackTraceSplit = stackTrace.Split('\n');
+
+				for (var i = 0; i < stackTraceSplit.Length; i++)
+				{
+					var str = stackTraceSplit[i];
+				
+					if (string.IsNullOrWhiteSpace(str))
+						continue;
+				
+					AddEntry(entryType, str);
+				}
+			}
+		}
 		
 		public struct SConsoleEntry
 		{
