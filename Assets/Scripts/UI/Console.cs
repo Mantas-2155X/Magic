@@ -21,9 +21,6 @@ namespace UI
 		public ScrollRect ScrollRect;
 		
 		[SerializeField]
-		public Scrollbar Scrollbar;
-		
-		[SerializeField]
 		public TMP_InputField Input;
 		
 		[SerializeField]
@@ -182,11 +179,13 @@ namespace UI
 		{
 			await UniTask.NextFrame();
 			
-			if (!isActiveAndEnabled || Scrollbar == null)
+			if (!isActiveAndEnabled || ScrollRect == null)
 				return;
 
 			Canvas.ForceUpdateCanvases();
+			
 			ScrollRect.verticalNormalizedPosition = 0f;
+			ScrollRect.horizontalNormalizedPosition = 0f;
 		}
 	}
 }
