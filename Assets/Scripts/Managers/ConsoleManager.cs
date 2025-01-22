@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Managers.Events;
 using UnityEngine;
 using UnityEngine.Events;
@@ -58,7 +60,7 @@ namespace Managers
 
 		#region Commands
 
-		public void AddCommand(string name, string description, UnityAction action)
+		public void AddCommand(string name, string description, EConsoleCommandParameter[] parameters, UnityAction<object[]> action)
 		{
 			for (var i = commands.Count - 1; i >= 0; i--)
 			{
@@ -69,7 +71,12 @@ namespace Managers
 				return;
 			}
 			
-			commands.Add(new SConsoleCommand(name, description, action));
+			commands.Add(new SConsoleCommand(name, description, parameters, action));
+		}
+		
+		public void AddCommand(string name, string description, UnityAction<object[]> action)
+		{
+			AddCommand(name, description, null, action);
 		}
 
 		public void RemoveCommand(string name)
@@ -89,39 +96,92 @@ namespace Managers
 			commands.Clear();
 		}
 
-		public bool ExecuteCommand(string name)
+		public EConsoleCommandResult ExecuteCommand(string name)
 		{
+			if (string.IsNullOrEmpty(name))
+				return EConsoleCommandResult.NotFound;
+			
+			var split = name.Split(" ");
+			if (split.Length == 0)
+				return EConsoleCommandResult.NotFound;
+			
 			for (var i = 0; i < commands.Count; i++)
 			{
 				var command = commands[i];
-				if (command.Name != name)
+				if (command.Name != split[0])
 					continue;
 
-				command.Action();
-				return true;
+				object[] inputParameters = null;
+				
+				var commandParameters = command.Parameters;
+				if (commandParameters != null)
+				{
+					if (commandParameters.Length != split.Length - 1)
+						return EConsoleCommandResult.IncorrectUsage;
+
+					inputParameters = new object[commandParameters.Length];
+					
+					for (var k = 0; k < commandParameters.Length; k++)
+					{
+						var commandParameter = commandParameters[k];
+						switch (commandParameter)
+						{
+							case EConsoleCommandParameter.String:
+								inputParameters[k] = split[k + 1];
+								break;
+							case EConsoleCommandParameter.Float:
+								if (!float.TryParse(split[k + 1], NumberStyles.Float, CultureInfo.CurrentCulture, out var floatValue))
+									return EConsoleCommandResult.IncorrectUsage;
+								inputParameters[k] = floatValue;
+								break;
+							case EConsoleCommandParameter.Int:
+								if (!int.TryParse(split[k + 1], NumberStyles.Integer, CultureInfo.CurrentCulture, out var intValue))
+									return EConsoleCommandResult.IncorrectUsage;
+								inputParameters[k] = intValue;
+								break;
+							default:
+								throw new NotImplementedException();
+						}
+					}
+				}
+				
+				command.Action(inputParameters);
+				return EConsoleCommandResult.Success;
 			}
 
-			return false;
+			return EConsoleCommandResult.NotFound;
 		}
 		
 		private void setupCommands()
 		{
-			AddCommand("quit", "Quit the game", () =>
+			AddCommand("quit", "Quit the game", _ =>
 			{
 				SceneManager.Instance.ChangeScene("Exit", true, false, false);
 			});
 			
-			AddCommand("title", "Return to title", () =>
+			AddCommand("title", "Return to title", _ =>
 			{
 				SceneManager.Instance.ChangeScene("Scenes/Title", true, true, false);
 			});
 			
-			AddCommand("clear", "Clears the console", () =>
+			AddCommand("timescale", "Sets the time scale", new [] {EConsoleCommandParameter.Float}, args =>
+			{
+				var world = World.World.Instance;
+				if (world == null)
+					return;
+
+				var value = (float)args[0];
+				value = Mathf.Clamp(value, 0f, 100f);
+				
+				world.TimeScale = value;
+			});
+
+			AddCommand("clear", "Clears the console", _ =>
 			{
 				ClearEntries();
 			});
 			
-			AddCommand("kill", "Kills the player", () =>
+			AddCommand("kill", "Kills the player", _ =>
 			{
 				var player = AIManager.Instance.Player;
 				if (player == null && player.IsAlive)
@@ -130,7 +190,7 @@ namespace Managers
 				player.Kill(null);
 			});
 			
-			AddCommand("killall", "Kills everyone alive", () =>
+			AddCommand("killall", "Kills everyone alive", _ =>
 			{
 				var player = AIManager.Instance.Player;
 				if (player != null && player.IsAlive)
@@ -147,14 +207,32 @@ namespace Managers
 				}
 			});
 			
-			AddCommand("help", "Lists all commands", () =>
+			AddCommand("help", "Lists all commands", _ =>
 			{
 				AddEntry(EConsoleEntryType.Info, "Available Commands:");
 				
 				for (var i = 0; i < commands.Count; i++)
 				{
 					var command = commands[i];
-					AddEntry(EConsoleEntryType.Info, $"{command.Name} - {command.Description}");
+					var parameters = "";
+					
+					var commandParameters = command.Parameters;
+					if (commandParameters != null)
+					{
+						parameters += "(";
+						
+						for (var k = 0; k < commandParameters.Length; k++)
+						{
+							parameters += commandParameters[k];
+
+							if (k != commandParameters.Length - 1)
+								parameters += " ";
+						}
+						
+						parameters += ") ";
+					}
+					
+					AddEntry(EConsoleEntryType.Info, $"{command.Name} {parameters}- {command.Description}");
 				}
 			});
 		}
@@ -174,27 +252,44 @@ namespace Managers
 			}
 		}
 
+		public enum EConsoleEntryType
+		{
+			Info,
+			Warning,
+			Error
+		}
+		
 		public struct SConsoleCommand
 		{
 			public string Name { get; private set; }
 
 			public string Description { get; private set; }
 			
-			public UnityAction Action { get; private set; }
+			public EConsoleCommandParameter[] Parameters { get; private set; }
 
-			public SConsoleCommand(string name, string description, UnityAction action)
+			public UnityAction<object[]> Action { get; private set; }
+
+			public SConsoleCommand(string name, string description, EConsoleCommandParameter[] parameters, UnityAction<object[]> action)
 			{
 				Name = name;
 				Description = description;
+				Parameters = parameters;
 				Action = action;
 			}
 		}
 
-		public enum EConsoleEntryType
+		public enum EConsoleCommandParameter
 		{
-			Info,
-			Warning,
-			Error
+			String,
+			Float,
+			Int,
+		}
+
+		public enum EConsoleCommandResult
+		{
+			NotFound,
+			Success,
+			IncorrectUsage
 		}
 	}
 }

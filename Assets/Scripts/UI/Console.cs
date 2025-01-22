@@ -55,15 +55,29 @@ namespace UI
 			if (string.IsNullOrEmpty(Input.text))
 				return;
 			
+			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $">{Input.text}");
+
 			try
 			{
-				ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $">{Input.text}");
-
-				if (!ConsoleManager.Instance.ExecuteCommand(Input.text))
-					ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Command not found");
+				var result = ConsoleManager.Instance.ExecuteCommand(Input.text);
+				switch (result)
+				{
+					case ConsoleManager.EConsoleCommandResult.NotFound:
+						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Command not found");
+						break;
+					case ConsoleManager.EConsoleCommandResult.Success:
+						// all good
+						break;
+					case ConsoleManager.EConsoleCommandResult.IncorrectUsage:
+						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Incorrect usage");
+						break;
+					default:
+						throw new NotImplementedException();
+				}
 			}
 			catch (Exception e)
 			{
+				ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Error, "Failed executing command");
 				UnityEngine.Debug.LogWarning($"[Console] Failed executing command {Input.text}, {e}");
 			}
 			
