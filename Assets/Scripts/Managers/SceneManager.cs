@@ -26,6 +26,11 @@ namespace Managers
 
 		private readonly List<string> scenes = new ();
 
+		public string GetCurrentScene()
+		{
+			return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+		}
+		
 		public List<string> GetScenes()
 		{
 			return scenes;

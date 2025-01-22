@@ -1,6 +1,7 @@
 using AI.Base;
 using AI.Enums;
 using Combat.Wearables.Enums;
+using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
@@ -532,6 +533,50 @@ namespace AI
 
 		public override bool IsWalking => walking;
 
+		public override void SetInvulnerable(bool value)
+		{
+			var previous = IsInvulnerable;
+			
+			base.SetInvulnerable(value);
+
+			if (previous == value)
+				return;
+
+			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, value ? "Enabled god mode" : "Disabled god mode");
+		}
+		
+		public override void SetPowerful(bool value)
+		{
+			var previous = IsPowerful;
+			
+			base.SetPowerful(value);
+
+			if (previous == value)
+				return;
+
+			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, value ? "Enabled power mode" : "Disabled power mode");
+		}
+		
+		public override void SetMovementType(EMovementType value)
+		{
+			var previous = MovementType;
+			
+			base.SetMovementType(value);
+
+			if (previous == value)
+				return;
+
+			switch (value)
+			{
+				case EMovementType.Noclip:
+					ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, "Enabled noclip mode");
+					break;
+				case EMovementType.Normal when previous == EMovementType.Noclip:
+					ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, "Disabled noclip mode");
+					break;
+			}
+		}
+		
 		public override void SetSpellIndex(SpellData data, int index)
 		{
 			base.SetSpellIndex(data, index);

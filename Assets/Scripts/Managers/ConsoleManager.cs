@@ -236,7 +236,7 @@ namespace Managers
 				SceneManager.Instance.ChangeScene(scene, true, true, scene != "Title");
 			}, () =>
 			{
-				AddEntry(EConsoleEntryType.Info, UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+				AddEntry(EConsoleEntryType.Info, SceneManager.Instance.GetCurrentScene());
 			});
 			
 			AddCommand("scenes", "Lists all available scenes", () =>
@@ -252,18 +252,16 @@ namespace Managers
 			AddCommand("noclip", "Toggle noclip mode", () =>
 			{
 				var player = AIManager.Instance.Player;
-				if (player == null && !player.IsAlive)
+				if (player == null || !player.IsAlive)
 					return;
 				
 				switch (player.MovementType)
 				{
 					case EMovementType.Normal:
 						player.SetMovementType(EMovementType.Noclip);
-						AddEntry(EConsoleEntryType.Info, "Enabled noclip mode");
 						break;
 					case EMovementType.Noclip:
 						player.SetMovementType(EMovementType.Normal);
-						AddEntry(EConsoleEntryType.Info, "Disabled noclip mode");
 						break;
 				}
 			});
@@ -271,37 +269,19 @@ namespace Managers
 			AddCommand("god", "Toggle god mode", () =>
 			{
 				var player = AIManager.Instance.Player;
-				if (player == null && !player.IsAlive)
+				if (player == null || !player.IsAlive)
 					return;
 
-				if (!player.IsInvulnerable)
-				{
-					player.SetInvulnerable(true);
-					AddEntry(EConsoleEntryType.Info, "Enabled god mode");
-				}
-				else
-				{
-					player.SetInvulnerable(false);
-					AddEntry(EConsoleEntryType.Info, "Disabled god mode");
-				}
+				player.SetInvulnerable(!player.IsInvulnerable);
 			});
 			
 			AddCommand("power", "Toggle power mode", () =>
 			{
 				var player = AIManager.Instance.Player;
-				if (player == null && !player.IsAlive)
+				if (player == null || !player.IsAlive)
 					return;
 
-				if (!player.IsPowerful)
-				{
-					player.SetPowerful(true);
-					AddEntry(EConsoleEntryType.Info, "Enabled power mode");
-				}
-				else
-				{
-					player.SetPowerful(false);
-					AddEntry(EConsoleEntryType.Info, "Disabled power mode");
-				}
+				player.SetPowerful(!player.IsPowerful);
 			});
 			
 			AddCommand("timescale", "Sets the time scale", new [] {EConsoleCommandParameter.Float}, args =>
@@ -328,7 +308,7 @@ namespace Managers
 			AddCommand("kill", "Kills the player", () =>
 			{
 				var player = AIManager.Instance.Player;
-				if (player == null && player.IsAlive)
+				if (player == null || !player.IsAlive)
 					return;
 				
 				player.Kill(null);
