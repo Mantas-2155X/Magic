@@ -46,7 +46,6 @@ namespace Combat.Spells
 		
 		private async UniTaskVoid start()
 		{
-			var world = World.World.Instance;
 			var render = RenderManager.Instance;
 			
 			var player = AIManager.Instance.Player;
@@ -54,9 +53,9 @@ namespace Combat.Spells
 
 			var ownerRelationship = Owner.RelationshipGroup;
 
-			previousTimeScale = world.TimeScale;
+			previousTimeScale = GameManager.TimeScale;
 			
-			await fade(world, world.TimeScale, 0.1f, render, 0f, 1f);
+			await fade(previousTimeScale, previousTimeScale * 0.1f, render, 0f, 1f);
 			
 			targets.Clear();
 
@@ -77,25 +76,25 @@ namespace Combat.Spells
 			
 			await UniTask.WaitForSeconds(ReturnAfter, true);
 			
-			await fade(world, 0.1f, previousTimeScale, render, 1f, 0f);
+			await fade(previousTimeScale * 0.1f, previousTimeScale, render, 1f, 0f);
 
 			Active = false;
 		}
 		
-		private async UniTask fade(World.World world, float from, float to, RenderManager render, float invertFrom, float invertTo)
+		private async UniTask fade(float from, float to, RenderManager render, float invertFrom, float invertTo)
 		{
 			var normalizedTime = 0.0f;
 			while (normalizedTime < 1.0f)
 			{
 				await UniTask.NextFrame();
 
-				world.TimeScale = Mathf.SmoothStep(from, to, normalizedTime);
+				GameManager.TimeScale = Mathf.SmoothStep(from, to, normalizedTime);
 				render.InvertColors(Mathf.SmoothStep(invertFrom, invertTo, normalizedTime));
 				
 				normalizedTime += Time.unscaledDeltaTime / FadeDuration;
 			}
 
-			world.TimeScale = to;
+			GameManager.TimeScale = to;
 			render.InvertColors(invertTo);
 		}
 	}

@@ -60,7 +60,7 @@ namespace Managers
 
 		#region Commands
 
-		public void AddCommand(string name, string description, EConsoleCommandParameter[] parameters, UnityAction<object[]> action)
+		public void AddCommand(string name, string description, EConsoleCommandParameter[] parameters, UnityAction<object[]> parametersAction, UnityAction basicAction)
 		{
 			for (var i = commands.Count - 1; i >= 0; i--)
 			{
@@ -71,12 +71,17 @@ namespace Managers
 				return;
 			}
 			
-			commands.Add(new SConsoleCommand(name, description, parameters, action));
+			commands.Add(new SConsoleCommand(name, description, parameters, parametersAction, basicAction));
 		}
 		
-		public void AddCommand(string name, string description, UnityAction<object[]> action)
+		public void AddCommand(string name, string description, EConsoleCommandParameter[] parameters, UnityAction<object[]> parametersAction)
 		{
-			AddCommand(name, description, null, action);
+			AddCommand(name, description, parameters, parametersAction, null);
+		}
+		
+		public void AddCommand(string name, string description, UnityAction basicAction)
+		{
+			AddCommand(name, description, null, null, basicAction);
 		}
 
 		public void RemoveCommand(string name)
@@ -99,89 +104,138 @@ namespace Managers
 		public EConsoleCommandResult ExecuteCommand(string name)
 		{
 			if (string.IsNullOrEmpty(name))
+			{
+				// No command specified, fail
 				return EConsoleCommandResult.NotFound;
+			}
 			
 			var split = name.Split(" ");
-			if (split.Length == 0)
-				return EConsoleCommandResult.NotFound;
 			
+			var newSplit = new List<string>();
+			for (var i = 0; i < split.Length; i++)
+			{
+				var entry = split[i];
+				
+				// Remove empty or space characters from the parameters
+				if (string.IsNullOrWhiteSpace(entry))
+					continue;
+				
+				newSplit.Add(entry);
+			}
+			split = newSplit.ToArray();
+			
+			if (split.Length == 0)
+			{
+				// No command specified, fail
+				return EConsoleCommandResult.NotFound;
+			}
+
 			for (var i = 0; i < commands.Count; i++)
 			{
 				var command = commands[i];
 				if (command.Name != split[0])
 					continue;
 
-				object[] inputParameters = null;
-				
 				var commandParameters = command.Parameters;
-				if (commandParameters != null)
+				if (commandParameters == null)
 				{
-					if (commandParameters.Length != split.Length - 1)
-						return EConsoleCommandResult.IncorrectUsage;
-
-					inputParameters = new object[commandParameters.Length];
-					
-					for (var k = 0; k < commandParameters.Length; k++)
+					if (split.Length > 1)
 					{
-						var commandParameter = commandParameters[k];
-						switch (commandParameter)
-						{
-							case EConsoleCommandParameter.String:
-								inputParameters[k] = split[k + 1];
-								break;
-							case EConsoleCommandParameter.Float:
-								if (!float.TryParse(split[k + 1], NumberStyles.Float, CultureInfo.CurrentCulture, out var floatValue))
-									return EConsoleCommandResult.IncorrectUsage;
-								inputParameters[k] = floatValue;
-								break;
-							case EConsoleCommandParameter.Int:
-								if (!int.TryParse(split[k + 1], NumberStyles.Integer, CultureInfo.CurrentCulture, out var intValue))
-									return EConsoleCommandResult.IncorrectUsage;
-								inputParameters[k] = intValue;
-								break;
-							default:
-								throw new NotImplementedException();
-						}
+						// No parameters in command but there are some in the input, fail
+						return EConsoleCommandResult.IncorrectUsage;
+					}
+					
+					// No parameters in command and input, run the basic action
+					command.BasicAction();
+					return EConsoleCommandResult.Success;
+				}
+				
+				if (commandParameters.Length != split.Length - 1)
+				{
+					if (split.Length - 1 != 0 || command.BasicAction == null)
+					{
+						// Command has parameters but input doesn't and there isn't a basic action, fail
+						return EConsoleCommandResult.IncorrectUsage;
+					}
+
+					// Command has parameters but input doesn't, run the basic action
+					command.BasicAction();
+					return EConsoleCommandResult.Success;
+				}
+
+				var inputParameters = new object[commandParameters.Length];
+				for (var k = 0; k < commandParameters.Length; k++)
+				{
+					var commandParameter = commandParameters[k];
+					switch (commandParameter)
+					{
+						case EConsoleCommandParameter.String:
+							inputParameters[k] = split[k + 1];
+							break;
+						case EConsoleCommandParameter.Float:
+							if (!float.TryParse(split[k + 1], NumberStyles.Float, CultureInfo.CurrentCulture, out var floatValue))
+							{
+								// Command parameter should be a float but the input parameter isn't, fail
+								return EConsoleCommandResult.IncorrectUsage;
+							}
+							inputParameters[k] = floatValue;
+							break;
+						case EConsoleCommandParameter.Int:
+							if (!int.TryParse(split[k + 1], NumberStyles.Integer, CultureInfo.CurrentCulture, out var intValue))
+							{
+								// Command parameter should be an int but the input parameter isn't, fail
+								return EConsoleCommandResult.IncorrectUsage;
+							}
+							inputParameters[k] = intValue;
+							break;
+						default:
+							throw new NotImplementedException();
 					}
 				}
 				
-				command.Action(inputParameters);
+				// Command and input parameters are matched, run the arguments action
+				command.ArgumentsAction(inputParameters);
 				return EConsoleCommandResult.Success;
 			}
 
+			// No command found, fail
 			return EConsoleCommandResult.NotFound;
 		}
 		
 		private void setupCommands()
 		{
-			AddCommand("quit", "Quit the game", _ =>
+			AddCommand("quit", "Quit the game", () =>
 			{
 				SceneManager.Instance.ChangeScene("Exit", true, false, false);
 			});
 			
-			AddCommand("title", "Return to title", _ =>
+			AddCommand("title", "Return to title", () =>
 			{
 				SceneManager.Instance.ChangeScene("Scenes/Title", true, true, false);
 			});
 			
 			AddCommand("timescale", "Sets the time scale", new [] {EConsoleCommandParameter.Float}, args =>
 			{
-				var world = World.World.Instance;
-				if (world == null)
-					return;
-
-				var value = (float)args[0];
-				value = Mathf.Clamp(value, 0f, 100f);
-				
-				world.TimeScale = value;
+				GameManager.TimeScale = (float)args[0];
+			}, () =>
+			{
+				AddEntry(EConsoleEntryType.Info, GameManager.TimeScale.ToString(CultureInfo.CurrentCulture));
 			});
 
-			AddCommand("clear", "Clears the console", _ =>
+			AddCommand("fps", "Sets the target framerate", new [] {EConsoleCommandParameter.Int}, args =>
+			{
+				GameManager.TargetFPS = (int)args[0];
+			}, () =>
+			{
+				AddEntry(EConsoleEntryType.Info, GameManager.TargetFPS.ToString());
+			});
+
+			AddCommand("clear", "Clears the console", () =>
 			{
 				ClearEntries();
 			});
 			
-			AddCommand("kill", "Kills the player", _ =>
+			AddCommand("kill", "Kills the player", () =>
 			{
 				var player = AIManager.Instance.Player;
 				if (player == null && player.IsAlive)
@@ -190,7 +244,7 @@ namespace Managers
 				player.Kill(null);
 			});
 			
-			AddCommand("killall", "Kills everyone alive", _ =>
+			AddCommand("killall", "Kills everyone alive", () =>
 			{
 				var player = AIManager.Instance.Player;
 				if (player != null && player.IsAlive)
@@ -207,7 +261,7 @@ namespace Managers
 				}
 			});
 			
-			AddCommand("help", "Lists all commands", _ =>
+			AddCommand("help", "Lists all commands", () =>
 			{
 				AddEntry(EConsoleEntryType.Info, "Available Commands:");
 				
@@ -267,14 +321,17 @@ namespace Managers
 			
 			public EConsoleCommandParameter[] Parameters { get; private set; }
 
-			public UnityAction<object[]> Action { get; private set; }
+			public UnityAction<object[]> ArgumentsAction { get; private set; }
 
-			public SConsoleCommand(string name, string description, EConsoleCommandParameter[] parameters, UnityAction<object[]> action)
+			public UnityAction BasicAction { get; private set; }
+
+			public SConsoleCommand(string name, string description, EConsoleCommandParameter[] parameters, UnityAction<object[]> argumentsAction, UnityAction basicAction)
 			{
 				Name = name;
 				Description = description;
 				Parameters = parameters;
-				Action = action;
+				ArgumentsAction = argumentsAction;
+				BasicAction = basicAction;
 			}
 		}
 

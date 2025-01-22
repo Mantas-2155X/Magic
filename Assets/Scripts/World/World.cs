@@ -32,12 +32,6 @@ namespace World
 
 		[SerializeField]
 		public Transform Objects;
-		
-		[SerializeField]
-		public float TimeScale = 1f;
-
-		[SerializeField]
-		public int TargetFPS = 1000;
 
 		[SerializeField]
 		public bool SpawnPlayer = true;
@@ -49,11 +43,6 @@ namespace World
 		{
 			Instance = this;
 		}
-		
-		public void OnDisable()
-		{
-			TimeScale = 1f;
-		}
 
 		public void Start()
 		{
@@ -62,21 +51,6 @@ namespace World
 			
 			var spawnPoint = SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount));
 			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("AI_PLAYER_NAME"));
-		}
-		
-		public void Update()
-		{
-			if (TimeScale != previousTimeScale)
-			{
-				previousTimeScale = TimeScale;
-				Time.timeScale = TimeScale;
-			}
-
-			if (TargetFPS != previousTargetFPS)
-			{
-				previousTargetFPS = TargetFPS;
-				Application.targetFrameRate = TargetFPS;
-			}
 		}
 	}
 }

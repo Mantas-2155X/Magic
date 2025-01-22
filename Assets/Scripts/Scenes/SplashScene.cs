@@ -11,6 +11,7 @@ namespace Scenes
 		public void Awake()
 		{
 			_ = LocalizationManager.Instance;
+			_ = GameManager.Instance;
 			
 			loadTitleAsync().Forget();
 		}
