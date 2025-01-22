@@ -40,10 +40,13 @@ namespace World
 
 		private async UniTaskVoid damage()
 		{
-			while (enabled)
+			while (true)
 			{
 				await UniTask.WaitForSeconds(DamageRate);
 			
+				if (this == null || !isActiveAndEnabled)
+					return;
+				
 				foreach (var alive in alives)
 				{
 					if (alive == null || !alive.IsAlive)

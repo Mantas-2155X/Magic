@@ -46,6 +46,11 @@ namespace UI.Hotbar
 			BaseAlive.OnSpellSelectedEvent.AddListener(onSpellSelected);
 		}
 
+		public void OnDestroy()
+		{
+			BaseAlive.OnSpellSelectedEvent.RemoveListener(onSpellSelected);
+		}
+
 		public void UpdateHotbar()
 		{
 			var player = AIManager.Instance.Player;

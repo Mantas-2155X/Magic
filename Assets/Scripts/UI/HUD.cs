@@ -38,6 +38,12 @@ namespace UI
 			BaseAlive.OnDeathEvent.AddListener(OnDeath);
 			BaseAlive.OnSpawnEvent.AddListener(OnSpawn);
 		}
+		
+		public void OnDestroy()
+		{
+			BaseAlive.OnDeathEvent.RemoveListener(OnDeath);
+			BaseAlive.OnSpawnEvent.RemoveListener(OnSpawn);
+		}
 
 		public void Update()
 		{

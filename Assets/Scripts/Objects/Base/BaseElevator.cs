@@ -252,6 +252,9 @@ namespace Objects.Base
 
 				await UniTask.NextFrame(token);
 				
+				if (this == null)
+					return;
+				
 				if (token.IsCancellationRequested)
 					return;
 				

@@ -36,6 +36,14 @@ namespace Managers
 			BaseAlive.OnRelationshipGroupChangedEvent.AddListener(onRelationshipGroupChanged);
 		}
 
+		public void OnDestroy()
+		{
+			//BaseAlive.OnDamageEvent.RemoveListener(onDamage);
+			BaseAlive.OnSpawnEvent.RemoveListener(onSpawn);
+			BaseAlive.OnDeathEvent.RemoveListener(onDeath);
+			BaseAlive.OnRelationshipGroupChangedEvent.RemoveListener(onRelationshipGroupChanged);
+		}
+
 		public void Update()
 		{
 			handleTargets();

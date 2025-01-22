@@ -88,6 +88,9 @@ namespace Combat.Spells
 			{
 				await UniTask.NextFrame();
 
+				if (this == null)
+					return;
+				
 				GameManager.TimeScale = Mathf.SmoothStep(from, to, normalizedTime);
 				render.InvertColors(Mathf.SmoothStep(invertFrom, invertTo, normalizedTime));
 				

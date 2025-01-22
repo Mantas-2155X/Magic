@@ -36,6 +36,12 @@ namespace UI
 			ConsoleManager.OnConsoleEntryAddedEvent.AddListener(onConsoleEntryAdded);
 			ConsoleManager.OnConsoleClearedEvent.AddListener(onConsoleCleared);
 		}
+		
+		public void OnDestroy()
+		{
+			ConsoleManager.OnConsoleEntryAddedEvent.RemoveListener(onConsoleEntryAdded);
+			ConsoleManager.OnConsoleClearedEvent.RemoveListener(onConsoleCleared);
+		}
 
 		public void OnEnable()
 		{

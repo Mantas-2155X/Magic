@@ -48,10 +48,13 @@ namespace Combat.Attacks
 		
 		private async UniTaskVoid loop()
 		{
-			while (enabled)
+			while (true)
 			{
 				await UniTask.WaitForSeconds(Rate);
 
+				if (this == null || !isActiveAndEnabled)
+					return;
+				
 				for (var i = 0; i < CurrentAlives.Count; i++)
 				{
 					var alive = CurrentAlives[i];

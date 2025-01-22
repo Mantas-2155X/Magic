@@ -172,6 +172,9 @@ public class NavMeshElevatorLink : MonoBehaviour
 		{
 			await UniTask.NextFrame();
 			
+			if (this == null)
+				return;
+			
 			if (PlatformUser == null || !PlatformUser.IsAlive)
 			{
 				PlatformUser = null;
@@ -214,6 +217,9 @@ public class NavMeshElevatorLink : MonoBehaviour
 		while (normalizedTime < 1.0f)
 		{
 			await UniTask.NextFrame();
+			
+			if (this == null)
+				return;
 			
 			if (PlatformUser == null || !PlatformUser.IsAlive)
 			{

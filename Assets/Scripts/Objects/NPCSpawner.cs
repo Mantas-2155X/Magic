@@ -116,9 +116,12 @@ namespace Objects
 
 			var tr = GetTransform();
 			
-			while (isActiveAndEnabled)
+			while (true)
 			{
 				await UniTask.WaitForSeconds(SpawnRate);
+				
+				if (this == null || !isActiveAndEnabled)
+					return;
 				
 				// Spawn count is reached, stop
 				if (spawned.Count >= SpawnCount)

@@ -1,3 +1,4 @@
+using System;
 using AI;
 using AI.Base;
 using AI.Interfaces;
@@ -18,6 +19,12 @@ namespace UI
 			BaseAlive.OnSpawnEvent.AddListener(OnSpawn);
 		}
 		
+		public void OnDestroy()
+		{
+			BaseAlive.OnDeathEvent.RemoveListener(OnDeath);
+			BaseAlive.OnSpawnEvent.RemoveListener(OnSpawn);
+		}
+
 		public void OnDeath(IAlive alive, object source)
 		{
 			if (alive is not Player)

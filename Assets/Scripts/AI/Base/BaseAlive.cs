@@ -519,10 +519,13 @@ namespace AI.Base
 		
 		private async UniTaskVoid regenerateLoop()
 		{
-			while (IsAlive)
+			while (true)
 			{
 				await UniTask.WaitForSeconds(0.5f);
 
+				if (this == null || !IsAlive || !isActiveAndEnabled)
+					return;
+				
 				RestoreMana(Data.RegenerateMana, this);
 				RestoreHealth(Data.RegenerateHealth, this);
 			}
