@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using AI.Enums;
 using Managers.Events;
 using UnityEngine;
 using UnityEngine.Events;
@@ -212,6 +213,61 @@ namespace Managers
 			AddCommand("title", "Return to title", () =>
 			{
 				SceneManager.Instance.ChangeScene("Scenes/Title", true, true, false);
+			});
+			
+			AddCommand("noclip", "Toggle noclip mode", () =>
+			{
+				var player = AIManager.Instance.Player;
+				if (player == null && !player.IsAlive)
+					return;
+				
+				switch (player.MovementType)
+				{
+					case EMovementType.Normal:
+						player.SetMovementType(EMovementType.Noclip);
+						AddEntry(EConsoleEntryType.Info, "Enabled noclip mode");
+						break;
+					case EMovementType.Noclip:
+						player.SetMovementType(EMovementType.Normal);
+						AddEntry(EConsoleEntryType.Info, "Disabled noclip mode");
+						break;
+				}
+			});
+			
+			AddCommand("god", "Toggle god mode", () =>
+			{
+				var player = AIManager.Instance.Player;
+				if (player == null && !player.IsAlive)
+					return;
+
+				if (!player.IsInvulnerable)
+				{
+					player.SetInvulnerable(true);
+					AddEntry(EConsoleEntryType.Info, "Enabled god mode");
+				}
+				else
+				{
+					player.SetInvulnerable(false);
+					AddEntry(EConsoleEntryType.Info, "Disabled god mode");
+				}
+			});
+			
+			AddCommand("power", "Toggle power mode", () =>
+			{
+				var player = AIManager.Instance.Player;
+				if (player == null && !player.IsAlive)
+					return;
+
+				if (!player.IsPowerful)
+				{
+					player.SetPowerful(true);
+					AddEntry(EConsoleEntryType.Info, "Enabled power mode");
+				}
+				else
+				{
+					player.SetPowerful(false);
+					AddEntry(EConsoleEntryType.Info, "Disabled power mode");
+				}
 			});
 			
 			AddCommand("timescale", "Sets the time scale", new [] {EConsoleCommandParameter.Float}, args =>

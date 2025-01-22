@@ -18,6 +18,9 @@ namespace UI
 		public Transform Content;
 
 		[SerializeField]
+		public ScrollRect ScrollRect;
+		
+		[SerializeField]
 		public Scrollbar Scrollbar;
 		
 		[SerializeField]
@@ -43,6 +46,7 @@ namespace UI
 				refresh();
 			
 			selectDelayed().Forget();
+			scrollDown().Forget();
 		}
 		
 		public void OnCloseClicked()
@@ -83,8 +87,8 @@ namespace UI
 			
 			Input.SetTextWithoutNotify("");
 			
-			Input.Select();
-			Input.ActivateInputField();
+			selectDelayed().Forget();
+			scrollDown().Forget();
 		}
 
 		public void Toggle()
@@ -170,10 +174,19 @@ namespace UI
 			if (!isActiveAndEnabled || Input == null)
 				return;
 			
-			Scrollbar.value = 1f;
-
 			Input.Select();
 			Input.ActivateInputField();
+		}
+
+		private async UniTaskVoid scrollDown()
+		{
+			await UniTask.NextFrame();
+			
+			if (!isActiveAndEnabled || Scrollbar == null)
+				return;
+
+			Canvas.ForceUpdateCanvases();
+			ScrollRect.verticalNormalizedPosition = 0f;
 		}
 	}
 }
