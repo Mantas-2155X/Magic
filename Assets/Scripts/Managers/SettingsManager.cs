@@ -92,7 +92,7 @@ namespace Managers
 			return settings.GetValueOrDefault(key);
 		}
 		
-		public string? GetString(string key)
+		public string GetString(string key)
 		{
 			if (!settings.TryGetValue(key, out var setting))
 			{
@@ -291,6 +291,53 @@ namespace Managers
 
 		private void setupSettings()
 		{
+			#region Video
+
+			AddSetting("video-resolution", "SETTINGS_VIDEO_RESOLUTION", "SETTINGS_VIDEO_RESOLUTION_DESC", ESettingType.String, "1920x1080", (previousValue, newValue) =>
+			{
+				var setting = newValue.ToString();
+				if (string.IsNullOrEmpty(setting))
+				{
+					Debug.LogWarning("[SettingsManager] Invalid resolution provided, skipping");
+					return;
+				}
+
+				var resolutions = RenderManager.Instance.Resolutions;
+				if (resolutions == null)
+				{
+					Debug.LogWarning("[SettingsManager] No valid resolutions found, skipping");
+					return;
+				}
+
+				if (!resolutions.Contains(setting))
+				{
+					Debug.LogWarning("[SettingsManager] Unsupported resolution provided, skipping");
+					return;
+				}
+
+				var split = setting.Split("x");
+				
+				var width = Convert.ToInt32(split[0]);
+				var height = Convert.ToInt32(split[1]);
+				
+				Screen.SetResolution(width, height, GetBool("video-fullscreen")!.Value);
+			});
+
+			AddSetting("video-fullscreen", "SETTINGS_VIDEO_FULLSCREEN", "SETTINGS_VIDEO_FULLSCREEN_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
+			{
+				var resolution = GetString("video-resolution");
+				var split = resolution.Split("x");
+
+				var width = Convert.ToInt32(split[0]);
+				var height = Convert.ToInt32(split[1]);
+
+				Screen.SetResolution(width, height, Convert.ToBoolean(newValue));
+			});
+
+			#endregion
+			
+			#region Graphics
+
 			AddSetting("graphics-shadowquality", "SETTINGS_GRAPHICS_SHADOWQUALITY", "SETTINGS_GRAPHICS_SHADOWQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
@@ -532,6 +579,8 @@ namespace Managers
 						break;
 				}
 			});
+
+			#endregion
 			
 			loadSettings();
 			saveSettings();

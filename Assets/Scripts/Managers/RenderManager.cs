@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using Tools;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -21,6 +22,28 @@ namespace Managers
 			}
 		}
 
+		private List<string> resolutions;
+		public List<string> Resolutions
+		{
+			get
+			{
+				if (resolutions != null)
+					return resolutions;
+
+				var list = new List<string>();
+
+				var screenResolutions = Screen.resolutions;
+				for (var i = 0; i < Screen.resolutions.Length; i++)
+				{
+					var screenResolution = screenResolutions[i];
+					list.AddUnique($"{screenResolution.width}x{screenResolution.height}");
+				}
+
+				resolutions = list;
+				return resolutions;
+			}
+		}
+		
 		private UniversalRenderPipelineAsset renderAsset;
 		public UniversalRenderPipelineAsset RenderAsset
 		{
