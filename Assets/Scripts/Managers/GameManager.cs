@@ -15,7 +15,7 @@ namespace Managers
 				instance = new GameManager();
 				
 				TimeScale = 1f;
-				TargetFPS = 1000;
+				TargetFPS = 10000;
 				
 				return instance;
 			}
@@ -38,7 +38,7 @@ namespace Managers
 			set
 			{
 				var changeTo = value;
-				changeTo = Mathf.Clamp(changeTo, 10, 1000);
+				changeTo = Mathf.Clamp(changeTo, 10, 10000);
 				Application.targetFrameRate = changeTo;
 			}
 		}
