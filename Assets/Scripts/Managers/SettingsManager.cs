@@ -286,16 +286,10 @@ namespace Managers
 
 		private void setupSettings()
 		{
-			AddSetting("video-vsync", "SETTING_VIDEO_VSYNC", "SETTING_VIDEO_VSYNC_DESC", ESettingType.Bool, false, (previousValue, newValue) =>
-			{
-				var setting = Convert.ToBoolean(newValue);
-				QualitySettings.vSyncCount = setting ? 1 : 0;
-			});
-			
-			AddSetting("graphics-aa", "SETTING_GRAPHICS_AA", "SETTING_GRAPHICS_AA_DESC", ESettingType.Int, 8, (previousValue, newValue) =>
+			AddSetting("graphics-aa", "SETTING_GRAPHICS_AA", "SETTING_GRAPHICS_AA_DESC", ESettingType.Int, 3, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
-				if (setting is not (0 or 2 or 4 or 8))
+				if (setting is not (0 or 1 or 2 or 3))
 				{
 					Debug.LogWarning("[SettingsManager] Invalid antialiasing mode provided, skipping");
 					return;
@@ -308,17 +302,27 @@ namespace Managers
 					return;
 				}
 
-				// Why is "None" set at 1?
-				if (setting == 0)
-					setting = 1;
-				
-				renderAsset.msaaSampleCount = setting;
+				switch (setting)
+				{
+					case 0:
+						renderAsset.msaaSampleCount = 1;
+						break;
+					case 1:
+						renderAsset.msaaSampleCount = 2;
+						break;
+					case 2:
+						renderAsset.msaaSampleCount = 4;
+						break;
+					case 3:
+						renderAsset.msaaSampleCount = 8;
+						break;
+				}
 			});
 
-			AddSetting("graphics-shadowquality", "SETTING_GRAPHICS_SHADOWQUALITY", "SETTING_GRAPHICS_SHADOWQUALITY_DESC", ESettingType.Int, 4096, (previousValue, newValue) =>
+			AddSetting("graphics-shadowquality", "SETTING_GRAPHICS_SHADOWQUALITY", "SETTING_GRAPHICS_SHADOWQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
-				if (setting is not (1024 or 2048 or 4096))
+				if (setting is not (0 or 1 or 2))
 				{
 					Debug.LogWarning("[SettingsManager] Invalid shadow quality mode provided, skipping");
 					return;
@@ -331,9 +335,6 @@ namespace Managers
 					return;
 				}
 				
-				renderAsset.mainLightShadowmapResolution = setting;
-				renderAsset.additionalLightsShadowmapResolution = setting;
-
 				var softShadowsQuality = renderAsset.GetType().GetProperty("softShadowQuality", BindingFlags.NonPublic | BindingFlags.Instance);
 				if (softShadowsQuality == null)
 				{
@@ -343,14 +344,20 @@ namespace Managers
 
 				switch (setting)
 				{
-					case 1024:
+					case 0:
 						softShadowsQuality.SetValue(renderAsset, SoftShadowQuality.Low);
+						renderAsset.mainLightShadowmapResolution = 1024;
+						renderAsset.additionalLightsShadowmapResolution = 1024;
 						break;
-					case 2048:
+					case 1:
 						softShadowsQuality.SetValue(renderAsset, SoftShadowQuality.Medium);
+						renderAsset.mainLightShadowmapResolution = 2048;
+						renderAsset.additionalLightsShadowmapResolution = 2048;
 						break;
-					case 4096:
+					case 2:
 						softShadowsQuality.SetValue(renderAsset, SoftShadowQuality.High);
+						renderAsset.mainLightShadowmapResolution = 4096;
+						renderAsset.additionalLightsShadowmapResolution = 4096;
 						break;
 				}
 			});
