@@ -340,6 +340,11 @@ namespace Managers
 			{
 				Screen.fullScreen = Convert.ToBoolean(newValue);
 			});
+			
+			AddSetting("video-vsync", "SETTINGS_VIDEO_VSYNC", "SETTINGS_VIDEO_VSYNC_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
+			{
+				QualitySettings.vSyncCount = Convert.ToBoolean(newValue) ? 1 : 0;
+			});
 
 			#endregion
 			

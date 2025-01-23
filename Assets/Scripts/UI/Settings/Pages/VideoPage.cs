@@ -19,6 +19,11 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public Toggle FullscreenToggle;
 		
+		[SerializeField]
+		public Localizer VSyncLocalizer;
+		[SerializeField]
+		public Toggle VSyncToggle;
+		
 		private List<string> resolutions;
 		
 		public override void Select(bool state)
@@ -51,6 +56,12 @@ namespace UI.Settings.Pages
 			FullscreenLocalizer.Apply();
 			
 			FullscreenToggle.SetIsOnWithoutNotify(Convert.ToBoolean(fullscreen.Value));
+			
+			var vsync = SettingsManager.Instance.GetSetting("video-vsync");
+			VSyncLocalizer.Key = vsync.Name;
+			VSyncLocalizer.Apply();
+			
+			VSyncToggle.SetIsOnWithoutNotify(Convert.ToBoolean(vsync.Value));
 		}
 
 		public void OnResolutionChanged(int value)
@@ -64,6 +75,11 @@ namespace UI.Settings.Pages
 		public void OnFullscreenChanged(bool value)
 		{
 			SettingsManager.Instance.SetSetting("video-fullscreen", value);
+		}
+		
+		public void OnVSyncChanged(bool value)
+		{
+			SettingsManager.Instance.SetSetting("video-vsync", value);
 		}
 	}
 }
