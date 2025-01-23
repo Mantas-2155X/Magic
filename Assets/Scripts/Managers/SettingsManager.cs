@@ -182,29 +182,36 @@ namespace Managers
 
 			foreach (var (key, setting) in settings)
 			{
-				string value;
-
-				switch (setting.Type)
+				try
 				{
-					case ESettingType.String:
-						value = GetString(key);
-						break;
-					case ESettingType.Int:
-						value = GetInt(key)?.ToString();
-						break;
-					case ESettingType.Float:
-						value = GetFloat(key)?.ToString(CultureInfo.InvariantCulture);
-						break;
-					case ESettingType.Bool:
-						value = GetBool(key)?.ToString();
-						break;
-					default:
-						throw new NotImplementedException();
-				}
+					string value;
 
-				value ??= "";
+					switch (setting.Type)
+					{
+						case ESettingType.String:
+							value = GetString(key);
+							break;
+						case ESettingType.Int:
+							value = GetInt(key)?.ToString();
+							break;
+						case ESettingType.Float:
+							value = GetFloat(key)?.ToString(CultureInfo.InvariantCulture);
+							break;
+						case ESettingType.Bool:
+							value = GetBool(key)?.ToString();
+							break;
+						default:
+							throw new NotImplementedException();
+					}
+
+					value ??= "";
 				
-				builder.AppendLine($"{key}\t{value}");
+					builder.AppendLine($"{key}\t{value}");
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"[SettingsManager] Failed saving setting {key}, {e}");
+				}
 			}
 			
 			File.WriteAllText(System.IO.Path.Combine(Path, Name), builder.ToString());
@@ -249,42 +256,49 @@ namespace Managers
 
 				if (settings.TryGetValue(key, out var setting))
 				{
-					object value;
-
-					switch (setting.Type)
+					try
 					{
-						case ESettingType.String:
-							value = valueStr;
-							break;
-						case ESettingType.Int:
-							if (!int.TryParse(valueStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var intValue))
-							{
-								Debug.LogWarning($"[SettingsManager] Setting at line {i} failed to parse int value");
-								continue;
-							}
-							value = intValue;
-							break;
-						case ESettingType.Float:
-							if (!float.TryParse(valueStr, NumberStyles.Float, CultureInfo.InvariantCulture, out var floatValue))
-							{
-								Debug.LogWarning($"[SettingsManager] Setting at line {i} failed to parse float value");
-								continue;
-							}
-							value = floatValue;
-							break;
-						case ESettingType.Bool:
-							if (!bool.TryParse(valueStr, out var boolValue))
-							{
-								Debug.LogWarning($"[SettingsManager] Setting at line {i} failed to parse bool value");
-								continue;
-							}
-							value = boolValue;
-							break;
-						default:
-							throw new NotImplementedException();
-					}
+						object value;
 
-					SetSetting(key, value);
+						switch (setting.Type)
+						{
+							case ESettingType.String:
+								value = valueStr;
+								break;
+							case ESettingType.Int:
+								if (!int.TryParse(valueStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var intValue))
+								{
+									Debug.LogWarning($"[SettingsManager] Setting at line {i} failed to parse int value");
+									continue;
+								}
+								value = intValue;
+								break;
+							case ESettingType.Float:
+								if (!float.TryParse(valueStr, NumberStyles.Float, CultureInfo.InvariantCulture, out var floatValue))
+								{
+									Debug.LogWarning($"[SettingsManager] Setting at line {i} failed to parse float value");
+									continue;
+								}
+								value = floatValue;
+								break;
+							case ESettingType.Bool:
+								if (!bool.TryParse(valueStr, out var boolValue))
+								{
+									Debug.LogWarning($"[SettingsManager] Setting at line {i} failed to parse bool value");
+									continue;
+								}
+								value = boolValue;
+								break;
+							default:
+								throw new NotImplementedException();
+						}
+
+						SetSetting(key, value);
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"[SettingsManager] Failed loading setting {key}, {e}");
+					}
 				}
 			}
 		}
