@@ -4514,8 +4514,7 @@ MonoBehaviour:
   Casts: {fileID: 446806502}
   Projectiles: {fileID: 13660899}
   Objects: {fileID: 174416576}
-  TimeScale: 1
-  TargetFPS: 1000
+  SpawnPlayer: 1
 --- !u!4 &646561133
 Transform:
   m_ObjectHideFlags: 0
@@ -5592,7 +5591,6 @@ GameObject:
   - component: {fileID: 891401689}
   - component: {fileID: 891401690}
   - component: {fileID: 891401691}
-  - component: {fileID: 891401692}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -5653,20 +5651,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f52447bebe4a4ca9bf6e184bd328c632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &891401692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891401686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba4928b2ec474462aecbcd083e0c0ae5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InvertFeature: {fileID: 4147670163396297480, guid: f288ae1f4751b564a96ac7587541f7a2, type: 2}
-  InvertMaterial: {fileID: 2100000, guid: f3954a164842d623fb59b14a2887d4b3, type: 2}
 --- !u!1001 &902856541
 PrefabInstance:
   m_ObjectHideFlags: 0

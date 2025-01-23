@@ -1,3 +1,4 @@
+using System;
 using Managers;
 using ScriptableObjects;
 using UnityEngine;
@@ -42,6 +43,15 @@ namespace World
 		public void Awake()
 		{
 			Instance = this;
+		}
+
+		public void OnDestroy()
+		{
+			var renderManager = RenderManager.Instance;
+			if (renderManager == null)
+				return;
+			
+			renderManager.InvertColors(0f);
 		}
 
 		public void Start()

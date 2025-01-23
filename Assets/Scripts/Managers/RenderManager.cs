@@ -6,22 +6,57 @@ using UnityEngine.Rendering.Universal;
 
 namespace Managers
 {
-	public class RenderManager : MonoBehaviour
+	public class RenderManager
 	{
-		public static RenderManager Instance;
-
-		private FullScreenPassRendererFeature invertFeature;
-		public FullScreenPassRendererFeature InvertFeature
+		private static RenderManager instance;
+		public static RenderManager Instance
 		{
 			get
 			{
-				if (invertFeature != null)
-					return invertFeature;
+				if (instance != null)
+					return instance;
 				
-				var rend = ((UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline).GetRenderer(0);
-				if (rend == null)
+				instance = new RenderManager();
+				return instance;
+			}
+		}
+
+		private UniversalRenderPipelineAsset renderAsset;
+		public UniversalRenderPipelineAsset RenderAsset
+		{
+			get
+			{
+				if (renderAsset != null)
+					return renderAsset;
+
+				var asset = (UniversalRenderPipelineAsset)GraphicsSettings.currentRenderPipeline;
+				if (asset == null)
 				{
 					Debug.LogError("[RenderManager] Failed to get UniversalRenderPipelineAsset");
+					return null;
+				}
+
+				renderAsset = asset;
+				return renderAsset;
+			}
+		}
+
+		private List<ScriptableRendererFeature> renderFeatures;
+		public List<ScriptableRendererFeature> RenderFeatures
+		{
+			get
+			{
+				if (renderFeatures != null)
+					return renderFeatures;
+
+				var asset = RenderAsset;
+				if (asset == null)
+					return null;
+
+				var rend = asset.GetRenderer(0);
+				if (rend == null)
+				{
+					Debug.LogError("[RenderManager] Failed to get Renderer");
 					return null;
 				}
 			
@@ -39,6 +74,23 @@ namespace Managers
 					return null;
 				}
 
+				renderFeatures = features;
+				return renderFeatures;
+			}
+		}
+
+		private FullScreenPassRendererFeature invertFeature;
+		public FullScreenPassRendererFeature InvertFeature
+		{
+			get
+			{
+				if (invertFeature != null)
+					return invertFeature;
+				
+				var features = RenderFeatures;
+				if (features == null)
+					return null;
+
 				foreach (var feature in features)
 				{
 					if (feature.name != "Invert Colors")
@@ -49,6 +101,32 @@ namespace Managers
 				}
 
 				Debug.LogError("[RenderManager] Invert Colors feature not found");
+				return null;
+			}
+		}
+		
+		private ScreenSpaceAmbientOcclusion ssaoFeature;
+		public ScreenSpaceAmbientOcclusion SsaoFeature
+		{
+			get
+			{
+				if (ssaoFeature != null)
+					return ssaoFeature;
+				
+				var features = RenderFeatures;
+				if (features == null)
+					return null;
+
+				foreach (var feature in features)
+				{
+					if (feature.name != "ScreenSpaceAmbientOcclusion")
+						continue;
+
+					ssaoFeature = (ScreenSpaceAmbientOcclusion)feature;
+					return ssaoFeature;
+				}
+
+				Debug.LogError("[RenderManager] SSAO feature not found");
 				return null;
 			}
 		}
@@ -71,16 +149,6 @@ namespace Managers
 		}
 		
 		private static readonly int invertIntensity = Shader.PropertyToID("_Intensity");
-		
-		public void Awake()
-		{
-			Instance = this;
-		}
-
-		public void OnDisable()
-		{
-			InvertColors(0f);
-		}
 
 		public void InvertColors(float value)
 		{
