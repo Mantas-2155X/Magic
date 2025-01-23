@@ -10,7 +10,7 @@ namespace Editor
 	{
 		public int callbackOrder { get; }
 
-		private readonly string[] copyAssets = { "localization" };
+		private readonly string[] copyAssets = { "data" };
 		
 		public void OnPostprocessBuild(BuildReport report)
 		{
