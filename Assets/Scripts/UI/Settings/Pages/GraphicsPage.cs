@@ -28,7 +28,13 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public DropdownLocalizer ShaderQualityDropdown;
 
+		[SerializeField]
+		public Localizer AntialiasingLocalizer;
+		[SerializeField]
+		public DropdownLocalizer AntialiasingDropdown;
+
 		private readonly List<string> qualityKeys = new () {"SETTINGS_DROPDOWN_LOW", "SETTINGS_DROPDOWN_MEDIUM", "SETTINGS_DROPDOWN_HIGH"};
+		private readonly List<string> aaKeys = new () {"SETTINGS_DROPDOWN_NONE", "SETTINGS_DROPDOWN_MSAA2X", "SETTINGS_DROPDOWN_MSAA4X", "SETTINGS_DROPDOWN_MSAA8X"};
 
 		public override void Select(bool state)
 		{
@@ -61,6 +67,13 @@ namespace UI.Settings.Pages
 			
 			ShaderQualityDropdown.SetOptions(qualityKeys);
 			ShaderQualityDropdown.SetValueWithoutNotify(Convert.ToInt32(shaderQuality.Value));
+			
+			var antiAliasing = SettingsManager.Instance.GetSetting("graphics-antialiasing");
+			AntialiasingLocalizer.Key = antiAliasing.Name;
+			AntialiasingLocalizer.Apply();
+			
+			AntialiasingDropdown.SetOptions(aaKeys);
+			AntialiasingDropdown.SetValueWithoutNotify(Convert.ToInt32(antiAliasing.Value));
 		}
 
 		public void OnShadowQualityChanged(int value)
@@ -81,6 +94,11 @@ namespace UI.Settings.Pages
 		public void OnShaderQualityChanged(int value)
 		{
 			SettingsManager.Instance.SetSetting("graphics-shaderquality", value);
+		}
+		
+		public void OnAntialiasingChanged(int value)
+		{
+			SettingsManager.Instance.SetSetting("graphics-antialiasing", value);
 		}
 	}
 }

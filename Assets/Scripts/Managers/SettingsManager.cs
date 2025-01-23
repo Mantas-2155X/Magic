@@ -291,39 +291,6 @@ namespace Managers
 
 		private void setupSettings()
 		{
-			AddSetting("graphics-aa", "SETTINGS_GRAPHICS_AA", "SETTINGS_GRAPHICS_AA_DESC", ESettingType.Int, 3, (previousValue, newValue) =>
-			{
-				var setting = Convert.ToInt32(newValue);
-				if (setting is not (0 or 1 or 2 or 3))
-				{
-					Debug.LogWarning("[SettingsManager] Invalid antialiasing mode provided, skipping");
-					return;
-				}
-
-				var renderAsset = RenderManager.Instance.RenderAsset;
-				if (renderAsset == null)
-				{
-					Debug.LogError("[SettingsManager] Failed to get render asset");
-					return;
-				}
-
-				switch (setting)
-				{
-					case 0:
-						renderAsset.msaaSampleCount = 1;
-						break;
-					case 1:
-						renderAsset.msaaSampleCount = 2;
-						break;
-					case 2:
-						renderAsset.msaaSampleCount = 4;
-						break;
-					case 3:
-						renderAsset.msaaSampleCount = 8;
-						break;
-				}
-			});
-
 			AddSetting("graphics-shadowquality", "SETTINGS_GRAPHICS_SHADOWQUALITY", "SETTINGS_GRAPHICS_SHADOWQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
@@ -529,6 +496,39 @@ namespace Managers
 						downsample.SetValue(featureSettings, false);
 						samples.SetValue(featureSettings, 0);
 						blurQuality.SetValue(featureSettings, 0);
+						break;
+				}
+			});
+			
+			AddSetting("graphics-antialiasing", "SETTINGS_GRAPHICS_ANTIALIASING", "SETTINGS_GRAPHICS_ANTIALIASING_DESC", ESettingType.Int, 3, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToInt32(newValue);
+				if (setting is not (0 or 1 or 2 or 3))
+				{
+					Debug.LogWarning("[SettingsManager] Invalid antialiasing mode provided, skipping");
+					return;
+				}
+
+				var renderAsset = RenderManager.Instance.RenderAsset;
+				if (renderAsset == null)
+				{
+					Debug.LogError("[SettingsManager] Failed to get render asset");
+					return;
+				}
+
+				switch (setting)
+				{
+					case 0:
+						renderAsset.msaaSampleCount = 1;
+						break;
+					case 1:
+						renderAsset.msaaSampleCount = 2;
+						break;
+					case 2:
+						renderAsset.msaaSampleCount = 4;
+						break;
+					case 3:
+						renderAsset.msaaSampleCount = 8;
 						break;
 				}
 			});
