@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 namespace Managers
@@ -498,20 +499,31 @@ namespace Managers
 						break;
 				}
 
-				if (profile.TryGet<Bloom>(out var bloom))
-					bloom.active = useBloom;
+				var components = profile.components;
+				for (var i = 0; i < components.Count; i++)
+				{
+					var component = components[i];
+					switch (component)
+					{
+						case Bloom:
+							component.active = useBloom;
+							break;
+						case Vignette:
+							component.active = useVignette;
+							break;
+						case ChromaticAberration:
+							component.active = useChromaticAberration;
+							break;
+						case FilmGrain:
+							component.active = useFilmGrain;
+							break;
+						case DepthOfField:
+							component.active = useDepthOfField;
+							break;
+					}
+				}
 
-				if (profile.TryGet<Vignette>(out var vignette))
-					vignette.active = useVignette;
-
-				if (profile.TryGet<ChromaticAberration>(out var chromaticAberration))
-					chromaticAberration.active = useChromaticAberration;
-
-				if (profile.TryGet<FilmGrain>(out var filmGrain))
-					filmGrain.active = useFilmGrain;
-
-				if (profile.TryGet<DepthOfField>(out var depthOfField))
-					depthOfField.active = useDepthOfField;
+				VolumeManager.instance.OnVolumeProfileChanged(profile);
 
 				var ssao = RenderManager.Instance.SsaoFeature;
 				if (ssao == null)
