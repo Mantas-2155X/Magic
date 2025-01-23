@@ -4,6 +4,8 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
@@ -32,6 +34,8 @@ namespace Managers
 
 		private readonly Dictionary<string, Setting> settings = new ();
 
+		private CancellationTokenSource cancellationToken = new ();
+		
 		#region Manage
 
 		public void AddSetting(string key, string name, string description, ESettingType type, object value, UnityAction<object, object> changed)
@@ -43,19 +47,19 @@ namespace Managers
 			}
 
 			settings.Add(key, new Setting(name, description, type, value, value, changed));
-			// todo: timer this saveSettings();
+			saveSettings();
 		}
 
 		public void RemoveSetting(string key)
 		{
 			settings.Remove(key);
-			// todo: timer this saveSettings();
+			saveSettings();
 		}
 
 		public void ClearSettings()
 		{
 			settings.Clear();
-			// todo: timer this saveSettings();
+			saveSettings();
 		}
 
 		public void SetSetting(string key, object value)
@@ -70,7 +74,7 @@ namespace Managers
 			setting.Value = value;
 			setting.Changed?.Invoke(previousValue, value);
 			
-			// todo: timer this saveSettings();
+			saveSettings();
 		}
 
 		public void DefaultSetting(string key)
@@ -176,46 +180,10 @@ namespace Managers
 
 		private void saveSettings()
 		{
-			if (!Directory.Exists(Path))
-				Directory.CreateDirectory(Path);
-			
-			var builder = new StringBuilder();
+			cancellationToken?.Cancel();
+			cancellationToken = new CancellationTokenSource();
 
-			foreach (var (key, setting) in settings)
-			{
-				try
-				{
-					string value;
-
-					switch (setting.Type)
-					{
-						case ESettingType.String:
-							value = GetString(key);
-							break;
-						case ESettingType.Int:
-							value = GetInt(key)?.ToString();
-							break;
-						case ESettingType.Float:
-							value = GetFloat(key)?.ToString(CultureInfo.InvariantCulture);
-							break;
-						case ESettingType.Bool:
-							value = GetBool(key)?.ToString();
-							break;
-						default:
-							throw new NotImplementedException();
-					}
-
-					value ??= "";
-				
-					builder.AppendLine($"{key}\t{value}");
-				}
-				catch (Exception e)
-				{
-					Debug.LogError($"[SettingsManager] Failed saving setting {key}, {e}");
-				}
-			}
-			
-			File.WriteAllText(System.IO.Path.Combine(Path, Name), builder.ToString());
+			saveSettingsDelayed(cancellationToken.Token).Forget();
 		}
 
 		private void loadSettings()
@@ -308,7 +276,37 @@ namespace Managers
 		{
 			#region Video
 
-			AddSetting("video-resolution", "SETTINGS_VIDEO_RESOLUTION", "SETTINGS_VIDEO_RESOLUTION_DESC", ESettingType.String, "1920x1080", (previousValue, newValue) =>
+			var defaultResolution = "1920x1080";
+
+			try
+			{
+				var displays = Display.displays;
+				for (var i = 0; i < displays.Length; i++)
+				{
+					var display = displays[i];
+					if (!display.active)
+						continue;
+
+					defaultResolution = $"{display.systemWidth}x{display.systemHeight}";
+					break;
+				}
+
+				if (RenderManager.Instance.Resolutions.Contains(defaultResolution))
+				{
+					Debug.Log($"[SettingsManager] Native resolution set to {defaultResolution}");
+				}
+				else
+				{
+					defaultResolution = "1920x1080";
+					Debug.LogWarning("[SettingsManager] Native resolution unsupported, defaulting");
+				}
+			}
+			catch (Exception e)
+			{
+				Debug.LogWarning($"[SettingsManager] Failed grabbing native resolution, defaulting, {e}");
+			}
+			
+			AddSetting("video-resolution", "SETTINGS_VIDEO_RESOLUTION", "SETTINGS_VIDEO_RESOLUTION_DESC", ESettingType.String, defaultResolution, (previousValue, newValue) =>
 			{
 				var setting = newValue.ToString();
 				if (string.IsNullOrEmpty(setting))
@@ -340,13 +338,7 @@ namespace Managers
 
 			AddSetting("video-fullscreen", "SETTINGS_VIDEO_FULLSCREEN", "SETTINGS_VIDEO_FULLSCREEN_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
 			{
-				var resolution = GetString("video-resolution");
-				var split = resolution.Split("x");
-
-				var width = Convert.ToInt32(split[0]);
-				var height = Convert.ToInt32(split[1]);
-
-				Screen.SetResolution(width, height, Convert.ToBoolean(newValue));
+				Screen.fullScreen = Convert.ToBoolean(newValue);
 			});
 
 			#endregion
@@ -610,6 +602,55 @@ namespace Managers
 			
 			loadSettings();
 			saveSettings();
+		}
+
+		private async UniTask saveSettingsDelayed(CancellationToken token)
+		{
+			await UniTask.WaitForSeconds(2.5f, cancellationToken: token);
+
+			if (token.IsCancellationRequested)
+				return;
+
+			if (!Directory.Exists(Path))
+				Directory.CreateDirectory(Path);
+			
+			var builder = new StringBuilder();
+
+			foreach (var (key, setting) in settings)
+			{
+				try
+				{
+					string value;
+
+					switch (setting.Type)
+					{
+						case ESettingType.String:
+							value = GetString(key);
+							break;
+						case ESettingType.Int:
+							value = GetInt(key)?.ToString();
+							break;
+						case ESettingType.Float:
+							value = GetFloat(key)?.ToString(CultureInfo.InvariantCulture);
+							break;
+						case ESettingType.Bool:
+							value = GetBool(key)?.ToString();
+							break;
+						default:
+							throw new NotImplementedException();
+					}
+
+					value ??= "";
+				
+					builder.AppendLine($"{key}\t{value}");
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"[SettingsManager] Failed saving setting {key}, {e}");
+				}
+			}
+			
+			await File.WriteAllTextAsync(System.IO.Path.Combine(Path, Name), builder.ToString(), token);
 		}
 		
 		#endregion
