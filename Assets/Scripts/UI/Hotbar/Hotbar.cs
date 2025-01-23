@@ -109,7 +109,7 @@ namespace UI.Hotbar
 			if (newSpell == null)
 			{
 				SelectedSpellLocalizer.Key = "";
-				SelectedSpellLocalizer.Clear();
+				SelectedSpellLocalizer.Text.text = "";
 			}
 			else
 			{

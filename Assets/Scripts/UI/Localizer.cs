@@ -12,24 +12,22 @@ namespace UI
 		[SerializeField]
 		public string Key;
 		
-		public void Awake()
+		public virtual void Awake()
 		{
 			LocalizationManager.Instance.RegisterLocalizer(this);
 		}
 
-		public void OnDestroy()
+		public virtual void OnDestroy()
 		{
 			LocalizationManager.Instance.UnregisterLocalizer(this);
 		}
 
-		public void Apply()
+		public virtual void Apply()
 		{
+			if (Text == null)
+				return;
+			
 			Text.text = LocalizationManager.Instance.GetLocalizedEntry(Key);
-		}
-
-		public void Clear()
-		{
-			Text.text = Key;
 		}
 	}
 }
