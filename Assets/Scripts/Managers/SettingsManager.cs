@@ -86,6 +86,11 @@ namespace Managers
 		#endregion
 
 		#region Get
+
+		public Setting GetSetting(string key)
+		{
+			return settings.GetValueOrDefault(key);
+		}
 		
 		public string? GetString(string key)
 		{
@@ -286,7 +291,7 @@ namespace Managers
 
 		private void setupSettings()
 		{
-			AddSetting("graphics-aa", "SETTING_GRAPHICS_AA", "SETTING_GRAPHICS_AA_DESC", ESettingType.Int, 3, (previousValue, newValue) =>
+			AddSetting("graphics-aa", "SETTINGS_GRAPHICS_AA", "SETTINGS_GRAPHICS_AA_DESC", ESettingType.Int, 3, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
 				if (setting is not (0 or 1 or 2 or 3))
@@ -319,7 +324,7 @@ namespace Managers
 				}
 			});
 
-			AddSetting("graphics-shadowquality", "SETTING_GRAPHICS_SHADOWQUALITY", "SETTING_GRAPHICS_SHADOWQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
+			AddSetting("graphics-shadowquality", "SETTINGS_GRAPHICS_SHADOWQUALITY", "SETTINGS_GRAPHICS_SHADOWQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
 				if (setting is not (0 or 1 or 2))
@@ -362,7 +367,7 @@ namespace Managers
 				}
 			});
 
-			AddSetting("graphics-texturequality", "SETTING_GRAPHICS_TEXTUREQUALITY", "SETTING_GRAPHICS_TEXTUREQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
+			AddSetting("graphics-texturequality", "SETTINGS_GRAPHICS_TEXTUREQUALITY", "SETTINGS_GRAPHICS_TEXTUREQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
 				if (setting is not (0 or 1 or 2))
@@ -388,7 +393,7 @@ namespace Managers
 				}
 			});
 			
-			AddSetting("graphics-modelquality", "SETTING_GRAPHICS_MODELQUALITY", "SETTING_GRAPHICS_MODELQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
+			AddSetting("graphics-modelquality", "SETTINGS_GRAPHICS_MODELQUALITY", "SETTINGS_GRAPHICS_MODELQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
 				if (setting is not (0 or 1 or 2))
@@ -411,7 +416,7 @@ namespace Managers
 				}
 			});
 			
-			AddSetting("graphics-shaderquality", "SETTING_GRAPHICS_SHADERQUALITY", "SETTING_GRAPHICS_SHADERQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
+			AddSetting("graphics-shaderquality", "SETTINGS_GRAPHICS_SHADERQUALITY", "SETTINGS_GRAPHICS_SHADERQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
 				if (setting is not (0 or 1 or 2))

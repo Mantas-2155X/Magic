@@ -58,7 +58,7 @@ namespace UI
 		public Console Console;
 
 		[SerializeField]
-		public Settings Settings;
+		public Settings.Settings Settings;
 		
 		#region MonoBehaviour
 
