@@ -443,7 +443,7 @@ namespace Managers
 				switch (setting)
 				{
 					case 0:
-						useBloom = true;
+						useBloom = false;
 						useVignette = false;
 						useChromaticAberration = false;
 						useFilmGrain = false;
