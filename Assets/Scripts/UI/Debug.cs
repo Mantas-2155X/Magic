@@ -34,10 +34,18 @@ namespace UI
 		public TMP_Text Text;
 
 		[SerializeField]
+		public TMP_Text Build;
+		
+		[SerializeField]
 		public int AverageOver = 5;
 
 		private float time;
 		private int count;
+
+		public void Awake()
+		{
+			Build.text = $"Build {Application.version}";
+		}
 
 		public void Update()
 		{
