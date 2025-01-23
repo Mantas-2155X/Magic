@@ -25,7 +25,7 @@ namespace Managers
 		}
 
 		public string CurrentLanguage { get; private set; }
-		public string Path { get; private set; } = "localization";
+		public string Path { get; private set; } = "data/localization";
 
 		private readonly Dictionary<string, List<SLanguageEntry>> languages = new ();
 		private readonly Dictionary<string, SLanguageEntry> currentEntries = new ();
