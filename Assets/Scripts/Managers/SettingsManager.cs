@@ -272,6 +272,12 @@ namespace Managers
 			}
 		}
 
+		private void resetSettings()
+		{
+			foreach (var pair in settings)
+				DefaultSetting(pair.Key);
+		}
+		
 		private void setupSettings()
 		{
 			#region Video
@@ -605,6 +611,7 @@ namespace Managers
 
 			#endregion
 			
+			resetSettings();
 			loadSettings();
 			saveSettings();
 		}
