@@ -7,8 +7,11 @@ using AI.Enums;
 using Managers.Events;
 using Microsoft.CSharp;
 using Tools;
+using UI;
+using UI.Settings.Pages;
 using UnityEngine;
 using UnityEngine.Events;
+using Debug = UnityEngine.Debug;
 
 namespace Managers
 {
@@ -240,6 +243,40 @@ namespace Managers
 				AddEntry(EConsoleEntryType.Info, SceneManager.Instance.GetCurrentScene());
 			});
 			
+			AddCommand("msens", "Changes the mouse sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
+			{
+				var value = (float)args[0];
+				value = Mathf.Clamp(value, 0.001f, 2f);
+				
+				SettingsManager.Instance.SetSetting("controls-sensitivity-mouse", value);
+
+				var title = Title.Instance;
+				if (title == null || title.Settings.CurrentPage is not ControlsPage controlsPage)
+					return;
+
+				controlsPage.Select(true);
+			}, () =>
+			{
+				AddEntry(EConsoleEntryType.Info, SettingsManager.Instance.GetFloat("controls-sensitivity-mouse")?.ToString(CultureInfo.CurrentCulture));
+			});
+			
+			AddCommand("csens", "Changes the controller sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
+			{
+				var value = (float)args[0];
+				value = Mathf.Clamp(value, 0.001f, 2f);
+
+				SettingsManager.Instance.SetSetting("controls-sensitivity-controller", value);
+				
+				var title = Title.Instance;
+				if (title == null || title.Settings.CurrentPage is not ControlsPage controlsPage)
+					return;
+
+				controlsPage.Select(true);
+			}, () =>
+			{
+				AddEntry(EConsoleEntryType.Info, SettingsManager.Instance.GetFloat("controls-sensitivity-controller")?.ToString(CultureInfo.CurrentCulture));
+			});
+			
 			AddCommand("log", "Create test logs", new [] {EConsoleCommandParameter.String, EConsoleCommandParameter.Int}, args =>
 			{
 				var amount = (int)args[1];
@@ -454,7 +491,7 @@ namespace Managers
 
 		private void printInfo()
 		{
-			Debug.Log($"Build {Application.version} at ({Path.GetDirectoryName(Application.dataPath)})");
+			Debug.Log($"Build {Application.version} at {Path.GetDirectoryName(Application.dataPath)}");
 			Debug.Log($"OS: {SystemInfo.operatingSystem}");
 			Debug.Log($"CPU: {SystemInfo.processorType} (RAM: {SystemInfo.systemMemorySize} MB)");
 			Debug.Log($"GPU: {SystemInfo.graphicsDeviceName} (VRAM: {SystemInfo.graphicsMemorySize} MB)");
