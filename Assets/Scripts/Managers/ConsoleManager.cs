@@ -2,6 +2,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using AI.Enums;
 using Managers.Events;
 using Microsoft.CSharp;
@@ -22,6 +23,7 @@ namespace Managers
 				
 				instance = new ConsoleManager();
 				Application.logMessageReceived += instance.logReceived;
+				instance.printInfo();
 				instance.setupCommands();
 				return instance;
 			}
@@ -456,6 +458,14 @@ namespace Managers
 
 		#endregion
 
+		private void printInfo()
+		{
+			Debug.Log($"Build {Application.version} at ({Path.GetDirectoryName(Application.dataPath)})");
+			Debug.Log($"OS: {SystemInfo.operatingSystem}");
+			Debug.Log($"CPU: {SystemInfo.processorType} (RAM: {SystemInfo.systemMemorySize} MB)");
+			Debug.Log($"GPU: {SystemInfo.graphicsDeviceName} (VRAM: {SystemInfo.graphicsMemorySize} MB)");
+		}
+		
 		private void logReceived(string logString, string stackTrace, LogType type)
 		{
 			EConsoleEntryType entryType;
