@@ -457,6 +457,17 @@ namespace Managers
 				}
 			});
 			
+			AddCommand("resetsettings", "Reset all settings", () =>
+			{
+				SettingsManager.Instance.ResetSettings();
+				
+				var title = Title.Instance;
+				if (title == null || title.Settings.CurrentPage == null)
+					return;
+
+				title.Settings.CurrentPage.Select(true);
+			});
+			
 			AddCommand("help", "Lists all commands", () =>
 			{
 				AddEntry(EConsoleEntryType.Info, "Available Commands:");

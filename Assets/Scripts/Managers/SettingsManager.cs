@@ -89,6 +89,12 @@ namespace Managers
 			SetSetting(key, setting.DefaultValue);
 		}
 		
+		public void ResetSettings()
+		{
+			foreach (var pair in settings)
+				DefaultSetting(pair.Key);
+		}
+
 		#endregion
 
 		#region Get
@@ -271,12 +277,6 @@ namespace Managers
 					}
 				}
 			}
-		}
-
-		private void resetSettings()
-		{
-			foreach (var pair in settings)
-				DefaultSetting(pair.Key);
 		}
 		
 		private void setupSettings()
@@ -627,7 +627,7 @@ namespace Managers
 
 			#endregion
 			
-			resetSettings();
+			ResetSettings();
 			loadSettings();
 			saveSettings();
 		}
