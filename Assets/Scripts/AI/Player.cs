@@ -516,7 +516,7 @@ namespace AI
 
 		private void onScroll(InputAction.CallbackContext ctx)
 		{
-			if (Spells.Count < 2 || !ScrollAction.action.WasPressedThisFrame())
+			if (Spells.Count < 2)
 				return;
 			
 			var currentIndex = GetSpellIndex(Spell != null ? Spell.SpellData : null);

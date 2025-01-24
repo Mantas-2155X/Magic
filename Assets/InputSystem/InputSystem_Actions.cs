@@ -338,7 +338,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Gamepad"",
                     ""id"": ""d0ac4079-6a3e-4649-b492-3c9fae07b50a"",
                     ""path"": ""2DVector"",
-                    ""interactions"": """",
+                    ""interactions"": ""PressAndRepeat(holdTime=0.25,repeatTime=0.15,press=true)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""HotbarScroll"",
@@ -790,7 +790,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""id"": ""5b714479-2337-4daa-ac7f-298a01a43203"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""PressAndRepeat(holdTime=0.25,repeatTime=0.15,press=true)"",
                     ""initialStateCheck"": false
                 }
             ],
