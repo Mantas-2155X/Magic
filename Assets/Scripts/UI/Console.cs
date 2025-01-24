@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using AYellowpaper.SerializedCollections;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -67,6 +68,33 @@ namespace UI
 			historyIndex = history.Count;
 			refresh();
 			selectDelayed().Forget();
+		}
+
+		public void OnOpenLogsClicked()
+		{
+			var filePath = Application.consoleLogPath;
+			if (string.IsNullOrEmpty(filePath))
+			{
+				UnityEngine.Debug.LogWarning("[Console] Log path not found");
+				return;
+			}
+
+			var fileInfo = new FileInfo(filePath);
+			if (!fileInfo.Exists)
+			{
+				UnityEngine.Debug.LogWarning("[Console] Log file not found");
+				return;
+			}
+
+			var directory = fileInfo.DirectoryName;
+			if (string.IsNullOrEmpty(directory))
+			{
+				UnityEngine.Debug.LogWarning("[Console] Log directory not found");
+				return;
+			}
+
+			UnityEngine.Debug.Log($"[Console] Opening path {directory}");
+			Application.OpenURL($"file:///{directory}");
 		}
 		
 		public void OnCloseClicked()
