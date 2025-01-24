@@ -297,11 +297,7 @@ namespace Managers
 					break;
 				}
 
-				if (RenderManager.Instance.Resolutions.Contains(defaultResolution))
-				{
-					Debug.Log($"[SettingsManager] Native resolution set to {defaultResolution}");
-				}
-				else
+				if (!RenderManager.Instance.Resolutions.Contains(defaultResolution))
 				{
 					defaultResolution = "1920x1080";
 					Debug.LogWarning("[SettingsManager] Native resolution unsupported, defaulting");

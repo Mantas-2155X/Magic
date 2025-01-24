@@ -315,6 +315,7 @@ namespace Managers
 				var result = provider.CompileAssemblyFromSource(parameters, compileString);
 
 				var anyErrors = false;
+				
 				foreach (CompilerError error in result.Errors)
 				{
 					Debug.LogError(error);
