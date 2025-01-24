@@ -6,6 +6,7 @@ using System.IO;
 using AI.Enums;
 using Managers.Events;
 using Microsoft.CSharp;
+using Tools;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -115,22 +116,17 @@ namespace Managers
 				return EConsoleCommandResult.NotFound;
 			}
 			
-			var split = name.Split(" ");
-			
-			var newSplit = new List<string>();
-			for (var i = 0; i < split.Length; i++)
+			var split = new List<string>(TextTools.ParseText(name, ' ', '"'));
+			for (var i = split.Count - 1; i >= 0; i--)
 			{
 				var entry = split[i];
 				
 				// Remove empty or space characters from the parameters
 				if (string.IsNullOrWhiteSpace(entry))
-					continue;
-				
-				newSplit.Add(entry);
+					split.RemoveAt(i);
 			}
-			split = newSplit.ToArray();
 			
-			if (split.Length == 0)
+			if (split.Count == 0)
 			{
 				// No command specified, fail
 				return EConsoleCommandResult.NotFound;
@@ -145,7 +141,7 @@ namespace Managers
 				var commandParameters = command.Parameters;
 				if (commandParameters == null)
 				{
-					if (split.Length > 1)
+					if (split.Count > 1)
 					{
 						// No parameters in command but there are some in the input, fail
 						return EConsoleCommandResult.TooManyParameters;
@@ -156,12 +152,12 @@ namespace Managers
 					return EConsoleCommandResult.Success;
 				}
 				
-				if (commandParameters.Length != split.Length - 1)
+				if (commandParameters.Length != split.Count - 1)
 				{
-					if (split.Length - 1 != 0 || command.BasicAction == null)
+					if (split.Count - 1 != 0 || command.BasicAction == null)
 					{
 						// Match parameter count if there's no basic action
-						return commandParameters.Length > split.Length - 1 ? EConsoleCommandResult.NotEnoughParameters : EConsoleCommandResult.TooManyParameters;
+						return commandParameters.Length > split.Count - 1 ? EConsoleCommandResult.NotEnoughParameters : EConsoleCommandResult.TooManyParameters;
 					}
 
 					// Command has parameters but input doesn't, run the basic action
@@ -303,12 +299,10 @@ namespace Managers
 				var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 				foreach (var assembly in assemblies)
 				{
-					var location = assembly.Location;
-					
-					if (assembly.IsDynamic || assembly.FullName.Contains("mscorlib") || !location.Contains("Magic_Data") || !location.Contains("Managed"))
+					if (assembly.IsDynamic || assembly.FullName.Contains("mscorlib") || !assembly.Location.Contains("Magic_Data") || !assembly.Location.Contains("Managed"))
 						continue;
 
-					parameters.ReferencedAssemblies.Add(location);
+					parameters.ReferencedAssemblies.Add(assembly.Location);
 				}
 				
 				var compileString = $"public class TestClass {{ public void TestMethod() {{ {args[0]} }} }}";
