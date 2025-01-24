@@ -148,7 +148,7 @@ namespace Managers
 					if (split.Length > 1)
 					{
 						// No parameters in command but there are some in the input, fail
-						return EConsoleCommandResult.IncorrectUsage;
+						return EConsoleCommandResult.TooManyParameters;
 					}
 					
 					// No parameters in command and input, run the basic action
@@ -160,8 +160,8 @@ namespace Managers
 				{
 					if (split.Length - 1 != 0 || command.BasicAction == null)
 					{
-						// Command has parameters but input doesn't and there isn't a basic action, fail
-						return EConsoleCommandResult.IncorrectUsage;
+						// Match parameter count if there's no basic action
+						return commandParameters.Length > split.Length - 1 ? EConsoleCommandResult.NotEnoughParameters : EConsoleCommandResult.TooManyParameters;
 					}
 
 					// Command has parameters but input doesn't, run the basic action
@@ -182,7 +182,7 @@ namespace Managers
 							if (!float.TryParse(split[k + 1], NumberStyles.Float, CultureInfo.CurrentCulture, out var floatValue))
 							{
 								// Command parameter should be a float but the input parameter isn't, fail
-								return EConsoleCommandResult.IncorrectUsage;
+								return EConsoleCommandResult.InvalidParameter;
 							}
 							inputParameters[k] = floatValue;
 							break;
@@ -190,7 +190,7 @@ namespace Managers
 							if (!int.TryParse(split[k + 1], NumberStyles.Integer, CultureInfo.CurrentCulture, out var intValue))
 							{
 								// Command parameter should be an int but the input parameter isn't, fail
-								return EConsoleCommandResult.IncorrectUsage;
+								return EConsoleCommandResult.InvalidParameter;
 							}
 							inputParameters[k] = intValue;
 							break;
@@ -198,7 +198,7 @@ namespace Managers
 							if (!bool.TryParse(split[k + 1], out var boolValue))
 							{
 								// Command parameter should be a bool but the input parameter isn't, fail
-								return EConsoleCommandResult.IncorrectUsage;
+								return EConsoleCommandResult.InvalidParameter;
 							}
 							inputParameters[k] = boolValue;
 							break;
@@ -569,7 +569,9 @@ namespace Managers
 		{
 			NotFound,
 			Success,
-			IncorrectUsage
+			InvalidParameter,
+			TooManyParameters,
+			NotEnoughParameters
 		}
 	}
 }

@@ -135,8 +135,14 @@ namespace UI
 							historyIndex = history.Count;
 						}
 						break;
-					case ConsoleManager.EConsoleCommandResult.IncorrectUsage:
-						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Incorrect usage");
+					case ConsoleManager.EConsoleCommandResult.InvalidParameter:
+						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Invalid parameters");
+						break;
+					case ConsoleManager.EConsoleCommandResult.TooManyParameters:
+						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Too many parameters");
+						break;
+					case ConsoleManager.EConsoleCommandResult.NotEnoughParameters:
+						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Not enough parameters");
 						break;
 					default:
 						throw new NotImplementedException();
