@@ -1,8 +1,10 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Globalization;
 using AI.Enums;
 using Managers.Events;
+using Microsoft.CSharp;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -286,6 +288,47 @@ namespace Managers
 						AddEntry(EConsoleEntryType.Warning, "Incorrect type specified (error, assert, exception, warning, log)");
 						return;
 				}
+			});
+			
+			AddCommand("eval", "Compile and run code (Dangerous, do not use)", new [] {EConsoleCommandParameter.String}, args =>
+			{
+				var parameters = new CompilerParameters
+				{
+					GenerateExecutable = false,
+					GenerateInMemory = true,
+				};
+
+				var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+				foreach (var assembly in assemblies)
+				{
+					var location = assembly.Location;
+					
+					if (assembly.IsDynamic || assembly.FullName.Contains("mscorlib") || !location.Contains("Magic_Data") || !location.Contains("Managed"))
+						continue;
+
+					parameters.ReferencedAssemblies.Add(location);
+				}
+				
+				var compileString = $"public class TestClass {{ public void TestMethod() {{ {args[0]} }} }}";
+				
+				var provider = new CSharpCodeProvider();
+				var result = provider.CompileAssemblyFromSource(parameters, compileString);
+
+				var anyErrors = false;
+				foreach (CompilerError error in result.Errors)
+				{
+					Debug.LogError(error);
+					anyErrors = true;
+				}
+				
+				if (anyErrors)
+					return;
+
+				var compiledAssembly = result.CompiledAssembly;
+				var compiledType = compiledAssembly.GetType("TestClass");
+				var compiledInstance = Activator.CreateInstance(compiledType);
+				var compiledMethod = compiledInstance.GetType().GetMethod("TestMethod");
+				compiledMethod!.Invoke(compiledInstance, null);
 			});
 			
 			AddCommand("scenes", "Lists all available scenes", () =>
