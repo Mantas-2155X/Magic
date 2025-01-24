@@ -7,7 +7,15 @@ namespace Scenes
 	{
 		public void Start()
 		{
-			Title.Instance.Open();
+			var title = Title.Instance;
+			title.Open();
+
+			var console = title.Console;
+			if (console.isActiveAndEnabled)
+			{
+				// Take focus and select the input field
+				console.OnEnable();
+			}
 		}
 	}
 }

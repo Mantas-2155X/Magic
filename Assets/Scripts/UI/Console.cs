@@ -288,8 +288,8 @@ namespace UI
 			if (this == null || !isActiveAndEnabled)
 				return;
 			
-			Input.Select();
 			Input.ActivateInputField();
+			Input.Select();
 		}
 
 		private async UniTaskVoid scrollDelayed()
