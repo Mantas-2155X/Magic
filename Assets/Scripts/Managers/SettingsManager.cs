@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using AI;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -603,6 +604,25 @@ namespace Managers
 						renderAsset.msaaSampleCount = 8;
 						break;
 				}
+			});
+
+			#endregion
+
+			#region Controls
+
+			AddSetting("controls-sensitivity-mouse", "SETTINGS_CONTROLS_SENSITIVITY", "SETTINGS_CONTROLS_SENSITIVITY_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
+			{
+				Player.MouseSensitivity = Convert.ToSingle(newValue);
+			});
+			
+			AddSetting("controls-sensitivity-controller", "SETTINGS_CONTROLS_SENSITIVITY", "SETTINGS_CONTROLS_SENSITIVITY_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
+			{
+				Player.ControllerSensitivity = Convert.ToSingle(newValue);
+			});
+			
+			AddSetting("controls-allowhotbarscrolling", "SETTINGS_CONTROLS_ALLOWHOTBARSCROLLING", "SETTINGS_CONTROLS_ALLOWHOTBARSCROLLING_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
+			{
+				Player.AllowHotbarScrolling = Convert.ToBoolean(newValue);
 			});
 
 			#endregion

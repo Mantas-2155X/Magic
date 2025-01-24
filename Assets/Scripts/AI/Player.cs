@@ -74,11 +74,13 @@ namespace AI
 
 		#endregion
 
-		[SerializeField]
-		public float LookSensitivity = 0.1f;
+		// Overriden by settings, caching here to reduce setting lookups
+		public static float MouseSensitivity = 1f;
+		public static float ControllerSensitivity = 1f;
+		public static bool AllowHotbarScrolling = true;
 		
 		[SerializeField]
-		public float UseDistance = 2f;
+		public float UseDistance = 2.5f;
 
 		[SerializeField]
 		public Vector3 ViewmodelPosition = new (0.76f, -1.24f, 1.09f);
@@ -430,6 +432,16 @@ namespace AI
 		private void onLookPerformed(InputAction.CallbackContext ctx)
 		{
 			lookDirection = ctx.ReadValue<Vector2>();
+
+			switch (ctx.control.device)
+			{
+				case Mouse or Pointer:
+					lookDirection = lookDirection * 0.1f * MouseSensitivity;
+					break;
+				case Gamepad or Joystick:
+					lookDirection = lookDirection * 0.35f * ControllerSensitivity;
+					break;
+			}
 		}
 		
 		private void onLookCanceled(InputAction.CallbackContext ctx)
@@ -517,6 +529,10 @@ namespace AI
 		private void onScroll(InputAction.CallbackContext ctx)
 		{
 			if (Spells.Count < 2)
+				return;
+
+			// Scrollwheel switching might be disabled
+			if (!AllowHotbarScrolling && ctx.control.device is Mouse)
 				return;
 			
 			var currentIndex = GetSpellIndex(Spell != null ? Spell.SpellData : null);
