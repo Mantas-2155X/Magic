@@ -108,7 +108,6 @@ namespace AI
 		{
 			Camera = Camera.main;
 			CameraTr = Camera!.transform;
-			lookDirection = new Vector2(transform.eulerAngles.x, transform.eulerAngles.y);
 		}
 
 		public void OnDestroy()
@@ -143,10 +142,29 @@ namespace AI
 			if (!IsAlive)
 				return;
 
-			Body.Rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0f, lookDirection.y, 0f)));
-
-			CameraTr.eulerAngles = new Vector3(lookDirection.x, lookDirection.y, 0f);
 			CameraTr.position = transform.position + Vector3.up * 0.5f;
+
+			if (lookDirection == Vector2.zero)
+				return;
+			
+			var cameraAngle = CameraTr.eulerAngles;
+			cameraAngle.y += lookDirection.x;
+
+			var cameraAngleX = cameraAngle.x - lookDirection.y;
+			
+			if (cameraAngleX > 180)
+				cameraAngleX -= 360;
+			
+			if (cameraAngleX > 85)
+				cameraAngleX = 85;
+			
+			if (cameraAngleX < -85)
+				cameraAngleX = -85;
+			
+			cameraAngle.x = cameraAngleX;
+			
+			CameraTr.eulerAngles = cameraAngle;
+			Body.Rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0f, cameraAngle.y, 0f)));
 		}
 
 		public void FixedUpdate()
@@ -249,6 +267,7 @@ namespace AI
 
 			var look = LookAction.action;
 			look.performed += onLookPerformed;
+			look.canceled += onLookCanceled;
 			look.Enable();
 			
 			var move = MoveAction.action;
@@ -331,6 +350,7 @@ namespace AI
 			var look = LookAction.action;
 			look.Disable();
 			look.performed -= onLookPerformed;
+			look.canceled -= onLookCanceled;
 
 			var move = MoveAction.action;
 			move.Disable();
@@ -409,14 +429,12 @@ namespace AI
 
 		private void onLookPerformed(InputAction.CallbackContext ctx)
 		{
-			var value = ctx.ReadValue<Vector2>();
-			lookDirection += new Vector2(-value.y, value.x) * LookSensitivity;
-
-			if (lookDirection.x > 85)
-				lookDirection.x = 85;
-			
-			if (lookDirection.x < -85)
-				lookDirection.x = -85;
+			lookDirection = ctx.ReadValue<Vector2>();
+		}
+		
+		private void onLookCanceled(InputAction.CallbackContext ctx)
+		{
+			lookDirection = Vector2.zero;
 		}
 
 		private void onMovePerformed(InputAction.CallbackContext ctx)

@@ -26,10 +26,7 @@ namespace UI
 		public TMP_InputField Input;
 		
 		[SerializeField]
-		public InputActionReference PreviousHistoryAction;
-		
-		[SerializeField]
-		public InputActionReference NextHistoryAction;
+		public InputActionReference HistoryAction;
 
 		[SerializeField]
 		public List<TMP_Text> Items = new ();
@@ -45,13 +42,9 @@ namespace UI
 			ConsoleManager.OnConsoleEntryAddedEvent.AddListener(onConsoleEntryAdded);
 			ConsoleManager.OnConsoleClearedEvent.AddListener(onConsoleCleared);
 			
-			var previousHistoryAction = PreviousHistoryAction.action;
-			previousHistoryAction.performed += onPreviousHistoryPerformed;
-			previousHistoryAction.Enable();
-			
-			var nextHistoryAction = NextHistoryAction.action;
-			nextHistoryAction.performed += onNextHistoryPerformed;
-			nextHistoryAction.Enable();
+			var historyAction = HistoryAction.action;
+			historyAction.performed += onHistory;
+			historyAction.Enable();
 			
 			Input.onSubmit.AddListener(onSubmit);
 		}
@@ -236,7 +229,21 @@ namespace UI
 			refresh();
 		}
 
-		private void onPreviousHistoryPerformed(InputAction.CallbackContext ctx)
+		private void onHistory(InputAction.CallbackContext ctx)
+		{
+			var value = ctx.ReadValue<Vector2>();
+			switch (value.y)
+			{
+				case > 0f:
+					previousHistory();
+					break;
+				case < 0f:
+					nextHistory();
+					break;
+			}
+		}
+		
+		private void previousHistory()
 		{
 			if (!Input.IsActive() || !Input.isFocused)
 				return;
@@ -255,7 +262,7 @@ namespace UI
 			moveToEndDelayed().Forget();
 		}
 		
-		private void onNextHistoryPerformed(InputAction.CallbackContext ctx)
+		private void nextHistory()
 		{
 			if (!Input.IsActive() || !Input.isFocused)
 				return;

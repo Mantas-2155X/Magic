@@ -109,7 +109,16 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Scroll"",
+                    ""name"": ""Spellbook"",
+                    ""type"": ""Button"",
+                    ""id"": ""290b495c-3136-481a-ad9f-c7b1d8837c0f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HotbarScroll"",
                     ""type"": ""PassThrough"",
                     ""id"": ""53706573-892a-49f6-a0d8-ce6cf7127931"",
                     ""expectedControlType"": ""Vector2"",
@@ -175,15 +184,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Hotbar7"",
                     ""type"": ""Button"",
                     ""id"": ""b95063ad-43e9-49a2-9905-e1f70c378671"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Spellbook"",
-                    ""type"": ""Button"",
-                    ""id"": ""290b495c-3136-481a-ad9f-c7b1d8837c0f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -330,9 +330,42 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Scroll"",
+                    ""action"": ""HotbarScroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Gamepad"",
+                    ""id"": ""d0ac4079-6a3e-4649-b492-3c9fae07b50a"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarScroll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""id"": ""a91042e0-3ac2-4deb-aa2d-801e4ba81b4e"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""HotbarScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Down"",
+                    ""id"": ""696b3162-f7ea-43f2-ba02-c5b4d01d1926"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""HotbarScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -567,6 +600,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""40844fd6-c893-480f-bd4b-ee0309b08558"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Light"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""23f60a3b-1fc5-4cde-a357-e20e470d8497"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
@@ -652,6 +696,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Spellbook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""547225cc-0462-484a-a73b-f086941cda50"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Spellbook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -692,11 +747,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6fb7e62a-5088-4154-8b65-8d9a84f2f57b"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Title"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""d577e360-b12b-405b-904c-cc826977553e"",
                     ""path"": ""<Keyboard>/backquote"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Console"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02dc0585-7b6f-433c-928c-7702b4d8a07c"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""Console"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -708,19 +785,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ""id"": ""f2108ddb-763f-47bb-97d0-2c6149b0e506"",
             ""actions"": [
                 {
-                    ""name"": ""Previous Console History"",
-                    ""type"": ""Button"",
-                    ""id"": ""006a10f1-af66-4f07-bc7a-be557e03080e"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Next Console History"",
-                    ""type"": ""Button"",
-                    ""id"": ""d9d612d5-7799-4364-86ad-fc33b79f3113"",
-                    ""expectedControlType"": """",
+                    ""name"": ""History"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""5b714479-2337-4daa-ac7f-298a01a43203"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -728,26 +796,136 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""c1b6e5ce-6a3f-49d5-8db0-92577dc27206"",
-                    ""path"": ""<Keyboard>/upArrow"",
+                    ""name"": ""Gamepad"",
+                    ""id"": ""e565416d-3580-441d-8e3e-3fac3bcee8af"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Previous Console History"",
+                    ""groups"": """",
+                    ""action"": ""History"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""a21e8ade-5dd6-419f-b5f4-85e6f56c3650"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f80f4028-e761-42dd-9c09-0a061acf9ce1"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""c7dc7f9d-9f8f-455b-b2b2-884688bf91d9"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""c3f97a65-159f-45c8-a388-06a778d14364"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fc48dd2-8fc5-41f5-b94e-5561ea36c03d"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""History"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""3dbf7ffc-f814-46a7-96a0-a8faf1dfa9a9"",
+                    ""name"": ""Joystick"",
+                    ""id"": ""47081aaf-dc67-44f6-b96f-a88758b98fd2"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""History"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""1ece4340-4391-4e46-8e29-415430c55604"",
+                    ""path"": ""<Joystick>/stick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Joystick"",
+                    ""action"": ""History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""be0523c3-4f2a-411e-8282-c5b93667bc5a"",
+                    ""path"": ""<Joystick>/stick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Joystick"",
+                    ""action"": ""History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""e889afce-e2c7-4f25-b0c8-4ca17b162d2d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""History"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""866181ab-b945-4d56-9b08-02cabc31d6c7"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""History"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""e1f9eb2b-6477-41d6-8773-1df1dbff618e"",
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Next Console History"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""History"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1342,7 +1520,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Noclip = m_Player.FindAction("Noclip", throwIfNotFound: true);
         m_Player_Light = m_Player.FindAction("Light", throwIfNotFound: true);
-        m_Player_Scroll = m_Player.FindAction("Scroll", throwIfNotFound: true);
+        m_Player_Spellbook = m_Player.FindAction("Spellbook", throwIfNotFound: true);
+        m_Player_HotbarScroll = m_Player.FindAction("HotbarScroll", throwIfNotFound: true);
         m_Player_Hotbar1 = m_Player.FindAction("Hotbar1", throwIfNotFound: true);
         m_Player_Hotbar2 = m_Player.FindAction("Hotbar2", throwIfNotFound: true);
         m_Player_Hotbar3 = m_Player.FindAction("Hotbar3", throwIfNotFound: true);
@@ -1350,15 +1529,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Hotbar5 = m_Player.FindAction("Hotbar5", throwIfNotFound: true);
         m_Player_Hotbar6 = m_Player.FindAction("Hotbar6", throwIfNotFound: true);
         m_Player_Hotbar7 = m_Player.FindAction("Hotbar7", throwIfNotFound: true);
-        m_Player_Spellbook = m_Player.FindAction("Spellbook", throwIfNotFound: true);
         // Title
         m_Title = asset.FindActionMap("Title", throwIfNotFound: true);
         m_Title_Title = m_Title.FindAction("Title", throwIfNotFound: true);
         m_Title_Console = m_Title.FindAction("Console", throwIfNotFound: true);
         // Console
         m_Console = asset.FindActionMap("Console", throwIfNotFound: true);
-        m_Console_PreviousConsoleHistory = m_Console.FindAction("Previous Console History", throwIfNotFound: true);
-        m_Console_NextConsoleHistory = m_Console.FindAction("Next Console History", throwIfNotFound: true);
+        m_Console_History = m_Console.FindAction("History", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1449,7 +1626,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Noclip;
     private readonly InputAction m_Player_Light;
-    private readonly InputAction m_Player_Scroll;
+    private readonly InputAction m_Player_Spellbook;
+    private readonly InputAction m_Player_HotbarScroll;
     private readonly InputAction m_Player_Hotbar1;
     private readonly InputAction m_Player_Hotbar2;
     private readonly InputAction m_Player_Hotbar3;
@@ -1457,7 +1635,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Hotbar5;
     private readonly InputAction m_Player_Hotbar6;
     private readonly InputAction m_Player_Hotbar7;
-    private readonly InputAction m_Player_Spellbook;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1471,7 +1648,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Noclip => m_Wrapper.m_Player_Noclip;
         public InputAction @Light => m_Wrapper.m_Player_Light;
-        public InputAction @Scroll => m_Wrapper.m_Player_Scroll;
+        public InputAction @Spellbook => m_Wrapper.m_Player_Spellbook;
+        public InputAction @HotbarScroll => m_Wrapper.m_Player_HotbarScroll;
         public InputAction @Hotbar1 => m_Wrapper.m_Player_Hotbar1;
         public InputAction @Hotbar2 => m_Wrapper.m_Player_Hotbar2;
         public InputAction @Hotbar3 => m_Wrapper.m_Player_Hotbar3;
@@ -1479,7 +1657,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Hotbar5 => m_Wrapper.m_Player_Hotbar5;
         public InputAction @Hotbar6 => m_Wrapper.m_Player_Hotbar6;
         public InputAction @Hotbar7 => m_Wrapper.m_Player_Hotbar7;
-        public InputAction @Spellbook => m_Wrapper.m_Player_Spellbook;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1516,9 +1693,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Light.started += instance.OnLight;
             @Light.performed += instance.OnLight;
             @Light.canceled += instance.OnLight;
-            @Scroll.started += instance.OnScroll;
-            @Scroll.performed += instance.OnScroll;
-            @Scroll.canceled += instance.OnScroll;
+            @Spellbook.started += instance.OnSpellbook;
+            @Spellbook.performed += instance.OnSpellbook;
+            @Spellbook.canceled += instance.OnSpellbook;
+            @HotbarScroll.started += instance.OnHotbarScroll;
+            @HotbarScroll.performed += instance.OnHotbarScroll;
+            @HotbarScroll.canceled += instance.OnHotbarScroll;
             @Hotbar1.started += instance.OnHotbar1;
             @Hotbar1.performed += instance.OnHotbar1;
             @Hotbar1.canceled += instance.OnHotbar1;
@@ -1540,9 +1720,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Hotbar7.started += instance.OnHotbar7;
             @Hotbar7.performed += instance.OnHotbar7;
             @Hotbar7.canceled += instance.OnHotbar7;
-            @Spellbook.started += instance.OnSpellbook;
-            @Spellbook.performed += instance.OnSpellbook;
-            @Spellbook.canceled += instance.OnSpellbook;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1574,9 +1751,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Light.started -= instance.OnLight;
             @Light.performed -= instance.OnLight;
             @Light.canceled -= instance.OnLight;
-            @Scroll.started -= instance.OnScroll;
-            @Scroll.performed -= instance.OnScroll;
-            @Scroll.canceled -= instance.OnScroll;
+            @Spellbook.started -= instance.OnSpellbook;
+            @Spellbook.performed -= instance.OnSpellbook;
+            @Spellbook.canceled -= instance.OnSpellbook;
+            @HotbarScroll.started -= instance.OnHotbarScroll;
+            @HotbarScroll.performed -= instance.OnHotbarScroll;
+            @HotbarScroll.canceled -= instance.OnHotbarScroll;
             @Hotbar1.started -= instance.OnHotbar1;
             @Hotbar1.performed -= instance.OnHotbar1;
             @Hotbar1.canceled -= instance.OnHotbar1;
@@ -1598,9 +1778,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Hotbar7.started -= instance.OnHotbar7;
             @Hotbar7.performed -= instance.OnHotbar7;
             @Hotbar7.canceled -= instance.OnHotbar7;
-            @Spellbook.started -= instance.OnSpellbook;
-            @Spellbook.performed -= instance.OnSpellbook;
-            @Spellbook.canceled -= instance.OnSpellbook;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1676,14 +1853,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     // Console
     private readonly InputActionMap m_Console;
     private List<IConsoleActions> m_ConsoleActionsCallbackInterfaces = new List<IConsoleActions>();
-    private readonly InputAction m_Console_PreviousConsoleHistory;
-    private readonly InputAction m_Console_NextConsoleHistory;
+    private readonly InputAction m_Console_History;
     public struct ConsoleActions
     {
         private @InputSystem_Actions m_Wrapper;
         public ConsoleActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @PreviousConsoleHistory => m_Wrapper.m_Console_PreviousConsoleHistory;
-        public InputAction @NextConsoleHistory => m_Wrapper.m_Console_NextConsoleHistory;
+        public InputAction @History => m_Wrapper.m_Console_History;
         public InputActionMap Get() { return m_Wrapper.m_Console; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1693,22 +1868,16 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_ConsoleActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_ConsoleActionsCallbackInterfaces.Add(instance);
-            @PreviousConsoleHistory.started += instance.OnPreviousConsoleHistory;
-            @PreviousConsoleHistory.performed += instance.OnPreviousConsoleHistory;
-            @PreviousConsoleHistory.canceled += instance.OnPreviousConsoleHistory;
-            @NextConsoleHistory.started += instance.OnNextConsoleHistory;
-            @NextConsoleHistory.performed += instance.OnNextConsoleHistory;
-            @NextConsoleHistory.canceled += instance.OnNextConsoleHistory;
+            @History.started += instance.OnHistory;
+            @History.performed += instance.OnHistory;
+            @History.canceled += instance.OnHistory;
         }
 
         private void UnregisterCallbacks(IConsoleActions instance)
         {
-            @PreviousConsoleHistory.started -= instance.OnPreviousConsoleHistory;
-            @PreviousConsoleHistory.performed -= instance.OnPreviousConsoleHistory;
-            @PreviousConsoleHistory.canceled -= instance.OnPreviousConsoleHistory;
-            @NextConsoleHistory.started -= instance.OnNextConsoleHistory;
-            @NextConsoleHistory.performed -= instance.OnNextConsoleHistory;
-            @NextConsoleHistory.canceled -= instance.OnNextConsoleHistory;
+            @History.started -= instance.OnHistory;
+            @History.performed -= instance.OnHistory;
+            @History.canceled -= instance.OnHistory;
         }
 
         public void RemoveCallbacks(IConsoleActions instance)
@@ -1900,7 +2069,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnNoclip(InputAction.CallbackContext context);
         void OnLight(InputAction.CallbackContext context);
-        void OnScroll(InputAction.CallbackContext context);
+        void OnSpellbook(InputAction.CallbackContext context);
+        void OnHotbarScroll(InputAction.CallbackContext context);
         void OnHotbar1(InputAction.CallbackContext context);
         void OnHotbar2(InputAction.CallbackContext context);
         void OnHotbar3(InputAction.CallbackContext context);
@@ -1908,7 +2078,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnHotbar5(InputAction.CallbackContext context);
         void OnHotbar6(InputAction.CallbackContext context);
         void OnHotbar7(InputAction.CallbackContext context);
-        void OnSpellbook(InputAction.CallbackContext context);
     }
     public interface ITitleActions
     {
@@ -1917,8 +2086,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     }
     public interface IConsoleActions
     {
-        void OnPreviousConsoleHistory(InputAction.CallbackContext context);
-        void OnNextConsoleHistory(InputAction.CallbackContext context);
+        void OnHistory(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -69,11 +69,11 @@ namespace UI
 			updateButtons();
 
 			var titleAction = TitleAction.action;
-			titleAction.performed += onTitlePerformed;
+			titleAction.performed += onTitle;
 			titleAction.Enable();
 			
 			var consoleAction = ConsoleAction.action;
-			consoleAction.performed += onConsolePerformed;
+			consoleAction.performed += onConsole;
 			consoleAction.Enable();
 		}
 
@@ -166,7 +166,7 @@ namespace UI
 
 		#region Input
 
-		private void onTitlePerformed(InputAction.CallbackContext ctx)
+		private void onTitle(InputAction.CallbackContext ctx)
 		{
 			if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title")
 				return;
@@ -174,7 +174,7 @@ namespace UI
 			Toggle();
 		}
 		
-		private void onConsolePerformed(InputAction.CallbackContext ctx)
+		private void onConsole(InputAction.CallbackContext ctx)
 		{
 			if (Console == null)
 				return;

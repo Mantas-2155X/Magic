@@ -87,7 +87,16 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Scroll",
+                    "name": "Spellbook",
+                    "type": "Button",
+                    "id": "290b495c-3136-481a-ad9f-c7b1d8837c0f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HotbarScroll",
                     "type": "PassThrough",
                     "id": "53706573-892a-49f6-a0d8-ce6cf7127931",
                     "expectedControlType": "Vector2",
@@ -153,15 +162,6 @@
                     "name": "Hotbar7",
                     "type": "Button",
                     "id": "b95063ad-43e9-49a2-9905-e1f70c378671",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Spellbook",
-                    "type": "Button",
-                    "id": "290b495c-3136-481a-ad9f-c7b1d8837c0f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -308,9 +308,42 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Scroll",
+                    "action": "HotbarScroll",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Gamepad",
+                    "id": "d0ac4079-6a3e-4649-b492-3c9fae07b50a",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HotbarScroll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Up",
+                    "id": "a91042e0-3ac2-4deb-aa2d-801e4ba81b4e",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "HotbarScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "696b3162-f7ea-43f2-ba02-c5b4d01d1926",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "HotbarScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -545,6 +578,17 @@
                 },
                 {
                     "name": "",
+                    "id": "40844fd6-c893-480f-bd4b-ee0309b08558",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Light",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "23f60a3b-1fc5-4cde-a357-e20e470d8497",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -630,6 +674,17 @@
                     "action": "Spellbook",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "547225cc-0462-484a-a73b-f086941cda50",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Spellbook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -670,11 +725,33 @@
                 },
                 {
                     "name": "",
+                    "id": "6fb7e62a-5088-4154-8b65-8d9a84f2f57b",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Title",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d577e360-b12b-405b-904c-cc826977553e",
                     "path": "<Keyboard>/backquote",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
+                    "action": "Console",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "02dc0585-7b6f-433c-928c-7702b4d8a07c",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
                     "action": "Console",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -686,19 +763,10 @@
             "id": "f2108ddb-763f-47bb-97d0-2c6149b0e506",
             "actions": [
                 {
-                    "name": "Previous Console History",
-                    "type": "Button",
-                    "id": "006a10f1-af66-4f07-bc7a-be557e03080e",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Next Console History",
-                    "type": "Button",
-                    "id": "d9d612d5-7799-4364-86ad-fc33b79f3113",
-                    "expectedControlType": "",
+                    "name": "History",
+                    "type": "PassThrough",
+                    "id": "5b714479-2337-4daa-ac7f-298a01a43203",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -706,26 +774,136 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "c1b6e5ce-6a3f-49d5-8db0-92577dc27206",
-                    "path": "<Keyboard>/upArrow",
+                    "name": "Gamepad",
+                    "id": "e565416d-3580-441d-8e3e-3fac3bcee8af",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Previous Console History",
+                    "groups": "",
+                    "action": "History",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "a21e8ade-5dd6-419f-b5f4-85e6f56c3650",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "History",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "up",
+                    "id": "f80f4028-e761-42dd-9c09-0a061acf9ce1",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "History",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "c7dc7f9d-9f8f-455b-b2b2-884688bf91d9",
+                    "path": "<Gamepad>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "History",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "c3f97a65-159f-45c8-a388-06a778d14364",
+                    "path": "<Gamepad>/rightStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "History",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6fc48dd2-8fc5-41f5-b94e-5561ea36c03d",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "History",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "3dbf7ffc-f814-46a7-96a0-a8faf1dfa9a9",
+                    "name": "Joystick",
+                    "id": "47081aaf-dc67-44f6-b96f-a88758b98fd2",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "History",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "1ece4340-4391-4e46-8e29-415430c55604",
+                    "path": "<Joystick>/stick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Joystick",
+                    "action": "History",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "be0523c3-4f2a-411e-8282-c5b93667bc5a",
+                    "path": "<Joystick>/stick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Joystick",
+                    "action": "History",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Keyboard",
+                    "id": "e889afce-e2c7-4f25-b0c8-4ca17b162d2d",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "History",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "866181ab-b945-4d56-9b08-02cabc31d6c7",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "History",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "e1f9eb2b-6477-41d6-8773-1df1dbff618e",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Next Console History",
+                    "groups": "Keyboard&Mouse",
+                    "action": "History",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 }
             ]
         },
