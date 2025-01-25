@@ -10,12 +10,12 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public Localizer MouseSensitivityLocalizer;
 		[SerializeField]
-		public Slider MouseSensitivitySlider;
+		public Elements.Slider MouseSensitivitySlider;
 		
 		[SerializeField]
 		public Localizer ControllerSensitivityLocalizer;
 		[SerializeField]
-		public Slider ControllerSensitivitySlider;
+		public Elements.Slider ControllerSensitivitySlider;
 		
 		[SerializeField]
 		public Localizer AllowHotbarScrollingLocalizer;
