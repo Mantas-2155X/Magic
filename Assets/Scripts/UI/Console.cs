@@ -60,7 +60,7 @@ namespace UI
 			transform.SetAsLastSibling();
 			historyIndex = history.Count;
 			refresh();
-			selectDelayed().Forget();
+			Select();
 		}
 
 		public void OnOpenLogsClicked()
@@ -147,8 +147,7 @@ namespace UI
 			}
 			
 			Input.SetTextWithoutNotify("");
-			
-			selectDelayed().Forget();
+			Select();
 		}
 
 		public void Toggle()
@@ -169,6 +168,16 @@ namespace UI
 			}
 
 			gameObject.SetActive(state);
+			
+			if (state)
+				Select();
+			else
+				Title.Instance.Select(true);
+		}
+		
+		public void Select()
+		{
+			selectDelayed().Forget();
 		}
 		
 		private void refresh()

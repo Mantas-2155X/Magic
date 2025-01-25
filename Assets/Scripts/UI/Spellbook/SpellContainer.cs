@@ -21,6 +21,9 @@ namespace UI.Spellbook
 
 		[SerializeField]
 		public TMP_Text Mana;
+
+		[SerializeField]
+		public Button Button;
 		
 		public ISpell Spell { get; private set; }
 		public int Index { get; private set; }

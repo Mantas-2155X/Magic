@@ -71,7 +71,7 @@ namespace UI.Hotbar
 					for (var i = 0; i < Size; i++)
 					{
 						var copy = Instantiate(Template.gameObject, parent);
-						copy.name = $"Container {i}";
+						copy.name = $"Container {Containers.Count}";
 				
 						var container = copy.GetComponent<SpellContainer>();
 						Containers.Add(container);

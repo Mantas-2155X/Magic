@@ -1,5 +1,9 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Managers;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.Settings
 {
@@ -42,6 +46,7 @@ namespace UI.Settings
 		public void OnEnable()
 		{
 			transform.SetAsLastSibling();
+			Select();
 		}
 
 		public void OnCloseClicked()
@@ -67,6 +72,26 @@ namespace UI.Settings
 			}
 
 			gameObject.SetActive(state);
+			
+			if (state)
+				Select();
+			else
+				Title.Instance.Select(true);
+		}
+		
+		public void Select()
+		{
+			selectDelayed().Forget();
+		}
+		
+		private async UniTaskVoid selectDelayed()
+		{
+			await UniTask.NextFrame();
+			
+			if (this == null || !isActiveAndEnabled)
+				return;
+			
+			SelectionManager.Instance.SetSelection(Pages[0].Tab.gameObject);
 		}
 	}
 }

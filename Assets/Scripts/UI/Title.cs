@@ -2,8 +2,10 @@ using System;
 using Managers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using SceneManager = Managers.SceneManager;
 
 namespace UI
@@ -66,7 +68,7 @@ namespace UI
 		{
 			UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneChanged;
 			
-			updateButtons();
+			UpdateButtons();
 
 			var titleAction = TitleAction.action;
 			titleAction.performed += onTitle;
@@ -110,13 +112,16 @@ namespace UI
 				if (aiManager != null && aiManager.Player != null)
 					aiManager.Player.DisableInput();
 				
-				updateButtons();
+				UpdateButtons();
+				Select();
 			}
 			else
 			{
 				var player = AIManager.Instance.Player;
 				if (player != null && player.IsAlive)
 					player.EnableInput();
+				
+				Deselect();
 			}
 		}
 		
@@ -184,7 +189,8 @@ namespace UI
 
 		#endregion
 		
-		private void updateButtons()
+		// todo: turn the buttons into an array and use indexes instead
+		public void UpdateButtons()
 		{
 			var inTitle = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title";
 			
@@ -195,6 +201,105 @@ namespace UI
 			SettingsButton.SetActive(true);
 			ReturnToTitleButton.SetActive(!inTitle);
 			QuitGameButton.SetActive(true);
+			
+			UpdateNavigation();
+		}
+
+		// todo: optimize, too many getcomponent calls
+		public void UpdateNavigation()
+		{
+			// Having the console or settings open might navigate to them since the mode is automatic vertical
+			// Set up explicit nav for top and bottom buttons to prevent that from happening
+			
+			var basicNav = new Navigation
+			{
+				mode = Navigation.Mode.Vertical,
+				wrapAround = true
+			};
+			
+			var shouldExplicit = Console.isActiveAndEnabled || Settings.isActiveAndEnabled;
+			if (shouldExplicit)
+			{
+				var bottomButton = QuitGameButton.GetComponent<Button>();
+
+				Button topButton;
+				Button otherTopButton;
+				
+				if (NewGameButton.activeSelf)
+				{
+					topButton = NewGameButton.GetComponent<Button>();
+					otherTopButton = ContinueButton.GetComponent<Button>();
+				}
+				else
+				{
+					otherTopButton = NewGameButton.GetComponent<Button>();
+					topButton = ContinueButton.GetComponent<Button>();
+				}
+
+				// Restore basic nav to the previous top button
+				otherTopButton.navigation = basicNav;
+				
+				// Top button should nav to bottom button if going up
+				var topNav = new Navigation
+				{
+					mode = Navigation.Mode.Explicit,
+					selectOnUp = bottomButton,
+					selectOnDown = topButton.FindSelectable(topButton.transform.rotation * Vector3.down)
+				};
+
+				topButton.navigation = topNav;
+
+				// Bottom button should nav to top button if going down
+				var botNav = new Navigation
+				{
+					mode = Navigation.Mode.Explicit,
+					selectOnUp = bottomButton.FindSelectable(bottomButton.transform.rotation * Vector3.up),
+					selectOnDown = topButton
+				};
+
+				bottomButton.navigation = botNav;
+			}
+			else
+			{
+				// Restore any nav changes
+				NewGameButton.GetComponent<Button>().navigation = basicNav;
+				ContinueButton.GetComponent<Button>().navigation = basicNav;
+				QuitGameButton.GetComponent<Button>().navigation = basicNav;
+			}
+		}
+
+		public void Select(bool withCondition = false)
+		{
+			if (withCondition)
+			{
+				if (Console.isActiveAndEnabled)
+				{
+					Console.Select();
+					return;
+				}
+				
+				if (Settings.isActiveAndEnabled)
+				{
+					Settings.Select();
+					return;
+				}
+			}
+
+			SelectionManager.Instance.SetSelection(NewGameButton.activeSelf ? NewGameButton : ContinueButton);
+		}
+
+		public void Deselect(bool withCondition = false)
+		{
+			if (withCondition)
+			{
+				if (Console.isActiveAndEnabled)
+					return;
+				
+				if (Settings.isActiveAndEnabled)
+					return;
+			}
+			
+			SelectionManager.Instance.SetSelection(null);
 		}
 		
 		private void onSceneChanged(Scene scene, LoadSceneMode mode)
@@ -202,7 +307,7 @@ namespace UI
 			if (!isActiveAndEnabled)
 				return;
 			
-			updateButtons();
+			UpdateButtons();
 		}
 	}
 }

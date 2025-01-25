@@ -10,6 +10,7 @@ namespace Scenes
 	{
 		public void Awake()
 		{
+			_ = SelectionManager.Instance;
 			_ = ConsoleManager.Instance;
 			_ = SettingsManager.Instance;
 			_ = LocalizationManager.Instance;
