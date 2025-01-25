@@ -1,11 +1,8 @@
-using System;
 using AI;
 using AI.Base;
 using AI.Interfaces;
 using Managers;
-using ScriptableObjects;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace UI
 {
@@ -31,6 +28,7 @@ namespace UI
 				return;
 			
 			gameObject.SetActive(true);
+			SceneManager.Instance.ReloadScene(true, true, true, 1f);
 		}
 		
 		public void OnSpawn(IAlive alive)
@@ -39,12 +37,6 @@ namespace UI
 				return;
 
 			gameObject.SetActive(false);
-		}
-		
-		public void OnRespawnClicked()
-		{
-			var spawnPoint = World.World.Instance.SpawnPoints.GetChild(Random.Range(0, World.World.Instance.SpawnPoints.childCount));
-			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)AIManager.Instance.Player.Data);
 		}
 	}
 }

@@ -22,8 +22,6 @@ namespace Managers
 			}
 		}
 
-		private readonly float fadeDuration = 0.3f;
-
 		private readonly List<string> scenes = new ();
 
 		public string GetCurrentScene()
@@ -41,15 +39,25 @@ namespace Managers
 			return scenes.Contains(scene);
 		}
 		
-		public void ChangeScene(string scene, bool fadeIn, bool fadeOut, bool closeTitle)
+		public void ReloadScene(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
 		{
-			ChangeSceneAsync(scene, fadeIn, fadeOut, closeTitle).Forget();
+			ReloadSceneAsync(fadeIn, fadeOut, closeTitle, fadeDuration).Forget();
 		}
 		
-		public async UniTask ChangeSceneAsync(string scene, bool fadeIn, bool fadeOut, bool closeTitle)
+		public async UniTask ReloadSceneAsync(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
+		{
+			await ChangeSceneAsync(GetCurrentScene(), fadeIn, fadeOut, closeTitle, fadeDuration);
+		}
+		
+		public void ChangeScene(string scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
+		{
+			ChangeSceneAsync(scene, fadeIn, fadeOut, closeTitle, fadeDuration).Forget();
+		}
+		
+		public async UniTask ChangeSceneAsync(string scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
 		{
 			if (fadeIn)
-				await fade(true);
+				await fade(true, fadeDuration);
 
 			if (scene == "Exit")
 			{
@@ -76,10 +84,10 @@ namespace Managers
 			}
 			
 			if (fadeOut)
-				await fade(false);
+				await fade(false, fadeDuration);
 		}
 
-		private async UniTask fade(bool fadeIn)
+		private async UniTask fade(bool fadeIn, float fadeDuration)
 		{
 			var fade = Fade.Instance;
 			if (fade != null)
