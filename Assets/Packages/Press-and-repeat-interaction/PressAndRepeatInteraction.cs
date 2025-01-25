@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEditor;
-using UnityEngine.InputSystem.Editor;
 
 #if UNITY_EDITOR
 [InitializeOnLoad]
@@ -125,7 +124,7 @@ public class PressAndRepeatInteraction : IInputInteraction
 #if UNITY_EDITOR
 
 // This class is used by Unity to have public parameters in the interaction configuration in the action properties
-internal class PressAndRepeatInteractionEditor : InputParameterEditor<PressAndRepeatInteraction>
+internal class PressAndRepeatInteractionEditor : UnityEngine.InputSystem.Editor.InputParameterEditor<PressAndRepeatInteraction>
 {
     private static GUIContent holdTimeLabel, repeatTimeLabel, pressLabel;
 
