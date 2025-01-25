@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Combat.Spells.Interfaces;
 using Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Spellbook
 {
@@ -13,6 +14,12 @@ namespace UI.Spellbook
 		[SerializeField]
 		public Transform Template;
 
+		[SerializeField]
+		public GridLayoutGroup GridLayoutGroup;
+		
+		[SerializeField]
+		public Button CloseButton;
+		
 		[NonSerialized]
 		public readonly List<SpellContainer> Containers = new ();
 
@@ -57,6 +64,16 @@ namespace UI.Spellbook
 			}
 
 			gameObject.SetActive(state);
+
+			if (state)
+			{
+				updateNavigation();
+				SelectionManager.Instance.SetSelection(Containers[0].gameObject);
+			}
+			else
+			{
+				SelectionManager.Instance.SetSelection(null);
+			}
 		}
 		
 		public void UpdateSpellbook()
@@ -93,11 +110,111 @@ namespace UI.Spellbook
 				
 				Containers[i].AssignSpell(spell, i);
 			}
+			
+			if (isActiveAndEnabled)
+				updateNavigation();
 		}
 
 		public void OnCloseClicked()
 		{
 			Display(false);
+		}
+
+		private void updateNavigation()
+		{
+			var spellCount = AIManager.Instance.Player.Spells.Count;
+			
+			var firstContainer = Containers[0];
+			var lastContainer = Containers[spellCount - 1];
+
+			var constraints = GridLayoutGroup.constraintCount;
+			
+			CloseButton.navigation = new Navigation
+			{
+				mode = Navigation.Mode.Explicit,
+				selectOnDown = firstContainer.Button,
+				selectOnUp = lastContainer.Button
+			};
+
+			for (var i = 0; i < spellCount; i++)
+			{
+				var container = Containers[i];
+
+				var nav = new Navigation
+				{
+					mode = Navigation.Mode.Explicit
+				};
+
+				SpellContainer previousContainer;
+				SpellContainer nextContainer;
+
+				if (i == 0)
+				{
+					previousContainer = lastContainer;
+					nextContainer = spellCount - 1 > 1 ? Containers[i + 1] : container;
+				}
+				else if (i == spellCount - 1)
+				{
+					previousContainer = spellCount - 1 > 1 ? Containers[i - 1] : container;
+					nextContainer = firstContainer;
+				}
+				else
+				{
+					previousContainer = Containers[i - 1];
+					nextContainer = Containers[i + 1];
+				}
+				
+				if (container == firstContainer)
+				{
+					nav.selectOnLeft = lastContainer.Button;
+					nav.selectOnRight = nextContainer.Button;
+				}
+				else if (container == lastContainer)
+				{
+					nav.selectOnLeft = previousContainer.Button;
+					nav.selectOnRight = firstContainer.Button;
+				}
+				else
+				{
+					nav.selectOnLeft = previousContainer.Button;
+					nav.selectOnRight = nextContainer.Button;
+				}
+
+				Button aboveButton;
+				Button belowButton;
+
+				var aboveIndex = i - constraints;
+				if (aboveIndex < 0)
+				{
+					aboveButton = CloseButton;
+				}
+				else
+				{
+					aboveButton = Containers[aboveIndex].Button;
+				}
+				
+				var belowIndex = i + constraints;
+				if (belowIndex >= spellCount)
+				{
+					if (aboveButton != CloseButton)
+					{
+						belowButton = CloseButton;
+					}
+					else
+					{
+						belowButton = lastContainer.Button;
+					}
+				}
+				else
+				{
+					belowButton = Containers[belowIndex].Button;
+				}
+
+				nav.selectOnUp = aboveButton;
+				nav.selectOnDown = belowButton;
+				
+				container.Button.navigation = nav;
+			}
 		}
 	}
 }
