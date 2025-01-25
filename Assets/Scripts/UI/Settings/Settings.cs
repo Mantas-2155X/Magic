@@ -4,6 +4,7 @@ using Managers;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UI.Settings
 {
@@ -12,6 +13,9 @@ namespace UI.Settings
 		[SerializeField]
 		public List<SettingsPage> Pages;
 		
+		[SerializeField]
+		public Button CloseButton;
+
 		public SettingsPage CurrentPage { get; private set; }
 
 		public void Awake()
@@ -25,9 +29,42 @@ namespace UI.Settings
 				page.Tab.onClick.AddListener(delegate
 				{
 					SelectPage(page);
+					SelectionManager.Instance.SetSelection(page.AutoSelect);
 				});
+
+				var nav = new Navigation
+				{
+					mode = Navigation.Mode.Explicit
+				};
+
+				if (i == 0)
+				{
+					nav.selectOnLeft = Pages[^1].Tab;
+					nav.selectOnRight = Pages.Count == 1 ? page.Tab : Pages[i + 1].Tab;
+				}
+				else if (i == Pages.Count - 1)
+				{
+					nav.selectOnLeft = Pages.Count == 1 ? page.Tab : Pages[i - 1].Tab;
+					nav.selectOnRight = Pages[0].Tab;
+				}
+				else
+				{
+					nav.selectOnLeft = Pages[i - 1].Tab;
+					nav.selectOnRight = Pages[i + 1].Tab;
+				}
+
+				nav.selectOnUp = CloseButton;
+				
+				page.Tab.navigation = nav;
 			}
 
+			CloseButton.navigation = new Navigation
+			{
+				mode = Navigation.Mode.Explicit,
+				selectOnUp = Pages[0].Tab,
+				selectOnDown = Pages[^1].Tab
+			};
+			
 			SelectPage(Pages[0]);
 		}
 

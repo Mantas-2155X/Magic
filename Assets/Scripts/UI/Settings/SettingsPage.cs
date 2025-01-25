@@ -12,6 +12,9 @@ namespace UI.Settings
 		[SerializeField]
 		public Localizer TabLocalizer;
 
+		[SerializeField]
+		public GameObject AutoSelect;
+		
 		public virtual void Select(bool state)
 		{
 			TabLocalizer.Text.fontStyle = state ? FontStyles.Italic : FontStyles.Normal;
