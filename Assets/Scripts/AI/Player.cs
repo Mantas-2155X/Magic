@@ -439,7 +439,7 @@ namespace AI
 					lookDirection = lookDirection * 0.1f * MouseSensitivity;
 					break;
 				case Gamepad or Joystick:
-					lookDirection = lookDirection * 0.35f * ControllerSensitivity;
+					lookDirection = lookDirection * 0.45f * ControllerSensitivity;
 					break;
 			}
 		}
