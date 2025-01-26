@@ -434,26 +434,6 @@ namespace AI
 			else if (forgetCurrent)
 				setAttackTarget(null);
 		}
-
-		// todo: This is definitely not reliable and needs to be improved
-		private Vector3 handleUpsideDown(Vector3 destination)
-		{
-			var tr = GetTransform();
-			
-			// Upside down destination handling
-			if (Vector3.Dot(tr.up, Vector3.down) > 0.9f)
-			{
-				var difference = tr.position.y - destination.y;
-				
-				// Is 2 units enough of a check before applying an offset?
-				if (difference < 2f)
-					return destination;
-				
-				destination += new Vector3(0, difference, 0);
-			}
-
-			return destination;
-		}
 		
 		#endregion
 
