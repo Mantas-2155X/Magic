@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AI;
 using AI.Base;
+using AI.Enums;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
 using Combat.Enums;
@@ -30,7 +31,7 @@ namespace Managers
 		{
 			Instance = this;
 			
-			//BaseAlive.OnDamageEvent.AddListener(onDamage);
+			BaseAlive.OnDamageEvent.AddListener(onDamage);
 			BaseAlive.OnSpawnEvent.AddListener(onSpawn);
 			BaseAlive.OnDeathEvent.AddListener(onDeath);
 			BaseAlive.OnRelationshipGroupChangedEvent.AddListener(onRelationshipGroupChanged);
@@ -38,7 +39,7 @@ namespace Managers
 
 		public void OnDestroy()
 		{
-			//BaseAlive.OnDamageEvent.RemoveListener(onDamage);
+			BaseAlive.OnDamageEvent.RemoveListener(onDamage);
 			BaseAlive.OnSpawnEvent.RemoveListener(onSpawn);
 			BaseAlive.OnDeathEvent.RemoveListener(onDeath);
 			BaseAlive.OnRelationshipGroupChangedEvent.RemoveListener(onRelationshipGroupChanged);
@@ -70,11 +71,15 @@ namespace Managers
 			}
 		}
 
-		/*private void onDamage(IAlive alive, float damage, object source, EElement type)
+		private void onDamage(IAlive alive, float damage, object source, EElement type)
 		{
 			if (!alive.IsAlive || alive is not NPC npc)
 				return;
 
+			// Should work for both aggressive and passive aggressive
+			if (((NPCData)npc.Data).TargetMode == ETargetMode.Passive)
+				return;
+			
 			IAlive aggressor = null;
 			
 			switch (source)
@@ -93,11 +98,16 @@ namespace Managers
 					break;
 			}
 			
-			if (aggressor == null || !aggressor.IsAlive || aggressor == alive || aggressor.RelationshipGroup == alive.RelationshipGroup)
+			// Don't attack allies or dead targets
+			if (aggressor == null || !aggressor.IsAlive || aggressor.RelationshipGroup == alive.RelationshipGroup)
+				return;
+
+			// Make sure its within sense or spell range
+			if (!npc.WithinRange.SenseDistanceCheck(aggressor.GetTransform(), false, true))
 				return;
 			
 			npc.AssignAttackTarget((Component)aggressor);
-		}*/
+		}
 
 		private void onSpawn(IAlive alive)
 		{

@@ -1,3 +1,4 @@
+using AI.Enums;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -120,10 +121,10 @@ namespace ScriptableObjects
 		public float TargetPredictMaximumFakeVelocity = 11f;
 
 		/// <summary>
-		/// Starting aggressiveness parameter
+		/// Target mode parameter. Aggressive always targets, passive aggressive doesn't unless damaged, passive doesn't at all
 		/// </summary>
 		[SerializeField]
-		public bool Aggressive = true;
+		public ETargetMode TargetMode = ETargetMode.Aggressive;
 
 		/// <summary>
 		/// Is the npc able to walk at all? Turning is allowed either way
