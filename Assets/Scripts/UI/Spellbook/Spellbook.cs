@@ -26,11 +26,34 @@ namespace UI.Spellbook
 		[NonSerialized]
 		public readonly List<SpellContainer> Containers = new ();
 
+		private SpellContainer grabbedContainer;
+		
 		public void Awake()
 		{
 			Instance = this;
 		}
 
+		/// <summary>
+		/// Used to move the containers via kb/ctrl
+		/// </summary>
+		public void GrabContainer(SpellContainer container)
+		{
+			var previousContainer = grabbedContainer;
+			grabbedContainer = container;
+
+			if (previousContainer == null || grabbedContainer == null)
+				return;
+
+			var spell = previousContainer.Spell;
+			if (spell != null)
+			{
+				// Move previously grabbed container to the newly grabbed containers index
+				AIManager.Instance.Player.SetSpellIndex(spell.SpellData, grabbedContainer.Index);
+			}
+				
+			grabbedContainer = null;
+		}
+		
 		public void OnDisable()
 		{
 			for (var i = 0; i < Containers.Count; i++)
@@ -38,6 +61,8 @@ namespace UI.Spellbook
 				var container = Containers[i];
 				container.OnEndDrag(null);
 			}
+			
+			GrabContainer(null);
 		}
 
 		public void Toggle()

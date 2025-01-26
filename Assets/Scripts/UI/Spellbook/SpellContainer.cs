@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace UI.Spellbook
 {
-	public class SpellContainer : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
+	public class SpellContainer : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, ISubmitHandler
 	{
 		[SerializeField]
 		public GameObject Hover;
@@ -118,6 +118,14 @@ namespace UI.Spellbook
 				return;
 			
 			Spellbook.Instance.ScrollRect.ScrollToCenter((RectTransform)transform, Spellbook.Instance);
+		}
+
+		public void OnSubmit(BaseEventData eventData)
+		{
+			if (eventData is PointerEventData)
+				return;
+
+			Spellbook.Instance.GrabContainer(this);
 		}
 	}
 }
