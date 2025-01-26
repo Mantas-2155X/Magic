@@ -31,10 +31,13 @@ namespace UI
 				DontDestroyOnLoad(copy);
 
 				instance = copy.GetComponent<Title>();
+				WeakInstance = instance;
 				return instance;
 			}
 		}
 
+		public static Title WeakInstance;
+		
 		[SerializeField]
 		public InputActionReference TitleAction;
 

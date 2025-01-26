@@ -1,8 +1,11 @@
 using Managers.Events;
+using UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace Managers
 {
@@ -26,15 +29,22 @@ namespace Managers
 				var copy = Instantiate(prefab);
 				DontDestroyOnLoad(copy);
 				
-				var indicatorRect = copy.GetComponentInChildren<Image>(true).rectTransform;
-				
 				var go = new GameObject("SelectionManager");
 				DontDestroyOnLoad(go);
 
 				instance = go.AddComponent<SelectionManager>();
 				
-				instance.Indicator = indicatorRect.gameObject;
-				instance.IndicatorRect = indicatorRect;
+				instance.IndicatorImage = copy.GetComponentInChildren<Image>(true);
+				instance.IndicatorRect = instance.IndicatorImage.rectTransform;
+				instance.Indicator = instance.IndicatorRect.gameObject;
+				
+				InputSystem.onDeviceChange += instance.onDeviceChange;
+
+				if (Gamepad.all.Count > 0)
+				{
+					ControllerConnected = true;
+					instance.IndicatorImage.color = Color.white;
+				}
 				
 				return instance;
 			}
@@ -42,6 +52,8 @@ namespace Managers
 
 		public static readonly OnSelectionChangedEvent OnSelectionChangedEvent = new ();
 		
+		public static bool ControllerConnected { get; private set; }
+
 		private EventSystem eventSystem;
 		public EventSystem EventSystem
 		{
@@ -76,6 +88,7 @@ namespace Managers
 		public RectTransform SelectionRect { get; private set; }
 		
 		public GameObject Indicator { get; private set; }
+		public Image IndicatorImage { get; private set; }
 		public RectTransform IndicatorRect { get; private set; }
 		
 		public void Update()
@@ -108,6 +121,11 @@ namespace Managers
 			}
 		}
 
+		public void OnDestroy()
+		{
+			InputSystem.onDeviceChange -= onDeviceChange;
+		}
+
 		public void SetSelection(GameObject go)
 		{
 			var system = EventSystem;
@@ -116,6 +134,34 @@ namespace Managers
 
 			system.SetSelectedGameObject(go);
 			Selection = go;
+		}
+
+		private void onDeviceChange(InputDevice device, InputDeviceChange change)
+		{
+			if (device is not Gamepad and not Joystick)
+				return;
+
+			var title = Title.WeakInstance;
+
+			switch (change)
+			{
+				case InputDeviceChange.Added or InputDeviceChange.Enabled or InputDeviceChange.Reconnected:
+					ControllerConnected = true;
+					IndicatorImage.color = Color.white;
+
+					if (title != null && !title.isActiveAndEnabled)
+						title.Open();
+					
+					break;
+				case InputDeviceChange.Removed or InputDeviceChange.Disabled or InputDeviceChange.Disconnected:
+					ControllerConnected = false;
+					IndicatorImage.color = Color.clear;
+					
+					if (title != null && !title.isActiveAndEnabled)
+						title.Open();
+					
+					break;
+			}
 		}
 	}
 }
