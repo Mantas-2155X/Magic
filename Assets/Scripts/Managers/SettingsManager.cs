@@ -624,6 +624,11 @@ namespace Managers
 			{
 				Player.AllowHotbarScrolling = Convert.ToBoolean(newValue);
 			});
+			
+			AddSetting("controls-showselection", "SETTINGS_CONTROLS_SHOWSELECTION", "SETTINGS_CONTROLS_SHOWSELECTION_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
+			{
+				SelectionManager.ShowIndicator = Convert.ToBoolean(newValue);
+			});
 
 			#endregion
 			

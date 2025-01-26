@@ -40,19 +40,22 @@ namespace Managers
 				
 				InputSystem.onDeviceChange += instance.onDeviceChange;
 
-				if (Gamepad.all.Count > 0)
-				{
-					ControllerConnected = true;
-					instance.IndicatorImage.color = Color.white;
-				}
-				
+				instance.updateIndicatorImage();
 				return instance;
 			}
 		}
 
-		public static readonly OnSelectionChangedEvent OnSelectionChangedEvent = new ();
-		
-		public static bool ControllerConnected { get; private set; }
+		private static bool showIndicator;
+		public static bool ShowIndicator
+		{
+			get => showIndicator;
+			set
+			{
+				showIndicator = value;
+				if (instance != null)
+					instance.updateIndicatorImage();
+			}
+		}
 
 		private EventSystem eventSystem;
 		public EventSystem EventSystem
@@ -91,6 +94,8 @@ namespace Managers
 		public Image IndicatorImage { get; private set; }
 		public RectTransform IndicatorRect { get; private set; }
 		
+		public static readonly OnSelectionChangedEvent OnSelectionChangedEvent = new ();
+
 		public void Update()
 		{
 			var system = EventSystem;
@@ -142,26 +147,15 @@ namespace Managers
 				return;
 
 			var title = Title.WeakInstance;
+			if (title != null && !title.isActiveAndEnabled)
+				title.Open();
+					
+			updateIndicatorImage();
+		}
 
-			switch (change)
-			{
-				case InputDeviceChange.Added or InputDeviceChange.Enabled or InputDeviceChange.Reconnected:
-					ControllerConnected = true;
-					IndicatorImage.color = Color.white;
-
-					if (title != null && !title.isActiveAndEnabled)
-						title.Open();
-					
-					break;
-				case InputDeviceChange.Removed or InputDeviceChange.Disabled or InputDeviceChange.Disconnected:
-					ControllerConnected = false;
-					IndicatorImage.color = Color.clear;
-					
-					if (title != null && !title.isActiveAndEnabled)
-						title.Open();
-					
-					break;
-			}
+		private void updateIndicatorImage()
+		{
+			IndicatorImage.color = Gamepad.all.Count > 0 && ShowIndicator ? Color.white : Color.clear;
 		}
 	}
 }

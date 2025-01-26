@@ -22,6 +22,11 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public Toggle AllowHotbarScrollingToggle;
 
+		[SerializeField]
+		public Localizer ShowSelectionLocalizer;
+		[SerializeField]
+		public Toggle ShowSelectionToggle;
+
 		public override void Select(bool state)
 		{
 			base.Select(state);
@@ -43,6 +48,12 @@ namespace UI.Settings.Pages
 			AllowHotbarScrollingLocalizer.Apply();
 			
 			AllowHotbarScrollingToggle.SetIsOnWithoutNotify(Convert.ToBoolean(allowHotbarScrolling.Value));
+			
+			var showSelection = SettingsManager.Instance.GetSetting("controls-showselection");
+			ShowSelectionLocalizer.Key = showSelection.Name;
+			ShowSelectionLocalizer.Apply();
+			
+			ShowSelectionToggle.SetIsOnWithoutNotify(Convert.ToBoolean(showSelection.Value));
 		}
 
 		public void OnMouseSensitivityChanged(float value)
@@ -58,6 +69,11 @@ namespace UI.Settings.Pages
 		public void OnAllowHotbarScrollingChanged(bool value)
 		{
 			SettingsManager.Instance.SetSetting("controls-allowhotbarscrolling", value);
+		}
+		
+		public void OnShowSelectionChanged(bool value)
+		{
+			SettingsManager.Instance.SetSetting("controls-showselection", value);
 		}
 	}
 }
