@@ -185,11 +185,6 @@ namespace AI.AIModes
 		{
 			Owner.Agent.SetDestination(newDestination);
 		}
-		
-		public void AggressiveChanged(bool previousAggressive, bool newAggressive)
-		{
-			
-		}
 
 		public void CommunicationReceived(ECommunication type, NPC source, object data)
 		{

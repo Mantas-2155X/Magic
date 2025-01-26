@@ -42,11 +42,6 @@ namespace AI.AIModes
 		{
 			
 		}
-
-		public void AggressiveChanged(bool previousAggressive, bool newAggressive)
-		{
-			
-		}
 		
 		public void CommunicationReceived(ECommunication type, NPC source, object data)
 		{

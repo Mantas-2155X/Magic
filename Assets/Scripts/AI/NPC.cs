@@ -80,7 +80,6 @@ namespace AI
 		private EActionMode previousActionMode;
 		private Component previousAttackTarget;
 		private Component previousOtherTarget;
-		private bool previousAggressive;
 		private Vector3 previousDestination;
 
 		#region AI
