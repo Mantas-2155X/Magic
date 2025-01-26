@@ -44,10 +44,5 @@ namespace Tools
 			lmaskWithPlayerAndWater = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Player", "Water");
 			return lmaskWithPlayerAndWater!.Value;
 		}
-		
-		public static bool ContainsLayer(this int mask, int layer)
-		{
-			return (mask & 1 << layer) != 0;
-		}
 	}
 }

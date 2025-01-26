@@ -78,10 +78,11 @@ GameObject:
   - component: {fileID: 4436625694638001749}
   - component: {fileID: 4746227734239897106}
   - component: {fileID: 7438414152483783318}
-  - component: {fileID: 5592564884707540726}
   - component: {fileID: 8875241505759051937}
   - component: {fileID: 155913516104971226}
   - component: {fileID: 8040881093273766306}
+  - component: {fileID: 5592564884707540726}
+  - component: {fileID: 8390399023308001613}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
@@ -248,38 +249,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bd0ea54f427415b862209c8d4703dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Link: {fileID: 5592564884707540726}
   Elevator: {fileID: 4746227734239897106}
   ElevateButton: {fileID: 0}
   LowerButton: {fileID: 0}
   StepTarget: {fileID: 5566586108904635884}
   UpperLink: {fileID: 1770467638847288459}
   LowerLink: {fileID: 6974847846934229583}
---- !u!114 &5592564884707540726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2449657336125602452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SerializedVersion: 1
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: 2.5}
-  m_EndPoint: {x: 0, y: 0, z: -2.5}
-  m_StartTransform: {fileID: 6974847846934229583}
-  m_EndTransform: {fileID: 1770467638847288459}
-  m_Activated: 1
-  m_Width: 2
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 0
-  m_AutoUpdatePosition: 0
-  m_Area: 4
 --- !u!54 &8875241505759051937
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5107,6 +5082,56 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &5592564884707540726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449657336125602452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 1
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: 2.5}
+  m_EndPoint: {x: 0, y: 0, z: -2.5}
+  m_StartTransform: {fileID: 6974847846934229583}
+  m_EndTransform: {fileID: 1770467638847288459}
+  m_Activated: 1
+  m_Width: 2
+  m_CostModifier: 1
+  m_IsOverridingCost: 0
+  m_Bidirectional: 0
+  m_AutoUpdatePosition: 0
+  m_Area: 4
+--- !u!114 &8390399023308001613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449657336125602452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 1
+  m_AgentTypeID: -1372625422
+  m_StartPoint: {x: 0, y: 0, z: 2.5}
+  m_EndPoint: {x: 0, y: 0, z: -2.5}
+  m_StartTransform: {fileID: 6974847846934229583}
+  m_EndTransform: {fileID: 1770467638847288459}
+  m_Activated: 1
+  m_Width: 2
+  m_CostModifier: 1
+  m_IsOverridingCost: 0
+  m_Bidirectional: 0
+  m_AutoUpdatePosition: 0
+  m_Area: 4
 --- !u!1 &3378869693892303696
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ using UnityEngine.AI;
 public class NavMeshDoorLink : MonoBehaviour
 {
 	[SerializeField]
-	public NavMeshLink Link;
+	public NavMeshLink[] Links;
 	
 	[SerializeField]
 	public BaseDoor Door;
@@ -44,26 +44,26 @@ public class NavMeshDoorLink : MonoBehaviour
 	{
 		User = null;
 		IsPartial = false;
-		toggleLink(false);
+		toggleLinks(false);
 	}
 
 	public void OnDoorClosed()
 	{
 		User = null;
 		IsPartial = false;
-		toggleLink(true);
+		toggleLinks(true);
 	}
 	
 	public void OnDoorOpening()
 	{
 		IsPartial = true;
-		toggleLink(true);
+		toggleLinks(true);
 	}
 	
 	public void OnDoorClosing()
 	{
 		IsPartial = true;
-		toggleLink(true);
+		toggleLinks(true);
 	}
 
 	public bool TryOpen(NPC user)
@@ -121,31 +121,36 @@ public class NavMeshDoorLink : MonoBehaviour
 		return true;
 	}
 
-	private void toggleLink(bool state)
+	private void toggleLinks(bool state)
 	{
 		linkUsers.Clear();
-		
-		if (!state && Link.occupied)
+
+		for (var i = 0; i < Links.Length; i++)
 		{
-			foreach (var npc in AIManager.Instance.NPCs)
+			var link = Links[i];
+			
+			if (!state && link.occupied)
 			{
-				var agent = npc.Agent;
+				foreach (var npc in AIManager.Instance.NPCs)
+				{
+					var agent = npc.Agent;
 				
-				if (!npc.IsAlive || !agent.enabled || !agent.isOnOffMeshLink || agent.currentOffMeshLinkData.owner != Link)
-					continue;
+					if (!npc.IsAlive || !agent.enabled || !agent.isOnOffMeshLink || agent.currentOffMeshLinkData.owner != link)
+						continue;
 
-				linkUsers.Add(npc);
+					linkUsers.Add(npc);
+				}
 			}
-		}
 		
-		Link.enabled = state;
+			link.enabled = state;
 
-		// Cancel the isOnOffMeshLink check
-		for (var i = 0; i < linkUsers.Count; i++)
-		{
-			var linkUser = linkUsers[i];
-			linkUser.Agent.Warp(linkUser.GetTransform().position);
-			linkUser.Agent.destination = linkUser.Destination;
+			// Cancel the isOnOffMeshLink check
+			for (var k = 0; k < linkUsers.Count; k++)
+			{
+				var linkUser = linkUsers[k];
+				linkUser.Agent.Warp(linkUser.GetTransform().position);
+				linkUser.Agent.destination = linkUser.Destination;
+			}
 		}
 	}
 }

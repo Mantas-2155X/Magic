@@ -12,9 +12,6 @@ using UnityEngine;
 public class NavMeshElevatorLink : MonoBehaviour
 {
 	[SerializeField]
-	public NavMeshLink Link;
-
-	[SerializeField]
 	public BaseElevator Elevator;
 	
 	[SerializeField]
