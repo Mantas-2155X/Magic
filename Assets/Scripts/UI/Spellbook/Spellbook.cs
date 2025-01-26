@@ -39,7 +39,12 @@ namespace UI.Spellbook
 		public void GrabContainer(SpellContainer container)
 		{
 			var previousContainer = grabbedContainer;
+			if (previousContainer != null)
+				previousContainer.Icon.color = Color.white;
+			
 			grabbedContainer = container;
+			if (grabbedContainer != null)
+				grabbedContainer.Icon.color = new Color(0.75f, 0.75f, 0.75f);
 
 			if (previousContainer == null || grabbedContainer == null)
 				return;
@@ -51,6 +56,7 @@ namespace UI.Spellbook
 				AIManager.Instance.Player.SetSpellIndex(spell.SpellData, grabbedContainer.Index);
 			}
 				
+			grabbedContainer.Icon.color = Color.white;
 			grabbedContainer = null;
 		}
 		
