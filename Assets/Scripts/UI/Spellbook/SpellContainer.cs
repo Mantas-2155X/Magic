@@ -122,7 +122,7 @@ namespace UI.Spellbook
 
 		public void OnSubmit(BaseEventData eventData)
 		{
-			if (eventData is not AxisEventData)
+			if (eventData is PointerEventData)
 				return;
 
 			Spellbook.Instance.GrabContainer(this);
