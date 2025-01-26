@@ -105,7 +105,7 @@ namespace Tools
                 var pos1 = Mathf.Round(scrollRect.verticalNormalizedPosition * 1000.0f) * 0.001f;
                 var pos2 = Mathf.Round(position * 1000.0f) * 0.001f;
 
-                if (pos1 == pos2 || maxTime <= DateTime.Now.Second)
+                if (Mathf.Approximately(pos1, pos2) || maxTime <= DateTime.Now.Second)
                 {
                     scrollRect.verticalNormalizedPosition = position;
 
