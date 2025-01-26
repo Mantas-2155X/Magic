@@ -57,7 +57,10 @@ namespace Managers
 		public async UniTask ChangeSceneAsync(string scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
 		{
 			if (fadeIn)
+			{
+				SelectionManager.Instance.SetSelection(null);
 				await fade(true, fadeDuration);
+			}
 
 			if (scene == "Exit")
 			{
