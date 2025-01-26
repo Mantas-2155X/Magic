@@ -19,7 +19,7 @@ namespace UI
 		public void Start()
 		{
 			var sel = SelectionManager.Instance.Selection;
-			if (sel == null || sel.gameObject != gameObject)
+			if (sel == null || sel != gameObject)
 				return;
 
 			// Do it no matter the device when it comes alive

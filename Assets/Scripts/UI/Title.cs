@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Managers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -45,19 +45,9 @@ namespace UI
 		public InputActionReference ConsoleAction;
 
 		[SerializeField]
-		public GameObject NewGameButton;		
+		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - load, 3 - save, 4 - settings, 5 - returntotitle, 6 - quitgame
 		[SerializeField]
-		public GameObject ContinueButton;
-		[SerializeField]
-		public GameObject LoadButton;
-		[SerializeField]
-		public GameObject SaveButton;
-		[SerializeField]
-		public GameObject SettingsButton;
-		[SerializeField]
-		public GameObject ReturnToTitleButton;
-		[SerializeField]
-		public GameObject QuitGameButton;
+		public List<GameObject> ButtonObjects;
 
 		[SerializeField]
 		public Console Console;
@@ -192,23 +182,21 @@ namespace UI
 
 		#endregion
 		
-		// todo: turn the buttons into an array and use indexes instead
 		public void UpdateButtons()
 		{
 			var inTitle = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title";
 			
-			NewGameButton.SetActive(inTitle);
-			ContinueButton.SetActive(!inTitle);
-			LoadButton.SetActive(false);
-			SaveButton.SetActive(false);
-			SettingsButton.SetActive(true);
-			ReturnToTitleButton.SetActive(!inTitle);
-			QuitGameButton.SetActive(true);
+			ButtonObjects[0].SetActive(inTitle);
+			ButtonObjects[1].SetActive(!inTitle);
+			ButtonObjects[2].SetActive(false);
+			ButtonObjects[3].SetActive(false);
+			ButtonObjects[4].SetActive(true);
+			ButtonObjects[5].SetActive(!inTitle);
+			ButtonObjects[6].SetActive(true);
 			
 			UpdateNavigation();
 		}
 
-		// todo: optimize, too many getcomponent calls
 		public void UpdateNavigation()
 		{
 			// Having the console or settings open might navigate to them since the mode is automatic vertical
@@ -220,23 +208,25 @@ namespace UI
 				wrapAround = true
 			};
 			
+			var newGameButton = Buttons[0];
+			var continueButton = Buttons[1];
+			var quitGameButton = Buttons[6];
+
 			var shouldExplicit = Console.isActiveAndEnabled || Settings.isActiveAndEnabled;
 			if (shouldExplicit)
 			{
-				var bottomButton = QuitGameButton.GetComponent<Button>();
-
 				Button topButton;
 				Button otherTopButton;
 				
-				if (NewGameButton.activeSelf)
+				if (ButtonObjects[0].activeSelf)
 				{
-					topButton = NewGameButton.GetComponent<Button>();
-					otherTopButton = ContinueButton.GetComponent<Button>();
+					topButton = newGameButton;
+					otherTopButton = continueButton;
 				}
 				else
 				{
-					otherTopButton = NewGameButton.GetComponent<Button>();
-					topButton = ContinueButton.GetComponent<Button>();
+					otherTopButton = newGameButton;
+					topButton = continueButton;
 				}
 
 				// Restore basic nav to the previous top button
@@ -246,7 +236,7 @@ namespace UI
 				var topNav = new Navigation
 				{
 					mode = Navigation.Mode.Explicit,
-					selectOnUp = bottomButton,
+					selectOnUp = quitGameButton,
 					selectOnDown = topButton.FindSelectable(topButton.transform.rotation * Vector3.down)
 				};
 
@@ -256,18 +246,18 @@ namespace UI
 				var botNav = new Navigation
 				{
 					mode = Navigation.Mode.Explicit,
-					selectOnUp = bottomButton.FindSelectable(bottomButton.transform.rotation * Vector3.up),
+					selectOnUp = quitGameButton.FindSelectable(quitGameButton.transform.rotation * Vector3.up),
 					selectOnDown = topButton
 				};
 
-				bottomButton.navigation = botNav;
+				quitGameButton.navigation = botNav;
 			}
 			else
 			{
 				// Restore any nav changes
-				NewGameButton.GetComponent<Button>().navigation = basicNav;
-				ContinueButton.GetComponent<Button>().navigation = basicNav;
-				QuitGameButton.GetComponent<Button>().navigation = basicNav;
+				newGameButton.navigation = basicNav;
+				continueButton.navigation = basicNav;
+				quitGameButton.navigation = basicNav;
 			}
 		}
 
@@ -288,7 +278,7 @@ namespace UI
 				}
 			}
 
-			SelectionManager.Instance.SetSelection(NewGameButton.activeSelf ? NewGameButton : ContinueButton);
+			SelectionManager.Instance.SetSelection(ButtonObjects[0].activeSelf ? ButtonObjects[0] : ButtonObjects[1]);
 		}
 
 		public void Deselect(bool withCondition = false)
