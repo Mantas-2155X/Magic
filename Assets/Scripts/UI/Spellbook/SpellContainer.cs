@@ -114,7 +114,7 @@ namespace UI.Spellbook
 		
 		public void OnSelect(BaseEventData eventData)
 		{
-			if (eventData is PointerEventData)
+			if (eventData is not AxisEventData)
 				return;
 			
 			Spellbook.Instance.ScrollRect.ScrollToCenter((RectTransform)transform, Spellbook.Instance);
@@ -122,7 +122,7 @@ namespace UI.Spellbook
 
 		public void OnSubmit(BaseEventData eventData)
 		{
-			if (eventData is PointerEventData)
+			if (eventData is not AxisEventData)
 				return;
 
 			Spellbook.Instance.GrabContainer(this);

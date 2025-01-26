@@ -101,7 +101,7 @@ namespace Managers
 			if (selected != Selection)
 				Selection = selected;
 			
-			if (SelectionRect != null && Selection.activeSelf)
+			if (SelectionRect != null && Selection.activeSelf && Selection.name != "Blocker")
 			{
 				Indicator.SetActive(true);
 				
