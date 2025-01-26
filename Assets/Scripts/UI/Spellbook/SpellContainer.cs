@@ -2,13 +2,14 @@ using System.Globalization;
 using Combat.Spells.Interfaces;
 using Managers;
 using TMPro;
+using Tools;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Spellbook
 {
-	public class SpellContainer : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler
+	public class SpellContainer : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
 	{
 		[SerializeField]
 		public GameObject Hover;
@@ -109,6 +110,14 @@ namespace UI.Spellbook
 				return;
 			
 			Hover.SetActive(false);
+		}
+		
+		public void OnSelect(BaseEventData eventData)
+		{
+			if (eventData is PointerEventData)
+				return;
+			
+			Spellbook.Instance.ScrollRect.ScrollToCenter((RectTransform)transform, Spellbook.Instance);
 		}
 	}
 }

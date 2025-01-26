@@ -20,6 +20,9 @@ namespace UI.Spellbook
 		[SerializeField]
 		public Button CloseButton;
 		
+		[SerializeField]
+		public ScrollRect ScrollRect;
+		
 		[NonSerialized]
 		public readonly List<SpellContainer> Containers = new ();
 
