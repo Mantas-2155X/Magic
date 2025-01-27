@@ -45,7 +45,7 @@ namespace UI
 		public InputActionReference ConsoleAction;
 
 		[SerializeField]
-		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - load, 3 - save, 4 - settings, 5 - returntotitle, 6 - quitgame
+		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - load, 3 - save, 4 - settings, 5 - returntotitle, 6 - quitgame, 7 - console
 		[SerializeField]
 		public List<GameObject> ButtonObjects;
 
@@ -160,6 +160,14 @@ namespace UI
 			SceneManager.Instance.ChangeScene("Exit", true, false, false);
 		}
 		
+		public void OnConsole()
+		{
+			if (Console == null)
+				return;
+			
+			Console.Toggle();
+		}
+		
 		#endregion
 
 		#region Input
@@ -193,6 +201,7 @@ namespace UI
 			ButtonObjects[4].SetActive(true);
 			ButtonObjects[5].SetActive(!inTitle);
 			ButtonObjects[6].SetActive(true);
+			ButtonObjects[7].SetActive(true);
 			
 			UpdateNavigation();
 		}
