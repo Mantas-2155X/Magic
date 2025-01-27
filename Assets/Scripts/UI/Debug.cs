@@ -56,7 +56,8 @@ namespace UI
 			}
 			else
 			{
-				Text.text = $"Alive: {AIManager.Instance.AlivesColliderMap.Count}\nFPS: {(int)(count / time)}";
+				var alive = AIManager.Instance != null ? AIManager.Instance.AlivesColliderMap.Count : 0;
+				Text.text = $"Alive: {alive}\nFPS: {(int)(count / time)}";
 				
 				time = 0f;
 				count = 0;

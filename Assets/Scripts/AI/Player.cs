@@ -436,10 +436,11 @@ namespace AI
 			switch (ctx.control.device)
 			{
 				case Mouse or Pointer:
-					lookDirection = lookDirection * 0.1f * MouseSensitivity;
+					lookDirection = lookDirection * 0.075f * MouseSensitivity;
 					break;
 				case Gamepad or Joystick:
-					lookDirection = lookDirection * 0.45f * ControllerSensitivity;
+					// Why is this framerate dependant but mouse isn't?
+					lookDirection = lookDirection * ControllerSensitivity * Time.unscaledDeltaTime * 135f;
 					break;
 			}
 		}
