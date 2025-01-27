@@ -1,5 +1,6 @@
 using Combat.Attacks.Enums;
 using Combat.Enums;
+using ScriptableObjects.Structs;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -31,6 +32,9 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public float Damage;
+
+		[SerializeField]
+		public SSlow Slow;
 
 		[SerializeField]
 		public EElement Element;

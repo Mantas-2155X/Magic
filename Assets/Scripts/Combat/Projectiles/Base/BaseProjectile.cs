@@ -54,6 +54,7 @@ namespace Combat.Projectiles.Base
 				{
 					attach = alive.GetTransform();
 					alive.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
+					alive.AddSlowSource(ProjectileData.Slow.Amount, ProjectileData.Slow.Duration);
 				}
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{

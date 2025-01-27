@@ -469,22 +469,20 @@ namespace AI
 		
 		public override bool IsWalking => Agent.hasPath;
 
-		public override void AddBindSource(int instanceID)
+		public override void AddSlowSource(int instanceID, float amount)
 		{
-			base.AddBindSource(instanceID);
-			Agent.speed = 0f;
+			base.AddSlowSource(instanceID, amount);
+			updateAgentSpeed();
 		}
-		public override void RemoveBindSource(int instanceID)
+		public override void RemoveSlowSource(int instanceID)
 		{
-			base.RemoveBindSource(instanceID);
-			
-			if (!IsBound)
-				Agent.speed = Data.Speed;
+			base.RemoveSlowSource(instanceID);
+			updateAgentSpeed();
 		}
-		public override void ClearBindSources()
+		public override void ClearSlowSources()
 		{
-			base.ClearBindSources();
-			Agent.speed = Data.Speed;
+			base.ClearSlowSources();
+			updateAgentSpeed();
 		}
 		
 		public override void SelectSpell(SpellData data)
@@ -535,6 +533,27 @@ namespace AI
 			return true;
 		}
 
+		private void updateAgentSpeed()
+		{
+			if (SlowSources.Count == 0)
+			{
+				Agent.speed = Data.Speed;
+				return;
+			}
+
+			var maximum = 0f;
+
+			foreach (var pair in SlowSources)
+			{
+				if (pair.Value <= maximum)
+					continue;
+				
+				maximum = pair.Value;
+			}
+			
+			Agent.speed = Data.Speed - (Data.Speed * maximum);
+		}
+		
 		#endregion
 	}
 }

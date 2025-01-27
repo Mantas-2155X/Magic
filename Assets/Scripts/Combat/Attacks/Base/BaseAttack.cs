@@ -121,6 +121,8 @@ namespace Combat.Attacks.Base
 				
 				if (AttackData.Damage != 0f)
 					alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
+				
+				alive.AddSlowSource(AttackData.Slow.Amount, AttackData.Slow.Duration);
 			}
 			
 			CurrentAlives.Add(alive);

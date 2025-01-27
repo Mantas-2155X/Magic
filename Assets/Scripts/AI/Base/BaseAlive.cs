@@ -82,13 +82,30 @@ namespace AI.Base
 		public EMovementType MovementType { get; private set; }
 		public int RelationshipGroup { get; private set; }
 		public float SpellRange { get; private set; }
-		public List<int> BindSources { get; private set; } = new ();
+		public float SlowAmount
+		{
+			get
+			{
+				var amount = 0f;
+
+				foreach (var pair in SlowSources)
+				{
+					if (pair.Value <= amount)
+						continue;
+					
+					amount = pair.Value;
+				}
+				
+				return amount;
+			}
+		}
+
+		public Dictionary<int, float> SlowSources { get; private set; } = new ();
 
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
 		public bool IsPowerful { get; private set; }
 		public virtual bool IsWalking { get; private set; }
-		public bool IsBound => BindSources.Count > 0;
 		public bool IsCasting => Spell != null && Spell.IsCasting;
 
 		public virtual void SetInvulnerable(bool value)
@@ -133,17 +150,27 @@ namespace AI.Base
 			OnRelationshipGroupChangedEvent?.Invoke(this, previousRelationshipGroup, RelationshipGroup);
 		}
 		
-		public virtual void AddBindSource(int instanceID)
+		public virtual int AddSlowSource(float amount, float duration)
 		{
-			BindSources.AddUnique(instanceID);
+			if (duration <= 0f)
+				return -1;
+
+			var id = Random.Range(0, int.MaxValue);
+			addTemporarySlow(id, amount, duration).Forget();
+
+			return id;
 		}
-		public virtual void RemoveBindSource(int instanceID)
+		public virtual void AddSlowSource(int instanceID, float amount)
 		{
-			BindSources.Remove(instanceID);
+			SlowSources[instanceID] = Mathf.Clamp01(amount);
 		}
-		public virtual void ClearBindSources()
+		public virtual void RemoveSlowSource(int instanceID)
 		{
-			BindSources.Clear();
+			SlowSources.Remove(instanceID);
+		}
+		public virtual void ClearSlowSources()
+		{
+			SlowSources.Clear();
 		}
 
 		public virtual int GetSpellIndex(SpellData data)
@@ -531,6 +558,18 @@ namespace AI.Base
 			}
 		}
 
+		private async UniTaskVoid addTemporarySlow(int id, float amount, float duration)
+		{
+			AddSlowSource(id, amount);
+
+			await UniTask.WaitForSeconds(duration);
+			
+			if (this == null || !IsAlive || !isActiveAndEnabled)
+				return;
+			
+			RemoveSlowSource(id);
+		}
+		
 		private void recalculateStats()
 		{
 			#region Clear current stats
