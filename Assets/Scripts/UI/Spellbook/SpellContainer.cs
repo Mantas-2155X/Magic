@@ -50,7 +50,7 @@ namespace UI.Spellbook
 			Icon.sprite = spell.SpellData.Icon;
 			Mana.text = spell.SpellData.CastingCost.ToString(CultureInfo.CurrentCulture);
 			
-			if (index > Hotbar.Hotbar.Instance.Size)
+			if (index > Player.Instance.HUD.Hotbar.Size)
 			{
 				Bind.gameObject.SetActive(false);
 				return;
@@ -70,7 +70,7 @@ namespace UI.Spellbook
 		public void OnDrag(PointerEventData eventData)
 		{
 			var pos = eventData.position;
-			var containers = Spellbook.Instance.Containers;
+			var containers = Player.Instance.HUD.Spellbook.Containers;
 
 			for (var i = 0; i < containers.Count; i++)
 			{
@@ -117,7 +117,8 @@ namespace UI.Spellbook
 			if (eventData is not AxisEventData)
 				return;
 			
-			Spellbook.Instance.ScrollRect.ScrollToCenter((RectTransform)transform, Spellbook.Instance);
+			var spellbook = Player.Instance.HUD.Spellbook;
+			spellbook.ScrollRect.ScrollToCenter((RectTransform)transform, spellbook);
 		}
 
 		public void OnSubmit(BaseEventData eventData)
@@ -125,7 +126,7 @@ namespace UI.Spellbook
 			if (eventData is PointerEventData)
 				return;
 
-			Spellbook.Instance.GrabContainer(this);
+			Player.Instance.HUD.Spellbook.GrabContainer(this);
 		}
 	}
 }

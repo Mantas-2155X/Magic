@@ -538,7 +538,7 @@ namespace AI
 			var currentIndex = GetSpellIndex(Spell != null ? Spell.SpellData : null);
 			currentIndex -= (int)ctx.ReadValue<Vector2>().y;
 
-			var maxSpell = Mathf.Min(Hotbar.Instance.Size, Spells.Count);
+			var maxSpell = Mathf.Min(UI.Player.Instance.HUD.Hotbar.Size, Spells.Count);
 			
 			if (currentIndex < 0)
 				currentIndex = maxSpell - 1;
@@ -557,7 +557,7 @@ namespace AI
 		private void onHotbar6(InputAction.CallbackContext ctx) => SelectSpell(5);
 		private void onHotbar7(InputAction.CallbackContext ctx) => SelectSpell(6);
 		
-		private void onSpellbook(InputAction.CallbackContext ctx) => Spellbook.Instance.Toggle();
+		private void onSpellbook(InputAction.CallbackContext ctx) => UI.Player.Instance.HUD.Spellbook.Toggle();
 
 		#endregion
 		
@@ -615,61 +615,55 @@ namespace AI
 		{
 			base.SetSpellIndex(data, index);
 			
-			var hotbar = Hotbar.Instance;
-			if (hotbar != null)
-			{
-				if (Spell != null)
-				{
-					// Changing spell index might put it outside of hotbar size, put it to the first one if so
-					if (GetSpellIndex(Spell.SpellData) >= hotbar.Size)
-						SelectSpell(0);
-				}
+			var playerUI = UI.Player.Instance;
+			if (playerUI == null)
+				return;
 			
-				hotbar.UpdateHotbar();
-			}
+			if (Spell != null)
+            {
+            	// Changing spell index might put it outside of hotbar size, put it to the first one if so
+            	if (GetSpellIndex(Spell.SpellData) >= playerUI.HUD.Hotbar.Size)
+            		SelectSpell(0);
+            }
 			
-			var spellbook = Spellbook.Instance;
-			if (spellbook != null)
-				spellbook.UpdateSpellbook();
+            playerUI.HUD.Hotbar.UpdateHotbar();
+			playerUI.HUD.Spellbook.UpdateSpellbook();
 		}
 
 		public override void LearnSpell(SpellData data, bool autoSelect)
 		{
 			base.LearnSpell(data, autoSelect);
 			
-			var hotbar = Hotbar.Instance;
-			if (hotbar != null)
-				hotbar.UpdateHotbar();
+			var playerUI = UI.Player.Instance;
+			if (playerUI == null)
+				return;
 			
-			var spellbook = Spellbook.Instance;
-			if (spellbook != null)
-				spellbook.UpdateSpellbook();
+			playerUI.HUD.Hotbar.UpdateHotbar();
+			playerUI.HUD.Spellbook.UpdateSpellbook();
 		}
 
 		public override void ForgetSpell(SpellData data)
 		{
 			base.ForgetSpell(data);
 			
-			var hotbar = Hotbar.Instance;
-			if (hotbar != null)
-				hotbar.UpdateHotbar();
+			var playerUI = UI.Player.Instance;
+			if (playerUI == null)
+				return;
 			
-			var spellbook = Spellbook.Instance;
-			if (spellbook != null)
-				spellbook.UpdateSpellbook();
+			playerUI.HUD.Hotbar.UpdateHotbar();
+			playerUI.HUD.Spellbook.UpdateSpellbook();
 		}
 
 		public override void ForgetAllSpells()
 		{
 			base.ForgetAllSpells();
 			
-			var hotbar = Hotbar.Instance;
-			if (hotbar != null)
-				hotbar.UpdateHotbar();
+			var playerUI = UI.Player.Instance;
+			if (playerUI == null)
+				return;
 			
-			var spellbook = Spellbook.Instance;
-			if (spellbook != null)
-				spellbook.UpdateSpellbook();
+			playerUI.HUD.Hotbar.UpdateHotbar();
+			playerUI.HUD.Spellbook.UpdateSpellbook();
 		}
 		
 		public override void Spawn(AliveData data, int relationshipGroup)
@@ -683,9 +677,9 @@ namespace AI
 			setRenderMode(ShadowCastingMode.ShadowsOnly);
 			base.Spawn(data, relationshipGroup);
 			
-			var spellbook = Spellbook.Instance;
-			if (spellbook != null)
-				spellbook.Display(false);
+			var playerUI = UI.Player.Instance;
+			if (playerUI != null)
+				playerUI.HUD.Spellbook.Display(false);
 			
 			EnableInput();
 		}
@@ -696,9 +690,9 @@ namespace AI
 		
 			World.World.Instance.Flashlight.enabled = false;
 			
-			var spellbook = Spellbook.Instance;
-			if (spellbook != null)
-				spellbook.Display(false);
+			var playerUI = UI.Player.Instance;
+			if (playerUI != null)
+				playerUI.HUD.Spellbook.Display(false);
 			
 			DisableInput();
 			

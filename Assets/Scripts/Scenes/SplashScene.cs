@@ -15,6 +15,8 @@ namespace Scenes
 			_ = SettingsManager.Instance;
 			_ = LocalizationManager.Instance;
 			_ = GameManager.Instance;
+			_ = Player.Instance;
+			_ = Debug.Instance;
 			
 			loadTitleAsync().Forget();
 		}
@@ -23,7 +25,6 @@ namespace Scenes
 		{
 			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
 			
-			_ = Debug.Instance;
 			_ = Title.Instance;
 		}
 	}

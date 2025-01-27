@@ -13,8 +13,6 @@ namespace UI.Hotbar
 {
 	public class Hotbar : MonoBehaviour
 	{
-		public static Hotbar Instance;
-		
 		[SerializeField]
 		public Transform Template;
 		
@@ -41,8 +39,6 @@ namespace UI.Hotbar
 
 		public void Awake()
 		{
-			Instance = this;
-			
 			BaseAlive.OnSpellSelectedEvent.AddListener(onSpellSelected);
 		}
 
@@ -103,7 +99,7 @@ namespace UI.Hotbar
 
 		private void onSpellSelected(IAlive alive, ISpell previousSpell, ISpell newSpell)
 		{
-			if (alive is not Player)
+			if (alive is not AI.Player)
 				return;
 
 			if (newSpell == null)

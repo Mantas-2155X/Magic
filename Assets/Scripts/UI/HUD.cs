@@ -29,6 +29,9 @@ namespace UI
 		public Image Cooldown;
 		
 		[SerializeField]
+		public Spellbook.Spellbook Spellbook;
+
+		[SerializeField]
 		public Hotbar.Hotbar Hotbar;
 
 		public void Awake()
@@ -111,7 +114,7 @@ namespace UI
 		
 		public void OnDeath(IAlive alive, object source)
 		{
-			if (alive is not Player)
+			if (alive is not AI.Player)
 				return;
 			
 			gameObject.SetActive(false);
@@ -120,7 +123,7 @@ namespace UI
 		
 		public void OnSpawn(IAlive alive)
 		{
-			if (alive is not Player)
+			if (alive is not AI.Player)
 				return;
 
 			gameObject.SetActive(true);

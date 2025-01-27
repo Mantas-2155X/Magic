@@ -97,9 +97,9 @@ namespace UI
 
 			if (state)
 			{
-				var spellbook = Spellbook.Spellbook.Instance;
-				if (spellbook != null)
-					spellbook.Display(false);
+				var playerUI = Player.Instance;
+				if (playerUI != null)
+					playerUI.HUD.Spellbook.Display(false);
 
 				var aiManager = AIManager.Instance;
 				if (aiManager != null && aiManager.Player != null)

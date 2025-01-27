@@ -33,7 +33,8 @@ namespace UI.Hotbar
 			if (Spell == null)
 				return;
 
-			Icon.color = Spell.CanCast() || Spell.IsCasting ? Hotbar.Instance.CanCastColor : Hotbar.Instance.CantCastColor;
+			var hotbar = Player.Instance.HUD.Hotbar;
+			Icon.color = Spell.CanCast() || Spell.IsCasting ? hotbar.CanCastColor : hotbar.CantCastColor;
 			
 			var scale = Cooldown.localScale;
 

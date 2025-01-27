@@ -24,7 +24,7 @@ namespace UI
 
 		public void OnDeath(IAlive alive, object source)
 		{
-			if (alive is not Player)
+			if (alive is not AI.Player)
 				return;
 			
 			gameObject.SetActive(true);
@@ -33,7 +33,7 @@ namespace UI
 		
 		public void OnSpawn(IAlive alive)
 		{
-			if (alive is not Player)
+			if (alive is not AI.Player)
 				return;
 
 			gameObject.SetActive(false);

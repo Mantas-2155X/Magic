@@ -9,8 +9,6 @@ namespace UI.Spellbook
 {
 	public class Spellbook : MonoBehaviour
 	{
-		public static Spellbook Instance;
-
 		[SerializeField]
 		public Transform Template;
 
@@ -27,11 +25,6 @@ namespace UI.Spellbook
 		public readonly List<SpellContainer> Containers = new ();
 
 		private SpellContainer grabbedContainer;
-		
-		public void Awake()
-		{
-			Instance = this;
-		}
 
 		/// <summary>
 		/// Used to move the containers via kb/ctrl

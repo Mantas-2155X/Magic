@@ -54,7 +54,7 @@ namespace UI
 
 		public void OnRestoreHealth(IAlive alive, float health, object source)
 		{
-			if (alive is not Player player)
+			if (alive is not AI.Player player)
 				return;
 
 			setHealth(player.CurrentHealth, player.Data.Health);
@@ -62,7 +62,7 @@ namespace UI
 		
 		public void OnDamage(IAlive alive, float damage, object source, EElement type)
 		{
-			if (alive is not Player player)
+			if (alive is not AI.Player player)
 				return;
 
 			setHealth(player.CurrentHealth, player.Data.Health);
@@ -70,7 +70,7 @@ namespace UI
 		
 		public void OnRestoreMana(IAlive alive, float generated, object source)
 		{
-			if (alive is not Player player)
+			if (alive is not AI.Player player)
 				return;
 
 			setMana(player.CurrentMana, player.Data.Mana);
@@ -78,7 +78,7 @@ namespace UI
 		
 		public void OnTakeMana(IAlive alive, float used, object source)
 		{
-			if (alive is not Player player)
+			if (alive is not AI.Player player)
 				return;
 
 			setMana(player.CurrentMana, player.Data.Mana);
@@ -86,7 +86,7 @@ namespace UI
 		
 		public void OnDeath(IAlive alive, object source)
 		{
-			if (alive is not Player)
+			if (alive is not AI.Player)
 				return;
 			
 			setHealth(0, 100);
@@ -95,7 +95,7 @@ namespace UI
 		
 		public void OnSpawn(IAlive alive)
 		{
-			if (alive is not Player player)
+			if (alive is not AI.Player player)
 				return;
 
 			gameObject.SetActive(true);
