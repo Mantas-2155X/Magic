@@ -154,6 +154,9 @@ namespace Managers
 				
 				Player = null;
 			}
+
+			// Don't know why but the player spawn angle is offset for some reason
+			angles += new Vector3(0, 90, 0);
 			
 			var go = Instantiate(data.Prefab);
 			go.name = "Player";
@@ -165,6 +168,11 @@ namespace Managers
 			go.SetActive(true);
 			
 			var player = go.GetComponent<Player>();
+
+			var camAngles = player.CameraTr.eulerAngles;
+			camAngles.y = angles.y;
+			
+			player.CameraTr.eulerAngles = camAngles;
 			
 			AlivesColliderMap[player.Body.BodyCollider] = player;
 			Player = player;
