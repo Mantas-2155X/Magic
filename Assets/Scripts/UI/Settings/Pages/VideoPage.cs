@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using TMPro;
+using UI.Elements;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,16 @@ namespace UI.Settings.Pages
 		public Localizer VSyncLocalizer;
 		[SerializeField]
 		public Toggle VSyncToggle;
+		
+		[SerializeField]
+		public Localizer FPSLimitLocalizer;
+		[SerializeField]
+		public InputSlider FPSLimitInputSlider;
+		
+		[SerializeField]
+		public Localizer RenderScaleLocalizer;
+		[SerializeField]
+		public InputSlider RenderScaleInputSlider;
 		
 		private List<string> resolutions;
 		
@@ -62,6 +73,18 @@ namespace UI.Settings.Pages
 			VSyncLocalizer.Apply();
 			
 			VSyncToggle.SetIsOnWithoutNotify(Convert.ToBoolean(vsync.Value));
+			
+			var fpsLimit = SettingsManager.Instance.GetSetting("video-fpslimit");
+			FPSLimitLocalizer.Key = fpsLimit.Name;
+			FPSLimitLocalizer.Apply();
+			
+			FPSLimitInputSlider.SetValueWithoutNotify(Convert.ToInt32(fpsLimit.Value));
+
+			var renderScale = SettingsManager.Instance.GetSetting("video-renderscale");
+			RenderScaleLocalizer.Key = renderScale.Name;
+			RenderScaleLocalizer.Apply();
+			
+			RenderScaleInputSlider.SetValueWithoutNotify(Convert.ToSingle(renderScale.Value));
 		}
 
 		public void OnResolutionChanged(int value)
@@ -80,6 +103,16 @@ namespace UI.Settings.Pages
 		public void OnVSyncChanged(bool value)
 		{
 			SettingsManager.Instance.SetSetting("video-vsync", value);
+		}
+		
+		public void OnFPSLimitChanged(float value)
+		{
+			SettingsManager.Instance.SetSetting("video-fpslimit", Convert.ToInt32(value));
+		}
+		
+		public void OnRenderScaleChanged(float value)
+		{
+			SettingsManager.Instance.SetSetting("video-renderscale", value);
 		}
 	}
 }
