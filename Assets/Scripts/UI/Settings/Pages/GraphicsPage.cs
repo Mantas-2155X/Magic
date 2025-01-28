@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Managers;
-using TMPro;
 using UnityEngine;
 
 namespace UI.Settings.Pages
@@ -33,6 +32,7 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public DropdownLocalizer AntialiasingDropdown;
 
+		private readonly List<string> maxQualityKeys = new () {"SETTINGS_DROPDOWN_LOW", "SETTINGS_DROPDOWN_MEDIUM", "SETTINGS_DROPDOWN_HIGH", "SETTINGS_DROPDOWN_VERYHIGH"};
 		private readonly List<string> qualityKeys = new () {"SETTINGS_DROPDOWN_LOW", "SETTINGS_DROPDOWN_MEDIUM", "SETTINGS_DROPDOWN_HIGH"};
 		private readonly List<string> aaKeys = new () {"SETTINGS_DROPDOWN_NONE", "SETTINGS_DROPDOWN_MSAA2X", "SETTINGS_DROPDOWN_MSAA4X", "SETTINGS_DROPDOWN_MSAA8X"};
 
@@ -44,7 +44,7 @@ namespace UI.Settings.Pages
 			ShadowQualityLocalizer.Key = shadowQuality.Name;
 			ShadowQualityLocalizer.Apply();
 			
-			ShadowQualityDropdown.SetOptions(qualityKeys);
+			ShadowQualityDropdown.SetOptions(maxQualityKeys);
 			ShadowQualityDropdown.SetValueWithoutNotify(Convert.ToInt32(shadowQuality.Value));
 			
 			var textureQuality = SettingsManager.Instance.GetSetting("graphics-texturequality");
@@ -58,14 +58,14 @@ namespace UI.Settings.Pages
 			ModelQualityLocalizer.Key = modelQuality.Name;
 			ModelQualityLocalizer.Apply();
 			
-			ModelQualityDropdown.SetOptions(qualityKeys);
+			ModelQualityDropdown.SetOptions(maxQualityKeys);
 			ModelQualityDropdown.SetValueWithoutNotify(Convert.ToInt32(modelQuality.Value));
 			
 			var shaderQuality = SettingsManager.Instance.GetSetting("graphics-shaderquality");
 			ShaderQualityLocalizer.Key = shaderQuality.Name;
 			ShaderQualityLocalizer.Apply();
 			
-			ShaderQualityDropdown.SetOptions(qualityKeys);
+			ShaderQualityDropdown.SetOptions(maxQualityKeys);
 			ShaderQualityDropdown.SetValueWithoutNotify(Convert.ToInt32(shaderQuality.Value));
 			
 			var antiAliasing = SettingsManager.Instance.GetSetting("graphics-antialiasing");

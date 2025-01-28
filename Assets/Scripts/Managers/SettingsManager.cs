@@ -387,7 +387,7 @@ namespace Managers
 			AddSetting("graphics-shadowquality", "SETTINGS_GRAPHICS_SHADOWQUALITY", "SETTINGS_GRAPHICS_SHADOWQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
-				if (setting is not (0 or 1 or 2))
+				if (setting is not (0 or 1 or 2 or 3))
 				{
 					Debug.LogWarning("[SettingsManager] Invalid shadow quality mode provided, skipping");
 					return;
@@ -413,16 +413,25 @@ namespace Managers
 						softShadowsQuality.SetValue(renderAsset, SoftShadowQuality.Low);
 						renderAsset.mainLightShadowmapResolution = 1024;
 						renderAsset.additionalLightsShadowmapResolution = 1024;
+						renderAsset.shadowDistance = 25f;
 						break;
 					case 1:
 						softShadowsQuality.SetValue(renderAsset, SoftShadowQuality.Medium);
 						renderAsset.mainLightShadowmapResolution = 2048;
 						renderAsset.additionalLightsShadowmapResolution = 2048;
+						renderAsset.shadowDistance = 40f;
 						break;
 					case 2:
 						softShadowsQuality.SetValue(renderAsset, SoftShadowQuality.High);
 						renderAsset.mainLightShadowmapResolution = 4096;
 						renderAsset.additionalLightsShadowmapResolution = 4096;
+						renderAsset.shadowDistance = 50f;
+						break;
+					case 3:
+						softShadowsQuality.SetValue(renderAsset, SoftShadowQuality.High);
+						renderAsset.mainLightShadowmapResolution = 8192;
+						renderAsset.additionalLightsShadowmapResolution = 8192;
+						renderAsset.shadowDistance = 75f;
 						break;
 				}
 			});
@@ -456,7 +465,7 @@ namespace Managers
 			AddSetting("graphics-modelquality", "SETTINGS_GRAPHICS_MODELQUALITY", "SETTINGS_GRAPHICS_MODELQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
-				if (setting is not (0 or 1 or 2))
+				if (setting is not (0 or 1 or 2 or 3))
 				{
 					Debug.LogWarning("[SettingsManager] Invalid model quality mode provided, skipping");
 					return;
@@ -468,10 +477,13 @@ namespace Managers
 						QualitySettings.lodBias = 0.5f;
 						break;
 					case 1:
-						QualitySettings.lodBias = 1;
+						QualitySettings.lodBias = 1f;
 						break;
 					case 2:
-						QualitySettings.lodBias = 1.5f;
+						QualitySettings.lodBias = 2f;
+						break;
+					case 3:
+						QualitySettings.lodBias = 3f;
 						break;
 				}
 			});
@@ -479,7 +491,7 @@ namespace Managers
 			AddSetting("graphics-shaderquality", "SETTINGS_GRAPHICS_SHADERQUALITY", "SETTINGS_GRAPHICS_SHADERQUALITY_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
-				if (setting is not (0 or 1 or 2))
+				if (setting is not (0 or 1 or 2 or 3))
 				{
 					Debug.LogWarning("[SettingsManager] Invalid shader quality mode provided, skipping");
 					return;
@@ -513,6 +525,7 @@ namespace Managers
 						useChromaticAberration = false;
 						useFilmGrain = false;
 						useDepthOfField = false;
+						renderAsset.maxAdditionalLightsCount = 2;
 						break;
 					case 1:
 						useBloom = true;
@@ -520,6 +533,7 @@ namespace Managers
 						useChromaticAberration = false;
 						useFilmGrain = true;
 						useDepthOfField = false;
+						renderAsset.maxAdditionalLightsCount = 4;
 						break;
 					case 2:
 						useBloom = true;
@@ -527,6 +541,15 @@ namespace Managers
 						useChromaticAberration = true;
 						useFilmGrain = true;
 						useDepthOfField = true;
+						renderAsset.maxAdditionalLightsCount = 6;
+						break;
+					case 3:
+						useBloom = true;
+						useVignette = true;
+						useChromaticAberration = true;
+						useFilmGrain = true;
+						useDepthOfField = true;
+						renderAsset.maxAdditionalLightsCount = 8;
 						break;
 				}
 
@@ -597,6 +620,11 @@ namespace Managers
 						blurQuality.SetValue(featureSettings, 1);
 						break;
 					case 2:
+						downsample.SetValue(featureSettings, true);
+						samples.SetValue(featureSettings, 0);
+						blurQuality.SetValue(featureSettings, 0);
+						break;
+					case 3:
 						downsample.SetValue(featureSettings, false);
 						samples.SetValue(featureSettings, 0);
 						blurQuality.SetValue(featureSettings, 0);
@@ -604,7 +632,7 @@ namespace Managers
 				}
 			});
 			
-			AddSetting("graphics-antialiasing", "SETTINGS_GRAPHICS_ANTIALIASING", "SETTINGS_GRAPHICS_ANTIALIASING_DESC", ESettingType.Int, 3, (previousValue, newValue) =>
+			AddSetting("graphics-antialiasing", "SETTINGS_GRAPHICS_ANTIALIASING", "SETTINGS_GRAPHICS_ANTIALIASING_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
 				if (setting is not (0 or 1 or 2 or 3))
