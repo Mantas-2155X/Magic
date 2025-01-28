@@ -1,5 +1,6 @@
 using System;
 using Managers;
+using UI.Elements;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,12 +11,12 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public Localizer MouseSensitivityLocalizer;
 		[SerializeField]
-		public Elements.Slider MouseSensitivitySlider;
+		public InputSlider MouseSensitivityInputSlider;
 		
 		[SerializeField]
 		public Localizer ControllerSensitivityLocalizer;
 		[SerializeField]
-		public Elements.Slider ControllerSensitivitySlider;
+		public InputSlider ControllerSensitivityInputSlider;
 		
 		[SerializeField]
 		public Localizer AllowHotbarScrollingLocalizer;
@@ -35,13 +36,13 @@ namespace UI.Settings.Pages
 			MouseSensitivityLocalizer.Key = mouseSensitivity.Name;
 			MouseSensitivityLocalizer.Apply();
 			
-			MouseSensitivitySlider.SetValueWithoutNotify(Convert.ToSingle(mouseSensitivity.Value));
+			MouseSensitivityInputSlider.SetValueWithoutNotify(Convert.ToSingle(mouseSensitivity.Value));
 			
 			var controllerSensitivity = SettingsManager.Instance.GetSetting("controls-sensitivity-controller");
 			ControllerSensitivityLocalizer.Key = controllerSensitivity.Name;
 			ControllerSensitivityLocalizer.Apply();
 			
-			ControllerSensitivitySlider.SetValueWithoutNotify(Convert.ToSingle(controllerSensitivity.Value));
+			ControllerSensitivityInputSlider.SetValueWithoutNotify(Convert.ToSingle(controllerSensitivity.Value));
 			
 			var allowHotbarScrolling = SettingsManager.Instance.GetSetting("controls-allowhotbarscrolling");
 			AllowHotbarScrollingLocalizer.Key = allowHotbarScrolling.Name;
