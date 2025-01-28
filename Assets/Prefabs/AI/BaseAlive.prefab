@@ -126,6 +126,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 4
+  DissolveAfter: 5
+  DissolveDuration: 1.5
 --- !u!136 &7747468937501591225
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -340,6 +342,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 5
+  DissolveAfter: 0
+  DissolveDuration: 1.5
 --- !u!135 &1656509487453732406
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -581,6 +585,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 6
+  DissolveAfter: 5
+  DissolveDuration: 1.5
 --- !u!136 &7122553442683222997
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -760,6 +766,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 5
+  DissolveAfter: 0
+  DissolveDuration: 1.5
 --- !u!135 &6387050982892449552
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -990,6 +998,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 8
+  DissolveAfter: 5
+  DissolveDuration: 1.5
 --- !u!136 &2876092449613239704
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1173,6 +1183,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 4
+  DissolveAfter: 5
+  DissolveDuration: 1.5
 --- !u!136 &6966139526102207317
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1353,6 +1365,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: c9178eae4b6b65db9857c8a79bb90577, type: 2}
   HealAmount: 6
+  DissolveAfter: 5
+  DissolveDuration: 1.5
 --- !u!136 &2312222712323515687
 CapsuleCollider:
   m_ObjectHideFlags: 0
