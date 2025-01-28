@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Tools;
+using Unified.UniversalBlur.Runtime;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -150,6 +151,32 @@ namespace Managers
 				}
 
 				Debug.LogError("[RenderManager] SSAO feature not found");
+				return null;
+			}
+		}
+		
+		private UniversalBlurFeature blurFeature;
+		public UniversalBlurFeature BlurFeature
+		{
+			get
+			{
+				if (blurFeature != null)
+					return blurFeature;
+				
+				var features = RenderFeatures;
+				if (features == null)
+					return null;
+
+				foreach (var feature in features)
+				{
+					if (feature.name != "UniversalBlurFeature")
+						continue;
+
+					blurFeature = (UniversalBlurFeature)feature;
+					return blurFeature;
+				}
+
+				Debug.LogError("[RenderManager] Blur feature not found");
 				return null;
 			}
 		}

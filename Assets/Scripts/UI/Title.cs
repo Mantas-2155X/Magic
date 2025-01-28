@@ -72,6 +72,24 @@ namespace UI
 			consoleAction.Enable();
 		}
 
+		public void OnEnable()
+		{
+			var feature = RenderManager.Instance.BlurFeature;
+			if (feature == null)
+				return;
+			
+			feature.SetActive(true);
+		}
+
+		public void OnDisable()
+		{
+			var feature = RenderManager.Instance.BlurFeature;
+			if (feature == null)
+				return;
+			
+			feature.SetActive(false);
+		}
+
 		#endregion
 		
 		#region Toggle

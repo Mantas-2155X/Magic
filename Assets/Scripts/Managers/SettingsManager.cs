@@ -365,7 +365,8 @@ namespace Managers
 					return;
 				}
 				
-				renderAsset.renderScale = Convert.ToSingle(newValue);
+				renderAsset.upscalingFilter = Mathf.Approximately(setting, 1f) ? UpscalingFilterSelection.Point : UpscalingFilterSelection.FSR;
+				renderAsset.renderScale = setting;
 			});
 			
 			AddSetting("video-fpslimit", "SETTINGS_VIDEO_FPSLIMIT", "SETTINGS_VIDEO_FPSLIMIT_DESC", ESettingType.Int, 1000, (previousValue, newValue) =>
