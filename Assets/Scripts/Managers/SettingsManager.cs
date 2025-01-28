@@ -365,7 +365,7 @@ namespace Managers
 					return;
 				}
 				
-				renderAsset.upscalingFilter = Mathf.Approximately(setting, 1f) ? UpscalingFilterSelection.Point : UpscalingFilterSelection.FSR;
+				renderAsset.upscalingFilter = Mathf.Approximately(setting, 1f) ? UpscalingFilterSelection.Auto : UpscalingFilterSelection.FSR;
 				renderAsset.renderScale = setting;
 			});
 			
@@ -526,7 +526,6 @@ namespace Managers
 						useChromaticAberration = false;
 						useFilmGrain = false;
 						useDepthOfField = false;
-						renderAsset.maxAdditionalLightsCount = 2;
 						break;
 					case 1:
 						useBloom = true;
@@ -534,7 +533,6 @@ namespace Managers
 						useChromaticAberration = false;
 						useFilmGrain = true;
 						useDepthOfField = false;
-						renderAsset.maxAdditionalLightsCount = 4;
 						break;
 					case 2:
 						useBloom = true;
@@ -542,7 +540,6 @@ namespace Managers
 						useChromaticAberration = true;
 						useFilmGrain = true;
 						useDepthOfField = true;
-						renderAsset.maxAdditionalLightsCount = 6;
 						break;
 					case 3:
 						useBloom = true;
@@ -550,7 +547,6 @@ namespace Managers
 						useChromaticAberration = true;
 						useFilmGrain = true;
 						useDepthOfField = true;
-						renderAsset.maxAdditionalLightsCount = 8;
 						break;
 				}
 
