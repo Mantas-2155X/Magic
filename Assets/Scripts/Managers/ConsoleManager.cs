@@ -418,12 +418,20 @@ namespace Managers
 				AddEntry(EConsoleEntryType.Info, GameManager.TimeScale.ToString(CultureInfo.CurrentCulture));
 			});
 
-			AddCommand("fps", "Sets the target framerate", new [] {EConsoleCommandParameter.Int}, args =>
+			AddCommand("fpslimit", "Sets the framerate limit", new [] {EConsoleCommandParameter.Int}, args =>
 			{
-				GameManager.TargetFPS = (int)args[0];
+				SettingsManager.Instance.SetSetting("video-fpslimit", (int)args[0]);
 			}, () =>
 			{
-				AddEntry(EConsoleEntryType.Info, GameManager.TargetFPS.ToString());
+				AddEntry(EConsoleEntryType.Info, SettingsManager.Instance.GetInt("video-fpslimit")?.ToString());
+			});
+			
+			AddCommand("renderscale", "Sets the render scale", new [] {EConsoleCommandParameter.Float}, args =>
+			{
+				SettingsManager.Instance.SetSetting("video-renderscale", (float)args[0]);
+			}, () =>
+			{
+				AddEntry(EConsoleEntryType.Info, SettingsManager.Instance.GetFloat("video-renderscale")?.ToString(CultureInfo.CurrentCulture));
 			});
 
 			AddCommand("clear", "Clears the console", () =>

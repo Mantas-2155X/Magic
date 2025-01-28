@@ -37,9 +37,6 @@ namespace World
 		[SerializeField]
 		public bool SpawnPlayer = true;
 		
-		private float previousTimeScale;
-		private int previousTargetFPS;
-		
 		public void Awake()
 		{
 			Instance = this;

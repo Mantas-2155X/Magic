@@ -349,6 +349,37 @@ namespace Managers
 				QualitySettings.vSyncCount = Convert.ToBoolean(newValue) ? 1 : 0;
 			});
 
+			AddSetting("video-renderscale", "SETTINGS_VIDEO_RENDERSCALE", "SETTINGS_VIDEO_RENDERSCALE_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToSingle(newValue);
+				if (setting is < 0.1f or > 2f)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid render scale provided, skipping");
+					return;
+				}
+				
+				var renderAsset = RenderManager.Instance.RenderAsset;
+				if (renderAsset == null)
+				{
+					Debug.LogError("[SettingsManager] Failed to get render asset");
+					return;
+				}
+				
+				renderAsset.renderScale = Convert.ToSingle(newValue);
+			});
+			
+			AddSetting("video-fpslimit", "SETTINGS_VIDEO_FPSLIMIT", "SETTINGS_VIDEO_FPSLIMIT_DESC", ESettingType.Int, 1000, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToInt32(newValue);
+				if (setting < 15)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid FPS limit provided, skipping");
+					return;
+				}
+				
+				Application.targetFrameRate = setting;
+			});
+				
 			#endregion
 			
 			#region Graphics
