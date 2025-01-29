@@ -206,7 +206,7 @@ namespace AI
 				movement *= data.AirMovement;
 			
 			shouldBreak = true;
-			Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * movement, ForceMode.VelocityChange);
+			Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * movement, ForceMode.Acceleration);
 			
 			if (!grounded)
 				return;
@@ -454,8 +454,11 @@ namespace AI
 			if (!shouldBreak || !IsGrounded())
 				return;
 
+			var velocity = Body.Rigidbody.linearVelocity;
+			velocity *= 40f;
+			
+			Body.Rigidbody.AddForce(-velocity, ForceMode.Acceleration);
 			shouldBreak = false;
-			Body.Rigidbody.linearVelocity *= 0.05f;
 		}
 		
 		private void onJumpPerformed(InputAction.CallbackContext ctx)
