@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -100,10 +101,19 @@ namespace Objects
 
 			Gizmos.DrawWireCube(Vector3.zero, new Vector3(1, 0, 1));
 			
-			Gizmos.DrawLine(new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0));
-			Gizmos.DrawLine(new Vector3(-0.5f, 0, -0.5f), new Vector3(0.5f, 0, 0));
+			Gizmos.DrawLine(new Vector3(-0.5f, 0, -0.5f), new Vector3(0, 0, 0.5f));
+			Gizmos.DrawLine(new Vector3(0.5f, 0, -0.5f), new Vector3(0, 0, 0.5f));
 			
 			Gizmos.DrawLine(Vector3.zero, Vector3.up);
+		}
+
+		public void OnDrawGizmosSelected()
+		{
+			if (Datas == null)
+				return;
+
+			for (var i = 0; i < Datas.Count; i++)
+				Gizmos.DrawWireSphere(transform.position, Datas[i].SenseRange);
 		}
 #endif
 

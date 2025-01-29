@@ -102,8 +102,8 @@ namespace Managers
 			if (aggressor == null || !aggressor.IsAlive || aggressor.RelationshipGroup == alive.RelationshipGroup)
 				return;
 
-			// Make sure its within sense or spell range
-			if (!npc.WithinRange.SenseDistanceCheck(aggressor.GetTransform(), false, true))
+			// Make sure its within sense range
+			if (!npc.WithinRange.SenseDistanceCheck(aggressor.GetTransform(), false, false))
 				return;
 			
 			npc.AssignAttackTarget((Component)aggressor);
@@ -154,9 +154,6 @@ namespace Managers
 				
 				Player = null;
 			}
-
-			// Don't know why but the player spawn angle is offset for some reason
-			angles += new Vector3(0, 90, 0);
 			
 			var go = Instantiate(data.Prefab);
 			go.name = "Player";
