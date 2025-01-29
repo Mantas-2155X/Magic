@@ -178,8 +178,8 @@ namespace AI
 			
 			if (MovementType == EMovementType.Noclip)
 			{
-				// Prevent noclip slippyness
-				Body.Rigidbody.linearVelocity *= 0.65f;
+				// No smoothing for noclip
+				Body.Rigidbody.linearVelocity *= data.StopSlide;
 
 				// Grab jump/fall as vertical move direction
 				var vertical = jumpPressed ? 1f : fallPressed ? -1f : 0f;
@@ -191,10 +191,22 @@ namespace AI
 				return;
 			}
 			
-			if (moveDirection == Vector2.zero)
-				return;
-
 			var grounded = IsGrounded();
+
+			if (moveDirection == Vector2.zero)
+			{
+				if (!grounded)
+					return;
+
+				// Adjust how fast the rigidbody stops after letting go of controls
+				var velocity = Body.Rigidbody.linearVelocity;
+				velocity.x *= data.StopSlide;
+				velocity.z *= data.StopSlide;
+				
+				Body.Rigidbody.linearVelocity = velocity;
+				return;
+			}
+
 			var movement = data.MovementForce;
 
 			// Prevent movement when fully bound
