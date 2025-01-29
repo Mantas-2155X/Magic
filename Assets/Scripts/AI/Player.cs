@@ -6,8 +6,6 @@ using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
 using UI;
-using UI.Hotbar;
-using UI.Spellbook;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -103,6 +101,8 @@ namespace AI
 		
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
+
+		private bool shouldBreak;
 		
 		#region MonoBehaviour
 
@@ -191,23 +191,11 @@ namespace AI
 				return;
 			}
 			
-			var grounded = IsGrounded();
-
 			if (moveDirection == Vector2.zero)
-			{
-				if (!grounded)
-					return;
-
-				// Adjust how fast the rigidbody stops after letting go of controls
-				var velocity = Body.Rigidbody.linearVelocity;
-				velocity.x *= data.StopSlide;
-				velocity.z *= data.StopSlide;
-				
-				Body.Rigidbody.linearVelocity = velocity;
 				return;
-			}
 
 			var movement = data.MovementForce;
+			var grounded = IsGrounded();
 
 			// Prevent movement when fully bound
 			if (SlowAmount >= 1f)
@@ -217,6 +205,7 @@ namespace AI
 			if (!grounded)
 				movement *= data.AirMovement;
 			
+			shouldBreak = true;
 			Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * movement, ForceMode.VelocityChange);
 			
 			if (!grounded)
@@ -461,6 +450,12 @@ namespace AI
 		{
 			moveDirection = Vector2.zero;
 			walking = false;
+
+			if (!shouldBreak || !IsGrounded())
+				return;
+
+			shouldBreak = false;
+			Body.Rigidbody.linearVelocity *= 0.05f;
 		}
 		
 		private void onJumpPerformed(InputAction.CallbackContext ctx)
