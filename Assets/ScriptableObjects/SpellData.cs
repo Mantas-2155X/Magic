@@ -1,3 +1,4 @@
+using Combat.Enums;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -21,6 +22,9 @@ namespace ScriptableObjects
 		[SerializeField]
 		public bool IsResource;
 		
+		[SerializeField]
+		public EElement Element;
+
 		[SerializeField]
 		public CastData Cast;
 

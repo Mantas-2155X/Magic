@@ -1,9 +1,10 @@
+using System;
 using AI.Base;
 using AYellowpaper.SerializedCollections;
+using Combat.Enums;
 using Combat.Wearables.Enums;
 using Combat.Wearables.Structs;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace AI
 {
@@ -31,8 +32,14 @@ namespace AI
 		public Transform[] Legs;
 
 		[SerializeField]
+		public Renderer Core;
+		
+		[SerializeField]
 		public SerializedDictionary<EWearableType, SWearableContainer> Containers;
 
+		[SerializeField]
+		public SerializedDictionary<EElement, CoreColor> CoreColors;
+		
 		[SerializeField]
 		public Vector2 SwayAngles = new (30f, 15f);
 
@@ -48,8 +55,25 @@ namespace AI
 		[HideInInspector]
 		public bool ShouldSway;
 		
+		private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
+
 		private bool swayDirection;
 
+		private Material glowMaterial;
+
+		public void Awake()
+		{
+			glowMaterial = Core.materials[1];
+		}
+
+		public void SetCore(EElement element)
+		{
+			var coreColor = CoreColors[element];
+			
+			glowMaterial.color = coreColor.Color;
+			glowMaterial.SetColor(emissionColor, coreColor.EmissionColor);
+		}
+		
 		public void Update()
 		{
 			if (!Alive.IsAlive)
@@ -125,6 +149,16 @@ namespace AI
 			
 			foreach (var leg in Legs)
 				leg.localEulerAngles = Vector3.zero;
+		}
+
+		[Serializable]
+		public struct CoreColor
+		{
+			[ColorUsage(false, false)]
+			public Color Color;
+			
+			[ColorUsage(false, true)]
+			public Color EmissionColor;
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using AI;
 using AI.Interfaces;
 using Combat.Casts.Interfaces;
+using Combat.Enums;
 using Combat.Spells.Interfaces;
 using Managers;
 using ScriptableObjects;
@@ -83,11 +84,13 @@ namespace Combat.Spells.Base
 		
 		public virtual void Select()
 		{
+			Owner.Body.SetCore(SpellData.Element);
 			IsSelected = true;
 		}
 		
 		public virtual void Unselect()
 		{
+			Owner.Body.SetCore(EElement.Unknown);
 			CancelCasting();
 			
 			IsSelected = false;

@@ -370,6 +370,8 @@ namespace AI.Base
 			Wearables = new List<IWearable>();
 			Spells = new List<ISpell>();
 			
+			Body.SetCore(EElement.Unknown);
+
 			CurrentHealth = data.Health;
 			CurrentMana = data.Mana;
 			
@@ -405,6 +407,8 @@ namespace AI.Base
 			
 			SetMovementType(EMovementType.Normal);
 			DropAllWearables();
+
+			Body.SetCore(EElement.Unknown);
 
 			CurrentHealth = 0;
 			CurrentMana = 0;
