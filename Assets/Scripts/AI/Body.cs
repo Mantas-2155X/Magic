@@ -32,7 +32,7 @@ namespace AI
 		public Transform[] Legs;
 
 		[SerializeField]
-		public Renderer Core;
+		public Transform Core;
 		
 		[SerializeField]
 		public SerializedDictionary<EWearableType, SWearableContainer> Containers;
@@ -63,7 +63,7 @@ namespace AI
 
 		public void Awake()
 		{
-			glowMaterial = Core.materials[1];
+			glowMaterial = Core.GetComponent<Renderer>().materials[1];
 		}
 
 		public void SetCore(EElement element)

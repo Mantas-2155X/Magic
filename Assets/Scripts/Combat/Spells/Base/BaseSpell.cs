@@ -180,7 +180,15 @@ namespace Combat.Spells.Base
 			switch (Owner)
 			{
 				case Player player:
-					LastRay = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+					var ray = player.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+					if (Physics.Raycast(ray, out var camHit, float.MaxValue, ~LayerMaskTools.GetMaskPlayer(), QueryTriggerInteraction.Ignore))
+					{
+						ray.origin = Owner.Body.Core.position;
+						ray.direction = camHit.point - ray.origin;
+					}
+					
+					LastRay = ray;
 					break;
 				case NPC npc:
 					var ownerTr = Owner.GetTransform();
@@ -238,7 +246,7 @@ namespace Combat.Spells.Base
 					}
 					
 					var direction = npc.AttackTarget == null ? ownerTr.forward : (targetPos - ownerPos).normalized;
-					LastRay = new Ray(ownerPos + ownerTr.up * ((npc.Agent.baseOffset * ownerTr.localScale.y) / 2f), direction);
+					LastRay = new Ray(Owner.Body.Core.position, direction);
 					break;
 				default:
 					throw new NotImplementedException();

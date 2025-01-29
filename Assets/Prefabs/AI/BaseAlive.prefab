@@ -970,7 +970,7 @@ MonoBehaviour:
   Legs:
   - {fileID: 109099294140091109}
   - {fileID: 5313810489724381644}
-  Core: {fileID: 6356200211305554481}
+  Core: {fileID: 5223875086607358302}
   Containers:
     _serializedList:
     - Key: 0
@@ -1605,11 +1605,6 @@ PrefabInstance:
 --- !u!4 &5223875086607358302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
-  m_PrefabInstance: {fileID: 5761326355765788341}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &6356200211305554481 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
   m_PrefabInstance: {fileID: 5761326355765788341}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8546780872055633306
