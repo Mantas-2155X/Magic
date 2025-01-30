@@ -41,5 +41,8 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public EAttackAngle AttackAngle;
+		
+		[SerializeField]
+		public EAttackOrigin AttackOrigin;
 	}
 }

@@ -4,6 +4,7 @@ namespace Combat.Attacks.Enums
 	{
 		Identity,
 		HitNormal,
-		Owner
+		Owner,
+		Ray
 	}
 }

@@ -1001,8 +1001,12 @@ MonoBehaviour:
         EmissionColor: {r: 1.7814789, g: 0.3824117, b: 0, a: 0}
     - Key: 5
       Value:
+        Color: {r: 0.6666667, g: 0.6666667, b: 0.6666667, a: 0}
+        EmissionColor: {r: 1.7814786, g: 1.7814789, b: 1.7814786, a: 0}
+    - Key: 6
+      Value:
         Color: {r: 0, g: 0.9843137, b: 1, a: 0}
-        EmissionColor: {r: 0, g: 1.7814789, b: 1.3990672, a: 0}
+        EmissionColor: {r: 0, g: 1.781479, b: 1.3990673, a: 0}
   SwayAngles: {x: 30, y: 15}
   SwaySpeedMultiplier: 1
   FallMinimumVelocity: 7

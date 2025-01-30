@@ -3823,10 +3823,10 @@ ParticleSystem:
       emitProbability: 1
   LightsModule:
     enabled: 0
-    ratio: 0
+    ratio: 0.1
     light: {fileID: 0}
     randomDistribution: 1
-    color: 1
+    color: 0
     range: 1
     intensity: 1
     rangeCurve:
@@ -3935,7 +3935,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 20
+    maxLights: 5
   TrailModule:
     enabled: 0
     mode: 0

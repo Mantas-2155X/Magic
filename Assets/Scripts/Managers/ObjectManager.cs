@@ -195,6 +195,21 @@ namespace Managers
 							break;
 					}
 					break;
+				case EAttackAngle.Ray:
+					angles = source is ISpell raySpell ? Quaternion.LookRotation(raySpell.LastRay.direction) : Quaternion.identity;
+					break;
+				default:
+					throw new NotImplementedException();
+			}
+
+			switch (data.AttackOrigin)
+			{
+				case EAttackOrigin.Point:
+					point = point;
+					break;
+				case EAttackOrigin.Origin:
+					point = source is ISpell spell ? spell.LastRay.origin : point;
+					break;
 				default:
 					throw new NotImplementedException();
 			}
