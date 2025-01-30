@@ -957,6 +957,7 @@ MonoBehaviour:
   Gibs:
   - {fileID: 7110768281633782373}
   - {fileID: 6413429528327965899}
+  - {fileID: 5930344154911725567}
   - {fileID: 4579662405891315712}
   - {fileID: 3180055987770812146}
   - {fileID: 1504740529191842669}
@@ -1604,8 +1605,54 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5771682835013045567}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5930344154911725567}
   m_SourcePrefab: {fileID: 100100000, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
+--- !u!1 &4842845257081996260 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
+  m_PrefabInstance: {fileID: 5761326355765788341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5771682835013045567
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842845257081996260}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.0045, y: 0.0045, z: 0.00065}
+  m_Center: {x: 0, y: 0, z: -0.00011760991}
+--- !u!114 &5930344154911725567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842845257081996260}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7f263614ac4f858f3ab0cf12755962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: 96d6b50da392b7423a35d257f4b291ba, type: 2}
+  GenerateAmount: 15
 --- !u!4 &5223875086607358302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}

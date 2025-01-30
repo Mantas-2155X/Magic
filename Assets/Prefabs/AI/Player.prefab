@@ -78,34 +78,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: Gibs.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[1]'
       value: 
-      objectReference: {fileID: 189772823038521403}
+      objectReference: {fileID: 8025660034328625092}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[2]'
       value: 
-      objectReference: {fileID: 1228879905442877129}
+      objectReference: {fileID: 189772823038521403}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[3]'
       value: 
-      objectReference: {fileID: 3012316995019070294}
+      objectReference: {fileID: 1228879905442877129}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[4]'
       value: 
-      objectReference: {fileID: 6633763523938907380}
+      objectReference: {fileID: 3012316995019070294}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[5]'
       value: 
-      objectReference: {fileID: 339794981848375254}
+      objectReference: {fileID: 6633763523938907380}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[6]'
       value: 
-      objectReference: {fileID: 6472600453187581204}
+      objectReference: {fileID: 339794981848375254}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[7]'
+      value: 
+      objectReference: {fileID: 6472600453187581204}
+    - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: 'Gibs.Array.data[8]'
       value: 
       objectReference: {fileID: 1466817488225096774}
     - target: {fileID: 1578906078410702355, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -308,6 +312,17 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5e3c6a593ad4cdc803cd08c419d7ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8025660034328625092 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5930344154911725567, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+  m_PrefabInstance: {fileID: 4407915526272526395}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a7f263614ac4f858f3ab0cf12755962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8475379242147071745 stripped
