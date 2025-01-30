@@ -673,7 +673,7 @@ namespace AI
 			weaponContainer.localPosition = ViewmodelPosition;
 			weaponContainer.localEulerAngles = ViewmodelAngles;
 
-			setRenderMode(ShadowCastingMode.ShadowsOnly);
+			SetRenderMode(ShadowCastingMode.ShadowsOnly);
 			base.Spawn(data, relationshipGroup);
 			
 			var playerUI = UI.Player.Instance;
@@ -695,7 +695,7 @@ namespace AI
 			
 			DisableInput();
 			
-			setRenderMode(ShadowCastingMode.On);
+			SetRenderMode(ShadowCastingMode.On);
 			base.Kill(source);
 		}
 
@@ -712,14 +712,14 @@ namespace AI
 			
 			return false;
 		}
-
-		private void setRenderMode(ShadowCastingMode mode)
+		
+		#endregion
+		
+		public void SetRenderMode(ShadowCastingMode mode)
 		{
 			var renderers = Body.GetComponentsInChildren<Renderer>(true);
 			foreach (var rend in renderers)
 				rend.shadowCastingMode = mode;
 		}
-		
-		#endregion
 	}
 }

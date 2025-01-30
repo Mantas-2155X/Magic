@@ -84,13 +84,13 @@ namespace Combat.Spells.Base
 		
 		public virtual void Select()
 		{
-			Owner.Body.SetCore(SpellData.Element);
+			Owner.Body.SetCoreGlow(SpellData.Element);
 			IsSelected = true;
 		}
 		
 		public virtual void Unselect()
 		{
-			Owner.Body.SetCore(EElement.Unknown);
+			Owner.Body.SetCoreGlow(EElement.Unknown);
 			CancelCasting();
 			
 			IsSelected = false;
@@ -116,6 +116,8 @@ namespace Combat.Spells.Base
 				return;
 			
 			IsCasting = true;
+			Owner.Body.SetCoreCenter(true);
+			
 			LastStartedCast = Time.time;
 			PredictFinishCast = LastStartedCast + SpellData.CastingTime;
 			
@@ -131,6 +133,8 @@ namespace Combat.Spells.Base
 				return false;
 
 			IsCasting = false;
+			Owner.Body.SetCoreCenter(false);
+			
 			LastFinishedCast = Time.time;
 
 			// Add a variation to npc spell cooldowns
@@ -165,6 +169,8 @@ namespace Combat.Spells.Base
 				return;
 			
 			IsCasting = false;
+			Owner.Body.SetCoreCenter(false);
+			
 			clearCast();
 		}
 

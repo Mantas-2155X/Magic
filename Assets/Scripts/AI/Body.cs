@@ -60,18 +60,49 @@ namespace AI
 		private bool swayDirection;
 
 		private Material glowMaterial;
+		private Material centerMaterial;
+
+		private EElement coreGlowElement;
+		private bool coreCenterActive;
 
 		public void Awake()
 		{
-			glowMaterial = Core.GetComponent<Renderer>().materials[1];
+			var materials = Core.GetComponent<Renderer>().materials;
+			glowMaterial = materials[1];
+			centerMaterial = materials[2];
 		}
 
-		public void SetCore(EElement element)
+		public void SetCoreGlow(EElement element)
 		{
-			var coreColor = CoreColors[element];
+			if (coreGlowElement == element)
+				return;
 			
+			coreGlowElement = element;
+			
+			var coreColor = CoreColors[element];
 			glowMaterial.color = coreColor.Color;
 			glowMaterial.SetColor(emissionColor, coreColor.EmissionColor);
+		}
+		
+		public void SetCoreCenter(bool active)
+		{
+			if (coreCenterActive == active)
+				return;
+
+			coreCenterActive = active;
+			
+			if (active)
+			{
+				var color = Color.white;
+				centerMaterial.color = color;
+				centerMaterial.SetColor(emissionColor, color * 1.25f);
+			}
+			else
+			{
+				var color = Color.black;
+				centerMaterial.color = color;
+				centerMaterial.SetColor(emissionColor, color);
+			}
 		}
 		
 		public void Update()

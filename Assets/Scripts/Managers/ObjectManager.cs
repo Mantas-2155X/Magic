@@ -205,7 +205,6 @@ namespace Managers
 			switch (data.AttackOrigin)
 			{
 				case EAttackOrigin.Point:
-					point = point;
 					break;
 				case EAttackOrigin.Origin:
 					point = source is ISpell spell ? spell.LastRay.origin : point;
