@@ -608,6 +608,7 @@ namespace Managers
 				var downsample = type.GetField("Downsample", BindingFlags.NonPublic | BindingFlags.Instance)!;
 				var samples = type.GetField("Samples", BindingFlags.NonPublic | BindingFlags.Instance)!;
 				var blurQuality = type.GetField("BlurQuality", BindingFlags.NonPublic | BindingFlags.Instance)!;
+				var falloff = type.GetField("Falloff", BindingFlags.NonPublic | BindingFlags.Instance)!;
 
 				switch (setting)
 				{
@@ -615,16 +616,19 @@ namespace Managers
 						downsample.SetValue(featureSettings, true);
 						samples.SetValue(featureSettings, 1);
 						blurQuality.SetValue(featureSettings, 1);
+						falloff.SetValue(featureSettings, 35);
 						break;
 					case 2:
 						downsample.SetValue(featureSettings, true);
 						samples.SetValue(featureSettings, 0);
 						blurQuality.SetValue(featureSettings, 0);
+						falloff.SetValue(featureSettings, 75);
 						break;
 					case 3:
 						downsample.SetValue(featureSettings, false);
 						samples.SetValue(featureSettings, 0);
 						blurQuality.SetValue(featureSettings, 0);
+						falloff.SetValue(featureSettings, 150);
 						break;
 				}
 			});
