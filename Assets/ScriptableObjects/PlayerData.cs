@@ -23,5 +23,8 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public float SpeedClampModifier = 0.91f;
+
+		[SerializeField]
+		public float SprintEnergy = 15f;
 	}
 }

@@ -194,6 +194,15 @@ namespace AI
 			if (moveDirection == Vector2.zero)
 				return;
 
+			var isSprinting = false;
+			var sprintEnergy = data.SprintEnergy * Time.fixedDeltaTime;
+			
+			if (CurrentEnergy >= sprintEnergy && SprintAction.action.IsPressed())
+			{
+				isSprinting = true;
+				TakeEnergy(sprintEnergy, this);
+			}
+			
 			var movement = data.MovementForce;
 			var grounded = IsGrounded();
 
@@ -211,10 +220,10 @@ namespace AI
 			if (!grounded)
 				return;
 
-			var maxSpeed = Data.Speed - (Data.Speed * SlowAmount);
+			var maxSpeed = data.Speed - (data.Speed * SlowAmount);
 			
 			// Limit the rigidbody walking speed
-			var clampSpeed = SprintAction.action.IsPressed() ? maxSpeed * data.SprintMultiplier : maxSpeed;
+			var clampSpeed = isSprinting ? maxSpeed * data.SprintMultiplier : maxSpeed;
 			Body.Rigidbody.linearVelocity = Vector3.ClampMagnitude(Body.Rigidbody.linearVelocity, clampSpeed * data.SpeedClampModifier);
 		}
 		

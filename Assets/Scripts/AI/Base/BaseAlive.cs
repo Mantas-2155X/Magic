@@ -553,6 +553,12 @@ namespace AI.Base
 			if (!IsAlive || mana < 0 || IsPowerful)
 				return;
 			
+			if (CurrentMana < 0f)
+				return;
+			
+			if (CurrentMana - mana <= 0f)
+				mana = 0f;
+			
 			CurrentMana -= mana;
 			OnTakeManaEvent?.Invoke(this, mana, source);
 		}
@@ -560,6 +566,12 @@ namespace AI.Base
 		{
 			if (!IsAlive || energy < 0 || IsPowerful)
 				return;
+			
+			if (CurrentEnergy < 0f)
+				return;
+			
+			if (CurrentEnergy - energy <= 0f)
+				energy = 0f;
 			
 			CurrentEnergy -= energy;
 			OnTakeEnergyEvent?.Invoke(this, energy, source);
