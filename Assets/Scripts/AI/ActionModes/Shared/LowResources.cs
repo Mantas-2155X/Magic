@@ -66,6 +66,27 @@ namespace AI.ActionModes.Shared
 					}
 				}
 			}
+			
+			if (IsHalfEnergy())
+			{
+				for (var i = 0; i < spells.Count; i++)
+				{
+					var spell = spells[i];
+
+					var spellData = spell.SpellData;
+					if (!spellData.IsResource || !spell.CanCast())
+						continue;
+					
+					if (spellData.Tags.HasFlag(ETag.RestoresEnergy))
+					{
+						owner.SelectSpell(spellData);
+						owner.SwitchCastCooldown = 0f;
+						owner.Spell.StartCasting();
+
+						return true;
+					}
+				}
+			}
 
 			return false;
 		}
@@ -97,6 +118,22 @@ namespace AI.ActionModes.Shared
 				}
 				
 				var resource = FindNearbyResource(ETag.RestoresMana);
+				if (resource != null)
+				{
+					owner.Use((Component)resource);
+					return true;
+				}
+			}
+			
+			if (IsLowEnergy())
+			{
+				if (CurrentResourceValid(ETag.RestoresEnergy))
+				{
+					owner.Use(owner.OtherTarget);
+					return true;
+				}
+				
+				var resource = FindNearbyResource(ETag.RestoresEnergy);
 				if (resource != null)
 				{
 					owner.Use((Component)resource);
@@ -190,9 +227,13 @@ namespace AI.ActionModes.Shared
 		public bool IsLowHealth() => owner.CurrentHealth <= owner.Data.Health * ((NPCData)owner.Data).LowResourcesMultiplier;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool IsLowMana() => owner.CurrentMana <= owner.Data.Mana * ((NPCData)owner.Data).LowResourcesMultiplier;
+		public bool IsLowEnergy() => owner.CurrentEnergy <= owner.Data.Energy * ((NPCData)owner.Data).LowResourcesMultiplier;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool IsHalfHealth() => owner.CurrentHealth <= owner.Data.Health / 2f;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool IsHalfMana() => owner.CurrentMana <= owner.Data.Mana / 2f;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public bool IsHalfEnergy() => owner.CurrentEnergy <= owner.Data.Energy / 2f;
+
 	}
 }

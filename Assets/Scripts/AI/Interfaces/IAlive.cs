@@ -27,6 +27,7 @@ namespace AI.Interfaces
 		public float CurrentSpeed { get; }
 		public float CurrentHealth { get; }
 		public float CurrentMana { get; }
+		public float CurrentEnergy { get; }
 
 		public EMovementType MovementType { get; }
 		public int RelationshipGroup { get; }
@@ -70,9 +71,11 @@ namespace AI.Interfaces
 
 		public void RestoreHealth(float health, object source);
 		public void RestoreMana(float mana, object source);
+		public void RestoreEnergy(float energy, object source);
 		
 		public void Damage(float damage, object source, EElement type);
 		public void TakeMana(float mana, object source);
+		public void TakeEnergy(float energy, object source);
 		
 		public bool IsGrounded();
 

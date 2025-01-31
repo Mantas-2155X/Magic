@@ -1,5 +1,3 @@
-using System;
-using AI;
 using AI.Base;
 using AI.Interfaces;
 using Combat.Enums;
@@ -22,6 +20,9 @@ namespace UI
 		public RectTransform ManaBottle;
 
 		[SerializeField]
+		public RectTransform EnergyBottle;
+
+		[SerializeField]
 		public AnimationCurve HealthRedCurve;
 
 		[SerializeField]
@@ -30,6 +31,9 @@ namespace UI
 		[SerializeField]
 		public TMP_Text ManaText;
 		
+		[SerializeField]
+		public TMP_Text EnergyText;
+
 		public void Awake()
 		{
 			gameObject.SetActive(false);
@@ -37,7 +41,9 @@ namespace UI
 			BaseAlive.OnRestoreHealthEvent.AddListener(OnRestoreHealth);
 			BaseAlive.OnDamageEvent.AddListener(OnDamage);
 			BaseAlive.OnRestoreManaEvent.AddListener(OnRestoreMana);
+			BaseAlive.OnRestoreEnergyEvent.AddListener(OnRestoreEnergy);
 			BaseAlive.OnTakeManaEvent.AddListener(OnTakeMana);
+			BaseAlive.OnTakeEnergyEvent.AddListener(OnTakeEnergy);
 			BaseAlive.OnDeathEvent.AddListener(OnDeath);
 			BaseAlive.OnSpawnEvent.AddListener(OnSpawn);
 		}
@@ -47,7 +53,9 @@ namespace UI
 			BaseAlive.OnRestoreHealthEvent.RemoveListener(OnRestoreHealth);
 			BaseAlive.OnDamageEvent.RemoveListener(OnDamage);
 			BaseAlive.OnRestoreManaEvent.RemoveListener(OnRestoreMana);
+			BaseAlive.OnRestoreEnergyEvent.RemoveListener(OnRestoreEnergy);
 			BaseAlive.OnTakeManaEvent.RemoveListener(OnTakeMana);
+			BaseAlive.OnTakeEnergyEvent.RemoveListener(OnTakeEnergy);
 			BaseAlive.OnDeathEvent.RemoveListener(OnDeath);
 			BaseAlive.OnSpawnEvent.RemoveListener(OnSpawn);
 		}
@@ -76,12 +84,28 @@ namespace UI
 			setMana(player.CurrentMana, player.Data.Mana);
 		}
 		
+		public void OnRestoreEnergy(IAlive alive, float generated, object source)
+		{
+			if (alive is not AI.Player player)
+				return;
+
+			setEnergy(player.CurrentEnergy, player.Data.Energy);
+		}
+		
 		public void OnTakeMana(IAlive alive, float used, object source)
 		{
 			if (alive is not AI.Player player)
 				return;
 
 			setMana(player.CurrentMana, player.Data.Mana);
+		}
+		
+		public void OnTakeEnergy(IAlive alive, float used, object source)
+		{
+			if (alive is not AI.Player player)
+				return;
+
+			setEnergy(player.CurrentEnergy, player.Data.Energy);
 		}
 		
 		public void OnDeath(IAlive alive, object source)
@@ -91,6 +115,7 @@ namespace UI
 			
 			setHealth(0, 100);
 			setMana(0, 100);
+			setEnergy(0, 100);
 		}
 		
 		public void OnSpawn(IAlive alive)
@@ -99,8 +124,10 @@ namespace UI
 				return;
 
 			gameObject.SetActive(true);
+			
 			setHealth(player.CurrentHealth, player.Data.Health);
 			setMana(player.CurrentMana, player.Data.Mana);
+			setEnergy(player.CurrentEnergy, player.Data.Energy);
 		}
 		
 		private void setHealth(float amount, float maximum)
@@ -130,6 +157,19 @@ namespace UI
 			offset.y = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
 
 			ManaBottle.offsetMax = offset;
+		}
+		
+		private void setEnergy(float amount, float maximum)
+		{
+			EnergyText.text = amount.ToString("0.#");
+
+			if (amount > maximum)
+				amount = maximum;
+			
+			var offset = EnergyBottle.offsetMax;
+			offset.y = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
+
+			EnergyBottle.offsetMax = offset;
 		}
 	}
 }

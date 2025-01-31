@@ -16,7 +16,13 @@ namespace AI.Events
 	public class OnRestoreManaEvent : UnityEvent<IAlive, float, object> { }
 	
 	[Serializable]
+	public class OnRestoreEnergyEvent : UnityEvent<IAlive, float, object> { }
+
+	[Serializable]
 	public class OnTakeManaEvent : UnityEvent<IAlive, float, object> { }
+
+	[Serializable]
+	public class OnTakeEnergyEvent : UnityEvent<IAlive, float, object> { }
 
 	[Serializable]
 	public class OnDeathEvent : UnityEvent<IAlive, object> { }

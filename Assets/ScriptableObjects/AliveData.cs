@@ -16,10 +16,16 @@ namespace ScriptableObjects
 		public float Mana;
 
 		[SerializeField]
+		public float Energy;
+
+		[SerializeField]
 		public float RegenerateHealth;
 		
 		[SerializeField]
 		public float RegenerateMana;
+
+		[SerializeField]
+		public float RegenerateEnergy;
 
 		[SerializeField]
 		public float Speed;

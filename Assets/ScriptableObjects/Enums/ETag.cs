@@ -10,6 +10,7 @@ namespace ScriptableObjects.Enums
 		RestoresMana = 2,
 		Damage = 4,
 		CrowdControl = 8,
-		Defense = 16
+		Defense = 16,
+		RestoresEnergy = 32,
 	}
 }

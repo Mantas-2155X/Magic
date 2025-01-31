@@ -28,7 +28,9 @@ namespace AI.Base
 		public static readonly OnRestoreHealthEvent OnRestoreHealthEvent = new ();
 		public static readonly OnDamageEvent OnDamageEvent = new ();
 		public static readonly OnRestoreManaEvent OnRestoreManaEvent = new ();
+		public static readonly OnRestoreEnergyEvent OnRestoreEnergyEvent = new ();
 		public static readonly OnTakeManaEvent OnTakeManaEvent = new ();
+		public static readonly OnTakeEnergyEvent OnTakeEnergyEvent = new ();
 		public static readonly OnDeathEvent OnDeathEvent = new ();
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
 		public static readonly OnRelationshipGroupChangedEvent OnRelationshipGroupChangedEvent = new ();
@@ -78,6 +80,7 @@ namespace AI.Base
 		public virtual float CurrentSpeed { get; private set; }
 		public float CurrentHealth { get; private set; }
 		public float CurrentMana { get; private set; }
+		public float CurrentEnergy { get; private set; }
 
 		public EMovementType MovementType { get; private set; }
 		public int RelationshipGroup { get; private set; }
@@ -374,6 +377,7 @@ namespace AI.Base
 
 			CurrentHealth = data.Health;
 			CurrentMana = data.Mana;
+			CurrentEnergy = data.Energy;
 			
 			SpellRange = float.MaxValue;
 			IsAlive = true;
@@ -412,6 +416,7 @@ namespace AI.Base
 
 			CurrentHealth = 0;
 			CurrentMana = 0;
+			CurrentEnergy = 0;
 			IsAlive = false;
 			
 #if BODY_GIB
@@ -498,6 +503,20 @@ namespace AI.Base
 			CurrentMana += mana;
 			OnRestoreManaEvent?.Invoke(this, mana, source);
 		}
+		public virtual void RestoreEnergy(float energy, object source)
+		{
+			if (!IsAlive || energy < 0)
+				return;
+
+			if (CurrentEnergy >= Data.Energy)
+				return;
+
+			if (CurrentEnergy + energy >= Data.Energy)
+				energy = Data.Energy - CurrentEnergy;
+			
+			CurrentEnergy += energy;
+			OnRestoreEnergyEvent?.Invoke(this, energy, source);
+		}
 
 		public virtual void Damage(float damage, object source, EElement type)
 		{
@@ -537,6 +556,14 @@ namespace AI.Base
 			CurrentMana -= mana;
 			OnTakeManaEvent?.Invoke(this, mana, source);
 		}
+		public virtual void TakeEnergy(float energy, object source)
+		{
+			if (!IsAlive || energy < 0 || IsPowerful)
+				return;
+			
+			CurrentEnergy -= energy;
+			OnTakeEnergyEvent?.Invoke(this, energy, source);
+		}
 
 		public virtual bool IsGrounded()
 		{
@@ -557,6 +584,7 @@ namespace AI.Base
 				if (this == null || !IsAlive || !isActiveAndEnabled)
 					return;
 				
+				RestoreEnergy(Data.RegenerateEnergy, this);
 				RestoreMana(Data.RegenerateMana, this);
 				RestoreHealth(Data.RegenerateHealth, this);
 			}

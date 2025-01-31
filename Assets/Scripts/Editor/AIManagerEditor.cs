@@ -308,6 +308,26 @@ namespace Editor
 			
 			GUILayout.EndHorizontal();
 			
+			GUILayout.BeginHorizontal();
+
+			if (GUILayout.Button("Refill Energy"))
+			{
+				aiManager.Player.RestoreEnergy(aiManager.Player.Data.Energy, null);
+
+				foreach (var npc in aiManager.NPCs)
+					npc.RestoreEnergy(npc.Data.Energy, null);
+			}
+			
+			if (GUILayout.Button("Clear Energy"))
+			{
+				aiManager.Player.TakeEnergy(aiManager.Player.CurrentEnergy, null);
+
+				foreach (var npc in aiManager.NPCs)
+					npc.TakeEnergy(npc.CurrentEnergy, null);
+			}
+			
+			GUILayout.EndHorizontal();
+			
 			ShowStats = EditorGUILayout.ToggleLeft("Show Stats", ShowStats);
 			if (!ShowStats)
 			{
@@ -344,6 +364,7 @@ namespace Editor
 				GUILayout.Label(npc.gameObject.name, GUILayout.Width(50));
 				GUILayout.Label($"HP: {npc.CurrentHealth}", GUILayout.Width(50));
 				GUILayout.Label($"MP: {npc.CurrentMana}", GUILayout.Width(50));
+				GUILayout.Label($"EP: {npc.CurrentEnergy}", GUILayout.Width(50));
 				GUILayout.Label($"Vel: {npc.Agent.velocity.magnitude:0.0000}", GUILayout.Width(80));
 				npc.SetInvulnerable(GUILayout.Toggle(npc.IsInvulnerable, "INV", GUILayout.Width(50)));
 				npc.SetPowerful(GUILayout.Toggle(npc.IsPowerful, "PW", GUILayout.Width(50)));
