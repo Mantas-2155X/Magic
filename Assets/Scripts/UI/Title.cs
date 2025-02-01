@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Managers;
+using UI.Settings.Pages;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
@@ -55,6 +56,9 @@ namespace UI
 		[SerializeField]
 		public Settings.Settings Settings;
 		
+		[SerializeField]
+		public GameObject Blocker;
+
 		#region MonoBehaviour
 
 		public void Awake()
@@ -184,7 +188,7 @@ namespace UI
 
 		private void onTitle(InputAction.CallbackContext ctx)
 		{
-			if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title")
+			if (KeybindsPage.IsRebinding || UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title")
 				return;
 			
 			Toggle();
@@ -192,7 +196,7 @@ namespace UI
 		
 		private void onConsole(InputAction.CallbackContext ctx)
 		{
-			if (Console == null)
+			if (KeybindsPage.IsRebinding || Console == null)
 				return;
 			
 			Console.Toggle();
