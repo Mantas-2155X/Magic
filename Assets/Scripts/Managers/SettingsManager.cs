@@ -9,6 +9,7 @@ using AI;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -690,6 +691,110 @@ namespace Managers
 				SelectionManager.ShowIndicator = Convert.ToBoolean(newValue);
 			});
 
+			#endregion
+
+			#region Keybinds
+
+			AddSetting("keybinds-movement-forward", "SETTINGS_KEYBINDS_MOVEMENT_FORWARD", "SETTINGS_KEYBINDS_MOVEMENT_FORWARD_DESC", ESettingType.String, "<Keyboard>/w", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Move").ApplyBindingOverride(2, (string)newValue);
+			});
+			
+			AddSetting("keybinds-movement-backward", "SETTINGS_KEYBINDS_MOVEMENT_BACKWARD", "SETTINGS_KEYBINDS_MOVEMENT_BACKWARD_DESC", ESettingType.String, "<Keyboard>/s", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Move").ApplyBindingOverride(3, (string)newValue);
+			});
+			
+			AddSetting("keybinds-movement-left", "SETTINGS_KEYBINDS_MOVEMENT_LEFT", "SETTINGS_KEYBINDS_MOVEMENT_LEFT_DESC", ESettingType.String, "<Keyboard>/a", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Move").ApplyBindingOverride(4, (string)newValue);
+			});
+			
+			AddSetting("keybinds-movement-right", "SETTINGS_KEYBINDS_MOVEMENT_RIGHT", "SETTINGS_KEYBINDS_MOVEMENT_RIGHT_DESC", ESettingType.String, "<Keyboard>/d", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Move").ApplyBindingOverride(5, (string)newValue);
+			});
+			
+			AddSetting("keybinds-movement-jump", "SETTINGS_KEYBINDS_MOVEMENT_JUMP", "SETTINGS_KEYBINDS_MOVEMENT_JUMP_DESC", ESettingType.String, "<Keyboard>/space", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Jump").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-movement-sprint", "SETTINGS_KEYBINDS_MOVEMENT_SPRINT", "SETTINGS_KEYBINDS_MOVEMENT_SPRINT_DESC", ESettingType.String, "<Keyboard>/leftShift", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Sprint").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-movement-fall", "SETTINGS_KEYBINDS_MOVEMENT_FALL", "SETTINGS_KEYBINDS_MOVEMENT_FALL_DESC", ESettingType.String, "<Keyboard>/leftCtrl", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Fall").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-attack", "SETTINGS_KEYBINDS_GAMEPLAY_ATTACK", "SETTINGS_KEYBINDS_GAMEPLAY_ATTACK_DESC", ESettingType.String, "<Mouse>/leftButton", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Attack").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-interact", "SETTINGS_KEYBINDS_GAMEPLAY_INTERACT", "SETTINGS_KEYBINDS_GAMEPLAY_INTERACT_DESC", ESettingType.String, "<Keyboard>/e", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Interact").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-light", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT_DESC", ESettingType.String, "<Keyboard>/f", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Light").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-spellbook", "SETTINGS_KEYBINDS_GAMEPLAY_SPELLBOOK", "SETTINGS_KEYBINDS_GAMEPLAY_SPELLBOOK_DESC", ESettingType.String, "<Keyboard>/i", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Spellbook").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-hotbar1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1_DESC", ESettingType.String, "<Keyboard>/1", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Hotbar1").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-hotbar2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2_DESC", ESettingType.String, "<Keyboard>/2", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Hotbar2").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-hotbar3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3_DESC", ESettingType.String, "<Keyboard>/3", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Hotbar3").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-hotbar4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4_DESC", ESettingType.String, "<Keyboard>/4", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Hotbar4").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-hotbar5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5_DESC", ESettingType.String, "<Keyboard>/5", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Hotbar5").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-hotbar6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6_DESC", ESettingType.String, "<Keyboard>/6", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Hotbar6").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-gameplay-hotbar7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7_DESC", ESettingType.String, "<Keyboard>/7", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Hotbar7").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-debug-console", "SETTINGS_KEYBINDS_DEBUG_CONSOLE", "SETTINGS_KEYBINDS_DEBUG_CONSOLE_DESC", ESettingType.String, "<Keyboard>/backquote", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Title").FindAction("Console").ApplyBindingOverride(0, (string)newValue);
+			});
+			
+			AddSetting("keybinds-debug-noclip", "SETTINGS_KEYBINDS_DEBUG_NOCLIP", "SETTINGS_KEYBINDS_DEBUG_NOCLIP_DESC", ESettingType.String, "<Keyboard>/v", (previousValue, newValue) =>
+			{
+				InputSystem.actions.FindActionMap("Player").FindAction("Noclip").ApplyBindingOverride(0, (string)newValue);
+			});
+			
 			#endregion
 			
 			ResetSettings();
