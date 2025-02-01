@@ -20,55 +20,7 @@ namespace AI
 		public InputActionReference LookAction;
 		
 		[SerializeField]
-		public InputActionReference MoveAction;
-
-		[SerializeField]
-		public InputActionReference JumpAction;
-		
-		[SerializeField]
-		public InputActionReference FallAction;
-		
-		[SerializeField]
-		public InputActionReference SprintAction;
-
-		[SerializeField]
 		public InputActionReference ScrollAction;
-
-		[SerializeField]
-		public InputActionReference UseAction;
-
-		[SerializeField]
-		public InputActionReference AttackAction;
-		
-		[SerializeField]
-		public InputActionReference NoclipAction;
-		
-		[SerializeField]
-		public InputActionReference LightAction;
-
-		[SerializeField]
-		public InputActionReference HotbarAction1;
-		
-		[SerializeField]
-		public InputActionReference HotbarAction2;
-		
-		[SerializeField]
-		public InputActionReference HotbarAction3;
-		
-		[SerializeField]
-		public InputActionReference HotbarAction4;
-		
-		[SerializeField]
-		public InputActionReference HotbarAction5;
-		
-		[SerializeField]
-		public InputActionReference HotbarAction6;
-
-		[SerializeField]
-		public InputActionReference HotbarAction7;
-
-		[SerializeField]
-		public InputActionReference SpellbookAction;
 
 		#endregion
 
@@ -122,7 +74,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 
-			if (AttackAction.action.IsPressed() && Spell != null)
+			if (SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1.IsPressed() && Spell != null)
 				Spell.StartCasting();
 
 			var weaponContainer = Body.Containers[EWearableType.Weapon].Wear;
@@ -175,6 +127,7 @@ namespace AI
 				return;
 
 			var data = (PlayerData)Data;
+			var sprintAction = SettingsManager.Instance.GetKeybind("keybinds-movement-sprint").Item1;
 			
 			if (MovementType == EMovementType.Noclip)
 			{
@@ -184,7 +137,7 @@ namespace AI
 				// Grab jump/fall as vertical move direction
 				var vertical = jumpPressed ? 1f : fallPressed ? -1f : 0f;
 				
-				var addVector = new Vector3(moveDirection.x, vertical, moveDirection.y) * (SprintAction.action.IsPressed() ? 1f * data.SprintMultiplier : 1f);
+				var addVector = new Vector3(moveDirection.x, vertical, moveDirection.y) * (sprintAction.IsPressed() ? 1f * data.SprintMultiplier : 1f);
 				addVector *= 5f;
 				
 				Body.Rigidbody.AddRelativeForce(addVector, ForceMode.VelocityChange);
@@ -197,7 +150,7 @@ namespace AI
 			var isSprinting = false;
 			var sprintEnergy = data.SprintEnergy * Time.fixedDeltaTime;
 			
-			if (CurrentEnergy >= sprintEnergy && SprintAction.action.IsPressed())
+			if (CurrentEnergy >= sprintEnergy && sprintAction.IsPressed())
 			{
 				isSprinting = true;
 				TakeEnergy(sprintEnergy, this);
@@ -236,19 +189,19 @@ namespace AI
 			switch (index)
 			{
 				case 0:
-					return HotbarAction1.action.GetBindingDisplayString();
+					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar1").Item1.GetBindingDisplayString();
 				case 1:
-					return HotbarAction2.action.GetBindingDisplayString();
+					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar2").Item1.GetBindingDisplayString();
 				case 2:
-					return HotbarAction3.action.GetBindingDisplayString();
+					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar3").Item1.GetBindingDisplayString();
 				case 3:
-					return HotbarAction4.action.GetBindingDisplayString();
+					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar4").Item1.GetBindingDisplayString();
 				case 4:
-					return HotbarAction5.action.GetBindingDisplayString();
+					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar5").Item1.GetBindingDisplayString();
 				case 5:
-					return HotbarAction6.action.GetBindingDisplayString();
+					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar6").Item1.GetBindingDisplayString();
 				case 6:
-					return HotbarAction7.action.GetBindingDisplayString();
+					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar7").Item1.GetBindingDisplayString();
 			}
 
 			return "";
@@ -270,74 +223,74 @@ namespace AI
 			look.canceled += onLookCanceled;
 			look.Enable();
 			
-			var move = MoveAction.action;
+			var move = SettingsManager.Instance.GetKeybind("keybinds-movement-forward").Item1;
 			move.performed += onMovePerformed;
 			move.canceled += onMoveCanceled;
 			move.Enable();
 			
-			var jump = JumpAction.action;
+			var jump = SettingsManager.Instance.GetKeybind("keybinds-movement-jump").Item1;
 			jump.performed += onJumpPerformed;
 			jump.canceled += onJumpCanceled;
 			jump.Enable();
 			
-			var fall = FallAction.action;
+			var fall = SettingsManager.Instance.GetKeybind("keybinds-movement-fall").Item1;
 			fall.performed += onFallPerformed;
 			fall.canceled += onFallCanceled;
 			fall.Enable();
 			
-			var use = UseAction.action;
+			var use = SettingsManager.Instance.GetKeybind("keybinds-gameplay-interact").Item1;
 			use.performed += onUse;
 			use.Enable();
 			
-			var attack = AttackAction.action;
+			var attack = SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1;
 			attack.performed += onAttackPerformed;
 			attack.canceled += onAttackCanceled;
 			attack.Enable();
 			
-			var noclip = NoclipAction.action;
+			var noclip = SettingsManager.Instance.GetKeybind("keybinds-debug-noclip").Item1;
 			noclip.performed += onNoclip;
 			noclip.Enable();
 			
-			var lightA = LightAction.action;
+			var lightA = SettingsManager.Instance.GetKeybind("keybinds-gameplay-light").Item1;
 			lightA.performed += onLight;
 			lightA.Enable();
 			
-			var sprint = SprintAction.action;
+			var sprint = SettingsManager.Instance.GetKeybind("keybinds-movement-sprint").Item1;
 			sprint.Enable();
 
 			var scroll = ScrollAction.action;
 			scroll.performed += onScroll;
 			scroll.Enable();
 			
-			var hotbar1 = HotbarAction1.action;
+			var hotbar1 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar1").Item1;
 			hotbar1.performed += onHotbar1;
 			hotbar1.Enable();
 			
-			var hotbar2 = HotbarAction2.action;
+			var hotbar2 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar2").Item1;
 			hotbar2.performed += onHotbar2;
 			hotbar2.Enable();
 			
-			var hotbar3 = HotbarAction3.action;
+			var hotbar3 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar3").Item1;
 			hotbar3.performed += onHotbar3;
 			hotbar3.Enable();
 			
-			var hotbar4 = HotbarAction4.action;
+			var hotbar4 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar4").Item1;
 			hotbar4.performed += onHotbar4;
 			hotbar4.Enable();
 			
-			var hotbar5 = HotbarAction5.action;
+			var hotbar5 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar5").Item1;
 			hotbar5.performed += onHotbar5;
 			hotbar5.Enable();
 			
-			var hotbar6 = HotbarAction6.action;
+			var hotbar6 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar6").Item1;
 			hotbar6.performed += onHotbar6;
 			hotbar6.Enable();
 			
-			var hotbar7 = HotbarAction7.action;
+			var hotbar7 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar7").Item1;
 			hotbar7.performed += onHotbar7;
 			hotbar7.Enable();
 			
-			var spellbook = SpellbookAction.action;
+			var spellbook = SettingsManager.Instance.GetKeybind("keybinds-gameplay-spellbook").Item1;
 			spellbook.performed += onSpellbook;
 			spellbook.Enable();
 		}
@@ -352,76 +305,76 @@ namespace AI
 			look.performed -= onLookPerformed;
 			look.canceled -= onLookCanceled;
 
-			var move = MoveAction.action;
+			var move = SettingsManager.Instance.GetKeybind("keybinds-movement-forward").Item1;
 			move.Disable();
 			move.performed -= onMovePerformed;
 			move.canceled -= onMoveCanceled;
 
-			var jump = JumpAction.action;
+			var jump = SettingsManager.Instance.GetKeybind("keybinds-movement-jump").Item1;
 			jump.Disable();
 			jump.performed -= onJumpPerformed;
 			jump.canceled -= onJumpCanceled;
 
-			var fall = FallAction.action;
+			var fall = SettingsManager.Instance.GetKeybind("keybinds-movement-fall").Item1;
 			fall.Disable();
 			fall.performed -= onFallPerformed;
 			fall.canceled -= onFallCanceled;
 
-			var use = UseAction.action;
+			var use = SettingsManager.Instance.GetKeybind("keybinds-gameplay-interact").Item1;
 			use.Disable();
 			use.performed -= onUse;
 
-			var attack = AttackAction.action;
+			var attack = SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1;
 			attack.Disable();
 			attack.performed -= onAttackPerformed;
 			attack.canceled -= onAttackCanceled;
 	
-			var noclip = NoclipAction.action;
+			var noclip = SettingsManager.Instance.GetKeybind("keybinds-debug-noclip").Item1;
 			noclip.Disable();
 			noclip.performed -= onNoclip;
 
-			var lightA = LightAction.action;
+			var lightA = SettingsManager.Instance.GetKeybind("keybinds-gameplay-light").Item1;
 			lightA.Disable();
 			lightA.performed -= onLight;
 
-			var sprint = SprintAction.action;
+			var sprint = SettingsManager.Instance.GetKeybind("keybinds-movement-sprint").Item1;
 			sprint.Disable();
 
 			var scroll = ScrollAction.action;
 			scroll.Disable();
 			scroll.performed -= onScroll;
 
-			var hotbar1 = HotbarAction1.action;
+			var hotbar1 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar1").Item1;
 			hotbar1.Disable();
 			hotbar1.performed -= onHotbar1;
 
-			var hotbar2 = HotbarAction2.action;
+			var hotbar2 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar2").Item1;
 			hotbar2.Disable();
 			hotbar2.performed -= onHotbar2;
 
-			var hotbar3 = HotbarAction3.action;
+			var hotbar3 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar3").Item1;
 			hotbar3.Disable();
 			hotbar3.performed -= onHotbar3;
 
-			var hotbar4 = HotbarAction4.action;
+			var hotbar4 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar4").Item1;
 			hotbar4.Disable();
 			hotbar4.performed -= onHotbar4;
 
-			var hotbar5 = HotbarAction5.action;
+			var hotbar5 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar5").Item1;
 			hotbar5.Disable();
 			hotbar5.performed -= onHotbar5;
 
-			var hotbar6 = HotbarAction6.action;
+			var hotbar6 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar6").Item1;
 			hotbar6.Disable();
 			hotbar6.performed -= onHotbar6;
 
-			var hotbar7 = HotbarAction7.action;
+			var hotbar7 = SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar7").Item1;
 			hotbar7.Disable();
 			hotbar7.performed -= onHotbar7;
 
 			if (includePanels)
 			{
-				var spellbook = SpellbookAction.action;
+				var spellbook = SettingsManager.Instance.GetKeybind("keybinds-gameplay-spellbook").Item1;
 				spellbook.Disable();
 				spellbook.performed -= onSpellbook;
 			}

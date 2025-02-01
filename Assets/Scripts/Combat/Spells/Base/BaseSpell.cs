@@ -52,9 +52,9 @@ namespace Combat.Spells.Base
 
 			switch (Owner)
 			{
-				case Player player:
+				case Player:
 				{
-					if (player.AttackAction.action.IsPressed())
+					if (SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1.IsPressed())
 						FinishCasting();
 					break;
 				}

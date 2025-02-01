@@ -43,9 +43,6 @@ namespace UI
 		public InputActionReference TitleAction;
 
 		[SerializeField]
-		public InputActionReference ConsoleAction;
-
-		[SerializeField]
 		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - load, 3 - save, 4 - settings, 5 - returntotitle, 6 - quitgame
 		[SerializeField]
 		public List<GameObject> ButtonObjects;
@@ -71,7 +68,7 @@ namespace UI
 			titleAction.performed += onTitle;
 			titleAction.Enable();
 			
-			var consoleAction = ConsoleAction.action;
+			var consoleAction = SettingsManager.Instance.GetKeybind("keybinds-debug-console").Item1;
 			consoleAction.performed += onConsole;
 			consoleAction.Enable();
 		}
