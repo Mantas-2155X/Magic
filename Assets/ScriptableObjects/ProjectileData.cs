@@ -16,6 +16,9 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public SSlow Slow;
+		
+		[SerializeField]
+		public SParalyze Paralyze;
 
 		[SerializeField]
 		public EElement Element;

@@ -32,8 +32,12 @@ namespace AI.Interfaces
 		public EMovementType MovementType { get; }
 		public int RelationshipGroup { get; }
 		public float SpellRange { get; }
+		
 		public float SlowAmount { get; }
 		public Dictionary<int, float> SlowSources { get; }
+		
+		public bool Paralyzed { get; }
+		public List<int> ParalyzeSources { get; }
 		
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
@@ -50,6 +54,11 @@ namespace AI.Interfaces
 		public void AddSlowSource(int instanceID, float amount);
 		public void RemoveSlowSource(int instanceID);
 		public void ClearSlowSources();
+		
+		public int AddParalyzeSource(float duration);
+		public void AddParalyzeSource(int instanceID);
+		public void RemoveParalyzeSource(int instanceID);
+		public void ClearParalyzeSources();
 
 		public int GetSpellIndex(SpellData data);
 		public void SetSpellIndex(SpellData data, int index);

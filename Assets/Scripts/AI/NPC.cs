@@ -485,6 +485,22 @@ namespace AI
 			updateAgentSpeed();
 		}
 		
+		public override void AddParalyzeSource(int instanceID)
+		{
+			base.AddParalyzeSource(instanceID);
+			updateAgentSpeed();
+		}
+		public override void RemoveParalyzeSource(int instanceID)
+		{
+			base.RemoveParalyzeSource(instanceID);
+			updateAgentSpeed();
+		}
+		public override void ClearParalyzeSources()
+		{
+			base.ClearParalyzeSources();
+			updateAgentSpeed();
+		}
+		
 		public override void SelectSpell(SpellData data)
 		{
 			var previousSpell = Spell;
@@ -535,6 +551,12 @@ namespace AI
 
 		private void updateAgentSpeed()
 		{
+			if (Paralyzed)
+			{
+				Agent.speed = 0f;
+				return;
+			}
+			
 			if (SlowSources.Count == 0)
 			{
 				Agent.speed = Data.Speed;

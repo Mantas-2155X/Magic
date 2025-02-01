@@ -85,6 +85,7 @@ namespace AI.Base
 		public EMovementType MovementType { get; private set; }
 		public int RelationshipGroup { get; private set; }
 		public float SpellRange { get; private set; }
+		
 		public float SlowAmount
 		{
 			get
@@ -102,9 +103,11 @@ namespace AI.Base
 				return amount;
 			}
 		}
-
 		public Dictionary<int, float> SlowSources { get; private set; } = new ();
 
+		public bool Paralyzed => ParalyzeSources.Count > 0;
+		public List<int> ParalyzeSources { get; private set; } = new ();
+		
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
 		public bool IsPowerful { get; private set; }
@@ -174,6 +177,29 @@ namespace AI.Base
 		public virtual void ClearSlowSources()
 		{
 			SlowSources.Clear();
+		}
+		
+		public virtual int AddParalyzeSource(float duration)
+		{
+			if (duration <= 0f)
+				return -1;
+
+			var id = Random.Range(0, int.MaxValue);
+			addTemporaryParalyze(id, duration).Forget();
+
+			return id;
+		}
+		public virtual void AddParalyzeSource(int instanceID)
+		{
+			ParalyzeSources.AddUnique(instanceID);
+		}
+		public virtual void RemoveParalyzeSource(int instanceID)
+		{
+			ParalyzeSources.Remove(instanceID);
+		}
+		public virtual void ClearParalyzeSources()
+		{
+			ParalyzeSources.Clear();
 		}
 
 		public virtual int GetSpellIndex(SpellData data)
@@ -612,6 +638,18 @@ namespace AI.Base
 				return;
 			
 			RemoveSlowSource(id);
+		}
+		
+		private async UniTaskVoid addTemporaryParalyze(int id, float duration)
+		{
+			AddParalyzeSource(id);
+
+			await UniTask.WaitForSeconds(duration);
+			
+			if (this == null || !IsAlive || !isActiveAndEnabled)
+				return;
+			
+			RemoveParalyzeSource(id);
 		}
 		
 		private void recalculateStats()

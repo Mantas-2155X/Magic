@@ -146,7 +146,7 @@ namespace AI
 
 			CameraTr.position = transform.position + Vector3.up * 0.5f;
 
-			if (lookDirection == Vector2.zero)
+			if (Paralyzed || lookDirection == Vector2.zero)
 				return;
 			
 			var cameraAngle = CameraTr.eulerAngles;
@@ -207,7 +207,7 @@ namespace AI
 			var grounded = IsGrounded();
 
 			// Prevent movement when fully bound
-			if (SlowAmount >= 1f)
+			if (Paralyzed || SlowAmount >= 1f)
 				movement = 0;
 			
 			// Adjust how much control force is weakened if not grounded
@@ -220,7 +220,7 @@ namespace AI
 			if (!grounded)
 				return;
 
-			var maxSpeed = data.Speed - (data.Speed * SlowAmount);
+			var maxSpeed = Paralyzed ? 0f : data.Speed - (data.Speed * SlowAmount);
 			
 			// Limit the rigidbody walking speed
 			var clampSpeed = isSprinting ? maxSpeed * data.SprintMultiplier : maxSpeed;
@@ -474,7 +474,7 @@ namespace AI
 		{
 			jumpPressed = true;
 			
-			if (MovementType == EMovementType.Normal && SlowAmount < 1f && IsGrounded())
+			if (MovementType == EMovementType.Normal && !Paralyzed && SlowAmount < 1f && IsGrounded())
 				Body.Rigidbody.AddForce(0f, ((PlayerData)Data).JumpForce, 0f, ForceMode.Impulse);
 		}
 		
@@ -571,7 +571,7 @@ namespace AI
 		
 		#region IAlive
 		
-		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : (SlowAmount >= 1f ? 0f : Data.Speed);
+		public override float CurrentSpeed => walking ? Body.Rigidbody.linearVelocity.magnitude : (Paralyzed || SlowAmount >= 1f ? 0f : Data.Speed);
 
 		public override bool IsWalking => walking;
 

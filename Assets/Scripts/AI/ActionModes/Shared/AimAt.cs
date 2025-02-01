@@ -19,6 +19,9 @@ namespace AI.ActionModes.Shared
 		/// </summary>
 		public bool AimTowards(Transform target)
 		{
+			if (owner.Paralyzed)
+				return false;
+			
 			var rb = owner.Body.Rigidbody;
 			
 			var targetPosition = target.position - rb.position;

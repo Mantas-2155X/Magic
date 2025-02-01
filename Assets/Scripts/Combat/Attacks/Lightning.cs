@@ -33,7 +33,7 @@ namespace Combat.Attacks
 			alives.Add(alive);
 			
 			alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
-			alive.AddSlowSource(AttackData.Slow.Amount, AttackData.Slow.Duration);
+			alive.AddParalyzeSource(AttackData.Paralyze.Duration);
 		}
 	}
 }

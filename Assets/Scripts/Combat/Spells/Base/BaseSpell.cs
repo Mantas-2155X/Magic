@@ -98,7 +98,7 @@ namespace Combat.Spells.Base
 		
 		public virtual bool CanCast()
 		{
-			if (IsCasting)
+			if (IsCasting || Owner.Paralyzed)
 				return false;
 
 			if (IsOnCooldown || Owner.CurrentMana < SpellData.CastingCost)
