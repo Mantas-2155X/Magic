@@ -155,7 +155,10 @@ namespace UI.Settings.Pages
 			if (IsRebinding)
 				return;
 			
-			Title.Instance.Blocker.SetActive(true);
+			var blocker = Title.Instance.Blocker;
+			blocker.SetActive(true);
+			
+			SelectionManager.Instance.SetSelection(blocker);
 			
 			enableInputAction = rebindingItem.InputAction.enabled;
 			rebindingItem.InputAction.Disable();
