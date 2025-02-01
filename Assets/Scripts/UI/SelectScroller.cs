@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using Managers;
-using TMPro;
 using Tools;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,16 +7,22 @@ using UnityEngine.UI;
 
 namespace UI
 {
-	public class DropdownScroller : MonoBehaviour, ISelectHandler
+	public class SelectScroller : MonoBehaviour, ISelectHandler
 	{
 		[SerializeField]
-		public TMP_Dropdown Dropdown;
+		public MonoBehaviour Element;
 		
 		[SerializeField]
 		public ScrollRect ScrollRect;
 
+		[SerializeField]
+		public bool ScrollOnStart;
+		
 		public void Start()
 		{
+			if (!ScrollOnStart)
+				return;
+			
 			var sel = SelectionManager.Instance.Selection;
 			if (sel == null || sel != gameObject)
 				return;
@@ -31,7 +36,7 @@ namespace UI
 			if (eventData is not AxisEventData)
 				return;
 			
-			ScrollRect.ScrollToCenterDelayed((RectTransform)transform, Dropdown).Forget();
+			ScrollRect.ScrollToCenterDelayed((RectTransform)transform, Element).Forget();
 		}
 	}
 }

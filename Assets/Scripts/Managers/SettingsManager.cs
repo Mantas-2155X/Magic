@@ -58,6 +58,11 @@ namespace Managers
 			saveSettings();
 		}
 
+		public Dictionary<string, Setting> GetSettings()
+		{
+			return settings;
+		}
+		
 		public void ClearSettings()
 		{
 			settings.Clear();
