@@ -16223,7 +16223,7 @@ MonoBehaviour:
     m_Left: 5
     m_Right: 5
     m_Top: 5
-    m_Bottom: -11
+    m_Bottom: 5
   m_ChildAlignment: 0
   m_Spacing: 1
   m_ChildForceExpandWidth: 1
@@ -17003,6 +17003,7 @@ MonoBehaviour:
   isAlert: 0
   m_InputValidator: {fileID: 0}
   m_ShouldActivateOnSelect: 1
+  OverrideWrappingMode: 0
 --- !u!1 &7744259043607816774
 GameObject:
   m_ObjectHideFlags: 0
@@ -17568,6 +17569,7 @@ MonoBehaviour:
   isAlert: 0
   m_InputValidator: {fileID: 0}
   m_ShouldActivateOnSelect: 0
+  OverrideWrappingMode: 1
 --- !u!1 &8199954794238512924
 GameObject:
   m_ObjectHideFlags: 0
@@ -19008,7 +19010,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 3
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
