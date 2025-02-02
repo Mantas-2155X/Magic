@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using AYellowpaper.SerializedCollections;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
@@ -14,25 +14,23 @@ namespace UI
 	public class Console : MonoBehaviour
 	{
 		[SerializeField]
-		public Transform Template;
-
-		[SerializeField]
-		public Transform Content;
-
-		[SerializeField]
 		public ScrollRect ScrollRect;
 		
 		[SerializeField]
 		public TMP_InputField Input;
+
+		[SerializeField]
+		public TMP_InputField Text;
 		
 		[SerializeField]
 		public InputActionReference HistoryAction;
 
-		[SerializeField]
-		public List<TMP_Text> Items = new ();
+		private const string whiteColor = "<color=white>";
+		private const string yellowColor = "<color=yellow>";
+		private const string redColor = "<color=red>";
+		private const string endColor = "</color>";
 
-		[SerializeField]
-		public SerializedDictionary<ConsoleManager.EConsoleEntryType, Color> Colors;
+		private readonly string newLine = Environment.NewLine;
 		
 		private readonly List<string> history = new ();
 		private int historyIndex = -1;
@@ -192,45 +190,52 @@ namespace UI
 
 			if (refreshEverything)
 			{
-				for (var i = 0; i < Items.Count; i++)
-				{
-					var item = Items[i];
-					item.gameObject.SetActive(false);
-				}
+				Text.text = "";
+			}
+			else if (refreshLast == 0)
+			{
+				refreshEverything = false;
+				refreshLast = 0;
+				return;
 			}
 			else if (refreshLast != 0)
 			{
-				startAt = entries.Count - refreshLast - 1;
+				startAt = entries.Count - refreshLast;
 			}
 
-			if (startAt < 0 || startAt >= entries.Count)
-				return;
-			
 			refreshEverything = false;
 			refreshLast = 0;
 
+			if (entries.Count == 0 || startAt < 0 || startAt >= entries.Count)
+				return;
+			
+			var builder = new StringBuilder(Text.text);
+
 			for (var i = startAt; i < entries.Count; i++)
 			{
-				TMP_Text item;
-				
-				if (Items.Count <= i)
-				{
-					item = Instantiate(Template, Content).GetComponent<TMP_Text>();
-					Items.Add(item);
-				}
-				else
-				{
-					item = Items[i];
-				}
-				
 				var entry = entries[i];
 				
-				item.color = Colors[entry.Type];
-				item.text = entry.Text;
+				switch (entry.Type)
+				{
+					case ConsoleManager.EConsoleEntryType.Info:
+						builder.Append(whiteColor);
+						break;
+					case ConsoleManager.EConsoleEntryType.Warning:
+						builder.Append(yellowColor);
+						break;
+					case ConsoleManager.EConsoleEntryType.Error:
+						builder.Append(redColor);
+						break;
+					default:
+						throw new NotImplementedException();
+				}
 				
-				item.gameObject.SetActive(true);
+				builder.Append(entry.Text);
+				builder.Append(endColor);
+				builder.Append(newLine);
 			}
 			
+			Text.text = builder.ToString();
 			scrollDelayed().Forget();
 		}
 
@@ -332,7 +337,7 @@ namespace UI
 			if (this == null || !isActiveAndEnabled)
 				return;
 
-			Canvas.ForceUpdateCanvases();
+			LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)ScrollRect.transform);
 			
 			ScrollRect.verticalNormalizedPosition = 0f;
 			ScrollRect.horizontalNormalizedPosition = 0f;
