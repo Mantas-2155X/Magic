@@ -1,3 +1,5 @@
+#define SELECTION_REQUIRE_GAMEPAD
+
 using Managers.Events;
 using UI;
 using UnityEngine;
@@ -155,7 +157,11 @@ namespace Managers
 
 		private void updateIndicatorImage()
 		{
+#if !SELECTION_REQUIRE_GAMEPAD
+			IndicatorImage.color = Color.white;
+#else
 			IndicatorImage.color = Gamepad.all.Count > 0 && ShowIndicator ? Color.white : Color.clear;
+#endif
 		}
 	}
 }

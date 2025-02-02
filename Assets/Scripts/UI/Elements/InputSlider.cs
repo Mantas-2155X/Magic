@@ -2,6 +2,7 @@ using System.Globalization;
 using TMPro;
 using UI.Events;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Elements
 {
