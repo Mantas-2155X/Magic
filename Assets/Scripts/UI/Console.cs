@@ -202,6 +202,9 @@ namespace UI
 			{
 				startAt = entries.Count - refreshLast - 1;
 			}
+
+			if (startAt < 0 || startAt >= entries.Count)
+				return;
 			
 			refreshEverything = false;
 			refreshLast = 0;
