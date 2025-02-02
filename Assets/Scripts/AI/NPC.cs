@@ -192,7 +192,7 @@ namespace AI
 			if (!state || agent.isOnNavMesh)
 				return true;
 
-			Debug.LogWarning($"[{name}] Agent is outside of navmesh, killing");
+			Debug.LogWarning($"[NPC {gameObject.name}] Agent is outside of navmesh, killing");
 			Kill(this);
 
 			return false;

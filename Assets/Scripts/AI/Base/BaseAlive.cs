@@ -572,7 +572,7 @@ namespace AI.Base
 			if (ProtectionStats.TryGetValue(type, out var protectionStat))
 				protectionStat.Subtract(ref damage);
 #if DEBUG_DAMAGE
-			Debug.Log($"[{name}] Taking {type} damage from {source}. {original} -> {postDamage} -> {damage}");
+			Debug.Log($"[Alive {gameObject.name}] Taking {type} damage from {source}. {original} -> {postDamage} -> {damage}");
 #endif
 			if (damage < 0)
 				return;

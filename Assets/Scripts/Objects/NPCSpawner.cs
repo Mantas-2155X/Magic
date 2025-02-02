@@ -155,7 +155,7 @@ namespace Objects
 				var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], RelationshipGroup);
 				if (npc == null || !npc.IsAlive)
 				{
-					Debug.LogWarning($"[{name}] Failed creating NPC");
+					Debug.LogWarning($"[NPCSpawner {gameObject.name}] Failed creating NPC");
 					continue;
 				}
 				

@@ -127,7 +127,7 @@ namespace Objects.Base
 			ObjectManager.Instance.Unregister(this);
 			
 #if DEBUG_OBJ
-			Debug.Log($"[{name}] IObject broken by {source}");
+			Debug.Log($"[Object {gameObject.name}] IObject broken by {source}");
 #endif
 			
 			Destroy(thisGo);
@@ -168,7 +168,7 @@ namespace Objects.Base
 				return false;
 			
 #if DEBUG_OBJ
-			Debug.Log($"[{name}] IObject picked up by {user.GetGameObject().name}");
+			Debug.Log($"[Object {gameObject.name}] IObject picked up by {user.GetGameObject().name}");
 #endif
 			
 			switch (ObjectData.PickupAction)
@@ -232,7 +232,7 @@ namespace Objects.Base
 				return false;
 			
 #if DEBUG_OBJ
-			Debug.Log($"[{name}] IObject used by {user.GetGameObject().name}");
+			Debug.Log($"[Object {gameObject.name}] IObject used by {user.GetGameObject().name}");
 #endif
 			
 			switch (ObjectData.UseAction)
