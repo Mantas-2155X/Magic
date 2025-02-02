@@ -192,14 +192,22 @@ namespace AI.Base
 		public virtual void AddParalyzeSource(int instanceID)
 		{
 			ParalyzeSources.AddUnique(instanceID);
+			
+			if (Paralyzed)
+				Body.SetMalfunction(true);
 		}
 		public virtual void RemoveParalyzeSource(int instanceID)
 		{
 			ParalyzeSources.Remove(instanceID);
+			
+			if (!Paralyzed)
+				Body.SetMalfunction(false);
 		}
 		public virtual void ClearParalyzeSources()
 		{
 			ParalyzeSources.Clear();
+			
+			Body.SetMalfunction(false);
 		}
 
 		public virtual int GetSpellIndex(SpellData data)
@@ -439,6 +447,9 @@ namespace AI.Base
 			DropAllWearables();
 
 			Body.SetCoreGlow(EElement.Unknown);
+			Body.SetCoreCenter(false);
+
+			Body.Malfunction.gameObject.SetActive(false);
 
 			CurrentHealth = 0;
 			CurrentMana = 0;

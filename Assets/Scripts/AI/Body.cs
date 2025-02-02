@@ -52,6 +52,9 @@ namespace AI
 		[SerializeField]
 		public float FallDamageMultiplier = 3.5f;
 		
+		[SerializeField]
+		public ParticleSystem Malfunction;
+		
 		[HideInInspector]
 		public bool ShouldSway;
 		
@@ -64,6 +67,8 @@ namespace AI
 
 		private EElement coreGlowElement;
 		private bool coreCenterActive;
+		
+		private bool malfunctionActive;
 
 		public void Awake()
 		{
@@ -103,6 +108,19 @@ namespace AI
 				centerMaterial.color = color;
 				centerMaterial.SetColor(emissionColor, color);
 			}
+		}
+
+		public void SetMalfunction(bool active)
+		{
+			if (malfunctionActive == active)
+				return;
+			
+			malfunctionActive = active;
+			
+			if (active)
+				Malfunction.Play(true);
+			else
+				Malfunction.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 		}
 		
 		public void Update()
