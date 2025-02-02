@@ -537,7 +537,7 @@ namespace AI
 			if (previous == value)
 				return;
 
-			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, value ? "Enabled god mode" : "Disabled god mode");
+			UnityEngine.Debug.Log(value ? $"[Player {gameObject.name}] Enabled god mode" : $"[Player {gameObject.name}] Disabled god mode");
 		}
 		
 		public override void SetPowerful(bool value)
@@ -549,7 +549,7 @@ namespace AI
 			if (previous == value)
 				return;
 
-			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, value ? "Enabled power mode" : "Disabled power mode");
+			UnityEngine.Debug.Log(value ? $"[Player {gameObject.name}] Enabled power mode" : $"[Player {gameObject.name}] Disabled power mode");
 		}
 		
 		public override void SetMovementType(EMovementType value)
@@ -564,10 +564,10 @@ namespace AI
 			switch (value)
 			{
 				case EMovementType.Noclip:
-					ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, "Enabled noclip mode");
+					UnityEngine.Debug.Log($"[Player {gameObject.name}] Enabled noclip mode");
 					break;
 				case EMovementType.Normal when previous == EMovementType.Noclip:
-					ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, "Disabled noclip mode");
+					UnityEngine.Debug.Log($"[Player {gameObject.name}] Disabled noclip mode");
 					break;
 			}
 		}

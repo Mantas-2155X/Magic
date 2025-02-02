@@ -73,7 +73,7 @@ namespace Managers
 			}
 
 			var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $"Changing scene from {currentScene} to {scene}");
+			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {currentScene} to {scene}");
 			
 			var handle = Addressables.LoadSceneAsync("Scenes/" + scene);
 

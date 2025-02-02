@@ -228,14 +228,14 @@ namespace Managers
 
 				if (!SceneManager.Instance.SceneExists(scene))
 				{
-					AddEntry(EConsoleEntryType.Warning, "Scene not found");
+					Debug.LogWarning("Scene not found");
 					return;
 				}
 				
 				SceneManager.Instance.ChangeScene(scene, true, true, scene != "Title");
 			}, () =>
 			{
-				AddEntry(EConsoleEntryType.Info, SceneManager.Instance.GetCurrentScene());
+				Debug.Log(SceneManager.Instance.GetCurrentScene());
 			});
 			
 			AddCommand("msens", "Changes the mouse sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
@@ -252,7 +252,7 @@ namespace Managers
 				controlsPage.Select(true);
 			}, () =>
 			{
-				AddEntry(EConsoleEntryType.Info, SettingsManager.Instance.GetFloat("controls-sensitivity-mouse")?.ToString(CultureInfo.CurrentCulture));
+				Debug.Log(SettingsManager.Instance.GetFloat("controls-sensitivity-mouse")?.ToString(CultureInfo.CurrentCulture));
 			});
 			
 			AddCommand("csens", "Changes the controller sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
@@ -269,7 +269,7 @@ namespace Managers
 				controlsPage.Select(true);
 			}, () =>
 			{
-				AddEntry(EConsoleEntryType.Info, SettingsManager.Instance.GetFloat("controls-sensitivity-controller")?.ToString(CultureInfo.CurrentCulture));
+				Debug.Log(SettingsManager.Instance.GetFloat("controls-sensitivity-controller")?.ToString(CultureInfo.CurrentCulture));
 			});
 			
 			AddCommand("log", "Create test logs", new [] {EConsoleCommandParameter.String, EConsoleCommandParameter.Int}, args =>
@@ -277,7 +277,7 @@ namespace Managers
 				var amount = (int)args[1];
 				if (amount <= 0)
 				{
-					AddEntry(EConsoleEntryType.Warning, "Invalid amount specified");
+					Debug.LogWarning("Invalid amount specified");
 					return;
 				}
 				
@@ -315,7 +315,7 @@ namespace Managers
 						break;
 					}
 					default:
-						AddEntry(EConsoleEntryType.Warning, "Incorrect type specified (error, assert, exception, warning, log)");
+						Debug.LogWarning("Incorrect type specified (error, assert, exception, warning, log)");
 						return;
 				}
 			});
@@ -362,12 +362,12 @@ namespace Managers
 			
 			AddCommand("scenes", "Lists all available scenes", () =>
 			{
-				AddEntry(EConsoleEntryType.Info, "Available Scenes:");
+				Debug.Log("Available Scenes:");
 
 				var scenes = SceneManager.Instance.GetScenes();
 				
 				for (var i = 0; i < scenes.Count; i++)
-					AddEntry(EConsoleEntryType.Info, scenes[i]);
+					Debug.Log(scenes[i]);
 			});
 			
 			AddCommand("noclip", "Toggle noclip mode", () =>
@@ -410,7 +410,7 @@ namespace Managers
 				GameManager.TimeScale = (float)args[0];
 			}, () =>
 			{
-				AddEntry(EConsoleEntryType.Info, GameManager.TimeScale.ToString(CultureInfo.CurrentCulture));
+				Debug.Log(GameManager.TimeScale.ToString(CultureInfo.CurrentCulture));
 			});
 
 			AddCommand("fpslimit", "Sets the framerate limit", new [] {EConsoleCommandParameter.Int}, args =>
@@ -418,7 +418,7 @@ namespace Managers
 				SettingsManager.Instance.SetSetting("video-fpslimit", (int)args[0]);
 			}, () =>
 			{
-				AddEntry(EConsoleEntryType.Info, SettingsManager.Instance.GetInt("video-fpslimit")?.ToString());
+				Debug.Log(SettingsManager.Instance.GetInt("video-fpslimit")?.ToString());
 			});
 			
 			AddCommand("renderscale", "Sets the render scale", new [] {EConsoleCommandParameter.Float}, args =>
@@ -426,7 +426,7 @@ namespace Managers
 				SettingsManager.Instance.SetSetting("video-renderscale", (float)args[0]);
 			}, () =>
 			{
-				AddEntry(EConsoleEntryType.Info, SettingsManager.Instance.GetFloat("video-renderscale")?.ToString(CultureInfo.CurrentCulture));
+				Debug.Log(SettingsManager.Instance.GetFloat("video-renderscale")?.ToString(CultureInfo.CurrentCulture));
 			});
 
 			AddCommand("clear", "Clears the console", () =>
@@ -473,7 +473,7 @@ namespace Managers
 			
 			AddCommand("help", "Lists all commands", () =>
 			{
-				AddEntry(EConsoleEntryType.Info, "Available Commands:");
+				Debug.Log("Available Commands:");
 				
 				for (var i = 0; i < commands.Count; i++)
 				{
@@ -496,7 +496,7 @@ namespace Managers
 						parameters += ") ";
 					}
 					
-					AddEntry(EConsoleEntryType.Info, $"{command.Name} {parameters}- {command.Description}");
+					Debug.Log($"{command.Name} {parameters}- {command.Description}");
 				}
 			});
 		}

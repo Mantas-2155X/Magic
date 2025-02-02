@@ -105,7 +105,7 @@ namespace UI
 			if (string.IsNullOrEmpty(text))
 				return;
 			
-			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $">{text}");
+			UnityEngine.Debug.Log($">{text}");
 
 			try
 			{
@@ -113,7 +113,7 @@ namespace UI
 				switch (result)
 				{
 					case ConsoleManager.EConsoleCommandResult.NotFound:
-						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Command not found");
+						UnityEngine.Debug.LogWarning("Command not found");
 						break;
 					case ConsoleManager.EConsoleCommandResult.Success:
 						if (history.Count > 0)
@@ -132,13 +132,13 @@ namespace UI
 						}
 						break;
 					case ConsoleManager.EConsoleCommandResult.InvalidParameter:
-						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Invalid parameters");
+						UnityEngine.Debug.LogWarning("Invalid parameters");
 						break;
 					case ConsoleManager.EConsoleCommandResult.TooManyParameters:
-						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Too many parameters");
+						UnityEngine.Debug.LogWarning("Too many parameters");
 						break;
 					case ConsoleManager.EConsoleCommandResult.NotEnoughParameters:
-						ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Warning, "Not enough parameters");
+						UnityEngine.Debug.LogWarning("Not enough parameters");
 						break;
 					default:
 						throw new NotImplementedException();

@@ -400,7 +400,7 @@ namespace AI.Base
 			if (IsAlive)
 				return;
 
-			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $"{name} has spawned");
+			Debug.Log($"[Alive {gameObject.name}] has spawned");
 
 			Data = data;
 			
@@ -438,7 +438,7 @@ namespace AI.Base
 			if (!IsAlive)
 				return;
 			
-			ConsoleManager.Instance.AddEntry(ConsoleManager.EConsoleEntryType.Info, $"{name} was killed by {source}");
+			Debug.Log($"[Alive {gameObject.name}] was killed by {source}");
 			
 			if (Spell != null)
 				Spell.CancelCasting();
