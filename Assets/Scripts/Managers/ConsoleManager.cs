@@ -49,11 +49,6 @@ namespace Managers
 			OnConsoleEntryAddedEvent?.Invoke(entry);
 		}
 
-		public void RemoveEntry(int index)
-		{
-			entries.RemoveAt(index);
-		}
-
 		public void ClearEntries()
 		{
 			entries.Clear();

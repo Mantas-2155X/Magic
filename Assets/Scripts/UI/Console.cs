@@ -36,6 +36,9 @@ namespace UI
 		
 		private readonly List<string> history = new ();
 		private int historyIndex = -1;
+
+		private bool refreshEverything;
+		private int refreshLast;
 		
 		public void Awake()
 		{
@@ -47,6 +50,8 @@ namespace UI
 			historyAction.Enable();
 			
 			Input.onSubmit.AddListener(onSubmit);
+
+			refreshEverything = true;
 		}
 		
 		public void OnDestroy()
@@ -182,14 +187,26 @@ namespace UI
 		
 		private void refresh()
 		{
-			for (var i = 0; i < Items.Count; i++)
+			var entries = ConsoleManager.Instance.GetEntries();
+			var startAt = 0;
+
+			if (refreshEverything)
 			{
-				var item = Items[i];
-				item.gameObject.SetActive(false);
+				for (var i = 0; i < Items.Count; i++)
+				{
+					var item = Items[i];
+					item.gameObject.SetActive(false);
+				}
+			}
+			else if (refreshLast != 0)
+			{
+				startAt = entries.Count - refreshLast - 1;
 			}
 			
-			var entries = ConsoleManager.Instance.GetEntries();
-			for (var i = 0; i < entries.Count; i++)
+			refreshEverything = false;
+			refreshLast = 0;
+
+			for (var i = startAt; i < entries.Count; i++)
 			{
 				TMP_Text item;
 				
@@ -224,6 +241,8 @@ namespace UI
 		
 		private void onConsoleEntryAdded(ConsoleManager.SConsoleEntry entry)
 		{
+			refreshLast++;
+
 			if (!isActiveAndEnabled)
 				return;
 			
@@ -232,6 +251,8 @@ namespace UI
 		
 		private void onConsoleCleared()
 		{
+			refreshEverything = true;
+			
 			if (!isActiveAndEnabled)
 				return;
 			
