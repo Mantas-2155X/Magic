@@ -117,6 +117,9 @@ namespace Combat.Spells.Base
 			
 			IsCasting = true;
 			Owner.Body.SetCoreCenter(true);
+
+			if (SpellData.LockWhileCasting)
+				Owner.AddSlowSource(1f, GetInstanceID());
 			
 			LastStartedCast = Time.time;
 			PredictFinishCast = LastStartedCast + SpellData.CastingTime;
@@ -134,6 +137,9 @@ namespace Combat.Spells.Base
 
 			IsCasting = false;
 			Owner.Body.SetCoreCenter(false);
+			
+			if (SpellData.LockAfterCasting != 0f)
+				Owner.AddSlowSource(1f, SpellData.LockAfterCasting);
 			
 			LastFinishedCast = Time.time;
 
@@ -170,6 +176,9 @@ namespace Combat.Spells.Base
 			
 			IsCasting = false;
 			Owner.Body.SetCoreCenter(false);
+			
+			if (SpellData.LockWhileCasting)
+				Owner.RemoveSlowSource(GetInstanceID());
 			
 			clearCast();
 		}

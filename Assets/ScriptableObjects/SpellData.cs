@@ -21,6 +21,12 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public bool IsResource;
+
+		[SerializeField]
+		public bool LockWhileCasting;
+
+		[SerializeField]
+		public float LockAfterCasting;
 		
 		[SerializeField]
 		public EElement Element;
