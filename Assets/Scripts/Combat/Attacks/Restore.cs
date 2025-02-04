@@ -29,6 +29,9 @@ namespace Combat.Attacks
 				case ERestoreType.Mana:
 					alive.RestoreMana(Amount, this);
 					break;
+				case ERestoreType.Energy:
+					alive.RestoreEnergy(Amount, this);
+					break;
 				default:
 					throw new NotImplementedException();
 			}

@@ -41,6 +41,9 @@ namespace Combat.Attacks
 				case EPoolType.Mana:
 					alive.RestoreMana(Amount, this);
 					break;
+				case EPoolType.Energy:
+					alive.RestoreEnergy(Amount, this);
+					break;
 				default:
 					throw new NotImplementedException();
 			}
