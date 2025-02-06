@@ -31,8 +31,7 @@ namespace Combat.Decals.Base
 				init = true;
 			}
 
-			Projector.size = new Vector3(DecalData.Size, DecalData.Size, 0.03f);
-			Projector.pivot = new Vector3(0, 0, 0.025f);
+			Projector.size = new Vector3(DecalData.Size, DecalData.Size, DecalData.Size / 2f);
 			Projector.fadeFactor = 1f;
 			
 			thisTr.position = position;
