@@ -175,6 +175,24 @@ namespace Managers
 			return decal;
 		}
 		
+		public IDecal CreateDecal(DecalData data, ParticleCollisionEvent collisionEvent, Transform attach)
+		{
+			return createDecal(data, collisionEvent.intersection, Quaternion.LookRotation(-collisionEvent.normal), attach);
+		}
+		
+		public IDecal CreateDecal(DecalData data, Vector3 point, Quaternion angles, Transform attach)
+		{
+			return createDecal(data, point, angles, attach);
+		}
+
+		private IDecal createDecal(DecalData data, Vector3 point, Quaternion angles, Transform attach)
+		{
+			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
+			decal.Spawn(point, angles, attach);
+			
+			return decal;
+		}
+		
 		private IAttack createAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
 		{
 			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);

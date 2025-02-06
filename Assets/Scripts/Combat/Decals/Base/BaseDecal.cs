@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Combat.Decals.Interfaces;
 using Cysharp.Threading.Tasks;
+using Managers;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -19,7 +20,6 @@ namespace Combat.Decals.Base
 		private Transform thisTr;
 		
 		private bool init;
-		private bool isFading;
 
 		public void Spawn(Vector3 position, Quaternion angles, Transform attach)
 		{
@@ -27,9 +27,13 @@ namespace Combat.Decals.Base
 			{
 				thisGo = gameObject;
 				thisTr = thisGo.transform;
-				Projector.size = new Vector3(DecalData.Size, DecalData.Size, DecalData.Size);
+				thisTr.SetParent(World.World.Instance.Decals);
 				init = true;
 			}
+
+			Projector.size = new Vector3(DecalData.Size, DecalData.Size, 0.03f);
+			Projector.pivot = new Vector3(0, 0, 0.025f);
+			Projector.fadeFactor = 1f;
 			
 			thisTr.position = position;
 			thisTr.rotation = angles;
@@ -50,8 +54,6 @@ namespace Combat.Decals.Base
 
 			var duration = DecalData.FadeDuration;
 			
-			isFading = true;
-			
 			var normalizedTime = 0.0f;
 			while (normalizedTime < 1.0f)
 			{
@@ -65,7 +67,8 @@ namespace Combat.Decals.Base
 				normalizedTime += Time.deltaTime / duration;
 			}
 			
-			Destroy(gameObject);
+			thisTr.SetParent(World.World.Instance.Decals);
+			PoolingManager.Instance.Add(DecalData, thisGo);
 		}
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -35,6 +35,9 @@ namespace World
 		public Transform Objects;
 
 		[SerializeField]
+		public Transform Decals;
+
+		[SerializeField]
 		public bool SpawnPlayer = true;
 		
 		public void Awake()
