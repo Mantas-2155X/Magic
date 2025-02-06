@@ -46,6 +46,8 @@ namespace Combat.Projectiles.Base
 		{
 			Transform attach = null;
 			
+			var contact = collision.contacts[0];
+			
 			if (ProjectileData.Damage > 0)
 			{
 				var coll = collision.collider;
@@ -65,10 +67,10 @@ namespace Combat.Projectiles.Base
 			}
 			
 			if (attackData != null)
-			{
-				var contact = collision.contacts[0];
 				ObjectManager.Instance.CreateAttack(attackData, Source, contact, attach);
-			}
+
+			if (ProjectileData.Decal != null)
+				ObjectManager.Instance.CreateDecal(ProjectileData.Decal, contact, attach != null ? attach : collision.transform);
 				
 			clearVelocityAndPool().Forget();
 		}

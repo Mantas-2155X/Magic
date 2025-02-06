@@ -4,6 +4,7 @@ using AI.Interfaces;
 using Combat.Attacks.Enums;
 using Combat.Attacks.Interfaces;
 using Combat.Casts.Interfaces;
+using Combat.Decals.Interfaces;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Combat.Wearables.Interfaces;
@@ -21,7 +22,7 @@ namespace Managers
 		private readonly Dictionary<string, Data> datasMap = new ();
 		private readonly List<IObject> activeObjects = new ();
 
-		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI" };
+		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals" };
 
 		public ObjectManager()
 		{
@@ -110,6 +111,11 @@ namespace Managers
 			return (AliveData)datasMap.GetValueOrDefault($"AI/{path}");
 		}
 		
+		public DecalData GetDecal(string path)
+		{
+			return (DecalData)datasMap.GetValueOrDefault($"Decals/{path}");
+		}
+		
 		#endregion
 
 		#region Create
@@ -159,6 +165,14 @@ namespace Managers
 		public IAttack CreateAttack(AttackData data, Component source, Transform attach)
 		{
 			return createAttack(data, source, Vector3.zero, Vector3.zero, attach);
+		}
+		
+		public IDecal CreateDecal(DecalData data, ContactPoint contact, Transform attach)
+		{
+			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
+			decal.Spawn(contact.point, Quaternion.LookRotation(-contact.normal), attach);
+			
+			return decal;
 		}
 		
 		private IAttack createAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
