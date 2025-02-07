@@ -7,6 +7,7 @@ using ScriptableObjects;
 using Tools;
 using UI;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
@@ -44,6 +45,9 @@ namespace AI
 		[SerializeField]
 		public Vector3 CastViewmodelAngles = new (50f, -20.1f, 0f);
 		
+		[SerializeField]
+		public NavMeshObstacle Obstacle;
+
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
 
@@ -635,6 +639,8 @@ namespace AI
 			weaponContainer.localPosition = ViewmodelPosition;
 			weaponContainer.localEulerAngles = ViewmodelAngles;
 
+			Obstacle.enabled = true;
+			
 			SetRenderMode(ShadowCastingMode.ShadowsOnly);
 			base.Spawn(data, relationshipGroup);
 			
@@ -656,6 +662,8 @@ namespace AI
 				playerUI.HUD.Spellbook.Display(false);
 			
 			DisableInput();
+			
+			Obstacle.enabled = false;
 			
 			SetRenderMode(ShadowCastingMode.On);
 			base.Kill(source);
