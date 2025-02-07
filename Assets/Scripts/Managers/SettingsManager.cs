@@ -788,6 +788,12 @@ namespace Managers
 				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
 			});
 			
+			AddSetting("keybinds-gameplay-grab", "SETTINGS_KEYBINDS_GAMEPLAY_GRAB", "SETTINGS_KEYBINDS_GAMEPLAY_GRAB_DESC", playerMap.FindAction("Grab"), 0, "<Mouse>/rightButton", (previousValue, newValue) =>
+			{
+				var keybind = keybinds["keybinds-gameplay-grab"];
+				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
+			});
+			
 			AddSetting("keybinds-gameplay-light", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT_DESC", playerMap.FindAction("Light"), 0, "<Keyboard>/f", (previousValue, newValue) =>
 			{
 				var keybind = keybinds["keybinds-gameplay-light"];

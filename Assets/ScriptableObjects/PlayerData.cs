@@ -26,5 +26,11 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public float SprintEnergy = 15f;
+
+		[SerializeField]
+		public float GrabSpeed = 25f;
+
+		[SerializeField]
+		public float GrabMass = 25f;
 	}
 }

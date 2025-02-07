@@ -51,6 +51,8 @@ namespace AI
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
 
+		public Rigidbody Grabbing { get; private set; }
+
 		private bool walking;
 		private bool jumpPressed;
 		private bool fallPressed;
@@ -93,6 +95,17 @@ namespace AI
 				weaponContainer.localPosition = ViewmodelPosition;
 				weaponContainer.localEulerAngles = ViewmodelAngles;
 			}
+			
+			if (Grabbing == null)
+				return;
+
+			var angles = Grabbing.rotation.eulerAngles;
+			angles.y = Body.Rigidbody.rotation.eulerAngles.y;
+			
+			Grabbing.MoveRotation(Quaternion.Euler(angles));
+
+			var dir = Body.Core.position + Body.Core.forward - Grabbing.position;
+			Grabbing.linearVelocity = dir * ((PlayerData)Data).GrabSpeed;
 		}
 		
 		public void LateUpdate()
@@ -246,6 +259,10 @@ namespace AI
 			use.performed += onUse;
 			use.Enable();
 			
+			var grab = SettingsManager.Instance.GetKeybind("keybinds-gameplay-grab").Item1;
+			grab.Enable();
+			grab.performed += onGrab;
+			
 			var attack = SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1;
 			attack.performed += onAttackPerformed;
 			attack.canceled += onAttackCanceled;
@@ -327,6 +344,10 @@ namespace AI
 			var use = SettingsManager.Instance.GetKeybind("keybinds-gameplay-interact").Item1;
 			use.Disable();
 			use.performed -= onUse;
+			
+			var grab = SettingsManager.Instance.GetKeybind("keybinds-gameplay-grab").Item1;
+			grab.Disable();
+			grab.performed -= onGrab;
 
 			var attack = SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1;
 			attack.Disable();
@@ -464,7 +485,7 @@ namespace AI
 
 		private void onUse(InputAction.CallbackContext ctx)
 		{
-			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithPlayerAndWater()))
+			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithAlives()))
 				return;
 			
 			if (!hit.collider.TryGetComponent<IObject>(out var obj) || !obj.CanUse(this))
@@ -473,6 +494,27 @@ namespace AI
 			obj.Use(this);
 		}
 
+		private void onGrab(InputAction.CallbackContext ctx)
+		{
+			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithAlives()))
+			{
+				ReleaseObject();
+				return;
+			}
+
+			if (hit.collider.GetComponent<IObject>() == null)
+				return;
+			
+			var rb = hit.rigidbody;
+			if (rb == null || rb.mass > ((PlayerData)Data).GrabMass)
+			{
+				ReleaseObject();
+				return;
+			}
+
+			GrabObject(rb);
+		}
+		
 		private void onNoclip(InputAction.CallbackContext ctx)
 		{
 			switch (MovementType)
@@ -664,6 +706,7 @@ namespace AI
 			DisableInput();
 			
 			Obstacle.enabled = false;
+			ReleaseObject();
 			
 			SetRenderMode(ShadowCastingMode.On);
 			base.Kill(source);
@@ -690,6 +733,29 @@ namespace AI
 			var renderers = Body.GetComponentsInChildren<Renderer>(true);
 			foreach (var rend in renderers)
 				rend.shadowCastingMode = mode;
+		}
+
+		public void GrabObject(Rigidbody body)
+		{
+			if (Grabbing != null)
+			{
+				ReleaseObject();
+				return;
+			}
+			
+			Grabbing = body;
+			Grabbing.useGravity = false;
+			Grabbing.freezeRotation = true;
+		}
+
+		public void ReleaseObject()
+		{
+			if (Grabbing == null)
+				return;
+			
+			Grabbing.useGravity = true;
+			Grabbing.freezeRotation = false;
+			Grabbing = null;
 		}
 	}
 }
