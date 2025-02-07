@@ -99,13 +99,45 @@ namespace AI
 			if (Grabbing == null)
 				return;
 
+			var data = (PlayerData)Data;
+			var grabEnergy = data.GrabEnergy * Time.deltaTime;
+			
+			if (CurrentEnergy >= grabEnergy)
+			{
+				TakeEnergy(grabEnergy, this);
+			}
+			else
+			{
+				ReleaseObject();
+				return;
+			}
+
+			var corePos = Body.Core.position;
+			var coreForward = Body.Core.forward;
+			
+			var objPos = Grabbing.position;
+
+			var distance = Vector3.Distance(corePos, objPos);
+			if (distance > data.GrabDropDistance)
+			{
+				ReleaseObject();
+				return;
+			}
+			
+			var angle = Vector3.Angle(objPos - corePos, coreForward);
+			if (angle > data.GrabDropAngle)
+			{
+				ReleaseObject();
+				return;
+			}
+			
 			var angles = Grabbing.rotation.eulerAngles;
 			angles.y = Body.Rigidbody.rotation.eulerAngles.y;
 			
 			Grabbing.MoveRotation(Quaternion.Euler(angles));
 
-			var dir = Body.Core.position + Body.Core.forward - Grabbing.position;
-			Grabbing.linearVelocity = dir * ((PlayerData)Data).GrabSpeed;
+			var dir = corePos + coreForward - objPos;
+			Grabbing.linearVelocity = dir * data.GrabSpeed;
 		}
 		
 		public void LateUpdate()
@@ -746,6 +778,7 @@ namespace AI
 			Grabbing = body;
 			Grabbing.useGravity = false;
 			Grabbing.freezeRotation = true;
+			Grabbing.linearVelocity = Vector3.zero;
 		}
 
 		public void ReleaseObject()
@@ -755,6 +788,7 @@ namespace AI
 			
 			Grabbing.useGravity = true;
 			Grabbing.freezeRotation = false;
+			Grabbing.linearVelocity = Vector3.zero;
 			Grabbing = null;
 		}
 	}
