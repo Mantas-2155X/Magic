@@ -523,6 +523,9 @@ namespace AI.Base
 			if (CurrentHealth + health >= Data.Health)
 				health = Data.Health - CurrentHealth;
 			
+			if (health == 0)
+				return;
+			
 			CurrentHealth += health;
 			OnRestoreHealthEvent?.Invoke(this, health, source);
 		}
@@ -537,6 +540,9 @@ namespace AI.Base
 			if (CurrentMana + mana >= Data.Mana)
 				mana = Data.Mana - CurrentMana;
 			
+			if (mana == 0)
+				return;
+			
 			CurrentMana += mana;
 			OnRestoreManaEvent?.Invoke(this, mana, source);
 		}
@@ -550,6 +556,9 @@ namespace AI.Base
 
 			if (CurrentEnergy + energy >= Data.Energy)
 				energy = Data.Energy - CurrentEnergy;
+			
+			if (energy == 0)
+				return;
 			
 			CurrentEnergy += energy;
 			OnRestoreEnergyEvent?.Invoke(this, energy, source);
@@ -626,16 +635,18 @@ namespace AI.Base
 		
 		private async UniTaskVoid regenerateLoop()
 		{
+			var regenerateEvery = 0.2f;
+			
 			while (true)
 			{
-				await UniTask.WaitForSeconds(0.5f);
+				await UniTask.WaitForSeconds(regenerateEvery);
 
 				if (this == null || !IsAlive || !isActiveAndEnabled)
 					return;
 				
-				RestoreEnergy(Data.RegenerateEnergy, this);
-				RestoreMana(Data.RegenerateMana, this);
-				RestoreHealth(Data.RegenerateHealth, this);
+				RestoreEnergy(Data.RegenerateEnergy * regenerateEvery, this);
+				RestoreMana(Data.RegenerateMana * regenerateEvery, this);
+				RestoreHealth(Data.RegenerateHealth * regenerateEvery, this);
 			}
 		}
 

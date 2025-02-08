@@ -34,6 +34,15 @@ namespace UI
 		[SerializeField]
 		public TMP_Text EnergyText;
 
+		[SerializeField]
+		public float Smoothing;
+
+		private float targetRed;
+		
+		private float targetHealth;
+		private float targetMana;
+		private float targetEnergy;
+		
 		public void Awake()
 		{
 			gameObject.SetActive(false);
@@ -46,6 +55,34 @@ namespace UI
 			BaseAlive.OnTakeEnergyEvent.AddListener(OnTakeEnergy);
 			BaseAlive.OnDeathEvent.AddListener(OnDeath);
 			BaseAlive.OnSpawnEvent.AddListener(OnSpawn);
+		}
+
+		public void Update()
+		{
+			// Health
+			{
+				var color = Red.color;
+				color.a = Mathf.Lerp(color.a, targetRed, Time.deltaTime * Smoothing);
+				Red.color = color;
+				
+				var offset = HealthBottle.offsetMax;
+				offset.y = Mathf.Lerp(offset.y, targetHealth, Time.deltaTime * Smoothing);
+				HealthBottle.offsetMax = offset;
+			}
+			
+			// Mana
+			{
+				var offset = ManaBottle.offsetMax;
+				offset.y = Mathf.Lerp(offset.y, targetMana, Time.deltaTime * Smoothing);
+				ManaBottle.offsetMax = offset;
+			}
+			
+			// Energy
+			{
+				var offset = EnergyBottle.offsetMax;
+				offset.y = Mathf.Lerp(offset.y, targetEnergy, Time.deltaTime * Smoothing);
+				EnergyBottle.offsetMax = offset;
+			}
 		}
 
 		public void OnDestroy()
@@ -137,13 +174,8 @@ namespace UI
 			if (amount > maximum)
 				amount = maximum;
 
-			var color = Red.color;
-			color.a = HealthRedCurve.Evaluate(1 - (amount / maximum));
-			Red.color = color;
-			
-			var offset = HealthBottle.offsetMax;
-			offset.y = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
-			HealthBottle.offsetMax = offset;
+			targetRed = HealthRedCurve.Evaluate(1 - amount / maximum);
+			targetHealth = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
 		}
 		
 		private void setMana(float amount, float maximum)
@@ -153,10 +185,7 @@ namespace UI
 			if (amount > maximum)
 				amount = maximum;
 			
-			var offset = ManaBottle.offsetMax;
-			offset.y = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
-
-			ManaBottle.offsetMax = offset;
+			targetMana = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
 		}
 		
 		private void setEnergy(float amount, float maximum)
@@ -166,10 +195,7 @@ namespace UI
 			if (amount > maximum)
 				amount = maximum;
 			
-			var offset = EnergyBottle.offsetMax;
-			offset.y = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
-
-			EnergyBottle.offsetMax = offset;
+			targetEnergy = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
 		}
 	}
 }
