@@ -494,7 +494,10 @@ namespace AI
 			}
 
 			if (hit.collider.GetComponent<IObject>() == null)
+			{
+				ReleaseObject();
 				return;
+			}
 			
 			var rb = hit.rigidbody;
 			if (rb == null || rb.mass > ((PlayerData)Data).GrabMass)
@@ -736,8 +739,8 @@ namespace AI
 			
 			Grabbing = body;
 			Grabbing.useGravity = false;
-			Grabbing.freezeRotation = true;
 			Grabbing.linearVelocity = Vector3.zero;
+			Grabbing.angularVelocity = Vector3.zero;
 		}
 
 		public void ReleaseObject()
@@ -746,8 +749,8 @@ namespace AI
 				return;
 			
 			Grabbing.useGravity = true;
-			Grabbing.freezeRotation = false;
 			Grabbing.linearVelocity = Vector3.zero;
+			Grabbing.angularVelocity = Vector3.zero;
 			Grabbing = null;
 		}
 
@@ -774,27 +777,37 @@ namespace AI
 			
 			var objPos = Grabbing.position;
 
-			var distance = Vector3.Distance(corePos, objPos);
-			if (distance > data.GrabDropDistance)
+			if (Vector3.Distance(corePos, objPos) > data.GrabDropDistance)
 			{
 				ReleaseObject();
 				return;
 			}
 			
-			var angle = Vector3.Angle(objPos - corePos, coreForward);
-			if (angle > data.GrabDropAngle)
+			if (Vector3.Angle(objPos - corePos, coreForward) > data.GrabDropAngle)
 			{
 				ReleaseObject();
 				return;
 			}
 			
-			var angles = Grabbing.rotation.eulerAngles;
-			angles.y = Body.Rigidbody.rotation.eulerAngles.y;
+			var linearVelocity = corePos + coreForward - objPos;
+			Grabbing.linearVelocity = linearVelocity * data.GrabPositionSpeed;
 			
-			Grabbing.MoveRotation(Quaternion.Euler(angles));
+			var deltaRotation = Body.Rigidbody.rotation * Quaternion.Inverse(Grabbing.rotation);
+			deltaRotation.ToAngleAxis(out var angle, out var axis);
+			
+			if (angle > 180f)
+				angle -= 360f;
 
-			var dir = corePos + coreForward - objPos;
-			Grabbing.linearVelocity = dir * data.GrabSpeed;
+			if (Mathf.Approximately(angle, 0)) 
+			{
+				Grabbing.angularVelocity = Vector3.zero;
+				return;
+			}
+			
+			angle *= Mathf.Deg2Rad;
+
+			var angularVelocity = axis * angle;
+			Grabbing.angularVelocity = angularVelocity * data.GrabRotationSpeed;
 		}
 	}
 }
