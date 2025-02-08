@@ -132,7 +132,7 @@ namespace UI
 		
 		private void setHealth(float amount, float maximum)
 		{
-			HealthText.text = amount.ToString("0.#");
+			HealthText.text = ((int)amount).ToString();
 
 			if (amount > maximum)
 				amount = maximum;
@@ -148,7 +148,7 @@ namespace UI
 		
 		private void setMana(float amount, float maximum)
 		{
-			ManaText.text = amount.ToString("0.#");
+			ManaText.text = ((int)amount).ToString();
 
 			if (amount > maximum)
 				amount = maximum;
@@ -161,7 +161,7 @@ namespace UI
 		
 		private void setEnergy(float amount, float maximum)
 		{
-			EnergyText.text = amount.ToString("0.#");
+			EnergyText.text = ((int)amount).ToString();
 
 			if (amount > maximum)
 				amount = maximum;
