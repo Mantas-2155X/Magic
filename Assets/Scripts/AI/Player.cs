@@ -773,6 +773,8 @@ namespace AI
 			}
 
 			var corePos = Body.Core.position;
+			corePos.y = (CameraTr.position + CameraTr.forward).y + data.GrabVerticalOffset;
+			
 			var coreForward = Body.Core.forward;
 			
 			var objPos = Grabbing.position;
