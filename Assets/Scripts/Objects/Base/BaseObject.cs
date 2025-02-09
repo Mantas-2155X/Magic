@@ -120,6 +120,17 @@ namespace Objects.Base
 			if (!ObjectData.IsBreakable || IsBroken)
 				return;
 
+			if (ObjectData.BrokenPrefab != null)
+			{
+				var broken = Instantiate(ObjectData.BrokenPrefab, World.World.Instance.Ragdolls);
+				
+				var brokenTr = broken.transform;
+				brokenTr.position = thisTr.position;
+				brokenTr.rotation = thisTr.rotation;
+				
+				broken.SetActive(true);
+			}
+			
 			Health = 0;
 			IsBroken = true;
 			

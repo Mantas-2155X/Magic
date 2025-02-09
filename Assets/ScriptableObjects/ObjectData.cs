@@ -15,6 +15,9 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public float MaximumHealth;
+
+		[SerializeField]
+		public GameObject BrokenPrefab;
 		
 		[Header("Pickupable")]
 		[SerializeField]
