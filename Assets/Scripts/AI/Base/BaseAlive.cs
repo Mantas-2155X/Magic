@@ -496,6 +496,8 @@ namespace AI.Base
 
 				go.transform.SetParent(ragdolls);
 			}
+
+			var scale = thisTr.localScale;
 			
 #if BODY_GIB
 			// Body
@@ -505,6 +507,7 @@ namespace AI.Base
 				var brokenTr = broken.transform;
 				brokenTr.position = thisTr.position;
 				brokenTr.rotation = thisTr.rotation;
+				brokenTr.localScale = scale;
 				
 				broken.SetActive(true);
 			}
@@ -519,6 +522,7 @@ namespace AI.Base
 				var brokenTr = broken.transform;
 				brokenTr.position = arm.position;
 				brokenTr.rotation = arm.rotation;
+				brokenTr.localScale = scale;
 				
 				broken.SetActive(true);
 			}
@@ -533,6 +537,7 @@ namespace AI.Base
 				var brokenTr = broken.transform;
 				brokenTr.position = foot.position;
 				brokenTr.rotation = foot.rotation;
+				brokenTr.localScale = scale;
 				
 				broken.SetActive(true);
 			}
