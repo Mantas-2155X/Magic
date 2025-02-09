@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: 'Gibs.Array.data[3]'
       value: 
       objectReference: {fileID: 2026133108294415460}
+    - target: {fileID: 1446329854764345363, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1578906078410702355, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -200,6 +204,7 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 2073094155178259440, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
     - {fileID: 4683780981325718410, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+    - {fileID: 8884044816284953537, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5238415708173528890, guid: a346750b223c8888ab19d1ae288889e7, type: 3}

@@ -28,7 +28,7 @@ public class Dissolve : MonoBehaviour
 
 		if (ShouldDissolve)
 		{
-			var material = GetComponent<Renderer>().material;
+			var materials = GetComponent<Renderer>().materials;
 			
 			var normalizedTime = 0.0f;
 			while (normalizedTime < 1.0f)
@@ -38,7 +38,11 @@ public class Dissolve : MonoBehaviour
 				if (this == null || !isActiveAndEnabled)
 					return;
 				
-				material.SetFloat(dissolveAmount, normalizedTime);
+				for (var i = 0; i < materials.Length; i++)
+				{
+					var material = materials[i];
+					material.SetFloat(dissolveAmount, normalizedTime);
+				}
 				
 				normalizedTime += Time.deltaTime / DissolveDuration;
 			}
