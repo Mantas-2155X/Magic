@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8310894691095723154}
   - component: {fileID: 7374701913626592888}
   - component: {fileID: 890154380233269124}
-  - component: {fileID: 7747468937501591225}
   m_Layer: 0
   m_Name: RightFoot
   m_TagString: Untagged
@@ -108,29 +107,6 @@ CapsuleCollider:
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &7747468937501591225
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 918261936898904529}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 1.25
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -14986,7 +14962,6 @@ GameObject:
   - component: {fileID: 7758074310417278802}
   - component: {fileID: 5240458502354090696}
   - component: {fileID: 2222034672959033276}
-  - component: {fileID: 7122553442683222997}
   m_Layer: 0
   m_Name: RightArm
   m_TagString: Untagged
@@ -15082,29 +15057,6 @@ CapsuleCollider:
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &7122553442683222997
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4765344902642305140}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 1.25
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -15584,7 +15536,6 @@ GameObject:
   - component: {fileID: 3493967524279949028}
   - component: {fileID: 6214098482222032939}
   - component: {fileID: 36329325502326166}
-  - component: {fileID: 6966139526102207317}
   m_Layer: 0
   m_Name: LeftFoot
   m_TagString: Untagged
@@ -15680,29 +15631,6 @@ CapsuleCollider:
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &6966139526102207317
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7186803857782215973}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 1.25
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -20592,7 +20520,6 @@ GameObject:
   - component: {fileID: 7796913983919622348}
   - component: {fileID: 3724468191582165016}
   - component: {fileID: 2096745006995001726}
-  - component: {fileID: 2312222712323515687}
   m_Layer: 0
   m_Name: LeftArm
   m_TagString: Untagged
@@ -20688,29 +20615,6 @@ CapsuleCollider:
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &2312222712323515687
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7661345106908029820}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 1.25
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -25745,6 +25649,9 @@ PrefabInstance:
       addedObject: {fileID: 5771682835013045567}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 7188989343752832411}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 8366597518288756583}
   m_SourcePrefab: {fileID: 100100000, guid: 6e3c12278abcca1e2b5dd26567e0d94f, type: 3}
 --- !u!1 &4842845257081996260 stripped
@@ -25772,6 +25679,27 @@ BoxCollider:
   m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.0045, y: 0.0045, z: 0.00065}
+  m_Center: {x: 0, y: 0, z: -0.00011760991}
+--- !u!65 &7188989343752832411
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842845257081996260}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.005, y: 0.005, z: 0.002}
   m_Center: {x: 0, y: 0, z: -0.00011760991}
 --- !u!114 &8366597518288756583
 MonoBehaviour:
