@@ -4,6 +4,7 @@ using AYellowpaper.SerializedCollections;
 using Combat.Enums;
 using Combat.Wearables.Enums;
 using Combat.Wearables.Structs;
+using Objects.Base;
 using UnityEngine;
 
 namespace AI
@@ -23,7 +24,7 @@ namespace AI
 		public Collider FeetCollider;
 
 		[SerializeField]
-		public MonoBehaviour[] Gibs;
+		public BaseGib[] Gibs;
 		
 		[SerializeField]
 		public Transform[] Shoulders;
