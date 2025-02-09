@@ -33,6 +33,12 @@ namespace AI
 		public Transform[] Legs;
 
 		[SerializeField]
+		public Transform[] Arms;
+
+		[SerializeField]
+		public Transform[] Feet;
+		
+		[SerializeField]
 		public Transform Core;
 		
 		[SerializeField]

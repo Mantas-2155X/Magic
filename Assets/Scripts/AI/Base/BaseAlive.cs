@@ -456,13 +456,11 @@ namespace AI.Base
 			CurrentEnergy = 0;
 			IsAlive = false;
 			
-#if BODY_GIB
 			Body.Rigidbody.constraints = RigidbodyConstraints.None;
 			Body.Rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
 
 			Body.Rigidbody.isKinematic = false;
 			Body.Rigidbody.useGravity = true;
-			Body.Rigidbody.AddForce(Random.Range(-25f, 25f), 100f, Random.Range(-25f, 25f), ForceMode.Impulse);
 
 			Body.BodyCollider.material = null;
 			Body.FeetCollider.material = null;
@@ -472,44 +470,79 @@ namespace AI.Base
 
 			for (var i = 0; i < length; i++)
 			{
-				var isLast = i == length - 1;
-				
 				var gib = Body.Gibs[i];
 				gib.enabled = true;
 
 				var go = gib.gameObject;
 				go.layer = 0;
 
-				if (!isLast)
+				var colliders = go.GetComponents<Collider>();
+				for (var k = 0; k < colliders.Length; k++)
 				{
-					var colliders = go.GetComponents<Collider>();
-					for (var k = 0; k < colliders.Length; k++)
+					var coll = colliders[k];
+					if (!coll.isTrigger)
 					{
-						var coll = colliders[k];
-						if (!coll.isTrigger)
-						{
-							coll.excludeLayers = 0;
-							coll.material = null;
-						}
-
-						coll.enabled = true;
+						coll.excludeLayers = 0;
+						coll.material = null;
 					}
+
+					coll.enabled = true;
 				}
 
-				var rb = isLast ? Body.Rigidbody : go.AddComponent<Rigidbody>();
+				var rb = go.AddComponent<Rigidbody>();
 				rb.interpolation = RigidbodyInterpolation.Interpolate;
 				rb.excludeLayers = 0;
 				rb.mass = 5;
 
 				go.transform.SetParent(ragdolls);
 			}
-#else
-			thisGo.SetActive(false);
+			
+#if BODY_GIB
+			// Body
+			{
+				var broken = Instantiate(Data.BrokenBodyPrefab, World.World.Instance.Ragdolls);
+				
+				var brokenTr = broken.transform;
+				brokenTr.position = thisTr.position;
+				brokenTr.rotation = thisTr.rotation;
+				
+				broken.SetActive(true);
+			}
+			
+			// Arms
+			for (var i = 0; i < Body.Arms.Length; i++)
+			{
+				var arm = Body.Arms[i];
+				
+				var broken = Instantiate(Data.BrokenArmPrefab, World.World.Instance.Ragdolls);
+				
+				var brokenTr = broken.transform;
+				brokenTr.position = arm.position;
+				brokenTr.rotation = arm.rotation;
+				
+				broken.SetActive(true);
+			}
+			
+			// Feet
+			for (var i = 0; i < Body.Feet.Length; i++)
+			{
+				var foot = Body.Feet[i];
+				
+				var broken = Instantiate(Data.BrokenFootPrefab, World.World.Instance.Ragdolls);
+				
+				var brokenTr = broken.transform;
+				brokenTr.position = foot.position;
+				brokenTr.rotation = foot.rotation;
+				
+				broken.SetActive(true);
+			}
 #endif
 
 			AIManager.Instance.AlivesColliderMap.Remove(Body.BodyCollider);
 			
 			OnDeathEvent?.Invoke(this, source);
+			
+			Destroy(thisGo);
 		}
 
 		public virtual void RestoreHealth(float health, object source)

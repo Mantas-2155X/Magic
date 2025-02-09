@@ -47,5 +47,15 @@ namespace ScriptableObjects
 		[Header("Base Wearables")]
 		[SerializeField]
 		public List<WearableData> Wearables;
+		
+		[Header("Broken")]
+		[SerializeField]
+		public GameObject BrokenBodyPrefab;
+		
+		[SerializeField]
+		public GameObject BrokenArmPrefab;
+
+		[SerializeField]
+		public GameObject BrokenFootPrefab;
 	}
 }
