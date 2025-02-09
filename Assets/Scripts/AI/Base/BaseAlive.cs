@@ -1,4 +1,3 @@
-#define BODY_GIB
 //#define DEBUG_DAMAGE
 
 using System;
@@ -497,51 +496,56 @@ namespace AI.Base
 				go.transform.SetParent(ragdolls);
 			}
 
-			var scale = thisTr.localScale;
-			
-#if BODY_GIB
-			// Body
+			if (SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
 			{
-				var broken = Instantiate(Data.BrokenBodyPrefab, World.World.Instance.Ragdolls);
+				var scale = thisTr.localScale;
 				
-				var brokenTr = broken.transform;
-				brokenTr.position = thisTr.position;
-				brokenTr.rotation = thisTr.rotation;
-				brokenTr.localScale = scale;
+				if (Data.BrokenBodyPrefab != null)
+				{
+					var broken = Instantiate(Data.BrokenBodyPrefab, World.World.Instance.Ragdolls);
 				
-				broken.SetActive(true);
+					var brokenTr = broken.transform;
+					brokenTr.position = thisTr.position;
+					brokenTr.rotation = thisTr.rotation;
+					brokenTr.localScale = scale;
+				
+					broken.SetActive(true);
+				}
+
+				if (Data.BrokenArmPrefab != null)
+				{
+					for (var i = 0; i < Body.Arms.Length; i++)
+					{
+						var arm = Body.Arms[i];
+				
+						var broken = Instantiate(Data.BrokenArmPrefab, World.World.Instance.Ragdolls);
+				
+						var brokenTr = broken.transform;
+						brokenTr.position = arm.position;
+						brokenTr.rotation = arm.rotation;
+						brokenTr.localScale = scale;
+				
+						broken.SetActive(true);
+					}
+				}
+
+				if (Data.BrokenFootPrefab != null)
+				{
+					for (var i = 0; i < Body.Feet.Length; i++)
+					{
+						var foot = Body.Feet[i];
+				
+						var broken = Instantiate(Data.BrokenFootPrefab, World.World.Instance.Ragdolls);
+				
+						var brokenTr = broken.transform;
+						brokenTr.position = foot.position;
+						brokenTr.rotation = foot.rotation;
+						brokenTr.localScale = scale;
+				
+						broken.SetActive(true);
+					}
+				}
 			}
-			
-			// Arms
-			for (var i = 0; i < Body.Arms.Length; i++)
-			{
-				var arm = Body.Arms[i];
-				
-				var broken = Instantiate(Data.BrokenArmPrefab, World.World.Instance.Ragdolls);
-				
-				var brokenTr = broken.transform;
-				brokenTr.position = arm.position;
-				brokenTr.rotation = arm.rotation;
-				brokenTr.localScale = scale;
-				
-				broken.SetActive(true);
-			}
-			
-			// Feet
-			for (var i = 0; i < Body.Feet.Length; i++)
-			{
-				var foot = Body.Feet[i];
-				
-				var broken = Instantiate(Data.BrokenFootPrefab, World.World.Instance.Ragdolls);
-				
-				var brokenTr = broken.transform;
-				brokenTr.position = foot.position;
-				brokenTr.rotation = foot.rotation;
-				brokenTr.localScale = scale;
-				
-				broken.SetActive(true);
-			}
-#endif
 
 			AIManager.Instance.AlivesColliderMap.Remove(Body.BodyCollider);
 			

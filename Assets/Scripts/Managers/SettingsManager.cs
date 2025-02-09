@@ -695,6 +695,11 @@ namespace Managers
 				}
 			});
 
+			AddSetting("graphics-shatterobjects", "SETTINGS_GRAPHICS_SHATTEROBJECTS", "SETTINGS_GRAPHICS_SHATTEROBJECTS_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
+			{
+				
+			});
+			
 			#endregion
 
 			#region Controls

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Settings.Pages
 {
@@ -32,6 +33,11 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public DropdownLocalizer AntialiasingDropdown;
 
+		[SerializeField]
+		public Localizer ShatterObjectsLocalizer;
+		[SerializeField]
+		public Toggle ShatterObjectsToggle;
+		
 		private readonly List<string> maxQualityKeys = new () {"SETTINGS_DROPDOWN_LOW", "SETTINGS_DROPDOWN_MEDIUM", "SETTINGS_DROPDOWN_HIGH", "SETTINGS_DROPDOWN_VERYHIGH"};
 		private readonly List<string> qualityKeys = new () {"SETTINGS_DROPDOWN_LOW", "SETTINGS_DROPDOWN_MEDIUM", "SETTINGS_DROPDOWN_HIGH"};
 		private readonly List<string> aaKeys = new () {"SETTINGS_DROPDOWN_NONE", "SETTINGS_DROPDOWN_MSAA2X", "SETTINGS_DROPDOWN_MSAA4X", "SETTINGS_DROPDOWN_MSAA8X"};
@@ -74,6 +80,12 @@ namespace UI.Settings.Pages
 			
 			AntialiasingDropdown.SetOptions(aaKeys);
 			AntialiasingDropdown.SetValueWithoutNotify(Convert.ToInt32(antiAliasing.Value));
+			
+			var shatterObjects = SettingsManager.Instance.GetSetting("graphics-shatterobjects");
+			ShatterObjectsLocalizer.Key = shatterObjects.Name;
+			ShatterObjectsLocalizer.Apply();
+			
+			ShatterObjectsToggle.SetIsOnWithoutNotify(Convert.ToBoolean(shatterObjects.Value));
 		}
 
 		public void OnShadowQualityChanged(int value)
@@ -99,6 +111,11 @@ namespace UI.Settings.Pages
 		public void OnAntialiasingChanged(int value)
 		{
 			SettingsManager.Instance.SetSetting("graphics-antialiasing", value);
+		}
+		
+		public void OnShatterObjectsChanged(bool value)
+		{
+			SettingsManager.Instance.SetSetting("graphics-shatterobjects", value);
 		}
 	}
 }

@@ -120,7 +120,7 @@ namespace Objects.Base
 			if (!ObjectData.IsBreakable || IsBroken)
 				return;
 
-			if (ObjectData.BrokenPrefab != null)
+			if (ObjectData.BrokenPrefab != null && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
 			{
 				var broken = Instantiate(ObjectData.BrokenPrefab, World.World.Instance.Ragdolls);
 				
