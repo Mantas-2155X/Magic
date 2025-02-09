@@ -127,6 +127,7 @@ namespace Objects.Base
 				var brokenTr = broken.transform;
 				brokenTr.position = thisTr.position;
 				brokenTr.rotation = thisTr.rotation;
+				brokenTr.localScale = thisTr.localScale;
 				
 				broken.SetActive(true);
 			}
