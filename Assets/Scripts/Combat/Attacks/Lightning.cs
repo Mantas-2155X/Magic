@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AI.Interfaces;
 using Combat.Attacks.Base;
 using Managers;
+using Objects.Interfaces;
 using UnityEngine;
 
 namespace Combat.Attacks
@@ -15,6 +16,8 @@ namespace Combat.Attacks
 		public int DecalsPerSystem = 2;
 
 		private readonly List<IAlive> alives = new ();
+		private readonly List<IObject> objects = new ();
+		
 		private readonly List<ParticleCollisionEvent> collisions = new ();
 		private readonly Dictionary<ParticleSystem, int> systemDecals = new ();
 
@@ -23,6 +26,7 @@ namespace Combat.Attacks
 			base.Spawn(source, position, angles, attach);
 			
 			alives.Clear();
+			objects.Clear();
 
 			for (var i = 0; i < Systems.Count; i++)
 				systemDecals[Systems[i]] = 0;
@@ -49,18 +53,24 @@ namespace Combat.Attacks
 
 				systemDecals[system] = decals + clamped;
 			}
+
+			if (other.TryGetComponent<IAlive>(out var alive) && !alives.Contains(alive))
+			{
+				// Don't damage caster
+				if (GetAlive() == alive)
+					return;
 			
-			if (!other.TryGetComponent<IAlive>(out var alive) || !alive.IsAlive || alives.Contains(alive))
-				return;
+				alives.Add(alive);
 			
-			// Don't damage caster
-			if (GetAlive() == alive)
-				return;
-			
-			alives.Add(alive);
-			
-			alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
-			alive.AddParalyzeSource(AttackData.Paralyze.Duration);
+				alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
+				alive.AddParalyzeSource(AttackData.Paralyze.Duration);
+			}
+			else if (other.TryGetComponent<IObject>(out var obj) && !objects.Contains(obj))
+			{
+				objects.Add(obj);
+				
+				obj.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
+			}
 		}
 	}
 }

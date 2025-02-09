@@ -7,6 +7,7 @@ using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
@@ -29,6 +30,9 @@ namespace Combat.Attacks.Base
 
 		public readonly List<IAlive> TriggeredAlives = new ();
 		public readonly List<IAlive> CurrentAlives = new ();
+		
+		public readonly List<IObject> TriggeredObjects = new ();
+		public readonly List<IObject> CurrentObjects = new ();
 		
 		private GameObject thisGo;
 		private Transform thisTr;
@@ -101,46 +105,69 @@ namespace Combat.Attacks.Base
 
 		public virtual void OnTriggerEnter(Collider other)
 		{
-			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
-				return;
-
-			if (AttackData.IgnoreCaster && alive == GetAlive())
-				return;
-			
-			if (!TriggeredAlives.Contains(alive))
+			if (AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
 			{
-				for (var i = 0; i < Triggers.Length; i++)
-				{
-					if (Triggers[i].bounds.Intersects(other.bounds))
-						continue;
-
+				if (AttackData.IgnoreCaster && alive == GetAlive())
 					return;
-				}
-				
-				TriggeredAlives.Add(alive);
-				
-				if (AttackData.Damage != 0f)
-					alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
-				
-				alive.AddSlowSource(AttackData.Slow.Amount, AttackData.Slow.Duration);
-				alive.AddParalyzeSource(AttackData.Paralyze.Duration);
-			}
 			
-			CurrentAlives.Add(alive);
+				if (!TriggeredAlives.Contains(alive))
+				{
+					for (var i = 0; i < Triggers.Length; i++)
+					{
+						if (Triggers[i].bounds.Intersects(other.bounds))
+							continue;
+
+						return;
+					}
+				
+					TriggeredAlives.Add(alive);
+				
+					if (AttackData.Damage != 0f)
+						alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
+				
+					alive.AddSlowSource(AttackData.Slow.Amount, AttackData.Slow.Duration);
+					alive.AddParalyzeSource(AttackData.Paralyze.Duration);
+				}
+			
+				CurrentAlives.Add(alive);
+			}
+			else if (other.TryGetComponent<IObject>(out var obj))
+			{
+				if (!TriggeredObjects.Contains(obj))
+				{
+					for (var i = 0; i < Triggers.Length; i++)
+					{
+						if (Triggers[i].bounds.Intersects(other.bounds))
+							continue;
+
+						return;
+					}
+				
+					TriggeredObjects.Add(obj);
+				
+					if (AttackData.Damage != 0f)
+						obj.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
+				}
+			
+				CurrentObjects.Add(obj);
+			}
 		}
 		
 		public virtual void OnTriggerExit(Collider other)
 		{
-			if (!AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
-				return;
-
-			CurrentAlives.Remove(alive);
+			if (AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var alive))
+				CurrentAlives.Remove(alive);
+			else if (other.TryGetComponent<IObject>(out var obj))
+				CurrentObjects.Remove(obj);
 		}
 
 		public virtual void OnTriggersEnabled()
 		{
 			TriggeredAlives.Clear();
 			CurrentAlives.Clear();
+			
+			TriggeredObjects.Clear();
+			CurrentObjects.Clear();
 
 			for (var i = 0; i < Triggers.Length; i++)
 				Triggers[i].enabled = true;
