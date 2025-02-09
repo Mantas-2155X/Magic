@@ -467,13 +467,15 @@ namespace AI.Base
 			var ragdolls = World.World.Instance.Ragdolls;
 			var length = Body.Gibs.Length;
 
+			var objectLayer = LayerMask.NameToLayer("Object");
+			
 			for (var i = 0; i < length; i++)
 			{
 				var gib = Body.Gibs[i];
 				gib.enabled = true;
 
 				var go = gib.gameObject;
-				go.layer = 0;
+				go.layer = objectLayer;
 
 				var colliders = go.GetComponents<Collider>();
 				for (var k = 0; k < colliders.Length; k++)
