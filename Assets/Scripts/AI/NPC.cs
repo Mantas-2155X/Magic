@@ -73,7 +73,8 @@ namespace AI
 			{ EActionMode.Wander, new Wander() },
 			{ EActionMode.Patrol, new Patrol() },
 			{ EActionMode.Idle, new Idle() },
-			{ EActionMode.Use, new Use() }
+			{ EActionMode.Use, new Use() },
+			{ EActionMode.Carry, new Carry() }
 		};
 		
 		private EAIMode previousAIMode;
@@ -115,13 +116,29 @@ namespace AI
 			setAIMode(EAIMode.Action);
 		}
 
-		public void Use(Component target)
+		public void Use(Component target, Vector3? walkAfterwards = null)
+		{
+			if (!IsAlive || ((NPCData)Data).Stationary)
+				return;
+
+			var actionMode = (Use)ActionModes[EActionMode.Use];
+			actionMode.WalkAfterwards = walkAfterwards;
+			
+			setOtherTarget(target);
+			setActionMode(EActionMode.Use);
+			setAIMode(EAIMode.Action);
+		}
+		
+		public void Carry(Rigidbody target, Vector3 dropAt)
 		{
 			if (!IsAlive || ((NPCData)Data).Stationary)
 				return;
 			
+			var actionMode = (Carry)ActionModes[EActionMode.Carry];
+			actionMode.DropAt = dropAt;
+
 			setOtherTarget(target);
-			setActionMode(EActionMode.Use);
+			setActionMode(EActionMode.Carry);
 			setAIMode(EAIMode.Action);
 		}
 

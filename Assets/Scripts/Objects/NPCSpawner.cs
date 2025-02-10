@@ -48,6 +48,11 @@ namespace Objects
 
 		[SerializeField]
 		public Component UseAction;
+
+		[SerializeField]
+		public Rigidbody CarryAction;
+		[SerializeField]
+		public Vector3 DropAtLocation;
 		
 		private readonly List<IAlive> spawned = new ();
 		
@@ -165,6 +170,8 @@ namespace Objects
 					npc.Patrol(PatrolAction);
 				else if (UseAction != null)
 					npc.Use(UseAction);
+				else if (CarryAction != null)
+					npc.Carry(CarryAction, DropAtLocation);
 				else
 					npc.Idle();
 				

@@ -8,7 +8,8 @@ namespace AI.Enums
 		Wander,
 		Patrol,
 		Idle,
-		Use
+		Use,
+		Carry
 	}
 	
 	public struct EActionModeComparer : IEqualityComparer<EActionMode>

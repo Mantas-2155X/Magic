@@ -121,10 +121,7 @@ public class NavMeshElevatorLink : MonoBehaviour
 
 		ButtonUser = user;
 		
-		var actionMode = (Use)user.ActionModes[EActionMode.Use];
-		actionMode.WalkAfterwards = user.Destination;
-
-		user.Use(button);
+		user.Use(button, user.Destination);
 		return true;
 	}
 

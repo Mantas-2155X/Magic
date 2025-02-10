@@ -2435,6 +2435,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4093284366663789129, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
   m_PrefabInstance: {fileID: 321892287}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &321892289 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8590110310615143507, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+  m_PrefabInstance: {fileID: 321892287}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &324666429
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5539,12 +5544,24 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
-      propertyPath: PatrolAction
+      propertyPath: CarryAction
       value: 
-      objectReference: {fileID: 11400000, guid: d5c40fbe13c2ce4cea7dfe08910ae3aa, type: 2}
+      objectReference: {fileID: 321892289}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: Datas.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: DropAtLocation.x
+      value: -47.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: DropAtLocation.y
+      value: -0.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: DropAtLocation.z
+      value: -11.92
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: 'Datas.Array.data[0]'

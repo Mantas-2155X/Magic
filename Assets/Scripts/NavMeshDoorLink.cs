@@ -73,18 +73,15 @@ public class NavMeshDoorLink : MonoBehaviour
 
 		User = user;
 		
-		var actionMode = (Use)user.ActionModes[EActionMode.Use];
-		actionMode.WalkAfterwards = user.Destination;
-		
 		switch (Buttons.Length)
 		{
 			// No buttons, use the door
 			case 0: 
-				user.Use(Door);
+				user.Use(Door, user.Destination);
 				break;
 			// One button, use it
 			case 1: 
-				user.Use(Buttons[0]);
+				user.Use(Buttons[0], user.Destination);
 				break;
 			// Multiple buttons, use the cheapest one
 			default: 
@@ -113,7 +110,7 @@ public class NavMeshDoorLink : MonoBehaviour
 					}
 				}
 				
-				user.Use(Buttons[pathIndex]);
+				user.Use(Buttons[pathIndex], user.Destination);
 				break;
 			}
 		}

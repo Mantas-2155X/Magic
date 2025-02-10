@@ -75,9 +75,9 @@ namespace ScriptableObjects
 		public float GrabMass = 25f;
 
 		[SerializeField]
-		public float GrabDropDistance = 3f;
+		public float GrabDropDistance = 5f;
 
 		[SerializeField]
-		public float GrabDropAngle = 65f;
+		public float GrabDropAngle = 100f;
 	}
 }
