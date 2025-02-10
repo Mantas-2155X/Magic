@@ -51,8 +51,6 @@ namespace AI
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
 
-		public Rigidbody Grabbing { get; private set; }
-
 		private bool walking;
 		private bool jumpPressed;
 		private bool fallPressed;
@@ -127,12 +125,12 @@ namespace AI
 			Body.Rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0f, cameraAngle.y, 0f)));
 		}
 
-		public void FixedUpdate()
+		public override void FixedUpdate()
 		{
+			base.FixedUpdate();
+			
 			if (!IsAlive)
 				return;
-
-			handleGrab();
 			
 			var data = (PlayerData)Data;
 			var sprintAction = SettingsManager.Instance.GetKeybind("keybinds-movement-sprint").Item1;
@@ -736,89 +734,6 @@ namespace AI
 			var renderers = Body.GetComponentsInChildren<Renderer>(true);
 			foreach (var rend in renderers)
 				rend.shadowCastingMode = mode;
-		}
-
-		public void GrabObject(Rigidbody body)
-		{
-			if (Grabbing != null)
-			{
-				ReleaseObject();
-				return;
-			}
-			
-			Grabbing = body;
-			Grabbing.useGravity = false;
-			Grabbing.linearVelocity = Vector3.zero;
-			Grabbing.angularVelocity = Vector3.zero;
-		}
-
-		public void ReleaseObject()
-		{
-			if (Grabbing == null)
-				return;
-			
-			Grabbing.useGravity = true;
-			Grabbing.linearVelocity = Vector3.zero;
-			Grabbing.angularVelocity = Vector3.zero;
-			Grabbing = null;
-		}
-
-		private void handleGrab()
-		{
-			if (Grabbing == null)
-				return;
-
-			var data = (PlayerData)Data;
-			var grabEnergy = data.GrabEnergy * Time.deltaTime;
-			
-			if (CurrentEnergy >= grabEnergy)
-			{
-				TakeEnergy(grabEnergy, this);
-			}
-			else
-			{
-				ReleaseObject();
-				return;
-			}
-
-			var corePos = Body.Core.position;
-			corePos.y = (CameraTr.position + CameraTr.forward).y + data.GrabVerticalOffset;
-			
-			var coreForward = Body.Core.forward;
-			
-			var objPos = Grabbing.position;
-
-			if (Vector3.Distance(corePos, objPos) > data.GrabDropDistance)
-			{
-				ReleaseObject();
-				return;
-			}
-			
-			if (Vector3.Angle(objPos - corePos, coreForward) > data.GrabDropAngle)
-			{
-				ReleaseObject();
-				return;
-			}
-			
-			var linearVelocity = corePos + coreForward - objPos;
-			Grabbing.linearVelocity = linearVelocity * data.GrabPositionSpeed;
-			
-			var deltaRotation = Body.Rigidbody.rotation * Quaternion.Inverse(Grabbing.rotation);
-			deltaRotation.ToAngleAxis(out var angle, out var axis);
-			
-			if (angle > 180f)
-				angle -= 360f;
-
-			if (Mathf.Approximately(angle, 0)) 
-			{
-				Grabbing.angularVelocity = Vector3.zero;
-				return;
-			}
-			
-			angle *= Mathf.Deg2Rad;
-
-			var angularVelocity = axis * angle;
-			Grabbing.angularVelocity = angularVelocity * data.GrabRotationSpeed;
 		}
 	}
 }

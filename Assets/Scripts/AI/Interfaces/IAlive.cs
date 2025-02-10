@@ -39,6 +39,8 @@ namespace AI.Interfaces
 		public bool Paralyzed { get; }
 		public List<int> ParalyzeSources { get; }
 		
+		public Rigidbody Grabbing { get; }
+		
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
 		public bool IsPowerful { get; }
@@ -88,6 +90,10 @@ namespace AI.Interfaces
 		
 		public bool IsGrounded();
 
+		public void GrabObject(Rigidbody body);
+		public void ReleaseObject();
+		public void HandleGrab();
+		
 		public GameObject GetGameObject();
 		public Transform GetTransform();
 	}

@@ -44,6 +44,14 @@ namespace AI.Base
 		
 		#region MonoBehaviour
 
+		public virtual void FixedUpdate()
+		{
+			if (!IsAlive)
+				return;
+			
+			HandleGrab();
+		}
+
 		// todo: needs fixing, sometimes very wrong
 		/*public void OnCollisionEnter(Collision coll)
 		{
@@ -107,6 +115,8 @@ namespace AI.Base
 		public bool Paralyzed => ParalyzeSources.Count > 0;
 		public List<int> ParalyzeSources { get; private set; } = new ();
 		
+		public Rigidbody Grabbing { get; private set; }
+
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
 		public bool IsPowerful { get; private set; }
@@ -672,6 +682,97 @@ namespace AI.Base
 			OnTakeEnergyEvent?.Invoke(this, energy, source);
 		}
 
+		public virtual void GrabObject(Rigidbody body)
+		{
+			if (Grabbing != null)
+			{
+				ReleaseObject();
+				return;
+			}
+			
+			Grabbing = body;
+			Grabbing.useGravity = false;
+			Grabbing.linearVelocity = Vector3.zero;
+			Grabbing.angularVelocity = Vector3.zero;
+		}
+
+		public virtual void ReleaseObject()
+		{
+			if (Grabbing == null)
+				return;
+			
+			Grabbing.useGravity = true;
+			Grabbing.linearVelocity = Vector3.zero;
+			Grabbing.angularVelocity = Vector3.zero;
+			Grabbing = null;
+		}
+
+		public virtual void HandleGrab()
+		{
+			if (Grabbing == null)
+				return;
+
+			var data = Data;
+			var grabEnergy = data.GrabEnergy * Time.deltaTime;
+			
+			if (CurrentEnergy >= grabEnergy)
+			{
+				TakeEnergy(grabEnergy, this);
+			}
+			else
+			{
+				ReleaseObject();
+				return;
+			}
+
+			var corePos = Body.Core.position;
+
+			if (this is Player player)
+			{
+				corePos.y = (player.CameraTr.position + player.CameraTr.forward).y + data.GrabVerticalOffset;
+			}
+			else
+			{
+				corePos.y += data.GrabVerticalOffset;
+			}
+			
+			var coreForward = Body.Core.forward;
+			
+			var objPos = Grabbing.position;
+
+			if (Vector3.Distance(corePos, objPos) > data.GrabDropDistance)
+			{
+				ReleaseObject();
+				return;
+			}
+			
+			if (Vector3.Angle(objPos - corePos, coreForward) > data.GrabDropAngle)
+			{
+				ReleaseObject();
+				return;
+			}
+			
+			var linearVelocity = corePos + coreForward - objPos;
+			Grabbing.linearVelocity = linearVelocity * data.GrabPositionSpeed;
+			
+			var deltaRotation = Body.Rigidbody.rotation * Quaternion.Inverse(Grabbing.rotation);
+			deltaRotation.ToAngleAxis(out var angle, out var axis);
+			
+			if (angle > 180f)
+				angle -= 360f;
+
+			if (Mathf.Approximately(angle, 0)) 
+			{
+				Grabbing.angularVelocity = Vector3.zero;
+				return;
+			}
+			
+			angle *= Mathf.Deg2Rad;
+
+			var angularVelocity = axis * angle;
+			Grabbing.angularVelocity = angularVelocity * data.GrabRotationSpeed;
+		}
+		
 		public virtual bool IsGrounded()
 		{
 			return true;

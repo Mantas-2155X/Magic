@@ -26,26 +26,5 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public float SprintEnergy = 15f;
-
-		[SerializeField]
-		public float GrabEnergy = 5f;
-		
-		[SerializeField]
-		public float GrabPositionSpeed = 15f;
-
-		[SerializeField]
-		public float GrabRotationSpeed = 15f;
-
-		[SerializeField]
-		public float GrabVerticalOffset = -0.5f;
-		
-		[SerializeField]
-		public float GrabMass = 25f;
-
-		[SerializeField]
-		public float GrabDropDistance = 3f;
-
-		[SerializeField]
-		public float GrabDropAngle = 65f;
 	}
 }
