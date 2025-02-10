@@ -23,6 +23,9 @@ namespace AI.ActionModes.Shared
 
 		public bool UseResourceSpellIfNeeded()
 		{
+			if (owner.Paralyzed)
+				return false;
+
 			var spells = owner.Spells;
 			
 			if (IsHalfHealth())
@@ -93,6 +96,9 @@ namespace AI.ActionModes.Shared
 		
 		public bool GrabResourceIfNeeded()
 		{
+			if (owner.Paralyzed)
+				return false;
+
 			if (IsLowHealth())
 			{
 				if (CurrentResourceValid(ETag.RestoresHealth))

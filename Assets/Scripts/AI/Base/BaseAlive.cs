@@ -193,7 +193,12 @@ namespace AI.Base
 			ParalyzeSources.AddUnique(instanceID);
 			
 			if (Paralyzed)
+			{
+				if (Spell != null)
+					Spell.CancelCasting();
+				
 				Body.SetMalfunction(true);
+			}
 		}
 		public virtual void RemoveParalyzeSource(int instanceID)
 		{

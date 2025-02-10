@@ -229,6 +229,9 @@ public class NavMeshElevatorLink : MonoBehaviour
 			if (token.IsCancellationRequested)
 				break;
 			
+			if (PlatformUser.Paralyzed)
+				continue;
+			
 			tr.position = Vector3.Lerp(startPos, endPos, normalizedTime);
 			normalizedTime += speed * Time.deltaTime * 0.4f;
 		}

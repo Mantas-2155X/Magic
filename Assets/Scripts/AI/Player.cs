@@ -476,6 +476,9 @@ namespace AI
 
 		private void onUse(InputAction.CallbackContext ctx)
 		{
+			if (Paralyzed)
+				return;
+			
 			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithAlives()))
 				return;
 			
@@ -487,6 +490,9 @@ namespace AI
 
 		private void onGrab(InputAction.CallbackContext ctx)
 		{
+			if (Paralyzed)
+				return;
+
 			if (!Physics.Raycast(Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, UseDistance, ~LayerMaskTools.GetMaskWithAlives()))
 			{
 				ReleaseObject();
@@ -524,6 +530,9 @@ namespace AI
 		
 		private void onLight(InputAction.CallbackContext ctx)
 		{
+			if (Paralyzed)
+				return;
+
 			World.World.Instance.Flashlight.enabled = !World.World.Instance.Flashlight.enabled;
 		}
 

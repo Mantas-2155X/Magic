@@ -229,6 +229,9 @@ namespace AI.AIModes
 					forceFinishJump();
 					return;
 				}
+
+				if (Owner.Paralyzed)
+					continue;
 				
 				var yOffset = Owner.JumpCurve.Evaluate(normalizedTime);
 				transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + yOffset * Vector3.up;

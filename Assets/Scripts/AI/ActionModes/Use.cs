@@ -77,6 +77,9 @@ namespace AI.ActionModes
 				if (!owner.AimAt.AimTowards(targetTr))
 					return;
 
+				if (owner.Paralyzed)
+					return;
+
 				obj.Use(owner);
 			}
 			
