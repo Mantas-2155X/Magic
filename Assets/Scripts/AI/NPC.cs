@@ -501,6 +501,9 @@ namespace AI
 			
 			handleAttackTarget();
 			
+			// If low on resources, see if there's any spell that can be casted
+			LowResources.UseResourceSpellIfNeeded();
+
 			ActionModeObj.Update();
 			AIModeObj.Update();
 		}

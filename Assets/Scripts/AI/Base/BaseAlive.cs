@@ -750,21 +750,16 @@ namespace AI.Base
 				return;
 
 			var data = Data;
-
-			// Only consume grab energy if the object is not shrinked
-			if (originalGrabSize == null)
-			{
-				var grabEnergy = data.GrabEnergy * Time.deltaTime;
+			var grabEnergy = (originalGrabSize != null ? data.GrabShinkedEnergy : data.GrabEnergy) * Time.deltaTime;
 			
-				if (CurrentEnergy >= grabEnergy)
-				{
-					TakeEnergy(grabEnergy, this);
-				}
-				else
-				{
-					ReleaseObject();
-					return;
-				}
+			if (CurrentEnergy >= grabEnergy)
+			{
+				TakeEnergy(grabEnergy, this);
+			}
+			else
+			{
+				ReleaseObject();
+				return;
 			}
 
 			var corePos = Body.Core.position;
@@ -784,7 +779,7 @@ namespace AI.Base
 			
 			var objPos = Grabbing.position;
 
-			// Shrinking makes it kinematic, no velocities so use MoveX and ignore dist checks
+			// Shrinking makes it kinematic, no velocities so use MoveX and ignore distance and angle checks
 			if (originalGrabSize != null)
 			{
 				Grabbing.MovePosition(corePos + coreForward);

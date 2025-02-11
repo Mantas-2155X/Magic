@@ -60,7 +60,7 @@ namespace Combat.Spells.Base
 				}
 				case NPC npc:
 				{
-					if (npc.AttackTarget != null)
+					if (SpellData.IsResource || npc.AttackTarget != null)
 						FinishCasting();
 					break;
 				}
@@ -98,7 +98,7 @@ namespace Combat.Spells.Base
 		
 		public virtual bool CanCast()
 		{
-			if (IsCasting || Owner.Paralyzed || Owner.Grabbing != null)
+			if (IsCasting || Owner.Paralyzed)
 				return false;
 
 			if (IsOnCooldown || Owner.CurrentMana < SpellData.CastingCost)
@@ -173,7 +173,7 @@ namespace Combat.Spells.Base
 		{
 			if (!IsCasting)
 				return;
-			
+			Debug.Log("cancel");	
 			IsCasting = false;
 			Owner.Body.SetCoreCenter(false);
 			

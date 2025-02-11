@@ -5,7 +5,7 @@ namespace ScriptableObjects
 	[CreateAssetMenu]
 	public class PlayerData : AliveData
 	{
-		[Header("Movement")]
+		[Header("Player")]
 		[SerializeField]
 		public float MovementForce = 1f;
 		

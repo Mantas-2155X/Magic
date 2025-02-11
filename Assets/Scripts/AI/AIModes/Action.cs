@@ -30,9 +30,6 @@ namespace AI.AIModes
 		{
 			if (Owner.AIMode != EAIMode.Action)
 				return;
-
-			// If low on resources, see if there's any spell that can be casted
-			Owner.LowResources.UseResourceSpellIfNeeded();
 			
 			// Don't perform other actions if casting
 			if (Owner.IsCasting)
