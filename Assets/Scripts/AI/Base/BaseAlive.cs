@@ -693,6 +693,8 @@ namespace AI.Base
 				return;
 			}
 			
+			RenderManager.Instance.OutlineFeature.AddRenderers(body.GetComponentsInChildren<Renderer>());
+
 			Grabbing = body;
 			Grabbing.useGravity = false;
 			Grabbing.linearVelocity = Vector3.zero;
@@ -704,6 +706,8 @@ namespace AI.Base
 			if (Grabbing == null)
 				return;
 			
+			RenderManager.Instance.OutlineFeature.RemoveRenderers(Grabbing.GetComponentsInChildren<Renderer>());
+
 			ShrinkObject(false);
 
 			Grabbing.useGravity = true;

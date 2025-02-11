@@ -15,7 +15,7 @@ public class BlurredBufferMultiObjectOutlineRendererFeature : ScriptableRenderer
     public Material OutlineMaterial;
     
     [SerializeField, Range(1, 60)]
-    public int Spread = 15;
+    public int Spread = 10;
     
     private readonly List<Renderer> renderersList = new ();
 
