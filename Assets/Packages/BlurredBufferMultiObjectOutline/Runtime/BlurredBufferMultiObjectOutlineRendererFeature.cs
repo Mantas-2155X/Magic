@@ -82,5 +82,7 @@ public class BlurredBufferMultiObjectOutlineRendererFeature : ScriptableRenderer
         
         if (outlinePass != null)
             outlinePass.Renderers = targetRenderers;
+        
+        SetActive(targetRenderers.Length > 0);
     }
 }
