@@ -486,6 +486,7 @@ namespace AI.Base
 			var length = Body.Gibs.Length;
 
 			var objectLayer = LayerMask.NameToLayer("Object");
+			var force = -thisTr.forward * 0.25f;
 			
 			for (var i = 0; i < length; i++)
 			{
@@ -513,6 +514,8 @@ namespace AI.Base
 				rb.excludeLayers = 0;
 				rb.mass = 5;
 
+				rb.AddForce(force, ForceMode.VelocityChange);
+				
 				go.transform.SetParent(ragdolls);
 			}
 

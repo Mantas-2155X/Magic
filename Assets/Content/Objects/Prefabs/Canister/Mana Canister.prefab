@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7101656253968932233}
   - component: {fileID: 5894312124118944966}
   - component: {fileID: 5965907832837043669}
-  - component: {fileID: 427463504399752909}
   - component: {fileID: 6142042592346368541}
   - component: {fileID: 5818590395883434831}
   - component: {fileID: 3449953546821831926}
+  - component: {fileID: 3270689985989041232}
   m_Layer: 10
   m_Name: Mana Canister
   m_TagString: Untagged
@@ -91,28 +91,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &427463504399752909
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6900112509888156798}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5685363115531012651, guid: e4fc2408bc990db8e907ebdd93fc7209, type: 3}
 --- !u!136 &6142042592346368541
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -178,3 +156,26 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &3270689985989041232
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6900112509888156798}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.00105
+  m_Height: 0.006
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}

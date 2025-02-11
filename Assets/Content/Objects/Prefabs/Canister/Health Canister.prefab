@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 2576630630053905109}
   - component: {fileID: 5815118417631545858}
   - component: {fileID: 3029853365159742379}
-  - component: {fileID: 7259016892652859752}
   - component: {fileID: 2520106227387048869}
   - component: {fileID: 8231638090954666341}
   - component: {fileID: 1448056120677301711}
+  - component: {fileID: 8978112957005800782}
   m_Layer: 10
   m_Name: Health Canister
   m_TagString: Untagged
@@ -91,28 +91,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7259016892652859752
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6255904325556568875}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5685363115531012651, guid: e4fc2408bc990db8e907ebdd93fc7209, type: 3}
 --- !u!136 &2520106227387048869
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -178,3 +156,26 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &8978112957005800782
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6255904325556568875}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.00105
+  m_Height: 0.006
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
