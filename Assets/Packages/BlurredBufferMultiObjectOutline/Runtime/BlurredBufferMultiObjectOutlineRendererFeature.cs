@@ -69,6 +69,13 @@ public class BlurredBufferMultiObjectOutlineRendererFeature : ScriptableRenderer
         renderer.EnqueuePass(outlinePass);
     }
 
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        
+        ClearRenderers();
+    }
+    
     private void updateRenderers()
     {
         targetRenderers = renderersList.ToArray();
