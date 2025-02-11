@@ -1,57 +1,79 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
 
 public class BlurredBufferMultiObjectOutlineRendererFeature : ScriptableRendererFeature
 {
-    private static readonly int SpreadId = Shader.PropertyToID("_Spread");
+    [SerializeField]
+    private RenderPassEvent RenderEvent = RenderPassEvent.AfterRenderingTransparents;
+    
+    [Space, SerializeField]
+    public Material DilationMaterial;
+    
+    [SerializeField]
+    public Material OutlineMaterial;
+    
+    [SerializeField, Range(1, 60)]
+    public int Spread = 15;
+    
+    private readonly List<Renderer> renderersList = new ();
 
-    [SerializeField] private RenderPassEvent renderEvent = RenderPassEvent.AfterRenderingTransparents;
-    [Space, SerializeField] private Material dilationMaterial;
-    [SerializeField] public Material outlineMaterial;
-    [SerializeField, Range(1, 60)] private int spread = 15;
+    private BlurredBufferMultiObjectOutlinePass outlinePass;
+    private Renderer[] targetRenderers = Array.Empty<Renderer>();
 
-    private BlurredBufferMultiObjectOutlinePass _outlinePass;
+    private static readonly int spreadId = Shader.PropertyToID("_Spread");
 
-    private Renderer[] _targetRenderers;
-
-    public void SetRenderers(Renderer[] targetRenderers)
+    public void AddRenderers(Renderer[] renderers)
     {
-        _targetRenderers = targetRenderers;
+        for (var i = renderers.Length - 1; i >= 0; i--)
+            renderersList.Remove(renderers[i]);
+        
+        renderersList.AddRange(renderers);
+        updateRenderers();
+    }
 
-        if (_outlinePass != null)
-            _outlinePass.Renderers = _targetRenderers;
+    public void RemoveRenderers(Renderer[] renderers)
+    {
+        for (var i = renderers.Length - 1; i >= 0; i--)
+            renderersList.Remove(renderers[i]);
+        
+        updateRenderers();
+    }
+
+    public void ClearRenderers()
+    {
+        renderersList.Clear();
+        updateRenderers();
     }
 
     public override void Create()
     {
         name = "Multi-Object Outliner";
-
-        // Pass in constructor variables which don't/shouldn't need to be updated every frame.
-        _outlinePass = new BlurredBufferMultiObjectOutlinePass();
+        outlinePass = new BlurredBufferMultiObjectOutlinePass();
+        
+        outlinePass.RenderEvent = RenderEvent;
+        
+        outlinePass.OutlineMaterial = OutlineMaterial;
+        outlinePass.DilationMaterial = DilationMaterial;
+        
+        DilationMaterial.SetInteger(spreadId, Spread);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        if (_outlinePass == null)
+        if (outlinePass == null || targetRenderers.Length == 0)
             return;
 
-        if (!dilationMaterial ||
-            !outlineMaterial ||
-            _targetRenderers == null ||
-            _targetRenderers.Length == 0)
-        {
-            // Don't render the effect if there's nothing to render
-            return;
-        }
+        outlinePass.Renderers = targetRenderers;
+        renderer.EnqueuePass(outlinePass);
+    }
 
-        // Any variables you may want to update every frame should be set here.
-        _outlinePass.RenderEvent = renderEvent;
-        _outlinePass.DilationMaterial = dilationMaterial;
-        dilationMaterial.SetInteger("_Spread", spread);
-        _outlinePass.OutlineMaterial = outlineMaterial;
-        _outlinePass.Renderers = _targetRenderers;
-
-        renderer.EnqueuePass(_outlinePass);
+    private void updateRenderers()
+    {
+        targetRenderers = renderersList.ToArray();
+        
+        if (outlinePass != null)
+            outlinePass.Renderers = targetRenderers;
     }
 }

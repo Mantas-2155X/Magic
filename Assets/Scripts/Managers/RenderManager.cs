@@ -219,7 +219,7 @@ namespace Managers
 				if (feature == null)
 					return null;
 
-				outlineMaterial = feature.outlineMaterial;
+				outlineMaterial = feature.OutlineMaterial;
 				return outlineMaterial;
 			}
 		}
