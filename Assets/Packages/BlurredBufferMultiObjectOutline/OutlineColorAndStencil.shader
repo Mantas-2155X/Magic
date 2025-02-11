@@ -14,7 +14,7 @@ Shader "Hidden/Outline Color And Stencil"
         
         Tags
         {
-            "RenderType" = "Opaque" "RenderPipeline" = "UniversalRenderPipeline"
+            "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"
         }
 
         Pass
