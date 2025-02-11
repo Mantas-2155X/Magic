@@ -173,7 +173,7 @@ namespace Combat.Spells.Base
 		{
 			if (!IsCasting)
 				return;
-			Debug.Log("cancel");	
+
 			IsCasting = false;
 			Owner.Body.SetCoreCenter(false);
 			
