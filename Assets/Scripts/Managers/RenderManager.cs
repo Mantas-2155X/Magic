@@ -103,6 +103,32 @@ namespace Managers
 			}
 		}
 
+		private BlurredBufferMultiObjectOutlineRendererFeature outlineFeature;
+		public BlurredBufferMultiObjectOutlineRendererFeature OutlineFeature
+		{
+			get
+			{
+				if (outlineFeature != null)
+					return outlineFeature;
+				
+				var features = RenderFeatures;
+				if (features == null)
+					return null;
+
+				foreach (var feature in features)
+				{
+					if (feature.name != "Multi-Object Outliner")
+						continue;
+
+					outlineFeature = (BlurredBufferMultiObjectOutlineRendererFeature)feature;
+					return outlineFeature;
+				}
+
+				Debug.LogError("[RenderManager] Outline feature not found");
+				return null;
+			}
+		}
+		
 		private FullScreenPassRendererFeature invertFeature;
 		public FullScreenPassRendererFeature InvertFeature
 		{
@@ -178,6 +204,23 @@ namespace Managers
 
 				Debug.LogError("[RenderManager] Blur feature not found");
 				return null;
+			}
+		}
+		
+		private Material outlineMaterial;
+		public Material OutlineMaterial
+		{
+			get
+			{
+				if (outlineMaterial != null)
+					return outlineMaterial;
+		
+				var feature = OutlineFeature;
+				if (feature == null)
+					return null;
+
+				outlineMaterial = feature.outlineMaterial;
+				return outlineMaterial;
 			}
 		}
 		
