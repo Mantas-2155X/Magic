@@ -92,6 +92,7 @@ namespace AI.Interfaces
 
 		public void GrabObject(Rigidbody body);
 		public void ReleaseObject();
+		public void ShrinkObject(bool state);
 		public void HandleGrab();
 		
 		public GameObject GetGameObject();

@@ -38,7 +38,7 @@ namespace AI.ActionModes
 			}
 
 			// Currently on a NavMeshLink, wait for it to complete
-			if (Owner.IsOnLink)
+			if (Owner.IsOnLink != null)
 				return;
 			
 			// If stationary, just aim and kill, otherwise chase

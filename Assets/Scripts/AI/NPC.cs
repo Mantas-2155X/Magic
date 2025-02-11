@@ -9,6 +9,7 @@ using AI.Enums;
 using AI.Interfaces;
 using Managers;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 using UnityEngine.AI;
 using Action = AI.AIModes.Action;
@@ -58,7 +59,41 @@ namespace AI
 		public LowResources LowResources { get; private set; }
 		public KillTarget KillTarget { get; private set; }
 
-		public bool IsOnLink;
+		private OffMeshLinkData? isOnLink;
+		public OffMeshLinkData? IsOnLink
+		{
+			get => isOnLink;
+			set
+			{
+				var prev = isOnLink;
+				isOnLink = value;
+				
+				// No link change
+				if (prev == null && isOnLink == null)
+					return;
+
+				// Lost link
+				if (prev != null && isOnLink == null)
+				{
+					ShrinkObject(false);
+					return;
+				}
+
+				// Gained link
+				if (prev == null && isOnLink != null)
+				{
+					ShrinkObject(NavMeshTools.IsElevatorLink(isOnLink.Value));
+					return;
+				}
+				
+				// Changed link
+				if (prev!.Value.owner != isOnLink.Value.owner)
+				{
+					ShrinkObject(NavMeshTools.IsElevatorLink(isOnLink.Value));
+					return;
+				}
+			}
+		}
 		
 		public readonly Dictionary<EAIMode, IAIMode> AIModes = new (new EAIModeComparer())
 		{

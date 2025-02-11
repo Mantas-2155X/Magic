@@ -42,6 +42,10 @@ namespace AI.ActionModes
 				return;
 			}
 
+			// Currently on a NavMeshLink, wait for it to complete
+			if (Owner.IsOnLink != null)
+				return;
+			
 			// Go grab the object
 			if (owner.Grabbing != target)
 			{

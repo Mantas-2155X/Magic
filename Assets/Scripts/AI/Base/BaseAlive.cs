@@ -34,6 +34,8 @@ namespace AI.Base
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
 		public static readonly OnRelationshipGroupChangedEvent OnRelationshipGroupChangedEvent = new ();
 		public static readonly OnSpellSelectedEvent OnSpellSelectedEvent = new ();
+
+		private Vector3? originalGrabSize;
 		
 		private LayerMask previousExcludeLayers;
 
@@ -459,6 +461,7 @@ namespace AI.Base
 			
 			SetMovementType(EMovementType.Normal);
 			DropAllWearables();
+			ReleaseObject();
 
 			Body.SetCoreGlow(EElement.Unknown);
 			Body.SetCoreCenter(false);
@@ -701,10 +704,44 @@ namespace AI.Base
 			if (Grabbing == null)
 				return;
 			
+			ShrinkObject(false);
+
 			Grabbing.useGravity = true;
 			Grabbing.linearVelocity = Vector3.zero;
 			Grabbing.angularVelocity = Vector3.zero;
 			Grabbing = null;
+		}
+
+		public virtual void ShrinkObject(bool state)
+		{
+			if (Grabbing == null)
+				return;
+
+			var tr = Grabbing.transform;
+			
+			if (state)
+			{
+				// Already shrinked
+				if (originalGrabSize != null)
+					return;
+				
+				originalGrabSize = tr.localScale;
+				Grabbing.isKinematic = true;
+				tr.localScale = Vector3.zero;
+			}
+			else
+			{
+				// Already expanded
+				if (originalGrabSize == null)
+					return;
+				
+				tr.localScale = originalGrabSize.Value;
+				Grabbing.isKinematic = false;
+				originalGrabSize = null;
+			}
+			
+			var portal = ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME");
+			ObjectManager.Instance.CreateObject(portal, tr.position, Vector3.zero);
 		}
 
 		public virtual void HandleGrab()
@@ -713,33 +750,49 @@ namespace AI.Base
 				return;
 
 			var data = Data;
-			var grabEnergy = data.GrabEnergy * Time.deltaTime;
+
+			// Only consume grab energy if the object is not shrinked
+			if (originalGrabSize == null)
+			{
+				var grabEnergy = data.GrabEnergy * Time.deltaTime;
 			
-			if (CurrentEnergy >= grabEnergy)
-			{
-				TakeEnergy(grabEnergy, this);
-			}
-			else
-			{
-				ReleaseObject();
-				return;
+				if (CurrentEnergy >= grabEnergy)
+				{
+					TakeEnergy(grabEnergy, this);
+				}
+				else
+				{
+					ReleaseObject();
+					return;
+				}
 			}
 
 			var corePos = Body.Core.position;
-
-			if (this is Player player)
-			{
-				corePos.y = (player.CameraTr.position + player.CameraTr.forward).y + data.GrabVerticalOffset;
-			}
-			else
-			{
-				corePos.y += data.GrabVerticalOffset;
-			}
-			
 			var coreForward = Body.Core.forward;
+
+			switch (this)
+			{
+				case Player player:
+					corePos.y = (player.CameraTr.position + player.CameraTr.forward).y + data.GrabVerticalOffset;
+					break;
+				case NPC:
+					corePos.y += data.GrabVerticalOffset;
+					break;
+				default:
+					throw new NotImplementedException();
+			}
 			
 			var objPos = Grabbing.position;
 
+			// Shrinking makes it kinematic, no velocities so use MoveX and ignore dist checks
+			if (originalGrabSize != null)
+			{
+				Grabbing.MovePosition(corePos + coreForward);
+				Grabbing.MoveRotation(Body.Rigidbody.rotation);
+				
+				return;
+			}
+			
 			if (Vector3.Distance(corePos, objPos) > data.GrabDropDistance)
 			{
 				ReleaseObject();
