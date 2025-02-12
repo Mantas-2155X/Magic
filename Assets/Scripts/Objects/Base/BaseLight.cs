@@ -45,6 +45,12 @@ namespace Objects.Base
 		}
 #endif
 		
+		public override void Break(object source)
+		{
+			Disable();
+			base.Break(source);
+		}
+
 		#region Light
 
 		public void Enable()
