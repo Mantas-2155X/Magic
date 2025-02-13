@@ -14,6 +14,9 @@ public class Explode : MonoBehaviour
 	public void Awake()
 	{
 		var position = transform.position;
+		var scale = transform.localScale;
+
+		Radius *= Mathf.Max(scale.x, scale.y, scale.z);
 
 		for (var i = 0; i < Rigidbodies.Length; i++)
 			Rigidbodies[i].AddExplosionForce(Force, position, Radius);
