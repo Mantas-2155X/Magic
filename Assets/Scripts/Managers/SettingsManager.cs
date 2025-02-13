@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using AI;
+using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -859,6 +860,50 @@ namespace Managers
 				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
 			});
 			
+			#endregion
+
+			#region Other
+
+			AddSetting("other-cursorelement", "SETTINGS_OTHER_CURSORELEMENT", "SETTINGS_OTHER_CURSORELEMENT_DESC", ESettingType.Int, (int)EElement.Mana, (previousValue, newValue) =>
+			{
+				var elements = Enum.GetValues(typeof(EElement));
+
+				var value = (int)newValue;
+				if (value < 0 || value >= elements.Length)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid cursor element provided, skipping");
+					return;
+				}
+				
+				CursorManager.Instance.SetElement((EElement)elements.GetValue(value));
+			});
+			
+			AddSetting("other-cursorsize", "SETTINGS_OTHER_CURSORSIZE", "SETTINGS_OTHER_CURSORSIZE_DESC", ESettingType.Int, 2, (previousValue, newValue) =>
+			{
+				var value = (int)newValue;
+				switch (value)
+				{
+					case 0:
+						CursorManager.Instance.SetSize(16);
+						break;
+					case 1:
+						CursorManager.Instance.SetSize(20);
+						break;
+					case 2:
+						CursorManager.Instance.SetSize(24);
+						break;
+					case 3:
+						CursorManager.Instance.SetSize(28);
+						break;
+					case 4:
+						CursorManager.Instance.SetSize(32);
+						break;
+					default:
+						Debug.LogWarning("[SettingsManager] Invalid cursor size provided, skipping");
+						break;
+				}
+			});
+
 			#endregion
 			
 			ResetSettings();
