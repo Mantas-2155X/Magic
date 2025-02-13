@@ -864,18 +864,33 @@ namespace Managers
 
 			#region Other
 
-			AddSetting("other-cursorelement", "SETTINGS_OTHER_CURSORELEMENT", "SETTINGS_OTHER_CURSORELEMENT_DESC", ESettingType.Int, (int)EElement.Mana, (previousValue, newValue) =>
+			AddSetting("other-cursorelement", "SETTINGS_OTHER_CURSORELEMENT", "SETTINGS_OTHER_CURSORELEMENT_DESC", ESettingType.Int, 3, (previousValue, newValue) =>
 			{
-				var elements = Enum.GetValues(typeof(EElement));
-
 				var value = (int)newValue;
-				if (value < 0 || value >= elements.Length)
+				switch (value)
 				{
-					Debug.LogWarning("[SettingsManager] Invalid cursor element provided, skipping");
-					return;
+					case 0:
+						CursorManager.Instance.SetElement(EElement.Energy);
+						break;
+					case 1:
+						CursorManager.Instance.SetElement(EElement.Health);
+						break;
+					case 2:
+						CursorManager.Instance.SetElement(EElement.Mana);
+						break;
+					case 3:
+						CursorManager.Instance.SetElement(EElement.Fire);
+						break;
+					case 4:
+						CursorManager.Instance.SetElement(EElement.Time);
+						break;
+					case 5:
+						CursorManager.Instance.SetElement(EElement.Lightning);
+						break;
+					default:
+						Debug.LogWarning("[SettingsManager] Invalid cursor element provided, skipping");
+						break;
 				}
-				
-				CursorManager.Instance.SetElement((EElement)elements.GetValue(value));
 			});
 			
 			AddSetting("other-cursorsize", "SETTINGS_OTHER_CURSORSIZE", "SETTINGS_OTHER_CURSORSIZE_DESC", ESettingType.Int, 2, (previousValue, newValue) =>

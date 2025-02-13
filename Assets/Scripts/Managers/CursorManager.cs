@@ -25,30 +25,26 @@ namespace Managers
 
 		public void SetElement(EElement element)
 		{
-			if (Element == element)
-				return;
-			
 			Element = element;
 			updateCursor();
 		}
 		
 		public void SetSize(int size)
 		{
-			if (Size == size)
-				return;
-			
 			Size = size;
 			updateCursor();
 		}
 
 		private void updateCursor()
 		{
-			if (Element == EElement.Unknown || Size <= 0)
-				return;
+			if (Element == EElement.Unknown)
+				Element = EElement.Fire;
+
+			if (Size <= 0)
+				Size = 24;
 			
 			var cursor = Addressables.LoadAssetAsync<Texture2D>($"Assets/Textures/Cursor/{Element}.png").WaitForCompletion();
 			var resized = TextureTools.Resize(cursor, Size, Size);
-			
 			Cursor.SetCursor(resized, new Vector2(Size / 2f, Size / 2f), CursorMode.Auto);
 			Addressables.Release(cursor);
 		}
