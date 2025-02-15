@@ -24,7 +24,7 @@ namespace Scenes
 		public float MinimumVelocity = 2f;
 		
 		[SerializeField]
-		public float DivideBy = 175f;
+		public float DivideBy = 1.002f;
 
 		[SerializeField]
 		public Vector2 RangeX = new (-8.27f, 8.27f);
@@ -95,7 +95,7 @@ namespace Scenes
 				};
 
 				ObjectManager.Instance.CreateAttack(incinerate, this, hit, null);
-				AttackEvery -= AttackEvery / DivideBy;
+				AttackEvery /= DivideBy;
 			}
 		}
 		
