@@ -695,6 +695,16 @@ namespace AI.Base
 				ReleaseObject();
 				return;
 			}
+
+			var alives = AIManager.Instance.AlivesColliderMap;
+			foreach (var pair in alives)
+			{
+				if (!pair.Value.IsAlive || pair.Value.Grabbing != body)
+					continue;
+
+				pair.Value.ReleaseObject();
+				break;
+			}
 			
 			RenderManager.Instance.OutlineFeature.AddRenderers(body.GetComponentsInChildren<Renderer>());
 
