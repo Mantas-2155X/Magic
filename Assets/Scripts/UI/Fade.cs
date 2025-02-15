@@ -68,7 +68,6 @@ namespace UI
 		
 		public void SetAlpha(float alpha)
 		{
-			UnityEngine.Debug.Log(alpha);
 			Group.alpha = alpha;
 		}
 	}

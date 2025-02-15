@@ -86,7 +86,7 @@ namespace Managers
 			await UniTask.WaitUntil(() => handle.IsDone && DynamicGI.isConverged);
 
 			// Give extra time for GI since isConverged doesn't really work
-			await UniTask.WaitForSeconds(1f);
+			await UniTask.WaitForSeconds(0.5f);
 
 			if (closeTitle)
 			{
