@@ -1109,10 +1109,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackEvery: 1
+  AttackEveryCap: 0.15
   DamageEvery: 0.25
   DamageAmount: 3
   MinimumVelocity: 2
-  DivideBy: 1.002
+  DivideBy: 1.0025
   RangeX: {x: -8.27, y: 8.27}
   RangeZ: {x: -8.27, y: 8.27}
   Y: -0.75

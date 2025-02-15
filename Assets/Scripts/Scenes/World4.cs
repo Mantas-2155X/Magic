@@ -15,6 +15,9 @@ namespace Scenes
 		public float AttackEvery = 1f;
 
 		[SerializeField]
+		public float AttackEveryCap = 0.15f;
+
+		[SerializeField]
 		public float DamageEvery = 0.25f;
 
 		[SerializeField]
@@ -24,7 +27,7 @@ namespace Scenes
 		public float MinimumVelocity = 2f;
 		
 		[SerializeField]
-		public float DivideBy = 1.002f;
+		public float DivideBy = 1.0025f;
 
 		[SerializeField]
 		public Vector2 RangeX = new (-8.27f, 8.27f);
@@ -82,12 +85,6 @@ namespace Scenes
 				if (this == null || !isActiveAndEnabled)
 					return;
 
-				if (AttackEvery <= 0)
-				{
-					await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
-					return;
-				}
-
 				var hit = new RaycastHit
 				{
 					point = new Vector3(Random.Range(RangeX.x, RangeX.y), Y, Random.Range(RangeZ.x, RangeZ.y)),
@@ -95,7 +92,9 @@ namespace Scenes
 				};
 
 				ObjectManager.Instance.CreateAttack(incinerate, this, hit, null);
-				AttackEvery /= DivideBy;
+				
+				if (AttackEvery > AttackEveryCap)
+					AttackEvery /= DivideBy;
 			}
 		}
 		
