@@ -44,8 +44,6 @@ namespace Scenes
 		[SerializeField]
 		public TMP_Text Info;
 		
-		private string text = "Dodge attacks for as long as possible.\nIf you stop moving, you will take damage.";
-		
 		private float startTime;
 		private int currentCharacter;
 		
@@ -126,21 +124,34 @@ namespace Scenes
 
 		private async UniTaskVoid textLoop()
 		{
-			while (currentCharacter <= text.Length)
+			var text = LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE4_INFO");
+			
+			while (currentCharacter < text.Length)
 			{
 				await UniTask.WaitForSeconds(0.1f);
 				
 				if (this == null || !isActiveAndEnabled)
 					return;
 				
-				Info.text = text[..currentCharacter];
+				Info.text = text[..(currentCharacter + 1)];
 				currentCharacter++;
 			}
 
-			await UniTask.WaitForSeconds(1f);
+			await UniTask.WaitForSeconds(1.5f);
 			
 			if (this == null || !isActiveAndEnabled)
 				return;
+			
+			while (currentCharacter >= 0)
+			{
+				await UniTask.WaitForSeconds(0.0025f);
+				
+				if (this == null || !isActiveAndEnabled)
+					return;
+				
+				Info.text = text[..currentCharacter];
+				currentCharacter--;
+			}
 			
 			Info.gameObject.SetActive(false);
 		}
