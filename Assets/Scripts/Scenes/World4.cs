@@ -27,7 +27,7 @@ namespace Scenes
 		public float MinimumVelocity = 2f;
 		
 		[SerializeField]
-		public float DivideBy = 1.0025f;
+		public float DivideBy = 1.003f;
 
 		[SerializeField]
 		public Vector2 RangeX = new (-8.27f, 8.27f);
@@ -137,7 +137,7 @@ namespace Scenes
 				currentCharacter++;
 			}
 
-			await UniTask.WaitForSeconds(1.5f);
+			await UniTask.WaitForSeconds(2f);
 			
 			if (this == null || !isActiveAndEnabled)
 				return;
