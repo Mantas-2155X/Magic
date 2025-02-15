@@ -3,6 +3,8 @@ using Cysharp.Threading.Tasks;
 using UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.SceneManagement;
 
 namespace Managers
 {
@@ -75,9 +77,16 @@ namespace Managers
 			var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {currentScene} to {scene}");
 			
-			var handle = Addressables.LoadSceneAsync("Scenes/" + scene);
+			var handle = Addressables.LoadSceneAsync("Scenes/" + scene, LoadSceneMode.Single, false);
 
-			await UniTask.WaitUntil(() => handle.IsDone);
+			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded && DynamicGI.isConverged);
+
+			await handle.Result.ActivateAsync();
+			
+			await UniTask.WaitUntil(() => handle.IsDone && DynamicGI.isConverged);
+
+			// Give extra time for GI since isConverged doesn't really work
+			await UniTask.WaitForSeconds(1f);
 
 			if (closeTitle)
 			{
@@ -93,42 +102,31 @@ namespace Managers
 		private async UniTask fade(bool fadeIn, float fadeDuration)
 		{
 			var fade = Fade.Instance;
-			if (fade != null)
-			{
-				fade.SetAlpha(fadeIn ? 0f : 1f);
-				fade.gameObject.SetActive(true);
-			}
+			
+			fade.SetAlpha(fadeIn ? 0f : 1f);
+			fade.gameObject.SetActive(true);
 			
 			var normalizedTime = 0f;
 			while (normalizedTime < 1f)
 			{
 				await UniTask.NextFrame();
 				
-				fade = Fade.Instance;
-				if (fade != null)
-				{
-					float value;
+				float value;
 
-					if (fadeIn)
-						value = normalizedTime;
-					else
-						value = 1f - normalizedTime;
+				if (fadeIn)
+					value = normalizedTime;
+				else
+					value = 1f - normalizedTime;
 
-					fade.SetAlpha(value);
-				}
+				fade.SetAlpha(value);
 				
 				normalizedTime += Time.unscaledDeltaTime / fadeDuration;
 			}
 
+			fade.SetAlpha(fadeIn ? 1f : 0f);
+			
 			if (!fadeIn)
-			{
-				fade = Fade.Instance;
-				if (fade != null)
-				{
-					fade.SetAlpha(1f);
-					fade.gameObject.SetActive(false);
-				}
-			}
+				fade.gameObject.SetActive(false);
 		}
 
 		private void getScenes()
