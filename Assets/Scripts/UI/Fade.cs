@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.UI;
 
 namespace UI
 {
@@ -30,14 +29,11 @@ namespace UI
 		}
 
 		[SerializeField]
-		public Image Image;
+		public CanvasGroup Group;
 
 		public void SetAlpha(float alpha)
 		{
-			var color = Image.color;
-			color.a = alpha;
-
-			Image.color = color;
+			Group.alpha = alpha;
 		}
 	}
 }
