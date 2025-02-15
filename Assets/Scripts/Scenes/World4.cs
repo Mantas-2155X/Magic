@@ -27,7 +27,7 @@ namespace Scenes
 		public float MinimumVelocity = 2f;
 		
 		[SerializeField]
-		public float DivideBy = 1.003f;
+		public float DivideBy = 1.00425f;
 
 		[SerializeField]
 		public Vector2 RangeX = new (-8.27f, 8.27f);

@@ -207,60 +207,9 @@ namespace Combat.Spells.Base
 					break;
 				case NPC npc:
 					var ownerTr = Owner.GetTransform();
-					var ownerPos = ownerTr.position;
+					var targetPos = calculatePrediction(npc);
 					
-					var targetPos = Vector3.zero;
-
-					if (npc.AttackTarget != null)
-					{
-						targetPos = npc.AttackTargetTransform.position;
-						
-						var npcData = (NPCData)npc.Data;
-
-						var distance = Vector3.Distance(ownerPos, targetPos);
-						if (distance > npcData.TargetPredictMinimumRange)
-						{
-							Vector3 velocity;
-						
-							switch (npc.AttackTarget)
-							{
-								case Player targetPlayer:
-								{
-									velocity = targetPlayer.Body.Rigidbody.linearVelocity;
-									break;
-								}
-								case NPC targetNPC:
-								{
-									velocity = targetNPC.IsWalking ? targetNPC.Agent.velocity : targetNPC.Body.Rigidbody.linearVelocity;
-									break;
-								}
-								default:
-									throw new NotImplementedException();
-							}
-
-							if (velocity.magnitude < npcData.TargetPredictStartFakeVelocity)
-							{
-								// Add some amount of fake velocity for extra inaccuracy
-								var fakeVel = npcData.TargetPredictMaximumFakeVelocity;
-								velocity = new Vector3(Random.Range(-fakeVel, fakeVel), Random.Range(-fakeVel, fakeVel), Random.Range(-fakeVel, fakeVel));
-							}
-							
-							var distMul = npcData.TargetPredictDistanceMultiplier;
-							var velMul = npcData.TargetPredictVelocityMultiplier;
-						
-							var distInaccuracy = distMul * npcData.TargetPredictInaccuracy;
-							var velInaccuracy = velMul * npcData.TargetPredictInaccuracy;
-							
-							distance *= distMul + Random.Range(-distInaccuracy, distInaccuracy);
-							velocity *= velMul + Random.Range(-velInaccuracy, velInaccuracy);
-
-							var prediction = velocity * distance;
-							
-							targetPos += prediction;
-						}
-					}
-					
-					var direction = npc.AttackTarget == null ? ownerTr.forward : (targetPos - ownerPos).normalized;
+					var direction = npc.AttackTarget == null ? ownerTr.forward : (targetPos - ownerTr.position).normalized;
 					LastRay = new Ray(Owner.Body.Core.position, direction);
 					break;
 				default:
@@ -279,6 +228,69 @@ namespace Combat.Spells.Base
 			LastHit = hit;
 		}
 
+		private Vector3 calculatePrediction(NPC npc)
+		{
+			// No target, nothing to predict
+			if (npc.AttackTarget == null)
+				return Vector3.zero;
+			
+			var targetPos = npc.AttackTargetTransform.position;
+			
+			// No projectile, no need for prediction
+			if (SpellData.Projectile == null)
+				return targetPos;
+			
+			var ownerPos = npc.GetTransform().position;
+			var npcData = (NPCData)npc.Data;
+
+			// Only use prediction if close enough
+			var distance = Vector3.Distance(ownerPos, targetPos);
+			if (distance < npcData.TargetPredictMinimumRange)
+				return targetPos;
+			
+			Vector3 velocity;
+			
+			// Velocity grabbing differs for NPCs
+			switch (npc.AttackTarget)
+			{
+				case Player targetPlayer:
+				{
+					velocity = targetPlayer.Body.Rigidbody.linearVelocity;
+					break;
+				}
+				case NPC targetNPC:
+				{
+					velocity = targetNPC.IsWalking ? targetNPC.Agent.velocity : targetNPC.Body.Rigidbody.linearVelocity;
+					break;
+				}
+				default:
+					throw new NotImplementedException();
+			}
+			
+			// Add some amount of fake velocity for extra inaccuracy
+			if (velocity.magnitude < npcData.TargetPredictStartFakeVelocity)
+			{
+				var fakeVel = npcData.TargetPredictMaximumFakeVelocity;
+				velocity = new Vector3(Random.Range(-fakeVel, fakeVel), Random.Range(-fakeVel, fakeVel), Random.Range(-fakeVel, fakeVel));
+			}
+			
+			var distMul = npcData.TargetPredictDistanceMultiplier;
+			var velMul = npcData.TargetPredictVelocityMultiplier;
+			
+			// Use distance
+			var distInaccuracy = distMul * npcData.TargetPredictInaccuracy;
+			distance *= distMul + Random.Range(-distInaccuracy, distInaccuracy);
+			
+			// Use velocity
+			var velInaccuracy = velMul * npcData.TargetPredictInaccuracy;
+			velocity *= velMul + Random.Range(-velInaccuracy, velInaccuracy);
+			
+			var prediction = velocity * distance;
+			targetPos += prediction;
+			
+			return targetPos;
+		}
+		
 		private void clearCast()
 		{
 			if (cast == null)
