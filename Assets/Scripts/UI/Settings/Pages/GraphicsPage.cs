@@ -38,6 +38,11 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public Toggle ShatterObjectsToggle;
 		
+		[SerializeField]
+		public Localizer MotionBlurLocalizer;
+		[SerializeField]
+		public Toggle MotionBlurToggle;
+		
 		private readonly List<string> maxQualityKeys = new () {"SETTINGS_DROPDOWN_LOW", "SETTINGS_DROPDOWN_MEDIUM", "SETTINGS_DROPDOWN_HIGH", "SETTINGS_DROPDOWN_VERYHIGH"};
 		private readonly List<string> qualityKeys = new () {"SETTINGS_DROPDOWN_LOW", "SETTINGS_DROPDOWN_MEDIUM", "SETTINGS_DROPDOWN_HIGH"};
 		private readonly List<string> aaKeys = new () {"SETTINGS_DROPDOWN_NONE", "SETTINGS_DROPDOWN_MSAA2X", "SETTINGS_DROPDOWN_MSAA4X", "SETTINGS_DROPDOWN_MSAA8X"};
@@ -86,6 +91,12 @@ namespace UI.Settings.Pages
 			ShatterObjectsLocalizer.Apply();
 			
 			ShatterObjectsToggle.SetIsOnWithoutNotify(Convert.ToBoolean(shatterObjects.Value));
+			
+			var motionBlur = SettingsManager.Instance.GetSetting("graphics-motionblur");
+			MotionBlurLocalizer.Key = motionBlur.Name;
+			MotionBlurLocalizer.Apply();
+			
+			MotionBlurToggle.SetIsOnWithoutNotify(Convert.ToBoolean(motionBlur.Value));
 		}
 
 		public void OnShadowQualityChanged(int value)
@@ -116,6 +127,11 @@ namespace UI.Settings.Pages
 		public void OnShatterObjectsChanged(bool value)
 		{
 			SettingsManager.Instance.SetSetting("graphics-shatterobjects", value);
+		}
+		
+		public void OnMotionBlurChanged(bool value)
+		{
+			SettingsManager.Instance.SetSetting("graphics-motionblur", value);
 		}
 	}
 }

@@ -701,6 +701,29 @@ namespace Managers
 				
 			});
 			
+			AddSetting("graphics-motionblur", "SETTINGS_GRAPHICS_MOTIONBLUR", "SETTINGS_GRAPHICS_MOTIONBLUR_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
+			{
+				var renderAsset = RenderManager.Instance.RenderAsset;
+				if (renderAsset == null)
+				{
+					Debug.LogError("[SettingsManager] Failed to get render asset");
+					return;
+				}
+
+				var profile = renderAsset.volumeProfile;
+				if (profile == null)
+				{
+					Debug.LogError("[SettingsManager] Failed to get volume profile");
+					return;
+				}
+
+				if (!profile.TryGet<MotionBlur>(out var motionBlur))
+					return;
+
+				motionBlur.active = Convert.ToBoolean(newValue);
+				VolumeManager.instance.OnVolumeProfileChanged(profile);
+			});
+			
 			#endregion
 
 			#region Controls
