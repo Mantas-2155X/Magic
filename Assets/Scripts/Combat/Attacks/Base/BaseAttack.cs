@@ -220,14 +220,14 @@ namespace Combat.Attacks.Base
 		{
 			await UniTask.WaitForSeconds(AttackData.EnableTriggerAfter);
 			
-			if (!isActiveAndEnabled)
+			if (this == null || !isActiveAndEnabled)
 				return;
 
 			OnTriggersEnabled();
 			
 			await UniTask.WaitForSeconds(AttackData.DisableTriggerAfter);
 			
-			if (!isActiveAndEnabled)
+			if (this == null || !isActiveAndEnabled)
 				return;
 
 			OnTriggersDisabled();

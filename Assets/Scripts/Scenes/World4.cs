@@ -140,6 +140,9 @@ namespace Scenes
 
 			await UniTask.WaitForSeconds(1f);
 			
+			if (this == null || !isActiveAndEnabled)
+				return;
+			
 			Info.gameObject.SetActive(false);
 		}
 	}

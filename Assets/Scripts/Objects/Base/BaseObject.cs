@@ -166,6 +166,9 @@ namespace Objects.Base
 		{
 			await UniTask.WaitForSeconds(ObjectData.PickupableAfter);
 			
+			if (this == null || !isActiveAndEnabled)
+				return;
+			
 			pickupable = true;
 		}
 		
@@ -229,6 +232,9 @@ namespace Objects.Base
 		private async UniTaskVoid setUsable()
 		{
 			await UniTask.WaitForSeconds(ObjectData.UsableAfter);
+			
+			if (this == null || !isActiveAndEnabled)
+				return;
 			
 			usable = true;
 		}

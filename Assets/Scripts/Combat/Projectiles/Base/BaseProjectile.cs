@@ -175,10 +175,16 @@ namespace Combat.Projectiles.Base
 
 			await UniTask.NextFrame();
 
+			if (this == null || !isActiveAndEnabled)
+				return;
+			
 			Rigidbody.linearVelocity = Vector3.zero;
 			Rigidbody.angularVelocity = Vector3.zero;
 			
 			await UniTask.WaitForFixedUpdate();
+			
+			if (this == null || !isActiveAndEnabled)
+				return;
 			
 			PoolingManager.Instance.Add(ProjectileData, thisGo);
 		}

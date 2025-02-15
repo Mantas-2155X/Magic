@@ -63,7 +63,7 @@ namespace Objects.Base
 			
 			await UniTask.WaitForSeconds(IndicateDuration, cancellationToken: token);
 			
-			if (cancellationToken.IsCancellationRequested)
+			if (this == null || !isActiveAndEnabled || cancellationToken.IsCancellationRequested)
 				return;
 			
 			sideMaterial.color = Color.black;

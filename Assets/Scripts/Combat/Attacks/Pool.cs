@@ -73,6 +73,9 @@ namespace Combat.Attacks
 		{
 			await UniTask.WaitForSeconds(Lifetime);
 			
+			if (this == null || !isActiveAndEnabled)
+				return;
+			
 			System.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 		}
 	}
