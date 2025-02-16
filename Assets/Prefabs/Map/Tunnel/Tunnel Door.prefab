@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 1416668169679170020}
   - component: {fileID: 789314569580283374}
   - component: {fileID: 8260235532324987626}
+  - component: {fileID: 5419331283273417980}
   m_Layer: 0
   m_Name: Tunnel Door
   m_TagString: Untagged
@@ -133,6 +134,7 @@ MonoBehaviour:
   Links:
   - {fileID: 789314569580283374}
   - {fileID: 8260235532324987626}
+  - {fileID: 5419331283273417980}
   Door: {fileID: 6292421525599915767}
   Buttons: []
 --- !u!114 &789314569580283374
@@ -174,6 +176,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedVersion: 1
   m_AgentTypeID: -1372625422
+  m_StartPoint: {x: 0, y: -2.425, z: -0.9}
+  m_EndPoint: {x: 0, y: -2.425, z: 0.9}
+  m_StartTransform: {fileID: 0}
+  m_EndTransform: {fileID: 0}
+  m_Activated: 1
+  m_Width: 3.75
+  m_CostModifier: 1
+  m_IsOverridingCost: 0
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 3
+--- !u!114 &5419331283273417980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6213745301316637675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 1
+  m_AgentTypeID: 1479372276
   m_StartPoint: {x: 0, y: -2.425, z: -0.9}
   m_EndPoint: {x: 0, y: -2.425, z: 0.9}
   m_StartTransform: {fileID: 0}
