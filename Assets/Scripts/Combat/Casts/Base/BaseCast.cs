@@ -105,7 +105,12 @@ namespace Combat.Casts.Base
 		
 		private void setPosition()
 		{
-			thisTr.position = ownerTr.position + -ownerTr.up * (0.95f * ownerTr.localScale.y);
+			var newPos = ownerTr.position + -ownerTr.up * (0.95f * ownerTr.localScale.y);
+
+			if (owner != null)
+				newPos.y = owner.Body.Feet[0].position.y;
+			
+			thisTr.position = newPos;
 		}
 	}
 }
