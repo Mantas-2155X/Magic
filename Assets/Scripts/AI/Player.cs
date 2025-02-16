@@ -624,6 +624,22 @@ namespace AI
 			}
 		}
 		
+		public override void AddParalyzeSource(int instanceID)
+		{
+			base.AddParalyzeSource(instanceID);
+			RenderManager.Instance.Desaturate(Paralyzed);
+		}
+		public override void RemoveParalyzeSource(int instanceID)
+		{
+			base.RemoveParalyzeSource(instanceID);
+			RenderManager.Instance.Desaturate(Paralyzed);
+		}
+		public override void ClearParalyzeSources()
+		{
+			base.ClearParalyzeSources();
+			RenderManager.Instance.Desaturate(Paralyzed);
+		}
+		
 		public override void SetSpellIndex(SpellData data, int index)
 		{
 			base.SetSpellIndex(data, index);

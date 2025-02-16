@@ -241,6 +241,37 @@ namespace Managers
 			}
 		}
 		
+		private ColorAdjustments colorAdjustments;
+		public ColorAdjustments ColorAdjustments
+		{
+			get
+			{
+				if (colorAdjustments != null)
+					return colorAdjustments;
+				
+				if (RenderAsset == null)
+				{
+					Debug.LogError("[RenderManager] Failed to get render asset");
+					return null;
+				}
+
+				var profile = RenderAsset.volumeProfile;
+				if (profile == null)
+				{
+					Debug.LogError("[RenderManager] Failed to get volume profile");
+					return null;
+				}
+
+				if (!profile.TryGet(out colorAdjustments))
+				{
+					Debug.LogError("[RenderManager] Failed to get ColorAdjustments");
+					return null;
+				}
+				
+				return colorAdjustments;
+			}
+		}
+		
 		private static readonly int invertIntensity = Shader.PropertyToID("_Intensity");
 
 		public void InvertColors(float value)
@@ -250,6 +281,15 @@ namespace Managers
 			
 			if (InvertMaterial != null)
 				InvertMaterial.SetFloat(invertIntensity, value);
+		}
+
+		public void Desaturate(bool value)
+		{
+			if (ColorAdjustments != null)
+			{
+				ColorAdjustments.saturation.Override(value ? -100f : 0f);
+				VolumeManager.instance.OnVolumeProfileChanged(RenderAsset.volumeProfile);
+			}
 		}
 	}
 }

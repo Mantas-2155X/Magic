@@ -55,6 +55,7 @@ namespace World
 				return;
 			
 			renderManager.InvertColors(0f);
+			renderManager.Desaturate(false);
 		}
 
 		public void Start()
