@@ -102,10 +102,15 @@ namespace AI
 
 			CameraTr.position = transform.position + Vector3.up * 0.5f;
 
-			if (Paralyzed || lookDirection == Vector2.zero)
-				return;
-			
 			var cameraAngle = CameraTr.eulerAngles;
+			cameraAngle.z = Paralyzed ? -15f : 0f;
+			
+			if (lookDirection == Vector2.zero || Paralyzed)
+			{
+				CameraTr.eulerAngles = cameraAngle;
+				return;
+			}
+			
 			cameraAngle.y += lookDirection.x;
 
 			var cameraAngleX = cameraAngle.x - lookDirection.y;
