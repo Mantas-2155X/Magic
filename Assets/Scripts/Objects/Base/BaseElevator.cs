@@ -1,5 +1,6 @@
 using System.Threading;
 using AI.Interfaces;
+using Components;
 using Cysharp.Threading.Tasks;
 using Objects.Enums;
 using Objects.Events;

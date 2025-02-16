@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace World
+namespace Components
 {
 	public class Delete : MonoBehaviour
 	{

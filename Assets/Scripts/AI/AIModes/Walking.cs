@@ -1,5 +1,6 @@
 using AI.Enums;
 using AI.Interfaces;
+using AI.Navigation;
 using Cysharp.Threading.Tasks;
 using Objects.Base;
 using Objects.Enums;
