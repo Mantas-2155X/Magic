@@ -117,6 +117,9 @@ namespace Managers
 		private void onDeath(IAlive alive, object source)
 		{
 			updateTargets = true;
+
+			if (alive is Player && World.World.Instance.ReloadOnPlayerDeath)
+				SceneManager.Instance.ReloadScene(true, true, true, 1f);
 		}
 
 		private void onRelationshipGroupChanged(IAlive alive, int previousRelationshipGroup, int newRelationshipGroup)

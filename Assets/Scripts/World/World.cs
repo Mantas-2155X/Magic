@@ -39,6 +39,9 @@ namespace World
 
 		[SerializeField]
 		public bool SpawnPlayer = true;
+
+		[SerializeField]
+		public bool ReloadOnPlayerDeath = true;
 		
 		public void Awake()
 		{

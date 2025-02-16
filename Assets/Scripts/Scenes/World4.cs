@@ -1,4 +1,7 @@
 using System;
+using AI;
+using AI.Base;
+using AI.Interfaces;
 using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -45,7 +48,18 @@ namespace Scenes
 		public TMP_Text Info;
 		
 		private float startTime;
+		private bool stopTimer;
 		private int currentCharacter;
+
+		public void Awake()
+		{
+			BaseAlive.OnDeathEvent.AddListener(onDeath);
+		}
+
+		public void OnDestroy()
+		{
+			BaseAlive.OnDeathEvent.RemoveListener(onDeath);
+		}
 		
 		public void Start()
 		{
@@ -63,8 +77,20 @@ namespace Scenes
 
 		public void Update()
 		{
+			if (stopTimer)
+				return;
+			
 			var timeSpan = TimeSpan.FromSeconds(Time.time - startTime);
 			Timer.text = $"<mspace=0.6em>{timeSpan.Minutes:00}:{timeSpan.Seconds:00}:{timeSpan.Milliseconds:000}</mspace>";
+		}
+		
+		private void onDeath(IAlive alive, object source)
+		{
+			if (alive is not Player)
+				return;
+
+			stopTimer = true;
+			respawnDelayed().Forget();
 		}
 		
 		private async UniTaskVoid attackLoop()
@@ -154,6 +180,16 @@ namespace Scenes
 			}
 			
 			Info.gameObject.SetActive(false);
+		}
+
+		private async UniTaskVoid respawnDelayed()
+		{
+			await UniTask.WaitForSeconds(2.5f);
+			
+			if (this == null || !isActiveAndEnabled)
+				return;
+			
+			await SceneManager.Instance.ReloadSceneAsync(true, true, true, 1f);
 		}
 	}
 }

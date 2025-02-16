@@ -28,7 +28,6 @@ namespace UI
 				return;
 			
 			gameObject.SetActive(true);
-			SceneManager.Instance.ReloadScene(true, true, true, 1f);
 		}
 		
 		public void OnSpawn(IAlive alive)
