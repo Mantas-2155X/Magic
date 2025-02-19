@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace UI
 {
-	public class Scale : MonoBehaviour, IBeginDragHandler, IDragHandler, IInitializePotentialDragHandler
+	public class Scale : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IInitializePotentialDragHandler
 	{
 		[SerializeField]
 		public RectTransform ScaleTarget;
@@ -14,7 +15,23 @@ namespace UI
 		[SerializeField]
 		public Vector2 MinimumSize;
 		
+		public static readonly List<Scale> Instances = new ();
+
 		private Vector2 beginPosition;
+		private RectTransform canvas;
+		
+		private const float borderAmount = 5f;
+
+		public void Awake()
+		{
+			canvas = (RectTransform)GetComponentInParent<Canvas>().transform;
+			Instances.Add(this);
+		}
+
+		public void OnDestroy()
+		{
+			Instances.Remove(this);
+		}
 		
 		public void OnBeginDrag(PointerEventData eventData)
 		{
@@ -44,10 +61,30 @@ namespace UI
 				beginPosition.x = eventData.position.x;
 			}
 		}
+
+		public void OnEndDrag(PointerEventData eventData)
+		{
+			ClampScaleToScreenResolution();
+		}
 		
 		public void OnInitializePotentialDrag(PointerEventData eventData)
 		{
 			eventData.useDragThreshold = UseThreshold;
+		}
+
+		public void ClampScaleToScreenResolution()
+		{
+			var canvasRect = canvas.rect;
+			var targetRect = ScaleTarget.rect;
+
+			var maxHeight = canvasRect.height - (borderAmount * 2f);
+			var maxWidth = canvasRect.width - (borderAmount * 2f);
+			
+			if (targetRect.height > maxHeight)
+				ScaleTarget.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, maxHeight);
+			
+			if (targetRect.width > maxWidth)
+				ScaleTarget.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth);
 		}
 	}
 }

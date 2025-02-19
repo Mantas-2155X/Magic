@@ -5,14 +5,16 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using AI;
 using Combat.Enums;
 using Cysharp.Threading.Tasks;
+using UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Debug = UnityEngine.Debug;
+using Player = AI.Player;
 
 namespace Managers
 {
@@ -367,6 +369,7 @@ namespace Managers
 				var height = Convert.ToInt32(split[1]);
 				
 				Screen.SetResolution(width, height, GetBool("video-fullscreen")!.Value);
+				resolutionChangedDelayed().Forget();
 			});
 
 			AddSetting("video-fullscreen", "SETTINGS_VIDEO_FULLSCREEN", "SETTINGS_VIDEO_FULLSCREEN_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
@@ -996,6 +999,25 @@ namespace Managers
 			}
 			
 			await File.WriteAllTextAsync(System.IO.Path.Combine(Path, Name), builder.ToString(), token);
+		}
+
+		private async UniTaskVoid resolutionChangedDelayed()
+		{
+			// For some reason things take a while to update
+			
+			await UniTask.NextFrame();
+			await UniTask.NextFrame();
+			await UniTask.NextFrame();
+			
+			for (var i = 0; i < Scale.Instances.Count; i++)
+				Scale.Instances[i].ClampScaleToScreenResolution();
+			
+			await UniTask.NextFrame();
+			await UniTask.NextFrame();
+			await UniTask.NextFrame();
+			
+			for (var i = 0; i < Drag.Instances.Count; i++)
+				Drag.Instances[i].ClampPositionToScreenBounds();
 		}
 		
 		#endregion
