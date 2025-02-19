@@ -4,6 +4,7 @@ using AYellowpaper.SerializedCollections;
 using Combat.Enums;
 using Combat.Wearables.Enums;
 using Combat.Wearables.Structs;
+using Managers;
 using Objects.Base;
 using UnityEngine;
 
@@ -132,6 +133,9 @@ namespace AI
 		
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (!Alive.IsAlive)
 				return;
 			

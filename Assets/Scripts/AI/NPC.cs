@@ -493,6 +493,9 @@ namespace AI
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (!IsAlive)
 				return;
 			

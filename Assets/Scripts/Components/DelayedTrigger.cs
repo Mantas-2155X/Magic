@@ -1,4 +1,5 @@
 using Events;
+using Managers;
 using Tools;
 using UnityEngine;
 
@@ -22,6 +23,9 @@ namespace Components
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (triggered || enterTime < 0f)
 				return;
 

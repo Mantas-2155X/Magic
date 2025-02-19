@@ -1,6 +1,7 @@
 using System.Threading;
 using AI.Enums;
 using Cysharp.Threading.Tasks;
+using Managers;
 using Objects.Base;
 using Objects.Enums;
 using ScriptableObjects;
@@ -42,6 +43,9 @@ namespace AI.Navigation
 	
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (ButtonUser != null)
 			{
 				// Dying or getting interrupted should clear the user to prevent a lock

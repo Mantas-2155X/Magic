@@ -75,6 +75,9 @@ namespace UI
 
 		public void OnEnable()
 		{
+			if (SceneManager.Instance.GetCurrentScene() != "Title")
+				PauseManager.Instance.Pause();
+			
 			var feature = RenderManager.Instance.BlurFeature;
 			if (feature == null)
 				return;
@@ -84,6 +87,8 @@ namespace UI
 
 		public void OnDisable()
 		{
+			PauseManager.Instance.Unpause();
+			
 			var feature = RenderManager.Instance.BlurFeature;
 			if (feature == null)
 				return;

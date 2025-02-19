@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
+using Managers;
 using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
@@ -80,6 +81,9 @@ namespace Objects.Base
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (AutoClose == 0f || State != EDoorState.Open)
 				return;
 			

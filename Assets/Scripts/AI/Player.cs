@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using Debug = UnityEngine.Debug;
 
 namespace AI
 {
@@ -75,6 +76,9 @@ namespace AI
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (!IsAlive)
 				return;
 
@@ -97,6 +101,9 @@ namespace AI
 		
 		public void LateUpdate()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (!IsAlive)
 				return;
 

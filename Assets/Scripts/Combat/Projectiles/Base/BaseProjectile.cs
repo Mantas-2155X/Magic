@@ -77,6 +77,9 @@ namespace Combat.Projectiles.Base
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			var distance = Vector3.Distance(startingPosition, thisTr.position);
 			if (distance < spellRange)
 				return;

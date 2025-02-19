@@ -38,6 +38,9 @@ namespace Combat.Spells.Base
 
 		public virtual void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (!IsCasting || !IsSelected || !Owner.IsAlive)
 				return;
 

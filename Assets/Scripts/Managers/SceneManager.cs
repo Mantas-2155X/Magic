@@ -77,15 +77,12 @@ namespace Managers
 			var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {currentScene} to {scene}");
 			
+			PauseManager.Instance.Unpause();
+
 			var handle = Addressables.LoadSceneAsync("Scenes/" + scene, LoadSceneMode.Single, false);
-
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded && DynamicGI.isConverged);
-
 			await handle.Result.ActivateAsync();
-			
 			await UniTask.WaitUntil(() => handle.IsDone && DynamicGI.isConverged);
-
-			// Give extra time for GI since isConverged doesn't really work
 			await UniTask.WaitForSeconds(0.5f);
 
 			if (closeTitle)

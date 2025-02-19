@@ -47,6 +47,9 @@ namespace Managers
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			handleTargets();
 		}
 

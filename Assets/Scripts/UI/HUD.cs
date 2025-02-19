@@ -50,6 +50,9 @@ namespace UI
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (LookTarget.text != "")
 				LookTarget.text = "";
 			

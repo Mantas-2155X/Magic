@@ -70,6 +70,9 @@ namespace Objects
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (cleared || spawned.Count < SpawnCount)
 				return;
 

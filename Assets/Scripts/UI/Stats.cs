@@ -1,6 +1,7 @@
 using AI.Base;
 using AI.Interfaces;
 using Combat.Enums;
+using Managers;
 using TMPro;
 using Tools;
 using UnityEngine;
@@ -59,28 +60,31 @@ namespace UI
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			// Health
 			{
 				var color = Red.color;
-				color.a = Mathf.Lerp(color.a, targetRed, Time.deltaTime * Smoothing);
+				color.a = Mathf.Lerp(color.a, targetRed, Time.unscaledDeltaTime * Smoothing);
 				Red.color = color;
 				
 				var offset = HealthBottle.offsetMax;
-				offset.y = Mathf.Lerp(offset.y, targetHealth, Time.deltaTime * Smoothing);
+				offset.y = Mathf.Lerp(offset.y, targetHealth, Time.unscaledDeltaTime * Smoothing);
 				HealthBottle.offsetMax = offset;
 			}
 			
 			// Mana
 			{
 				var offset = ManaBottle.offsetMax;
-				offset.y = Mathf.Lerp(offset.y, targetMana, Time.deltaTime * Smoothing);
+				offset.y = Mathf.Lerp(offset.y, targetMana, Time.unscaledDeltaTime * Smoothing);
 				ManaBottle.offsetMax = offset;
 			}
 			
 			// Energy
 			{
 				var offset = EnergyBottle.offsetMax;
-				offset.y = Mathf.Lerp(offset.y, targetEnergy, Time.deltaTime * Smoothing);
+				offset.y = Mathf.Lerp(offset.y, targetEnergy, Time.unscaledDeltaTime * Smoothing);
 				EnergyBottle.offsetMax = offset;
 			}
 		}

@@ -90,6 +90,9 @@ namespace Combat.Attacks.Base
 		
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			FollowTarget();
 		}
 

@@ -77,6 +77,9 @@ namespace Scenes
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (stopTimer)
 				return;
 			

@@ -31,6 +31,9 @@ namespace Combat.Casts.Base
 		
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (Source == null)
 				return;
 

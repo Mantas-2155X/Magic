@@ -28,6 +28,9 @@ namespace AI.Navigation
 	
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (User == null)
 				return;
 

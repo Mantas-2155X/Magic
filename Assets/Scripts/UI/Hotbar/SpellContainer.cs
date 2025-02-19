@@ -30,6 +30,9 @@ namespace UI.Hotbar
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			if (Spell == null)
 				return;
 

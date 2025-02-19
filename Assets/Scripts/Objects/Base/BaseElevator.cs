@@ -2,6 +2,7 @@ using System.Threading;
 using AI.Interfaces;
 using Components;
 using Cysharp.Threading.Tasks;
+using Managers;
 using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
@@ -91,6 +92,9 @@ namespace Objects.Base
 
 		public void Update()
 		{
+			if (PauseManager.IsPaused)
+				return;
+			
 			var yPos = GetTransform().localPosition.y;
 			AntiCrush.enabled = State == EElevatorState.Lowering && yPos < 3.5f && yPos > 1.5f;
 			
