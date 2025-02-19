@@ -83,7 +83,7 @@ namespace Managers
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded && DynamicGI.isConverged);
 			await handle.Result.ActivateAsync();
 			await UniTask.WaitUntil(() => handle.IsDone && DynamicGI.isConverged);
-			await UniTask.WaitForSeconds(0.5f);
+			await UniTask.WaitForSeconds(0.5f, true);
 
 			if (closeTitle)
 			{

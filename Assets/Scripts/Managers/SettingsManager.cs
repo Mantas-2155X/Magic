@@ -954,7 +954,7 @@ namespace Managers
 
 		private async UniTask saveSettingsDelayed(CancellationToken token)
 		{
-			await UniTask.WaitForSeconds(2.5f, cancellationToken: token);
+			await UniTask.WaitForSeconds(2.5f, true, cancellationToken: token);
 
 			if (token.IsCancellationRequested)
 				return;
