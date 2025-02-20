@@ -62,6 +62,9 @@ namespace AI
 		
 		[SerializeField]
 		public ParticleSystem Malfunction;
+
+		[SerializeField]
+		public bool CanSway = true;
 		
 		[HideInInspector]
 		public bool ShouldSway;
@@ -139,7 +142,7 @@ namespace AI
 			if (!Alive.IsAlive)
 				return;
 			
-			if (ShouldSway)
+			if (ShouldSway && CanSway)
 				swayLimbs();
 		}
 

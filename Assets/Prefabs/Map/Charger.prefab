@@ -72,6 +72,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9e1337ee68e3ad7fa70adf4857ed592, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8608284275622683697}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9e1337ee68e3ad7fa70adf4857ed592, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4384016077012910864}
   m_SourcePrefab: {fileID: 100100000, guid: c9e1337ee68e3ad7fa70adf4857ed592, type: 3}
 --- !u!1 &2682123816496534366 stripped
 GameObject:
@@ -97,6 +100,8 @@ MonoBehaviour:
   <Renderer>k__BackingField: {fileID: 4483383004702159499}
   <PullForce>k__BackingField: 2.5
   <Type>k__BackingField: 0
+  <Charged>k__BackingField: 0
+  <Activated>k__BackingField: 0
   <Elements>k__BackingField:
     _serializedList:
     - Key: 0
@@ -169,6 +174,26 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.0115
   m_Center: {x: 0, y: 0, z: 0.0015}
+--- !u!114 &4384016077012910864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2682123816496534366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: c3c0608d
 --- !u!23 &4483383004702159499 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: c9e1337ee68e3ad7fa70adf4857ed592, type: 3}

@@ -111,7 +111,7 @@ namespace Combat.Casts.Base
 			var newPos = ownerTr.position + -ownerTr.up * (0.95f * ownerTr.localScale.y);
 
 			if (owner != null)
-				newPos.y = owner.Body.Feet[0].position.y;
+				newPos.y = owner.Body.CanSway ? owner.Body.Feet[0].position.y : owner.Body.Core.position.y;
 			
 			thisTr.position = newPos;
 		}

@@ -211,9 +211,10 @@ namespace Combat.Spells.Base
 				case NPC npc:
 					var ownerTr = Owner.GetTransform();
 					var targetPos = calculatePrediction(npc);
+					var verticalOffset = ownerTr.up * ((NPCData)npc.Data).AttackVerticalOffset;
 					
-					var direction = npc.AttackTarget == null ? ownerTr.forward : (targetPos - ownerTr.position).normalized;
-					LastRay = new Ray(Owner.Body.Core.position, direction);
+					var direction = npc.AttackTarget == null ? ownerTr.forward : (targetPos - (ownerTr.position + verticalOffset)).normalized;
+					LastRay = new Ray(Owner.Body.Core.position + verticalOffset, direction);
 					break;
 				default:
 					throw new NotImplementedException();

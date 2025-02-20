@@ -111,10 +111,17 @@ namespace Combat.Projectiles.Base
 				var body = owner.Body;
 			
 				ignoreBodyCollider = body.BodyCollider;
-				ignoreFeetCollider = body.FeetCollider;
-
 				Physics.IgnoreCollision(ignoreBodyCollider, Collider, true);
-				Physics.IgnoreCollision(ignoreFeetCollider, Collider, true);
+
+				if (body.FeetCollider != null)
+				{
+					ignoreFeetCollider = body.FeetCollider;
+					Physics.IgnoreCollision(ignoreFeetCollider, Collider, true);
+				}
+				else
+				{
+					ignoreFeetCollider = null;
+				}
 			}
 			else
 			{
@@ -168,11 +175,11 @@ namespace Combat.Projectiles.Base
 				rangeToken.Cancel();
 			}
 			
-			if (ignoreBodyCollider != null && ignoreFeetCollider != null)
-			{
+			if (ignoreBodyCollider != null)
 				Physics.IgnoreCollision(ignoreBodyCollider, Collider, false);
+			
+			if (ignoreFeetCollider != null)
 				Physics.IgnoreCollision(ignoreFeetCollider, Collider, false);
-			}
 			
 			thisGo.SetActive(false);
 

@@ -127,6 +127,12 @@ namespace ScriptableObjects
 		public ETargetMode TargetMode = ETargetMode.Aggressive;
 
 		/// <summary>
+		/// Offset attack ray vertically
+		/// </summary>
+		[SerializeField]
+		public float AttackVerticalOffset;
+		
+		/// <summary>
 		/// Is the npc able to walk at all? Turning is allowed either way
 		/// </summary>
 		[SerializeField]
