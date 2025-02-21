@@ -14954,7 +14954,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NPC: {fileID: 231732286194361612}
   StayBelow: 0.75
-  StayAbove: 1
+  StayAbove: 2
+  HoverRange: 7.5
   HoverSpeed: 2.5
   StabilizeSpeed: 1
   AimAtSpeed: 2.5

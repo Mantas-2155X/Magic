@@ -15,6 +15,9 @@ namespace AI.Navigation
 		public float StayAbove;
 
 		[SerializeField]
+		public float HoverRange;
+		
+		[SerializeField]
 		public float HoverSpeed;
 
 		[SerializeField]
@@ -68,8 +71,29 @@ namespace AI.Navigation
 			}
 			else
 			{
-				// Not too close to anything, keep hovering
-				return;
+				if (Mathf.Approximately(distanceToCeiling, float.MaxValue) && Mathf.Approximately(distanceToFloor, float.MaxValue))
+				{
+					// No ceiling or floor found to base position on, keep hovering
+					return;
+				}
+				
+				if (Mathf.Approximately(distanceToCeiling, float.MaxValue))
+				{
+					// No ceiling found, try to be within ground range
+					if (distanceToFloor > HoverRange)
+						flightTarget.y -= distanceToFloor - HoverRange;
+				}
+				else if (Mathf.Approximately(distanceToFloor, float.MaxValue))
+				{
+					// No floor found, try to be within ceiling range
+					if (distanceToCeiling > HoverRange)
+						flightTarget.y += distanceToCeiling - HoverRange;
+				}
+				else
+				{
+					// Not too close to anything, keep hovering
+					return;
+				}
 			}
 			
 			var force = flightTarget - position;

@@ -154,7 +154,8 @@ namespace AI.Base
 			else
 				Body.Rigidbody.excludeLayers = previousExcludeLayers;
 
-			Body.FeetCollider.enabled = MovementType == EMovementType.Normal;
+			if (Body.FeetCollider != null)
+				Body.FeetCollider.enabled = MovementType == EMovementType.Normal;
 		}
 		public virtual void SetRelationshipGroup(int value)
 		{
