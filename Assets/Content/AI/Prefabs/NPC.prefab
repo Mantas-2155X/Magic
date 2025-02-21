@@ -188,7 +188,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0.934
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 29
   m_ObstacleAvoidanceType: 4
 --- !u!114 &5086737948386064533
 MonoBehaviour:
@@ -205,6 +205,7 @@ MonoBehaviour:
   <Data>k__BackingField: {fileID: 0}
   <Body>k__BackingField: {fileID: 42988670619036741}
   Agent: {fileID: 7175161009213997453}
+  Flight: {fileID: 0}
   JumpCurve:
     serializedVersion: 2
     m_Curve:

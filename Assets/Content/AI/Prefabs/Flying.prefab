@@ -14849,6 +14849,10 @@ PrefabInstance:
       propertyPath: m_AgentTypeID
       value: -1923039037
       objectReference: {fileID: 0}
+    - target: {fileID: 7175161009213997453, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_WalkableMask
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7872159411983185947, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_UseGravity
       value: 0
