@@ -63,6 +63,8 @@ namespace AI
 		public LowResources LowResources { get; private set; }
 		public KillTarget KillTarget { get; private set; }
 
+		public Vector3 Velocity => IsWalking && Flight == null ? Agent.velocity : Body.Rigidbody.linearVelocity;
+		
 		private OffMeshLinkData? isOnLink;
 		public OffMeshLinkData? IsOnLink
 		{

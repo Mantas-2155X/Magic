@@ -63,7 +63,9 @@ namespace Combat.Spells
 					}
 
 					var tr = npc.GetTransform();
-					endPos += tr.up * ((npc.Agent.baseOffset * tr.localScale.y) / 2f);
+					
+					if (npc.Flight == null)
+						endPos += tr.up * ((npc.Agent.baseOffset * tr.localScale.y) / 2f);
 					
 					tr.position = endPos;
 					npc.Body.Rigidbody.MovePosition(endPos);

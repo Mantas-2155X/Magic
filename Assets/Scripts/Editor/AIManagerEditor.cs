@@ -365,7 +365,7 @@ namespace Editor
 				GUILayout.Label($"HP: {npc.CurrentHealth}", GUILayout.Width(50));
 				GUILayout.Label($"MP: {npc.CurrentMana}", GUILayout.Width(50));
 				GUILayout.Label($"EP: {npc.CurrentEnergy}", GUILayout.Width(50));
-				GUILayout.Label($"Vel: {npc.Agent.velocity.magnitude:0.0000}", GUILayout.Width(80));
+				GUILayout.Label($"Vel: {npc.Velocity.magnitude:0.0000}", GUILayout.Width(80));
 				npc.SetInvulnerable(GUILayout.Toggle(npc.IsInvulnerable, "INV", GUILayout.Width(50)));
 				npc.SetPowerful(GUILayout.Toggle(npc.IsPowerful, "PW", GUILayout.Width(50)));
 				npc.SetMovementType((EMovementType)EditorGUILayout.EnumPopup(npc.MovementType));

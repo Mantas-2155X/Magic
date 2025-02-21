@@ -264,7 +264,7 @@ namespace Combat.Spells.Base
 				}
 				case NPC targetNPC:
 				{
-					velocity = targetNPC.IsWalking ? targetNPC.Agent.velocity : targetNPC.Body.Rigidbody.linearVelocity;
+					velocity = targetNPC.Velocity;
 					break;
 				}
 				default:
