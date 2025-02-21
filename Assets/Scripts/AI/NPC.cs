@@ -7,6 +7,7 @@ using AI.AIModes;
 using AI.Base;
 using AI.Enums;
 using AI.Interfaces;
+using AI.Navigation;
 using Managers;
 using ScriptableObjects;
 using Tools;
@@ -24,6 +25,9 @@ namespace AI
 		[SerializeField]
 		public NavMeshAgent Agent;
 
+		[SerializeField]
+		public Flight Flight;
+		
 		#region Jump
 
 		[SerializeField]

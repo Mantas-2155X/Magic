@@ -20,6 +20,9 @@ namespace AI.Navigation
 		[SerializeField]
 		public float StabilizeSpeed;
 		
+		[SerializeField]
+		public float AimAtSpeed;
+
 		private Rigidbody rb;
 		
 		public void Awake()
@@ -102,6 +105,32 @@ namespace AI.Navigation
 
 			var torque = axis * angle;
 			rb.AddTorque(torque * StabilizeSpeed, ForceMode.VelocityChange);
+		}
+
+		public void AimAt(Transform target)
+		{
+			var pos1 = target.position;
+			pos1.y = 0;
+			
+			var pos2 = rb.position;
+			pos2.y = 0;
+			
+			var targetPosition = pos1 - pos2;
+			var targetRotation = Quaternion.LookRotation(targetPosition, Vector3.up);
+			
+			var deltaRotation = targetRotation * Quaternion.Inverse(rb.rotation);
+			deltaRotation.ToAngleAxis(out var angle, out var axis);
+			
+			if (angle > 180f)
+				angle -= 360f;
+
+			if (Mathf.Approximately(angle, 0)) 
+				return;
+			
+			angle *= Mathf.Deg2Rad;
+
+			var torque = axis * angle;
+			rb.AddTorque(torque * (AimAtSpeed * Time.fixedDeltaTime), ForceMode.VelocityChange);
 		}
 		
 		#endregion

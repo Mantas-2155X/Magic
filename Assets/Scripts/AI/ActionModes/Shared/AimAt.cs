@@ -22,15 +22,18 @@ namespace AI.ActionModes.Shared
 			if (owner.Paralyzed)
 				return false;
 			
+			var npcData = (NPCData)owner.Data;
 			var rb = owner.Body.Rigidbody;
 			
 			var targetPosition = target.position - rb.position;
 			targetPosition.y = 0;
 
-			var npcData = (NPCData)owner.Data;
-			
 			var targetRotation = Quaternion.LookRotation(targetPosition, owner.GetTransform().up);
-			rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, npcData.RotationSpeed * Time.deltaTime));
+
+			if (owner.Flight == null)
+				rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, npcData.RotationSpeed * Time.deltaTime));
+			else
+				owner.Flight.AimAt(target);
 			
 			return Quaternion.Angle(rb.rotation, targetRotation) < npcData.AimAngle;
 		}
