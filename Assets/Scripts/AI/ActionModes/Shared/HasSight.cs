@@ -46,17 +46,19 @@ namespace AI.ActionModes.Shared
 				
 				var instance = hit.colliderInstanceID;
 				var originRight = originCenter + transform.right * halfSize;
+				var directionRight = target.position - (position + transform.right * halfSize);
 #if UNITY_EDITOR
-				Debug.DrawLine(originRight, direction * 50f, Color.cyan);
+				Debug.DrawLine(originRight, directionRight * 50f, Color.cyan);
 #endif
-				if (!Physics.Raycast(originRight, direction, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitRight.colliderInstanceID != instance)
+				if (!Physics.Raycast(originRight, directionRight, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitRight.colliderInstanceID != instance)
 					return false;
 				
 				var originLeft = originCenter - transform.right * halfSize;
+				var directionLeft = target.position - (position + -transform.right * halfSize);
 #if UNITY_EDITOR
-				Debug.DrawLine(originLeft, direction * 50f, Color.yellow);
+				Debug.DrawLine(originLeft, directionLeft * 50f, Color.yellow);
 #endif
-				if (!Physics.Raycast(originLeft, direction, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitLeft.colliderInstanceID != instance)
+				if (!Physics.Raycast(originLeft, directionLeft, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitLeft.colliderInstanceID != instance)
 					return false;
 			}
 			
