@@ -185,7 +185,7 @@ namespace Combat.Projectiles.Base
 
 			await UniTask.NextFrame();
 
-			if (this == null || !isActiveAndEnabled)
+			if (this == null)
 				return;
 			
 			Rigidbody.linearVelocity = Vector3.zero;
@@ -193,7 +193,7 @@ namespace Combat.Projectiles.Base
 			
 			await UniTask.WaitForFixedUpdate();
 			
-			if (this == null || !isActiveAndEnabled)
+			if (this == null)
 				return;
 			
 			PoolingManager.Instance.Add(ProjectileData, thisGo);
