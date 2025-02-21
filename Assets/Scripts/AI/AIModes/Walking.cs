@@ -163,10 +163,18 @@ namespace AI.AIModes
 			{
 				Owner.IsOnLink = null;
 			}
-			
-			if (agent.pathPending || !agent.isOnNavMesh || agent.remainingDistance > agent.stoppingDistance || agent.hasPath && agent.velocity.sqrMagnitude != 0f)
-				return;
-			
+
+			if (Owner.Flight == null)
+			{
+				if (agent.pathPending || !agent.isOnNavMesh || agent.remainingDistance > agent.stoppingDistance || agent.hasPath && agent.velocity.sqrMagnitude != 0f)
+					return;
+			}
+			else
+			{
+				if (Vector3.Distance(Owner.Body.Rigidbody.position, Owner.Destination) > agent.stoppingDistance)
+					return;
+			}
+
 			// Reached destination, go back to what was being done earlier
 			Owner.ReturnAIMode();
 		}

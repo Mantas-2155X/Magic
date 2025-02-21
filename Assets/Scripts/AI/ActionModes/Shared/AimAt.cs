@@ -36,12 +36,17 @@ namespace AI.ActionModes.Shared
 			}
 			else
 			{
-				var flight = owner.Flight.AimAt(target);
-				if (flight.Item1 < 0 && flight.Item2)
-				{
-					// Target is below npc and same horizontal position
+				var pos1 = target.position;
+				var pos2 = rb.position;
+			
+				var verticalDistance = pos1.y - pos2.y;
+			
+				pos1.y = 0;
+				pos2.y = 0;
+				
+				// Target is below npc and same horizontal position
+				if (verticalDistance < 0 && (pos1 - pos2).magnitude < 1f)
 					return true;
-				}
 			}
 			
 			return Quaternion.Angle(rb.rotation, targetRotation) < npcData.AimAngle;

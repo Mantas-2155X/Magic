@@ -14854,6 +14854,10 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7872159411983185947, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_Drag
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872159411983185947, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
@@ -14959,10 +14963,11 @@ MonoBehaviour:
   NPC: {fileID: 231732286194361612}
   StayBelow: 0.75
   StayAbove: 2
-  HoverRange: 7.5
+  HoverRange: 3
   HoverSpeed: 2.5
+  FlightSpeed: 1
+  RotateSpeed: 7.5
   StabilizeSpeed: 1
-  AimAtSpeed: 2.5
 --- !u!114 &2524303300372934529 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7397406505081074200, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}

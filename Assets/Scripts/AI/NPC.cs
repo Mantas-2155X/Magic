@@ -246,7 +246,11 @@ namespace AI
 				return true;
 			
 			agent.enabled = state;
-			Body.Rigidbody.isKinematic = state;
+			
+			if (Flight == null)
+				Body.Rigidbody.isKinematic = state;
+			else if (state)
+				return true;
 
 			if (!state || agent.isOnNavMesh)
 				return true;
@@ -592,6 +596,13 @@ namespace AI
 			KillTarget = new KillTarget(this);
 
 			var npcData = (NPCData)data;
+
+			if (Flight != null)
+			{
+				Agent.updatePosition = false;
+				Agent.updateRotation = false;
+				Agent.updateUpAxis = false;
+			}
 			
 			Agent.speed = data.Speed;
 			Agent.angularSpeed = npcData.RotationSpeed;
