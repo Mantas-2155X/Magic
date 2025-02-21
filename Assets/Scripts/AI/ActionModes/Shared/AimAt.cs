@@ -31,9 +31,18 @@ namespace AI.ActionModes.Shared
 			var targetRotation = Quaternion.LookRotation(targetPosition, owner.GetTransform().up);
 
 			if (owner.Flight == null)
+			{
 				rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, npcData.RotationSpeed * Time.deltaTime));
+			}
 			else
-				owner.Flight.AimAt(target);
+			{
+				var flight = owner.Flight.AimAt(target);
+				if (flight.Item1 < 0 && flight.Item2)
+				{
+					// Target is below npc and same horizontal position
+					return true;
+				}
+			}
 			
 			return Quaternion.Angle(rb.rotation, targetRotation) < npcData.AimAngle;
 		}

@@ -131,15 +131,20 @@ namespace AI.Navigation
 			rb.AddTorque(torque * StabilizeSpeed, ForceMode.VelocityChange);
 		}
 
-		public void AimAt(Transform target)
+		public (float, bool) AimAt(Transform target)
 		{
 			var pos1 = target.position;
-			pos1.y = 0;
-			
 			var pos2 = rb.position;
+			
+			var verticalDistance = pos1.y - pos2.y;
+			
+			pos1.y = 0;
 			pos2.y = 0;
 			
 			var targetPosition = pos1 - pos2;
+			if (targetPosition.magnitude < 1f)
+				return (verticalDistance, true);
+			
 			var targetRotation = Quaternion.LookRotation(targetPosition, Vector3.up);
 			
 			var deltaRotation = targetRotation * Quaternion.Inverse(rb.rotation);
@@ -149,12 +154,14 @@ namespace AI.Navigation
 				angle -= 360f;
 
 			if (Mathf.Approximately(angle, 0)) 
-				return;
+				return (verticalDistance, false);
 			
 			angle *= Mathf.Deg2Rad;
 
 			var torque = axis * angle;
 			rb.AddTorque(torque * (AimAtSpeed * Time.fixedDeltaTime), ForceMode.VelocityChange);
+
+			return (verticalDistance, false);
 		}
 		
 		#endregion
