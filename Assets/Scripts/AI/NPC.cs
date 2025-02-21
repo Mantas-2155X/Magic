@@ -170,7 +170,8 @@ namespace AI
 		
 		public void Carry(Rigidbody target, Vector3 dropAt)
 		{
-			if (!IsAlive || ((NPCData)Data).Stationary)
+			var data = (NPCData)Data;
+			if (!IsAlive || data.Stationary || !data.CanGrab)
 				return;
 			
 			var actionMode = (Carry)ActionModes[EActionMode.Carry];

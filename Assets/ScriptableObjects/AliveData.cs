@@ -60,6 +60,9 @@ namespace ScriptableObjects
 		
 		[Header("Grab")]
 		[SerializeField]
+		public bool CanGrab = true;
+
+		[SerializeField]
 		public float GrabEnergy = 5f;
 		
 		[SerializeField]

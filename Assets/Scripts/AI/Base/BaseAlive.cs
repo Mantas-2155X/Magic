@@ -693,6 +693,9 @@ namespace AI.Base
 
 		public virtual void GrabObject(Rigidbody body)
 		{
+			if (!Data.CanGrab)
+				return;
+			
 			if (Grabbing != null)
 			{
 				ReleaseObject();
