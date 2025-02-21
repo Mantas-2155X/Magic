@@ -1,7 +1,9 @@
+using AI.AIModes;
 using AI.Enums;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace AI.Navigation
 {
@@ -33,6 +35,10 @@ namespace AI.Navigation
 		
 		private Rigidbody rb;
 		
+		private float angleStuckTime;
+
+		private Vector3 movementTarget;
+		
 		private readonly Vector3[] corners = new Vector3[2];
 		
 		public void Awake()
@@ -47,6 +53,9 @@ namespace AI.Navigation
 			if (path == null)
 				return;
 
+			var previousColor = Gizmos.color;
+			Gizmos.color = Color.blue;
+			
 			var allCorners = path.corners;
 			for (var i = 0; i < allCorners.Length; i++)
 			{
@@ -63,9 +72,44 @@ namespace AI.Navigation
 					Gizmos.DrawLine(corner, nextCorner);
 				}
 			}
+			
+			Gizmos.color = Color.green;
+			Gizmos.DrawSphere(movementTarget, 0.1f);
+			
+			Gizmos.color = previousColor;
 		}
 #endif
 		
+		public void Update()
+		{
+			var euler = rb.rotation.eulerAngles;
+			
+			var x = euler.x;
+			var z = euler.z;
+
+			if (x > 180f)
+				x -= 360f;
+			
+			if (z > 180f)
+				z -= 360f;
+
+			if (Mathf.Abs(x) < 20f && Mathf.Abs(z) < 20f)
+			{
+				angleStuckTime = 0f;
+				return;
+			}
+
+			angleStuckTime += Time.deltaTime;
+			
+			if (angleStuckTime < 2f)
+				return;
+			
+			rb.AddRelativeTorque(new Vector3(Random.Range(0f, 5f), Random.Range(0f, 5f), Random.Range(0f, 5f)) * 10f, ForceMode.VelocityChange);
+			angleStuckTime = 0f;
+			
+			NPC.Chase.ResetChaseRange(true);
+		}
+
 		public void FixedUpdate()
 		{
 			var position = rb.position;
@@ -79,11 +123,15 @@ namespace AI.Navigation
 			var agent = NPC.Agent;
 			agent.nextPosition = position;
 
+			if (NPC.Paralyzed)
+			{
+				rb.AddTorque(new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5)), ForceMode.Impulse);
+				return;
+			}
+			
 			var aiMode = NPC.AIMode;
 			if (aiMode == EAIMode.Walking)
 			{
-				Vector3 movementTarget;
-
 				if (agent.enabled && agent.hasPath && agent.pathStatus == NavMeshPathStatus.PathComplete)
 				{
 					var path = agent.path;
@@ -96,13 +144,19 @@ namespace AI.Navigation
 					movementTarget = NPC.Destination;
 				}
 			
-				movementTarget.y += HoverRange;
+				// Don't hover too high when going to target
+				if (HoverRange > distanceToCeiling - StayBelow)
+					movementTarget.y += distanceToCeiling - StayBelow;
+				else
+					movementTarget.y += HoverRange;
 
 				if (movementTarget.y > position.y)
 					movementTarget.y += movementTarget.y - position.y;
 				else if (movementTarget.y < position.y)
 					movementTarget.y -= position.y - movementTarget.y;
-				
+#if UNITY_EDITOR
+				Debug.DrawLine(position, movementTarget, new Color(0.25f, 0.5f, 0.75f));
+#endif
 				FlyTowards(movementTarget);
 				RotateTowards(movementTarget);
 			}
@@ -163,17 +217,19 @@ namespace AI.Navigation
 					// No ceiling or floor found to base position on, keep hovering
 					return;
 				}
+
+				var isFlightStuck = ((Walking)NPC.AIModes[EAIMode.Walking]).IsFlightStuck;
 				
 				if (Mathf.Approximately(distanceToCeiling, float.MaxValue))
 				{
 					// No ceiling found, try to be within ground range
-					if (distanceToFloor > HoverRange)
+					if (distanceToFloor > HoverRange && !isFlightStuck)
 						flightTarget.y -= distanceToFloor - HoverRange;
 				}
 				else if (Mathf.Approximately(distanceToFloor, float.MaxValue))
 				{
 					// No floor found, try to be within ceiling range
-					if (distanceToCeiling > HoverRange)
+					if (distanceToCeiling > HoverRange && !isFlightStuck)
 						flightTarget.y += distanceToCeiling - HoverRange;
 				}
 				else
@@ -220,7 +276,7 @@ namespace AI.Navigation
 
 		public void FlyTowards(Vector3 target)
 		{
-			rb.AddForce(target - rb.position * FlightSpeed, ForceMode.Acceleration);
+			rb.AddForce((target - rb.position).normalized * FlightSpeed, ForceMode.Acceleration);
 		}
 		
 		public void RotateTowards(Vector3 target)

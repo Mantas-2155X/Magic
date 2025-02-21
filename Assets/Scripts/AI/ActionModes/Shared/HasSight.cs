@@ -35,20 +35,27 @@ namespace AI.ActionModes.Shared
 			var hitTransform = hit.collider.transform;
 			if (hitTransform != target)
 				return false;
+#if UNITY_EDITOR
+			Debug.DrawLine(originCenter, direction * 50f, Color.magenta);
+#endif
 
 			// Projectiles have thickness so we need to cast more rays to make sure the projectile isn't going to just hit a wall. Spherecast does not work here because it spawns inside a collider and therefore it ignores the wall 
-			if (extraCasts && ((NPCData)owner.Data).UseExtraCasts)
+			if (extraCasts)
 			{
 				var halfSize = NavMesh.GetSettingsByID(owner.Agent.agentTypeID).agentRadius / 2f;
 				
 				var instance = hit.colliderInstanceID;
 				var originRight = originCenter + transform.right * halfSize;
-				
+#if UNITY_EDITOR
+				Debug.DrawLine(originRight, direction * 50f, Color.cyan);
+#endif
 				if (!Physics.Raycast(originRight, direction, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitRight.colliderInstanceID != instance)
 					return false;
 				
 				var originLeft = originCenter - transform.right * halfSize;
-				
+#if UNITY_EDITOR
+				Debug.DrawLine(originLeft, direction * 50f, Color.yellow);
+#endif
 				if (!Physics.Raycast(originLeft, direction, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitLeft.colliderInstanceID != instance)
 					return false;
 			}

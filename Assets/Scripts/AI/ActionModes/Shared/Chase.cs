@@ -1,3 +1,4 @@
+using AI.AIModes;
 using AI.Enums;
 using Tools;
 using UnityEngine;
@@ -44,6 +45,8 @@ namespace AI.ActionModes.Shared
 		{
 			var agent = owner.Agent;
 			var transform = owner.GetTransform();
+
+			var isFlightStuck = ((Walking)owner.AIModes[EAIMode.Walking]).IsFlightStuck && owner.Flight != null;
 			
 			// Try to stop at this distance
 			var currentStopTarget = currentChaseRange + agent.stoppingDistance;
@@ -54,7 +57,7 @@ namespace AI.ActionModes.Shared
 				// Target within destination range, keep current path
 				if (Vector3.Distance(target.position, owner.Destination) <= currentChaseRange + agent.stoppingDistance)
 				{
-					if (owner.AIMode != EAIMode.Walking)
+					if (owner.AIMode != EAIMode.Walking && !isFlightStuck)
 						owner.Walk(target.position);
 
 					return false;
@@ -73,7 +76,7 @@ namespace AI.ActionModes.Shared
 			{
 				currentChaseRange /= 1.2f;
 
-				if (owner.AIMode != EAIMode.Walking)
+				if (owner.AIMode != EAIMode.Walking && !isFlightStuck)
 					owner.Walk(target.position);
 				
 				return false;

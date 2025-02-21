@@ -17,14 +17,21 @@ namespace AI.AIModes
 
 		public float LastEntered { get; private set; }
 		public float LastExited { get; private set; }
+
+		public bool IsFlightStuck => nextMoveAllowed > 0f;
 		
 		private bool jumpingLink;
+		
+		private float flightStuckTime;
+		private float nextMoveAllowed;
 		
 		public void Enabled(NPC owner)
 		{
 			Owner = owner;
 			LastEntered = Time.time;
 
+			nextMoveAllowed = 0f;
+			
 			if (owner.ToggleAgent(true))
 				Owner.Agent.SetDestination(Owner.Destination);
 		}
@@ -34,6 +41,8 @@ namespace AI.AIModes
 			if (jumpingLink)
 				forceFinishJump();
 
+			nextMoveAllowed = 0f;
+			
 			Owner.IsOnLink = null;
 			
 			Owner.ToggleAgent(false);
@@ -171,6 +180,39 @@ namespace AI.AIModes
 			}
 			else
 			{
+				if (Owner.AttackTarget != null || Owner.OtherTarget != null)
+				{
+					var time = Time.time;
+				
+					// Control taken over for some time because stuck
+					if (nextMoveAllowed > 0f)
+					{
+						if (time >= nextMoveAllowed)
+							nextMoveAllowed = 0f;
+						else
+							return;
+					}
+					
+					// Likely stuck, change move target to something around itself
+					if (Owner.Velocity.magnitude < 0.5f)
+					{
+						flightStuckTime += Time.deltaTime;
+						if (flightStuckTime >= 1.5f)
+						{
+							flightStuckTime = 0f;
+							nextMoveAllowed = time + 1.5f;
+
+							Owner.Chase.ResetChaseRange(true);
+							Owner.Wandering.WalkRandomly(true, false, true);
+							return;
+						}
+					}
+					else
+					{
+						flightStuckTime = 0f;
+					}
+				}
+				
 				if (Vector3.Distance(Owner.Body.Rigidbody.position, Owner.Destination) > agent.stoppingDistance)
 					return;
 			}
@@ -181,12 +223,12 @@ namespace AI.AIModes
 
 		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
 		{
-			
+			nextMoveAllowed = 0f;
 		}
 		
 		public void OtherTargetChanged(Component previousOtherTarget, Component newOtherTarget)
 		{
-			
+			nextMoveAllowed = 0f;
 		}
 
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination)

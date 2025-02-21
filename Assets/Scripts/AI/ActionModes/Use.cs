@@ -1,3 +1,4 @@
+using AI.AIModes;
 using AI.Enums;
 using AI.Interfaces;
 using Objects.Interfaces;
@@ -51,6 +52,8 @@ namespace AI.ActionModes
 				return;
 			}
 
+			var isFlightStuck = ((Walking)owner.AIModes[EAIMode.Walking]).IsFlightStuck && owner.Flight != null;
+			
 			// Stop next to the usable
 			var stopAt = 2.5f + owner.Agent.stoppingDistance;
 			
@@ -60,7 +63,7 @@ namespace AI.ActionModes
 				// Target within destination range, keep current path
 				if (Vector3.Distance(targetPos, owner.Destination) <= stopAt)
 				{
-					if (owner.AIMode != EAIMode.Walking)
+					if (owner.AIMode != EAIMode.Walking && !isFlightStuck)
 						owner.Walk(targetPos);
 
 					return;

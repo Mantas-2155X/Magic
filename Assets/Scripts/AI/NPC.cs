@@ -522,7 +522,7 @@ namespace AI
 			AIModeObj.Update();
 		}
 
-#if UNITY_EDITOR && DEBUG_NPC
+#if UNITY_EDITOR
 		public void OnDrawGizmos()
 		{
 			Gizmos.color = Color.green;
@@ -617,6 +617,10 @@ namespace AI
 			SendCommunication(ECommunication.Died, source);
 			
 			Agent.enabled = false;
+			
+			if (Flight != null)
+				Destroy(Flight);
+			
 			base.Kill(source);
 		}
 		

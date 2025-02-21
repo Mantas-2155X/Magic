@@ -14839,7 +14839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7175161009213997453, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_Radius
-      value: 0.7
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7175161009213997453, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_BaseOffset
@@ -14963,9 +14963,9 @@ MonoBehaviour:
   NPC: {fileID: 231732286194361612}
   StayBelow: 0.75
   StayAbove: 2
-  HoverRange: 3
-  HoverSpeed: 2.5
-  FlightSpeed: 1
+  HoverRange: 5
+  HoverSpeed: 5
+  FlightSpeed: 10
   RotateSpeed: 7.5
   StabilizeSpeed: 1
 --- !u!114 &2524303300372934529 stripped
