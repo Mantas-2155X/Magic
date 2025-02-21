@@ -138,7 +138,7 @@ namespace AI.Navigation
 		public float GetCeilingDistance(Vector3 position)
 		{
 			if (!Physics.Raycast(position, Vector3.up, out var hit, float.MaxValue, ~LayerMaskTools.GetMaskWithNPC(), QueryTriggerInteraction.Ignore))
-				return -1f;
+				return float.MaxValue;
 
 			return hit.distance;
 		}
@@ -146,7 +146,7 @@ namespace AI.Navigation
 		public float GetFloorDistance(Vector3 position)
 		{
 			if (!Physics.Raycast(position, Vector3.down, out var hit, float.MaxValue, ~LayerMaskTools.GetMaskWithNPC(), QueryTriggerInteraction.Ignore))
-				return -1f;
+				return float.MaxValue;
 
 			return hit.distance;
 		}

@@ -480,7 +480,9 @@ namespace AI.Base
 			Body.Rigidbody.useGravity = true;
 
 			Body.BodyCollider.material = null;
-			Body.FeetCollider.material = null;
+			
+			if (Body.FeetCollider != null)
+				Body.FeetCollider.material = null;
 
 			var ragdolls = World.World.Instance.Ragdolls;
 			var length = Body.Gibs.Length;
