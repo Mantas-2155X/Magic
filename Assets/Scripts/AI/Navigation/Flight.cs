@@ -276,7 +276,11 @@ namespace AI.Navigation
 
 		public void FlyTowards(Vector3 target)
 		{
-			rb.AddForce((target - rb.position).normalized * FlightSpeed, ForceMode.Acceleration);
+			var speed = FlightSpeed - (FlightSpeed * NPC.SlowAmount);
+			if (speed == 0f)
+				return;
+			
+			rb.AddForce((target - rb.position).normalized * speed, ForceMode.Acceleration);
 		}
 		
 		public void RotateTowards(Vector3 target)
