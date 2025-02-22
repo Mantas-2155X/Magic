@@ -180,10 +180,10 @@ namespace AI.AIModes
 			}
 			else
 			{
+				var time = Time.time;
+
 				if (Owner.AttackTarget != null || Owner.OtherTarget != null)
 				{
-					var time = Time.time;
-				
 					// Control taken over for some time because stuck
 					if (nextMoveAllowed > 0f)
 					{
@@ -192,25 +192,25 @@ namespace AI.AIModes
 						else
 							return;
 					}
-					
-					// Likely stuck, change move target to something around itself
-					if (Owner.Velocity.magnitude < 0.5f)
-					{
-						flightStuckTime += Time.deltaTime;
-						if (flightStuckTime >= 1.5f)
-						{
-							flightStuckTime = 0f;
-							nextMoveAllowed = time + 1.5f;
-
-							Owner.Chase.ResetChaseRange(true);
-							Owner.Wandering.WalkRandomly(true);
-							return;
-						}
-					}
-					else
+				}
+				
+				// Likely stuck, change move target to something around itself
+				if (Owner.Velocity.magnitude < 0.5f)
+				{
+					flightStuckTime += Time.deltaTime;
+					if (flightStuckTime >= 1.5f)
 					{
 						flightStuckTime = 0f;
+						nextMoveAllowed = time + 1.5f;
+
+						Owner.Chase.ResetChaseRange(true);
+						Owner.Wandering.WalkRandomly(true);
+						return;
 					}
+				}
+				else
+				{
+					flightStuckTime = 0f;
 				}
 				
 				if (Vector3.Distance(Owner.Body.Rigidbody.position, Owner.Destination) > agent.stoppingDistance)
@@ -233,7 +233,8 @@ namespace AI.AIModes
 
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination)
 		{
-			Owner.Agent.SetDestination(newDestination);
+			if (Owner.Agent.enabled)
+				Owner.Agent.SetDestination(newDestination);
 		}
 
 		public void CommunicationReceived(ECommunication type, NPC source, object data)

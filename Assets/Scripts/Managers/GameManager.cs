@@ -13,21 +13,20 @@ namespace Managers
 					return instance;
 				
 				instance = new GameManager();
-				
-				TimeScale = 1f;
-				
 				return instance;
 			}
 		}
 
+		private static float timeScale = 1f;
 		public static float TimeScale
 		{
-			get => Time.timeScale;
+			get => timeScale;
 			set
 			{
-				var changeTo = value;
-				changeTo = Mathf.Clamp(changeTo, 0f, 100f);
-				Time.timeScale = changeTo;
+				timeScale = Mathf.Clamp(value, 0f, 100f);
+				
+				if (!PauseManager.IsPaused)
+					Time.timeScale = timeScale;
 			}
 		}
 	}

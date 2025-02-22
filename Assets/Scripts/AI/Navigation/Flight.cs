@@ -19,9 +19,6 @@ namespace AI.Navigation
 		public float StayAbove;
 
 		[SerializeField]
-		public float HoverRange;
-		
-		[SerializeField]
 		public float HoverSpeed;
 
 		[SerializeField]
@@ -226,19 +223,20 @@ namespace AI.Navigation
 					return;
 				}
 
+				var spellRange = NPC.SpellRange;
 				var isFlightStuck = ((Walking)NPC.AIModes[EAIMode.Walking]).IsFlightStuck;
 				
 				if (Mathf.Approximately(distanceToCeiling, float.MaxValue))
 				{
 					// No ceiling found, try to be within ground range
-					if (distanceToFloor > HoverRange && !isFlightStuck && NPC.AIMode != EAIMode.Walking)
-						flightTarget.y -= distanceToFloor - HoverRange;
+					if (distanceToFloor > spellRange && !isFlightStuck && NPC.AIMode != EAIMode.Walking)
+						flightTarget.y -= distanceToFloor - spellRange;
 				}
 				else if (Mathf.Approximately(distanceToFloor, float.MaxValue))
 				{
 					// No floor found, try to be within ceiling range
-					if (distanceToCeiling > HoverRange && !isFlightStuck && NPC.AIMode != EAIMode.Walking)
-						flightTarget.y += distanceToCeiling - HoverRange;
+					if (distanceToCeiling > spellRange && !isFlightStuck && NPC.AIMode != EAIMode.Walking)
+						flightTarget.y += distanceToCeiling - spellRange;
 				}
 				else
 				{

@@ -245,16 +245,37 @@ namespace AI
 			if (agent.enabled == state)
 				return true;
 			
+			var hasFlight = Flight != null;
+			if (hasFlight && state)
+			{
+				// Flying agents can be too far, prevent warning when enabling agent
+				if (!NavMesh.SamplePosition(GetTransform().position, out _, 14.25f, NavMesh.AllAreas))
+					return false;
+			}
+			
 			agent.enabled = state;
 			
-			if (Flight == null)
+			// Walking agents aren't using physics
+			if (!hasFlight)
 				Body.Rigidbody.isKinematic = state;
-			else if (state)
+
+			// Disabling the agent, so return false
+			if (!state)
+				return false;
+
+			// Enabling agent, return true if on nav mesh
+			if (agent.isOnNavMesh)
 				return true;
 
-			if (!state || agent.isOnNavMesh)
-				return true;
-
+			// Enabling agent, not on navmesh - allow because it can fly
+			if (hasFlight)
+			{
+				NavMesh.SamplePosition(GetTransform().position, out var hit, float.MaxValue, NavMesh.AllAreas);
+				Debug.LogWarning($"Distance to NavMesh: {hit.distance}");
+				return false;
+			}
+			
+			// Enabling agent, not on navmesh - kill
 			Debug.LogWarning($"[NPC {gameObject.name}] Agent is outside of navmesh, killing");
 			Kill(this);
 

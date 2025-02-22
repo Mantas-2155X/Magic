@@ -22,15 +22,11 @@ namespace Managers
 		public readonly OnUnpausedEvent OnUnpausedEvent = new ();
 		
 		public static bool IsPaused { get; private set; }
-
-		private float previousTimeScale;
 		
 		public void Pause()
 		{
 			if (IsPaused)
 				return;
-
-			previousTimeScale = Time.timeScale;
 			
 			IsPaused = true;
 			OnPausedEvent?.Invoke();
@@ -46,7 +42,7 @@ namespace Managers
 			IsPaused = false;
 			OnUnpausedEvent?.Invoke();
 			
-			Time.timeScale = previousTimeScale == 0f ? 1f : previousTimeScale;
+			Time.timeScale = GameManager.TimeScale;
 		}
 	}
 }

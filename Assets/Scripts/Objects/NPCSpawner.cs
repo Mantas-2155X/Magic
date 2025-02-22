@@ -47,7 +47,7 @@ namespace Objects
 		public Path PatrolAction;
 
 		[SerializeField]
-		public Component UseAction;
+		public BaseObject UseAction;
 
 		[SerializeField]
 		public Rigidbody CarryAction;

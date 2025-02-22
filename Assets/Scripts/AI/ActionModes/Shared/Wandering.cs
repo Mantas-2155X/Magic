@@ -45,14 +45,14 @@ namespace AI.ActionModes.Shared
 			if (navCast)
 			{
 				// Prevent wandering picking a destination that's cutting a navmesh
-				if (NavMesh.Raycast(pos, target, out _, NavMesh.AllAreas))
-					return;
+				if (NavMesh.Raycast(pos, target, out var hit, NavMesh.AllAreas))
+					target = hit.position + hit.normal;
 			}
 			else
 			{
 				// If hit something, use that as the point to prevent going through it
 				if (Physics.Raycast(pos, (target - pos).normalized, out var hit, float.MaxValue, ~LayerMaskTools.GetMask()))
-					target = hit.point;
+					target = hit.point + hit.normal;
 			}
 			
 			owner.Walk(target);
