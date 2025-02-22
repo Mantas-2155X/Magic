@@ -60,15 +60,11 @@ namespace AI.Navigation
 			for (var i = 0; i < allCorners.Length; i++)
 			{
 				var corner = allCorners[i];
-				corner.y += HoverRange;
-				
 				Gizmos.DrawSphere(corner, 0.1f);
 				
 				if (i != allCorners.Length - 1)
 				{	
 					var nextCorner = allCorners[i];
-					nextCorner.y += HoverRange;
-					
 					Gizmos.DrawLine(corner, nextCorner);
 				}
 			}
@@ -132,18 +128,29 @@ namespace AI.Navigation
 			var aiMode = NPC.AIMode;
 			if (aiMode == EAIMode.Walking)
 			{
+				var destination = NPC.Destination;
+
 				if (agent.enabled && agent.hasPath && agent.pathStatus == NavMeshPathStatus.PathComplete)
 				{
 					var path = agent.path;
 					path.GetCornersNonAlloc(corners);
 
-					movementTarget = corners[1];
+					if (Physics.Raycast(destination, Vector3.down, out var hit, float.MaxValue, ~LayerMaskTools.GetMaskWithAlives(), QueryTriggerInteraction.Ignore) && NavMesh.SamplePosition(hit.point, out _, 2.5f, NavMesh.AllAreas))
+					{
+						movementTarget = corners[1];
+						movementTarget.y = destination.y;
+					}
+					else
+					{
+						movementTarget = destination;
+					}
 				}
 				else
 				{
-					movementTarget = NPC.Destination;
+					movementTarget = destination;
 				}
 			
+/*
 				// Don't hover too high when going to target
 				if (HoverRange > distanceToCeiling - StayBelow)
 					movementTarget.y += distanceToCeiling - StayBelow;
@@ -154,6 +161,7 @@ namespace AI.Navigation
 					movementTarget.y += movementTarget.y - position.y;
 				else if (movementTarget.y < position.y)
 					movementTarget.y -= position.y - movementTarget.y;
+*/
 #if UNITY_EDITOR
 				Debug.DrawLine(position, movementTarget, new Color(0.25f, 0.5f, 0.75f));
 #endif
@@ -223,13 +231,13 @@ namespace AI.Navigation
 				if (Mathf.Approximately(distanceToCeiling, float.MaxValue))
 				{
 					// No ceiling found, try to be within ground range
-					if (distanceToFloor > HoverRange && !isFlightStuck)
+					if (distanceToFloor > HoverRange && !isFlightStuck && NPC.AIMode != EAIMode.Walking)
 						flightTarget.y -= distanceToFloor - HoverRange;
 				}
 				else if (Mathf.Approximately(distanceToFloor, float.MaxValue))
 				{
 					// No floor found, try to be within ceiling range
-					if (distanceToCeiling > HoverRange && !isFlightStuck)
+					if (distanceToCeiling > HoverRange && !isFlightStuck && NPC.AIMode != EAIMode.Walking)
 						flightTarget.y += distanceToCeiling - HoverRange;
 				}
 				else

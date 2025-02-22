@@ -23,6 +23,12 @@ namespace AI.ActionModes.Shared
 		{
 			if (!force && Time.time < owner.AIModes[EAIMode.Walking].LastExited + ((NPCData)owner.Data).WanderEvery)
 				return;
+
+			if (owner.Flight != null)
+			{
+				navCast = false;
+				vertical = true;
+			}
 			
 			var pos = owner.Body.Rigidbody.position;
 			

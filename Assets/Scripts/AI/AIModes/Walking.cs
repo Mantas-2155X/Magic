@@ -203,7 +203,7 @@ namespace AI.AIModes
 							nextMoveAllowed = time + 1.5f;
 
 							Owner.Chase.ResetChaseRange(true);
-							Owner.Wandering.WalkRandomly(true, false, true);
+							Owner.Wandering.WalkRandomly(true);
 							return;
 						}
 					}
