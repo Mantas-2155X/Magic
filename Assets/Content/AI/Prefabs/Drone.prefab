@@ -14795,7 +14795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_Name
-      value: Flying
+      value: Drone
       objectReference: {fileID: 0}
     - target: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_IsActive
@@ -14963,11 +14963,14 @@ MonoBehaviour:
   NPC: {fileID: 231732286194361612}
   StayBelow: 0.75
   StayAbove: 2
-  HoverRange: 5
   HoverSpeed: 5
   FlightSpeed: 10
   RotateSpeed: 7.5
   StabilizeSpeed: 1
+  AngleStuckDegree: 25
+  AngleStuckTime: 2.5
+  PositionStuckVelocity: 0.75
+  PositionStuckTime: 0.75
 --- !u!114 &2524303300372934529 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7397406505081074200, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}

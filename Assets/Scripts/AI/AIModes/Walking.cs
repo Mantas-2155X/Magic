@@ -172,8 +172,6 @@ namespace AI.AIModes
 			}
 			else
 			{
-				
-				
 				if (Vector3.Distance(Owner.Body.Rigidbody.position, Owner.Destination) > agent.stoppingDistance)
 					return;
 			}
