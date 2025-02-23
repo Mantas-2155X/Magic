@@ -46,7 +46,6 @@ namespace AI.ActionModes.Shared
 			var agent = owner.Agent;
 			var transform = owner.GetTransform();
 
-			var isFlightStuck = ((Walking)owner.AIModes[EAIMode.Walking]).IsFlightStuck && owner.Flight != null;
 			var targetPos = target.position;
 			
 			// Try to stop at this distance
@@ -58,7 +57,7 @@ namespace AI.ActionModes.Shared
 				// Target within destination range, keep current path
 				if (Vector3.Distance(targetPos, owner.Destination) <= currentChaseRange + agent.stoppingDistance)
 				{
-					if (owner.AIMode != EAIMode.Walking && !isFlightStuck)
+					if (owner.AIMode != EAIMode.Walking)
 						owner.Walk(targetPos);
 
 					return false;
@@ -77,7 +76,7 @@ namespace AI.ActionModes.Shared
 			{
 				currentChaseRange /= 1.2f;
 
-				if (owner.AIMode != EAIMode.Walking && !isFlightStuck)
+				if (owner.AIMode != EAIMode.Walking)
 					owner.Walk(targetPos);
 				
 				return false;

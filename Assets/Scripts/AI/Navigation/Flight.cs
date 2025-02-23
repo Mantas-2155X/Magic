@@ -1,5 +1,7 @@
-using AI.AIModes;
+//#define DEBUG_STUCK
+
 using AI.Enums;
+using ScriptableObjects;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -29,15 +31,30 @@ namespace AI.Navigation
 		
 		[SerializeField]
 		public float StabilizeSpeed;
+
+		[SerializeField]
+		public float AngleStuckDegree = 25f;
+
+		[SerializeField]
+		public float AngleStuckTime = 2.5f;
+		
+		[SerializeField]
+		public float PositionStuckVelocity = 0.5f;
+
+		[SerializeField]
+		public float PositionStuckTime = 1.5f;
 		
 		private Rigidbody rb;
 		
-		private float angleStuckTime;
+		private float angleStuckCount;
+		private float positionStuckCount;
 
 		private Vector3 movementTarget;
 		
 		private readonly Vector3[] corners = new Vector3[2];
 		
+		#region MonoBehaviour
+
 		public void Awake()
 		{
 			rb = NPC.Body.Rigidbody;
@@ -75,32 +92,8 @@ namespace AI.Navigation
 		
 		public void Update()
 		{
-			var euler = rb.rotation.eulerAngles;
-			
-			var x = euler.x;
-			var z = euler.z;
-
-			if (x > 180f)
-				x -= 360f;
-			
-			if (z > 180f)
-				z -= 360f;
-
-			if (Mathf.Abs(x) < 20f && Mathf.Abs(z) < 20f)
-			{
-				angleStuckTime = 0f;
-				return;
-			}
-
-			angleStuckTime += Time.deltaTime;
-			
-			if (angleStuckTime < 2f)
-				return;
-			
-			rb.AddRelativeTorque(new Vector3(Random.Range(0f, 5f), Random.Range(0f, 5f), Random.Range(0f, 5f)) * 10f, ForceMode.VelocityChange);
-			angleStuckTime = 0f;
-			
-			NPC.Chase.ResetChaseRange(true);
+			processAngleStuck();
+			processPositionStuck();
 		}
 
 		public void FixedUpdate()
@@ -190,6 +183,8 @@ namespace AI.Navigation
 					Stabilize(rotation);
 			}
 		}
+		
+		#endregion
 
 		#region Flight
 
@@ -223,20 +218,22 @@ namespace AI.Navigation
 					return;
 				}
 
-				var spellRange = NPC.SpellRange;
-				var isFlightStuck = ((Walking)NPC.AIModes[EAIMode.Walking]).IsFlightStuck;
+				var data = (NPCData)NPC.Data;
+				
+				// Hover within range that can still attack, spot and sense targets
+				var hoverRange = Mathf.Min(NPC.SpellRange, data.SpotRange, data.SenseRange);
 				
 				if (Mathf.Approximately(distanceToCeiling, float.MaxValue))
 				{
 					// No ceiling found, try to be within ground range
-					if (distanceToFloor > spellRange && !isFlightStuck && NPC.AIMode != EAIMode.Walking)
-						flightTarget.y -= distanceToFloor - spellRange;
+					if (distanceToFloor > hoverRange && NPC.AIMode != EAIMode.Walking)
+						flightTarget.y -= distanceToFloor - hoverRange;
 				}
 				else if (Mathf.Approximately(distanceToFloor, float.MaxValue))
 				{
 					// No floor found, try to be within ceiling range
-					if (distanceToCeiling > spellRange && !isFlightStuck && NPC.AIMode != EAIMode.Walking)
-						flightTarget.y += distanceToCeiling - spellRange;
+					if (distanceToCeiling > hoverRange && NPC.AIMode != EAIMode.Walking)
+						flightTarget.y += distanceToCeiling - hoverRange;
 				}
 				else
 				{
@@ -334,6 +331,63 @@ namespace AI.Navigation
 				return float.MaxValue;
 
 			return hit.distance;
+		}
+
+		private void processAngleStuck()
+		{
+			var euler = rb.rotation.eulerAngles;
+			
+			var x = euler.x;
+			var z = euler.z;
+
+			if (x > 180f)
+				x -= 360f;
+			
+			if (z > 180f)
+				z -= 360f;
+
+			if (Mathf.Abs(x) < AngleStuckDegree && Mathf.Abs(z) < AngleStuckDegree)
+			{
+				angleStuckCount = 0f;
+				return;
+			}
+
+			angleStuckCount += Time.deltaTime;
+			
+			if (angleStuckCount < AngleStuckTime)
+				return;
+			
+			angleStuckCount = 0f;
+#if DEBUG_STUCK
+			Debug.LogWarning($"[Flight {gameObject.name}] Angle stuck, attempting to break out");
+#endif
+			rb.AddRelativeTorque(new Vector3(Random.Range(0f, 5f), Random.Range(0f, 5f), Random.Range(0f, 5f)) * 10f, ForceMode.VelocityChange);
+			NPC.Chase.ResetChaseRange(true);
+		}
+
+		private void processPositionStuck()
+		{
+			if (NPC.AIMode != EAIMode.Walking)
+				return;
+
+			var velocity = rb.linearVelocity;
+			if (velocity.magnitude > PositionStuckVelocity)
+			{
+				positionStuckCount = 0f;
+				return;
+			}
+
+			positionStuckCount += Time.deltaTime;
+			
+			if (positionStuckCount < PositionStuckTime)
+				return;
+			
+			positionStuckCount = 0f;
+#if DEBUG_STUCK
+			Debug.LogWarning($"[Flight {gameObject.name}] Position stuck, attempting to break out");
+#endif
+			rb.AddRelativeTorque(new Vector3(Random.Range(0f, 5f), Random.Range(0f, 5f), Random.Range(0f, 5f)) * 10f, ForceMode.VelocityChange);
+			NPC.Chase.ResetChaseRange(true);
 		}
 	}
 }
