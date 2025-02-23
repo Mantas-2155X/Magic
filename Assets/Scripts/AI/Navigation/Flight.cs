@@ -111,12 +111,6 @@ namespace AI.Navigation
 			Gizmos.DrawSphere(movementTarget, 0.1f);
 		}
 #endif
-		
-		public void Update()
-		{
-			processAngleStuck();
-			processPositionStuck();
-		}
 
 		public void FixedUpdate()
 		{
@@ -136,6 +130,9 @@ namespace AI.Navigation
 				rb.AddTorque(new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5)), ForceMode.Impulse);
 				return;
 			}
+			
+			processAngleStuck();
+			processPositionStuck();
 			
 			var aiMode = NPC.AIMode;
 			if (aiMode == EAIMode.Walking)
@@ -403,7 +400,7 @@ namespace AI.Navigation
 				if (nextHint != null && previousPositionHint != nextHint)
 				{
 #if DEBUG_STUCK
-			Debug.Log($"[Flight {gameObject.name}] Going to next position hint {nextHint} at {nextHint.Position}");
+					Debug.Log($"[Flight {gameObject.name}] Going to next position hint {nextHint} at {nextHint.Position}");
 #endif
 					setPositionHint(nextHint);
 					return;
