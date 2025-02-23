@@ -34,10 +34,22 @@ namespace AI.Navigation
 		public float StabilizeSpeed;
 
 		[SerializeField]
+		public bool AngleAntiStuckEnabled = true;
+
+		[SerializeField]
 		public float AngleStuckDegree = 25f;
 
 		[SerializeField]
 		public float AngleStuckTime = 2.5f;
+		
+		[SerializeField]
+		public bool PositionRaycastAntiStuckEnabled = true;
+
+		[SerializeField]
+		public float PositionStuckDistance = 0.4f;
+		
+		[SerializeField]
+		public bool PositionVelocityAntiStuckEnabled = true;
 		
 		[SerializeField]
 		public float PositionStuckVelocity = 0.75f;
@@ -68,11 +80,18 @@ namespace AI.Navigation
 #if UNITY_EDITOR
 		public void OnDrawGizmos()
 		{
+			if (positionStuckDuration > 0f)
+			{
+				Gizmos.color = Color.red;
+				var position = transform.position;
+				Gizmos.DrawLine(position, position + Vector3.up * PositionStuckDistance);
+				Gizmos.DrawLine(position, position + -Vector3.up * PositionStuckDistance);
+			}
+			
 			var path = NPC.Agent.path;
 			if (path == null)
 				return;
 
-			var previousColor = Gizmos.color;
 			Gizmos.color = Color.blue;
 			
 			var allCorners = path.corners;
@@ -90,8 +109,6 @@ namespace AI.Navigation
 			
 			Gizmos.color = Color.green;
 			Gizmos.DrawSphere(movementTarget, 0.1f);
-			
-			Gizmos.color = previousColor;
 		}
 #endif
 		
@@ -337,6 +354,9 @@ namespace AI.Navigation
 
 		private void processAngleStuck()
 		{
+			if (!AngleAntiStuckEnabled)
+				return;
+			
 			var euler = rb.rotation.eulerAngles;
 			
 			var x = euler.x;
@@ -372,7 +392,12 @@ namespace AI.Navigation
 			if (NPC.AIMode != EAIMode.Walking)
 				return;
 
-			if (positionHint != null && Vector3.Distance(positionHint.Position, rb.position) <= NPC.Agent.stoppingDistance)
+			if (!PositionRaycastAntiStuckEnabled && !PositionVelocityAntiStuckEnabled)
+				return;
+
+			var position = rb.position;
+			
+			if (positionHint != null && Vector3.Distance(positionHint.Position, position) <= NPC.Agent.stoppingDistance)
 			{
 				var nextHint = positionHint.NextHint;
 				if (nextHint != null && previousPositionHint != nextHint)
@@ -388,8 +413,16 @@ namespace AI.Navigation
 				return;
 			}
 			
-			var velocity = rb.linearVelocity;
-			if (velocity.magnitude > PositionStuckVelocity)
+			var velocityStuck = false;
+			var raycastStuck = false;
+
+			if (PositionVelocityAntiStuckEnabled && rb.linearVelocity.magnitude < PositionStuckVelocity) 
+				velocityStuck = true;
+			
+			if (PositionRaycastAntiStuckEnabled && GetCeilingDistance(position) < PositionStuckDistance || GetFloorDistance(position) < PositionStuckDistance)
+				raycastStuck = true;
+			
+			if (!velocityStuck && !raycastStuck)
 			{
 				positionStuckDuration = 0f;
 				return;

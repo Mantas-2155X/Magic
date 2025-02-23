@@ -14967,8 +14967,12 @@ MonoBehaviour:
   FlightSpeed: 10
   RotateSpeed: 7.5
   StabilizeSpeed: 1
+  AngleAntiStuckEnabled: 1
   AngleStuckDegree: 25
   AngleStuckTime: 2.5
+  PositionRaycastAntiStuckEnabled: 1
+  PositionStuckDistance: 0.4
+  PositionVelocityAntiStuckEnabled: 1
   PositionStuckVelocity: 0.75
   PositionStuckTime: 0.75
 --- !u!114 &2524303300372934529 stripped
