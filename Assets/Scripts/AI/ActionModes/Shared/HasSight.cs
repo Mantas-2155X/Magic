@@ -40,7 +40,7 @@ namespace AI.ActionModes.Shared
 #endif
 
 			// Projectiles have thickness so we need to cast more rays to make sure the projectile isn't going to just hit a wall. Spherecast does not work here because it spawns inside a collider and therefore it ignores the wall 
-			if (extraCasts)
+			if (extraCasts && ((NPCData)owner.Data).UseExtraCasts)
 			{
 				var halfSize = NavMesh.GetSettingsByID(owner.Agent.agentTypeID).agentRadius / 2f;
 				

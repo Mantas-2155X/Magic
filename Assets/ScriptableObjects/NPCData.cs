@@ -131,6 +131,12 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public float AttackVerticalOffset;
+
+		/// <summary>
+		/// Use extra casts for aiming
+		/// </summary>
+		[SerializeField]
+		public bool UseExtraCasts = true;
 		
 		/// <summary>
 		/// Is the npc able to walk at all? Turning is allowed either way

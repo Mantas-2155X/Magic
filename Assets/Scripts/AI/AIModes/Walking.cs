@@ -192,7 +192,7 @@ namespace AI.AIModes
 
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination)
 		{
-			if (Owner.Agent.enabled)
+			if (Owner.Agent.enabled && Owner.Agent.isOnNavMesh)
 				Owner.Agent.SetDestination(newDestination);
 		}
 

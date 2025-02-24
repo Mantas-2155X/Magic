@@ -34,6 +34,9 @@ namespace AI.Navigation
 		public float StabilizeSpeed;
 
 		[SerializeField]
+		public bool UseSpellRange = true;
+		
+		[SerializeField]
 		public bool AngleAntiStuckEnabled = true;
 
 		[SerializeField]
@@ -231,7 +234,7 @@ namespace AI.Navigation
 				var data = (NPCData)NPC.Data;
 				
 				// Hover within range that can still attack, spot and sense targets
-				var hoverRange = Mathf.Min(NPC.SpellRange, data.SpotRange, data.SenseRange);
+				var hoverRange = UseSpellRange ? Mathf.Min(NPC.SpellRange, data.SpotRange, data.SenseRange) : Mathf.Min(data.SpotRange, data.SenseRange);
 				
 				if (Mathf.Approximately(distanceToCeiling, float.MaxValue))
 				{
