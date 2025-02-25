@@ -162,9 +162,9 @@ namespace Managers
 			return createAttack(data, source, contact.point, contact.normal, attach);
 		}
 		
-		public IAttack CreateAttack(AttackData data, Component source, Transform attach)
+		public IAttack CreateAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
 		{
-			return createAttack(data, source, Vector3.zero, Vector3.zero, attach);
+			return createAttack(data, source, point, normal, attach);
 		}
 		
 		public IDecal CreateDecal(DecalData data, ContactPoint contact, Transform attach)
