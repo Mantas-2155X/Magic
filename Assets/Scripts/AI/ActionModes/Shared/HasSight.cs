@@ -1,3 +1,5 @@
+//#define DEBUG_SIGHT
+
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
@@ -40,7 +42,7 @@ namespace AI.ActionModes.Shared
 			var hitTransform = hit.collider.transform;
 			if (hitTransform != target)
 				return false;
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEBUG_SIGHT
 			Debug.DrawLine(originCenter, direction * 50f, Color.magenta);
 #endif
 
@@ -52,7 +54,7 @@ namespace AI.ActionModes.Shared
 				var instance = hit.colliderInstanceID;
 				var originRight = originCenter + transform.right * halfSize;
 				var directionRight = target.position - (position + transform.right * halfSize);
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEBUG_SIGHT
 				Debug.DrawLine(originRight, directionRight * 50f, Color.cyan);
 #endif
 				if (!Physics.Raycast(originRight, directionRight, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitRight.colliderInstanceID != instance)
@@ -60,7 +62,7 @@ namespace AI.ActionModes.Shared
 				
 				var originLeft = originCenter - transform.right * halfSize;
 				var directionLeft = target.position - (position + -transform.right * halfSize);
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEBUG_SIGHT
 				Debug.DrawLine(originLeft, directionLeft * 50f, Color.yellow);
 #endif
 				if (!Physics.Raycast(originLeft, directionLeft, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitLeft.colliderInstanceID != instance)

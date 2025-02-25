@@ -1,3 +1,5 @@
+//#define DEBUG_SPELL
+
 using System;
 using AI;
 using AI.Interfaces;
@@ -72,7 +74,7 @@ namespace Combat.Spells.Base
 			}
 		}
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEBUG_SPELL
 		public void OnDrawGizmos()
 		{
 			Gizmos.color = Color.red;
