@@ -96,7 +96,7 @@ namespace AI.ActionModes.Shared
 		
 		public bool GrabResourceIfNeeded()
 		{
-			if (owner.Paralyzed)
+			if (owner.Paralyzed || !((NPCData)owner.Data).CanTakeResources)
 				return false;
 
 			if (IsLowHealth())

@@ -110,7 +110,7 @@ namespace AI.Navigation
 				}
 			}
 			
-			Gizmos.color = Color.green;
+			Gizmos.color = Color.yellow;
 			Gizmos.DrawSphere(movementTarget, 0.1f);
 		}
 #endif

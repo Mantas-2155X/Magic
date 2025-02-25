@@ -19392,6 +19392,22 @@ PrefabInstance:
       propertyPath: FlightSpeed
       value: 7.5
       objectReference: {fileID: 0}
+    - target: {fileID: -1129489370468741524, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+      propertyPath: UseSpellRange
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1129489370468741524, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+      propertyPath: AngleAntiStuckEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1129489370468741524, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+      propertyPath: PositionRaycastAntiStuckEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1129489370468741524, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+      propertyPath: PositionVelocityAntiStuckEnabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 168419840278684807, guid: f87096318aaafc244997e6f00eca6740, type: 3}
       propertyPath: m_Mesh
       value: 

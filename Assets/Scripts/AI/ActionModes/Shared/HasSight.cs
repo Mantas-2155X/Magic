@@ -21,6 +21,8 @@ namespace AI.ActionModes.Shared
 		{
 			if (target == null)
 				return false;
+
+			var data = (NPCData)owner.Data;
 			
 			var transform = owner.GetTransform();
 			var position = transform.position;
@@ -28,6 +30,9 @@ namespace AI.ActionModes.Shared
 			var direction = target.position - position;
 			var originCenter = owner.Body.Core.position;
 
+			if (!data.UseSightCheck)
+				return true;
+			
 			if (!Physics.Raycast(originCenter, direction, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 				return false;
 
@@ -40,7 +45,7 @@ namespace AI.ActionModes.Shared
 #endif
 
 			// Projectiles have thickness so we need to cast more rays to make sure the projectile isn't going to just hit a wall. Spherecast does not work here because it spawns inside a collider and therefore it ignores the wall 
-			if (extraCasts && ((NPCData)owner.Data).UseExtraCasts)
+			if (extraCasts && data.UseExtraCasts)
 			{
 				var halfSize = NavMesh.GetSettingsByID(owner.Agent.agentTypeID).agentRadius / 2f;
 				

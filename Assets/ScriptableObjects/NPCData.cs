@@ -137,6 +137,18 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public bool UseExtraCasts = true;
+
+		/// <summary>
+		/// Use sight checks
+		/// </summary>
+		[SerializeField]
+		public bool UseSightCheck = true;
+		
+		/// <summary>
+		/// Can the NPC go and take resources objects
+		/// </summary>
+		[SerializeField]
+		public bool CanTakeResources = true;
 		
 		/// <summary>
 		/// Is the npc able to walk at all? Turning is allowed either way
