@@ -249,7 +249,7 @@ namespace AI
 			if (hasFlight && state)
 			{
 				// Flying agents can be too far, prevent warning when enabling agent
-				if (!NavMesh.SamplePosition(GetTransform().position, out _, 14.25f, NavMesh.AllAreas))
+				if (!NavMesh.SamplePosition(GetTransform().position, out _, Flight.MaximumAgentDistance, NavMesh.AllAreas))
 					return false;
 			}
 			

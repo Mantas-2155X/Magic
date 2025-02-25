@@ -19397,6 +19397,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -1129489370468741524, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+      propertyPath: MaximumAgentDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -1129489370468741524, guid: f87096318aaafc244997e6f00eca6740, type: 3}
       propertyPath: AngleAntiStuckEnabled
       value: 0
       objectReference: {fileID: 0}

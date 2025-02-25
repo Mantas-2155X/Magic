@@ -34,6 +34,9 @@ namespace AI.Navigation
 		public float StabilizeSpeed;
 
 		[SerializeField]
+		public float MaximumAgentDistance = 14.25f;
+		
+		[SerializeField]
 		public bool UseSpellRange = true;
 		
 		[SerializeField]
