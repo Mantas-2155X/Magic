@@ -149,6 +149,11 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public bool CanTakeResources = true;
+
+		/// <summary>
+		/// Can the NPC self-destruct if it has such mechanisms
+		/// </summary>
+		public bool CanSelfDestruct = false;
 		
 		/// <summary>
 		/// Is the npc able to walk at all? Turning is allowed either way

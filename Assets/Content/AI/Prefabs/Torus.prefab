@@ -19626,6 +19626,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7605076707503681139}
   m_SourcePrefab: {fileID: 100100000, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+--- !u!114 &1057957121230558841 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 231732286194361612, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+  m_PrefabInstance: {fileID: 980053177586971509}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302894152738733886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 923e274e6c3b4bccbda3b5d3b10802b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1302894152738733886 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2273498091929504843, guid: f87096318aaafc244997e6f00eca6740, type: 3}
@@ -19666,6 +19677,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: ca485fbe64df111cba21f83d47ccc93e, type: 2}
   AttackAfter: 7.5
+  AttachedNPC: {fileID: 1057957121230558841}
 --- !u!4 &6421657305293746071 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6091002392588000482, guid: f87096318aaafc244997e6f00eca6740, type: 3}

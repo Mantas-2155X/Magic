@@ -1,3 +1,4 @@
+using AI;
 using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
@@ -13,9 +14,15 @@ namespace Components
 		[SerializeField]
 		public float AttackAfter;
 		
-		public void Awake()
+		[SerializeField]
+		public NPC AttachedNPC;
+		
+		public void Start()
 		{
 			if (Data == null)
+				return;
+			
+			if (AttachedNPC != null && !((NPCData)AttachedNPC.Data).CanSelfDestruct)
 				return;
 			
 			attackDelayed().Forget();
