@@ -17,12 +17,21 @@ namespace Objects.Base
 		
 		[SerializeField]
 		public int MaterialIndex;
+
+		[SerializeField]
+		public Color LightColor = Color.white;
+
+		[SerializeField]
+		[ColorUsage(false, true)]
+		public Color EmissionColor = Color.white * 1.25f;
 		
 		[SerializeField]
 		public OnLightEnabledEvent OnLightEnabledEvent = new ();
 
 		[SerializeField]
 		public OnLightDisabledEvent OnLightDisabledEvent = new ();
+
+		private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
 
 		private Material material;
 		
@@ -34,6 +43,9 @@ namespace Objects.Base
 			material = materials[MaterialIndex];
 			Renderer.materials = materials;
 
+			Light.color = LightColor;
+			material.SetColor(emissionColor, EmissionColor);
+			
 			setEnabled();
 		}
 

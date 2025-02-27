@@ -107,6 +107,8 @@ MonoBehaviour:
   Enabled: 1
   Renderer: {fileID: 8729331271185628313}
   MaterialIndex: 1
+  LightColor: {r: 1, g: 1, b: 1, a: 1}
+  EmissionColor: {r: 1.781479, g: 1.781479, b: 1.781479, a: 1.25}
   OnLightEnabledEvent:
     m_PersistentCalls:
       m_Calls: []
