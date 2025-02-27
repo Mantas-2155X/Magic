@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d62d623348690e9f9bddc6336f65456f069075ae0512cefda4e7ef50cedd002c
-size 1269
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Prefabs
+  m_EditorClassIdentifier: 
+  m_GroupName: Prefabs
+  m_GUID: 60dedc60f07bbe3ac8030ffe22b5533a
+  m_SerializeEntries:
+  - m_GUID: 9580abcb964244131b397da784c3696d
+    m_Address: Assets/Prefabs/Points
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b29d5cf0d1e5338caa8b55c4b4852735
+    m_Address: Assets/Prefabs/Map
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1e174f2e13487a81a2f743a2f14eea7
+    m_Address: Assets/Prefabs/UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a9c353db03cd8fa9fadd4277dc07e972, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: cbb562305136f7e92b02449758f67e48, type: 2}
+    - {fileID: 11400000, guid: f133135c64cd6be1dba350d90b6e2800, type: 2}

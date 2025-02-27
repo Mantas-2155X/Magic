@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:86c1564ccdd0b8cfb6f2ea4f49c12b2be8d8b43f4078fc37cc53f3a956a66c93
-size 711
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
+  m_Name: HealthGib
+  m_EditorClassIdentifier: 
+  Name: OBJECT_HEALTHGIB_NAME
+  Description: OBJECT_HEALTHGIB_DESC
+  Icon: {fileID: 0}
+  Tags: 1
+  Prefab: {fileID: 0}
+  Type: 
+  IsPoolable: 0
+  IsBreakable: 0
+  MaximumHealth: 0
+  BrokenPrefab: {fileID: 0}
+  IsPickupable: 0
+  PickupableAfter: 0
+  PickupAction: 0
+  IsUsable: 1
+  UsableAfter: 0.5
+  UseAction: 1

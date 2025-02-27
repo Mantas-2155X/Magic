@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:18b6fd4dfe6afa4488ff0f2f1d23c3075384c53e4074b7fdd80367fdb2c296be
-size 860
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
+  m_Name: EnergyCanister
+  m_EditorClassIdentifier: 
+  Name: OBJECT_ENERGYCANISTER_NAME
+  Description: OBJECT_ENERGYCANISTER_DESC
+  Icon: {fileID: 0}
+  Tags: 32
+  Prefab: {fileID: 5422014121488987390, guid: e030221d431c5b271b2b9834bb7ef97e, type: 3}
+  Type: 
+  IsPoolable: 0
+  IsBreakable: 1
+  MaximumHealth: 5
+  BrokenPrefab: {fileID: 289324834980497232, guid: 137f608a460c4dbe29364d97c431907e, type: 3}
+  IsPickupable: 0
+  PickupableAfter: 0
+  PickupAction: 0
+  IsUsable: 1
+  UsableAfter: 0.5
+  UseAction: 1

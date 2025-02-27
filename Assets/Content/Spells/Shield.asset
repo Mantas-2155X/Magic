@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:be666025a3fa7994e4c67f2f5aa36d1543451c0544e77557834f872b7cc799b3
-size 844
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: 
+  Name: SPELL_SHIELD_NAME
+  Description: SPELL_SHIELD_DESC
+  Icon: {fileID: 21300000, guid: 494fc58480bbd73af9a3bfed101c1d7f, type: 3}
+  Tags: 16
+  Prefab: {fileID: 0}
+  Type: 
+  Cooldown: 12.5
+  CastingTime: 1
+  CastingCost: 25
+  Range: 5
+  IsResource: 0
+  Element: 3
+  Cast: {fileID: 11400000, guid: a6d0636060cf7effb8a704dfc3e62d31, type: 2}
+  Projectile: {fileID: 0}
+  Attack: {fileID: 11400000, guid: 6c1795e77c8365f099bc517bb1c8a193, type: 2}

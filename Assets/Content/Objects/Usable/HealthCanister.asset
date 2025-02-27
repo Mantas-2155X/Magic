@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4c56c067a0500ede9f5c0481ca6224f7312d2f6f57da1ec9fdb12f10beffa70b
-size 859
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
+  m_Name: HealthCanister
+  m_EditorClassIdentifier: 
+  Name: OBJECT_HEALTHCANISTER_NAME
+  Description: OBJECT_HEALTHCANISTER_DESC
+  Icon: {fileID: 0}
+  Tags: 1
+  Prefab: {fileID: 6255904325556568875, guid: 20b34c44d967289ff983d1af3a9fd892, type: 3}
+  Type: 
+  IsPoolable: 0
+  IsBreakable: 1
+  MaximumHealth: 5
+  BrokenPrefab: {fileID: 289324834980497232, guid: b41fb7be7df412b27ba62cd9b09b7a24, type: 3}
+  IsPickupable: 0
+  PickupableAfter: 0
+  PickupAction: 0
+  IsUsable: 1
+  UsableAfter: 0.5
+  UseAction: 1

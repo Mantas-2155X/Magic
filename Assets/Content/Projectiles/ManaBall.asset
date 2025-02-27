@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bc44b12969c44ddcabfc6802d01f782f9de1890f3747de2b5d4b9a502ed26056
-size 786
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd0ae0db49104ff39ef235d001464c3a, type: 3}
+  m_Name: ManaBall
+  m_EditorClassIdentifier: 
+  Name: PROJECTILE_MANABALL_NAME
+  Description: PROJECTILE_MANABALL_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 6837300406704376654, guid: 8b52a81927123d1138d8bb6469c28fd9, type: 3}
+  Type: 
+  Force: 7.5
+  Damage: 15
+  Slow:
+    Amount: 0.15
+    Duration: 0.15
+  Paralyze:
+    Duration: 0
+  Element: 3
+  Decal: {fileID: 11400000, guid: 989cbe507e9f24fb5be2f05cd2c640be, type: 2}

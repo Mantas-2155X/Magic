@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7479a4fd1b73d4f92cabb85d0c4ea15e64c37cb570e5e2fd63928730ced885ba
-size 853
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
+  m_Name: ManaCanister
+  m_EditorClassIdentifier: 
+  Name: OBJECT_MANACANISTER_NAME
+  Description: OBJECT_MANACANISTER_DESC
+  Icon: {fileID: 0}
+  Tags: 2
+  Prefab: {fileID: 6900112509888156798, guid: 26cb4a1c51f5196cd8794646396714b6, type: 3}
+  Type: 
+  IsPoolable: 0
+  IsBreakable: 1
+  MaximumHealth: 5
+  BrokenPrefab: {fileID: 289324834980497232, guid: 84a290b98a90ae23f9b3d67c25396e80, type: 3}
+  IsPickupable: 0
+  PickupableAfter: 0
+  PickupAction: 0
+  IsUsable: 1
+  UsableAfter: 0.5
+  UseAction: 1

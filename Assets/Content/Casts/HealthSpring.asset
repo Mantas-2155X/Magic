@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0a2e9137e34569231b141e303db42640d505ca704e3c5a1816ae9e1588fe03ad
-size 600
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69597995f0ab489383c01ab05006b995, type: 3}
+  m_Name: HealthSpring
+  m_EditorClassIdentifier: 
+  Name: CASTS_HEALTHSPRING_NAME
+  Description: CASTS_HEALTHSPRING_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 2523756766213633531, guid: 70a65589f4ab6b3a782536e042555026, type: 3}
+  Type: 

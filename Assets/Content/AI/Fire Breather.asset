@@ -1,3 +1,81 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0e4c6b6878f0eea52835200c2d04c5e542a3fee9af0991adf42dd4cbe84cc4b0
-size 2208
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d095914682fd465fb83b431e5a31d2ef, type: 3}
+  m_Name: Fire Breather
+  m_EditorClassIdentifier: 
+  Name: AI_FIREBREATHER_NAME
+  Description: AI_FIREBREATHER_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+  Type: 
+  Health: 50
+  Mana: 150
+  Energy: 40
+  RegenerateHealth: 1
+  RegenerateMana: 14
+  RegenerateEnergy: 2
+  Speed: 7
+  DamageStats:
+    _serializedList:
+    - Key: 4
+      Value:
+        Constant: 2
+        Percentage: 0
+  ProtectionStats:
+    _serializedList:
+    - Key: 4
+      Value:
+        Constant: 5
+        Percentage: 10
+    - Key: 3
+      Value:
+        Constant: -3
+        Percentage: -5
+  Spells:
+  - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
+  - {fileID: 11400000, guid: 7b8993fdb778cb39e9054cdf7d6ae5fa, type: 2}
+  Wearables: []
+  BrokenBodyPrefab: {fileID: 295334512180552911, guid: 3888f632278c1dcb2a4f9b6ddb275b38, type: 3}
+  BrokenArmPrefab: {fileID: 4027122668051800298, guid: 6b769d4d7ce6fdd75991852972882303, type: 3}
+  BrokenFootPrefab: {fileID: 6523054473690755916, guid: 518a3fdcc001d4c1bb6e5a63c6a0e19e, type: 3}
+  CanGrab: 1
+  GrabEnergy: 5
+  GrabShinkedEnergy: 7.5
+  GrabPositionSpeed: 15
+  GrabRotationSpeed: 15
+  GrabVerticalOffset: -0.15
+  GrabMass: 25
+  GrabDropDistance: 5
+  GrabDropAngle: 100
+  SenseRange: 25
+  SpotRange: 25
+  FieldOfView: 75
+  PatrolReachRange: 0.5
+  RotationSpeed: 480
+  AimAngle: 5
+  WanderEvery: 1
+  CommunicateRange: 5
+  LowResourcesMultiplier: 0.15
+  SpellCooldownVariation: 0.15
+  SpellSwitchCastCooldown: 0.25
+  UseResourceEvery: 1
+  TargetPredictInaccuracy: 0.6
+  TargetPredictMinimumRange: 5
+  TargetPredictVelocityMultiplier: 0.09
+  TargetPredictDistanceMultiplier: 0.0775
+  TargetPredictStartFakeVelocity: 4.5
+  TargetPredictMaximumFakeVelocity: 11
+  TargetMode: 2
+  AttackVerticalOffset: 0
+  UseExtraCasts: 1
+  Stationary: 0

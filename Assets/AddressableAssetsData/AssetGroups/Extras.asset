@@ -1,3 +1,48 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:daaf36fbb26a10db217fae64cb58b433b6ce32c9c4bde387f20939c9f394e604
-size 1794
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Extras
+  m_EditorClassIdentifier: 
+  m_GroupName: Extras
+  m_GUID: 1b177a3fbb3bebf0086719675ad3aeda
+  m_SerializeEntries:
+  - m_GUID: 0d8740dafc144694e8c44f361eaa1948
+    m_Address: Assets/Packages/BlurredBufferMultiObjectOutline/OutlineDilation.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a1bf9bb3b284b8c97b0081218789d96
+    m_Address: Assets/InputSystem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4f17eb9239a68045a995537d1de7423
+    m_Address: Assets/Packages/BlurredBufferMultiObjectOutline/OutlineColorAndStencil.shader
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f54d1bd14bd3ca042bd867b519fee8cc
+    m_Address: Assets/Packages/TextMesh Pro
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb6390f650ca44a5ba3246d8dda47927
+    m_Address: Packages/com.unity.render-pipelines.universal/Shaders/FullscreenInvertColors.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a9c353db03cd8fa9fadd4277dc07e972, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e4e7873c5980eea87bae2e94aa9299d7, type: 2}
+    - {fileID: 11400000, guid: 448ebdd8eed6f0ce38687a7d6d975ef5, type: 2}

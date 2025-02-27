@@ -1,3 +1,84 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c614d81045edb6107e9c6a7646885e811c1e56ac55cb4936e6dc16cee580b9a8
-size 2421
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d095914682fd465fb83b431e5a31d2ef, type: 3}
+  m_Name: Incinerator
+  m_EditorClassIdentifier: 
+  Name: AI_INCINERATOR_NAME
+  Description: AI_INCINERATOR_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+  Type: 
+  Health: 200
+  Mana: 500
+  Energy: 40
+  RegenerateHealth: 2
+  RegenerateMana: 50
+  RegenerateEnergy: 2
+  Speed: 4
+  DamageStats:
+    _serializedList:
+    - Key: 4
+      Value:
+        Constant: 2
+        Percentage: 1.5
+  ProtectionStats:
+    _serializedList:
+    - Key: 4
+      Value:
+        Constant: 7
+        Percentage: 25
+    - Key: 3
+      Value:
+        Constant: -1
+        Percentage: -2
+  Spells:
+  - {fileID: 11400000, guid: 7ad2cc843d9b00d8a84cc37429205c51, type: 2}
+  - {fileID: 11400000, guid: ec310bfa9a4a58bd488af052552febae, type: 2}
+  - {fileID: 11400000, guid: 94aa206cb01cadbd59512f3a1a32492b, type: 2}
+  - {fileID: 11400000, guid: f5ae129144c89e844bc0b34ff40400b3, type: 2}
+  - {fileID: 11400000, guid: 7b8993fdb778cb39e9054cdf7d6ae5fa, type: 2}
+  Wearables: []
+  BrokenBodyPrefab: {fileID: 295334512180552911, guid: 3888f632278c1dcb2a4f9b6ddb275b38, type: 3}
+  BrokenArmPrefab: {fileID: 4027122668051800298, guid: 6b769d4d7ce6fdd75991852972882303, type: 3}
+  BrokenFootPrefab: {fileID: 6523054473690755916, guid: 518a3fdcc001d4c1bb6e5a63c6a0e19e, type: 3}
+  CanGrab: 1
+  GrabEnergy: 5
+  GrabShinkedEnergy: 7.5
+  GrabPositionSpeed: 15
+  GrabRotationSpeed: 15
+  GrabVerticalOffset: -0.15
+  GrabMass: 25
+  GrabDropDistance: 5
+  GrabDropAngle: 100
+  SenseRange: 50
+  SpotRange: 50
+  FieldOfView: 75
+  PatrolReachRange: 0.5
+  RotationSpeed: 480
+  AimAngle: 5
+  WanderEvery: 1
+  CommunicateRange: 5
+  LowResourcesMultiplier: 0.3
+  SpellCooldownVariation: 0.3
+  SpellSwitchCastCooldown: 0.25
+  UseResourceEvery: 1
+  TargetPredictInaccuracy: 0.6
+  TargetPredictMinimumRange: 5
+  TargetPredictVelocityMultiplier: 0.09
+  TargetPredictDistanceMultiplier: 0.0775
+  TargetPredictStartFakeVelocity: 4.5
+  TargetPredictMaximumFakeVelocity: 11
+  TargetMode: 2
+  AttackVerticalOffset: 0
+  UseExtraCasts: 1
+  Stationary: 0

@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6fa21a06025010842e7d7c0b55935a6c441ee4242562be7fbeaa5f4898b7ea91
-size 826
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
+  m_Name: Box
+  m_EditorClassIdentifier: 
+  Name: OBJECT_BOX_NAME
+  Description: OBJECT_BOX_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 3712537145367851251, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+  Type: 
+  IsPoolable: 0
+  IsBreakable: 1
+  MaximumHealth: 25
+  BrokenPrefab: {fileID: 1264454106364523822, guid: 4ff7ca61c8d34000ab2b65180516b290, type: 3}
+  IsPickupable: 0
+  PickupableAfter: 0
+  PickupAction: 0
+  IsUsable: 0
+  UsableAfter: 0
+  UseAction: 0

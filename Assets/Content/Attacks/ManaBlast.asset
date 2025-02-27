@@ -1,3 +1,33 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6b4bf9f2dac9ee4e4fd484b6127e268d6fc3507bdd2f93851217555960f71a43
-size 840
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38265b3f53394812ab2b891cb9203b15, type: 3}
+  m_Name: ManaBlast
+  m_EditorClassIdentifier: 
+  Name: ATTACK_MANABLAST_NAME
+  Description: ATTACK_MANABLAST_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 2895964246749410662, guid: 7b139da5b90b57bdeb13d2e185070a56, type: 3}
+  Type: 
+  EnableTriggerAfter: 0.025
+  DisableTriggerAfter: 0.1
+  AttachToTarget: 0
+  DropToGround: 0
+  IgnoreCaster: 1
+  FollowCaster: 1
+  AttachOffset: {x: 0, y: 0, z: 0}
+  Damage: 65
+  Slow:
+    Amount: 0.5
+    Duration: 1
+  Element: 3
+  AttackAngle: 0

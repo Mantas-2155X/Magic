@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3c77ffc4a4d1b5252c529d2a8a80c0c3681f9a0b90a43863570d8e9458a9ba4a
-size 594
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69597995f0ab489383c01ab05006b995, type: 3}
+  m_Name: ManaSpring
+  m_EditorClassIdentifier: 
+  Name: CASTS_MANASPRING_NAME
+  Description: CASTS_MANASPRING_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 2523756766213633531, guid: 6b7f52085f38f4117ad26a0181b0eff3, type: 3}
+  Type: 

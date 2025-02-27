@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0f1c55abee95edaa93da21436e523eb057c524cd3a0aa05d4748fa765bb2d76e
-size 880
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38265b3f53394812ab2b891cb9203b15, type: 3}
+  m_Name: Lightning
+  m_EditorClassIdentifier: 
+  Name: ATTACK_LIGHTNING_NAME
+  Description: ATTACK_LIGHTNING_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 6668654195202726528, guid: 6506dd54dbb0c0eddbc71677e265f747, type: 3}
+  Type: 
+  EnableTriggerAfter: 0
+  DisableTriggerAfter: 0
+  AttachToTarget: 0
+  DropToGround: 0
+  IgnoreCaster: 0
+  FollowCaster: 0
+  AttachOffset: {x: 0, y: 0, z: 0}
+  Damage: 40
+  Slow:
+    Amount: 0
+    Duration: 0
+  Paralyze:
+    Duration: 1.5
+  Element: 6
+  AttackAngle: 3
+  AttackOrigin: 1

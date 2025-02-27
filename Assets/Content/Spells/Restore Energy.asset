@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:65dfe84097e9829c99c78a45f37fb32f0cacf9a14fdaa7378f3111815810f3aa
-size 853
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
+  m_Name: Restore Energy
+  m_EditorClassIdentifier: 
+  Name: SPELL_RESTOREENERGY_NAME
+  Description: SPELL_RESTOREENERGY_DESC
+  Icon: {fileID: 21300000, guid: e88ad92d5ba463665a36b5204a361f02, type: 3}
+  Tags: 32
+  Prefab: {fileID: 0}
+  Type: 
+  Cooldown: 10
+  CastingTime: 0
+  CastingCost: 20
+  Range: 50
+  IsResource: 1
+  LockWhileCasting: 0
+  LockAfterCasting: 0
+  Element: 1
+  Cast: {fileID: 0}
+  Projectile: {fileID: 0}
+  Attack: {fileID: 11400000, guid: ec205eefb15675c8faecc9ae80e7f9f2, type: 2}

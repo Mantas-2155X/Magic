@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9a6b6e51a9a270f1a1def3432ab5dea0e9f3657991780f70a96e26b77f449fb0
-size 785
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3502a9a36b9d421b87f7dd857598c6a7, type: 3}
+  m_Name: Path 1
+  m_EditorClassIdentifier: 
+  Points:
+  - Point: {x: -13.111015, y: -2.4, z: 6.461597}
+    Pause: 0
+  - Point: {x: -24.012987, y: -2.4, z: 18.31202}
+    Pause: 0
+  - Point: {x: -0.41958618, y: -2.4, z: -0.23690653}
+    Pause: 0
+  - Point: {x: -36.57161, y: -2.4, z: 5.4906654}
+    Pause: 0
+  - Point: {x: -42.246635, y: -2.4, z: -12.532797}
+    Pause: 0
+  - Point: {x: -18.285418, y: -2.4, z: -14.371925}
+    Pause: 0

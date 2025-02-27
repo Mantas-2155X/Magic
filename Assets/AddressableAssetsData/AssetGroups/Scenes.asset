@@ -1,3 +1,100 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4d1b07b981b8a83f0a63126b6062c86b63d21a8d69e329a6ad05d260b2e4495a
-size 3171
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Scenes
+  m_EditorClassIdentifier: 
+  m_GroupName: Scenes
+  m_GUID: 1d21fe3f5ee1f4d0fb634aafa50c2309
+  m_SerializeEntries:
+  - m_GUID: 0e33f658abb1a018b99d56c847c000f8
+    m_Address: Assets/Scenes/World6
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c9359980687639a39bcbd99c82e0ab0
+    m_Address: Scenes/World2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - scenes
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28d7c2744233b4277982c9a34ad4ace3
+    m_Address: Scenes/World5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - scenes
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3eccce49c61227877b80c6be75bef10b
+    m_Address: Assets/Scenes/World4
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56c89f803e0ee7d92862d893950681dc
+    m_Address: Assets/Scenes/World2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70b9e138c321f2815a945a623dcc726e
+    m_Address: Scenes/World6
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - scenes
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99c9720ab356a0642a771bea13969a05
+    m_Address: Scenes/World1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - scenes
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b1c6a0bbc99109c79456d19d6418e51
+    m_Address: Scenes/World4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - scenes
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1f6f890ba6cc6cfd8f80caf665874f1
+    m_Address: Scenes/Title
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - scenes
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9849892b95c5e28fa7b2487239d4541
+    m_Address: Assets/Scenes/World3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c11605a58551716ab92963ba832276e4
+    m_Address: Assets/Scenes/World1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca5dac0d27ac4504b82530f4e4b142d3
+    m_Address: Assets/Scenes/Title
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d54c675e28d247f0c92e401cf53f0be0
+    m_Address: Assets/Scenes/World5
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e62212586a5c2f3488362f46b0b1dd85
+    m_Address: Scenes/World3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - scenes
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a9c353db03cd8fa9fadd4277dc07e972, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: db4421eb6f5dcee8eac476038c7965d0, type: 2}
+    - {fileID: 11400000, guid: 7eb5d9cef6894de4f898587bcfdf00ed, type: 2}

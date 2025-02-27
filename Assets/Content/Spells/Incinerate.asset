@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1fe1e4ab9143fef96c6248fdd0b267a92319cd8b738637efd974c7b5504bbc3d
-size 853
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
+  m_Name: Incinerate
+  m_EditorClassIdentifier: 
+  Name: SPELL_INCINERATE_NAME
+  Description: SPELL_INCINERATE_DESC
+  Icon: {fileID: 21300000, guid: c8b2d81f7129455a3a857107e054f26c, type: 3}
+  Tags: 4
+  Prefab: {fileID: 0}
+  Type: 
+  Cooldown: 5
+  CastingTime: 2
+  CastingCost: 75
+  Range: 30
+  IsResource: 0
+  Element: 4
+  Cast: {fileID: 11400000, guid: 3d74fb92881356673a24a288609802be, type: 2}
+  Projectile: {fileID: 0}
+  Attack: {fileID: 11400000, guid: 3fc2ab69142f0010192cff2428c4b5fb, type: 2}

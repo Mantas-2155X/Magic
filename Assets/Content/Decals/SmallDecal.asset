@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3505d7a105b37aa59973bf6ec606f4d8c4fb9a79c9302e4fab66b784a16dc945
-size 643
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15952e4bbfce4c6bb83d5d7f90cb4510, type: 3}
+  m_Name: SmallDecal
+  m_EditorClassIdentifier: 
+  Name: DECALS_SMALLDECAL_NAME
+  Description: DECALS_SMALLDECAL_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 7558129622655910293, guid: 8310f4eb2391901309860b9579a0bb21, type: 3}
+  Type: 
+  Size: 0.125
+  FadeAfter: 1
+  FadeDuration: 1

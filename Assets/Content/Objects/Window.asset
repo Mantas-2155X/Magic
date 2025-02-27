@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ad4c479366d89aa7d09bfea6c9529f382ac576496163ddcc1773c76f496eb74f
-size 835
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
+  m_Name: Window
+  m_EditorClassIdentifier: 
+  Name: OBJECT_WINDOW_NAME
+  Description: OBJECT_WINDOW_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 7934029853552531436, guid: 51f214865c53b4c02bf707178126c6a7, type: 3}
+  Type: 
+  IsPoolable: 0
+  IsBreakable: 1
+  MaximumHealth: 10
+  BrokenPrefab: {fileID: 9137025523410215908, guid: db113620d11ea3506a69cef9cfbe3dd2, type: 3}
+  IsPickupable: 0
+  PickupableAfter: 0
+  PickupAction: 0
+  IsUsable: 0
+  UsableAfter: 0
+  UseAction: 0
