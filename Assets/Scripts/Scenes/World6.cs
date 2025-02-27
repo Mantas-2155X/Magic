@@ -42,7 +42,7 @@ namespace Scenes
 
 		public void Start()
 		{
-			textLoop().Forget();
+			textLoop(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_INFO")).Forget();
 		}
 		
 		public void OnSpawnerCleared()
@@ -57,17 +57,19 @@ namespace Scenes
 		
 		private async UniTaskVoid nextWave()
 		{
-			if (CurrentWave >= Waves.Count)
-			{
-				await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
-				return;
-			}
-			
 			if (CurrentWave != -1)
 				Waves[CurrentWave].Spawners.SetActive(false);
 			
 			CurrentWave++;
 
+			if (CurrentWave >= Waves.Count)
+			{
+				textLoop(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_CLEARED")).Forget();
+				await UniTask.WaitForSeconds(10f);
+				await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
+				return;
+			}
+			
 			var wave = Waves[CurrentWave];
 			
 			for (var i = 0; i < Indicators1.Length; i++)
@@ -95,9 +97,12 @@ namespace Scenes
 			wave.Spawners.gameObject.SetActive(true);
 		}
 		
-		private async UniTaskVoid textLoop()
+		private async UniTaskVoid textLoop(string text)
 		{
-			var text = LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_INFO");
+			currentCharacter = 0;
+
+			Info.text = "";
+			Info.gameObject.SetActive(true);
 		
 			while (currentCharacter < text.Length)
 			{
@@ -128,7 +133,8 @@ namespace Scenes
 			
 			Info.gameObject.SetActive(false);
 
-			nextWave().Forget();
+			if (CurrentWave == -1)
+				nextWave().Forget();
 		}
 		
 		[Serializable]
