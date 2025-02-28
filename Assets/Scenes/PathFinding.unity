@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Offset: {x: 0, y: 5, z: 0}
   Size: {x: 25, y: 25, z: 25}
-  Distance: 5
+  Distance: 1.5
   FilterInsideObjects: 1
   FilterMask:
     serializedVersion: 2
@@ -163,7 +163,7 @@ MonoBehaviour:
   DrawConnections: 0
   DrawPath: 1
   DrawFlags: -1
-  Start: {x: 1.5, y: 12.5, z: 0}
+  Start: {x: 1.5, y: 12.5, z: 2.5}
   End: {x: 0, y: -12.5, z: 0}
 --- !u!65 &257003285
 BoxCollider:

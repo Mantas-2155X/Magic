@@ -52,21 +52,19 @@ namespace AI.PathFinding
 		
 		#region MonoBehaviour
 
-		public void Awake()
-		{
-			CreateGrid();
-		}
-
 		public void Update()
 		{
-			if (nodes == null)
-				return;
+			var createStopwatch = new Stopwatch();
+			createStopwatch.Start();
+			CreateGrid();
+			createStopwatch.Stop();
+			Debug.Log($"Creating grid took {createStopwatch.ElapsedMilliseconds}ms");
 
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
+			var findStopwatch = new Stopwatch();
+			findStopwatch.Start();
 			FindPath(Start, End);
-			stopwatch.Stop();
-			Debug.Log($"elapsed {stopwatch.ElapsedMilliseconds}ms");
+			findStopwatch.Stop();
+			Debug.Log($"Finding path took {findStopwatch.ElapsedMilliseconds}ms");
 		}
 		
 #if UNITY_EDITOR
@@ -426,6 +424,8 @@ namespace AI.PathFinding
 
 			public Dictionary<Node, float> Connections;
 			
+			#region Path Calculation
+
 			public float GCost = float.MaxValue;
 			public float HCost;
 			public float FCost;
@@ -439,6 +439,8 @@ namespace AI.PathFinding
 				FCost = 0f;
 				Connection = null;
 			}
+
+			#endregion
 		}
 
 		[Flags]
