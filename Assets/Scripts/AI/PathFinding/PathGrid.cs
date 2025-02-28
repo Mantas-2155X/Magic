@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 namespace AI.PathFinding
 {
+	[ExecuteInEditMode]
 	public class PathGrid : MonoBehaviour
 	{
 		[Header("Grid Settings")]
@@ -22,9 +22,6 @@ namespace AI.PathFinding
 		[Header("Filter Settings")]
 		[SerializeField]
 		public bool FilterInsideObjects = true;
-
-		[SerializeField]
-		public bool FilterUnconnected = true;
 		
 		[SerializeField]
 		public LayerMask FilterMask = -1;
@@ -36,6 +33,8 @@ namespace AI.PathFinding
 
 		public bool DrawConnections = true;
 
+		public bool DrawPath = true;
+		
 		public ENodeAvailability DrawFlags = (ENodeAvailability)~0;
 		
 		private Node[][][] nodes;
@@ -44,6 +43,32 @@ namespace AI.PathFinding
 		private int ySize;
 		private int zSize;
 
+		private readonly HashSet<Node> searchedNodes = new ();
+		private readonly List<Node> toSearchNodes = new ();
+		private readonly List<Node> resultingPath = new ();
+
+		public Vector3 Start;
+		public Vector3 End;
+		
+		#region MonoBehaviour
+
+		public void Awake()
+		{
+			CreateGrid();
+		}
+
+		public void Update()
+		{
+			if (nodes == null)
+				return;
+
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+			FindPath(Start, End);
+			stopwatch.Stop();
+			Debug.Log($"elapsed {stopwatch.ElapsedMilliseconds}ms");
+		}
+		
 #if UNITY_EDITOR
 		public void OnDrawGizmos()
 		{
@@ -104,14 +129,21 @@ namespace AI.PathFinding
 					}
 				}
 			}
+			
+			if (DrawPath && resultingPath != null && resultingPath.Count > 1)
+			{
+				Gizmos.color = Color.cyan;
+				
+				for (var i = 0; i < resultingPath.Count - 1; i++)
+					Gizmos.DrawLine(resultingPath[i].Position, resultingPath[i + 1].Position);
+			}
 		}
 #endif
 		
+		#endregion
+
 		public void CreateGrid()
 		{
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-			
 			var position = transform.position + Offset - Size / 2f;
 			
 			xSize = (int)(Size.x / Distance) + 1;
@@ -142,21 +174,106 @@ namespace AI.PathFinding
 				}
 			}
 			
-			stopwatch.Stop();
-			Debug.Log($"Creating grid took {stopwatch.ElapsedMilliseconds}ms");
-			
 			if (FilterInsideObjects)
-				FindInsideObjects();
+				findInsideObjects();
 			
-			if (FilterUnconnected)
-				FindNeighborConnections();
+			findNeighborConnections();
 		}
 
-		public void FindInsideObjects()
+		public Node FindClosestNode(Vector3 position)
 		{
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
+			Node closestNode = null;
+			var closestDistance = Mathf.Infinity;
+			
+			for (var x = 0; x < xSize; x++)
+			{
+				var xArray = nodes[x];
+				for (var y = 0; y < ySize; y++)
+				{
+					var yArray = xArray[y];
+					for (var z = 0; z < zSize; z++)
+					{
+						var node = yArray[z];
+						
+						var dist = Vector3.Distance(node.Position, position) / Distance;
+						if (dist > closestDistance)
+							continue;
+						
+						closestDistance = dist;
+						closestNode = node;
+					}
+				}
+			}
+			
+			return closestNode;
+		}
 
+		public List<Node> FindPath(Vector3 start, Vector3 end)
+		{
+			searchedNodes.Clear();
+			toSearchNodes.Clear();
+			resultingPath.Clear();
+			
+			for (var x = 0; x < xSize; x++)
+			{
+				var xArray = nodes[x];
+				for (var y = 0; y < ySize; y++)
+				{
+					var yArray = xArray[y];
+					for (var z = 0; z < zSize; z++)
+					{
+						yArray[z].ClearPathCalculations();
+					}
+				}
+			}
+			
+			var distanceBetweenPoints = Vector3.Distance(start, end) / Distance;
+
+			toSearchNodes.Add(FindClosestNode(start));
+			
+			var endNode = FindClosestNode(end);
+
+			var startNode = toSearchNodes[0];
+			startNode.GCost = 0f;
+			startNode.HCost = distanceBetweenPoints;
+			startNode.FCost = distanceBetweenPoints;
+			
+			while (toSearchNodes.Count > 0)
+			{
+				var node = toSearchNodes[0];
+
+				for (var i = 0; i < toSearchNodes.Count; i++)
+				{
+					var searchingNode = toSearchNodes[i];
+					if (searchingNode.FCost < node.FCost || searchingNode.FCost == node.FCost && searchingNode.HCost < node.HCost)
+						node = searchingNode;
+				}
+
+				toSearchNodes.Remove(node);
+				searchedNodes.Add(node);
+
+				if (node == endNode)
+				{
+					while (endNode != startNode)
+					{
+						resultingPath.Add(endNode);
+						endNode = endNode.Connection;
+					}
+			
+					resultingPath.Add(startNode);
+					return resultingPath;
+				}
+				
+				calculateNeighbors(node, end);
+			}
+
+			return null;
+		}
+		
+		#region Internals
+
+		private void findInsideObjects()
+		{
 			var renderers = GetComponentsInChildren<Renderer>();
 			for (var i = 0; i < renderers.Length; i++)
 			{
@@ -195,16 +312,10 @@ namespace AI.PathFinding
 					}
 				}
 			}
-			
-			stopwatch.Stop();
-			Debug.Log($"Inside objects filtering took {stopwatch.ElapsedMilliseconds}ms");
 		}
 
-		public void FindNeighborConnections()
+		private void findNeighborConnections()
 		{
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-
 			for (var x = 0; x < nodes.Length; x++)
 			{
 				var xArray = nodes[x];
@@ -215,7 +326,7 @@ namespace AI.PathFinding
 					{
 						var node = yArray[z];
 						
-						getConnections(node, x, y, z);
+						getConnectionsAndCosts(node, x, y, z);
 						
 						// If a node does not have any connections, mark it unavailable
 						if (node.Connections.Count != 0)
@@ -233,12 +344,9 @@ namespace AI.PathFinding
 					}
 				}
 			}
-			
-			stopwatch.Stop();
-			Debug.Log($"Finding neighbor connections took {stopwatch.ElapsedMilliseconds}ms");
 		}
 
-		private void getConnections(Node node, int x, int y, int z)
+		private void getConnectionsAndCosts(Node node, int x, int y, int z)
 		{
 			for (var cX = -1; cX < 2; cX++)
 			{
@@ -283,13 +391,54 @@ namespace AI.PathFinding
 			}
 		}
 
+		private void calculateNeighbors(Node node, Vector3 end)
+		{
+			foreach (var pair in node.Connections)
+			{
+				var neighborNode = pair.Key;
+				if (neighborNode.Availability != ENodeAvailability.Available)
+					continue;
+				
+				if (searchedNodes.Contains(neighborNode))
+					continue;
+
+				var gCost = node.GCost + pair.Value;
+				if (gCost < neighborNode.GCost)
+				{
+					var hCost = Vector3.Distance(neighborNode.Position, end) / Distance;
+					
+					neighborNode.Connection = node;
+					neighborNode.GCost = gCost;
+					neighborNode.HCost = hCost;
+					neighborNode.FCost = gCost + hCost;
+				
+					toSearchNodes.Add(neighborNode);
+				}
+			}
+		}
+
+		#endregion
+
 		public class Node
 		{
 			public Vector3 Position;
-
 			public ENodeAvailability Availability;
 
 			public Dictionary<Node, float> Connections;
+			
+			public float GCost = float.MaxValue;
+			public float HCost;
+			public float FCost;
+
+			public Node Connection;
+			
+			public void ClearPathCalculations()
+			{
+				GCost = float.MaxValue;
+				HCost = 0f;
+				FCost = 0f;
+				Connection = null;
+			}
 		}
 
 		[Flags]
