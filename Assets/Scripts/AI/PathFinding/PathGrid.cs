@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using AI.PathFinding.Enums;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -35,7 +36,7 @@ namespace AI.PathFinding
 
 		public bool DrawPath = true;
 		
-		public ENodeAvailability DrawFlags = (ENodeAvailability)~0;
+		public ENodeAvailabilityFlags DrawFlags = (ENodeAvailabilityFlags)~0;
 		
 		private Node[][][] nodes;
 		
@@ -109,15 +110,15 @@ namespace AI.PathFinding
 						
 						if (DrawNodes)
 						{
-							if (node.Availability == ENodeAvailability.Available)
+							if (node.Availability == ENodeAvailabilityFlags.Available)
 							{
 								Gizmos.color = Color.green;
 							}
-							else if ((node.Availability & ENodeAvailability.InsideObject) != 0)
+							else if ((node.Availability & ENodeAvailabilityFlags.InsideObject) != 0)
 							{
 								Gizmos.color = Color.red;
 							}
-							else if ((node.Availability & ENodeAvailability.NoConnections) != 0)
+							else if ((node.Availability & ENodeAvailabilityFlags.NoConnections) != 0)
 							{
 								Gizmos.color = Color.yellow;
 							}
@@ -165,7 +166,7 @@ namespace AI.PathFinding
 					for (var z = 0; z < zSize; z++)
 					{
 						var node = new Node(new Vector3(x * Distance, y * Distance, z * Distance) + position);
-						node.Availability = ENodeAvailability.Available;
+						node.Availability = ENodeAvailabilityFlags.Available;
 						node.Connections = new Dictionary<Node, float>();
 						
 						nodes[x][y][z] = node;
@@ -309,10 +310,10 @@ namespace AI.PathFinding
 							var availability = node.Availability;
 							
 							// Remove available flag
-							availability &= ~ENodeAvailability.Available;
+							availability &= ~ENodeAvailabilityFlags.Available;
 							
 							// Add inside object flag
-							availability |= ENodeAvailability.InsideObject;
+							availability |= ENodeAvailabilityFlags.InsideObject;
 
 							node.Availability = availability;
 						}
@@ -342,10 +343,10 @@ namespace AI.PathFinding
 						var availability = node.Availability;
 							
 						// Remove available flag
-						availability &= ~ENodeAvailability.Available;
+						availability &= ~ENodeAvailabilityFlags.Available;
 							
 						// Add no connections flag
-						availability |= ENodeAvailability.NoConnections;
+						availability |= ENodeAvailabilityFlags.NoConnections;
 
 						node.Availability = availability;
 					}
@@ -403,7 +404,7 @@ namespace AI.PathFinding
 			foreach (var pair in node.Connections)
 			{
 				var neighborNode = pair.Key;
-				if (neighborNode.Availability != ENodeAvailability.Available)
+				if (neighborNode.Availability != ENodeAvailabilityFlags.Available)
 					continue;
 				
 				if (searchedNodes.Contains(neighborNode))
@@ -430,7 +431,7 @@ namespace AI.PathFinding
 		{
 			public readonly Vector3 Position;
 			
-			public ENodeAvailability Availability;
+			public ENodeAvailabilityFlags Availability;
 			public Dictionary<Node, float> Connections;
 			
 			public float GCost;
@@ -492,15 +493,6 @@ namespace AI.PathFinding
 			{
 				return !Equals(left, right);
 			}
-		}
-
-		[Flags]
-		public enum ENodeAvailability
-		{
-			None = 0,
-			Available = 1,
-			InsideObject = 2,
-			NoConnections = 4
 		}
 	}
 }
