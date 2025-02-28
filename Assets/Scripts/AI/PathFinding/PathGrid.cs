@@ -44,7 +44,7 @@ namespace AI.PathFinding
 		private int zSize;
 
 		private readonly HashSet<Node> searchedNodes = new ();
-		private readonly List<Node> toSearchNodes = new ();
+		private readonly HashSet<Node> toSearchNodes = new ();
 		private readonly List<Node> resultingPath = new ();
 
 		public Vector3 Start;
@@ -140,6 +140,8 @@ namespace AI.PathFinding
 		
 		#endregion
 
+		#region PathGrid
+
 		public void CreateGrid()
 		{
 			var position = transform.position + Offset - Size / 2f;
@@ -162,8 +164,7 @@ namespace AI.PathFinding
 				{
 					for (var z = 0; z < zSize; z++)
 					{
-						var node = new Node();
-						node.Position = new Vector3(x * Distance, y * Distance, z * Distance) + position;
+						var node = new Node(new Vector3(x * Distance, y * Distance, z * Distance) + position);
 						node.Availability = ENodeAvailability.Available;
 						node.Connections = new Dictionary<Node, float>();
 						
@@ -227,22 +228,28 @@ namespace AI.PathFinding
 			
 			var distanceBetweenPoints = Vector3.Distance(start, end) / Distance;
 
-			toSearchNodes.Add(FindClosestNode(start));
-			
-			var endNode = FindClosestNode(end);
-
-			var startNode = toSearchNodes[0];
+			var startNode = FindClosestNode(start);
 			startNode.GCost = 0f;
 			startNode.HCost = distanceBetweenPoints;
 			startNode.FCost = distanceBetweenPoints;
 			
+			var endNode = FindClosestNode(end);
+
+			toSearchNodes.Add(startNode);
+			
 			while (toSearchNodes.Count > 0)
 			{
-				var node = toSearchNodes[0];
+				Node node = null;
 
-				for (var i = 0; i < toSearchNodes.Count; i++)
+				// Find first node since hashset doesn't have indexer
+				foreach (var searchingNode in toSearchNodes)
 				{
-					var searchingNode = toSearchNodes[i];
+					node = searchingNode;
+					break;
+				}
+				
+				foreach (var searchingNode in toSearchNodes)
+				{
 					if (searchingNode.FCost < node.FCost || searchingNode.FCost == node.FCost && searchingNode.HCost < node.HCost)
 						node = searchingNode;
 				}
@@ -268,6 +275,8 @@ namespace AI.PathFinding
 			return null;
 		}
 		
+		#endregion
+
 		#region Internals
 
 		private void findInsideObjects()
@@ -417,20 +426,24 @@ namespace AI.PathFinding
 
 		#endregion
 
-		public class Node
+		public class Node : IEquatable<Node>
 		{
-			public Vector3 Position;
+			public readonly Vector3 Position;
+			
 			public ENodeAvailability Availability;
-
 			public Dictionary<Node, float> Connections;
 			
-			#region Path Calculation
-
-			public float GCost = float.MaxValue;
+			public float GCost;
 			public float HCost;
 			public float FCost;
 
 			public Node Connection;
+
+			public Node(Vector3 position)
+			{
+				Position = position;
+				ClearPathCalculations();
+			}
 			
 			public void ClearPathCalculations()
 			{
@@ -440,7 +453,45 @@ namespace AI.PathFinding
 				Connection = null;
 			}
 
-			#endregion
+			public bool Equals(Node other)
+			{
+				if (other is null)
+					return false;
+				
+				if (ReferenceEquals(this, other))
+					return true;
+
+				return Position.Equals(other.Position);
+			}
+			
+			public override bool Equals(object obj)
+			{
+				if (obj is null)
+					return false;
+				
+				if (ReferenceEquals(this, obj))
+					return true;
+				
+				if (obj.GetType() != GetType())
+					return false;
+
+				return Equals((Node)obj);
+			}
+			
+			public override int GetHashCode()
+			{
+				return Position.GetHashCode();
+			}
+			
+			public static bool operator ==(Node left, Node right)
+			{
+				return Equals(left, right);
+			}
+			
+			public static bool operator !=(Node left, Node right)
+			{
+				return !Equals(left, right);
+			}
 		}
 
 		[Flags]
