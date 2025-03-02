@@ -37,6 +37,8 @@ namespace UI
 
 		private bool refreshEverything;
 		private int refreshLast;
+
+		private bool firstOpened;
 		
 		public void Awake()
 		{
@@ -168,6 +170,12 @@ namespace UI
 				var title = Title.Instance;
 				if (title != null && !title.isActiveAndEnabled)
 					title.Open();
+
+				if (!firstOpened)
+				{
+					firstOpened = true;
+					UnityEngine.Debug.Log("Enter 'help' to view a list of available console commands");
+				}
 			}
 
 			gameObject.SetActive(state);
