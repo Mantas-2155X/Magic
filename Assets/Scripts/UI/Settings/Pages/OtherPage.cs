@@ -19,6 +19,7 @@ namespace UI.Settings.Pages
 
 		private readonly List<string> cursorElementKeys = new ()
 		{
+			"SETTINGS_DEFAULT",
 			"SETTINGS_ELEMENT_ENERGY", 
 			"SETTINGS_ELEMENT_HEALTH", 
 			"SETTINGS_ELEMENT_MANA", 
