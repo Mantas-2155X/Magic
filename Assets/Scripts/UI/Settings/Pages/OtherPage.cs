@@ -54,16 +54,37 @@ namespace UI.Settings.Pages
 			
 			CursorSizeDropdown.SetOptions(cursorSizeKeys);
 			CursorSizeDropdown.SetValueWithoutNotify(Convert.ToInt32(cursorSize.Value));
+
+			updateSizeDropdown();
 		}
 
 		public void OnCursorElementChanged(int value)
 		{
 			SettingsManager.Instance.SetSetting("other-cursorelement", value);
+			
+			updateSizeDropdown();
 		}
 		
 		public void OnCursorSizeChanged(int value)
 		{
 			SettingsManager.Instance.SetSetting("other-cursorsize", value);
+		}
+
+		private void updateSizeDropdown()
+		{
+			// TODO: Windows build doesn't change size, why?
+			// Default cursor can't change size
+
+			if (Application.platform == RuntimePlatform.WindowsPlayer || SettingsManager.Instance.GetInt("other-cursorelement") == 0)
+			{
+				CursorSizeDropdown.Dropdown.interactable = false;
+				CursorSizeDropdown.Dropdown.image.color = Color.gray;
+			}
+			else
+			{
+				CursorSizeDropdown.Dropdown.interactable = true;
+				CursorSizeDropdown.Dropdown.image.color = Color.black;
+			}
 		}
 	}
 }
