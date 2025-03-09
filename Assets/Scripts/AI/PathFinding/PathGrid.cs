@@ -1,7 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using AI.PathFinding.Enums;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -13,41 +17,52 @@ namespace AI.PathFinding
 		[Header("Grid Settings")]
 		[SerializeField]
 		public Vector3 Offset = Vector3.zero;
-		
 		[SerializeField]
 		public Vector3 Size = Vector3.one;
 		
 		[SerializeField]
 		public float Distance = 1f;
 
+		[SerializeField]
+		public float Radius = 0.1f;
+
 		[Header("Filter Settings")]
 		[SerializeField]
 		public LayerMask FilterMask = -1;
 
 		[Header("Draw Settings")]
+		[SerializeField]
 		public bool DrawBounds = true;
-		
+		[SerializeField]
 		public bool DrawNodes = true;
-
+		[SerializeField]
 		public bool DrawConnections = true;
-
+		[SerializeField]
 		public bool DrawPath = true;
 		
 		public ENodeAvailabilityFlags DrawFlags = (ENodeAvailabilityFlags)~0;
 		
-		private Node[][][] nodes;
+		[Header("Job Settings")]
+		public int BatchCount = 64;
+		
+		[Header("Path Finding")]
+		[SerializeField]
+		public Vector3 Start;
+		[SerializeField]
+		public Vector3 End;
+
+		private NativeParallelMultiHashMap<int, int> connections;
+		private NativeArray<SNode> nodes;
+		
+		private NativeHashSet<int> searchedNodes;
+		private NativeList<int> toSearchNodes;
+		
+		private NativeList<SNode> resultingPath;
 		
 		private int xSize;
 		private int ySize;
 		private int zSize;
 
-		private readonly HashSet<Node> searchedNodes = new ();
-		private readonly HashSet<Node> toSearchNodes = new ();
-		private readonly List<Node> resultingPath = new ();
-
-		public Vector3 Start;
-		public Vector3 End;
-		
 		#region MonoBehaviour
 
 		public void Update()
@@ -56,439 +71,641 @@ namespace AI.PathFinding
 			createStopwatch.Start();
 			CreateGrid();
 			createStopwatch.Stop();
-			Debug.Log($"Creating grid [sync] (size {xSize * ySize * zSize}) took {createStopwatch.ElapsedMilliseconds}ms");
-
+			Debug.Log($"Creating grid [job] (size {xSize * ySize * zSize}) took {createStopwatch.ElapsedMilliseconds}ms");
+			
 			var findStopwatch = new Stopwatch();
 			findStopwatch.Start();
 			FindPath(Start, End);
 			findStopwatch.Stop();
-			Debug.Log($"Finding path [sync] took {findStopwatch.ElapsedMilliseconds}ms");
+			Debug.Log($"Finding path [job] took {findStopwatch.ElapsedMilliseconds}ms");
 		}
-		
+
+		public void OnDestroy()
+		{
+			if (connections.IsCreated)
+				connections.Dispose();
+
+			if (nodes.IsCreated)
+				nodes.Dispose();
+			
+			if (searchedNodes.IsCreated)
+				searchedNodes.Dispose();
+			
+			if (toSearchNodes.IsCreated)
+				toSearchNodes.Dispose();
+			
+			if (resultingPath.IsCreated)
+				resultingPath.Dispose();
+		}
+
 #if UNITY_EDITOR
 		public void OnDrawGizmos()
 		{
-			if (nodes == null)
+			if (!nodes.IsCreated)
 				return;
 			
 			if (DrawBounds)
 				Gizmos.DrawWireCube(transform.position + Offset, Size);
 
-			for (var x = 0; x < nodes.Length; x++)
+			if (DrawNodes)
 			{
-				for (var y = 0; y < nodes[x].Length; y++)
+				for (var i = 0; i < nodes.Length; i++)
 				{
-					for (var z = 0; z < nodes[x][y].Length; z++)
+					var node = nodes[i];
+					if ((node.Availability & DrawFlags) == 0)
+						continue;
+
+					if (node.Availability == ENodeAvailabilityFlags.Available)
 					{
-						var node = nodes[x][y][z];
-						if ((node.Availability & DrawFlags) == 0)
-							continue;
-						
-						if (DrawConnections)
-						{
-							foreach (var pair in node.Connections)
-							{
-								if (pair.Value < 1.01f)
-								{
-									Gizmos.color = Color.yellow;
-								}
-								else if (pair.Value > 1.01f)
-								{
-									Gizmos.color = new Color(1f, 0.5f, 0f);
-								}
-								else
-								{
-									Gizmos.color = Color.green;
-								}
-								
-								Gizmos.DrawLine(node.Position, pair.Key.Position);
-							}
-						}
-						
-						if (DrawNodes)
-						{
-							if (node.Availability == ENodeAvailabilityFlags.Available)
-							{
-								Gizmos.color = Color.green;
-							}
-							else if ((node.Availability & ENodeAvailabilityFlags.InsideObject) != 0)
-							{
-								Gizmos.color = Color.red;
-							}
-							else if ((node.Availability & ENodeAvailabilityFlags.NoConnections) != 0)
-							{
-								Gizmos.color = Color.yellow;
-							}
-							
-							Gizmos.DrawSphere(node.Position, 0.1f);
-						}
+						Gizmos.color = Color.green;
 					}
+					else if ((node.Availability & ENodeAvailabilityFlags.InsideObject) != 0)
+					{
+						Gizmos.color = Color.red;
+					}
+					else if ((node.Availability & ENodeAvailabilityFlags.NoConnections) != 0)
+					{
+						Gizmos.color = Color.yellow;
+					}
+							
+					Gizmos.DrawSphere(node.WorldPosition, Radius);
+				}
+			}
+
+			if (DrawConnections)
+			{
+				Gizmos.color = Color.green;
+
+				foreach (var pair in connections)
+				{
+					var node = nodes[pair.Key];
+					if ((node.Availability & DrawFlags) == 0)
+						continue;
+
+					var neighborNode = nodes[pair.Value];
+					Gizmos.DrawLine(node.WorldPosition, neighborNode.WorldPosition);
 				}
 			}
 			
-			if (DrawPath && resultingPath != null && resultingPath.Count > 1)
+			if (DrawPath && resultingPath.IsCreated && resultingPath.Length > 0)
 			{
 				Gizmos.color = Color.cyan;
 				
-				for (var i = 0; i < resultingPath.Count - 1; i++)
-					Gizmos.DrawLine(resultingPath[i].Position, resultingPath[i + 1].Position);
+				for (var i = 0; i < resultingPath.Length - 1; i++)
+					Gizmos.DrawLine(resultingPath[i].WorldPosition, resultingPath[i + 1].WorldPosition);
 			}
 		}
 #endif
 		
 		#endregion
 
-		#region PathGrid
+		#region Path Grid
 
 		public void CreateGrid()
 		{
-			var position = transform.position + Offset - Size / 2f;
-			
 			xSize = (int)(Size.x / Distance) + 1;
 			ySize = (int)(Size.y / Distance) + 1;
 			zSize = (int)(Size.z / Distance) + 1;
 
-			nodes = new Node[xSize][][];
-			for (var i = 0; i < xSize; i++)
-			{
-				nodes[i] = new Node[ySize][];
-				for (var k = 0; k < ySize; k++)
-					nodes[i][k] = new Node[zSize];
-			}
+			if (connections.IsCreated)
+				connections.Dispose();
 
-			for (var x = 0; x < xSize; x++)
-			{
-				for (var y = 0; y < ySize; y++)
-				{
-					for (var z = 0; z < zSize; z++)
-					{
-						var node = new Node(new Vector3(x * Distance, y * Distance, z * Distance) + position);
-						node.Availability = ENodeAvailabilityFlags.Available;
-						node.Connections = new Dictionary<Node, float>();
-						
-						nodes[x][y][z] = node;
-					}
-				}
-			}
+			if (nodes.IsCreated)
+				nodes.Dispose();
+
+			if (searchedNodes.IsCreated)
+				searchedNodes.Dispose();
 			
-			findInsideObjects();
-			findNeighborConnections();
+			if (toSearchNodes.IsCreated)
+				toSearchNodes.Dispose();
+			
+			if (resultingPath.IsCreated)
+				resultingPath.Dispose();
+			
+			connections = new NativeParallelMultiHashMap<int, int>(0, Allocator.Persistent);
+			nodes = new NativeArray<SNode>(xSize * ySize * zSize, Allocator.Persistent);
+
+			searchedNodes = new NativeHashSet<int>(0, Allocator.Persistent);
+			toSearchNodes = new NativeList<int>(0, Allocator.Persistent);
+
+			resultingPath = new NativeList<SNode>(Allocator.Persistent);
+			
+			#region Initialize Nodes
+
+			var initializeNodesJob = new InitializeNodesJob
+			{
+				Nodes = nodes,
+				Position = transform.position + Offset - Size / 2f,
+				Distance = Distance,
+				XSize = xSize,
+				YSize = ySize,
+				ZSize = zSize
+			};
+
+			var initializeNodesHandle = initializeNodesJob.Schedule();
+
+			#endregion
+			
+			#region Filter Inside Objects
+
+			var nodesLength = nodes.Length;
+			
+			var overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.TempJob);
+			var overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.TempJob);
+
+			var initializeOverlapsJob = new InitializeOverlapsJob();
+			initializeOverlapsJob.Nodes = nodes;
+			initializeOverlapsJob.Commands = overlapCommands;
+			initializeOverlapsJob.Radius = Radius;
+			initializeOverlapsJob.Query = new QueryParameters(FilterMask);
+
+			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(nodesLength, BatchCount, initializeNodesHandle);
+			
+			var overlapHandle =  OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, BatchCount, 1, initializeOverlapsHandle);
+
+			var filterNodesJob = new FilterNodesJob
+			{
+				Nodes = nodes,
+				Hits = overlapResults
+			};
+
+			var filterNodesHandle = filterNodesJob.Schedule(overlapResults.Length, BatchCount, overlapHandle);
+			
+			#endregion
+
+			#region Find Neighbor Connections
+
+			var findNeighborConnectionsJob = new FindNeighborConnectionsJob
+			{
+				Nodes = nodes,
+				Connections = connections,
+				XSize = xSize,
+				YSize = ySize,
+				ZSize = zSize
+			};
+
+			var findNeighborConnectionsHandle = findNeighborConnectionsJob.Schedule(nodes.Length, filterNodesHandle);
+			findNeighborConnectionsHandle.Complete();
+
+			#endregion
+
+			#region Filter Raycast Neighbors
+
+			var connectionsLength = connections.Count();
+
+			var raycastPairs = new NativeArray<KeyValue<int, int>>(connectionsLength, Allocator.TempJob);
+			var raycastCommands = new NativeArray<RaycastCommand>(connectionsLength, Allocator.TempJob);
+			var raycastResults = new NativeArray<RaycastHit>(connectionsLength, Allocator.TempJob);
+
+			var initializeRaycastsJob = new InitializeRaycastsJob
+			{
+				Nodes = nodes,
+				Connections = connections,
+				Commands = raycastCommands,
+				Pairs = raycastPairs,
+				FilterMask = FilterMask
+			};
+
+			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(findNeighborConnectionsHandle);
+			
+			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, BatchCount, 1, initializeRaycastsHandle);
+
+			var filterConnectionsJob = new FilterConnectionsJob
+			{
+				Connections = connections,
+				Pairs = raycastPairs,
+				Hits = raycastResults
+			};
+
+			var filterConnectionsHandle = filterConnectionsJob.Schedule(raycastResults.Length, raycastHandle);
+			filterConnectionsHandle.Complete();
+			
+			#endregion
+
+			overlapCommands.Dispose();
+			overlapResults.Dispose();
+			raycastPairs.Dispose();
+			raycastCommands.Dispose();
+			raycastResults.Dispose();
 		}
 
-		public Node FindClosestNode(Vector3 position)
+		public void FindPath(Vector3 start, Vector3 end)
 		{
-			Node closestNode = null;
-			var closestDistance = Mathf.Infinity;
-			
-			for (var x = 0; x < xSize; x++)
+			var findPathJob = new FindPathJob
 			{
-				var xArray = nodes[x];
-				for (var y = 0; y < ySize; y++)
-				{
-					var yArray = xArray[y];
-					for (var z = 0; z < zSize; z++)
-					{
-						var node = yArray[z];
-						
-						var dist = Vector3.Distance(node.Position, position) / Distance;
-						if (dist > closestDistance)
-							continue;
-						
-						closestDistance = dist;
-						closestNode = node;
-					}
-				}
-			}
-			
-			return closestNode;
-		}
+				Nodes = nodes,
+				Connections = connections,
+				ResultingPath = resultingPath,
+				SearchedNodes = searchedNodes,
+				ToSearchNodes = toSearchNodes,
+				Distance = Distance,
+				StartPosition = start,
+				EndPosition = end
+			};
 
-		public List<Node> FindPath(Vector3 start, Vector3 end)
-		{
-			searchedNodes.Clear();
-			toSearchNodes.Clear();
-			resultingPath.Clear();
-			
-			for (var x = 0; x < xSize; x++)
-			{
-				var xArray = nodes[x];
-				for (var y = 0; y < ySize; y++)
-				{
-					var yArray = xArray[y];
-					for (var z = 0; z < zSize; z++)
-					{
-						yArray[z].ClearPathCalculations();
-					}
-				}
-			}
-			
-			var distanceBetweenPoints = Vector3.Distance(start, end) / Distance;
-
-			var startNode = FindClosestNode(start);
-			startNode.GCost = 0f;
-			startNode.HCost = distanceBetweenPoints;
-			startNode.FCost = distanceBetweenPoints;
-			
-			var endNode = FindClosestNode(end);
-
-			toSearchNodes.Add(startNode);
-			
-			while (toSearchNodes.Count > 0)
-			{
-				Node node = null;
-
-				// Find first node since hashset doesn't have indexer
-				foreach (var searchingNode in toSearchNodes)
-				{
-					node = searchingNode;
-					break;
-				}
-				
-				foreach (var searchingNode in toSearchNodes)
-				{
-					if (searchingNode.FCost < node.FCost || searchingNode.FCost == node.FCost && searchingNode.HCost < node.HCost)
-						node = searchingNode;
-				}
-
-				toSearchNodes.Remove(node);
-				searchedNodes.Add(node);
-
-				if (node == endNode)
-				{
-					while (endNode != startNode)
-					{
-						resultingPath.Add(endNode);
-						endNode = endNode.Connection;
-					}
-			
-					resultingPath.Add(startNode);
-					return resultingPath;
-				}
-				
-				calculateNeighbors(node, end);
-			}
-
-			return null;
+			var findPathHandle = findPathJob.Schedule();
+			findPathHandle.Complete();
 		}
 		
 		#endregion
 
-		#region Internals
-
-		private void findInsideObjects()
+		[BurstCompile]
+		public struct SNode
 		{
-			var renderers = GetComponentsInChildren<Renderer>();
-			for (var i = 0; i < renderers.Length; i++)
+			#region Node
+
+			public int Index;
+			
+			public int3 GridPosition;
+			public float3 WorldPosition;
+
+			public ENodeAvailabilityFlags Availability;
+			
+			#endregion
+			
+			#region Pathing
+
+			public float GCost;
+			public float HCost;
+			public float FCost;
+
+			public int Connection;
+
+			#endregion
+		}
+
+		[BurstCompile]
+		public struct InitializeNodesJob : IJob
+		{
+			[WriteOnly]
+			public NativeArray<SNode> Nodes;
+
+			public float3 Position;
+
+			public float Distance;
+			
+			public int XSize;
+			public int YSize;
+			public int ZSize;
+
+			public void Execute()
 			{
-				var rend = renderers[i];
+				var index = 0;
 				
-				// Only check objects that are in the blocking mask
-				if ((FilterMask.value & (1 << rend.gameObject.layer)) == 0)
-					continue;
-
-				var bounds = rend.bounds;
-
-				for (var x = 0; x < nodes.Length; x++)
+				for (var x = 0; x < XSize; x++)
 				{
-					var xArray = nodes[x];
-					for (var y = 0; y < xArray.Length; y++)
+					for (var y = 0; y < YSize; y++)
 					{
-						var yArray = xArray[y];
-						for (var z = 0; z < yArray.Length; z++)
+						for (var z = 0; z < ZSize; z++)
 						{
-							var node = yArray[z];
-							
-							// If a node is inside bounds of an object, mark it unavailable
-							if (!bounds.Contains(node.Position))
-								continue;
+							int3 gridPosition;
+							gridPosition.x = x;
+							gridPosition.y = y;
+							gridPosition.z = z;
 
-							var availability = node.Availability;
-							
-							// Remove available flag
-							availability &= ~ENodeAvailabilityFlags.Available;
-							
-							// Add inside object flag
-							availability |= ENodeAvailabilityFlags.InsideObject;
-
-							node.Availability = availability;
+							float3 worldPosition;
+							worldPosition.x = x * Distance + Position.x;
+							worldPosition.y = y * Distance + Position.y;
+							worldPosition.z = z * Distance + Position.z;
+						
+							Nodes[index] = new SNode
+							{
+								Index = index,
+								GridPosition = gridPosition,
+								WorldPosition = worldPosition,
+								Availability = ENodeAvailabilityFlags.Available,
+								GCost = float.MaxValue,
+								HCost = 0f,
+								FCost = 0f,
+								Connection = -1
+							};
+						
+							index++;
 						}
 					}
 				}
 			}
 		}
 
-		private void findNeighborConnections()
+		[BurstCompile]
+		public struct InitializeOverlapsJob : IJobParallelFor
 		{
-			for (var x = 0; x < nodes.Length; x++)
-			{
-				var xArray = nodes[x];
-				for (var y = 0; y < xArray.Length; y++)
-				{
-					var yArray = xArray[y];
-					for (var z = 0; z < yArray.Length; z++)
-					{
-						var node = yArray[z];
-						
-						getConnectionsAndCosts(node, x, y, z);
-						
-						// If a node does not have any connections, mark it unavailable
-						if (node.Connections.Count != 0)
-							continue;
-						
-						var availability = node.Availability;
-							
-						// Remove available flag
-						availability &= ~ENodeAvailabilityFlags.Available;
-							
-						// Add no connections flag
-						availability |= ENodeAvailabilityFlags.NoConnections;
+			[ReadOnly]
+			public NativeArray<SNode> Nodes;
+			
+			[WriteOnly]
+			public NativeArray<OverlapSphereCommand> Commands;
+			
+			public float Radius;
 
-						node.Availability = availability;
-					}
-				}
+			public QueryParameters Query;
+			
+			public void Execute(int index)
+			{
+				Commands[index] = new OverlapSphereCommand(Nodes[index].WorldPosition, Radius, Query);
 			}
 		}
 
-		private void getConnectionsAndCosts(Node node, int x, int y, int z)
+		[BurstCompile]
+		public struct FilterNodesJob : IJobParallelFor
 		{
-			for (var cX = -1; cX < 2; cX++)
+			public NativeArray<SNode> Nodes;
+
+			[ReadOnly]
+			public NativeArray<ColliderHit> Hits;
+
+			public void Execute(int index)
 			{
-				for (var cY = -1; cY < 2; cY++)
-				{
-					for (var cZ = -1; cZ < 2; cZ++)
-					{
-						var neighborX = x + cX;
-						if (neighborX < 0 || neighborX >= xSize) 
-							continue;
-						
-						var neighborY = y + cY;
-						if (neighborY < 0 || neighborY >= ySize) 
-							continue;
+				if (Hits[index].instanceID == 0)
+					return;
 
-						var neighborZ = z + cZ;
-						if (neighborZ < 0 || neighborZ >= zSize) 
-							continue;
-						
-						var neighborNode = nodes[neighborX][neighborY][neighborZ];
+				var node = Nodes[index];
+				var availability = node.Availability;
+							
+				// Remove available flag
+				availability &= ~ENodeAvailabilityFlags.Available;
+							
+				// Add inside object flag
+				availability |= ENodeAvailabilityFlags.InsideObject;
 
-						// Don't check connections to itself
-						if (neighborNode == node)
-							continue;
-						
-						// Already checked to be a neighbor
-						if (node.Connections.ContainsKey(neighborNode))
-							continue;
-
-						var nodePos = node.Position;
-						var neighborPos = neighborNode.Position;
-						
-						var direction = neighborPos - nodePos;
-						
-						if (Physics.Raycast(nodePos, direction, direction.magnitude, FilterMask))
-							continue;
-
-						var cost = Vector3.Distance(nodePos, neighborPos) / Distance;
-						
-						node.Connections[neighborNode] = cost;
-						neighborNode.Connections[node] = cost;
-					}
-				}
+				node.Availability = availability;
+				Nodes[index] = node;
 			}
 		}
-
-		private void calculateNeighbors(Node node, Vector3 end)
+		
+		[BurstCompile]
+		public struct FindNeighborConnectionsJob : IJobFor
 		{
-			foreach (var pair in node.Connections)
+			public NativeArray<SNode> Nodes;
+
+			[WriteOnly]
+			public NativeParallelMultiHashMap<int, int> Connections;
+
+			public int XSize;
+			public int YSize;
+			public int ZSize;
+			
+			public void Execute(int index)
 			{
-				var neighborNode = pair.Key;
-				if (neighborNode.Availability != ENodeAvailabilityFlags.Available)
-					continue;
+				var node = Nodes[index];
 				
-				if (searchedNodes.Contains(neighborNode))
-					continue;
+				// If a node does not have any connections, mark it unavailable
+				if (findConnections(node))
+					return;
+				
+				var availability = node.Availability;
+				
+				// Remove available flag
+				availability &= ~ENodeAvailabilityFlags.Available;
+				
+				// Add no connections flag
+				availability |= ENodeAvailabilityFlags.NoConnections;
+				
+				node.Availability = availability;
+				
+				Nodes[index] = node;
+			}
+			
+			private bool findConnections(SNode node)
+			{
+				var index = node.Index;
+				var pos = node.GridPosition;
+				
+				var x = pos.x;
+				var y = pos.y;
+				var z = pos.z;
 
-				var gCost = node.GCost + pair.Value;
-				if (gCost < neighborNode.GCost)
+				var neighbors = new NativeList<int>(0, Allocator.Temp);
+				
+				for (var cX = -1; cX < 2; cX++)
 				{
-					var hCost = Vector3.Distance(neighborNode.Position, end) / Distance;
+					for (var cY = -1; cY < 2; cY++)
+					{
+						for (var cZ = -1; cZ < 2; cZ++)
+						{
+							var neighborX = x + cX;
+							if (neighborX < 0 || neighborX >= XSize) 
+								continue;
+						
+							var neighborY = y + cY;
+							if (neighborY < 0 || neighborY >= YSize) 
+								continue;
+
+							var neighborZ = z + cZ;
+							if (neighborZ < 0 || neighborZ >= ZSize) 
+								continue;
+
+							var neighborIndex = getNodeIndex(neighborX, neighborY, neighborZ);
+							if (neighborIndex == index || neighbors.Contains(neighborIndex))
+								continue;
+							
+							Connections.Add(index, neighborIndex);
+							neighbors.Add(neighborIndex);
+						}
+					}
+				}
+
+				var any = neighbors.Length != 0;
+				neighbors.Dispose();
+				
+				return any;
+			}
+			
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			private int getNodeIndex(int x, int y, int z)
+			{
+				return x * (ZSize * YSize) + y * ZSize + z;
+			}
+		}
+
+		[BurstCompile]
+		public struct InitializeRaycastsJob : IJob
+		{
+			[ReadOnly]
+			public NativeArray<SNode> Nodes;
+			
+			[ReadOnly]
+			public NativeParallelMultiHashMap<int, int> Connections;
+			
+			[WriteOnly]
+			public NativeArray<RaycastCommand> Commands;
+
+			[WriteOnly]
+			public NativeArray<KeyValue<int, int>> Pairs;
+			
+			public LayerMask FilterMask;
+			
+			public void Execute()
+			{
+				var query = new QueryParameters(FilterMask);
+
+				var index = 0;
+				foreach (var pair in Connections)
+				{
+					var nodePos = Nodes[pair.Key].WorldPosition;
+					var neighborPos = Nodes[pair.Value].WorldPosition;
+
+					float3 direction;
+					direction.x = neighborPos.x - nodePos.x;
+					direction.y = neighborPos.y - nodePos.y;
+					direction.z = neighborPos.z - nodePos.z;
+				
+					Commands[index] = new RaycastCommand(nodePos, direction, query, math.length(direction));
+					Pairs[index] = pair;
+
+					index++;
+				}
+			}
+		}
+
+		[BurstCompile]
+		public struct FilterConnectionsJob : IJobFor
+		{
+			[WriteOnly]
+			public NativeParallelMultiHashMap<int, int> Connections;
+
+			[ReadOnly]
+			public NativeArray<KeyValue<int, int>> Pairs;
+
+			[ReadOnly]
+			public NativeArray<RaycastHit> Hits;
+
+			public void Execute(int index)
+			{
+				if (Hits[index].colliderInstanceID == 0)
+					return;
+
+				var pair = Pairs[index];
+				
+				Connections.Remove(pair.Key, pair.Value);
+				Connections.Remove(pair.Value, pair.Key);
+			}
+		}
+
+		[BurstCompile]
+		public struct FindPathJob : IJob
+		{
+			public NativeArray<SNode> Nodes;
+			
+			[ReadOnly]
+			public NativeParallelMultiHashMap<int, int> Connections;
+			
+			[WriteOnly]
+			public NativeList<SNode> ResultingPath;
+
+			public NativeHashSet<int> SearchedNodes;
+			public NativeList<int> ToSearchNodes;
+			
+			public float Distance;
+			
+			public float3 StartPosition;
+			public float3 EndPosition;
+			
+			public void Execute()
+			{
+				ResultingPath.Clear();
+				SearchedNodes.Clear();
+				ToSearchNodes.Clear();
+				
+				var distanceBetweenPoints = math.distance(StartPosition, EndPosition) / Distance;
+				
+				var startNodeIndex = findClosestNode(StartPosition);
+				
+				var startNode = Nodes[startNodeIndex];
+				startNode.GCost = 0f;
+				startNode.HCost = distanceBetweenPoints;
+				startNode.FCost = distanceBetweenPoints;
+				Nodes[startNodeIndex] = startNode;
+				
+				var endNodeIndex = findClosestNode(EndPosition);
+
+				ToSearchNodes.Add(startNodeIndex);
+				
+				while (ToSearchNodes.Length > 0)
+				{
+					var nodeIndex = ToSearchNodes[0];
+					var node = Nodes[nodeIndex];
 					
-					neighborNode.Connection = node;
+					for (var i = 0; i < ToSearchNodes.Length; i++)
+					{
+						var searchingNodeIndex = ToSearchNodes[i];
+						var searchingNode = Nodes[searchingNodeIndex];
+						
+						if (searchingNode.FCost < node.FCost || searchingNode.FCost == node.FCost && searchingNode.HCost < node.HCost)
+							nodeIndex = searchingNodeIndex;
+					}
+
+					ToSearchNodes.RemoveAt(ToSearchNodes.IndexOf(nodeIndex));
+					SearchedNodes.Add(nodeIndex);
+
+					if (nodeIndex == endNodeIndex)
+					{
+						while (endNodeIndex != startNodeIndex)
+						{
+							var endNode = Nodes[endNodeIndex];
+							
+							ResultingPath.Add(endNode);
+							endNodeIndex = endNode.Connection;
+						}
+			
+						ResultingPath.Add(startNode);
+						return;
+					}
+				
+					calculateNeighbors(nodeIndex, EndPosition);
+				}
+			}
+
+			private int findClosestNode(float3 worldPosition)
+			{
+				var closestDistance = Mathf.Infinity;
+				var closestNode = -1;
+
+				for (var i = 0; i < Nodes.Length; i++)
+				{
+					var dist = math.distancesq(Nodes[i].WorldPosition, worldPosition);
+					if (dist > closestDistance)
+						continue;
+						
+					closestDistance = dist;
+					closestNode = i;
+				}
+			
+				return closestNode;
+			}
+			
+			private void calculateNeighbors(int nodeIndex, float3 endPosition)
+			{
+				var node = Nodes[nodeIndex];
+
+				var values = Connections.GetValuesForKey(nodeIndex);
+				foreach (var neighborNodeIndex in values)
+				{
+					var neighborNode = Nodes[neighborNodeIndex];
+					if (neighborNode.Availability != ENodeAvailabilityFlags.Available)
+						continue;
+				
+					if (SearchedNodes.Contains(neighborNodeIndex))
+						continue;
+
+					var nodePos = node.WorldPosition;
+					var neighborPos = neighborNode.WorldPosition;
+					
+					var gCost = node.GCost + math.distance(nodePos, neighborPos) / Distance;
+					if (gCost >= neighborNode.GCost)
+						continue;
+					
+					var hCost = math.distance(neighborPos, endPosition) / Distance;
+					
+					neighborNode.Connection = nodeIndex;
 					neighborNode.GCost = gCost;
 					neighborNode.HCost = hCost;
 					neighborNode.FCost = gCost + hCost;
+					Nodes[neighborNodeIndex] = neighborNode;
 				
-					toSearchNodes.Add(neighborNode);
+					if (!ToSearchNodes.Contains(neighborNodeIndex))
+						ToSearchNodes.Add(neighborNodeIndex);
 				}
-			}
-		}
-
-		#endregion
-
-		public class Node : IEquatable<Node>
-		{
-			public readonly Vector3 Position;
-			
-			public ENodeAvailabilityFlags Availability;
-			public Dictionary<Node, float> Connections;
-			
-			public float GCost;
-			public float HCost;
-			public float FCost;
-
-			public Node Connection;
-
-			public Node(Vector3 position)
-			{
-				Position = position;
-				ClearPathCalculations();
-			}
-			
-			public void ClearPathCalculations()
-			{
-				GCost = float.MaxValue;
-				HCost = 0f;
-				FCost = 0f;
-				Connection = null;
-			}
-
-			public bool Equals(Node other)
-			{
-				if (other is null)
-					return false;
-				
-				if (ReferenceEquals(this, other))
-					return true;
-
-				return Position.Equals(other.Position);
-			}
-			
-			public override bool Equals(object obj)
-			{
-				if (obj is null)
-					return false;
-				
-				if (ReferenceEquals(this, obj))
-					return true;
-				
-				if (obj.GetType() != GetType())
-					return false;
-
-				return Equals((Node)obj);
-			}
-			
-			public override int GetHashCode()
-			{
-				return Position.GetHashCode();
-			}
-			
-			public static bool operator ==(Node left, Node right)
-			{
-				return Equals(left, right);
-			}
-			
-			public static bool operator !=(Node left, Node right)
-			{
-				return !Equals(left, right);
 			}
 		}
 	}
