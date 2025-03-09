@@ -46,6 +46,8 @@ namespace AI.PathFinding
 		public int BatchCount = 64;
 		
 		[Header("Path Finding")]
+		[SerializeField][Range(-1f, 0f)]
+		public float Inaccuracy;
 		[SerializeField]
 		public Vector3 Start;
 		[SerializeField]
@@ -128,6 +130,9 @@ namespace AI.PathFinding
 						Gizmos.color = Color.yellow;
 					}
 							
+					if (searchedNodes.Contains(i))
+						Gizmos.color = Color.black;
+					
 					Gizmos.DrawSphere(node.WorldPosition, Radius);
 				}
 			}
@@ -299,6 +304,7 @@ namespace AI.PathFinding
 				SearchedNodes = searchedNodes,
 				ToSearchNodes = toSearchNodes,
 				Distance = Distance,
+				Inaccuracy = Inaccuracy,
 				StartPosition = start,
 				EndPosition = end
 			};
@@ -597,6 +603,7 @@ namespace AI.PathFinding
 			public NativeList<int> ToSearchNodes;
 			
 			public float Distance;
+			public float Inaccuracy;
 			
 			public float3 StartPosition;
 			public float3 EndPosition;
@@ -691,7 +698,7 @@ namespace AI.PathFinding
 					var nodePos = node.WorldPosition;
 					var neighborPos = neighborNode.WorldPosition;
 					
-					var gCost = node.GCost + math.distance(nodePos, neighborPos) / Distance;
+					var gCost = node.GCost + (math.distance(nodePos, neighborPos) / Distance + Inaccuracy);
 					if (gCost >= neighborNode.GCost)
 						continue;
 					
