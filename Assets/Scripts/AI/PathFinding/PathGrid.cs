@@ -62,7 +62,7 @@ namespace AI.PathFinding
 			findStopwatch.Start();
 			FindPath(Start, End);
 			findStopwatch.Stop();
-			Debug.Log($"Finding path took {findStopwatch.ElapsedMilliseconds}ms");
+			Debug.Log($"Finding path [sync] took {findStopwatch.ElapsedMilliseconds}ms");
 		}
 		
 #if UNITY_EDITOR
