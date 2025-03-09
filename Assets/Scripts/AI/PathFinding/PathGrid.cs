@@ -22,9 +22,6 @@ namespace AI.PathFinding
 
 		[Header("Filter Settings")]
 		[SerializeField]
-		public bool FilterInsideObjects = true;
-		
-		[SerializeField]
 		public LayerMask FilterMask = -1;
 
 		[Header("Draw Settings")]
@@ -59,7 +56,7 @@ namespace AI.PathFinding
 			createStopwatch.Start();
 			CreateGrid();
 			createStopwatch.Stop();
-			Debug.Log($"Creating grid took {createStopwatch.ElapsedMilliseconds}ms");
+			Debug.Log($"Creating grid [sync] (size {xSize * ySize * zSize}) took {createStopwatch.ElapsedMilliseconds}ms");
 
 			var findStopwatch = new Stopwatch();
 			findStopwatch.Start();
@@ -174,9 +171,7 @@ namespace AI.PathFinding
 				}
 			}
 			
-			if (FilterInsideObjects)
-				findInsideObjects();
-			
+			findInsideObjects();
 			findNeighborConnections();
 		}
 
