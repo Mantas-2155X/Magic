@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using AI.PathFinding.Enums;
 using Unity.Burst;
 using Unity.Collections;
@@ -51,7 +52,7 @@ namespace AI.PathFinding
 		private NativeArray<SNode> nodes;
 		
 		private NativeHashSet<int> searchedNodes;
-		private NativeHashSet<int> toSearchNodes;
+		private NativeList<int> toSearchNodes;
 		
 		private NativeList<SNode> resultingPath;
 
@@ -182,7 +183,7 @@ namespace AI.PathFinding
 			nodes = new NativeArray<SNode>(xSize * ySize * zSize, Allocator.Persistent);
 
 			searchedNodes = new NativeHashSet<int>(0, Allocator.Persistent);
-			toSearchNodes = new NativeHashSet<int>(0, Allocator.Persistent);
+			toSearchNodes = new NativeList<int>(0, Allocator.Persistent);
 
 			resultingPath = new NativeList<SNode>(Allocator.Persistent);
 			
@@ -453,7 +454,6 @@ namespace AI.PathFinding
 			
 			private bool findConnections(SNode node)
 			{
-				var any = false;
 				var index = node.Index;
 				var pos = node.GridPosition;
 				
@@ -461,7 +461,7 @@ namespace AI.PathFinding
 				var y = pos.y;
 				var z = pos.z;
 
-				var neighbors = new NativeHashSet<int>(0, Allocator.Temp);
+				var neighbors = new NativeList<int>(0, Allocator.Temp);
 				
 				for (var cX = -1; cX < 2; cX++)
 				{
@@ -482,25 +482,22 @@ namespace AI.PathFinding
 								continue;
 
 							var neighborIndex = getNodeIndex(neighborX, neighborY, neighborZ);
-							
-							// Don't check connections to itself
-							if (neighborIndex == index)
+							if (neighborIndex == index || neighbors.Contains(neighborIndex))
 								continue;
 							
+							Connections.Add(index, neighborIndex);
 							neighbors.Add(neighborIndex);
-							any = true;
 						}
 					}
 				}
 
-				foreach (var neighbor in neighbors)
-					Connections.Add(index, neighbor);
-				
+				var any = neighbors.Length != 0;
 				neighbors.Dispose();
 				
 				return any;
 			}
 			
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			private int getNodeIndex(int x, int y, int z)
 			{
 				return x * (ZSize * YSize) + y * ZSize + z;
@@ -563,7 +560,9 @@ namespace AI.PathFinding
 					return;
 
 				var pair = Pairs[index];
+				
 				Connections.Remove(pair.Key, pair.Value);
+				Connections.Remove(pair.Value, pair.Key);
 			}
 		}
 
@@ -579,7 +578,7 @@ namespace AI.PathFinding
 			public NativeList<SNode> ResultingPath;
 
 			public NativeHashSet<int> SearchedNodes;
-			public NativeHashSet<int> ToSearchNodes;
+			public NativeList<int> ToSearchNodes;
 			
 			public float Distance;
 			
@@ -606,28 +605,21 @@ namespace AI.PathFinding
 
 				ToSearchNodes.Add(startNodeIndex);
 				
-				while (ToSearchNodes.Count > 0)
+				while (ToSearchNodes.Length > 0)
 				{
-					var nodeIndex = -1;
-
-					// Find first node since hashset doesn't have indexer
-					foreach (var searchingNodeIndex in ToSearchNodes)
-					{
-						nodeIndex = searchingNodeIndex;
-						break;
-					}
-
+					var nodeIndex = ToSearchNodes[0];
 					var node = Nodes[nodeIndex];
 					
-					foreach (var searchingNodeIndex in ToSearchNodes)
+					for (var i = 0; i < ToSearchNodes.Length; i++)
 					{
+						var searchingNodeIndex = ToSearchNodes[i];
 						var searchingNode = Nodes[searchingNodeIndex];
 						
 						if (searchingNode.FCost < node.FCost || searchingNode.FCost == node.FCost && searchingNode.HCost < node.HCost)
 							nodeIndex = searchingNodeIndex;
 					}
 
-					ToSearchNodes.Remove(nodeIndex);
+					ToSearchNodes.RemoveAt(ToSearchNodes.IndexOf(nodeIndex));
 					SearchedNodes.Add(nodeIndex);
 
 					if (nodeIndex == endNodeIndex)
@@ -680,11 +672,14 @@ namespace AI.PathFinding
 					if (SearchedNodes.Contains(neighborNodeIndex))
 						continue;
 
-					var gCost = node.GCost + math.distance(node.WorldPosition, neighborNode.WorldPosition) / Distance;
+					var nodePos = node.WorldPosition;
+					var neighborPos = neighborNode.WorldPosition;
+					
+					var gCost = node.GCost + math.distance(nodePos, neighborPos) / Distance;
 					if (gCost >= neighborNode.GCost)
 						continue;
 					
-					var hCost = math.distance(neighborNode.WorldPosition, endPosition) / Distance;
+					var hCost = math.distance(neighborPos, endPosition) / Distance;
 					
 					neighborNode.Connection = nodeIndex;
 					neighborNode.GCost = gCost;
@@ -692,7 +687,8 @@ namespace AI.PathFinding
 					neighborNode.FCost = gCost + hCost;
 					Nodes[neighborNodeIndex] = neighborNode;
 				
-					ToSearchNodes.Add(neighborNodeIndex);
+					if (!ToSearchNodes.Contains(neighborNodeIndex))
+						ToSearchNodes.Add(neighborNodeIndex);
 				}
 			}
 		}

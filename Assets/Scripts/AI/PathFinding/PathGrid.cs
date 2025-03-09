@@ -382,7 +382,9 @@ namespace AI.PathFinding
 						var nodePos = node.Position;
 						var neighborPos = neighborNode.Position;
 						
-						if (Physics.Raycast(nodePos, neighborPos - nodePos, float.MaxValue, FilterMask))
+						var direction = neighborPos - nodePos;
+						
+						if (Physics.Raycast(nodePos, direction, direction.magnitude, FilterMask))
 							continue;
 
 						var cost = Vector3.Distance(nodePos, neighborPos) / Distance;
