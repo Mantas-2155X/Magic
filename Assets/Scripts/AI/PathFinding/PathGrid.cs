@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using AI.PathFinding.Enums;
 using Unity.Burst;
 using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -21,7 +20,7 @@ namespace AI.PathFinding
 		[SerializeField]
 		public Vector3 Size = Vector3.one;
 		
-		[SerializeField][Range(0.1f, 5f)]
+		[SerializeField][Range(0.1f, 10f)]
 		public float Distance = 1f;
 
 		[SerializeField][Range(0.01f, 5f)]
@@ -54,8 +53,8 @@ namespace AI.PathFinding
 		[SerializeField]
 		public Vector3 End;
 
-		private NativeParallelMultiHashMap<int, SIndexWithCost> connections;
 		private NativeArray<SNode> nodes;
+		private NativeArray<SIndexWithCost> neighbors;
 		
 		private NativeHashSet<int> searchedNodes;
 		private NativeList<int> toSearchNodes;
@@ -78,7 +77,7 @@ namespace AI.PathFinding
 			
 			var findStopwatch = new Stopwatch();
 			findStopwatch.Start();
-			FindPath(Start, End);
+			FindPath();
 			findStopwatch.Stop();
 			Debug.Log($"Finding path [job] took {findStopwatch.ElapsedMilliseconds}ms");
 		}
@@ -127,31 +126,22 @@ namespace AI.PathFinding
 
 			if (DrawConnections)
 			{
-				Gizmos.color = Color.green;
+				Gizmos.color = new Color(1f, 0.5f, 0f);
 
-				foreach (var pair in connections)
+				for (var i = 0; i < nodes.Length; i++)
 				{
-					var node = nodes[pair.Key];
-					if ((node.Availability & DrawFlags) == 0)
-						continue;
-
-					var neighborIndex = pair.Value.Index;
-					var cost = pair.Value.Cost;
-
-					if (cost < 1.01f)
-					{
-						Gizmos.color = Color.yellow;
-					}
-					else if (cost > 1.01f)
-					{
-						Gizmos.color = new Color(1f, 0.5f, 0f);
-					}
-					else
-					{
-						Gizmos.color = Color.green;
-					}
+					var nodePos = nodes[i].WorldPosition;
 					
-					Gizmos.DrawLine(node.WorldPosition, nodes[neighborIndex].WorldPosition);
+					var startIndex = i * 26;
+					
+					for (var k = startIndex; k < startIndex + 26; k++)
+					{
+						var neighbor = neighbors[k];
+						if (!neighbor.Valid)
+							continue;
+						
+						Gizmos.DrawLine(nodePos, nodes[neighbor.Index].WorldPosition);
+					}
 				}
 			}
 			
@@ -167,12 +157,12 @@ namespace AI.PathFinding
 
 		private void cleanup()
 		{
-			if (connections.IsCreated)
-				connections.Dispose();
-
 			if (nodes.IsCreated)
 				nodes.Dispose();
 			
+			if (neighbors.IsCreated)
+				neighbors.Dispose();
+
 			if (searchedNodes.IsCreated)
 				searchedNodes.Dispose();
 			
@@ -187,6 +177,7 @@ namespace AI.PathFinding
 
 		#region Path Grid
 
+		[ContextMenu("Create Grid")]
 		public void CreateGrid()
 		{
 			cleanup();
@@ -196,9 +187,10 @@ namespace AI.PathFinding
 			zSize = (int)(Size.z / Distance) + 1;
 
 			var nodesLength = xSize * ySize * zSize;
+			var neighborsLength = 26 * nodesLength;
 
-			connections = new NativeParallelMultiHashMap<int, SIndexWithCost>(0, Allocator.Persistent);
 			nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
+			neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
 
 			searchedNodes = new NativeHashSet<int>(nodesLength, Allocator.Persistent);
 			toSearchNodes = new NativeList<int>(nodesLength, Allocator.Persistent);
@@ -221,7 +213,7 @@ namespace AI.PathFinding
 
 			#endregion
 			
-			#region Filter Inside Objects
+			#region Filter Overlaps
 			
 			var overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.TempJob);
 			var overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.TempJob);
@@ -238,25 +230,22 @@ namespace AI.PathFinding
 			
 			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, BatchCount, 1, initializeOverlapsHandle);
 
-			var filterNodesJob = new FilterNodesJob
+			var filterOverlapsJob = new FilterOverlapsJob
 			{
 				Nodes = nodes,
 				Hits = overlapResults
 			};
 
-			var filterNodesHandle = filterNodesJob.Schedule(overlapResults.Length, BatchCount, overlapHandle);
+			var filterOverlapsHandle = filterOverlapsJob.Schedule(overlapResults.Length, BatchCount, overlapHandle);
 			
 			#endregion
 
-			#region Find Neighbor Connections
+			#region Initialize Neighbors
 
-			var addedNeighbors = new NativeList<int>(9, Allocator.TempJob);
-			
-			var findNeighborConnectionsJob = new FindNeighborConnectionsJob
+			var initializeNeighborsJob = new InitializeNeighborsJob
 			{
 				Nodes = nodes,
-				Connections = connections,
-				AddedNeighbors = addedNeighbors,
+				Neighbors = neighbors,
 				Distance = Distance,
 				Accuracy = Accuracy,
 				XSize = xSize,
@@ -264,64 +253,57 @@ namespace AI.PathFinding
 				ZSize = zSize
 			};
 
-			var findNeighborConnectionsHandle = findNeighborConnectionsJob.Schedule(nodesLength, filterNodesHandle);
-			findNeighborConnectionsHandle.Complete();
+			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(nodesLength, BatchCount, filterOverlapsHandle);
 
 			#endregion
 
-			#region Filter Raycast Neighbors
+			#region Filter Raycasts
 
-			var connectionsLength = connections.Count();
-
-			var raycastPairs = new NativeArray<KeyValue<int, SIndexWithCost>>(connectionsLength, Allocator.TempJob);
-			var raycastCommands = new NativeArray<RaycastCommand>(connectionsLength, Allocator.TempJob);
-			var raycastResults = new NativeArray<RaycastHit>(connectionsLength, Allocator.TempJob);
+			var raycastCommands = new NativeArray<RaycastCommand>(neighborsLength, Allocator.TempJob);
+			var raycastResults = new NativeArray<RaycastHit>(neighborsLength, Allocator.TempJob);
 
 			var initializeRaycastsJob = new InitializeRaycastsJob
 			{
 				Nodes = nodes,
-				Connections = connections,
+				Neighbors = neighbors,
 				Commands = raycastCommands,
-				Pairs = raycastPairs,
 				Query = new QueryParameters(FilterMask, hitBackfaces: true)
 			};
 
-			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(findNeighborConnectionsHandle);
+			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(nodesLength, BatchCount, initializeNeighborsHandle);
 			
 			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, BatchCount, 1, initializeRaycastsHandle);
 
-			var filterConnectionsJob = new FilterConnectionsJob
+			var filterRaycastsJob = new FilterRaycastsJob
 			{
-				Connections = connections,
-				Pairs = raycastPairs,
+				Neighbors = neighbors,
 				Hits = raycastResults
 			};
 
-			var filterConnectionsHandle = filterConnectionsJob.Schedule(raycastResults.Length, raycastHandle);
-			filterConnectionsHandle.Complete();
+			var filterRaycastsHandle = filterRaycastsJob.Schedule(raycastResults.Length, BatchCount, raycastHandle);
+			filterRaycastsHandle.Complete();
 			
 			#endregion
 
 			overlapCommands.Dispose();
 			overlapResults.Dispose();
-			addedNeighbors.Dispose();
-			raycastPairs.Dispose();
 			raycastCommands.Dispose();
 			raycastResults.Dispose();
 		}
 
-		public void FindPath(Vector3 start, Vector3 end)
+		[ContextMenu("Find Path")]
+		public void FindPath()
 		{
 			var findPathJob = new FindPathJob
 			{
 				Nodes = nodes,
-				Connections = connections,
+				Neighbors = neighbors,
 				ResultingPath = resultingPath,
 				SearchedNodes = searchedNodes,
 				ToSearchNodes = toSearchNodes,
 				Distance = Distance,
-				StartPosition = start,
-				EndPosition = end
+				StartPosition = Start,
+				EndPosition = End
 			};
 
 			var findPathHandle = findPathJob.Schedule();
@@ -387,15 +369,21 @@ namespace AI.PathFinding
 			
 			public float Cost;
 
-			public SIndexWithCost(int index, float cost)
+			public bool Valid;
+			
+			public static SIndexWithCost Create(int index, float cost)
 			{
-				Index = index;
-				Cost = cost;
+				return new SIndexWithCost
+				{
+					Index = index,
+					Cost = cost,
+					Valid = true
+				};
 			}
 			
 			public bool Equals(SIndexWithCost other)
 			{
-				return Index == other.Index;
+				return Index == other.Index && Cost.Equals(other.Cost) && Valid == other.Valid;
 			}
 			
 			public override bool Equals(object obj)
@@ -405,7 +393,13 @@ namespace AI.PathFinding
 			
 			public override int GetHashCode()
 			{
-				return Index;
+				unchecked
+				{
+					var hashCode = Index;
+					hashCode = (hashCode * 397) ^ Cost.GetHashCode();
+					hashCode = (hashCode * 397) ^ Valid.GetHashCode();
+					return hashCode;
+				}
 			}
 			
 			public static bool operator ==(SIndexWithCost left, SIndexWithCost right)
@@ -492,7 +486,7 @@ namespace AI.PathFinding
 		}
 
 		[BurstCompile]
-		public struct FilterNodesJob : IJobParallelFor
+		public struct FilterOverlapsJob : IJobParallelFor
 		{
 			public NativeArray<SNode> Nodes;
 
@@ -516,14 +510,13 @@ namespace AI.PathFinding
 		}
 		
 		[BurstCompile]
-		public struct FindNeighborConnectionsJob : IJobFor
+		public struct InitializeNeighborsJob : IJobParallelFor
 		{
+			[ReadOnly]
 			public NativeArray<SNode> Nodes;
 
-			[WriteOnly]
-			public NativeParallelMultiHashMap<int, SIndexWithCost> Connections;
-
-			public NativeList<int> AddedNeighbors;
+			[WriteOnly][NativeDisableParallelForRestriction]
+			public NativeArray<SIndexWithCost> Neighbors;
 			
 			public float Distance;
 			public float Accuracy;
@@ -536,29 +529,14 @@ namespace AI.PathFinding
 			{
 				var node = Nodes[index];
 				
-				if (findConnections(node))
-					return;
-				
-				var availability = node.Availability;
-				availability &= ~ENodeAvailabilityFlags.Available;
-				availability |= ENodeAvailabilityFlags.NoConnections;
-				
-				node.Availability = availability;
-				Nodes[index] = node;
-			}
-			
-			private bool findConnections(SNode node)
-			{
-				AddedNeighbors.Clear();
-				
-				var index = node.Index;
-				var pos = node.GridPosition;
-
+				var gridPos = node.GridPosition;
 				var worldPos = node.WorldPosition;
 				
-				var x = pos.x;
-				var y = pos.y;
-				var z = pos.z;
+				var x = gridPos.x;
+				var y = gridPos.y;
+				var z = gridPos.z;
+
+				var addIndex = index * 26;
 				
 				for (var cX = -1; cX < 2; cX++)
 				{
@@ -567,30 +545,29 @@ namespace AI.PathFinding
 						for (var cZ = -1; cZ < 2; cZ++)
 						{
 							var neighborX = x + cX;
-							if (neighborX < 0 || neighborX >= XSize) 
+							if (neighborX < 0 || neighborX >= XSize)
 								continue;
 						
 							var neighborY = y + cY;
-							if (neighborY < 0 || neighborY >= YSize) 
+							if (neighborY < 0 || neighborY >= YSize)
 								continue;
 
 							var neighborZ = z + cZ;
-							if (neighborZ < 0 || neighborZ >= ZSize) 
+							if (neighborZ < 0 || neighborZ >= ZSize)
 								continue;
 
 							var neighborIndex = getNodeIndex(neighborX, neighborY, neighborZ);
-							if (neighborIndex == index || AddedNeighbors.Contains(neighborIndex))
+							if (neighborIndex == index)
 								continue;
 
 							var cost = math.distance(worldPos, Nodes[neighborIndex].WorldPosition) / Distance;
+							var neighbor = SIndexWithCost.Create(neighborIndex, cost * Accuracy);
 							
-							Connections.Add(index, new SIndexWithCost(neighborIndex, cost * Accuracy));
-							AddedNeighbors.Add(neighborIndex);
+							Neighbors[addIndex] = neighbor;
+							addIndex++;
 						}
 					}
 				}
-
-				return AddedNeighbors.Length != 0;
 			}
 			
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -601,29 +578,30 @@ namespace AI.PathFinding
 		}
 
 		[BurstCompile]
-		public struct InitializeRaycastsJob : IJob
+		public struct InitializeRaycastsJob : IJobParallelFor
 		{
 			[ReadOnly]
 			public NativeArray<SNode> Nodes;
 			
 			[ReadOnly]
-			public NativeParallelMultiHashMap<int, SIndexWithCost> Connections;
+			public NativeArray<SIndexWithCost> Neighbors;
 			
-			[WriteOnly]
+			[WriteOnly][NativeDisableParallelForRestriction]
 			public NativeArray<RaycastCommand> Commands;
 
-			[WriteOnly]
-			public NativeArray<KeyValue<int, SIndexWithCost>> Pairs;
-			
 			public QueryParameters Query;
 			
-			public void Execute()
+			public void Execute(int index)
 			{
-				var index = 0;
-				foreach (var pair in Connections)
+				var node = Nodes[index];
+				var nodePos = node.WorldPosition;
+
+				var startIndex = index * 26;
+
+				for (var i = startIndex; i < startIndex + 26; i++)
 				{
-					var nodePos = Nodes[pair.Key].WorldPosition;
-					var neighborPos = Nodes[pair.Value.Index].WorldPosition;
+					var neighbor = Neighbors[i];
+					var neighborPos = Nodes[neighbor.Index].WorldPosition;
 
 					Vector3 nodePosVector;
 					nodePosVector.x = nodePos.x;
@@ -635,22 +613,16 @@ namespace AI.PathFinding
 					directionVector.y = neighborPos.y - nodePos.y;
 					directionVector.z = neighborPos.z - nodePos.z;
 				
-					Commands[index] = new RaycastCommand(nodePosVector, directionVector, Query, directionVector.magnitude);
-					Pairs[index] = pair;
-
-					index++;
+					Commands[i] = new RaycastCommand(nodePosVector, directionVector, Query, directionVector.magnitude);
 				}
 			}
 		}
 
 		[BurstCompile]
-		public struct FilterConnectionsJob : IJobFor
+		public struct FilterRaycastsJob : IJobParallelFor
 		{
 			[WriteOnly]
-			public NativeParallelMultiHashMap<int, SIndexWithCost> Connections;
-
-			[ReadOnly]
-			public NativeArray<KeyValue<int, SIndexWithCost>> Pairs;
+			public NativeArray<SIndexWithCost> Neighbors;
 
 			[ReadOnly]
 			public NativeArray<RaycastHit> Hits;
@@ -660,8 +632,7 @@ namespace AI.PathFinding
 				if (Hits[index].colliderInstanceID == 0)
 					return;
 
-				var pair = Pairs[index];
-				Connections.Remove(pair.Key, pair.Value);
+				Neighbors[index] = new SIndexWithCost();
 			}
 		}
 
@@ -671,7 +642,7 @@ namespace AI.PathFinding
 			public NativeArray<SNode> Nodes;
 			
 			[ReadOnly]
-			public NativeParallelMultiHashMap<int, SIndexWithCost> Connections;
+			public NativeArray<SIndexWithCost> Neighbors;
 			
 			[WriteOnly]
 			public NativeList<SNode> ResultingPath;
@@ -761,9 +732,14 @@ namespace AI.PathFinding
 			{
 				var node = Nodes[nodeIndex];
 
-				var values = Connections.GetValuesForKey(nodeIndex);
-				foreach (var neighbor in values)
+				var startIndex = nodeIndex * 26;
+
+				for (var i = startIndex; i < startIndex + 26; i++)
 				{
+					var neighbor = Neighbors[i];
+					if (!neighbor.Valid)
+						continue;
+
 					var neighborIndex = neighbor.Index;
 					
 					var neighborNode = Nodes[neighborIndex];
