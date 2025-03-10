@@ -690,7 +690,7 @@ MonoBehaviour:
   DrawPath: 1
   DrawFlags: -1
   BatchCount: 64
-  Inaccuracy: -0.1
+  Accuracy: 0.75
   Start: {x: 1.5, y: 50, z: 2.5}
   End: {x: 0, y: -50, z: 0}
 --- !u!1 &443400751
