@@ -73,13 +73,13 @@ namespace AI.PathFinding
 			createStopwatch.Start();
 			CreateGrid();
 			createStopwatch.Stop();
-			Debug.Log($"Creating grid [job] (size {xSize * ySize * zSize}) took {createStopwatch.ElapsedMilliseconds}ms");
+			Debug.Log($"Creating grid [job] (nodes {xSize * ySize * zSize} neighbors {neighbors.Length}) took {createStopwatch.ElapsedMilliseconds}ms");
 			
 			var findStopwatch = new Stopwatch();
 			findStopwatch.Start();
 			FindPath();
 			findStopwatch.Stop();
-			Debug.Log($"Finding path [job] took {findStopwatch.ElapsedMilliseconds}ms");
+			Debug.Log($"Finding path [job] (searched {searchedNodes.Count} result {resultingPath.Length}) took {findStopwatch.ElapsedMilliseconds}ms");
 		}
 
 		public void OnDestroy()
@@ -177,7 +177,6 @@ namespace AI.PathFinding
 
 		#region Path Grid
 
-		[ContextMenu("Create Grid")]
 		public void CreateGrid()
 		{
 			cleanup();
@@ -291,7 +290,6 @@ namespace AI.PathFinding
 			raycastResults.Dispose();
 		}
 
-		[ContextMenu("Find Path")]
 		public void FindPath()
 		{
 			var findPathJob = new FindPathJob
