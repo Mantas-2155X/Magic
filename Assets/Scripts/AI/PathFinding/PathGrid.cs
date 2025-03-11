@@ -75,7 +75,6 @@ namespace AI.PathFinding
 		
 		private NativeList<SNode> resultingPath;
 
-		private JobHandle initializeHandle;
 		private JobHandle filterRaycastsHandle;
 		private JobHandle findPathHandle;
 		
@@ -95,11 +94,11 @@ namespace AI.PathFinding
 			{
 				if (createGridRequested)
 				{
-					Status = EPathFindingStatus.Initializing;
+					Status = EPathFindingStatus.CreatingGrid;
 					statusChangedTime = Time.time;
 					//createGridRequested = false;
 					
-					Initialize();
+					CreateGrid();
 				}
 				else if (findPathRequested && neighbors.IsCreated)
 				{
@@ -114,18 +113,7 @@ namespace AI.PathFinding
 
 		public void LateUpdate()
 		{
-			if (Status == EPathFindingStatus.Initializing && initializeHandle.IsCompleted)
-			{
-				initializeHandle.Complete();
-				Debug.Log($"Initialized data took {Time.time - statusChangedTime} s");
-
-				Status = EPathFindingStatus.CreatingGrid;
-				statusChangedTime = Time.time;
-				//createGridRequested = false;
-					
-				CreateGrid();
-			}
-			else if (Status == EPathFindingStatus.CreatingGrid && filterRaycastsHandle.IsCompleted && neighbors.IsCreated)
+			if (Status == EPathFindingStatus.CreatingGrid && filterRaycastsHandle.IsCompleted && neighbors.IsCreated)
 			{
 				filterRaycastsHandle.Complete();
 				Debug.Log($"Created grid [job] (nodes {xSize * ySize * zSize} neighbors {neighbors.Length}) took {Time.time - statusChangedTime} s");
@@ -226,9 +214,6 @@ namespace AI.PathFinding
 		{
 			switch (Status)
 			{
-				case EPathFindingStatus.Initializing:
-					initializeHandle.Complete();
-					break;
 				case EPathFindingStatus.CreatingGrid:
 					filterRaycastsHandle.Complete();
 					break;
@@ -269,7 +254,7 @@ namespace AI.PathFinding
 
 		#region Path Grid
 
-		public void Initialize()
+		public void CreateGrid()
 		{
 			xSize = (int)(Size.x / Distance) + 1;
 			ySize = (int)(Size.y / Distance) + 1;
@@ -299,24 +284,7 @@ namespace AI.PathFinding
 				NodesLength = nodesLength;
 				NeighborsLength = neighborsLength;
 			}
-			else
-			{
-				var initializeJob = new InitializeJob
-				{
-					Nodes = nodes,
-					Neighbors = neighbors,
-					OverlapCommands = overlapCommands,
-					OverlapResults = overlapResults,
-					RaycastCommands = raycastCommands,
-					RaycastResults = raycastResults,
-				};
-				
-				initializeHandle = initializeJob.Schedule();
-			}
-		}
-		
-		public void CreateGrid()
-		{
+			
 			#region Initialize Nodes
 
 			var initializeNodesJob = new InitializeNodesJob
@@ -329,7 +297,7 @@ namespace AI.PathFinding
 				ZSize = zSize
 			};
 
-			var initializeNodesHandle = initializeNodesJob.Schedule(initializeHandle);
+			var initializeNodesHandle = initializeNodesJob.Schedule();
 
 			#endregion
 			
