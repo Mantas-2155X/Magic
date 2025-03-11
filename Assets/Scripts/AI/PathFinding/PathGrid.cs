@@ -1,4 +1,3 @@
-using System;
 using AI.PathFinding.Jobs;
 using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
@@ -362,6 +361,20 @@ namespace AI.PathFinding
 
 		public void FindPath()
 		{
+			var nodesLength = xSize * ySize * zSize;
+			var nodesBatchCount = nodesLength / (JobsUtility.JobWorkerCount / 2);
+
+			resultingPath.Clear();
+			searchedNodes.Clear();
+			toSearchNodes.Clear();
+			
+			var clearPathJob = new ClearPathJob
+			{
+				Nodes = nodes
+			};
+
+			var clearPathHandle = clearPathJob.Schedule(nodesLength, nodesBatchCount, filterRaycastsHandle);
+			
 			var findPathJob = new FindPathJob
 			{
 				Nodes = nodes,
@@ -374,7 +387,7 @@ namespace AI.PathFinding
 				EndPosition = End
 			};
 
-			findPathHandle = findPathJob.Schedule(filterRaycastsHandle);
+			findPathHandle = findPathJob.Schedule(clearPathHandle);
 		}
 		
 		#endregion
