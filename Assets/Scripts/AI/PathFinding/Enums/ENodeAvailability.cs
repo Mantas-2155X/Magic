@@ -1,13 +1,9 @@
-using System;
-
 namespace AI.PathFinding.Enums
 {
-	[Flags]
-	public enum ENodeAvailabilityFlags
+	public enum ENodeAvailability
 	{
-		None = 0,
-		Available = 1,
-		InsideObject = 2,
-		NoConnections = 4
+		Available,
+		InsideObject,
+		NoConnections
 	}
 }

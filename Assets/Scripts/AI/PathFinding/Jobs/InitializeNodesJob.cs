@@ -53,7 +53,6 @@ namespace AI.PathFinding.Jobs
 							Index = index,
 							GridPosition = gridPosition,
 							WorldPosition = worldPosition,
-							Availability = ENodeAvailabilityFlags.Available
 						};
 					
 						index++;

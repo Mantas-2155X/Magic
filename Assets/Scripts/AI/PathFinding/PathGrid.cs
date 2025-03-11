@@ -1,3 +1,4 @@
+using System;
 using AI.PathFinding.Jobs;
 using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
@@ -22,27 +23,35 @@ namespace AI.PathFinding
 		public float Distance = 1f;
 
 		[SerializeField][Range(0.01f, 5f)]
-		public float Radius = 0.1f;
+		public float Radius = 0.25f;
 
 		[Header("Filter Settings")]
 		[SerializeField]
 		public LayerMask FilterMask = -1;
 
-		[Header("Draw Settings")]
+		[Header("Draw Types")]
 		[SerializeField]
-		public bool DrawBounds = true;
+		public bool DrawBounds;
 		[SerializeField]
-		public bool DrawNodes = true;
+		public bool DrawNodes;
 		[SerializeField]
-		public bool DrawConnections = true;
+		public bool DrawConnections;
 		[SerializeField]
-		public bool DrawPath = true;
+		public bool DrawPath;
 		
-		public ENodeAvailabilityFlags DrawFlags = (ENodeAvailabilityFlags)~0;
+		[Header("Draw Flags")]
+		[SerializeField]
+		public bool DrawAvailable;
+		[SerializeField]
+		public bool DrawInsideObject;
+		[SerializeField]
+		public bool DrawNoConnections;
+		[SerializeField]
+		public bool DrawSearched;
 		
 		[Header("Path Finding")]
 		[SerializeField][Range(0.5f, 1f)]
-		public float Accuracy = 0.75f;
+		public float Accuracy = 0.85f;
 		[SerializeField]
 		public Vector3 Start;
 		[SerializeField]
@@ -64,6 +73,8 @@ namespace AI.PathFinding
 		private NativeArray<SNode> nodes;
 		private NativeArray<SIndexWithCost> neighbors;
 
+		private NativeArray<ENodeAvailability> availabilities;
+
 		private NativeArray<float> gCosts;
 		private NativeArray<float> hCosts;
 		private NativeArray<float> fCosts;
@@ -78,7 +89,7 @@ namespace AI.PathFinding
 		private NativeHashSet<int> searchedNodes;
 		private NativeList<int> toSearchNodes;
 		
-		private NativeList<SNode> resultingPath;
+		private NativeList<int> resultingPath;
 
 		private JobHandle filterRaycastsHandle;
 		private JobHandle findPathHandle;
@@ -160,27 +171,44 @@ namespace AI.PathFinding
 			{
 				for (var i = 0; i < nodes.Length; i++)
 				{
-					var node = nodes[i];
-					if ((node.Availability & DrawFlags) == 0)
-						continue;
+					var availability = availabilities[i];
+					switch (availability)
+					{
+						case ENodeAvailability.Available:
+						{
+							if (!DrawAvailable && !DrawSearched)
+								continue;
+							
+							if (DrawSearched && Status != EPathFindingStatus.FindingPath && searchedNodes.Contains(i))
+								Gizmos.color = Color.black;
+							else if (DrawAvailable)
+								Gizmos.color = Color.green;
+							else
+								continue;
 
-					if (node.Availability == ENodeAvailabilityFlags.Available)
-					{
-						Gizmos.color = Color.green;
-					}
-					else if ((node.Availability & ENodeAvailabilityFlags.InsideObject) != 0)
-					{
-						Gizmos.color = Color.red;
-					}
-					else if ((node.Availability & ENodeAvailabilityFlags.NoConnections) != 0)
-					{
-						Gizmos.color = Color.yellow;
+							break;
+						}
+						case ENodeAvailability.InsideObject:
+						{
+							if (!DrawInsideObject)
+								continue;
+						
+							Gizmos.color = Color.red;
+							break;
+						}
+						case ENodeAvailability.NoConnections:
+						{
+							if (!DrawNoConnections)
+								continue;
+						
+							Gizmos.color = Color.yellow;
+							break;
+						}
+						default:
+							throw new NotImplementedException();
 					}
 							
-					if (searchedNodes.Contains(i))
-						Gizmos.color = Color.black;
-					
-					Gizmos.DrawSphere(node.WorldPosition, Radius);
+					Gizmos.DrawSphere(nodes[i].WorldPosition, Radius);
 				}
 			}
 
@@ -210,7 +238,12 @@ namespace AI.PathFinding
 				Gizmos.color = Color.cyan;
 				
 				for (var i = 0; i < resultingPath.Length - 1; i++)
-					Gizmos.DrawLine(resultingPath[i].WorldPosition, resultingPath[i + 1].WorldPosition);
+				{
+					var nodePos = nodes[resultingPath[i]].WorldPosition;
+					var otherNodePos = nodes[resultingPath[i + 1]].WorldPosition;
+					
+					Gizmos.DrawLine(nodePos, otherNodePos);
+				}
 			}
 		}
 #endif
@@ -233,6 +266,9 @@ namespace AI.PathFinding
 			if (neighbors.IsCreated)
 				neighbors.Dispose();
 
+			if (availabilities.IsCreated)
+				availabilities.Dispose();
+			
 			if (gCosts.IsCreated)
 				gCosts.Dispose();
 
@@ -287,6 +323,8 @@ namespace AI.PathFinding
 				nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
 				neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
 
+				availabilities = new NativeArray<ENodeAvailability>(nodesLength, Allocator.Persistent);
+				
 				gCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
 				hCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
 				fCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
@@ -301,7 +339,7 @@ namespace AI.PathFinding
 				searchedNodes = new NativeHashSet<int>(nodesLength, Allocator.Persistent);
 				toSearchNodes = new NativeList<int>(nodesLength, Allocator.Persistent);
 
-				resultingPath = new NativeList<SNode>(Allocator.Persistent);
+				resultingPath = new NativeList<int>(Allocator.Persistent);
 				
 				NodesLength = nodesLength;
 				NeighborsLength = neighborsLength;
@@ -339,7 +377,7 @@ namespace AI.PathFinding
 
 			var filterOverlapsJob = new FilterOverlapsJob
 			{
-				Nodes = nodes,
+				Availabilities = availabilities,
 				Hits = overlapResults
 			};
 
@@ -413,6 +451,7 @@ namespace AI.PathFinding
 			{
 				Nodes = nodes,
 				Neighbors = neighbors,
+				Availabilities = availabilities,
 				GCosts = gCosts,
 				HCosts = hCosts,
 				FCosts = fCosts,

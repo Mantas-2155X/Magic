@@ -10,7 +10,8 @@ namespace AI.PathFinding.Jobs
 	[BurstCompile]
 	public struct FilterOverlapsJob : IJobParallelFor
 	{
-		public NativeArray<SNode> Nodes;
+		[WriteOnly]
+		public NativeArray<ENodeAvailability> Availabilities;
 
 		[ReadOnly]
 		public NativeArray<ColliderHit> Hits;
@@ -20,14 +21,7 @@ namespace AI.PathFinding.Jobs
 			if (Hits[index].instanceID == 0)
 				return;
 
-			var node = Nodes[index];
-			
-			var availability = node.Availability;
-			availability &= ~ENodeAvailabilityFlags.Available;
-			availability |= ENodeAvailabilityFlags.InsideObject;
-
-			node.Availability = availability;
-			Nodes[index] = node;
+			Availabilities[index] = ENodeAvailability.InsideObject;
 		}
 	}
 }

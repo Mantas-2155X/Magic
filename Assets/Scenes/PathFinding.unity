@@ -685,11 +685,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   DrawBounds: 0
-  DrawNodes: 0
+  DrawNodes: 1
   DrawConnections: 0
   DrawPath: 1
-  DrawFlags: -1
-  Accuracy: 1
+  DrawAvailable: 0
+  DrawInsideObject: 1
+  DrawNoConnections: 1
+  DrawSearched: 1
+  Accuracy: 0.85
   Start: {x: 1.5, y: 50, z: 2.5}
   End: {x: 0, y: -50, z: 0}
   createGridRequested: 1
