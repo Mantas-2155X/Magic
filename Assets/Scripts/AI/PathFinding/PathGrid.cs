@@ -1,9 +1,9 @@
-using System.Diagnostics;
 using AI.PathFinding.Jobs;
 using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -40,9 +40,6 @@ namespace AI.PathFinding
 		
 		public ENodeAvailabilityFlags DrawFlags = (ENodeAvailabilityFlags)~0;
 		
-		[Header("Job Settings")]
-		public int BatchCount = 64;
-		
 		[Header("Path Finding")]
 		[SerializeField][Range(0.5f, 1f)]
 		public float Accuracy = 0.75f;
@@ -51,6 +48,9 @@ namespace AI.PathFinding
 		[SerializeField]
 		public Vector3 End;
 
+		public bool createGridRequested;
+		public bool findPathRequested;
+		
 		public EPathFindingStatus Status { get; private set; } = EPathFindingStatus.Idle;
 
 		#region Internals
@@ -68,10 +68,15 @@ namespace AI.PathFinding
 		private NativeList<int> toSearchNodes;
 		
 		private NativeList<SNode> resultingPath;
+
+		private JobHandle filterRaycastsHandle;
+		private JobHandle findPathHandle;
 		
 		private int xSize;
 		private int ySize;
 		private int zSize;
+		
+		private double statusChangedTime;
 		
 		#endregion
 
@@ -79,17 +84,50 @@ namespace AI.PathFinding
 
 		public void Update()
 		{
-			var createStopwatch = new Stopwatch();
-			createStopwatch.Start();
-			CreateGrid();
-			createStopwatch.Stop();
-			Debug.Log($"Creating grid [job] (nodes {xSize * ySize * zSize} neighbors {neighbors.Length}) took {createStopwatch.ElapsedMilliseconds}ms");
-			
-			var findStopwatch = new Stopwatch();
-			findStopwatch.Start();
-			FindPath();
-			findStopwatch.Stop();
-			Debug.Log($"Finding path [job] (searched {searchedNodes.Count} result {resultingPath.Length}) took {findStopwatch.ElapsedMilliseconds}ms");
+			if (Status == EPathFindingStatus.Idle)
+			{
+				if (createGridRequested)
+				{
+					Status = EPathFindingStatus.CreatingGrid;
+					statusChangedTime = Time.time;
+					//createGridRequested = false;
+					
+					CreateGrid();
+				}
+				else if (findPathRequested)
+				{
+					Status = EPathFindingStatus.FindingPath;
+					statusChangedTime = Time.time;
+					//findPathRequested = false;
+					
+					FindPath();
+				}
+			}
+			else if (Status == EPathFindingStatus.CreatingGrid && filterRaycastsHandle.IsCompleted)
+			{
+				filterRaycastsHandle.Complete();
+				Debug.Log($"Created grid [job] (nodes {xSize * ySize * zSize} neighbors {neighbors.Length}) took {Time.time - statusChangedTime} s");
+				
+				Status = EPathFindingStatus.Idle;
+				statusChangedTime = Time.time;
+
+				if (findPathRequested)
+				{
+					Status = EPathFindingStatus.FindingPath;
+					statusChangedTime = Time.time;
+					//findPathRequested = false;
+					
+					FindPath();
+				}
+			}
+			else if (Status == EPathFindingStatus.FindingPath && findPathHandle.IsCompleted)
+			{
+				findPathHandle.Complete();
+				Debug.Log($"Found path [job] (searched {searchedNodes.Count} result {resultingPath.Length}) took {Time.time - statusChangedTime} s");
+				
+				Status = EPathFindingStatus.Idle;
+				statusChangedTime = Time.time;
+			}
 		}
 
 		public void OnDestroy()
@@ -100,7 +138,7 @@ namespace AI.PathFinding
 #if UNITY_EDITOR
 		public void OnDrawGizmos()
 		{
-			if (!nodes.IsCreated)
+			if (Status != EPathFindingStatus.Idle || !nodes.IsCreated)
 				return;
 			
 			if (DrawBounds)
@@ -209,6 +247,7 @@ namespace AI.PathFinding
 
 			var nodesLength = xSize * ySize * zSize;
 			var neighborsLength = 26 * nodesLength;
+			var batchCount = nodesLength / (JobsUtility.JobWorkerCount - 2);
 
 			nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
 			neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
@@ -250,9 +289,9 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask)
 			};
 
-			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(nodesLength, BatchCount, initializeNodesHandle);
+			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(nodesLength, batchCount, initializeNodesHandle);
 			
-			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, BatchCount, 1, initializeOverlapsHandle);
+			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, batchCount, 1, initializeOverlapsHandle);
 
 			var filterOverlapsJob = new FilterOverlapsJob
 			{
@@ -260,7 +299,7 @@ namespace AI.PathFinding
 				Hits = overlapResults
 			};
 
-			var filterOverlapsHandle = filterOverlapsJob.Schedule(overlapResults.Length, BatchCount, overlapHandle);
+			var filterOverlapsHandle = filterOverlapsJob.Schedule(overlapResults.Length, batchCount, overlapHandle);
 			
 			#endregion
 
@@ -277,7 +316,7 @@ namespace AI.PathFinding
 				ZSize = zSize
 			};
 
-			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(nodesLength, BatchCount, filterOverlapsHandle);
+			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(nodesLength, batchCount, filterOverlapsHandle);
 
 			#endregion
 
@@ -291,9 +330,9 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask, hitBackfaces: true)
 			};
 
-			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(nodesLength, BatchCount, initializeNeighborsHandle);
+			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(nodesLength, batchCount, initializeNeighborsHandle);
 			
-			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, BatchCount, 1, initializeRaycastsHandle);
+			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, batchCount, 1, initializeRaycastsHandle);
 
 			var filterRaycastsJob = new FilterRaycastsJob
 			{
@@ -301,8 +340,7 @@ namespace AI.PathFinding
 				Hits = raycastResults
 			};
 
-			var filterRaycastsHandle = filterRaycastsJob.Schedule(raycastResults.Length, BatchCount, raycastHandle);
-			filterRaycastsHandle.Complete();
+			filterRaycastsHandle = filterRaycastsJob.Schedule(raycastResults.Length, batchCount, raycastHandle);
 			
 			#endregion
 		}
@@ -321,8 +359,7 @@ namespace AI.PathFinding
 				EndPosition = End
 			};
 
-			var findPathHandle = findPathJob.Schedule();
-			findPathHandle.Complete();
+			findPathHandle = findPathJob.Schedule();
 		}
 		
 		#endregion
