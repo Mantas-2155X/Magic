@@ -80,9 +80,7 @@ namespace AI.PathFinding.Jobs
 				{
 					while (endNodeIndex != startNodeIndex)
 					{
-						var endNode = Nodes[endNodeIndex];
-						
-						ResultingPath.Add(endNode);
+						ResultingPath.Add(Nodes[endNodeIndex]);
 						endNodeIndex = Connections[endNodeIndex];
 					}
 		
