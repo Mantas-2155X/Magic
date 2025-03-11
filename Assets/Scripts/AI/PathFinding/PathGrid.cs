@@ -106,7 +106,9 @@ namespace AI.PathFinding
 			else if (Status == EPathFindingStatus.CreatingGrid && filterRaycastsHandle.IsCompleted)
 			{
 				filterRaycastsHandle.Complete();
-				Debug.Log($"Created grid [job] (nodes {xSize * ySize * zSize} neighbors {neighbors.Length}) took {Time.time - statusChangedTime} s");
+				
+				if (neighbors.IsCreated)
+					Debug.Log($"Created grid [job] (nodes {xSize * ySize * zSize} neighbors {neighbors.Length}) took {Time.time - statusChangedTime} s");
 				
 				Status = EPathFindingStatus.Idle;
 				statusChangedTime = Time.time;
@@ -123,7 +125,9 @@ namespace AI.PathFinding
 			else if (Status == EPathFindingStatus.FindingPath && findPathHandle.IsCompleted)
 			{
 				findPathHandle.Complete();
-				Debug.Log($"Found path [job] (searched {searchedNodes.Count} result {resultingPath.Length}) took {Time.time - statusChangedTime} s");
+				
+				if (searchedNodes.IsCreated && toSearchNodes.IsCreated)
+					Debug.Log($"Found path [job] (searched {searchedNodes.Count} result {resultingPath.Length}) took {Time.time - statusChangedTime} s");
 				
 				Status = EPathFindingStatus.Idle;
 				statusChangedTime = Time.time;
@@ -330,7 +334,7 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask, hitBackfaces: true)
 			};
 
-			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(nodesLength, batchCount, initializeNeighborsHandle);
+			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(neighborsLength, 26, initializeNeighborsHandle);
 			
 			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, batchCount, 1, initializeRaycastsHandle);
 

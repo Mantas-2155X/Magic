@@ -7,7 +7,7 @@ using UnityEngine;
 namespace AI.PathFinding.Jobs
 {
 	[BurstCompile]
-	public struct InitializeRaycastsJob : IJobParallelFor
+	public struct InitializeRaycastsJob : IJobParallelForBatch
 	{
 		[ReadOnly]
 		public NativeArray<SNode> Nodes;
@@ -20,14 +20,12 @@ namespace AI.PathFinding.Jobs
 
 		public QueryParameters Query;
 		
-		public void Execute(int index)
+		public void Execute(int startIndex, int count)
 		{
-			var node = Nodes[index];
+			var node = Nodes[startIndex / count];
 			var nodePos = node.WorldPosition;
 
-			var startIndex = index * 26;
-
-			for (var i = startIndex; i < startIndex + 26; i++)
+			for (var i = startIndex; i < startIndex + count; i++)
 			{
 				var neighbor = Neighbors[i];
 				var neighborPos = Nodes[neighbor.Index].WorldPosition;
