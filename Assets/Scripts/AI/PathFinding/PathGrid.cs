@@ -51,6 +51,12 @@ namespace AI.PathFinding
 		public bool createGridRequested;
 		public bool findPathRequested;
 		
+		public int NodesLength { get; private set; }
+		public int NeighborsLength { get; private set; }
+
+		public int NodesBatchCount => NodesLength / (JobsUtility.JobWorkerCount / 2);
+		public int NeighborsBatchCount => NeighborsLength / (JobsUtility.JobWorkerCount / 2);
+		
 		public EPathFindingStatus Status { get; private set; } = EPathFindingStatus.Idle;
 
 		#region Internals
@@ -69,6 +75,7 @@ namespace AI.PathFinding
 		
 		private NativeList<SNode> resultingPath;
 
+		private JobHandle initializeHandle;
 		private JobHandle filterRaycastsHandle;
 		private JobHandle findPathHandle;
 		
@@ -88,11 +95,11 @@ namespace AI.PathFinding
 			{
 				if (createGridRequested)
 				{
-					Status = EPathFindingStatus.CreatingGrid;
+					Status = EPathFindingStatus.Initializing;
 					statusChangedTime = Time.time;
 					//createGridRequested = false;
 					
-					CreateGrid();
+					Initialize();
 				}
 				else if (findPathRequested && neighbors.IsCreated)
 				{
@@ -107,7 +114,18 @@ namespace AI.PathFinding
 
 		public void LateUpdate()
 		{
-			if (Status == EPathFindingStatus.CreatingGrid && filterRaycastsHandle.IsCompleted && neighbors.IsCreated)
+			if (Status == EPathFindingStatus.Initializing && initializeHandle.IsCompleted)
+			{
+				initializeHandle.Complete();
+				Debug.Log($"Initialized data took {Time.time - statusChangedTime} s");
+
+				Status = EPathFindingStatus.CreatingGrid;
+				statusChangedTime = Time.time;
+				//createGridRequested = false;
+					
+				CreateGrid();
+			}
+			else if (Status == EPathFindingStatus.CreatingGrid && filterRaycastsHandle.IsCompleted && neighbors.IsCreated)
 			{
 				filterRaycastsHandle.Complete();
 				Debug.Log($"Created grid [job] (nodes {xSize * ySize * zSize} neighbors {neighbors.Length}) took {Time.time - statusChangedTime} s");
@@ -208,6 +226,9 @@ namespace AI.PathFinding
 		{
 			switch (Status)
 			{
+				case EPathFindingStatus.Initializing:
+					initializeHandle.Complete();
+					break;
 				case EPathFindingStatus.CreatingGrid:
 					filterRaycastsHandle.Complete();
 					break;
@@ -248,34 +269,54 @@ namespace AI.PathFinding
 
 		#region Path Grid
 
-		public void CreateGrid()
+		public void Initialize()
 		{
-			cleanup();
-			
 			xSize = (int)(Size.x / Distance) + 1;
 			ySize = (int)(Size.y / Distance) + 1;
 			zSize = (int)(Size.z / Distance) + 1;
 
 			var nodesLength = xSize * ySize * zSize;
 			var neighborsLength = 26 * nodesLength;
-			
-			var nodesBatchCount = nodesLength / (JobsUtility.JobWorkerCount / 2);
-			var neighborsBatchCount = neighborsLength / (JobsUtility.JobWorkerCount / 2);
 
-			nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
-			neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
+			if (nodesLength != NodesLength || neighborsLength != NeighborsLength)
+			{
+				cleanup();
+				
+				nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
+				neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
 
-			overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.Persistent);
-			overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.Persistent);
+				overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.Persistent);
+				overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.Persistent);
 
-			raycastCommands = new NativeArray<RaycastCommand>(neighborsLength, Allocator.Persistent);
-			raycastResults = new NativeArray<RaycastHit>(neighborsLength, Allocator.Persistent);
+				raycastCommands = new NativeArray<RaycastCommand>(neighborsLength, Allocator.Persistent);
+				raycastResults = new NativeArray<RaycastHit>(neighborsLength, Allocator.Persistent);
 
-			searchedNodes = new NativeHashSet<int>(nodesLength, Allocator.Persistent);
-			toSearchNodes = new NativeList<int>(nodesLength, Allocator.Persistent);
+				searchedNodes = new NativeHashSet<int>(nodesLength, Allocator.Persistent);
+				toSearchNodes = new NativeList<int>(nodesLength, Allocator.Persistent);
 
-			resultingPath = new NativeList<SNode>(Allocator.Persistent);
-			
+				resultingPath = new NativeList<SNode>(Allocator.Persistent);
+				
+				NodesLength = nodesLength;
+				NeighborsLength = neighborsLength;
+			}
+			else
+			{
+				var initializeJob = new InitializeJob
+				{
+					Nodes = nodes,
+					Neighbors = neighbors,
+					OverlapCommands = overlapCommands,
+					OverlapResults = overlapResults,
+					RaycastCommands = raycastCommands,
+					RaycastResults = raycastResults,
+				};
+				
+				initializeHandle = initializeJob.Schedule();
+			}
+		}
+		
+		public void CreateGrid()
+		{
 			#region Initialize Nodes
 
 			var initializeNodesJob = new InitializeNodesJob
@@ -288,7 +329,7 @@ namespace AI.PathFinding
 				ZSize = zSize
 			};
 
-			var initializeNodesHandle = initializeNodesJob.Schedule();
+			var initializeNodesHandle = initializeNodesJob.Schedule(initializeHandle);
 
 			#endregion
 			
@@ -302,9 +343,9 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask)
 			};
 
-			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(nodesLength, nodesBatchCount, initializeNodesHandle);
+			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(NodesLength, NodesBatchCount, initializeNodesHandle);
 			
-			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, nodesBatchCount, 1, initializeOverlapsHandle);
+			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, NodesBatchCount, 1, initializeOverlapsHandle);
 
 			var filterOverlapsJob = new FilterOverlapsJob
 			{
@@ -312,7 +353,7 @@ namespace AI.PathFinding
 				Hits = overlapResults
 			};
 
-			var filterOverlapsHandle = filterOverlapsJob.Schedule(nodesLength, nodesBatchCount, overlapHandle);
+			var filterOverlapsHandle = filterOverlapsJob.Schedule(NodesLength, NodesBatchCount, overlapHandle);
 			
 			#endregion
 
@@ -329,7 +370,7 @@ namespace AI.PathFinding
 				ZSize = zSize
 			};
 
-			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(nodesLength, nodesBatchCount, filterOverlapsHandle);
+			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(NodesLength, NodesBatchCount, filterOverlapsHandle);
 
 			#endregion
 
@@ -343,9 +384,9 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask, hitBackfaces: true)
 			};
 
-			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(neighborsLength, neighborsBatchCount, initializeNeighborsHandle);
+			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(NeighborsLength, NeighborsBatchCount, initializeNeighborsHandle);
 			
-			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, neighborsBatchCount, 1, initializeRaycastsHandle);
+			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, NeighborsBatchCount, 1, initializeRaycastsHandle);
 
 			var filterRaycastsJob = new FilterRaycastsJob
 			{
@@ -354,7 +395,7 @@ namespace AI.PathFinding
 				Empty = new SIndexWithCost()
 			};
 
-			filterRaycastsHandle = filterRaycastsJob.Schedule(neighborsLength, neighborsBatchCount, raycastHandle);
+			filterRaycastsHandle = filterRaycastsJob.Schedule(NeighborsLength, NeighborsBatchCount, raycastHandle);
 			
 			#endregion
 		}

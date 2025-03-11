@@ -33,6 +33,11 @@ namespace AI.PathFinding.Jobs
 		
 		public void Execute()
 		{
+			SearchedNodes.Clear();
+			ToSearchNodes.Clear();
+			
+			ResultingPath.Clear();
+			
 			var distanceBetweenPoints = math.distance(StartPosition, EndPosition) / Distance;
 			
 			var startNodeIndex = findClosestNode(StartPosition);
