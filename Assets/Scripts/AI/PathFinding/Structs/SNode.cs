@@ -19,16 +19,6 @@ namespace AI.PathFinding.Structs
 			
 		#endregion
 			
-		#region Pathing
-
-		public float GCost;
-		public float HCost;
-		public float FCost;
-
-		public int Connection;
-
-		#endregion
-			
 		public bool Equals(SNode other)
 		{
 			return Index == other.Index;

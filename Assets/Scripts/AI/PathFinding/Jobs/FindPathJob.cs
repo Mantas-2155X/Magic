@@ -11,10 +11,16 @@ namespace AI.PathFinding.Jobs
 	[BurstCompile]
 	public struct FindPathJob : IJob
 	{
+		[ReadOnly]
 		public NativeArray<SNode> Nodes;
 		
 		[ReadOnly]
 		public NativeArray<SIndexWithCost> Neighbors;
+		
+		public NativeArray<float> GCosts;
+		public NativeArray<float> HCosts;
+		public NativeArray<float> FCosts;
+		public NativeArray<int> Connections;
 		
 		[WriteOnly]
 		public NativeList<SNode> ResultingPath;
@@ -38,31 +44,32 @@ namespace AI.PathFinding.Jobs
 			
 			ResultingPath.Clear();
 			
-			var distanceBetweenPoints = math.distance(StartPosition, EndPosition) / Distance;
-			
 			var startNodeIndex = findClosestNode(StartPosition);
-			
-			var startNode = Nodes[startNodeIndex];
-			startNode.GCost = 0f;
-			startNode.HCost = distanceBetweenPoints;
-			startNode.FCost = distanceBetweenPoints;
-			Nodes[startNodeIndex] = startNode;
-			
 			var endNodeIndex = findClosestNode(EndPosition);
 
+			var distanceBetweenPoints = math.distance(StartPosition, EndPosition) / Distance;
+
+			GCosts[startNodeIndex] = 0f;
+			HCosts[startNodeIndex] = distanceBetweenPoints;
+			FCosts[startNodeIndex] = distanceBetweenPoints;
+			
 			ToSearchNodes.Add(startNodeIndex);
 			
 			while (ToSearchNodes.Length > 0)
 			{
 				var nodeIndex = ToSearchNodes[0];
-				var node = Nodes[nodeIndex];
+				
+				var nodeHCost = HCosts[nodeIndex];
+				var nodeFCost = FCosts[nodeIndex];
 				
 				for (var i = 0; i < ToSearchNodes.Length; i++)
 				{
 					var searchingNodeIndex = ToSearchNodes[i];
-					var searchingNode = Nodes[searchingNodeIndex];
 					
-					if (searchingNode.FCost < node.FCost || searchingNode.FCost == node.FCost && searchingNode.HCost < node.HCost)
+					var searchingHCost = HCosts[searchingNodeIndex];
+					var searchingFCost = FCosts[searchingNodeIndex];
+					
+					if (searchingFCost < nodeFCost || searchingFCost == nodeFCost && searchingHCost < nodeHCost)
 						nodeIndex = searchingNodeIndex;
 				}
 
@@ -76,10 +83,10 @@ namespace AI.PathFinding.Jobs
 						var endNode = Nodes[endNodeIndex];
 						
 						ResultingPath.Add(endNode);
-						endNodeIndex = endNode.Connection;
+						endNodeIndex = Connections[endNodeIndex];
 					}
 		
-					ResultingPath.Add(startNode);
+					ResultingPath.Add(Nodes[startNodeIndex]);
 					return;
 				}
 			
@@ -107,7 +114,7 @@ namespace AI.PathFinding.Jobs
 		
 		private void calculateNeighbors(int nodeIndex, float3 endPosition)
 		{
-			var node = Nodes[nodeIndex];
+			var nodeGCost = GCosts[nodeIndex];
 
 			var startIndex = nodeIndex * 26;
 
@@ -126,18 +133,17 @@ namespace AI.PathFinding.Jobs
 				if (SearchedNodes.Contains(neighborIndex))
 					continue;
 				
-				var gCost = node.GCost + neighbor.Cost;
-				if (gCost >= neighborNode.GCost)
+				var gCost = nodeGCost + neighbor.Cost;
+				if (gCost >= GCosts[neighborIndex])
 					continue;
 				
 				var neighborPos = neighborNode.WorldPosition;
 				var hCost = math.distance(neighborPos, endPosition) / Distance;
 				
-				neighborNode.Connection = nodeIndex;
-				neighborNode.GCost = gCost;
-				neighborNode.HCost = hCost;
-				neighborNode.FCost = gCost + hCost;
-				Nodes[neighborIndex] = neighborNode;
+				Connections[neighborIndex] = nodeIndex;
+				GCosts[neighborIndex] = gCost;
+				HCosts[neighborIndex] = hCost;
+				FCosts[neighborIndex] = gCost + hCost;
 			
 				if (!ToSearchNodes.Contains(neighborIndex))
 					ToSearchNodes.Add(neighborIndex);

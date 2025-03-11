@@ -64,6 +64,11 @@ namespace AI.PathFinding
 		private NativeArray<SNode> nodes;
 		private NativeArray<SIndexWithCost> neighbors;
 
+		private NativeArray<float> gCosts;
+		private NativeArray<float> hCosts;
+		private NativeArray<float> fCosts;
+		private NativeArray<int> connections;
+		
 		private NativeArray<OverlapSphereCommand> overlapCommands;
 		private NativeArray<ColliderHit> overlapResults;
 
@@ -228,6 +233,18 @@ namespace AI.PathFinding
 			if (neighbors.IsCreated)
 				neighbors.Dispose();
 
+			if (gCosts.IsCreated)
+				gCosts.Dispose();
+
+			if (hCosts.IsCreated)
+				hCosts.Dispose();
+
+			if (fCosts.IsCreated)
+				fCosts.Dispose();
+
+			if (connections.IsCreated)
+				connections.Dispose();
+
 			if (overlapCommands.IsCreated)
 				overlapCommands.Dispose();
 			
@@ -270,6 +287,11 @@ namespace AI.PathFinding
 				nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
 				neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
 
+				gCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
+				hCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
+				fCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
+				connections = new NativeArray<int>(nodesLength, Allocator.Persistent);
+				
 				overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.Persistent);
 				overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.Persistent);
 
@@ -379,7 +401,10 @@ namespace AI.PathFinding
 			
 			var clearPathJob = new ClearPathJob
 			{
-				Nodes = nodes
+				GCosts = gCosts,
+				HCosts = hCosts,
+				FCosts = fCosts,
+				Connections = connections
 			};
 
 			var clearPathHandle = clearPathJob.Schedule(nodesLength, nodesBatchCount, filterRaycastsHandle);
@@ -388,6 +413,10 @@ namespace AI.PathFinding
 			{
 				Nodes = nodes,
 				Neighbors = neighbors,
+				GCosts = gCosts,
+				HCosts = hCosts,
+				FCosts = fCosts,
+				Connections = connections,
 				ResultingPath = resultingPath,
 				SearchedNodes = searchedNodes,
 				ToSearchNodes = toSearchNodes,

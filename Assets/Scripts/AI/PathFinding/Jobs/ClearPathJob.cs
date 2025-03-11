@@ -1,4 +1,3 @@
-using AI.PathFinding.Structs;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -8,17 +7,24 @@ namespace AI.PathFinding.Jobs
 	[BurstCompile]
 	public struct ClearPathJob : IJobParallelFor
 	{
-		public NativeArray<SNode> Nodes;
+		[WriteOnly]
+		public NativeArray<float> GCosts;
+		
+		[WriteOnly]
+		public NativeArray<float> HCosts;
+		
+		[WriteOnly]
+		public NativeArray<float> FCosts;
+		
+		[WriteOnly]
+		public NativeArray<int> Connections;
 		
 		public void Execute(int index)
 		{
-			var node = Nodes[index];
-			node.GCost = float.MaxValue;
-			node.HCost = 0f;
-			node.FCost = 0f;
-			node.Connection = -1;
-
-			Nodes[index] = node;
+			GCosts[index] = float.MaxValue;
+			HCosts[index] = 0;
+			FCosts[index] = 0;
+			Connections[index] = -1;
 		}
 	}
 }
