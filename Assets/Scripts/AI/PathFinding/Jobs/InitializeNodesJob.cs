@@ -13,12 +13,19 @@ namespace AI.PathFinding.Jobs
 		[WriteOnly]
 		public NativeArray<SNode> Nodes;
 
+		[ReadOnly]
 		public float3 Position;
 
+		[ReadOnly]
 		public float Distance;
 		
+		[ReadOnly]
 		public int XSize;
+		
+		[ReadOnly]
 		public int YSize;
+		
+		[ReadOnly]
 		public int ZSize;
 
 		public void Execute()

@@ -22,9 +22,13 @@ namespace AI.PathFinding.Jobs
 		public NativeHashSet<int> SearchedNodes;
 		public NativeList<int> ToSearchNodes;
 		
+		[ReadOnly]
 		public float Distance;
 		
+		[ReadOnly]
 		public float3 StartPosition;
+		
+		[ReadOnly]
 		public float3 EndPosition;
 		
 		public void Execute()

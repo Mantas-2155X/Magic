@@ -16,11 +16,19 @@ namespace AI.PathFinding.Jobs
 		[WriteOnly][NativeDisableParallelForRestriction]
 		public NativeArray<SIndexWithCost> Neighbors;
 		
+		[ReadOnly]
 		public float Distance;
+		
+		[ReadOnly]
 		public float Accuracy;
 
+		[ReadOnly]
 		public int XSize;
+		
+		[ReadOnly]
 		public int YSize;
+		
+		[ReadOnly]
 		public int ZSize;
 		
 		public void Execute(int index)

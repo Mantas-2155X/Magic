@@ -15,8 +15,10 @@ namespace AI.PathFinding.Jobs
 		[WriteOnly]
 		public NativeArray<OverlapSphereCommand> Commands;
 		
+		[ReadOnly]
 		public float Radius;
 
+		[ReadOnly]
 		public QueryParameters Query;
 		
 		public void Execute(int index)
