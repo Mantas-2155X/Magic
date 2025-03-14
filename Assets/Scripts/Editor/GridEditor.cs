@@ -12,6 +12,8 @@ namespace Editor
 	public class GridEditor : UnityEditor.Editor
 	{
 		private List<Path> foundPaths = new ();
+
+		private bool findPathLoop;
 		
 		private Vector3 customStartPos;
 		private Vector3 customEndPos;
@@ -25,6 +27,10 @@ namespace Editor
 			if (GUILayout.Button("Create Grid"))
 				grid.CreateGrid().Forget();
 			
+			GUILayout.Space(10);
+			
+			findPathLoop = EditorGUILayout.Toggle("Loop", findPathLoop);
+
 			GUILayout.BeginHorizontal();
 			
 			if (GUILayout.Button("Find 1 Path"))
@@ -41,6 +47,8 @@ namespace Editor
 			
 			if (GUILayout.Button("Find Custom Path"))
 				findPath(grid, customStartPos, customEndPos).Forget();
+			
+			GUILayout.Space(10);
 			
 			if (GUILayout.Button("Clear Paths"))
 				foundPaths.Clear();
@@ -60,6 +68,15 @@ namespace Editor
 		
 			var path = await grid.FindPath(startPos.Value, endPos.Value);
 			foundPaths.Add(path);
+
+			if (findPathLoop)
+			{
+				findPath(grid, startPos, endPos).Forget();
+				
+				await UniTask.NextFrame();
+
+				foundPaths.Remove(path);
+			}
 		}
 
 		public void OnSceneGUI()
