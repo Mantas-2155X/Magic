@@ -684,19 +684,17 @@ MonoBehaviour:
   FilterMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  DrawBounds: 0
-  DrawNodes: 1
+  DrawBounds: 1
+  DrawNodes: 0
   DrawConnections: 0
   DrawPath: 1
-  DrawAvailable: 0
+  DrawAvailable: 1
   DrawInsideObject: 1
   DrawNoConnections: 1
   DrawSearched: 1
   Accuracy: 0.85
   Start: {x: 1.5, y: 50, z: 2.5}
   End: {x: 0, y: -50, z: 0}
-  createGridRequested: 1
-  findPathRequested: 1
 --- !u!1 &443400751
 GameObject:
   m_ObjectHideFlags: 0

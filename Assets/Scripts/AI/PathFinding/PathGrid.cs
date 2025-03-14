@@ -1,16 +1,17 @@
 using System;
+using System.Collections.Generic;
 using AI.PathFinding.Jobs;
 using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
+using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
+using UnityEngine.Events;
 
 namespace AI.PathFinding
 {
-	[ExecuteInEditMode]
 	public class PathGrid : MonoBehaviour
 	{
 		[Header("Grid Settings")]
@@ -36,8 +37,6 @@ namespace AI.PathFinding
 		public bool DrawNodes;
 		[SerializeField]
 		public bool DrawConnections;
-		[SerializeField]
-		public bool DrawPath;
 		
 		[Header("Draw Flags")]
 		[SerializeField]
@@ -46,19 +45,10 @@ namespace AI.PathFinding
 		public bool DrawInsideObject;
 		[SerializeField]
 		public bool DrawNoConnections;
-		[SerializeField]
-		public bool DrawSearched;
 		
 		[Header("Path Finding")]
 		[SerializeField][Range(0.5f, 1f)]
 		public float Accuracy = 0.85f;
-		[SerializeField]
-		public Vector3 Start;
-		[SerializeField]
-		public Vector3 End;
-
-		public bool createGridRequested;
-		public bool findPathRequested;
 		
 		public int NodesLength { get; private set; }
 		public int NeighborsLength { get; private set; }
@@ -66,19 +56,12 @@ namespace AI.PathFinding
 		public int NodesBatchCount => NodesLength / (JobsUtility.JobWorkerCount / 2);
 		public int NeighborsBatchCount => NeighborsLength / (JobsUtility.JobWorkerCount / 2);
 		
-		public EPathFindingStatus Status { get; private set; } = EPathFindingStatus.Idle;
-
-		#region Internals
+		public EGridStatus Status { get; private set; } = EGridStatus.NotInitialized;
 
 		private NativeArray<SNode> nodes;
 		private NativeArray<SIndexWithCost> neighbors;
 
 		private NativeArray<ENodeAvailability> availabilities;
-
-		private NativeArray<float> gCosts;
-		private NativeArray<float> hCosts;
-		private NativeArray<float> fCosts;
-		private NativeArray<int> connections;
 		
 		private NativeArray<OverlapSphereCommand> overlapCommands;
 		private NativeArray<ColliderHit> overlapResults;
@@ -86,75 +69,11 @@ namespace AI.PathFinding
 		private NativeArray<RaycastCommand> raycastCommands;
 		private NativeArray<RaycastHit> raycastResults;
 		
-		private NativeHashSet<int> searchedNodes;
-		private NativeList<int> toSearchNodes;
-		
-		private NativeList<int> resultingPath;
-
-		private JobHandle filterRaycastsHandle;
-		private JobHandle findPathHandle;
-		
 		private int xSize;
 		private int ySize;
 		private int zSize;
 		
-		private double statusChangedTime;
-		
-		#endregion
-
 		#region MonoBehaviour
-
-		public void Update()
-		{
-			if (Status == EPathFindingStatus.Idle)
-			{
-				if (createGridRequested)
-				{
-					Status = EPathFindingStatus.CreatingGrid;
-					statusChangedTime = Time.time;
-					//createGridRequested = false;
-					
-					CreateGrid();
-				}
-				else if (findPathRequested && neighbors.IsCreated)
-				{
-					Status = EPathFindingStatus.FindingPath;
-					statusChangedTime = Time.time;
-					//findPathRequested = false;
-					
-					FindPath();
-				}
-			}
-		}
-
-		public void LateUpdate()
-		{
-			if (Status == EPathFindingStatus.CreatingGrid && filterRaycastsHandle.IsCompleted && neighbors.IsCreated)
-			{
-				filterRaycastsHandle.Complete();
-				Debug.Log($"Created grid [job] (nodes {xSize * ySize * zSize} neighbors {neighbors.Length}) took {Time.time - statusChangedTime} s");
-				
-				Status = EPathFindingStatus.Idle;
-				statusChangedTime = Time.time;
-
-				if (findPathRequested && neighbors.IsCreated)
-				{
-					Status = EPathFindingStatus.FindingPath;
-					statusChangedTime = Time.time;
-					//findPathRequested = false;
-					
-					FindPath();
-				}
-			}
-			else if (Status == EPathFindingStatus.FindingPath && findPathHandle.IsCompleted && searchedNodes.IsCreated && toSearchNodes.IsCreated)
-			{
-				findPathHandle.Complete();
-				Debug.Log($"Found path [job] (searched {searchedNodes.Count} result {resultingPath.Length}) took {Time.time - statusChangedTime} s");
-				
-				Status = EPathFindingStatus.Idle;
-				statusChangedTime = Time.time;
-			}
-		}
 
 		public void OnDestroy()
 		{
@@ -167,7 +86,7 @@ namespace AI.PathFinding
 			if (DrawBounds)
 				Gizmos.DrawWireCube(transform.position + Offset, Size);
 
-			if (DrawNodes && Status != EPathFindingStatus.CreatingGrid && nodes.IsCreated)
+			if (DrawNodes && Status == EGridStatus.Initialized && nodes.IsCreated)
 			{
 				for (var i = 0; i < nodes.Length; i++)
 				{
@@ -176,16 +95,10 @@ namespace AI.PathFinding
 					{
 						case ENodeAvailability.Available:
 						{
-							if (!DrawAvailable && !DrawSearched)
+							if (!DrawAvailable)
 								continue;
 							
-							if (DrawSearched && Status != EPathFindingStatus.FindingPath && searchedNodes.Contains(i))
-								Gizmos.color = Color.black;
-							else if (DrawAvailable)
-								Gizmos.color = Color.green;
-							else
-								continue;
-
+							Gizmos.color = Color.green;
 							break;
 						}
 						case ENodeAvailability.InsideObject:
@@ -212,7 +125,7 @@ namespace AI.PathFinding
 				}
 			}
 
-			if (DrawConnections && Status != EPathFindingStatus.CreatingGrid && nodes.IsCreated)
+			if (DrawConnections && Status == EGridStatus.Initialized && nodes.IsCreated)
 			{
 				Gizmos.color = new Color(1f, 0.5f, 0f);
 
@@ -232,83 +145,31 @@ namespace AI.PathFinding
 					}
 				}
 			}
-			
-			if (DrawPath && Status != EPathFindingStatus.FindingPath && resultingPath.IsCreated)
-			{
-				Gizmos.color = Color.cyan;
-				
-				for (var i = 0; i < resultingPath.Length - 1; i++)
-				{
-					var nodePos = nodes[resultingPath[i]].WorldPosition;
-					var otherNodePos = nodes[resultingPath[i + 1]].WorldPosition;
-					
-					Gizmos.DrawLine(nodePos, otherNodePos);
-				}
-			}
 		}
 #endif
-
-		private void cleanup()
-		{
-			switch (Status)
-			{
-				case EPathFindingStatus.CreatingGrid:
-					filterRaycastsHandle.Complete();
-					break;
-				case EPathFindingStatus.FindingPath:
-					findPathHandle.Complete();
-					break;
-			}
-			
-			if (nodes.IsCreated)
-				nodes.Dispose();
-			
-			if (neighbors.IsCreated)
-				neighbors.Dispose();
-
-			if (availabilities.IsCreated)
-				availabilities.Dispose();
-			
-			if (gCosts.IsCreated)
-				gCosts.Dispose();
-
-			if (hCosts.IsCreated)
-				hCosts.Dispose();
-
-			if (fCosts.IsCreated)
-				fCosts.Dispose();
-
-			if (connections.IsCreated)
-				connections.Dispose();
-
-			if (overlapCommands.IsCreated)
-				overlapCommands.Dispose();
-			
-			if (overlapResults.IsCreated)
-				overlapResults.Dispose();
-			
-			if (raycastCommands.IsCreated)
-				raycastCommands.Dispose();
-			
-			if (raycastResults.IsCreated)
-				raycastResults.Dispose();
-			
-			if (searchedNodes.IsCreated)
-				searchedNodes.Dispose();
-			
-			if (toSearchNodes.IsCreated)
-				toSearchNodes.Dispose();
-			
-			if (resultingPath.IsCreated)
-				resultingPath.Dispose();
-		}
 		
 		#endregion
 
-		#region Path Grid
+		#region API
 
-		public void CreateGrid()
+		/// <summary>
+		/// Creates the pathfinding grid from ground up
+		/// Returns true if the grid creation was successful
+		/// </summary>
+		public async UniTask<bool> CreateGrid(UnityAction<bool> callback = null)
 		{
+			// Can only create a grid if one isn't already being made
+			if (Status == EGridStatus.Initializing)
+			{
+				if (callback != null)
+					callback.Invoke(false);
+				
+				return false;
+			}
+
+			Status = EGridStatus.Initializing;
+			
+			// Set up grid size in amount of nodes
 			xSize = (int)(Size.x / Distance) + 1;
 			ySize = (int)(Size.y / Distance) + 1;
 			zSize = (int)(Size.z / Distance) + 1;
@@ -316,6 +177,7 @@ namespace AI.PathFinding
 			var nodesLength = xSize * ySize * zSize;
 			var neighborsLength = 26 * nodesLength;
 
+			// Amount of nodes changed, dispose of old data and create it from ground up
 			if (nodesLength != NodesLength || neighborsLength != NeighborsLength)
 			{
 				cleanup();
@@ -325,21 +187,11 @@ namespace AI.PathFinding
 
 				availabilities = new NativeArray<ENodeAvailability>(nodesLength, Allocator.Persistent);
 				
-				gCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
-				hCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
-				fCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
-				connections = new NativeArray<int>(nodesLength, Allocator.Persistent);
-				
 				overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.Persistent);
 				overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.Persistent);
 
 				raycastCommands = new NativeArray<RaycastCommand>(neighborsLength, Allocator.Persistent);
 				raycastResults = new NativeArray<RaycastHit>(neighborsLength, Allocator.Persistent);
-
-				searchedNodes = new NativeHashSet<int>(nodesLength, Allocator.Persistent);
-				toSearchNodes = new NativeList<int>(nodesLength, Allocator.Persistent);
-
-				resultingPath = new NativeList<int>(Allocator.Persistent);
 				
 				NodesLength = nodesLength;
 				NeighborsLength = neighborsLength;
@@ -371,9 +223,19 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask)
 			};
 
+			// Wait so we have the data ready for the physics job as it might lock up main thread
 			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(NodesLength, NodesBatchCount, initializeNodesHandle);
+			await UniTask.WaitForFixedUpdate();
+			await UniTask.WaitUntil(() => initializeOverlapsHandle.IsCompleted);
+			await UniTask.WaitForFixedUpdate();
+			initializeOverlapsHandle.Complete();
 			
+			// Wait for physics job as it might lock up main thread
 			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, NodesBatchCount, 1, initializeOverlapsHandle);
+			await UniTask.WaitForFixedUpdate();
+			await UniTask.WaitUntil(() => overlapHandle.IsCompleted);
+			await UniTask.WaitForFixedUpdate();
+			overlapHandle.Complete();
 
 			var filterOverlapsJob = new FilterOverlapsJob
 			{
@@ -412,9 +274,19 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask, hitBackfaces: true)
 			};
 
+			// Wait so we have the data ready for the physics job as it might lock up main thread
 			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(NeighborsLength, NeighborsBatchCount, initializeNeighborsHandle);
+			await UniTask.WaitForFixedUpdate();
+			await UniTask.WaitUntil(() => initializeRaycastsHandle.IsCompleted);
+			await UniTask.WaitForFixedUpdate();
+			initializeRaycastsHandle.Complete();
 			
+			// Wait for physics job as it might lock up main thread
 			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, NeighborsBatchCount, 1, initializeRaycastsHandle);
+			await UniTask.WaitForFixedUpdate();
+			await UniTask.WaitUntil(() => raycastHandle.IsCompleted);
+			await UniTask.WaitForFixedUpdate();
+			raycastHandle.Complete();
 
 			var filterRaycastsJob = new FilterRaycastsJob
 			{
@@ -423,19 +295,44 @@ namespace AI.PathFinding
 				Empty = new SIndexWithCost()
 			};
 
-			filterRaycastsHandle = filterRaycastsJob.Schedule(NeighborsLength, NeighborsBatchCount, raycastHandle);
+			var filterRaycastsHandle = filterRaycastsJob.Schedule(NeighborsLength, NeighborsBatchCount, raycastHandle);
+			await UniTask.WaitUntil(() => filterRaycastsHandle.IsCompleted);
+			filterRaycastsHandle.Complete();
 			
 			#endregion
+			
+			Status = EGridStatus.Initialized;
+			
+			if (callback != null)
+				callback.Invoke(true);
+
+			return true;
 		}
 
-		public void FindPath()
+		/// <summary>
+		/// Finds a path between two given vectors
+		/// Returns an array of nodes that follow the path
+		/// </summary>
+		public async UniTask<SNode[]> FindPath(Vector3 startPosition, Vector3 endPosition, UnityAction<SNode[]> callback = null)
 		{
+			// Can only find a path if the grid is created
+			if (Status != EGridStatus.Initialized)
+			{
+				if (callback != null)
+					callback.Invoke(null);
+
+				return null;
+			}
+			
 			var nodesLength = xSize * ySize * zSize;
 			var nodesBatchCount = nodesLength / (JobsUtility.JobWorkerCount / 2);
 
-			resultingPath.Clear();
-			searchedNodes.Clear();
-			toSearchNodes.Clear();
+			#region Clear Path
+
+			var gCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
+			var hCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
+			var fCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
+			var connections = new NativeArray<int>(nodesLength, Allocator.Persistent);
 			
 			var clearPathJob = new ClearPathJob
 			{
@@ -445,7 +342,15 @@ namespace AI.PathFinding
 				Connections = connections
 			};
 
-			var clearPathHandle = clearPathJob.Schedule(nodesLength, nodesBatchCount, filterRaycastsHandle);
+			var clearPathHandle = clearPathJob.Schedule(nodesLength, nodesBatchCount);
+
+			#endregion
+
+			#region Find Path
+
+			var searchedNodes = new NativeHashSet<int>(nodesLength, Allocator.Persistent);
+			var toSearchNodes = new NativeList<int>(nodesLength, Allocator.Persistent);
+			var resultingPath = new NativeList<int>(Allocator.Persistent);
 			
 			var findPathJob = new FindPathJob
 			{
@@ -460,13 +365,69 @@ namespace AI.PathFinding
 				SearchedNodes = searchedNodes,
 				ToSearchNodes = toSearchNodes,
 				Distance = Distance,
-				StartPosition = Start,
-				EndPosition = End
+				StartPosition = startPosition,
+				EndPosition = endPosition
 			};
 
-			findPathHandle = findPathJob.Schedule(clearPathHandle);
+			var findPathHandle = findPathJob.Schedule(clearPathHandle);
+			await UniTask.WaitUntil(() => findPathHandle.IsCompleted);
+			findPathHandle.Complete();
+
+			SNode[] result = null;
+			
+			if (resultingPath.Length != 0)
+			{
+				result = new SNode[resultingPath.Length];
+				
+				for (var i = 0; i < resultingPath.Length; i++)
+					result[i] = nodes[resultingPath[i]];
+			}
+			
+			#endregion
+
+			gCosts.Dispose();
+			hCosts.Dispose();
+			fCosts.Dispose();
+			connections.Dispose();
+
+			searchedNodes.Dispose();
+			toSearchNodes.Dispose();
+			resultingPath.Dispose();
+			
+			if (callback != null)
+				callback.Invoke(result);
+
+			return result;
 		}
 		
+		#endregion
+
+		#region Internals
+
+		private void cleanup()
+		{
+			if (nodes.IsCreated)
+				nodes.Dispose();
+			
+			if (neighbors.IsCreated)
+				neighbors.Dispose();
+
+			if (availabilities.IsCreated)
+				availabilities.Dispose();
+
+			if (overlapCommands.IsCreated)
+				overlapCommands.Dispose();
+			
+			if (overlapResults.IsCreated)
+				overlapResults.Dispose();
+			
+			if (raycastCommands.IsCreated)
+				raycastCommands.Dispose();
+			
+			if (raycastResults.IsCreated)
+				raycastResults.Dispose();
+		}
+
 		#endregion
 	}
 }
