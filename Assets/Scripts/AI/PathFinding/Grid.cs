@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Jobs.LowLevel.Unsafe;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -323,10 +324,42 @@ namespace AI.PathFinding
 				return null;
 			}
 			
+			var nodesRadius = Radius;
 			var nodesLength = xSize * ySize * zSize;
 			var nodesBatchCount = nodesLength / (JobsUtility.JobWorkerCount / 2);
 
-			#region Clear Path
+			#region Filter Obstacles
+
+			var obstacles = Obstacle.Obstacles;
+			var obstaclesLength = obstacles.Count;
+
+			var positions = new NativeArray<float3>(obstaclesLength, Allocator.Persistent);
+			var halfSizes = new NativeArray<float3>(obstaclesLength, Allocator.Persistent);
+			
+			var obstructed = new NativeArray<bool>(nodesLength, Allocator.Persistent);
+
+			for (var i = 0; i < obstaclesLength; i++)
+			{
+				var obstacle = obstacles[i];
+				
+				positions[i] = obstacle.GetPosition();
+				halfSizes[i] = obstacle.GetHalfSize();
+			}
+
+			var filterObstaclesJob = new FilterObstaclesJob
+			{
+				Nodes = nodes,
+				Positions = positions,
+				HalfSizes = halfSizes,
+				Obstructed = obstructed,
+				Radius = nodesRadius
+			};
+
+			var filterObstaclesHandle = filterObstaclesJob.Schedule(nodesLength, nodesBatchCount);
+			
+			#endregion
+			
+			#region Initialize Path
 
 			var gCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
 			var hCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
@@ -341,7 +374,7 @@ namespace AI.PathFinding
 				Connections = connections
 			};
 
-			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount);
+			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount, filterObstaclesHandle);
 
 			#endregion
 
@@ -365,27 +398,23 @@ namespace AI.PathFinding
 				ToSearchNodes = toSearchNodes,
 				Distance = Distance,
 				StartPosition = startPosition,
-				EndPosition = endPosition
+				EndPosition = endPosition,
+				Obstructed = obstructed
 			};
 
 			var findPathHandle = findPathJob.Schedule(initializePathHandle);
 			await UniTask.WaitUntil(() => findPathHandle.IsCompleted);
 			findPathHandle.Complete();
 
-			Path result = null;
-			
-			if (resultingPath.Length != 0)
-			{
-				var points = new Vector3[resultingPath.Length];
-				
-				for (var i = 0; i < resultingPath.Length; i++)
-					points[i] = nodes[resultingPath[i]].WorldPosition;
-				
-				result = new Path(points, searchedNodes.Count);
-			}
+			var result = Path.Create(nodes, searchedNodes, resultingPath, obstructed, nodesRadius);
 			
 			#endregion
 
+			positions.Dispose();
+			halfSizes.Dispose();
+			
+			obstructed.Dispose();
+			
 			gCosts.Dispose();
 			hCosts.Dispose();
 			fCosts.Dispose();

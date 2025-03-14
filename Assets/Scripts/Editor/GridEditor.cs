@@ -13,6 +13,9 @@ namespace Editor
 	{
 		private List<Path> foundPaths = new ();
 		
+		private Vector3 customStartPos;
+		private Vector3 customEndPos;
+		
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
@@ -32,6 +35,12 @@ namespace Editor
 					findPath(grid).Forget();
 			
 			GUILayout.EndHorizontal();
+
+			customStartPos = EditorGUILayout.Vector3Field("Custom Start Position", customStartPos);
+			customEndPos = EditorGUILayout.Vector3Field("Custom End Position", customEndPos);
+			
+			if (GUILayout.Button("Find Custom Path"))
+				findPath(grid, customStartPos, customEndPos).Forget();
 			
 			if (GUILayout.Button("Clear Paths"))
 				foundPaths.Clear();
@@ -41,12 +50,15 @@ namespace Editor
 			SceneView.RepaintAll();
 		}
 		
-		private async UniTask findPath(Grid grid)
+		private async UniTask findPath(Grid grid, Vector3? startPos = null, Vector3? endPos = null)
 		{
-			var startPos = new Vector3(Random.Range(-grid.Size.x, grid.Size.x), Random.Range(-grid.Size.y, grid.Size.y), Random.Range(-grid.Size.z, grid.Size.z));
-			var endPos = new Vector3(Random.Range(-grid.Size.x, grid.Size.x), Random.Range(-grid.Size.y, grid.Size.y), Random.Range(-grid.Size.z, grid.Size.z));
+			if (startPos == null)
+				startPos = new Vector3(Random.Range(-grid.Size.x, grid.Size.x), Random.Range(-grid.Size.y, grid.Size.y), Random.Range(-grid.Size.z, grid.Size.z));
 		
-			var path = await grid.FindPath(startPos, endPos);
+			if (endPos == null)
+				endPos = new Vector3(Random.Range(-grid.Size.x, grid.Size.x), Random.Range(-grid.Size.y, grid.Size.y), Random.Range(-grid.Size.z, grid.Size.z));
+		
+			var path = await grid.FindPath(startPos.Value, endPos.Value);
 			foundPaths.Add(path);
 		}
 
@@ -56,12 +68,13 @@ namespace Editor
 				return;
 
 			var currentColor = Handles.color;
-			Handles.color = Color.cyan;
 				
 			foreach (var foundPath in foundPaths)
 			{
 				if (foundPath == null)
 					continue;
+				
+				Handles.color = Color.cyan;
 				
 				var points = foundPath.Points;
 				for (var i = 0; i < points.Length - 1; i++)
@@ -71,6 +84,16 @@ namespace Editor
 					
 					Handles.DrawLine(nodePos, otherNodePos);
 				}
+
+				Handles.color = Color.magenta;
+				var searched = foundPath.Searched;
+				for (var i = 0; i < searched.Length; i++)
+					Handles.SphereHandleCap(0, searched[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
+				
+				Handles.color = Color.black;
+				var obstructed = foundPath.Obstructed;
+				for (var i = 0; i < obstructed.Count; i++)
+					Handles.SphereHandleCap(0, obstructed[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
 			}
 			
 			Handles.color = currentColor;

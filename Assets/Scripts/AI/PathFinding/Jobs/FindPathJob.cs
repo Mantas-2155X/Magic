@@ -40,6 +40,9 @@ namespace AI.PathFinding.Jobs
 		[ReadOnly]
 		public float3 EndPosition;
 		
+		[ReadOnly]
+		public NativeArray<bool> Obstructed;
+		
 		public void Execute()
 		{
 			SearchedNodes.Clear();
@@ -102,6 +105,9 @@ namespace AI.PathFinding.Jobs
 
 			for (var i = 0; i < Nodes.Length; i++)
 			{
+				if (Availabilities[i] != ENodeAvailability.Available || Obstructed[i])
+					continue;
+
 				var dist = math.distancesq(Nodes[i].WorldPosition, worldPosition);
 				if (dist > closestDistance)
 					continue;
@@ -127,7 +133,7 @@ namespace AI.PathFinding.Jobs
 
 				var neighborIndex = neighbor.Index;
 				
-				if (Availabilities[neighborIndex] != ENodeAvailability.Available)
+				if (Availabilities[neighborIndex] != ENodeAvailability.Available || Obstructed[neighborIndex])
 					continue;
 			
 				if (SearchedNodes.Contains(neighborIndex))
