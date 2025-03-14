@@ -483,6 +483,9 @@ namespace AI.PathFinding
 			if (neighbors.IsCreated)
 				neighbors.Dispose();
 
+			if (areas.IsCreated)
+				areas.Dispose();
+			
 			if (availabilities.IsCreated)
 				availabilities.Dispose();
 
