@@ -5,7 +5,7 @@ using Unity.Jobs;
 namespace AI.PathFinding.Jobs
 {
 	[BurstCompile]
-	public struct ClearPathJob : IJobParallelFor
+	public struct InitializePathJob : IJobParallelFor
 	{
 		[WriteOnly]
 		public NativeArray<float> GCosts;

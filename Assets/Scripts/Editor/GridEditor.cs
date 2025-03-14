@@ -3,12 +3,13 @@ using AI.PathFinding;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using Grid = AI.PathFinding.Grid;
 using Random = UnityEngine.Random;
 
 namespace Editor
 {
-	[CustomEditor(typeof(PathGrid))]
-	public class PathGridEditor : UnityEditor.Editor
+	[CustomEditor(typeof(Grid))]
+	public class GridEditor : UnityEditor.Editor
 	{
 		private List<Path> foundPaths = new ();
 		
@@ -16,19 +17,19 @@ namespace Editor
 		{
 			base.OnInspectorGUI();
 			
-			var pathGrid = (PathGrid)target;
+			var grid = (Grid)target;
 			
 			if (GUILayout.Button("Create Grid"))
-				pathGrid.CreateGrid().Forget();
+				grid.CreateGrid().Forget();
 			
 			GUILayout.BeginHorizontal();
 			
 			if (GUILayout.Button("Find 1 Path"))
-				findPath(pathGrid).Forget();
+				findPath(grid).Forget();
 			
 			if (GUILayout.Button("Find 5 Paths"))
 				for (var i = 0; i < 5; i++)
-					findPath(pathGrid).Forget();
+					findPath(grid).Forget();
 			
 			GUILayout.EndHorizontal();
 			
@@ -40,12 +41,12 @@ namespace Editor
 			SceneView.RepaintAll();
 		}
 		
-		private async UniTask findPath(PathGrid pathGrid)
+		private async UniTask findPath(Grid grid)
 		{
-			var startPos = new Vector3(Random.Range(-pathGrid.Size.x, pathGrid.Size.x), Random.Range(-pathGrid.Size.y, pathGrid.Size.y), Random.Range(-pathGrid.Size.z, pathGrid.Size.z));
-			var endPos = new Vector3(Random.Range(-pathGrid.Size.x, pathGrid.Size.x), Random.Range(-pathGrid.Size.y, pathGrid.Size.y), Random.Range(-pathGrid.Size.z, pathGrid.Size.z));
+			var startPos = new Vector3(Random.Range(-grid.Size.x, grid.Size.x), Random.Range(-grid.Size.y, grid.Size.y), Random.Range(-grid.Size.z, grid.Size.z));
+			var endPos = new Vector3(Random.Range(-grid.Size.x, grid.Size.x), Random.Range(-grid.Size.y, grid.Size.y), Random.Range(-grid.Size.z, grid.Size.z));
 		
-			var path = await pathGrid.FindPath(startPos, endPos);
+			var path = await grid.FindPath(startPos, endPos);
 			foundPaths.Add(path);
 		}
 

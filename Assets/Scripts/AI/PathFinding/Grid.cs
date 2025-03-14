@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using AI.PathFinding.Jobs;
 using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
@@ -12,7 +11,7 @@ using UnityEngine.Events;
 
 namespace AI.PathFinding
 {
-	public class PathGrid : MonoBehaviour
+	public class Grid : MonoBehaviour
 	{
 		[Header("Grid Settings")]
 		[SerializeField]
@@ -334,7 +333,7 @@ namespace AI.PathFinding
 			var fCosts = new NativeArray<float>(nodesLength, Allocator.Persistent);
 			var connections = new NativeArray<int>(nodesLength, Allocator.Persistent);
 			
-			var clearPathJob = new ClearPathJob
+			var initializePathJob = new InitializePathJob
 			{
 				GCosts = gCosts,
 				HCosts = hCosts,
@@ -342,7 +341,7 @@ namespace AI.PathFinding
 				Connections = connections
 			};
 
-			var clearPathHandle = clearPathJob.Schedule(nodesLength, nodesBatchCount);
+			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount);
 
 			#endregion
 
@@ -369,7 +368,7 @@ namespace AI.PathFinding
 				EndPosition = endPosition
 			};
 
-			var findPathHandle = findPathJob.Schedule(clearPathHandle);
+			var findPathHandle = findPathJob.Schedule(initializePathHandle);
 			await UniTask.WaitUntil(() => findPathHandle.IsCompleted);
 			findPathHandle.Complete();
 
