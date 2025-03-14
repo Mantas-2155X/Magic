@@ -22,7 +22,7 @@ namespace AI.PathFinding.Jobs
 		public NativeArray<bool> Obstructed;
 
 		[ReadOnly]
-		public float Radius;
+		public float HalfRadius;
 
 		public void Execute(int index)
 		{
@@ -34,6 +34,9 @@ namespace AI.PathFinding.Jobs
 				var position = Positions[i];
 				var halfSize = HalfSizes[i];
 
+				var direction = math.normalize(position - nodePos);
+				var closestPoint = direction * HalfRadius + nodePos;
+				
 				var minX = position.x - halfSize.x;
 				var minY = position.y - halfSize.y;
 				var minZ = position.z - halfSize.z;
@@ -42,7 +45,7 @@ namespace AI.PathFinding.Jobs
 				var maxY = position.y + halfSize.y;
 				var maxZ = position.z + halfSize.z;
 
-				if ((nodePos.x >= minX && nodePos.x <= maxX) && (nodePos.y >= minY && nodePos.y <= maxY) && (nodePos.z >= minZ && nodePos.z <= maxZ))
+				if ((closestPoint.x >= minX && closestPoint.x <= maxX) && (closestPoint.y >= minY && closestPoint.y <= maxY) && (closestPoint.z >= minZ && closestPoint.z <= maxZ))
 				{
 					Obstructed[index] = true;
 					break;

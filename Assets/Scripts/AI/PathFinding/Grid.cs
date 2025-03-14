@@ -352,7 +352,7 @@ namespace AI.PathFinding
 				Positions = positions,
 				HalfSizes = halfSizes,
 				Obstructed = obstructed,
-				Radius = nodesRadius
+				HalfRadius = nodesRadius / 2f
 			};
 
 			var filterObstaclesHandle = filterObstaclesJob.Schedule(nodesLength, nodesBatchCount);
