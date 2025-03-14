@@ -60,6 +60,8 @@ namespace AI.PathFinding
 
 		private NativeArray<SNode> nodes;
 		private NativeArray<SIndexWithCost> neighbors;
+		
+		private NativeArray<float> areas;
 
 		private NativeArray<ENodeAvailability> availabilities;
 		
@@ -185,6 +187,8 @@ namespace AI.PathFinding
 				nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
 				neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
 
+				areas = new NativeArray<float>(nodesLength, Allocator.Persistent);
+
 				availabilities = new NativeArray<ENodeAvailability>(nodesLength, Allocator.Persistent);
 				
 				overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.Persistent);
@@ -212,6 +216,38 @@ namespace AI.PathFinding
 			var initializeNodesHandle = initializeNodesJob.Schedule();
 
 			#endregion
+
+			#region Initialize Areas
+
+			var areasList = Area.Areas;
+			var areasLength = areasList.Count;
+
+			var positions = new NativeArray<float3>(areasLength, Allocator.Persistent);
+			var halfSizes = new NativeArray<float3>(areasLength, Allocator.Persistent);
+			var areaCosts = new NativeArray<float>(areasLength, Allocator.Persistent);
+			
+			for (var i = 0; i < areasLength; i++)
+			{
+				var area = areasList[i];
+				
+				positions[i] = area.GetPosition();
+				halfSizes[i] = area.GetHalfSize();
+				areaCosts[i] = area.Cost;
+			}
+
+			var initializeAreasJob = new InitializeAreasJob
+			{
+				Nodes = nodes,
+				Positions = positions,
+				HalfSizes = halfSizes,
+				AreaCosts = areaCosts,
+				Areas = areas,
+				HalfRadius = Radius / 2f
+			};
+
+			var initializeAreasHandle = initializeAreasJob.Schedule(nodesLength, NodesBatchCount, initializeNodesHandle);
+
+			#endregion
 			
 			#region Filter Overlaps
 			
@@ -224,7 +260,7 @@ namespace AI.PathFinding
 			};
 
 			// Wait so we have the data ready for the physics job as it might lock up main thread
-			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(NodesLength, NodesBatchCount, initializeNodesHandle);
+			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(NodesLength, NodesBatchCount, initializeAreasHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => initializeOverlapsHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
@@ -306,6 +342,10 @@ namespace AI.PathFinding
 			if (callback != null)
 				callback.Invoke(true);
 
+			positions.Dispose();
+			halfSizes.Dispose();
+			areaCosts.Dispose();
+			
 			return true;
 		}
 
@@ -388,6 +428,7 @@ namespace AI.PathFinding
 			{
 				Nodes = nodes,
 				Neighbors = neighbors,
+				Areas = areas,
 				Availabilities = availabilities,
 				GCosts = gCosts,
 				HCosts = hCosts,

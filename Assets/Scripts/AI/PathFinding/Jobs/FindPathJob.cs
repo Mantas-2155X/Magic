@@ -18,6 +18,9 @@ namespace AI.PathFinding.Jobs
 		public NativeArray<SIndexWithCost> Neighbors;
 		
 		[ReadOnly]
+		public NativeArray<float> Areas;
+
+		[ReadOnly]
 		public NativeArray<ENodeAvailability> Availabilities;
 
 		public NativeArray<float> GCosts;
@@ -139,7 +142,7 @@ namespace AI.PathFinding.Jobs
 				if (SearchedNodes.Contains(neighborIndex))
 					continue;
 				
-				var gCost = nodeGCost + neighbor.Cost;
+				var gCost = nodeGCost + neighbor.Cost + Areas[neighborIndex];
 				if (gCost >= GCosts[neighborIndex])
 					continue;
 				
