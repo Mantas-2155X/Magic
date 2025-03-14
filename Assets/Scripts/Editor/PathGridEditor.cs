@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using AI.PathFinding;
-using AI.PathFinding.Structs;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -12,7 +10,7 @@ namespace Editor
 	[CustomEditor(typeof(PathGrid))]
 	public class PathGridEditor : UnityEditor.Editor
 	{
-		private List<SNode[]> foundPaths = new ();
+		private List<Path> foundPaths = new ();
 		
 		public override void OnInspectorGUI()
 		{
@@ -64,10 +62,11 @@ namespace Editor
 				if (foundPath == null)
 					continue;
 				
-				for (var i = 0; i < foundPath.Length - 1; i++)
+				var points = foundPath.Points;
+				for (var i = 0; i < points.Length - 1; i++)
 				{
-					var nodePos = foundPath[i].WorldPosition;
-					var otherNodePos = foundPath[i + 1].WorldPosition;
+					var nodePos = points[i];
+					var otherNodePos = points[i + 1];
 					
 					Handles.DrawLine(nodePos, otherNodePos);
 				}
