@@ -685,14 +685,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   DrawBounds: 1
-  DrawNodes: 0
+  DrawNodes: 1
   DrawConnections: 0
-  DrawPaths: 0
+  DrawPaths: 1
   DrawAvailable: 0
   DrawInsideObject: 0
-  DrawNoConnections: 0
-  DrawSearched: 0
-  DrawObstructed: 0
+  DrawSearched: 1
+  DrawObstructed: 1
   Accuracy: 0.85
 --- !u!1 &443400751
 GameObject:

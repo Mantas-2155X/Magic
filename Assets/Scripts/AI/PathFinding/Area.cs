@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace AI.PathFinding
 {
+	[ExecuteInEditMode]
 	public class Area : MonoBehaviour
 	{
 		[Header("Area Settings")]

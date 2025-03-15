@@ -12,6 +12,7 @@ using UnityEngine.Events;
 
 namespace AI.PathFinding
 {
+	[ExecuteInEditMode]
 	public class Grid : MonoBehaviour
 	{
 		[Header("Grid Settings")]
