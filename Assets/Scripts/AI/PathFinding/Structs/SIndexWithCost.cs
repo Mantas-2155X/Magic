@@ -12,16 +12,6 @@ namespace AI.PathFinding.Structs
 
 		public bool Valid;
 		
-		public static SIndexWithCost Create(int index, float cost)
-		{
-			return new SIndexWithCost
-			{
-				Index = index,
-				Cost = cost,
-				Valid = true
-			};
-		}
-		
 		public bool Equals(SIndexWithCost other)
 		{
 			return Index == other.Index && Cost.Equals(other.Cost) && Valid == other.Valid;

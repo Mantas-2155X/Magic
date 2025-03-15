@@ -67,7 +67,11 @@ namespace AI.PathFinding.Jobs
 							continue;
 
 						var cost = math.distance(worldPos, Nodes[neighborIndex].WorldPosition) / Distance;
-						var neighbor = SIndexWithCost.Create(neighborIndex, cost * Accuracy);
+
+						SIndexWithCost neighbor;
+						neighbor.Index = neighborIndex;
+						neighbor.Cost = cost * Accuracy;
+						neighbor.Valid = true;
 						
 						Neighbors[addIndex] = neighbor;
 						addIndex++;
