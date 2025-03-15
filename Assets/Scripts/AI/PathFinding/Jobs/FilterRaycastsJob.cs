@@ -8,21 +8,20 @@ namespace AI.PathFinding.Jobs
 	[BurstCompile]
 	public struct FilterRaycastsJob : IJobParallelFor
 	{
-		[WriteOnly]
 		public NativeArray<SIndexWithCost> Neighbors;
 
 		[ReadOnly]
 		public NativeSlice<SRaycastHit> Hits;
-
-		[ReadOnly]
-		public SIndexWithCost Empty;
 
 		public void Execute(int index)
 		{
 			if (Hits[index].m_Collider == 0)
 				return;
 
-			Neighbors[index] = Empty;
+			var neighbor = Neighbors[index];
+			neighbor.Valid = false;
+			
+			Neighbors[index] = neighbor;
 		}
 	}
 }

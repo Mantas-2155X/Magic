@@ -403,7 +403,6 @@ namespace AI.PathFinding
 			{
 				Neighbors = neighbors,
 				Hits = raycastResults.Slice().SliceConvert<SRaycastHit>(),
-				Empty = new SIndexWithCost()
 			};
 
 #if DEBUG_TIMINGS
