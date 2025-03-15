@@ -10,11 +10,11 @@ namespace AI.PathFinding.Structs
 		
 		public float Cost;
 
-		public bool Valid;
+		public bool Connects;
 		
 		public bool Equals(SIndexWithCost other)
 		{
-			return Index == other.Index && Cost.Equals(other.Cost) && Valid == other.Valid;
+			return Index == other.Index && Cost.Equals(other.Cost) && Connects == other.Connects;
 		}
 		
 		public override bool Equals(object obj)
@@ -28,7 +28,7 @@ namespace AI.PathFinding.Structs
 			{
 				var hashCode = Index;
 				hashCode = (hashCode * 397) ^ Cost.GetHashCode();
-				hashCode = (hashCode * 397) ^ Valid.GetHashCode();
+				hashCode = (hashCode * 397) ^ Connects.GetHashCode();
 				return hashCode;
 			}
 		}

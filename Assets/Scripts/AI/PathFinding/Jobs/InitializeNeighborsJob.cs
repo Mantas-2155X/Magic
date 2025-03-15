@@ -71,7 +71,7 @@ namespace AI.PathFinding.Jobs
 						SIndexWithCost neighbor;
 						neighbor.Index = neighborIndex;
 						neighbor.Cost = cost * Accuracy;
-						neighbor.Valid = true;
+						neighbor.Connects = true;
 						
 						Neighbors[addIndex] = neighbor;
 						addIndex++;

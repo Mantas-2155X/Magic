@@ -140,7 +140,7 @@ namespace AI.PathFinding
 					for (var k = startIndex; k < startIndex + 26; k++)
 					{
 						var neighbor = neighbors[k];
-						if (!neighbor.Valid)
+						if (!neighbor.Connects)
 							continue;
 						
 						Gizmos.DrawLine(nodePos, nodes[neighbor.Index].WorldPosition);

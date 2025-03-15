@@ -19,7 +19,7 @@ namespace AI.PathFinding.Jobs
 				return;
 
 			var neighbor = Neighbors[index];
-			neighbor.Valid = false;
+			neighbor.Connects = false;
 			
 			Neighbors[index] = neighbor;
 		}

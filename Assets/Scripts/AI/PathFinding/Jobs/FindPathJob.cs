@@ -42,11 +42,6 @@ namespace AI.PathFinding.Jobs
 		
 		public void Execute()
 		{
-			SearchedNodes.Clear();
-			ToSearchNodes.Clear();
-			
-			ResultingPath.Clear();
-			
 			var startNodeIndex = findClosestNode(StartPosition);
 			var endNodeIndex = findClosestNode(EndPosition);
 
@@ -126,7 +121,7 @@ namespace AI.PathFinding.Jobs
 			for (var i = startIndex; i < startIndex + 26; i++)
 			{
 				var neighbor = Neighbors[i];
-				if (!neighbor.Valid)
+				if (!neighbor.Connects)
 					continue;
 
 				var neighborIndex = neighbor.Index;
