@@ -14,6 +14,9 @@ namespace Editor
 		private List<Path> foundPaths = new ();
 
 		[SerializeField]
+		private bool createGridLoop;
+
+		[SerializeField]
 		private bool findPathLoop;
 		
 		[SerializeField]
@@ -38,7 +41,9 @@ namespace Editor
 			GUILayout.EndHorizontal();
 			
 			if (GUILayout.Button("Create Grid"))
-				grid.CreateGrid().Forget();
+				createGrid(grid).Forget();
+			
+			createGridLoop = EditorGUILayout.Toggle("Loop Grid", createGridLoop);
 			
 			GUILayout.BeginHorizontal();
 			
@@ -54,7 +59,7 @@ namespace Editor
 			customStartPos = EditorGUILayout.Vector3Field("Custom Start Position", customStartPos);
 			customEndPos = EditorGUILayout.Vector3Field("Custom End Position", customEndPos);
 			
-			findPathLoop = EditorGUILayout.Toggle("Loop", findPathLoop);
+			findPathLoop = EditorGUILayout.Toggle("Loop Paths", findPathLoop);
 
 			if (GUILayout.Button("Find Custom Path"))
 				findPath(grid, customStartPos, customEndPos).Forget();
@@ -66,6 +71,17 @@ namespace Editor
 			
 			Repaint();
 			SceneView.RepaintAll();
+		}
+
+		private async UniTask createGrid(Grid grid)
+		{
+			await grid.CreateGrid();
+
+			if (createGridLoop)
+			{
+				await UniTask.WaitForSeconds(0.5f);
+				createGrid(grid).Forget();
+			}
 		}
 		
 		private async UniTask findPath(Grid grid, Vector3? startPos = null, Vector3? endPos = null)

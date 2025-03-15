@@ -17,7 +17,10 @@ namespace AI.PathFinding.Jobs
 		public NativeArray<SIndexWithCost> Neighbors;
 		
 		[WriteOnly]
-		public NativeArray<RaycastCommand> Commands;
+		public NativeArray<SpherecastCommand> Commands;
+
+		[ReadOnly]
+		public float Radius;
 
 		[ReadOnly]
 		public QueryParameters Query;
@@ -34,7 +37,7 @@ namespace AI.PathFinding.Jobs
 			direction.y = neighborPos.y - nodePos.y;
 			direction.z = neighborPos.z - nodePos.z;
 			
-			Commands[index] = new RaycastCommand(nodePos, direction, Query, math.length(direction));
+			Commands[index] = new SpherecastCommand(nodePos, Radius, direction, Query, math.length(direction));
 		}
 	}
 }

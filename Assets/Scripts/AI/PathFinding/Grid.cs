@@ -80,7 +80,7 @@ namespace AI.PathFinding
 		private NativeArray<OverlapSphereCommand> overlapCommands;
 		private NativeArray<ColliderHit> overlapResults;
 
-		private NativeArray<RaycastCommand> raycastCommands;
+		private NativeArray<SpherecastCommand> raycastCommands;
 		private NativeArray<RaycastHit> raycastResults;
 		
 		private int xSize;
@@ -215,7 +215,7 @@ namespace AI.PathFinding
 				overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.Persistent);
 				overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.Persistent);
 
-				raycastCommands = new NativeArray<RaycastCommand>(neighborsLength, Allocator.Persistent);
+				raycastCommands = new NativeArray<SpherecastCommand>(neighborsLength, Allocator.Persistent);
 				raycastResults = new NativeArray<RaycastHit>(neighborsLength, Allocator.Persistent);
 				
 				NodesLength = nodesLength;
@@ -328,6 +328,7 @@ namespace AI.PathFinding
 				Nodes = nodes,
 				Neighbors = neighbors,
 				Commands = raycastCommands,
+				Radius = Radius,
 				Query = new QueryParameters(FilterMask, hitBackfaces: true)
 			};
 
@@ -339,7 +340,7 @@ namespace AI.PathFinding
 			initializeRaycastsHandle.Complete();
 			
 			// Wait for physics job as it might lock up main thread
-			var raycastHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastResults, NeighborsBatchCount, 1, initializeRaycastsHandle);
+			var raycastHandle = SpherecastCommand.ScheduleBatch(raycastCommands, raycastResults, NeighborsBatchCount, 1, initializeRaycastsHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => raycastHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
