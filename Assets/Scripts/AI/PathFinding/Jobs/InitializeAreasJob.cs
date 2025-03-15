@@ -9,7 +9,6 @@ namespace AI.PathFinding.Jobs
 	[BurstCompile]
 	public struct InitializeAreasJob : IJobParallelFor
 	{
-		[ReadOnly]
 		public NativeArray<SNode> Nodes;
 
 		[ReadOnly]
@@ -20,9 +19,6 @@ namespace AI.PathFinding.Jobs
 
 		[ReadOnly]
 		public NativeArray<float> AreaCosts;
-
-		[WriteOnly]
-		public NativeArray<float> Areas;
 		
 		[ReadOnly]
 		public float HalfRadius;
@@ -50,7 +46,8 @@ namespace AI.PathFinding.Jobs
 
 				if ((closestPoint.x >= minX && closestPoint.x <= maxX) && (closestPoint.y >= minY && closestPoint.y <= maxY) && (closestPoint.z >= minZ && closestPoint.z <= maxZ))
 				{
-					Areas[index] = AreaCosts[i];
+					node.AreaCost = AreaCosts[i];
+					Nodes[index] = node;
 					break;
 				}
 			}

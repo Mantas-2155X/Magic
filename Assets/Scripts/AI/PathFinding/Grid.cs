@@ -69,10 +69,6 @@ namespace AI.PathFinding
 		private NativeArray<SNode> nodes;
 		private NativeArray<SIndexWithCost> neighbors;
 		
-		private NativeArray<float> areas;
-
-		private NativeArray<ENodeAvailability> availabilities;
-		
 		private NativeArray<OverlapSphereCommand> overlapCommands;
 		private NativeArray<ColliderHit> overlapResults;
 
@@ -100,7 +96,7 @@ namespace AI.PathFinding
 			{
 				for (var i = 0; i < nodes.Length; i++)
 				{
-					var availability = availabilities[i];
+					var availability = nodes[i].Availability;
 					switch (availability)
 					{
 						case ENodeAvailability.Available:
@@ -196,10 +192,6 @@ namespace AI.PathFinding
 				nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
 				neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
 
-				areas = new NativeArray<float>(nodesLength, Allocator.Persistent);
-
-				availabilities = new NativeArray<ENodeAvailability>(nodesLength, Allocator.Persistent);
-				
 				overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.Persistent);
 				overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.Persistent);
 
@@ -250,7 +242,6 @@ namespace AI.PathFinding
 				Positions = positions,
 				HalfSizes = halfSizes,
 				AreaCosts = areaCosts,
-				Areas = areas,
 				HalfRadius = Radius / 2f
 			};
 
@@ -284,7 +275,7 @@ namespace AI.PathFinding
 
 			var filterOverlapsJob = new FilterOverlapsJob
 			{
-				Availabilities = availabilities,
+				Nodes = nodes,
 				Hits = overlapResults
 			};
 
@@ -464,8 +455,6 @@ namespace AI.PathFinding
 			{
 				Nodes = nodes,
 				Neighbors = neighbors,
-				Areas = areas,
-				Availabilities = availabilities,
 				GCosts = gCosts,
 				HCosts = hCosts,
 				FCosts = fCosts,
@@ -520,12 +509,6 @@ namespace AI.PathFinding
 			
 			if (neighbors.IsCreated)
 				neighbors.Dispose();
-
-			if (areas.IsCreated)
-				areas.Dispose();
-			
-			if (availabilities.IsCreated)
-				availabilities.Dispose();
 
 			if (overlapCommands.IsCreated)
 				overlapCommands.Dispose();

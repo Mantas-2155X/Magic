@@ -15,6 +15,10 @@ namespace AI.PathFinding.Structs
 		public int3 GridPosition;
 		public float3 WorldPosition;
 
+		public float AreaCost;
+		
+		public ENodeAvailability Availability;
+		
 		#endregion
 			
 		public bool Equals(SNode other)
