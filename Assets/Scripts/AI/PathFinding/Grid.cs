@@ -46,8 +46,6 @@ namespace AI.PathFinding
 		[SerializeField]
 		public bool DrawInsideObject;
 		[SerializeField]
-		public bool DrawNoConnections;
-		[SerializeField]
 		public bool DrawSearched;
 		[SerializeField]
 		public bool DrawObstructed;
@@ -59,16 +57,13 @@ namespace AI.PathFinding
 		public int NodesLength { get; private set; }
 		public int NeighborsLength { get; private set; }
 
-		public int NodesBatchCount => NodesLength / (JobsUtility.JobWorkerCount / 2);
-		public int NeighborsBatchCount => NeighborsLength / (JobsUtility.JobWorkerCount / 2);
-		
-		public int SimultaneousPathFindsCount => JobsUtility.JobWorkerCount / 2;
-
 		public int DelayedPathFinds { get; private set; }
 		public int WaitingPathFinds { get; private set; }
 		public int ActivePathFinds { get; private set; }
 
 		public EGridStatus Status { get; private set; } = EGridStatus.NotInitialized;
+
+		public int MaximumWorkers => JobsUtility.JobWorkerCount / 2;
 
 		private NativeArray<SNode> nodes;
 		private NativeArray<SIndexWithCost> neighbors;
@@ -121,14 +116,6 @@ namespace AI.PathFinding
 								continue;
 						
 							Gizmos.color = Color.red;
-							break;
-						}
-						case ENodeAvailability.NoConnections:
-						{
-							if (!DrawNoConnections)
-								continue;
-						
-							Gizmos.color = Color.yellow;
 							break;
 						}
 						default:
@@ -266,7 +253,7 @@ namespace AI.PathFinding
 				HalfRadius = Radius / 2f
 			};
 
-			var initializeAreasHandle = initializeAreasJob.Schedule(nodesLength, NodesBatchCount, initializeNodesHandle);
+			var initializeAreasHandle = initializeAreasJob.Schedule(nodesLength, nodesLength / MaximumWorkers, initializeNodesHandle);
 
 			#endregion
 			
@@ -281,14 +268,14 @@ namespace AI.PathFinding
 			};
 
 			// Wait so we have the data ready for the physics job as it might lock up main thread
-			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(NodesLength, NodesBatchCount, initializeAreasHandle);
+			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, initializeAreasHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => initializeOverlapsHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
 			initializeOverlapsHandle.Complete();
 			
 			// Wait for physics job as it might lock up main thread
-			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, NodesBatchCount, 1, initializeOverlapsHandle);
+			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, nodesLength / MaximumWorkers, 1, initializeOverlapsHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => overlapHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
@@ -300,7 +287,7 @@ namespace AI.PathFinding
 				Hits = overlapResults
 			};
 
-			var filterOverlapsHandle = filterOverlapsJob.Schedule(NodesLength, NodesBatchCount, overlapHandle);
+			var filterOverlapsHandle = filterOverlapsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, overlapHandle);
 			
 			#endregion
 
@@ -317,7 +304,7 @@ namespace AI.PathFinding
 				ZSize = zSize
 			};
 
-			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(NodesLength, NodesBatchCount, filterOverlapsHandle);
+			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, filterOverlapsHandle);
 
 			#endregion
 
@@ -333,14 +320,14 @@ namespace AI.PathFinding
 			};
 
 			// Wait so we have the data ready for the physics job as it might lock up main thread
-			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(NeighborsLength, NeighborsBatchCount, initializeNeighborsHandle);
+			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(NeighborsLength, neighborsLength / MaximumWorkers, initializeNeighborsHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => initializeRaycastsHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
 			initializeRaycastsHandle.Complete();
 			
 			// Wait for physics job as it might lock up main thread
-			var raycastHandle = SpherecastCommand.ScheduleBatch(raycastCommands, raycastResults, NeighborsBatchCount, 1, initializeRaycastsHandle);
+			var raycastHandle = SpherecastCommand.ScheduleBatch(raycastCommands, raycastResults, neighborsLength / MaximumWorkers, 1, initializeRaycastsHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => raycastHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
@@ -353,7 +340,7 @@ namespace AI.PathFinding
 				Empty = new SIndexWithCost()
 			};
 
-			var filterRaycastsHandle = filterRaycastsJob.Schedule(NeighborsLength, NeighborsBatchCount, raycastHandle);
+			var filterRaycastsHandle = filterRaycastsJob.Schedule(NeighborsLength, neighborsLength / MaximumWorkers, raycastHandle);
 			await UniTask.WaitUntil(() => filterRaycastsHandle.IsCompleted);
 			filterRaycastsHandle.Complete();
 			
@@ -400,12 +387,12 @@ namespace AI.PathFinding
 			}
 
 			// Don't create too many path requests at the same time, wait for some to finish
-			if (ActivePathFinds >= SimultaneousPathFindsCount)
+			if (ActivePathFinds >= MaximumWorkers)
 			{
 				WaitingPathFinds++;
 
 				Debug.LogWarning("[Grid] Waiting path request until there is more queue space");
-				await UniTask.WaitUntil(() => ActivePathFinds < SimultaneousPathFindsCount);
+				await UniTask.WaitUntil(() => ActivePathFinds < MaximumWorkers);
 				
 				WaitingPathFinds--;
 			}
