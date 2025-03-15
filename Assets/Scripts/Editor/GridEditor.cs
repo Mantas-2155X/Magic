@@ -13,24 +13,33 @@ namespace Editor
 	{
 		private List<Path> foundPaths = new ();
 
+		[SerializeField]
 		private bool findPathLoop;
 		
+		[SerializeField]
 		private Vector3 customStartPos;
+		[SerializeField]
 		private Vector3 customEndPos;
 		
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
 			
+			GUILayout.Space(30);
+
 			var grid = (Grid)target;
+
+			GUILayout.BeginHorizontal();
+			EditorGUIUtility.labelWidth = 50;
+			EditorGUILayout.IntField("WAIT", grid.WaitingPathFinds);
+			EditorGUILayout.IntField("DELAY", grid.DelayedPathFinds);
+			EditorGUILayout.IntField("ACT", grid.ActivePathFinds);
+			EditorGUIUtility.labelWidth = 0;
+			GUILayout.EndHorizontal();
 			
 			if (GUILayout.Button("Create Grid"))
 				grid.CreateGrid().Forget();
 			
-			GUILayout.Space(10);
-			
-			findPathLoop = EditorGUILayout.Toggle("Loop", findPathLoop);
-
 			GUILayout.BeginHorizontal();
 			
 			if (GUILayout.Button("Find 1 Path"))
@@ -45,16 +54,17 @@ namespace Editor
 			customStartPos = EditorGUILayout.Vector3Field("Custom Start Position", customStartPos);
 			customEndPos = EditorGUILayout.Vector3Field("Custom End Position", customEndPos);
 			
+			findPathLoop = EditorGUILayout.Toggle("Loop", findPathLoop);
+
 			if (GUILayout.Button("Find Custom Path"))
 				findPath(grid, customStartPos, customEndPos).Forget();
-			
-			GUILayout.Space(10);
 			
 			if (GUILayout.Button("Clear Paths"))
 				foundPaths.Clear();
 			
 			serializedObject.ApplyModifiedProperties();
 			
+			Repaint();
 			SceneView.RepaintAll();
 		}
 		
@@ -84,6 +94,8 @@ namespace Editor
 			if (foundPaths == null || foundPaths.Count <= 0)
 				return;
 
+			var grid = (Grid)target;
+
 			var currentColor = Handles.color;
 				
 			foreach (var foundPath in foundPaths)
@@ -91,26 +103,40 @@ namespace Editor
 				if (foundPath == null)
 					continue;
 				
-				Handles.color = Color.cyan;
-				
-				var points = foundPath.Points;
-				for (var i = 0; i < points.Length - 1; i++)
+				if (grid.DrawPaths)
 				{
-					var nodePos = points[i];
-					var otherNodePos = points[i + 1];
+					Handles.color = Color.cyan;
 					
-					Handles.DrawLine(nodePos, otherNodePos);
+					var points = foundPath.Points;
+					for (var i = 0; i < points.Length - 1; i++)
+					{
+						var nodePos = points[i];
+						var otherNodePos = points[i + 1];
+					
+						Handles.DrawLine(nodePos, otherNodePos);
+					}
 				}
 
-				Handles.color = Color.magenta;
-				var searched = foundPath.Searched;
-				for (var i = 0; i < searched.Length; i++)
-					Handles.SphereHandleCap(0, searched[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
-				
-				Handles.color = Color.black;
-				var obstructed = foundPath.Obstructed;
-				for (var i = 0; i < obstructed.Count; i++)
-					Handles.SphereHandleCap(0, obstructed[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
+				if (grid.DrawNodes)
+				{
+					if (grid.DrawSearched)
+					{
+						Handles.color = Color.magenta;
+					
+						var searched = foundPath.Searched;
+						for (var i = 0; i < searched.Length; i++)
+							Handles.SphereHandleCap(0, searched[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
+					}
+
+					if (grid.DrawObstructed)
+					{
+						Handles.color = Color.black;
+					
+						var obstructed = foundPath.Obstructed;
+						for (var i = 0; i < obstructed.Count; i++)
+							Handles.SphereHandleCap(0, obstructed[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
+					}
+				}
 			}
 			
 			Handles.color = currentColor;

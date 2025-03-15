@@ -37,6 +37,8 @@ namespace AI.PathFinding
 		public bool DrawNodes;
 		[SerializeField]
 		public bool DrawConnections;
+		[SerializeField]
+		public bool DrawPaths;
 		
 		[Header("Draw Flags")]
 		[SerializeField]
@@ -45,6 +47,10 @@ namespace AI.PathFinding
 		public bool DrawInsideObject;
 		[SerializeField]
 		public bool DrawNoConnections;
+		[SerializeField]
+		public bool DrawSearched;
+		[SerializeField]
+		public bool DrawObstructed;
 		
 		[Header("Path Finding")]
 		[SerializeField][Range(0.5f, 1f)]
@@ -56,6 +62,12 @@ namespace AI.PathFinding
 		public int NodesBatchCount => NodesLength / (JobsUtility.JobWorkerCount / 2);
 		public int NeighborsBatchCount => NeighborsLength / (JobsUtility.JobWorkerCount / 2);
 		
+		public int SimultaneousPathFindsCount => JobsUtility.JobWorkerCount / 2;
+
+		public int DelayedPathFinds { get; private set; }
+		public int WaitingPathFinds { get; private set; }
+		public int ActivePathFinds { get; private set; }
+
 		public EGridStatus Status { get; private set; } = EGridStatus.NotInitialized;
 
 		private NativeArray<SNode> nodes;
@@ -163,6 +175,8 @@ namespace AI.PathFinding
 			// Can only create a grid if one isn't already being made
 			if (Status == EGridStatus.Initializing)
 			{
+				Debug.LogWarning("[Grid] Skipping grid creation as it is already being created");
+				
 				if (callback != null)
 					callback.Invoke(false);
 				
@@ -170,6 +184,13 @@ namespace AI.PathFinding
 			}
 
 			Status = EGridStatus.Initializing;
+			
+			// Wait for path requests to finish before recreating grid
+			if (ActivePathFinds != 0 || WaitingPathFinds != 0)
+			{
+				Debug.LogWarning("[Grid] Waiting grid creation until all path requests are done");
+				await UniTask.WaitUntil(() => ActivePathFinds == 0 && WaitingPathFinds == 0);
+			}
 			
 			// Set up grid size in amount of nodes
 			xSize = (int)(Size.x / Distance) + 1;
@@ -356,13 +377,39 @@ namespace AI.PathFinding
 		public async UniTask<Path> FindPath(Vector3 startPosition, Vector3 endPosition, UnityAction<Path> callback = null)
 		{
 			// Can only find a path if the grid is created
-			if (Status != EGridStatus.Initialized)
+			if (Status == EGridStatus.NotInitialized)
 			{
+				Debug.LogWarning("[Grid] Ignoring path request because grid is not created");
+
 				if (callback != null)
 					callback.Invoke(null);
 
 				return null;
 			}
+			
+			// If a grid is being created, wait for that to finish
+			if (Status == EGridStatus.Initializing)
+			{
+				DelayedPathFinds++;
+				
+				Debug.LogWarning("[Grid] Delaying path request until grid finishes creating");
+				await UniTask.WaitUntil(() => Status == EGridStatus.Initialized);
+
+				DelayedPathFinds--;
+			}
+
+			// Don't create too many path requests at the same time, wait for some to finish
+			if (ActivePathFinds >= SimultaneousPathFindsCount)
+			{
+				WaitingPathFinds++;
+
+				Debug.LogWarning("[Grid] Waiting path request until there is more queue space");
+				await UniTask.WaitUntil(() => ActivePathFinds < SimultaneousPathFindsCount);
+				
+				WaitingPathFinds--;
+			}
+
+			ActivePathFinds++;
 			
 			var nodesRadius = Radius;
 			var nodesLength = xSize * ySize * zSize;
@@ -467,6 +514,8 @@ namespace AI.PathFinding
 			
 			if (callback != null)
 				callback.Invoke(result);
+
+			ActivePathFinds--;
 
 			return result;
 		}

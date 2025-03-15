@@ -687,9 +687,12 @@ MonoBehaviour:
   DrawBounds: 1
   DrawNodes: 0
   DrawConnections: 0
-  DrawAvailable: 1
-  DrawInsideObject: 1
-  DrawNoConnections: 1
+  DrawPaths: 0
+  DrawAvailable: 0
+  DrawInsideObject: 0
+  DrawNoConnections: 0
+  DrawSearched: 0
+  DrawObstructed: 0
   Accuracy: 0.85
 --- !u!1 &443400751
 GameObject:
