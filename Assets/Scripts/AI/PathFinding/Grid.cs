@@ -1,4 +1,7 @@
+#define DEBUG_TIMINGS
+
 using System;
+using System.Diagnostics;
 using AI.PathFinding.Jobs;
 using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
@@ -9,6 +12,7 @@ using Unity.Jobs.LowLevel.Unsafe;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
+using Debug = UnityEngine.Debug;
 
 namespace AI.PathFinding
 {
@@ -176,6 +180,11 @@ namespace AI.PathFinding
 				await UniTask.WaitUntil(() => ActivePathFinds == 0 && WaitingPathFinds == 0);
 			}
 			
+#if DEBUG_TIMINGS
+			var totalWatch = new Stopwatch();
+			totalWatch.Start();
+#endif
+
 			// Set up grid size in amount of nodes
 			xSize = (int)(Size.x / Distance) + 1;
 			ySize = (int)(Size.y / Distance) + 1;
@@ -214,7 +223,16 @@ namespace AI.PathFinding
 				ZSize = zSize
 			};
 
+#if DEBUG_TIMINGS
+			var watch = new Stopwatch();
+			watch.Start();
 			var initializeNodesHandle = initializeNodesJob.Schedule();
+			initializeNodesHandle.Complete();
+			watch.Stop();
+			Debug.Log($"initializeNodesJob took {watch.ElapsedMilliseconds}ms");
+#else
+			var initializeNodesHandle = initializeNodesJob.Schedule();
+#endif
 
 			#endregion
 
@@ -245,7 +263,15 @@ namespace AI.PathFinding
 				HalfRadius = Radius / 2f
 			};
 
+#if DEBUG_TIMINGS
+			watch.Restart();
 			var initializeAreasHandle = initializeAreasJob.Schedule(nodesLength, nodesLength / MaximumWorkers, initializeNodesHandle);
+			initializeAreasHandle.Complete();
+			watch.Stop();
+			Debug.Log($"initializeAreasHandle took {watch.ElapsedMilliseconds}ms");
+#else
+			var initializeAreasHandle = initializeAreasJob.Schedule(nodesLength, nodesLength / MaximumWorkers, initializeNodesHandle);
+#endif
 
 			#endregion
 			
@@ -259,19 +285,35 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask)
 			};
 
+#if DEBUG_TIMINGS
+			watch.Restart();
+			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, initializeAreasHandle);
+			initializeOverlapsHandle.Complete();
+			watch.Stop();
+			Debug.Log($"initializeOverlapsHandle took {watch.ElapsedMilliseconds}ms");
+#else
 			// Wait so we have the data ready for the physics job as it might lock up main thread
 			var initializeOverlapsHandle = initializeOverlapsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, initializeAreasHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => initializeOverlapsHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
 			initializeOverlapsHandle.Complete();
+#endif
 			
+#if DEBUG_TIMINGS
+			watch.Restart();
+			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, nodesLength / MaximumWorkers, 1, initializeOverlapsHandle);
+			overlapHandle.Complete();
+			watch.Stop();
+			Debug.Log($"overlapHandle took {watch.ElapsedMilliseconds}ms");
+#else
 			// Wait for physics job as it might lock up main thread
 			var overlapHandle = OverlapSphereCommand.ScheduleBatch(overlapCommands, overlapResults, nodesLength / MaximumWorkers, 1, initializeOverlapsHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => overlapHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
 			overlapHandle.Complete();
+#endif
 
 			var filterOverlapsJob = new FilterOverlapsJob
 			{
@@ -279,7 +321,15 @@ namespace AI.PathFinding
 				Hits = overlapResults
 			};
 
+#if DEBUG_TIMINGS
+			watch.Restart();
 			var filterOverlapsHandle = filterOverlapsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, overlapHandle);
+			filterOverlapsHandle.Complete();
+			watch.Stop();
+			Debug.Log($"filterOverlapsHandle took {watch.ElapsedMilliseconds}ms");
+#else
+			var filterOverlapsHandle = filterOverlapsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, overlapHandle);
+#endif
 			
 			#endregion
 
@@ -296,7 +346,15 @@ namespace AI.PathFinding
 				ZSize = zSize
 			};
 
+#if DEBUG_TIMINGS
+			watch.Restart();
 			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, filterOverlapsHandle);
+			initializeNeighborsHandle.Complete();
+			watch.Stop();
+			Debug.Log($"initializeNeighborsHandle took {watch.ElapsedMilliseconds}ms");
+#else
+			var initializeNeighborsHandle = initializeNeighborsJob.Schedule(NodesLength, nodesLength / MaximumWorkers, filterOverlapsHandle);
+#endif
 
 			#endregion
 
@@ -311,19 +369,35 @@ namespace AI.PathFinding
 				Query = new QueryParameters(FilterMask, hitBackfaces: true)
 			};
 
+#if DEBUG_TIMINGS
+			watch.Restart();
+			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(NeighborsLength, neighborsLength / MaximumWorkers, initializeNeighborsHandle);
+			initializeRaycastsHandle.Complete();
+			watch.Stop();
+			Debug.Log($"initializeRaycastsHandle took {watch.ElapsedMilliseconds}ms");
+#else
 			// Wait so we have the data ready for the physics job as it might lock up main thread
 			var initializeRaycastsHandle = initializeRaycastsJob.Schedule(NeighborsLength, neighborsLength / MaximumWorkers, initializeNeighborsHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => initializeRaycastsHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
 			initializeRaycastsHandle.Complete();
+#endif
 			
+#if DEBUG_TIMINGS
+			watch.Restart();
+			var raycastHandle = SpherecastCommand.ScheduleBatch(raycastCommands, raycastResults, neighborsLength / MaximumWorkers, 1, initializeRaycastsHandle);
+			raycastHandle.Complete();
+			watch.Stop();
+			Debug.Log($"raycastHandle took {watch.ElapsedMilliseconds}ms");
+#else
 			// Wait for physics job as it might lock up main thread
 			var raycastHandle = SpherecastCommand.ScheduleBatch(raycastCommands, raycastResults, neighborsLength / MaximumWorkers, 1, initializeRaycastsHandle);
 			await UniTask.WaitForFixedUpdate();
 			await UniTask.WaitUntil(() => raycastHandle.IsCompleted);
 			await UniTask.WaitForFixedUpdate();
 			raycastHandle.Complete();
+#endif
 
 			var filterRaycastsJob = new FilterRaycastsJob
 			{
@@ -332,20 +406,33 @@ namespace AI.PathFinding
 				Empty = new SIndexWithCost()
 			};
 
+#if DEBUG_TIMINGS
+			watch.Restart();
+			var filterRaycastsHandle = filterRaycastsJob.Schedule(NeighborsLength, neighborsLength / MaximumWorkers, raycastHandle);
+			filterRaycastsHandle.Complete();
+			watch.Stop();
+			Debug.Log($"filterRaycastsHandle took {watch.ElapsedMilliseconds}ms");
+#else
 			var filterRaycastsHandle = filterRaycastsJob.Schedule(NeighborsLength, neighborsLength / MaximumWorkers, raycastHandle);
 			await UniTask.WaitUntil(() => filterRaycastsHandle.IsCompleted);
 			filterRaycastsHandle.Complete();
+#endif
 			
 			#endregion
 			
-			Status = EGridStatus.Initialized;
-			
-			if (callback != null)
-				callback.Invoke(true);
-
 			positions.Dispose();
 			halfSizes.Dispose();
 			areaCosts.Dispose();
+			
+			Status = EGridStatus.Initialized;
+			
+#if DEBUG_TIMINGS
+			totalWatch.Stop();
+			Debug.Log($"CreateGrid total took {totalWatch.ElapsedMilliseconds}ms");
+#endif
+			
+			if (callback != null)
+				callback.Invoke(true);
 			
 			return true;
 		}
@@ -391,6 +478,11 @@ namespace AI.PathFinding
 
 			ActivePathFinds++;
 			
+#if DEBUG_TIMINGS
+			var totalWatch = new Stopwatch();
+			totalWatch.Start();
+#endif
+			
 			var nodesRadius = Radius;
 			var nodesLength = xSize * ySize * zSize;
 			var nodesBatchCount = nodesLength / (JobsUtility.JobWorkerCount / 2);
@@ -422,7 +514,16 @@ namespace AI.PathFinding
 				HalfRadius = nodesRadius / 2f
 			};
 
+#if DEBUG_TIMINGS
+			var watch = new Stopwatch();
+			watch.Start();
 			var filterObstaclesHandle = filterObstaclesJob.Schedule(nodesLength, nodesBatchCount);
+			filterObstaclesHandle.Complete();
+			watch.Stop();
+			Debug.Log($"filterObstaclesHandle took {watch.ElapsedMilliseconds}ms");
+#else
+			var filterObstaclesHandle = filterObstaclesJob.Schedule(nodesLength, nodesBatchCount);
+#endif
 			
 			#endregion
 			
@@ -441,7 +542,15 @@ namespace AI.PathFinding
 				Connections = connections
 			};
 
+#if DEBUG_TIMINGS
+			watch.Restart();
 			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount, filterObstaclesHandle);
+			initializePathHandle.Complete();
+			watch.Stop();
+			Debug.Log($"initializePathHandle took {watch.ElapsedMilliseconds}ms");
+#else
+			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount, filterObstaclesHandle);
+#endif
 
 			#endregion
 
@@ -468,9 +577,17 @@ namespace AI.PathFinding
 				Obstructed = obstructed
 			};
 
+#if DEBUG_TIMINGS
+			watch.Restart();
+			var findPathHandle = findPathJob.Schedule(initializePathHandle);
+			findPathHandle.Complete();
+			watch.Stop();
+			Debug.Log($"findPathHandle took {watch.ElapsedMilliseconds}ms");
+#else
 			var findPathHandle = findPathJob.Schedule(initializePathHandle);
 			await UniTask.WaitUntil(() => findPathHandle.IsCompleted);
 			findPathHandle.Complete();
+#endif
 
 			var result = Path.Create(nodes, searchedNodes, resultingPath, obstructed, nodesRadius);
 			
@@ -489,6 +606,11 @@ namespace AI.PathFinding
 			searchedNodes.Dispose();
 			toSearchNodes.Dispose();
 			resultingPath.Dispose();
+			
+#if DEBUG_TIMINGS
+			totalWatch.Stop();
+			Debug.Log($"FindPath total took {totalWatch.ElapsedMilliseconds}ms");
+#endif
 			
 			if (callback != null)
 				callback.Invoke(result);
