@@ -194,7 +194,7 @@ namespace AI.PathFinding
 			var neighborsLength = 26 * nodesLength;
 
 			// Amount of nodes changed, dispose of old data and create it from ground up
-			if (nodesLength != NodesLength || neighborsLength != NeighborsLength)
+			if (nodesLength != NodesLength || neighborsLength != NeighborsLength || !nodes.IsCreated)
 			{
 				cleanup();
 				
