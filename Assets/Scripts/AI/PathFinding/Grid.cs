@@ -103,7 +103,10 @@ namespace AI.PathFinding
 
 		public void Update()
 		{
-			if (Status != EGridStatus.Initialized || updatingObstacles)
+			if (updatingObstacles)
+				return;
+			
+			if (Status != EGridStatus.Initialized || !nodes.IsCreated)
 				return;
 			
 			var time = Time.time;
@@ -679,6 +682,39 @@ namespace AI.PathFinding
 			positions.Dispose();
 			halfSizes.Dispose();
 
+#if DEBUG_TIMINGS
+			watch.Restart();
+#endif
+			
+			var agents = Agent.Agents;
+			var agentsLength = agents.Count;
+
+			for (var i = 0; i < NodesLength; i++)
+			{
+				var availability = availabilities[i];
+				if ((availability & ENodeAvailabilityFlags.Obstructed) == 0)
+					continue;
+				
+				for (var k = 0; k < agentsLength; k++)
+				{
+					var agent = agents[k];
+					if (agent == null || !agent.HasPath)
+						continue;
+					
+					if (Array.IndexOf(agent.Path.Indexes, i) < agent.BeforeSkipNextNodeIndex)
+						continue;
+
+					Debug.Log($"[Grid] Recalculating path for {agent.name} as it is obstructed");
+					agent.SetDestination(agent.LastNode);
+					break;
+				}
+			}
+			
+#if DEBUG_TIMINGS
+			watch.Stop();
+			Debug.Log($"obstruction recalculation check took {watch.ElapsedMilliseconds}ms");
+#endif
+			
 			lastObstacleUpdate = Time.time;
 			updatingObstacles = false;
 		}

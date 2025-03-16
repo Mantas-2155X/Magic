@@ -24,6 +24,8 @@ namespace AI.PathFinding
 		
 		public bool PathPending { get; private set; }
 		
+		public int BeforeSkipNextNodeIndex { get; private set; }
+
 		public bool HasPath => Path != null;
 		public bool HasGrid => Grid != null;
 
@@ -86,6 +88,8 @@ namespace AI.PathFinding
 			CurrentNode = points[nextNodeIndex - 1];
 			NextNode = points[nextNodeIndex];
 
+			BeforeSkipNextNodeIndex = nextNodeIndex;
+			
 			if (NextNode == LastNode)
 				return;
 			
@@ -119,7 +123,7 @@ namespace AI.PathFinding
 			
 			if (path == null)
 			{
-				Debug.Log($"[Agent] Received null path expecting identifier {activeIdentifier}");
+				Debug.LogWarning($"[Agent] Received null path expecting identifier {activeIdentifier}");
 				Path = null;
 				PathPending = false;
 				return;
@@ -127,13 +131,13 @@ namespace AI.PathFinding
 			
 			if (activeIdentifier != path.Identifier)
 			{
-				Debug.Log($"[Agent] Discarding path with identifier {path.Identifier} as it doesn't match the current identifier {activeIdentifier}");
+				Debug.LogWarning($"[Agent] Discarding path with identifier {path.Identifier} as it doesn't match the current identifier {activeIdentifier}");
 				return;
 			}
 
 			if (path.Points.Length == 0)
 			{
-				Debug.Log($"[Agent] Discarding path with identifier {path.Identifier} as it has 0 points");
+				Debug.LogWarning($"[Agent] Discarding path with identifier {path.Identifier} as it has 0 points");
 				Path = null;
 				PathPending = false;
 				return;
@@ -146,6 +150,8 @@ namespace AI.PathFinding
 			NextNode = Path.Points[nextNodeIndex];
 			LastNode = Path.Points[^1];
 			
+			BeforeSkipNextNodeIndex = nextNodeIndex;
+
 			PathPending = false;
 		}
 
