@@ -1,4 +1,3 @@
-using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
 using Unity.Burst;
 using Unity.Collections;
@@ -53,8 +52,7 @@ namespace AI.PathFinding.Jobs
 							Index = index,
 							GridPosition = gridPosition,
 							WorldPosition = worldPosition,
-							AreaCost = 0f,
-							Availability = ENodeAvailability.Available
+							AreaCost = 0f
 						};
 					
 						index++;

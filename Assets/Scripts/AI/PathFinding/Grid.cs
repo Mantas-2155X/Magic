@@ -1,4 +1,4 @@
-//#define DEBUG_TIMINGS
+#define DEBUG_TIMINGS
 
 using System;
 using System.Collections.Generic;
@@ -52,13 +52,16 @@ namespace AI.PathFinding
 		[SerializeField]
 		public bool DrawInsideObject;
 		[SerializeField]
-		public bool DrawSearched;
-		[SerializeField]
 		public bool DrawObstructed;
+		[SerializeField]
+		public bool DrawSearched;
 		
 		[Header("Path Finding")]
 		[SerializeField][Range(0.5f, 1f)]
 		public float Accuracy = 0.9f;
+
+		[SerializeField][Range(0.1f, 2.5f)]
+		public float UpdateObstaclesEvery = 0.5f;
 		
 		public int NodesLength { get; private set; }
 		public int NeighborsLength { get; private set; }
@@ -75,6 +78,8 @@ namespace AI.PathFinding
 
 		private NativeArray<SNode> nodes;
 		private NativeArray<SIndexWithCost> neighbors;
+
+		private NativeArray<ENodeAvailabilityFlags> availabilities;
 		
 		private NativeArray<OverlapSphereCommand> overlapCommands;
 		private NativeArray<ColliderHit> overlapResults;
@@ -85,12 +90,27 @@ namespace AI.PathFinding
 		private int xSize;
 		private int ySize;
 		private int zSize;
+
+		private bool updatingObstacles;
+		private float lastObstacleUpdate;
 		
 		#region MonoBehaviour
 
 		public void Start()
 		{
 			CreateGrid().Forget();
+		}
+
+		public void Update()
+		{
+			if (Status != EGridStatus.Initialized || updatingObstacles)
+				return;
+			
+			var time = Time.time;
+			if (time < lastObstacleUpdate + UpdateObstaclesEvery)
+				return;
+			
+			updateObstacles();
 		}
 		
 		public void OnEnable()
@@ -118,29 +138,33 @@ namespace AI.PathFinding
 			{
 				for (var i = 0; i < nodes.Length; i++)
 				{
-					var availability = nodes[i].Availability;
-					switch (availability)
+					var availability = availabilities[i];
+					if (availability == ENodeAvailabilityFlags.Available)
 					{
-						case ENodeAvailability.Available:
-						{
-							if (!DrawAvailable)
-								continue;
-							
-							Gizmos.color = Color.green;
-							break;
-						}
-						case ENodeAvailability.InsideObject:
-						{
-							if (!DrawInsideObject)
-								continue;
-						
-							Gizmos.color = Color.red;
-							break;
-						}
-						default:
-							throw new NotImplementedException();
+						if (!DrawAvailable)
+							continue;
+
+						Gizmos.color = Color.green;
 					}
-							
+					else if (availability.HasFlag(ENodeAvailabilityFlags.InsideObject))
+					{
+						if (!DrawInsideObject)
+							continue;
+
+						Gizmos.color = Color.red;
+					}
+					else if (availability.HasFlag(ENodeAvailabilityFlags.Obstructed))
+					{
+						if (!DrawObstructed)
+							continue;
+
+						Gizmos.color = Color.black;
+					}
+					else
+					{
+						throw new NotImplementedException();
+					}
+
 					Gizmos.DrawSphere(nodes[i].WorldPosition, Radius);
 				}
 			}
@@ -197,6 +221,13 @@ namespace AI.PathFinding
 				Debug.LogWarning("[Grid] Waiting grid creation until all path requests are done");
 				await UniTask.WaitUntil(() => ActivePathFinds == 0 && WaitingPathFinds == 0);
 			}
+
+			// Wait for obstacle update to finish before recreating grid
+			if (updatingObstacles)
+			{
+				Debug.LogWarning("[Grid] Waiting grid creation until obstacles are updated");
+				await UniTask.WaitUntil(() => !updatingObstacles);
+			}
 			
 #if DEBUG_TIMINGS
 			var totalWatch = new Stopwatch();
@@ -219,6 +250,8 @@ namespace AI.PathFinding
 				nodes = new NativeArray<SNode>(nodesLength, Allocator.Persistent);
 				neighbors = new NativeArray<SIndexWithCost>(neighborsLength, Allocator.Persistent);
 
+				availabilities = new NativeArray<ENodeAvailabilityFlags>(nodesLength, Allocator.Persistent);
+				
 				overlapCommands = new NativeArray<OverlapSphereCommand>(nodesLength, Allocator.Persistent);
 				overlapResults = new NativeArray<ColliderHit>(nodesLength, Allocator.Persistent);
 
@@ -335,7 +368,7 @@ namespace AI.PathFinding
 
 			var filterOverlapsJob = new FilterOverlapsJob
 			{
-				Nodes = nodes,
+				Availabilities = availabilities,
 				Hits = overlapResults
 			};
 
@@ -502,46 +535,6 @@ namespace AI.PathFinding
 			var nodesRadius = Radius;
 			var nodesLength = xSize * ySize * zSize;
 			var nodesBatchCount = nodesLength / (JobsUtility.JobWorkerCount / 2);
-
-			#region Filter Obstacles
-
-			var obstacles = Obstacle.Obstacles;
-			var obstaclesLength = obstacles.Count;
-
-			var positions = new NativeArray<float3>(obstaclesLength, Allocator.Persistent);
-			var halfSizes = new NativeArray<float3>(obstaclesLength, Allocator.Persistent);
-			
-			var obstructed = new NativeArray<bool>(nodesLength, Allocator.Persistent);
-
-			for (var i = 0; i < obstaclesLength; i++)
-			{
-				var obstacle = obstacles[i];
-				
-				positions[i] = obstacle.GetPosition();
-				halfSizes[i] = obstacle.GetHalfSize();
-			}
-
-			var filterObstaclesJob = new FilterObstaclesJob
-			{
-				Nodes = nodes,
-				Positions = positions,
-				HalfSizes = halfSizes,
-				Obstructed = obstructed,
-				HalfRadius = nodesRadius / 2f
-			};
-
-#if DEBUG_TIMINGS
-			var watch = new Stopwatch();
-			watch.Start();
-			var filterObstaclesHandle = filterObstaclesJob.Schedule(nodesLength, nodesBatchCount);
-			filterObstaclesHandle.Complete();
-			watch.Stop();
-			Debug.Log($"filterObstaclesHandle took {watch.ElapsedMilliseconds}ms");
-#else
-			var filterObstaclesHandle = filterObstaclesJob.Schedule(nodesLength, nodesBatchCount);
-#endif
-			
-			#endregion
 			
 			#region Initialize Path
 
@@ -559,13 +552,14 @@ namespace AI.PathFinding
 			};
 
 #if DEBUG_TIMINGS
-			watch.Restart();
-			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount, filterObstaclesHandle);
+			var watch = new Stopwatch();
+			watch.Start();
+			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount);
 			initializePathHandle.Complete();
 			watch.Stop();
 			Debug.Log($"initializePathHandle took {watch.ElapsedMilliseconds}ms");
 #else
-			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount, filterObstaclesHandle);
+			var initializePathHandle = initializePathJob.Schedule(nodesLength, nodesBatchCount);
 #endif
 
 			#endregion
@@ -576,10 +570,15 @@ namespace AI.PathFinding
 			var toSearchNodes = new NativeList<int>(nodesLength, Allocator.Persistent);
 			var resultingPath = new NativeList<int>(Allocator.Persistent);
 			
+			var availabilitiesCopy = new NativeArray<ENodeAvailabilityFlags>(nodesLength, Allocator.Persistent);
+			await UniTask.WaitUntil(() => !updatingObstacles);
+			availabilitiesCopy.CopyFrom(availabilities);
+
 			var findPathJob = new FindPathJob
 			{
 				Nodes = nodes,
 				Neighbors = neighbors,
+				Availabilities = availabilities,
 				GCosts = gCosts,
 				HCosts = hCosts,
 				FCosts = fCosts,
@@ -588,8 +587,7 @@ namespace AI.PathFinding
 				SearchedNodes = searchedNodes,
 				ToSearchNodes = toSearchNodes,
 				StartPosition = startPosition,
-				EndPosition = endPosition,
-				Obstructed = obstructed
+				EndPosition = endPosition
 			};
 
 #if DEBUG_TIMINGS
@@ -604,14 +602,9 @@ namespace AI.PathFinding
 			findPathHandle.Complete();
 #endif
 
-			var result = Path.Create(nodes, searchedNodes, resultingPath, obstructed, nodesRadius, identifier);
+			var result = Path.Create(nodes, searchedNodes, resultingPath, nodesRadius, identifier);
 			
 			#endregion
-
-			positions.Dispose();
-			halfSizes.Dispose();
-			
-			obstructed.Dispose();
 			
 			gCosts.Dispose();
 			hCosts.Dispose();
@@ -621,6 +614,8 @@ namespace AI.PathFinding
 			searchedNodes.Dispose();
 			toSearchNodes.Dispose();
 			resultingPath.Dispose();
+
+			availabilitiesCopy.Dispose();
 			
 #if DEBUG_TIMINGS
 			totalWatch.Stop();
@@ -639,6 +634,55 @@ namespace AI.PathFinding
 
 		#region Internals
 
+		private void updateObstacles()
+		{
+			updatingObstacles = true;
+			
+			var obstacles = Obstacle.Obstacles;
+			var obstaclesLength = obstacles.Count;
+
+			var positions = new NativeArray<float3>(obstaclesLength, Allocator.TempJob);
+			var halfSizes = new NativeArray<float3>(obstaclesLength, Allocator.TempJob);
+			
+			var nodesLength = NodesLength;
+			var nodesBatchCount = nodesLength / (JobsUtility.JobWorkerCount / 2);
+
+			for (var i = 0; i < obstaclesLength; i++)
+			{
+				var obstacle = obstacles[i];
+				
+				positions[i] = obstacle.GetPosition();
+				halfSizes[i] = obstacle.GetHalfSize();
+			}
+
+			var filterObstaclesJob = new FilterObstaclesJob
+			{
+				Nodes = nodes,
+				Positions = positions,
+				HalfSizes = halfSizes,
+				Availabilities = availabilities,
+				HalfRadius = Radius / 2f
+			};
+
+#if DEBUG_TIMINGS
+			var watch = new Stopwatch();
+			watch.Start();
+			var filterObstaclesHandle = filterObstaclesJob.Schedule(nodesLength, nodesBatchCount);
+			filterObstaclesHandle.Complete();
+			watch.Stop();
+			Debug.Log($"filterObstaclesHandle took {watch.ElapsedMilliseconds}ms");
+#else
+			var filterObstaclesHandle = filterObstaclesJob.Schedule(nodesLength, nodesBatchCount);
+			filterObstaclesHandle.Complete();
+#endif
+			
+			positions.Dispose();
+			halfSizes.Dispose();
+
+			lastObstacleUpdate = Time.time;
+			updatingObstacles = false;
+		}
+		
 		private void cleanup()
 		{
 			if (nodes.IsCreated)
@@ -647,6 +691,9 @@ namespace AI.PathFinding
 			if (neighbors.IsCreated)
 				neighbors.Dispose();
 
+			if (availabilities.IsCreated)
+				availabilities.Dispose();
+			
 			if (overlapCommands.IsCreated)
 				overlapCommands.Dispose();
 			

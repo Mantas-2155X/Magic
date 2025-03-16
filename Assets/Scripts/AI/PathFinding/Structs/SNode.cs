@@ -17,8 +17,6 @@ namespace AI.PathFinding.Structs
 
 		public float AreaCost;
 		
-		public ENodeAvailability Availability;
-		
 		#endregion
 			
 		public bool Equals(SNode other)

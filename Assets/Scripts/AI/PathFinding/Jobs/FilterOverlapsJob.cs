@@ -1,5 +1,4 @@
 using AI.PathFinding.Enums;
-using AI.PathFinding.Structs;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -10,19 +9,21 @@ namespace AI.PathFinding.Jobs
 	[BurstCompile]
 	public struct FilterOverlapsJob : IJobParallelFor
 	{
-		public NativeArray<SNode> Nodes;
+		public NativeArray<ENodeAvailabilityFlags> Availabilities;
 
 		[ReadOnly]
 		public NativeArray<ColliderHit> Hits;
 
 		public void Execute(int index)
 		{
-			if (Hits[index].instanceID == 0)
-				return;
+			var availability = Availabilities[index];
 
-			var node = Nodes[index];
-			node.Availability = ENodeAvailability.InsideObject;
-			Nodes[index] = node;
+			if (Hits[index].instanceID == 0)
+				availability &= ~ENodeAvailabilityFlags.InsideObject;
+			else
+				availability |= ENodeAvailabilityFlags.InsideObject;
+
+			Availabilities[index] = availability;
 		}
 	}
 }

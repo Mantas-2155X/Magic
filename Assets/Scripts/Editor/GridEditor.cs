@@ -143,15 +143,6 @@ namespace Editor
 						for (var i = 0; i < searched.Length; i++)
 							Handles.SphereHandleCap(0, searched[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
 					}
-
-					if (grid.DrawObstructed)
-					{
-						Handles.color = Color.black;
-					
-						var obstructed = foundPath.Obstructed;
-						for (var i = 0; i < obstructed.Count; i++)
-							Handles.SphereHandleCap(0, obstructed[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
-					}
 				}
 			}
 			

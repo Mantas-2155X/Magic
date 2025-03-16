@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -32,6 +33,8 @@ namespace AI.PathFinding
 
 		public float RemainingDistance => Vector3.Distance(thisTr.position, LastNode);
 		
+		public static readonly List<Agent> Agents = new ();
+
 		private Transform thisTr;
 		
 		private int activeIdentifier;
@@ -49,6 +52,16 @@ namespace AI.PathFinding
 			Obstacle = GetComponent<Obstacle>();
 		}
 
+		public void OnEnable()
+		{
+			Agents.Add(this);
+		}
+
+		public void OnDisable()
+		{
+			Agents.Remove(this);
+		}
+		
 		public void Update()
 		{
 			if (!HasPath)

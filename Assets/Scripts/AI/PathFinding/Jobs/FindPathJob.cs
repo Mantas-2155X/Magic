@@ -17,6 +17,9 @@ namespace AI.PathFinding.Jobs
 		[ReadOnly]
 		public NativeArray<SIndexWithCost> Neighbors;
 
+		[ReadOnly]
+		public NativeArray<ENodeAvailabilityFlags> Availabilities;
+		
 		public NativeArray<float> GCosts;
 		public NativeArray<float> HCosts;
 		public NativeArray<float> FCosts;
@@ -33,9 +36,6 @@ namespace AI.PathFinding.Jobs
 		
 		[ReadOnly]
 		public float3 EndPosition;
-		
-		[ReadOnly]
-		public NativeArray<bool> Obstructed;
 		
 		public void Execute()
 		{
@@ -99,11 +99,10 @@ namespace AI.PathFinding.Jobs
 
 			for (var i = 0; i < Nodes.Length; i++)
 			{
-				var node = Nodes[i];
-				if (node.Availability != ENodeAvailability.Available || Obstructed[i])
+				if (Availabilities[i] != ENodeAvailabilityFlags.Available)
 					continue;
 
-				var dist = math.distancesq(node.WorldPosition, worldPosition);
+				var dist = math.distancesq(Nodes[i].WorldPosition, worldPosition);
 				if (dist > closestDistance)
 					continue;
 					
@@ -127,13 +126,11 @@ namespace AI.PathFinding.Jobs
 					continue;
 
 				var neighborIndex = neighbor.Index;
-				var neighborNode = Nodes[neighborIndex];
 				
-				if (neighborNode.Availability != ENodeAvailability.Available || Obstructed[neighborIndex])
+				if (Availabilities[neighborIndex] != ENodeAvailabilityFlags.Available || SearchedNodes.Contains(neighborIndex))
 					continue;
 			
-				if (SearchedNodes.Contains(neighborIndex))
-					continue;
+				var neighborNode = Nodes[neighborIndex];
 				
 				var gCost = nodeGCost + neighbor.Cost + neighborNode.AreaCost;
 				if (gCost >= GCosts[neighborIndex])

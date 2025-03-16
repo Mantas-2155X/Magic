@@ -1,3 +1,4 @@
+using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
 using Unity.Burst;
 using Unity.Collections;
@@ -18,8 +19,7 @@ namespace AI.PathFinding.Jobs
 		[ReadOnly]
 		public NativeArray<float3> HalfSizes;
 		
-		[WriteOnly]
-		public NativeArray<bool> Obstructed;
+		public NativeArray<ENodeAvailabilityFlags> Availabilities;
 
 		[ReadOnly]
 		public float HalfRadius;
@@ -29,6 +29,9 @@ namespace AI.PathFinding.Jobs
 			var node = Nodes[index];
 			var nodePos = node.WorldPosition;
 
+			var availability = Availabilities[index];
+			availability &= ~ENodeAvailabilityFlags.Obstructed;
+			
 			for (var i = 0; i < Positions.Length; i++)
 			{
 				var position = Positions[i];
@@ -47,10 +50,12 @@ namespace AI.PathFinding.Jobs
 
 				if ((closestPoint.x >= minX && closestPoint.x <= maxX) && (closestPoint.y >= minY && closestPoint.y <= maxY) && (closestPoint.z >= minZ && closestPoint.z <= maxZ))
 				{
-					Obstructed[index] = true;
+					availability |= ENodeAvailabilityFlags.Obstructed;
 					break;
 				}
 			}
+			
+			Availabilities[index] = availability;
 		}
 	}
 }
