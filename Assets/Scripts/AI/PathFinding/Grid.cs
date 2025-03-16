@@ -1,4 +1,4 @@
-#define DEBUG_TIMINGS
+//#define DEBUG_TIMINGS
 
 using System;
 using System.Collections.Generic;
