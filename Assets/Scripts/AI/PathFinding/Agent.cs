@@ -146,10 +146,10 @@ namespace AI.PathFinding
 				var direction = points[nextNodeIndex + 1] - agentPos;
 				var distance = direction.magnitude;
 				
-				if (Physics.Raycast(agentPos, direction, distance, ~Grid.FilterMask))
+				if (Physics.Raycast(agentPos, direction, distance, Grid.FilterMask))
 					break;
 				
-				if (Physics.SphereCast(agentPos, Grid.Radius, direction, out _, distance, ~Grid.FilterMask))
+				if (Physics.SphereCast(agentPos, Grid.Radius, direction, out _, distance, Grid.FilterMask))
 					break;
 				
 				nextNodeIndex++;

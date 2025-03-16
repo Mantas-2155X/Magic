@@ -1,11 +1,10 @@
 using AI.Enums;
-using AI.PathFinding;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace AI.Navigation
+namespace AI
 {
 	public class Flight : MonoBehaviour
 	{
@@ -56,11 +55,16 @@ namespace AI.Navigation
 
 		[SerializeField]
 		public float PositionStuckTime = 0.75f;
+
+		[SerializeField]
+		public float PositionStuckRecalculateAfter = 0.15f;
 		
 		private Rigidbody rb;
 		
 		private float angleStuckDuration;
 		private float positionStuckDuration;
+
+		private float lastPositionStuck;
 
 		private Vector3 movementTarget;
 		
@@ -100,6 +104,17 @@ namespace AI.Navigation
 			}
 		}
 #endif
+
+		public void Update()
+		{
+			if (lastPositionStuck == 0f || Time.time < lastPositionStuck + PositionStuckRecalculateAfter)
+				return;
+			
+			if (NPC.Agent.HasPath)
+				NPC.Agent.SetDestination(NPC.Agent.Destination);
+
+			lastPositionStuck = 0f;
+		}
 
 		public void FixedUpdate()
 		{
@@ -378,6 +393,7 @@ namespace AI.Navigation
 				return;
 			
 			positionStuckDuration = 0f;
+			lastPositionStuck = Time.time;
 
 			Debug.LogWarning($"[Flight {gameObject.name}] Position stuck, attempting to break out");
 			
