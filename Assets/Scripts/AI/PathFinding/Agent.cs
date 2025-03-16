@@ -54,7 +54,9 @@ namespace AI.PathFinding
 			if (!HasPath)
 				return;
 
-			var distance = Vector3.Distance(thisTr.position, NextNode);
+			var agentPos = thisTr.position;
+			
+			var distance = Vector3.Distance(agentPos, NextNode);
 			if (distance > StoppingDistance)
 				return;
 
@@ -63,11 +65,18 @@ namespace AI.PathFinding
 				ClearDestination();
 				return;
 			}
+
+			var points = Path.Points;
 			
 			nextNodeIndex++;
 
-			CurrentNode = Path.Points[nextNodeIndex - 1];
-			NextNode = Path.Points[nextNodeIndex];
+			CurrentNode = points[nextNodeIndex - 1];
+			NextNode = points[nextNodeIndex];
+
+			if (NextNode == LastNode)
+				return;
+			
+			skipUnnecessaryPoints();
 		}
 		
 #if UNITY_EDITOR
@@ -92,9 +101,14 @@ namespace AI.PathFinding
 
 		private void onPathFound(Path path)
 		{
+			if (this == null)
+				return;
+			
 			if (path == null)
 			{
 				Debug.Log($"[Agent] Received null path expecting identifier {activeIdentifier}");
+				Path = null;
+				PathPending = false;
 				return;
 			}
 			
@@ -120,6 +134,29 @@ namespace AI.PathFinding
 			LastNode = Path.Points[^1];
 			
 			PathPending = false;
+		}
+
+		private void skipUnnecessaryPoints()
+		{
+			var points = Path.Points;
+			var agentPos = thisTr.position;
+
+			while (NextNode != LastNode)
+			{
+				var direction = points[nextNodeIndex + 1] - agentPos;
+				var distance = direction.magnitude;
+				
+				if (Physics.Raycast(agentPos, direction, distance, ~Grid.FilterMask))
+					break;
+				
+				if (Physics.SphereCast(agentPos, Grid.Radius, direction, out _, distance, ~Grid.FilterMask))
+					break;
+				
+				nextNodeIndex++;
+
+				CurrentNode = points[nextNodeIndex - 1];
+				NextNode = points[nextNodeIndex];
+			}
 		}
 	}
 }
