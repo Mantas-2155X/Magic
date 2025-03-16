@@ -26,8 +26,15 @@ namespace AI.AIModes
 			Owner = owner;
 			LastEntered = Time.time;
 			
-			if (owner.ToggleAgent(true))
-				Owner.Agent.SetDestination(Owner.Destination);
+			if (Owner.Flight != null)
+			{
+				Owner.Flight.Agent.SetDestination(Owner.Destination);
+			}
+			else
+			{
+				if (owner.ToggleAgent(true))
+					Owner.Agent.SetDestination(Owner.Destination);
+			}
 		}
 		
 		public void Disabled()
@@ -172,7 +179,8 @@ namespace AI.AIModes
 			}
 			else
 			{
-				if (Vector3.Distance(Owner.Body.Rigidbody.position, Owner.Destination) > agent.stoppingDistance)
+				var flightAgent = Owner.Flight.Agent;
+				if (flightAgent.PathPending || flightAgent.RemainingDistance > flightAgent.StoppingDistance)
 					return;
 			}
 
@@ -192,8 +200,15 @@ namespace AI.AIModes
 
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination)
 		{
-			if (Owner.Agent.enabled && Owner.Agent.isOnNavMesh)
-				Owner.Agent.SetDestination(newDestination);
+			if (Owner.Flight != null)
+			{
+				Owner.Flight.Agent.SetDestination(newDestination);
+			}
+			else
+			{
+				if (Owner.Agent.enabled && Owner.Agent.isOnNavMesh)
+					Owner.Agent.SetDestination(newDestination);
+			}
 		}
 
 		public void CommunicationReceived(ECommunication type, NPC source, object data)

@@ -1,4 +1,4 @@
-//#define DEBUG_NPC
+#define DEBUG_NPC
 
 using System.Collections.Generic;
 using AI.ActionModes;
@@ -241,23 +241,17 @@ namespace AI
 		
 		public bool ToggleAgent(bool state)
 		{
+			if (Flight != null)
+				return false;
+			
 			var agent = Agent;
 			if (agent.enabled == state)
 				return true;
 			
-			var hasFlight = Flight != null;
-			if (hasFlight && state)
-			{
-				// Flying agents can be too far, prevent warning when enabling agent
-				if (!NavMesh.SamplePosition(GetTransform().position, out _, Flight.MaximumAgentDistance, NavMesh.AllAreas))
-					return false;
-			}
-			
 			agent.enabled = state;
 			
 			// Walking agents aren't using physics
-			if (!hasFlight)
-				Body.Rigidbody.isKinematic = state;
+			Body.Rigidbody.isKinematic = state;
 
 			// Disabling the agent, so return false
 			if (!state)
@@ -267,14 +261,6 @@ namespace AI
 			if (agent.isOnNavMesh)
 				return true;
 
-			// Enabling agent, not on navmesh - allow because it can fly
-			if (hasFlight)
-			{
-				NavMesh.SamplePosition(GetTransform().position, out var hit, float.MaxValue, NavMesh.AllAreas);
-				Debug.LogWarning($"Distance to NavMesh: {hit.distance}");
-				return false;
-			}
-			
 			// Enabling agent, not on navmesh - kill
 			Debug.LogWarning($"[NPC {gameObject.name}] Agent is outside of navmesh, killing");
 			Kill(this);

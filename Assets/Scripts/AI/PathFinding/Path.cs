@@ -29,7 +29,7 @@ namespace AI.PathFinding
 			};
 
 			for (var i = 0; i < resultingPath.Length; i++)
-				path.Points[i] = nodes[resultingPath[i]].WorldPosition;
+				path.Points[i] = nodes[resultingPath[(resultingPath.Length - 1) - i]].WorldPosition;
 
 			var index = 0;
 			foreach (var searchedNode in searchedNodes)

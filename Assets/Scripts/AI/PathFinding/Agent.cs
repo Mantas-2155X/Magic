@@ -10,13 +10,9 @@ namespace AI.PathFinding
 		[SerializeField]
 		public float StoppingDistance;
 		
-		// todo: use this and filter it out for finding path so the agent isnt blocking itself
-		[SerializeField]
-		public Obstacle Obstacle;
+		public Grid Grid { get; private set; }
 
-		// todo: find closest grid and handle changes
-		[SerializeField]
-		public Grid Grid;
+		public Obstacle Obstacle { get; private set; }
 
 		public Vector3 CurrentNode { get; private set; }
 		
@@ -26,13 +22,14 @@ namespace AI.PathFinding
 		
 		public bool PathPending { get; private set; }
 		
-		public bool HasPath => activePath != null;
+		public bool HasPath => Path != null;
+
+		public Path Path { get; private set; }
 
 		public float RemainingDistance => Vector3.Distance(thisTr.position, LastNode);
 		
 		private Transform thisTr;
 		
-		private Path activePath;
 		private int activeIdentifier;
 
 		private int nextNodeIndex;
@@ -40,6 +37,12 @@ namespace AI.PathFinding
 		public void Awake()
 		{
 			thisTr = transform;
+
+			// todo: find closest grid and handle changes
+			Grid = FindAnyObjectByType<Grid>();
+			
+			// todo: use this and filter it out for finding path so the agent isnt blocking itself
+			Obstacle = GetComponent<Obstacle>();
 		}
 
 		public void Update()
@@ -59,8 +62,8 @@ namespace AI.PathFinding
 			
 			nextNodeIndex++;
 
-			CurrentNode = activePath.Points[nextNodeIndex - 1];
-			NextNode = activePath.Points[nextNodeIndex];
+			CurrentNode = Path.Points[nextNodeIndex - 1];
+			NextNode = Path.Points[nextNodeIndex];
 		}
 
 		public void SetDestination(Vector3 destination)
@@ -73,23 +76,29 @@ namespace AI.PathFinding
 
 		public void ClearDestination()
 		{
-			activePath = null;
+			Path = null;
 		}
 
 		private void onPathFound(Path path)
 		{
+			if (path == null)
+			{
+				Debug.Log($"[Agent] Received null path expecting identifier {activeIdentifier}");
+				return;
+			}
+			
 			if (activeIdentifier != path.Identifier)
 			{
 				Debug.Log($"[Agent] Discarding path with identifier {path.Identifier} as it doesn't match the current identifier {activeIdentifier}");
 				return;
 			}
 
-			activePath = path;
+			Path = path;
 			nextNodeIndex = 0;
 			
 			CurrentNode = thisTr.position;
-			NextNode = activePath.Points[nextNodeIndex];
-			LastNode = activePath.Points[^1];
+			NextNode = Path.Points[nextNodeIndex];
+			LastNode = Path.Points[^1];
 			
 			PathPending = false;
 		}

@@ -85,6 +85,11 @@ namespace AI.PathFinding
 		
 		#region MonoBehaviour
 
+		public void Start()
+		{
+			CreateGrid().Forget();
+		}
+
 		public void OnDestroy()
 		{
 			cleanup();

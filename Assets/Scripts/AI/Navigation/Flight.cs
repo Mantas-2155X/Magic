@@ -1,17 +1,17 @@
-//#define DEBUG_STUCK
-
-using System.Collections.Generic;
 using AI.Enums;
+using AI.PathFinding;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
-using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 namespace AI.Navigation
 {
 	public class Flight : MonoBehaviour
 	{
+		[SerializeField]
+		public Agent Agent;
+		
 		[SerializeField]
 		public NPC NPC;
 
@@ -32,9 +32,6 @@ namespace AI.Navigation
 		
 		[SerializeField]
 		public float StabilizeSpeed;
-
-		[SerializeField]
-		public float MaximumAgentDistance = 14.25f;
 		
 		[SerializeField]
 		public bool UseSpellRange = true;
@@ -70,12 +67,6 @@ namespace AI.Navigation
 
 		private Vector3 movementTarget;
 		
-		private PositionHint previousPositionHint;
-		private PositionHint positionHint;
-		
-		private readonly Vector3[] corners = new Vector3[2];
-		private readonly Dictionary<PositionHint, Vector3> visibleHints = new ();
-		
 		#region MonoBehaviour
 
 		public void Awake()
@@ -94,27 +85,22 @@ namespace AI.Navigation
 				Gizmos.DrawLine(position, position + -Vector3.up * PositionStuckDistance);
 			}
 			
-			var path = NPC.Agent.path;
-			if (path == null)
-				return;
-
-			Gizmos.color = Color.blue;
-			
-			var allCorners = path.corners;
-			for (var i = 0; i < allCorners.Length; i++)
-			{
-				var corner = allCorners[i];
-				Gizmos.DrawSphere(corner, 0.1f);
-				
-				if (i != allCorners.Length - 1)
-				{	
-					var nextCorner = allCorners[i];
-					Gizmos.DrawLine(corner, nextCorner);
-				}
-			}
-			
 			Gizmos.color = Color.yellow;
 			Gizmos.DrawSphere(movementTarget, 0.1f);
+			
+			if (!Agent.HasPath)
+				return;
+			
+			Gizmos.color = Color.cyan;
+					
+			var points = Agent.Path.Points;
+			for (var i = 0; i < points.Length - 1; i++)
+			{
+				var nodePos = points[i];
+				var otherNodePos = points[i + 1];
+					
+				Gizmos.DrawLine(nodePos, otherNodePos);
+			}
 		}
 #endif
 
@@ -128,9 +114,6 @@ namespace AI.Navigation
 			
 			Hover(position, distanceToCeiling, distanceToFloor);
 
-			var agent = NPC.Agent;
-			agent.nextPosition = position;
-
 			if (NPC.Paralyzed)
 			{
 				rb.AddTorque(new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5)), ForceMode.Impulse);
@@ -143,31 +126,8 @@ namespace AI.Navigation
 			var aiMode = NPC.AIMode;
 			if (aiMode == EAIMode.Walking)
 			{
-				var destination = NPC.Destination;
-
-				if (agent.enabled && agent.hasPath && agent.pathStatus == NavMeshPathStatus.PathComplete)
-				{
-					var path = agent.path;
-					path.GetCornersNonAlloc(corners);
-
-					if (Physics.Raycast(destination, Vector3.down, out var hit, float.MaxValue, ~LayerMaskTools.GetMaskWithAlives(), QueryTriggerInteraction.Ignore) && NavMesh.SamplePosition(hit.point, out _, 2.5f, NavMesh.AllAreas))
-					{
-						movementTarget = corners[1];
-						movementTarget.y = destination.y;
-					}
-					else
-					{
-						movementTarget = destination;
-					}
-				}
-				else
-				{
-					movementTarget = destination;
-				}
-			
-				if (positionHint != null)
-					movementTarget = positionHint.Position;
-
+				if (Agent.HasPath)
+					movementTarget = Agent.NextNode;
 #if UNITY_EDITOR
 				Debug.DrawLine(position, movementTarget, new Color(0.25f, 0.5f, 0.75f));
 #endif
@@ -383,9 +343,9 @@ namespace AI.Navigation
 				return;
 			
 			angleStuckDuration = 0f;
-#if DEBUG_STUCK
+			
 			Debug.LogWarning($"[Flight {gameObject.name}] Angle stuck, attempting to break out");
-#endif
+			
 			rb.AddRelativeTorque(new Vector3(Random.Range(0f, 5f), Random.Range(0f, 5f), Random.Range(0f, 5f)) * 10f, ForceMode.VelocityChange);
 			NPC.Chase.ResetChaseRange(true);
 		}
@@ -397,24 +357,6 @@ namespace AI.Navigation
 
 			if (!PositionRaycastAntiStuckEnabled && !PositionVelocityAntiStuckEnabled)
 				return;
-
-			var position = rb.position;
-			
-			if (positionHint != null && Vector3.Distance(positionHint.Position, position) <= NPC.Agent.stoppingDistance)
-			{
-				var nextHint = positionHint.NextHint;
-				if (nextHint != null && previousPositionHint != nextHint)
-				{
-#if DEBUG_STUCK
-					Debug.Log($"[Flight {gameObject.name}] Going to next position hint {nextHint} at {nextHint.Position}");
-#endif
-					setPositionHint(nextHint);
-					return;
-				}
-				
-				forgetPositionHint();
-				return;
-			}
 			
 			var velocityStuck = false;
 			var raycastStuck = false;
@@ -422,6 +364,8 @@ namespace AI.Navigation
 			if (PositionVelocityAntiStuckEnabled && rb.linearVelocity.magnitude < PositionStuckVelocity) 
 				velocityStuck = true;
 			
+			var position = rb.position;
+
 			if (PositionRaycastAntiStuckEnabled && GetCeilingDistance(position) < PositionStuckDistance || GetFloorDistance(position) < PositionStuckDistance)
 				raycastStuck = true;
 			
@@ -438,68 +382,10 @@ namespace AI.Navigation
 			
 			positionStuckDuration = 0f;
 
-			if (positionHint != null)
-			{
-				Debug.LogWarning($"[Flight {gameObject.name}] Stuck at position hint {positionHint} at {positionHint.Position}, forgetting");
-				forgetPositionHint();
-			}
-			else if (!findPositionHint())
-			{
-				Debug.LogWarning($"[Flight {gameObject.name}] Unable to find a position hint, attempting to break out");
-				rb.AddRelativeTorque(new Vector3(Random.Range(0f, 5f), Random.Range(0f, 5f), Random.Range(0f, 5f)) * 10f, ForceMode.VelocityChange);
-				NPC.Chase.ResetChaseRange(true);
-			}
-		}
-		
-		#endregion
-
-		#region Position Hints
-
-		private bool findPositionHint()
-		{
-#if DEBUG_STUCK
-			Debug.LogWarning($"[Flight {gameObject.name}] Position stuck, looking for position hint");
-#endif
-			visibleHints.Clear();
-			var position = rb.position;
+			Debug.LogWarning($"[Flight {gameObject.name}] Position stuck, attempting to break out");
 			
-			foreach (var pair in PositionHint.Hints)
-			{
-				if (!Physics.Raycast(position, position - pair.Value, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
-					continue;
-
-				visibleHints.Add(pair.Key, pair.Value);
-			}
-
-			var closestDistance = float.MaxValue;
-			PositionHint closestHint = null;
-
-			foreach (var pair in visibleHints)
-			{
-				var distance = Vector3.Distance(position, pair.Value);
-				if (distance > closestDistance)
-					continue;
-				
-				closestDistance = distance;
-				closestHint = pair.Key;
-			}
-
-			if (closestHint == null)
-				return false;
-			
-			setPositionHint(closestHint);
-			return true;
-		}
-
-		private void setPositionHint(PositionHint hint)
-		{
-			previousPositionHint = positionHint;
-			positionHint = hint;
-		}
-		
-		private void forgetPositionHint()
-		{
-			setPositionHint(null);
+			rb.AddRelativeTorque(new Vector3(Random.Range(0f, 5f), Random.Range(0f, 5f), Random.Range(0f, 5f)) * 10f, ForceMode.VelocityChange);
+			NPC.Chase.ResetChaseRange(true);
 		}
 		
 		#endregion
