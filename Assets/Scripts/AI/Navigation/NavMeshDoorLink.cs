@@ -132,8 +132,10 @@ namespace AI.Navigation
 					foreach (var npc in AIManager.Instance.NPCs)
 					{
 						var agent = npc.Agent;
+						if (!agent.IsNavMesh)
+							continue;
 				
-						if (!npc.IsAlive || !agent.enabled || !agent.isOnOffMeshLink || agent.currentOffMeshLinkData.owner != link)
+						if (!npc.IsAlive || !agent.NavMeshAgent.enabled || !agent.IsOnOffMeshLink || agent.CurrentOffMeshLinkData.owner != link)
 							continue;
 
 						linkUsers.Add(npc);
@@ -147,7 +149,7 @@ namespace AI.Navigation
 				{
 					var linkUser = linkUsers[k];
 					linkUser.Agent.Warp(linkUser.GetTransform().position);
-					linkUser.Agent.destination = linkUser.Destination;
+					linkUser.Agent.Destination = linkUser.Destination;
 				}
 			}
 		}

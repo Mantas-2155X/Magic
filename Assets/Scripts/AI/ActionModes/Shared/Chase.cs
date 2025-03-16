@@ -49,13 +49,13 @@ namespace AI.ActionModes.Shared
 			var targetPos = target.position;
 			
 			// Try to stop at this distance
-			var currentStopTarget = currentChaseRange + agent.stoppingDistance;
+			var currentStopTarget = currentChaseRange + agent.StoppingDistance;
 			
 			// NPC not within target range, keep walking
 			if (Vector3.Distance(targetPos, transform.position) > currentStopTarget)
 			{
 				// Target within destination range, keep current path
-				if (Vector3.Distance(targetPos, owner.Destination) <= currentChaseRange + agent.stoppingDistance)
+				if (Vector3.Distance(targetPos, owner.Destination) <= currentChaseRange + agent.StoppingDistance)
 				{
 					if (owner.AIMode != EAIMode.Walking)
 						owner.Walk(targetPos);
@@ -86,7 +86,7 @@ namespace AI.ActionModes.Shared
 			ResetChaseRange(false);
 			
 			// Performing link, stay on walking state until thats done
-			if (agent.isOnOffMeshLink)
+			if (agent.IsOnOffMeshLink)
 				return false;
 				
 			// Reached walking range

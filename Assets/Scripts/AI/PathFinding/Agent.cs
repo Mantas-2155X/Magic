@@ -10,7 +10,8 @@ namespace AI.PathFinding
 		[SerializeField]
 		public float StoppingDistance;
 		
-		public Grid Grid { get; private set; }
+		[SerializeField]
+		public float Radius = 1f;
 
 		public Obstacle Obstacle { get; private set; }
 
@@ -23,8 +24,11 @@ namespace AI.PathFinding
 		public bool PathPending { get; private set; }
 		
 		public bool HasPath => Path != null;
+		public bool HasGrid => Grid != null;
 
 		public Path Path { get; private set; }
+
+		public Grid Grid { get; private set; }
 
 		public float RemainingDistance => Vector3.Distance(thisTr.position, LastNode);
 		
@@ -65,6 +69,13 @@ namespace AI.PathFinding
 			CurrentNode = Path.Points[nextNodeIndex - 1];
 			NextNode = Path.Points[nextNodeIndex];
 		}
+		
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+		{
+			Gizmos.DrawWireSphere(transform.position, Radius);
+		}
+#endif
 
 		public void SetDestination(Vector3 destination)
 		{

@@ -10,9 +10,6 @@ namespace AI.Navigation
 	public class Flight : MonoBehaviour
 	{
 		[SerializeField]
-		public Agent Agent;
-		
-		[SerializeField]
 		public NPC NPC;
 
 		[SerializeField]
@@ -88,12 +85,12 @@ namespace AI.Navigation
 			Gizmos.color = Color.yellow;
 			Gizmos.DrawSphere(movementTarget, 0.1f);
 			
-			if (!Agent.HasPath)
+			if (!NPC.Agent.HasPath)
 				return;
 			
 			Gizmos.color = Color.cyan;
 					
-			var points = Agent.Path.Points;
+			var points = NPC.Agent.Agent.Path.Points;
 			for (var i = 0; i < points.Length - 1; i++)
 			{
 				var nodePos = points[i];
@@ -126,8 +123,8 @@ namespace AI.Navigation
 			var aiMode = NPC.AIMode;
 			if (aiMode == EAIMode.Walking)
 			{
-				if (Agent.HasPath)
-					movementTarget = Agent.NextNode;
+				if (NPC.Agent.HasPath)
+					movementTarget = NPC.Agent.Agent.NextNode;
 #if UNITY_EDITOR
 				Debug.DrawLine(position, movementTarget, new Color(0.25f, 0.5f, 0.75f));
 #endif

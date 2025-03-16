@@ -1,4 +1,4 @@
-#define DEBUG_NPC
+//#define DEBUG_NPC
 
 using System.Collections.Generic;
 using AI.ActionModes;
@@ -7,7 +7,7 @@ using AI.AIModes;
 using AI.Base;
 using AI.Enums;
 using AI.Interfaces;
-using AI.Navigation;
+using AI.PathFinding;
 using Managers;
 using ScriptableObjects;
 using Tools;
@@ -15,6 +15,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Action = AI.AIModes.Action;
 using Idle = AI.ActionModes.Idle;
+using Path = ScriptableObjects.Path;
 using Patrol = AI.ActionModes.Patrol;
 using Random = UnityEngine.Random;
 
@@ -23,10 +24,7 @@ namespace AI
 	public class NPC : BaseAlive
 	{
 		[SerializeField]
-		public NavMeshAgent Agent;
-
-		[SerializeField]
-		public Flight Flight;
+		public AgentCompat Agent;
 		
 		#region Jump
 
@@ -63,7 +61,7 @@ namespace AI
 		public LowResources LowResources { get; private set; }
 		public KillTarget KillTarget { get; private set; }
 
-		public Vector3 Velocity => IsWalking && Flight == null ? Agent.velocity : Body.Rigidbody.linearVelocity;
+		public Vector3 Velocity => IsWalking ? Agent.Velocity : Body.Rigidbody.linearVelocity;
 		
 		private OffMeshLinkData? isOnLink;
 		public OffMeshLinkData? IsOnLink
@@ -241,10 +239,10 @@ namespace AI
 		
 		public bool ToggleAgent(bool state)
 		{
-			if (Flight != null)
+			if (!Agent.IsNavMesh)
 				return false;
 			
-			var agent = Agent;
+			var agent = Agent.NavMeshAgent;
 			if (agent.enabled == state)
 				return true;
 			
@@ -517,7 +515,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
-			if (AIMode == EAIMode.Walking && Agent.hasPath)
+			if (AIMode == EAIMode.Walking && Agent.HasPath)
 				Body.ShouldSway = true;
 			
 			handleAttackTarget();
@@ -541,9 +539,9 @@ namespace AI
 		
 		#region IAlive
 		
-		public override float CurrentSpeed => !IsWalking ? Agent.speed : Agent.velocity.magnitude;
+		public override float CurrentSpeed => !IsWalking ? Agent.Speed : Agent.Velocity.magnitude;
 		
-		public override bool IsWalking => Agent.hasPath;
+		public override bool IsWalking => Agent.HasPath;
 
 		public override void AddSlowSource(int instanceID, float amount)
 		{
@@ -604,15 +602,8 @@ namespace AI
 
 			var npcData = (NPCData)data;
 
-			if (Flight != null)
-			{
-				Agent.updatePosition = false;
-				Agent.updateRotation = false;
-				Agent.updateUpAxis = false;
-			}
-			
-			Agent.speed = data.Speed;
-			Agent.angularSpeed = npcData.RotationSpeed;
+			Agent.Speed = data.Speed;
+			Agent.AngularSpeed = npcData.RotationSpeed;
 
 			base.Spawn(data, relationshipGroup);
 			
@@ -623,10 +614,11 @@ namespace AI
 		{
 			SendCommunication(ECommunication.Died, source);
 			
-			Agent.enabled = false;
+			if (Agent.IsNavMesh)
+				Agent.NavMeshAgent.enabled = false;
 			
-			if (Flight != null)
-				Destroy(Flight);
+			if (Agent.HasFlight)
+				Destroy(Agent.Flight);
 			
 			base.Kill(source);
 		}
@@ -640,13 +632,13 @@ namespace AI
 		{
 			if (Paralyzed)
 			{
-				Agent.speed = 0f;
+				Agent.Speed = 0f;
 				return;
 			}
 			
 			if (SlowSources.Count == 0)
 			{
-				Agent.speed = Data.Speed;
+				Agent.Speed = Data.Speed;
 				return;
 			}
 
@@ -660,7 +652,7 @@ namespace AI
 				maximum = pair.Value;
 			}
 			
-			Agent.speed = Data.Speed - (Data.Speed * maximum);
+			Agent.Speed = Data.Speed - (Data.Speed * maximum);
 		}
 		
 		#endregion

@@ -14717,6 +14717,18 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: 55574266aaee35b37beb23df6ac15575, type: 2}
+    - target: {fileID: 2209360275711873519, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: Agent
+      value: 
+      objectReference: {fileID: 7155503005156224709}
+    - target: {fileID: 2209360275711873519, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: Flight
+      value: 
+      objectReference: {fileID: -1129489370468741524}
+    - target: {fileID: 2209360275711873519, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: NavMeshAgent
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3799399758149138879, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_Name
       value: Eye
@@ -14880,6 +14892,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7335097495257663966, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
     - {fileID: 3852426555830168432, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+    - {fileID: 7175161009213997453, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
     m_RemovedGameObjects:
     - {fileID: 537645674149658875, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
     - {fileID: 5849129300083932631, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
@@ -14963,7 +14976,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4023119309774c1d9665c1e2da75c576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Agent: {fileID: 7155503005156224709}
   NPC: {fileID: 231732286194361612}
   StayBelow: 0.75
   StayAbove: 2
@@ -14993,8 +15005,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StoppingDistance: 1
-  Obstacle: {fileID: 0}
-  Grid: {fileID: 0}
+  Radius: 1
 --- !u!114 &2524303300372934529 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7397406505081074200, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}

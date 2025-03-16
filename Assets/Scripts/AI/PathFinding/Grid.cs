@@ -1,6 +1,7 @@
 #define DEBUG_TIMINGS
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using AI.PathFinding.Jobs;
 using AI.PathFinding.Enums;
@@ -57,7 +58,7 @@ namespace AI.PathFinding
 		
 		[Header("Path Finding")]
 		[SerializeField][Range(0.5f, 1f)]
-		public float Accuracy = 0.85f;
+		public float Accuracy = 0.9f;
 		
 		public int NodesLength { get; private set; }
 		public int NeighborsLength { get; private set; }
@@ -69,6 +70,8 @@ namespace AI.PathFinding
 		public EGridStatus Status { get; private set; } = EGridStatus.NotInitialized;
 
 		public int MaximumWorkers => JobsUtility.JobWorkerCount / 2;
+
+		public static readonly List<Grid> Grids = new ();
 
 		private NativeArray<SNode> nodes;
 		private NativeArray<SIndexWithCost> neighbors;
@@ -88,6 +91,16 @@ namespace AI.PathFinding
 		public void Start()
 		{
 			CreateGrid().Forget();
+		}
+		
+		public void OnEnable()
+		{
+			Grids.Add(this);
+		}
+
+		public void OnDisable()
+		{
+			Grids.Remove(this);
 		}
 
 		public void OnDestroy()

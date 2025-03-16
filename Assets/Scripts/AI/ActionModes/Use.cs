@@ -53,7 +53,7 @@ namespace AI.ActionModes
 			}
 			
 			// Stop next to the usable
-			var stopAt = 2.5f + owner.Agent.stoppingDistance;
+			var stopAt = 2.5f + owner.Agent.StoppingDistance;
 			
 			// NPC not within target range, keep walking
 			if (Vector3.Distance(ownerPos, targetPos) > stopAt)

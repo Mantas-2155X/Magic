@@ -151,6 +151,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5238415708173528890, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5086737948386064533}
+    - targetCorrespondingSourceObject: {fileID: 5238415708173528890, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2209360275711873519}
   m_SourcePrefab: {fileID: 100100000, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
 --- !u!114 &42988670619036741 stripped
 MonoBehaviour:
@@ -204,8 +207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Data>k__BackingField: {fileID: 0}
   <Body>k__BackingField: {fileID: 42988670619036741}
-  Agent: {fileID: 7175161009213997453}
-  Flight: {fileID: 0}
+  Agent: {fileID: 2209360275711873519}
   JumpCurve:
     serializedVersion: 2
     m_Curve:
@@ -240,3 +242,24 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   JumpDuration: 0.75
+--- !u!114 &2209360275711873519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6498104957624570322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6075f0abc706478aab7da4c28eb624e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NavMeshAgent: {fileID: 7175161009213997453}
+  Agent: {fileID: 0}
+  Flight: {fileID: 0}
+  Rigidbody: {fileID: 7872159411983185947}
+--- !u!54 &7872159411983185947 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 9196623204031514355, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+  m_PrefabInstance: {fileID: 1341931207900315368}
+  m_PrefabAsset: {fileID: 0}

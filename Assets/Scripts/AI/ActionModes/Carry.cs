@@ -56,7 +56,7 @@ namespace AI.ActionModes
 				var targetPos = targetTr.position;
 
 				// Stop next to the object
-				var stopAt = 2.5f + owner.Agent.stoppingDistance;
+				var stopAt = 2.5f + owner.Agent.StoppingDistance;
 
 				// NPC not within object range, keep walking
 				if (Vector3.Distance(ownerPos, targetPos) > stopAt)
@@ -88,7 +88,7 @@ namespace AI.ActionModes
 			else
 			{
 				// Stop next to the object
-				var stopAt = 2.5f + owner.Agent.stoppingDistance;
+				var stopAt = 2.5f + owner.Agent.StoppingDistance;
 
 				// NPC not within drop off range, keep walking
 				if (Vector3.Distance(ownerPos, DropAt) > stopAt)

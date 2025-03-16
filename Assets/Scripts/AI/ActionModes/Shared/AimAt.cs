@@ -30,7 +30,7 @@ namespace AI.ActionModes.Shared
 
 			var targetRotation = Quaternion.LookRotation(targetPosition, owner.GetTransform().up);
 
-			if (owner.Flight == null)
+			if (owner.Agent.IsNavMesh)
 			{
 				rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, npcData.RotationSpeed * Time.deltaTime));
 			}

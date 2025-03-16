@@ -24,7 +24,7 @@ namespace AI.ActionModes.Shared
 			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
 				return (true, false);
 			
-			var reached = Vector3.Distance(owner.GetTransform().position, CurrentPath.Points[CurrentPoint].Point) <= owner.Agent.stoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
+			var reached = Vector3.Distance(owner.GetTransform().position, CurrentPath.Points[CurrentPoint].Point) <= owner.Agent.StoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
 			if (!reached)
 				return (false, false);
 

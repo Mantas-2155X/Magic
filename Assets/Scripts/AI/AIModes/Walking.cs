@@ -26,15 +26,16 @@ namespace AI.AIModes
 			Owner = owner;
 			LastEntered = Time.time;
 			
-			if (Owner.Flight != null)
+			if (!Owner.Agent.IsNavMesh)
 			{
-				Owner.Flight.Agent.SetDestination(Owner.Destination);
+				Owner.Agent.SetDestination(Owner.Destination);
+				return;
 			}
-			else
-			{
-				if (owner.ToggleAgent(true))
-					Owner.Agent.SetDestination(Owner.Destination);
-			}
+
+			if (!Owner.ToggleAgent(true))
+				return;
+
+			Owner.Agent.SetDestination(Owner.Destination);
 		}
 		
 		public void Disabled()
@@ -53,9 +54,9 @@ namespace AI.AIModes
 		public void Update()
 		{
 			var agent = Owner.Agent;
-			if (agent.isOnOffMeshLink)
+			if (agent.IsOnOffMeshLink)
 			{
-				var data = agent.currentOffMeshLinkData;
+				var data = agent.CurrentOffMeshLinkData;
 				Owner.IsOnLink = data;
 				
 				// Jump if needed
@@ -121,7 +122,7 @@ namespace AI.AIModes
 								var ownerTr = Owner.GetTransform();
 								
 								// Moving to the destination, stay on the platform
-								ownerTr.position = action.StepTarget.position + Vector3.up * (agent.baseOffset * ownerTr.localScale.y);
+								ownerTr.position = action.StepTarget.position + Vector3.up * (agent.BaseOffset * ownerTr.localScale.y);
 							}
 							
 							return;
@@ -172,17 +173,8 @@ namespace AI.AIModes
 				Owner.IsOnLink = null;
 			}
 
-			if (Owner.Flight == null)
-			{
-				if (agent.pathPending || !agent.isOnNavMesh || agent.remainingDistance > agent.stoppingDistance || agent.hasPath && agent.velocity.sqrMagnitude != 0f)
-					return;
-			}
-			else
-			{
-				var flightAgent = Owner.Flight.Agent;
-				if (flightAgent.PathPending || flightAgent.RemainingDistance > flightAgent.StoppingDistance)
-					return;
-			}
+			if (agent.PathPending || !agent.IsOnNavMesh || agent.RemainingDistance > agent.StoppingDistance || agent.HasPath && agent.Velocity.sqrMagnitude != 0f)
+				return;
 
 			// Reached destination, go back to what was being done earlier
 			Owner.ReturnAIMode();
@@ -200,15 +192,19 @@ namespace AI.AIModes
 
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination)
 		{
-			if (Owner.Flight != null)
+			if (!Owner.Agent.IsOnNavMesh)
+				return;
+
+			if (!Owner.Agent.IsNavMesh)
 			{
-				Owner.Flight.Agent.SetDestination(newDestination);
+				Owner.Agent.SetDestination(newDestination);
+				return;
 			}
-			else
-			{
-				if (Owner.Agent.enabled && Owner.Agent.isOnNavMesh)
-					Owner.Agent.SetDestination(newDestination);
-			}
+
+			if (!Owner.Agent.NavMeshAgent.enabled)
+				return;
+
+			Owner.Agent.SetDestination(newDestination);
 		}
 
 		public void CommunicationReceived(ECommunication type, NPC source, object data)
@@ -221,7 +217,7 @@ namespace AI.AIModes
 			if (!Owner.IsAlive)
 				return;
 			
-			Owner.Agent.updateRotation = true;
+			Owner.Agent.UpdateRotation = true;
 			Owner.Agent.CompleteOffMeshLink();
 			jumpingLink = false;
 		}
@@ -232,14 +228,14 @@ namespace AI.AIModes
 			jumpingLink = true;
 
 			var agent = Owner.Agent;
-			var data = agent.currentOffMeshLinkData;
+			var data = agent.CurrentOffMeshLinkData;
 			var transform = Owner.GetTransform();
 
-			agent.updateRotation = false;
+			agent.UpdateRotation = false;
 			await lookAtLink(data);
 			
 			var startPos = transform.position;
-			var endPos = data.endPos + Vector3.up * (agent.baseOffset * transform.localScale.y);
+			var endPos = data.endPos + Vector3.up * (agent.BaseOffset * transform.localScale.y);
 			
 			var normalizedTime = 0.0f;
 			while (normalizedTime < 1.0f)
@@ -265,7 +261,7 @@ namespace AI.AIModes
 			}
 			
 			agent.CompleteOffMeshLink();
-			agent.updateRotation = true;
+			agent.UpdateRotation = true;
 			
 			jumpingLink = false;
 		}

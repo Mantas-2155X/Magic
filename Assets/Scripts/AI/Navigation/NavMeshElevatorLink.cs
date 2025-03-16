@@ -134,7 +134,7 @@ namespace AI.Navigation
 				return;
 		
 			PlatformUser = user;
-			PlatformUser.Agent.updateRotation = false;
+			PlatformUser.Agent.UpdateRotation = false;
 
 			IsSteppingOn = true;
 		
@@ -161,7 +161,7 @@ namespace AI.Navigation
 		{
 			var tr = PlatformUser.GetTransform();
 			var startPos = tr.position;
-			var endPos = StepTarget.position + Vector3.up * (PlatformUser.Agent.baseOffset * tr.localScale.y);
+			var endPos = StepTarget.position + Vector3.up * (PlatformUser.Agent.BaseOffset * tr.localScale.y);
 			var speed = PlatformUser.Data.Speed;
 		
 			var normalizedTime = 0.0f;
@@ -203,10 +203,10 @@ namespace AI.Navigation
 			switch (Elevator.State)
 			{
 				case EElevatorState.Elevated or EElevatorState.Elevating:
-					endPos = UpperLink.position + Vector3.up * (PlatformUser.Agent.baseOffset * tr.localScale.y);
+					endPos = UpperLink.position + Vector3.up * (PlatformUser.Agent.BaseOffset * tr.localScale.y);
 					break;
 				case EElevatorState.Lowered or EElevatorState.Lowering:
-					endPos = LowerLink.position + Vector3.up * (PlatformUser.Agent.baseOffset * tr.localScale.y);
+					endPos = LowerLink.position + Vector3.up * (PlatformUser.Agent.BaseOffset * tr.localScale.y);
 					break;
 			}
 
@@ -238,11 +238,11 @@ namespace AI.Navigation
 		
 			// Finish action
 			PlatformUser.Agent.CompleteOffMeshLink();
-			PlatformUser.Agent.updateRotation = true;
+			PlatformUser.Agent.UpdateRotation = true;
 
 			// Prevent weird rotation afterwards
 			PlatformUser.Agent.Warp(endPos);
-			PlatformUser.Agent.destination = PlatformUser.Destination;
+			PlatformUser.Agent.Destination = PlatformUser.Destination;
 
 			IsSteppingOff = false;
 			PlatformUser = null;
