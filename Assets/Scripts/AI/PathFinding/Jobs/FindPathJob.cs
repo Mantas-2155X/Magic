@@ -29,9 +29,6 @@ namespace AI.PathFinding.Jobs
 		public NativeList<int> ToSearchNodes;
 		
 		[ReadOnly]
-		public float Distance;
-		
-		[ReadOnly]
 		public float3 StartPosition;
 		
 		[ReadOnly]
@@ -45,7 +42,12 @@ namespace AI.PathFinding.Jobs
 			var startNodeIndex = findClosestNode(StartPosition);
 			var endNodeIndex = findClosestNode(EndPosition);
 
-			var distanceBetweenPoints = math.distance(StartPosition, EndPosition) / Distance;
+			var startNode = Nodes[startNodeIndex];
+			var endNode = Nodes[endNodeIndex];
+
+			var endGridPosition = endNode.GridPosition;
+			
+			var distanceBetweenPoints = math.distance(startNode.GridPosition, endGridPosition);
 
 			GCosts[startNodeIndex] = 0f;
 			HCosts[startNodeIndex] = distanceBetweenPoints;
@@ -86,7 +88,7 @@ namespace AI.PathFinding.Jobs
 					return;
 				}
 			
-				calculateNeighbors(nodeIndex, EndPosition);
+				calculateNeighbors(nodeIndex, endGridPosition);
 			}
 		}
 
@@ -112,7 +114,7 @@ namespace AI.PathFinding.Jobs
 			return closestNode;
 		}
 		
-		private void calculateNeighbors(int nodeIndex, float3 endPosition)
+		private void calculateNeighbors(int nodeIndex, int3 endGridPosition)
 		{
 			var nodeGCost = GCosts[nodeIndex];
 
@@ -137,8 +139,7 @@ namespace AI.PathFinding.Jobs
 				if (gCost >= GCosts[neighborIndex])
 					continue;
 				
-				var neighborPos = neighborNode.WorldPosition;
-				var hCost = math.distance(neighborPos, endPosition) / Distance;
+				var hCost = math.distance(neighborNode.GridPosition, endGridPosition);
 				
 				Connections[neighborIndex] = nodeIndex;
 				GCosts[neighborIndex] = gCost;

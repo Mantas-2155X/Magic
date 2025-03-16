@@ -357,7 +357,6 @@ namespace AI.PathFinding
 			{
 				Nodes = nodes,
 				Neighbors = neighbors,
-				Distance = Distance,
 				Accuracy = Accuracy,
 				XSize = xSize,
 				YSize = ySize,
@@ -588,7 +587,6 @@ namespace AI.PathFinding
 				ResultingPath = resultingPath,
 				SearchedNodes = searchedNodes,
 				ToSearchNodes = toSearchNodes,
-				Distance = Distance,
 				StartPosition = startPosition,
 				EndPosition = endPosition,
 				Obstructed = obstructed

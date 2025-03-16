@@ -17,9 +17,6 @@ namespace AI.PathFinding.Jobs
 		public NativeArray<SIndexWithCost> Neighbors;
 		
 		[ReadOnly]
-		public float Distance;
-		
-		[ReadOnly]
 		public float Accuracy;
 
 		[ReadOnly]
@@ -66,7 +63,7 @@ namespace AI.PathFinding.Jobs
 						if (neighborIndex == index)
 							continue;
 
-						var cost = math.distance(worldPos, Nodes[neighborIndex].WorldPosition) / Distance;
+						var cost = math.distance(gridPos, Nodes[neighborIndex].GridPosition);
 
 						SIndexWithCost neighbor;
 						neighbor.Index = neighborIndex;
