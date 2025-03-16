@@ -440,7 +440,7 @@ namespace AI.PathFinding
 		/// Finds a path between two given vectors
 		/// Returns an array of nodes that follow the path
 		/// </summary>
-		public async UniTask<Path> FindPath(Vector3 startPosition, Vector3 endPosition, UnityAction<Path> callback = null)
+		public async UniTask<Path> FindPath(Vector3 startPosition, Vector3 endPosition, int identifier = 0, UnityAction<Path> callback = null)
 		{
 			// Can only find a path if the grid is created
 			if (Status == EGridStatus.NotInitialized)
@@ -588,7 +588,7 @@ namespace AI.PathFinding
 			findPathHandle.Complete();
 #endif
 
-			var result = Path.Create(nodes, searchedNodes, resultingPath, obstructed, nodesRadius);
+			var result = Path.Create(nodes, searchedNodes, resultingPath, obstructed, nodesRadius, identifier);
 			
 			#endregion
 

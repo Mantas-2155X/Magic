@@ -15,17 +15,17 @@ namespace AI.PathFinding
 
 		public float NodeRadius { get; private set; }
 		
-		public static Path Create(NativeArray<SNode> nodes, NativeHashSet<int> searchedNodes, NativeList<int> resultingPath, NativeArray<bool> obstructed, float radius)
+		public int Identifier { get; private set; }
+		
+		public static Path Create(NativeArray<SNode> nodes, NativeHashSet<int> searchedNodes, NativeList<int> resultingPath, NativeArray<bool> obstructed, float radius, int identifier)
 		{
-			if (resultingPath.Length == 0)
-				return null;
-
 			var path = new Path
 			{
 				Points = new Vector3[resultingPath.Length],
 				Searched = new Vector3[searchedNodes.Count],
 				Obstructed = new List<Vector3>(),
-				NodeRadius = radius
+				NodeRadius = radius,
+				Identifier = identifier
 			};
 
 			for (var i = 0; i < resultingPath.Length; i++)
