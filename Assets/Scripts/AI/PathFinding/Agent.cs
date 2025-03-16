@@ -104,6 +104,14 @@ namespace AI.PathFinding
 				return;
 			}
 
+			if (path.Points.Length == 0)
+			{
+				Debug.Log($"[Agent] Discarding path with identifier {path.Identifier} as it has 0 points");
+				Path = null;
+				PathPending = false;
+				return;
+			}
+
 			Path = path;
 			nextNodeIndex = 0;
 			
