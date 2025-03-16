@@ -402,7 +402,7 @@ namespace AI.PathFinding
 			var filterRaycastsJob = new FilterRaycastsJob
 			{
 				Neighbors = neighbors,
-				Hits = raycastResults.Slice().SliceConvert<SRaycastHit>(),
+				Hits = raycastResults,
 			};
 
 #if DEBUG_TIMINGS
