@@ -14,8 +14,6 @@ namespace AI.PathFinding
 		[SerializeField]
 		public float Radius = 1f;
 
-		public Obstacle Obstacle { get; private set; }
-
 		public Vector3 CurrentNode { get; private set; }
 		
 		public Vector3 NextNode { get; private set; }
@@ -49,9 +47,6 @@ namespace AI.PathFinding
 
 			// todo: find closest grid and handle changes
 			Grid = FindAnyObjectByType<Grid>();
-			
-			// todo: use this and filter it out for finding path so the agent isnt blocking itself
-			Obstacle = GetComponent<Obstacle>();
 		}
 
 		public void OnEnable()
