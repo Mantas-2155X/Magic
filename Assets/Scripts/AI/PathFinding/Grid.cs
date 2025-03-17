@@ -704,7 +704,7 @@ namespace AI.PathFinding
 					if (Array.IndexOf(agent.Path.Indexes, i) < agent.BeforeSkipNextNodeIndex)
 						continue;
 
-					Debug.Log($"[Grid] Recalculating path for {agent.name} as it is obstructed");
+					Debug.LogWarning($"[Grid] Recalculating path for {agent.name} as it is obstructed");
 					agent.SetDestination(agent.LastNode);
 					break;
 				}
