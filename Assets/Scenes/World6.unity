@@ -3610,8 +3610,8 @@ GameObject:
   - component: {fileID: 646561133}
   - component: {fileID: 646561132}
   - component: {fileID: 646561134}
-  - component: {fileID: 646561135}
   - component: {fileID: 646561136}
+  - component: {fileID: 646561137}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -3748,38 +3748,6 @@ MonoBehaviour:
     ToggleLight: 0
   TimeBetweenWaves: 5
   Info: {fileID: 1285180922}
---- !u!114 &646561135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 646561131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SerializedVersion: 0
-  m_AgentTypeID: -902729914
-  m_CollectObjects: 2
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.1
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 117a7bbfbd5713816b975ad82d833e71, type: 2}
-  m_BuildHeightMesh: 0
 --- !u!114 &646561136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3812,6 +3780,35 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 26bbffa9d0e770cd18985bf3a90bbb39, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &646561137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646561131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87c68b432284ad69536b5a28906c059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Offset: {x: 0, y: -0.75, z: 0}
+  Size: {x: 41, y: 4, z: 41}
+  Distance: 1
+  Radius: 0.5
+  FilterMask:
+    serializedVersion: 2
+    m_Bits: 1
+  DrawBounds: 1
+  DrawNodes: 0
+  DrawConnections: 0
+  DrawPaths: 0
+  DrawAvailable: 0
+  DrawInsideObject: 0
+  DrawObstructed: 0
+  DrawSearched: 0
+  Accuracy: 0.9
+  UpdateObstaclesEvery: 0.5
 --- !u!1001 &665978333
 PrefabInstance:
   m_ObjectHideFlags: 0

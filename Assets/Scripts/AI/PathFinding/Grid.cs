@@ -1,4 +1,4 @@
-#define DEBUG_TIMINGS
+//#define DEBUG_TIMINGS
 
 using System;
 using System.Collections.Generic;
@@ -106,7 +106,7 @@ namespace AI.PathFinding
 			if (updatingObstacles)
 				return;
 			
-			if (Status != EGridStatus.Initialized || !nodes.IsCreated)
+			if (Status != EGridStatus.Initialized || !nodes.IsCreated || ActivePathFinds > 0)
 				return;
 			
 			var time = Time.time;
@@ -689,7 +689,7 @@ namespace AI.PathFinding
 			var agents = Agent.Agents;
 			var agentsLength = agents.Count;
 
-			for (var i = 0; i < NodesLength; i++)
+			for (var i = 0; i < nodesLength; i++)
 			{
 				var availability = availabilities[i];
 				if ((availability & ENodeAvailabilityFlags.Obstructed) == 0)
