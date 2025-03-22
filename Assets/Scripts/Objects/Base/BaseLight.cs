@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Managers;
 using Objects.Events;
 using Tools;
 using UnityEngine;
@@ -31,6 +33,9 @@ namespace Objects.Base
 		[SerializeField]
 		public OnLightDisabledEvent OnLightDisabledEvent = new ();
 
+		[SerializeField]
+		public List<ReflectionProbe> UpdateProbes;
+		
 		private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
 
 		private Material material;
@@ -95,6 +100,12 @@ namespace Objects.Base
 				OnLightDisabledEvent?.Invoke();
 			
 			setEnabled();
+
+			if (UpdateProbes == null)
+				return;
+
+			for (var i = 0; i < UpdateProbes.Count; i++)
+				ProbeManager.Instance.UpdateProbe(UpdateProbes[i]);
 		}
 
 		private void setEnabled()

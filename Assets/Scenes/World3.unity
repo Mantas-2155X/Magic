@@ -175,7 +175,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -1816,7 +1816,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -2490,7 +2490,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -2692,6 +2692,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3634,7 +3642,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -3761,7 +3769,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -4431,6 +4439,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5867,7 +5883,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -6022,7 +6038,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -6413,6 +6429,7 @@ GameObject:
   - component: {fileID: 891401689}
   - component: {fileID: 891401690}
   - component: {fileID: 891401691}
+  - component: {fileID: 891401692}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -6471,6 +6488,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f52447bebe4a4ca9bf6e184bd328c632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &891401692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891401686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be744ac02f964eb7bc29d211885389d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &902856541
@@ -7193,6 +7222,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7391,7 +7428,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -7495,6 +7532,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7853,7 +7898,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -22448,6 +22493,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22584,6 +22637,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22988,7 +23049,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -23053,7 +23114,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -23684,7 +23745,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -24148,7 +24209,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -24291,6 +24352,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -24965,7 +25034,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -25145,8 +25214,8 @@ ReflectionProbe:
   serializedVersion: 2
   m_Type: 0
   m_Mode: 0
-  m_RefreshMode: 0
-  m_TimeSlicingMode: 0
+  m_RefreshMode: 2
+  m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
   m_BoxSize: {x: 17.5, y: 3.75, z: 17.5}
@@ -25158,7 +25227,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -25941,6 +26010,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26018,7 +26095,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
@@ -27124,6 +27201,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: UpdateProbes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
+      propertyPath: 'UpdateProbes.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1667890045}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27201,7 +27286,7 @@ ReflectionProbe:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1
   m_IntensityMultiplier: 1
   m_BlendDistance: 1
   m_HDR: 1
