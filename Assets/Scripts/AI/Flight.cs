@@ -88,20 +88,6 @@ namespace AI
 			
 			Gizmos.color = Color.yellow;
 			Gizmos.DrawSphere(movementTarget, 0.1f);
-			
-			if (!NPC.Agent.HasPath)
-				return;
-			
-			Gizmos.color = Color.cyan;
-					
-			var points = NPC.Agent.Agent.Path.Points;
-			for (var i = 0; i < points.Length - 1; i++)
-			{
-				var nodePos = points[i];
-				var otherNodePos = points[i + 1];
-					
-				Gizmos.DrawLine(nodePos, otherNodePos);
-			}
 		}
 #endif
 

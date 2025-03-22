@@ -192,6 +192,37 @@ namespace AI.PathFinding
 					}
 				}
 			}
+
+			var agents = Agent.Agents;
+			for (var i = 0; i < agents.Count; i++)
+			{
+				var agent = agents[i];
+				if (agent.Grid != this || !agent.HasPath)
+					continue;
+
+				if (DrawPaths)
+				{
+					Gizmos.color = Color.cyan;
+					
+					var points = agent.Path.Points;
+					for (var k = 0; k < points.Length - 1; k++)
+					{
+						var nodePos = points[k];
+						var otherNodePos = points[k + 1];
+					
+						Gizmos.DrawLine(nodePos, otherNodePos);
+					}
+				}
+
+				if (DrawNodes && DrawSearched)
+				{
+					Gizmos.color = Color.magenta;
+					
+					var searched = agent.Path.Searched;
+					for (var k = 0; k < searched.Length; k++)
+						Gizmos.DrawSphere(searched[k], agent.Path.NodeRadius);
+				}
+			}
 		}
 #endif
 		
