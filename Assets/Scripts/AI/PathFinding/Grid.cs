@@ -1,4 +1,4 @@
-//#define DEBUG_TIMINGS
+#define DEBUG_TIMINGS
 
 using System;
 using System.Collections.Generic;
@@ -681,27 +681,46 @@ namespace AI.PathFinding
 			
 			positions.Dispose();
 			halfSizes.Dispose();
+			
+			var obstructed = new NativeList<int>(Allocator.TempJob);
+
+			var getObstructedJob = new GetObstructedJob
+			{
+				Availabilities = availabilities,
+				Obstructed = obstructed
+			};
+
+#if DEBUG_TIMINGS
+			watch = new Stopwatch();
+			watch.Start();
+			var getObstructedHandle = getObstructedJob.Schedule(nodesLength, filterObstaclesHandle);
+			getObstructedHandle.Complete();
+			watch.Stop();
+			Debug.Log($"getObstructedHandle took {watch.ElapsedMilliseconds}ms");
+#else
+			var getObstructedHandle = getObstructedJob.Schedule(nodesLength, filterObstaclesHandle);
+			getObstructedHandle.Complete();
+#endif
 
 #if DEBUG_TIMINGS
 			watch.Restart();
 #endif
 			
+			var obstructedLength = obstructed.Length;
+
 			var agents = Agent.Agents;
 			var agentsLength = agents.Count;
 
-			for (var i = 0; i < nodesLength; i++)
+			for (var i = 0; i < obstructedLength; i++)
 			{
-				var availability = availabilities[i];
-				if ((availability & ENodeAvailabilityFlags.Obstructed) == 0)
-					continue;
-				
+				var nodeIndex = obstructed[i];
 				for (var k = 0; k < agentsLength; k++)
 				{
 					var agent = agents[k];
 					if (agent == null || !agent.HasPath)
 						continue;
 					
-					if (Array.IndexOf(agent.Path.Indexes, i) < agent.BeforeSkipNextNodeIndex)
+					if (Array.IndexOf(agent.Path.Indexes, nodeIndex) < agent.BeforeSkipNextNodeIndex)
 						continue;
 
 					Debug.LogWarning($"[Grid] Recalculating path for {agent.name} as it is obstructed");
@@ -715,6 +734,8 @@ namespace AI.PathFinding
 			Debug.Log($"obstruction recalculation check took {watch.ElapsedMilliseconds}ms");
 #endif
 			
+			obstructed.Dispose();
+
 			lastObstacleUpdate = Time.time;
 			updatingObstacles = false;
 		}
