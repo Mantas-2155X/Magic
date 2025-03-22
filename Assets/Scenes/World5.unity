@@ -4680,9 +4680,10 @@ MonoBehaviour:
   DrawPaths: 0
   DrawAvailable: 0
   DrawInsideObject: 0
-  DrawSearched: 0
   DrawObstructed: 0
+  DrawSearched: 0
   Accuracy: 1
+  UpdateObstaclesEvery: 0.5
 --- !u!1001 &648856179
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6733,7 +6734,7 @@ ReflectionProbe:
   m_Mode: 0
   m_RefreshMode: 0
   m_TimeSlicingMode: 0
-  m_Resolution: 128
+  m_Resolution: 512
   m_UpdateFrequency: 0
   m_BoxSize: {x: 100, y: 48, z: 100}
   m_BoxOffset: {x: 0, y: 0, z: 0}
