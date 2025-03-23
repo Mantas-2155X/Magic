@@ -57,8 +57,8 @@ namespace AI.PathFinding
 		public bool DrawSearched;
 		
 		[Header("Path Finding")]
-		[SerializeField][Range(0.5f, 1f)]
-		public float Accuracy = 0.9f;
+		[SerializeField][Range(0.5f, 2f)]
+		public float Accuracy = 1f;
 
 		[SerializeField][Range(0.1f, 2.5f)]
 		public float UpdateObstaclesEvery = 0.5f;
@@ -174,7 +174,7 @@ namespace AI.PathFinding
 
 			if (DrawConnections && Status == EGridStatus.Initialized && nodes.IsCreated)
 			{
-				Gizmos.color = new Color(1f, 0.5f, 0f);
+				Gizmos.color = Color.black;
 
 				for (var i = 0; i < nodes.Length; i++)
 				{
@@ -187,6 +187,13 @@ namespace AI.PathFinding
 						var neighbor = neighbors[k];
 						if (!neighbor.Connects)
 							continue;
+
+						if (neighbor.Cost >= 1.7f)
+							Gizmos.color = Color.red;
+						else if (neighbor.Cost >= 1.4f)
+							Gizmos.color = Color.yellow;
+						else if (neighbor.Cost == 1f)
+							Gizmos.color = Color.green;
 						
 						Gizmos.DrawLine(nodePos, nodes[neighbor.Index].WorldPosition);
 					}

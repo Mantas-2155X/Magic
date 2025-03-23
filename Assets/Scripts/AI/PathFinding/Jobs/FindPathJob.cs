@@ -143,8 +143,18 @@ namespace AI.PathFinding.Jobs
 				HCosts[neighborIndex] = hCost;
 				FCosts[neighborIndex] = gCost + hCost;
 			
-				if (!ToSearchNodes.Contains(neighborIndex))
+				if (ToSearchNodes.Contains(neighborIndex))
+					continue;
+
+				if (ToSearchNodes.Length > 0 && hCost < HCosts[ToSearchNodes[0]])
+				{
+					ToSearchNodes.InsertRange(0, 1);
+					ToSearchNodes[0] = neighborIndex;
+				}
+				else
+				{
 					ToSearchNodes.Add(neighborIndex);
+				}
 			}
 		}
 	}
