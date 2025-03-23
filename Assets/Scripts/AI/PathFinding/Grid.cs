@@ -604,10 +604,6 @@ namespace AI.PathFinding
 			var toSearchNodes = new NativeList<int>(nodesLength, Allocator.Persistent);
 			var resultingPath = new NativeList<int>(Allocator.Persistent);
 			
-			var availabilitiesCopy = new NativeArray<ENodeAvailabilityFlags>(nodesLength, Allocator.Persistent);
-			await UniTask.WaitUntil(() => !updatingObstacles);
-			availabilitiesCopy.CopyFrom(availabilities);
-
 			var findPathJob = new FindPathJob
 			{
 				Nodes = nodes,
@@ -649,7 +645,6 @@ namespace AI.PathFinding
 			toSearchNodes.Dispose();
 			resultingPath.Dispose();
 
-			availabilitiesCopy.Dispose();
 			
 #if DEBUG_TIMINGS
 			totalWatch.Stop();
