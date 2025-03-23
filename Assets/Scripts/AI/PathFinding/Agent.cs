@@ -149,7 +149,7 @@ namespace AI.PathFinding
 				return;
 			}
 
-			if (path.Points.Length == 0)
+			if (path.Points.Count == 0)
 			{
 				Debug.LogWarning($"[Agent] Discarding path with identifier {path.Identifier} as it has 0 points");
 				Path = null;

@@ -212,7 +212,7 @@ namespace AI.PathFinding
 					Gizmos.color = Color.cyan;
 					
 					var points = agent.Path.Points;
-					for (var k = 0; k < points.Length - 1; k++)
+					for (var k = 0; k < points.Count - 1; k++)
 					{
 						var nodePos = points[k];
 						var otherNodePos = points[k + 1];
@@ -226,7 +226,7 @@ namespace AI.PathFinding
 					Gizmos.color = Color.magenta;
 					
 					var searched = agent.Path.Searched;
-					for (var k = 0; k < searched.Length; k++)
+					for (var k = 0; k < searched.Count; k++)
 						Gizmos.DrawSphere(searched[k], agent.Path.NodeRadius);
 				}
 			}
@@ -639,7 +639,7 @@ namespace AI.PathFinding
 			findPathHandle.Complete();
 #endif
 
-			var result = Path.Create(nodes, searchedNodes, resultingPath, nodesRadius, identifier);
+			var result = Path.Create(nodes, searchedNodes, resultingPath, nodesRadius, identifier, startPosition, endPosition);
 			
 			#endregion
 			
@@ -753,7 +753,7 @@ namespace AI.PathFinding
 					if (agent == null || !agent.HasPath)
 						continue;
 					
-					if (Array.IndexOf(agent.Path.Indexes, nodeIndex) < agent.BeforeSkipNextNodeIndex)
+					if (agent.Path.Indexes.IndexOf(nodeIndex) < agent.BeforeSkipNextNodeIndex)
 						continue;
 
 					Debug.LogWarning($"[Grid] Recalculating path for {agent.name} as it is obstructed");

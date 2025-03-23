@@ -124,7 +124,7 @@ namespace Editor
 					Handles.color = Color.cyan;
 					
 					var points = foundPath.Points;
-					for (var i = 0; i < points.Length - 1; i++)
+					for (var i = 0; i < points.Count - 1; i++)
 					{
 						var nodePos = points[i];
 						var otherNodePos = points[i + 1];
@@ -140,7 +140,7 @@ namespace Editor
 						Handles.color = Color.magenta;
 					
 						var searched = foundPath.Searched;
-						for (var i = 0; i < searched.Length; i++)
+						for (var i = 0; i < searched.Count; i++)
 							Handles.SphereHandleCap(0, searched[i], Quaternion.identity, foundPath.NodeRadius, EventType.Repaint);
 					}
 				}
