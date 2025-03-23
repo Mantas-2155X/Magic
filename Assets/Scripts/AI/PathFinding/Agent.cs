@@ -46,7 +46,26 @@ namespace AI.PathFinding
 			thisTr = transform;
 
 			// todo: find closest grid and handle changes
-			Grid = FindAnyObjectByType<Grid>();
+			
+			var grids = Grid.Grids;
+			if (grids.Count == 0)
+			{
+				Debug.LogWarning("[Agent] No grids available");
+				return;
+			}
+			
+			for (var i = 0; i < grids.Count; i++)
+			{
+				var grid = grids[i];
+				if (grid.Radius != Radius)
+					continue;
+
+				Grid = grid;
+				return;
+			}
+
+			Debug.LogWarning($"[Agent] No grids found with radius {Radius}, defaulting");
+			Grid = grids[0];
 		}
 
 		public void OnEnable()

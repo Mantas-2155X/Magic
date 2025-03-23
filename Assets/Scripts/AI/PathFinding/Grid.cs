@@ -57,8 +57,8 @@ namespace AI.PathFinding
 		public bool DrawSearched;
 		
 		[Header("Path Finding")]
-		[SerializeField][Range(0.5f, 2f)]
-		public float Accuracy = 1f;
+		[SerializeField][Range(0.5f, 1f)]
+		public float Accuracy = 0.9f;
 
 		[SerializeField][Range(0.1f, 2.5f)]
 		public float UpdateObstaclesEvery = 0.5f;
