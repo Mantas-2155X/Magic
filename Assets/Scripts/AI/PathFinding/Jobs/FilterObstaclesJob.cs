@@ -22,7 +22,7 @@ namespace AI.PathFinding.Jobs
 		public NativeArray<ENodeAvailabilityFlags> Availabilities;
 
 		[ReadOnly]
-		public float HalfRadius;
+		public float Radius;
 
 		public void Execute(int index)
 		{
@@ -38,7 +38,7 @@ namespace AI.PathFinding.Jobs
 				var halfSize = HalfSizes[i];
 
 				var direction = math.normalize(position - nodePos);
-				var closestPoint = direction * HalfRadius + nodePos;
+				var closestPoint = direction * Radius + nodePos;
 				
 				var minX = position.x - halfSize.x;
 				var minY = position.y - halfSize.y;

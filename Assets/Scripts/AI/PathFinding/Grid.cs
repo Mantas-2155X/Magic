@@ -168,6 +168,16 @@ namespace AI.PathFinding
 						throw new NotImplementedException();
 					}
 
+					if (nodes[i].AreaCost != 0)
+					{
+						var color = Gizmos.color;
+						color.r -= 0.65f;
+						color.g -= 0.65f;
+						color.b -= 0.65f;
+						
+						Gizmos.color = color;
+					}
+					
 					Gizmos.DrawSphere(nodes[i].WorldPosition, Radius);
 				}
 			}
@@ -352,7 +362,7 @@ namespace AI.PathFinding
 				Positions = positions,
 				HalfSizes = halfSizes,
 				AreaCosts = areaCosts,
-				HalfRadius = Radius / 2f
+				Radius = Radius
 			};
 
 #if DEBUG_TIMINGS
@@ -697,7 +707,7 @@ namespace AI.PathFinding
 				Positions = positions,
 				HalfSizes = halfSizes,
 				Availabilities = availabilities,
-				HalfRadius = Radius / 2f
+				Radius = Radius
 			};
 
 #if DEBUG_TIMINGS
