@@ -45,7 +45,8 @@ namespace AI.PathFinding
 			if (!DrawBounds)
 				return;
 			
-			Gizmos.DrawWireCube(transform.position + Offset, Size);
+			Gizmos.matrix = transform.localToWorldMatrix;
+			Gizmos.DrawWireCube(Offset, Size);
 		}
 #endif
 		
@@ -75,6 +76,12 @@ namespace AI.PathFinding
 			size.z = Size.z / 2f;
 			
 			return size;
+		}
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Matrix4x4 GetInverseMatrix()
+		{
+			return thisTr.localToWorldMatrix.inverse;
 		}
 
 		#endregion

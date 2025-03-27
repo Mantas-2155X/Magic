@@ -3,6 +3,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace AI.PathFinding.Jobs
 {
@@ -18,10 +19,13 @@ namespace AI.PathFinding.Jobs
 		public NativeArray<float3> HalfSizes;
 
 		[ReadOnly]
+		public NativeArray<Matrix4x4> InverseMatrices;
+
+		[ReadOnly]
 		public NativeArray<float> AreaCosts;
 		
 		[ReadOnly]
-		public float Radius;
+		public float HalfRadius;
 
 		public void Execute(int index)
 		{
@@ -32,19 +36,16 @@ namespace AI.PathFinding.Jobs
 			{
 				var position = Positions[i];
 				var halfSize = HalfSizes[i];
+				var inverseMatrix = InverseMatrices[i];
 
 				var direction = math.normalize(position - nodePos);
-				var closestPoint = direction * Radius + nodePos;
+				var closestPoint = direction * HalfRadius + nodePos;
 				
-				var minX = position.x - halfSize.x;
-				var minY = position.y - halfSize.y;
-				var minZ = position.z - halfSize.z;
+				var transformedPoint = inverseMatrix.MultiplyPoint(closestPoint);
 				
-				var maxX = position.x + halfSize.x;
-				var maxY = position.y + halfSize.y;
-				var maxZ = position.z + halfSize.z;
-
-				if ((closestPoint.x >= minX && closestPoint.x <= maxX) && (closestPoint.y >= minY && closestPoint.y <= maxY) && (closestPoint.z >= minZ && closestPoint.z <= maxZ))
+				if ((transformedPoint.x >= -halfSize.x && transformedPoint.x <= halfSize.x) && 
+				    (transformedPoint.y >= -halfSize.y && transformedPoint.y <= halfSize.y) && 
+				    (transformedPoint.z >= -halfSize.z && transformedPoint.z <= halfSize.z))
 				{
 					node.AreaCost = AreaCosts[i];
 					Nodes[index] = node;

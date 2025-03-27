@@ -345,6 +345,7 @@ namespace AI.PathFinding
 
 			var positions = new NativeArray<float3>(areasLength, Allocator.Persistent);
 			var halfSizes = new NativeArray<float3>(areasLength, Allocator.Persistent);
+			var inverseMatrices = new NativeArray<Matrix4x4>(areasLength, Allocator.Persistent);
 			var areaCosts = new NativeArray<float>(areasLength, Allocator.Persistent);
 			
 			for (var i = 0; i < areasLength; i++)
@@ -353,6 +354,7 @@ namespace AI.PathFinding
 				
 				positions[i] = area.GetPosition();
 				halfSizes[i] = area.GetHalfSize();
+				inverseMatrices[i] = area.GetInverseMatrix();
 				areaCosts[i] = area.Cost;
 			}
 
@@ -361,8 +363,9 @@ namespace AI.PathFinding
 				Nodes = nodes,
 				Positions = positions,
 				HalfSizes = halfSizes,
+				InverseMatrices = inverseMatrices,
 				AreaCosts = areaCosts,
-				Radius = Radius
+				HalfRadius = Radius / 2f
 			};
 
 #if DEBUG_TIMINGS
@@ -522,6 +525,7 @@ namespace AI.PathFinding
 			
 			positions.Dispose();
 			halfSizes.Dispose();
+			inverseMatrices.Dispose();
 			areaCosts.Dispose();
 			
 			Status = EGridStatus.Initialized;
@@ -689,6 +693,7 @@ namespace AI.PathFinding
 
 			var positions = new NativeArray<float3>(obstaclesLength, Allocator.TempJob);
 			var halfSizes = new NativeArray<float3>(obstaclesLength, Allocator.TempJob);
+			var inverseMatrices = new NativeArray<Matrix4x4>(obstaclesLength, Allocator.TempJob);
 			
 			var nodesLength = NodesLength;
 			var nodesBatchCount = nodesLength / (JobsUtility.JobWorkerCount / 2);
@@ -699,6 +704,7 @@ namespace AI.PathFinding
 				
 				positions[i] = obstacle.GetPosition();
 				halfSizes[i] = obstacle.GetHalfSize();
+				inverseMatrices[i] = obstacle.GetInverseMatrix();
 			}
 
 			var filterObstaclesJob = new FilterObstaclesJob
@@ -706,8 +712,9 @@ namespace AI.PathFinding
 				Nodes = nodes,
 				Positions = positions,
 				HalfSizes = halfSizes,
+				InverseMatrices = inverseMatrices,
 				Availabilities = availabilities,
-				Radius = Radius
+				HalfRadius = Radius / 2f
 			};
 
 #if DEBUG_TIMINGS
@@ -724,6 +731,7 @@ namespace AI.PathFinding
 			
 			positions.Dispose();
 			halfSizes.Dispose();
+			inverseMatrices.Dispose();
 			
 			var obstructed = new NativeList<int>(Allocator.TempJob);
 
