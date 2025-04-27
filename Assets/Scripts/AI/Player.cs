@@ -58,7 +58,7 @@ namespace AI
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
 
-		private Transform feetColliderTr;
+		private Transform colliderTr;
 		
 		#region MonoBehaviour
 
@@ -67,7 +67,7 @@ namespace AI
 			Camera = Camera.main;
 			CameraTr = Camera!.transform;
 
-			feetColliderTr = Body.FeetCollider.transform;
+			colliderTr = Body.BodyCollider.transform;
 		}
 
 		public void OnDestroy()
@@ -83,7 +83,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 
-			feetColliderTr.rotation = Quaternion.identity;
+			colliderTr.rotation = Quaternion.identity;
 			
 			if (SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1.IsPressed() && Spell != null)
 				Spell.StartCasting();
@@ -110,7 +110,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 
-			feetColliderTr.rotation = Quaternion.identity;
+			colliderTr.rotation = Quaternion.identity;
 			
 			CameraTr.position = transform.position + Vector3.up * 0.5f;
 
@@ -149,7 +149,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
-			feetColliderTr.rotation = Quaternion.identity;
+			colliderTr.rotation = Quaternion.identity;
 			
 			var tr = GetTransform();
 			var rb = Body.Rigidbody;
@@ -209,7 +209,7 @@ namespace AI
 				case < 0.5f:
 					// prevent horizontal micro-sliding
 					if (moveDirection == Vector2.zero)
-						rb.linearVelocity = new Vector3(0f, velocity.y, 0f);
+						rb.linearVelocity = Vector3.zero;
 					break;
 				default:
 					// apply friction

@@ -149,11 +149,11 @@ PrefabInstance:
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: BodyCollider
       value: 
-      objectReference: {fileID: 5366303718956293901}
+      objectReference: {fileID: 7442224888820584587}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: FeetCollider
       value: 
-      objectReference: {fileID: 7442224888820584587}
+      objectReference: {fileID: 0}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: Gibs.Array.size
       value: 4
@@ -288,6 +288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2876092449613239704, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+    - {fileID: 8598778091971049270, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2073094155178259440, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
     - {fileID: 4683780981325718410, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -350,11 +351,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd2f5b42556a4ef982b523cc2552e4e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &5366303718956293901 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 8598778091971049270, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
-  m_PrefabInstance: {fileID: 4407915526272526395}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8475379242147071745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5238415708173528890, guid: a346750b223c8888ab19d1ae288889e7, type: 3}

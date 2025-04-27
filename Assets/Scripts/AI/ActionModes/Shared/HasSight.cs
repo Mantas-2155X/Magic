@@ -39,7 +39,7 @@ namespace AI.ActionModes.Shared
 				return false;
 
 			// Check if the hit is the target so we don't waste extra casts calls
-			var hitTransform = hit.collider.transform;
+			var hitTransform = hit.transform;
 			if (hitTransform != target)
 				return false;
 #if UNITY_EDITOR && DEBUG_SIGHT
