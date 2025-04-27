@@ -1059,6 +1059,8 @@ GameObject:
   - component: {fileID: 646561133}
   - component: {fileID: 646561132}
   - component: {fileID: 646561134}
+  - component: {fileID: 646561135}
+  - component: {fileID: 646561136}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -1139,6 +1141,64 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 2a0a280da3a89c160b3b791935ee13e0, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &646561135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646561131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87c68b432284ad69536b5a28906c059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Offset: {x: -55.5, y: -6.5, z: -15}
+  Size: {x: 191, y: 24, z: 110}
+  Distance: 1.5
+  Radius: 0.5
+  FilterMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  DrawBounds: 1
+  DrawNodes: 0
+  DrawConnections: 0
+  DrawPaths: 0
+  DrawAvailable: 0
+  DrawInsideObject: 0
+  DrawObstructed: 0
+  DrawSearched: 0
+  Accuracy: 0.9
+  UpdateObstaclesEvery: 0.5
+--- !u!114 &646561136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646561131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87c68b432284ad69536b5a28906c059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Offset: {x: -55.5, y: -6.5, z: -15}
+  Size: {x: 191, y: 24, z: 110}
+  Distance: 1.5
+  Radius: 1
+  FilterMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  DrawBounds: 1
+  DrawNodes: 0
+  DrawConnections: 0
+  DrawPaths: 0
+  DrawAvailable: 0
+  DrawInsideObject: 0
+  DrawObstructed: 0
+  DrawSearched: 0
+  Accuracy: 0.9
+  UpdateObstaclesEvery: 0.5
 --- !u!1001 &668726192
 PrefabInstance:
   m_ObjectHideFlags: 0
