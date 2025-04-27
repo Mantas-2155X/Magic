@@ -66,7 +66,7 @@ namespace AI
 
 		private float lastPositionStuck;
 
-		private Vector3 movementTarget;
+		private Vector3? movementTarget;
 		
 		#region MonoBehaviour
 
@@ -86,8 +86,11 @@ namespace AI
 				Gizmos.DrawLine(position, position + -Vector3.up * PositionStuckDistance);
 			}
 			
+			if (movementTarget == null)
+				return;
+
 			Gizmos.color = Color.yellow;
-			Gizmos.DrawSphere(movementTarget, 0.1f);
+			Gizmos.DrawSphere(movementTarget.Value, 0.1f);
 		}
 #endif
 
@@ -126,11 +129,14 @@ namespace AI
 			{
 				if (NPC.Agent.HasPath)
 					movementTarget = NPC.Agent.Agent.NextNode;
+
+				if (movementTarget == null)
+					return;
 #if UNITY_EDITOR
-				Debug.DrawLine(position, movementTarget, new Color(0.25f, 0.5f, 0.75f));
+				Debug.DrawLine(position, movementTarget.Value, new Color(0.25f, 0.5f, 0.75f));
 #endif
-				FlyTowards(movementTarget);
-				RotateTowards(movementTarget);
+				FlyTowards(movementTarget.Value);
+				RotateTowards(movementTarget.Value);
 			}
 			else
 			{

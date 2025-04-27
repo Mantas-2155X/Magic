@@ -45,7 +45,7 @@ namespace AI.PathFinding
 		{
 			thisTr = transform;
 
-			// todo: find closest grid and handle changes
+			// todo: handle grid changes
 			
 			var grids = Grid.Grids;
 			if (grids.Count == 0)
@@ -54,18 +54,35 @@ namespace AI.PathFinding
 				return;
 			}
 			
+			var agentPos = thisTr.position;
+			
+			var closestDistance = float.MaxValue;
+			Grid closestGrid = null;
+
 			for (var i = 0; i < grids.Count; i++)
 			{
 				var grid = grids[i];
 				if (grid.Radius != Radius)
 					continue;
 
-				Grid = grid;
-				return;
+				// todo: this should use the bounds instead of center to determine distance
+				var distance = Vector3.Distance(agentPos, grid.transform.position);
+				if (distance >= closestDistance)
+					continue;
+				
+				closestDistance = distance;
+				closestGrid = grid;
 			}
 
-			Debug.LogWarning($"[Agent] No grids found with radius {Radius}, defaulting");
-			Grid = grids[0];
+			if (closestGrid == null)
+			{
+				Debug.LogWarning($"[Agent] No grids found with radius {Radius}, defaulting");
+				Grid = grids[0];
+			}
+			else
+			{
+				Grid = closestGrid;
+			}
 		}
 
 		public void OnEnable()

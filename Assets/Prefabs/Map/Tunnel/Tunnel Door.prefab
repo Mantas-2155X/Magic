@@ -93,7 +93,6 @@ GameObject:
   - component: {fileID: 789314569580283374}
   - component: {fileID: 8260235532324987626}
   - component: {fileID: 5419331283273417980}
-  - component: {fileID: 9053751721742616475}
   m_Layer: 0
   m_Name: Tunnel Door
   m_TagString: Untagged
@@ -136,7 +135,6 @@ MonoBehaviour:
   - {fileID: 789314569580283374}
   - {fileID: 8260235532324987626}
   - {fileID: 5419331283273417980}
-  - {fileID: 9053751721742616475}
   Door: {fileID: 6292421525599915767}
   Buttons: []
 --- !u!114 &789314569580283374
@@ -214,31 +212,6 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 0
   m_Area: 3
---- !u!114 &9053751721742616475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6213745301316637675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SerializedVersion: 1
-  m_AgentTypeID: -1923039037
-  m_StartPoint: {x: 0, y: -2.425, z: -1.4}
-  m_EndPoint: {x: 0, y: -2.425, z: 1.4}
-  m_StartTransform: {fileID: 0}
-  m_EndTransform: {fileID: 0}
-  m_Activated: 1
-  m_Width: 3.75
-  m_CostModifier: 1
-  m_IsOverridingCost: 0
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 3
 --- !u!1 &6459338153587922746
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,7 +227,8 @@ GameObject:
   - component: {fileID: 6292421525599915767}
   - component: {fileID: 8662556667001069779}
   - component: {fileID: 7575076091143412250}
-  m_Layer: 0
+  - component: {fileID: 7750189244390477700}
+  m_Layer: 11
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,6 +477,21 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7750189244390477700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459338153587922746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d9435ce40643e1b45229550d37b9ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Offset: {x: 0, y: 0, z: 0}
+  Size: {x: 1, y: 1, z: 10}
+  DrawBounds: 0
 --- !u!1 &6953628659220035188
 GameObject:
   m_ObjectHideFlags: 0
