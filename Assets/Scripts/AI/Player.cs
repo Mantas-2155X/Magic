@@ -758,7 +758,7 @@ namespace AI
 				return false;
 
 			var origin = Body.Rigidbody.position - new Vector3(0f, 1f, 0f);
-			var extents = new Vector3(1f, 0.1f, 1f) / 2f;
+			var extents = new Vector3(0.98f, 0.1f, 0.98f) / 2f;
 			
 			if (Physics.CheckBox(origin, extents, Quaternion.identity, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
 				return true;
