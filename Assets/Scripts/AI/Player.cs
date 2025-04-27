@@ -58,8 +58,6 @@ namespace AI
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
 
-		private bool shouldBreak;
-
 		private Transform feetColliderTr;
 		
 		#region MonoBehaviour
@@ -154,6 +152,7 @@ namespace AI
 			feetColliderTr.rotation = Quaternion.identity;
 			
 			var tr = GetTransform();
+			var rb = Body.Rigidbody;
 
 			var data = (PlayerData)Data;
 			var sprintAction = SettingsManager.Instance.GetKeybind("keybinds-movement-sprint").Item1;
@@ -166,45 +165,57 @@ namespace AI
 				var addVector = new Vector3(moveDirection.x, vertical, moveDirection.y) * (sprintAction.IsPressed() ? 1f * data.SprintMultiplier : 1f);
 				addVector *= data.NoclipSpeed;
 				
-				Body.Rigidbody.linearVelocity = tr.right * addVector.x + tr.up * addVector.y + tr.forward * addVector.z;
+				rb.linearVelocity = tr.right * addVector.x + tr.up * addVector.y + tr.forward * addVector.z;
 				return;
 			}
 			
-			if (moveDirection == Vector2.zero)
-				return;
+			var isGrounded = IsGrounded();
 
-			var grounded = IsGrounded();
-
-			var isSprinting = false;
-			var sprintEnergy = data.SprintEnergy * Time.fixedDeltaTime;
-			
-			if (CurrentEnergy >= sprintEnergy && sprintAction.IsPressed() && grounded)
+			if (moveDirection != Vector2.zero && !Paralyzed && SlowAmount < 1f)
 			{
-				isSprinting = true;
-				TakeEnergy(sprintEnergy, this);
-			}
+				var isSprinting = false;
+				var sprintEnergy = data.SprintEnergy * Time.fixedDeltaTime;
 			
-			var movement = data.MovementForce;
+				if (CurrentEnergy >= sprintEnergy && sprintAction.IsPressed() && isGrounded)
+				{
+					isSprinting = true;
+					TakeEnergy(sprintEnergy, this);
+				}
 
-			// Prevent movement when fully bound
-			if (Paralyzed || SlowAmount >= 1f)
-				movement = 0;
-			
-			// Adjust how much control force is weakened if not grounded
-			if (!grounded)
-				movement *= data.AirMovement;
-			
-			shouldBreak = true;
-			Body.Rigidbody.AddRelativeForce(new Vector3(moveDirection.x, 0f, moveDirection.y) * movement, ForceMode.Acceleration);
-			
-			if (!grounded)
+				var acceleration = isGrounded ? data.Acceleration : data.AirAcceleration;
+				
+				var direction = tr.right * moveDirection.x + tr.forward * moveDirection.y;
+				direction = Vector3.ClampMagnitude(direction, 1f);
+				
+				var speed = data.Speed - (data.Speed * SlowAmount);
+				speed = isSprinting ? (speed * data.SprintMultiplier) : speed;
+
+				var targetVelocity = direction * speed;
+				
+				var currentVelocity = rb.linearVelocity;
+				currentVelocity = Vector3.MoveTowards(currentVelocity, new Vector3(targetVelocity.x, currentVelocity.y, targetVelocity.z), acceleration);
+				
+				rb.linearVelocity = currentVelocity;
+			}
+
+			if (!isGrounded)
 				return;
 
-			var maxSpeed = Paralyzed ? 0f : data.Speed - (data.Speed * SlowAmount);
-			
-			// Limit the rigidbody walking speed
-			var clampSpeed = isSprinting ? maxSpeed * data.SprintMultiplier : maxSpeed;
-			Body.Rigidbody.linearVelocity = Vector3.ClampMagnitude(Body.Rigidbody.linearVelocity, clampSpeed * data.SpeedClampModifier);
+			var velocity = rb.linearVelocity;
+			switch (velocity.magnitude)
+			{
+				case <= 0f:
+					return;
+				case < 0.5f:
+					// prevent horizontal micro-sliding
+					if (moveDirection == Vector2.zero)
+						rb.linearVelocity = new Vector3(0f, velocity.y, 0f);
+					break;
+				default:
+					// apply friction
+					rb.AddForce(-velocity.normalized * data.Friction);
+					break;
+			}
 		}
 		
 		#endregion
@@ -447,15 +458,6 @@ namespace AI
 		{
 			moveDirection = Vector2.zero;
 			walking = false;
-
-			if (!shouldBreak || !IsGrounded())
-				return;
-
-			var velocity = Body.Rigidbody.linearVelocity;
-			velocity *= 40f;
-			
-			Body.Rigidbody.AddForce(-velocity, ForceMode.Acceleration);
-			shouldBreak = false;
 		}
 		
 		private void onJumpPerformed(InputAction.CallbackContext ctx)

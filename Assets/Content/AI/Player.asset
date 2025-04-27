@@ -64,10 +64,11 @@ MonoBehaviour:
   GrabMass: 25
   GrabDropDistance: 3
   GrabDropAngle: 65
-  MovementForce: 75
-  JumpForce: 125
   SprintMultiplier: 1.25
-  StopSlide: 0.65
-  AirMovement: 0.1
-  SpeedClampModifier: 0.8179
+  NoclipSpeed: 10
+  Acceleration: 1.75
+  AirAcceleration: 0.15
+  Friction: 750
+  Pull: 50
+  JumpForce: 125
   SprintEnergy: 15
