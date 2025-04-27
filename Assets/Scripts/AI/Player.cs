@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using Debug = UnityEngine.Debug;
 
 namespace AI
 {
@@ -100,6 +101,9 @@ namespace AI
 				weaponContainer.localPosition = ViewmodelPosition;
 				weaponContainer.localEulerAngles = ViewmodelAngles;
 			}
+			
+			if (IsGrounded())
+				handleStep();
 		}
 		
 		public void LateUpdate()
@@ -773,6 +777,87 @@ namespace AI
 			var renderers = Body.GetComponentsInChildren<Renderer>(true);
 			foreach (var rend in renderers)
 				rend.shadowCastingMode = mode;
+		}
+
+		private bool handleStep()
+		{
+			var directions = new [] 
+			{
+				Vector3.forward, Vector3.back, 
+				Vector3.right, Vector3.left 
+			};
+			
+			var clearanceSizes = new []
+			{
+				new Vector3(0.495f, 0f, 0f), new Vector3(0.495f, 0f, 0f), 
+				new Vector3(0f, 0f, 0.495f), new Vector3(0f, 0f, 0.495f)
+			};
+
+			var rb = Body.Rigidbody;
+			var position = GetTransform().position;
+
+			var size = new Vector3(0.495f, 0f, 0.495f);
+
+			var height = 2f;
+
+			var firstOffset = -0.995f;
+			var secondOffset = -0.745f;
+
+			var firstOrigin = position + Vector3.up * firstOffset;
+			var secondOrigin = position + Vector3.up * secondOffset;
+			
+			for (var i = 0; i < directions.Length; i++)
+			{
+				var direction = directions[i];
+				
+				// first hit detects a step
+				if (!Physics.BoxCast(firstOrigin, size, direction, Quaternion.identity, 0.04f, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+					continue;
+				
+				// make sure the step isn't too high
+				if (Physics.BoxCast(secondOrigin, size, direction, Quaternion.identity, 0.06f, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+					continue;
+				
+				var thirdOrigin = position + Vector3.up + direction * 0.55f;
+				var clearanceSize = clearanceSizes[i];
+
+				// get the step height
+				if (!Physics.BoxCast(thirdOrigin, clearanceSize, Vector3.down, out var stepHit, Quaternion.identity, height, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+					continue;
+				
+				// don't step to weird heights
+				var stepOffset = stepHit.point.y - (position.y - 1f);
+				if (stepOffset > 0.25f || stepOffset < 0.005f)
+					continue;
+
+				// don't step to weird angles
+				var angle = Vector3.Angle(stepHit.normal, Vector3.up);
+				if (float.IsNaN(angle) || angle > 5f)
+					continue;
+				
+				var newPosition = position;
+
+				// move up to the step height
+				newPosition += Vector3.up * stepOffset;
+				
+				// move forward on the step
+				newPosition += direction * 0.06f;
+				
+				// make sure there's clearance
+				if (Physics.BoxCast(stepHit.point + direction * 0.06f, clearanceSize, Vector3.up, Quaternion.identity, height, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+					continue;
+				
+				Debug.Log(stepOffset + " " + angle + " " + i);
+
+				var velocity = rb.linearVelocity;
+				GetTransform().position = newPosition;
+				
+				rb.position = newPosition;
+				rb.linearVelocity = velocity;
+				return true;
+			}
+
+			return false;
 		}
 	}
 }
