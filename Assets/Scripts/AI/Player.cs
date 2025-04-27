@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
-using Debug = UnityEngine.Debug;
 
 namespace AI
 {
@@ -60,6 +59,8 @@ namespace AI
 		private Vector2 moveDirection;
 
 		private bool shouldBreak;
+
+		private Transform feetColliderTr;
 		
 		#region MonoBehaviour
 
@@ -67,6 +68,8 @@ namespace AI
 		{
 			Camera = Camera.main;
 			CameraTr = Camera!.transform;
+
+			feetColliderTr = Body.FeetCollider.transform;
 		}
 
 		public void OnDestroy()
@@ -82,6 +85,8 @@ namespace AI
 			if (!IsAlive)
 				return;
 
+			feetColliderTr.rotation = Quaternion.identity;
+			
 			if (SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1.IsPressed() && Spell != null)
 				Spell.StartCasting();
 
@@ -107,6 +112,8 @@ namespace AI
 			if (!IsAlive)
 				return;
 
+			feetColliderTr.rotation = Quaternion.identity;
+			
 			CameraTr.position = transform.position + Vector3.up * 0.5f;
 
 			var cameraAngle = CameraTr.eulerAngles;
@@ -144,21 +151,22 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
+			feetColliderTr.rotation = Quaternion.identity;
+			
+			var tr = GetTransform();
+
 			var data = (PlayerData)Data;
 			var sprintAction = SettingsManager.Instance.GetKeybind("keybinds-movement-sprint").Item1;
 			
 			if (MovementType == EMovementType.Noclip)
 			{
-				// No smoothing for noclip
-				Body.Rigidbody.linearVelocity *= data.StopSlide;
-
 				// Grab jump/fall as vertical move direction
 				var vertical = jumpPressed ? 1f : fallPressed ? -1f : 0f;
 				
 				var addVector = new Vector3(moveDirection.x, vertical, moveDirection.y) * (sprintAction.IsPressed() ? 1f * data.SprintMultiplier : 1f);
-				addVector *= 5f;
+				addVector *= data.NoclipSpeed;
 				
-				Body.Rigidbody.AddRelativeForce(addVector, ForceMode.VelocityChange);
+				Body.Rigidbody.linearVelocity = tr.right * addVector.x + tr.up * addVector.y + tr.forward * addVector.z;
 				return;
 			}
 			
@@ -746,10 +754,10 @@ namespace AI
 			if (!IsAlive || MovementType != EMovementType.Normal)
 				return false;
 
-			var origin = Body.Rigidbody.position + new Vector3(0f, -1.02f, 0f);
-			var extents = new Vector3(0.6f, 0.05f, 0.2f) / 2f;
+			var origin = Body.Rigidbody.position - new Vector3(0f, 1f, 0f);
+			var extents = new Vector3(1f, 0.1f, 1f) / 2f;
 			
-			if (Physics.CheckBox(origin, extents, transform.rotation, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+			if (Physics.CheckBox(origin, extents, Quaternion.identity, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
 				return true;
 			
 			return false;

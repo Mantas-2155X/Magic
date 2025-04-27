@@ -16,7 +16,7 @@ namespace ScriptableObjects
 		public float SprintMultiplier = 1.25f;
 		
 		[SerializeField]
-		public float StopSlide = 0.65f;
+		public float NoclipSpeed = 10f;
 		
 		[SerializeField]
 		public float AirMovement = 0.1f;
