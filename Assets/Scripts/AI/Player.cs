@@ -173,17 +173,18 @@ namespace AI
 			if (moveDirection == Vector2.zero)
 				return;
 
+			var grounded = IsGrounded();
+
 			var isSprinting = false;
 			var sprintEnergy = data.SprintEnergy * Time.fixedDeltaTime;
 			
-			if (CurrentEnergy >= sprintEnergy && sprintAction.IsPressed())
+			if (CurrentEnergy >= sprintEnergy && sprintAction.IsPressed() && grounded)
 			{
 				isSprinting = true;
 				TakeEnergy(sprintEnergy, this);
 			}
 			
 			var movement = data.MovementForce;
-			var grounded = IsGrounded();
 
 			// Prevent movement when fully bound
 			if (Paralyzed || SlowAmount >= 1f)
