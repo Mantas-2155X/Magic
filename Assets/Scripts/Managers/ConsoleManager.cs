@@ -364,7 +364,7 @@ namespace Managers
 			{
 				Debug.Log("Available Scenes:");
 
-				var scenes = SceneManager.Instance.GetScenes();
+				var scenes = SceneManager.Instance.GetSceneNames();
 				
 				for (var i = 0; i < scenes.Count; i++)
 					Debug.Log(scenes[i]);

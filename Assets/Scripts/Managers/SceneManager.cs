@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using ScriptableObjects;
 using UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -24,21 +25,27 @@ namespace Managers
 			}
 		}
 
-		private readonly List<string> scenes = new ();
+		private readonly List<string> sceneNames = new ();
+		private readonly List<SceneData> sceneDatas = new ();
 
 		public string GetCurrentScene()
 		{
 			return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 		}
 		
-		public List<string> GetScenes()
+		public List<string> GetSceneNames()
 		{
-			return scenes;
+			return sceneNames;
+		}
+		
+		public List<SceneData> GetSceneDatas()
+		{
+			return sceneDatas;
 		}
 		
 		public bool SceneExists(string scene)
 		{
-			return scenes.Contains(scene);
+			return sceneNames.Contains(scene);
 		}
 		
 		public void ReloadScene(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
@@ -128,11 +135,11 @@ namespace Managers
 
 		private void getScenes()
 		{
-			var sceneDatas = ObjectManager.Instance.GetAllScenes();
-			if (sceneDatas == null || sceneDatas.Length == 0)
+			var availableScenes = ObjectManager.Instance.GetAllScenes();
+			if (availableScenes == null || availableScenes.Length == 0)
 				return;
 
-			foreach (var sceneData in sceneDatas)
+			foreach (var sceneData in availableScenes)
 			{
 				var location = Addressables.LoadResourceLocationsAsync(sceneData.Addressable.RuntimeKey).WaitForCompletion()[0];
 				
@@ -144,10 +151,9 @@ namespace Managers
 				if (trimmed == "")
 					continue;
 				
-				scenes.Add(trimmed);
+				sceneNames.Add(trimmed);
+				sceneDatas.Add(sceneData);
 			}
-			
-			scenes.Sort();
 		}
 	}
 }

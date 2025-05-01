@@ -43,7 +43,7 @@ namespace UI
 		public InputActionReference TitleAction;
 
 		[SerializeField]
-		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - load, 3 - save, 4 - settings, 5 - returntotitle, 6 - quitgame
+		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - load, 3 - save, 4 - settings, 5 - returntotitle, 6 - quitgame, 7 - sceneselect
 		[SerializeField]
 		public List<GameObject> ButtonObjects;
 
@@ -52,6 +52,9 @@ namespace UI
 
 		[SerializeField]
 		public Settings.Settings Settings;
+
+		[SerializeField]
+		public SceneSelect SceneSelect;
 		
 		[SerializeField]
 		public GameObject Blocker;
@@ -151,6 +154,14 @@ namespace UI
 			SceneManager.Instance.ChangeScene("World3", true, true, true);
 		}
 
+		public void OnSceneSelect()
+		{
+			if (SceneSelect == null)
+				return;
+			
+			SceneSelect.Toggle();
+		}
+
 		public void OnContinue()
 		{
 			Close();
@@ -217,6 +228,7 @@ namespace UI
 			ButtonObjects[4].SetActive(true);
 			ButtonObjects[5].SetActive(!inTitle);
 			ButtonObjects[6].SetActive(true);
+			ButtonObjects[7].SetActive(true);
 			
 			UpdateNavigation();
 		}
@@ -236,7 +248,7 @@ namespace UI
 			var continueButton = Buttons[1];
 			var quitGameButton = Buttons[6];
 
-			var shouldExplicit = Console.isActiveAndEnabled || Settings.isActiveAndEnabled;
+			var shouldExplicit = Console.isActiveAndEnabled || Settings.isActiveAndEnabled || SceneSelect.isActiveAndEnabled;
 			if (shouldExplicit)
 			{
 				Button topButton;
@@ -300,6 +312,12 @@ namespace UI
 					Settings.Select();
 					return;
 				}
+				
+				if (SceneSelect.isActiveAndEnabled)
+				{
+					SceneSelect.Select();
+					return;
+				}
 			}
 
 			SelectionManager.Instance.SetSelection(ButtonObjects[0].activeSelf ? ButtonObjects[0] : ButtonObjects[1]);
@@ -313,6 +331,9 @@ namespace UI
 					return;
 				
 				if (Settings.isActiveAndEnabled)
+					return;
+				
+				if (SceneSelect.isActiveAndEnabled)
 					return;
 			}
 			
