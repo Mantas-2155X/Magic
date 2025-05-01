@@ -65,7 +65,10 @@ namespace AI
 		private List<ContactPoint> contacts = new ();
 		
 		private Collider groundCollider;
+		private Vector3 groundNormal;
 		private float groundAngle;
+
+		private const float maximumGroundAngle = 45f;
 		
 		#region MonoBehaviour
 
@@ -195,7 +198,9 @@ namespace AI
 				var acceleration = isGrounded ? data.Acceleration : data.AirAcceleration;
 				
 				var direction = tr.right * moveDirection.x + tr.forward * moveDirection.y;
-				direction = Vector3.ClampMagnitude(direction, 1f);
+
+				if (groundCollider != null && groundAngle < maximumGroundAngle)
+					direction -= Vector3.Project(direction, groundNormal);
 				
 				var speed = data.Speed - (data.Speed * SlowAmount);
 				speed = isSprinting ? (speed * data.SprintMultiplier) : speed;
@@ -203,7 +208,7 @@ namespace AI
 				var targetVelocity = direction * speed;
 				
 				var currentVelocity = rb.linearVelocity;
-				currentVelocity = Vector3.MoveTowards(currentVelocity, new Vector3(targetVelocity.x, currentVelocity.y, targetVelocity.z), acceleration);
+				currentVelocity = Vector3.MoveTowards(currentVelocity, new Vector3(targetVelocity.x, isGrounded ? targetVelocity.y : currentVelocity.y, targetVelocity.z), acceleration);
 				
 				rb.linearVelocity = currentVelocity;
 			}
@@ -238,15 +243,19 @@ namespace AI
 			{
 				var contact = contacts[i];
 				
-				var angle = Vector3.Angle(Vector3.up, contact.normal);
-				if (angle <= 45f)
+				var normal = contact.normal;
+				
+				var angle = Vector3.Angle(Vector3.up, normal);
+				if (angle <= maximumGroundAngle)
 				{
 					groundCollider = contact.otherCollider;
+					groundNormal = normal;
 					groundAngle = angle;
 				}
 				else if (groundCollider == contact.otherCollider)
 				{
 					groundCollider = null;
+					groundNormal = Vector3.zero;
 					groundAngle = -1f;
 				}
 			}
@@ -258,6 +267,7 @@ namespace AI
 				return;
 
 			groundCollider = null;
+			groundNormal = Vector3.zero;
 			groundAngle = -1f;
 		}
 
@@ -844,8 +854,6 @@ namespace AI
 			for (var i = 0; i < directionsClearances.Count; i++)
 			{
 				var direction = directionsClearances[i].Item1;
-				
-				Debug.DrawLine(position, position + direction, Color.red);
 				
 				// first hit detects a step
 				if (!Physics.BoxCast(firstOrigin, size, direction, Quaternion.identity, 0.04f, groundLayer, QueryTriggerInteraction.Ignore))
