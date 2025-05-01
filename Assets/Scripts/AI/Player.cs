@@ -61,6 +61,11 @@ namespace AI
 		private Vector2 moveDirection;
 
 		private Transform colliderTr;
+
+		private List<ContactPoint> contacts = new ();
+		
+		private Collider groundCollider;
+		private float groundAngle;
 		
 		#region MonoBehaviour
 
@@ -223,6 +228,39 @@ namespace AI
 			}
 		}
 		
+		public void OnCollisionStay(Collision other)
+		{
+			var count = other.GetContacts(contacts);
+			if (count == 0)
+				return;
+			
+			for (var i = 0; i < count; i++)
+			{
+				var contact = contacts[i];
+				
+				var angle = Vector3.Angle(Vector3.up, contact.normal);
+				if (angle <= 45f)
+				{
+					groundCollider = contact.otherCollider;
+					groundAngle = angle;
+				}
+				else if (groundCollider == contact.otherCollider)
+				{
+					groundCollider = null;
+					groundAngle = -1f;
+				}
+			}
+		}
+
+		public void OnCollisionExit(Collision other)
+		{
+			if (other.collider != groundCollider)
+				return;
+
+			groundCollider = null;
+			groundAngle = -1f;
+		}
+
 		#endregion
 
 		#region Input
@@ -759,7 +797,7 @@ namespace AI
 
 		public override bool IsGrounded()
 		{
-			if (!IsAlive || MovementType != EMovementType.Normal)
+			if (!IsAlive || MovementType != EMovementType.Normal || groundCollider == null)
 				return false;
 
 			var origin = Body.Rigidbody.position - new Vector3(0f, 1f, 0f);
