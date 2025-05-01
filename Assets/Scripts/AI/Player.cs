@@ -800,24 +800,28 @@ namespace AI
 
 			var firstOrigin = position + Vector3.up * firstOffset;
 			var secondOrigin = position + Vector3.up * secondOffset;
+
+			var groundLayer = LayerMask.GetMask("Default");
 			
 			for (var i = 0; i < directionsClearances.Count; i++)
 			{
 				var direction = directionsClearances[i].Item1;
 				
+				Debug.DrawLine(position, position + direction, Color.red);
+				
 				// first hit detects a step
-				if (!Physics.BoxCast(firstOrigin, size, direction, Quaternion.identity, 0.04f, 0, QueryTriggerInteraction.Ignore))
+				if (!Physics.BoxCast(firstOrigin, size, direction, Quaternion.identity, 0.04f, groundLayer, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				// make sure the step isn't too high
-				if (Physics.BoxCast(secondOrigin, size, direction, Quaternion.identity, 0.06f, 0, QueryTriggerInteraction.Ignore))
+				if (Physics.BoxCast(secondOrigin, size, direction, Quaternion.identity, 0.06f, groundLayer, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				var clearanceSize = directionsClearances[i].Item2;
 				var thirdOrigin = position + Vector3.up + direction * 0.55f;
 
 				// get the step height
-				if (!Physics.BoxCast(thirdOrigin, clearanceSize, Vector3.down, out var stepHit, Quaternion.identity, height, 0, QueryTriggerInteraction.Ignore))
+				if (!Physics.BoxCast(thirdOrigin, clearanceSize, Vector3.down, out var stepHit, Quaternion.identity, height, groundLayer, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				// don't step to weird heights
@@ -839,7 +843,7 @@ namespace AI
 				newPosition += direction * 0.06f;
 				
 				// make sure there's clearance
-				if (Physics.BoxCast(stepHit.point + direction * 0.06f, clearanceSize, Vector3.up, Quaternion.identity, height, 0, QueryTriggerInteraction.Ignore))
+				if (Physics.BoxCast(stepHit.point + direction * 0.06f, clearanceSize, Vector3.up, Quaternion.identity, height, groundLayer, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				var velocity = rb.linearVelocity;
@@ -868,18 +872,278 @@ namespace AI
 			switch (angle)
 			{
 				case <= 45f and >= -45f:
-					// facing forward
+					if (direction.x == 0)
+					{
+						switch (direction.y)
+						{
+							case > 0: // walking forward, add side direction
+							{
+								switch (angle)
+								{
+									case < 0:
+										direction.x = -1f;
+										break;
+									case > 0:
+										direction.x = 1f;
+										break;
+								}
+								break;
+							}
+							case < 0: // walking backward, add side direction
+							{
+								switch (angle)
+								{
+									case < 0:
+										direction.x = 1f;
+										break;
+									case > 0:
+										direction.x = -1f;
+										break;
+								}
+								break;
+							}
+						}
+					}
+					else if (direction.y == 0)
+					{
+						switch (direction.x)
+						{
+							case > 0: // walking right, add forward direction
+							{
+								switch (angle)
+								{
+									case < 0:
+										direction.y = 1f;
+										break;
+									case > 0:
+										direction.y = -1f;
+										break;
+								}
+								break;
+							}
+							case < 0: // walking left, add back direction
+							{
+								switch (angle)
+								{
+									case < 0:
+										direction.y = -1f;
+										break;
+									case > 0:
+										direction.y = 1f;
+										break;
+								}
+								break;
+							}
+						}
+					}
+					
+					// facing forward, no changes
 					break;
 				case <= 135f and >= 45f:
-					// facing right
+					if (direction.x == 0)
+					{
+						switch (direction.y)
+						{
+							case > 0: // walking forward, add side direction
+							{
+								switch (angle)
+								{
+									case < 90:
+										direction.x = -1f;
+										break;
+									case > 90:
+										direction.x = 1f;
+										break;
+								}
+								break;
+							}
+							case < 0: // walking backward, add side direction
+							{
+								switch (angle)
+								{
+									case < 90:
+										direction.x = 1f;
+										break;
+									case > 90:
+										direction.x = -1f;
+										break;
+								}
+								break;
+							}
+						}
+					}
+					else if (direction.y == 0)
+					{
+						switch (direction.x)
+						{
+							case > 0: // walking right, add forward direction
+							{
+								switch (angle)
+								{
+									case < 90:
+										direction.y = 1f;
+										break;
+									case > 90:
+										direction.y = -1f;
+										break;
+								}
+								break;
+							}
+							case < 0: // walking left, add back direction
+							{
+								switch (angle)
+								{
+									case < 90:
+										direction.y = -1f;
+										break;
+									case > 90:
+										direction.y = 1f;
+										break;
+								}
+								break;
+							}
+						}
+					}
+					
+					// facing right, adjust direction
 					direction = new Vector2(direction.y, direction.x * -1.0f).normalized;
 					break;
 				case <= -45f and >= -135f:
-					// facing left
+					if (direction.x == 0)
+					{
+						switch (direction.y)
+						{
+							case > 0: // walking forward, add side direction
+							{
+								switch (angle)
+								{
+									case < -90:
+										direction.x = -1f;
+										break;
+									case > -90:
+										direction.x = 1f;
+										break;
+								}
+								break;
+							}
+							case < 0: // walking backward, add side direction
+							{
+								switch (angle)
+								{
+									case < -90:
+										direction.x = 1f;
+										break;
+									case > -90:
+										direction.x = -1f;
+										break;
+								}
+								break;
+							}
+						}
+					}
+					else if (direction.y == 0)
+					{
+						switch (direction.x)
+						{
+							case > 0: // walking right, add forward direction
+							{
+								switch (angle)
+								{
+									case < -90:
+										direction.y = 1f;
+										break;
+									case > -90:
+										direction.y = -1f;
+										break;
+								}
+								break;
+							}
+							case < 0: // walking left, add back direction
+							{
+								switch (angle)
+								{
+									case < -90:
+										direction.y = -1f;
+										break;
+									case > -90:
+										direction.y = 1f;
+										break;
+								}
+								break;
+							}
+						}
+					}
+
+					// facing left, adjust direction
 					direction = new Vector2(direction.y * -1.0f, direction.x).normalized;
 					break;
 				default:
-					// facing back
+					if (direction.x == 0)
+					{
+						switch (direction.y)
+						{
+							case > 0: // walking forward, add side direction
+							{
+								switch (angle)
+								{
+									case < 0:
+										direction.x = 1f;
+										break;
+									case > 0:
+										direction.x = -1f;
+										break;
+								}
+								break;
+							}
+							case < 0: // walking backward, add side direction
+							{
+								switch (angle)
+								{
+									case < 0:
+										direction.x = -1f;
+										break;
+									case > 0:
+										direction.x = 1f;
+										break;
+								}
+								break;
+							}
+						}
+					}
+					else if (direction.y == 0)
+					{
+						switch (direction.x)
+						{
+							case > 0: // walking right, add forward direction
+							{
+								switch (angle)
+								{
+									case < 0:
+										direction.y = -1f;
+										break;
+									case > 0:
+										direction.y = 1f;
+										break;
+								}
+								break;
+							}
+							case < 0: // walking left, add back direction
+							{
+								switch (angle)
+								{
+									case < 0:
+										direction.y = 1f;
+										break;
+									case > 0:
+										direction.y = -1f;
+										break;
+								}
+								break;
+							}
+						}
+					}
+
+					// facing back, adjust direction
 					direction = new Vector2(direction.y, direction.x * -1);
 					direction = new Vector2(direction.y, direction.x * -1);
 					break;
