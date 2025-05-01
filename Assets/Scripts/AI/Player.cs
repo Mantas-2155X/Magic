@@ -872,7 +872,7 @@ namespace AI
 				
 				// don't step to weird heights
 				var stepOffset = stepHit.point.y - (position.y - 1f);
-				if (stepOffset > 0.25f || stepOffset < 0.005f)
+				if (stepOffset > 0.251f || stepOffset < 0.005f)
 					continue;
 
 				// don't step to weird angles
