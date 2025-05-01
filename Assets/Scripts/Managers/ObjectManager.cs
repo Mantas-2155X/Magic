@@ -15,24 +15,27 @@ using UnityEngine.AddressableAssets;
 
 namespace Managers
 {
-	public class ObjectManager : MonoBehaviour
+	public class ObjectManager
 	{
-		public static ObjectManager Instance;
+		private static ObjectManager instance;
+		public static ObjectManager Instance
+		{
+			get
+			{
+				if (instance != null)
+					return instance;
+				
+				instance = new ObjectManager();
+				instance.setupDatasMap();
+				
+				return instance;
+			}
+		}
 
 		private readonly Dictionary<string, Data> datasMap = new ();
 		private readonly List<IObject> activeObjects = new ();
 
-		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals" };
-
-		public ObjectManager()
-		{
-			Instance = this;
-		}
-		
-		public void Awake()
-		{
-			setupDatasMap();
-		}
+		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes" };
 
 		#region Init
 
@@ -116,6 +119,30 @@ namespace Managers
 			return (DecalData)datasMap.GetValueOrDefault($"Decals/{path}");
 		}
 		
+		public SceneData GetScene(string path)
+		{
+			return (SceneData)datasMap.GetValueOrDefault($"Scenes/{path}");
+		}
+		
+		#endregion
+
+		#region Get All
+
+		public SceneData[] GetAllScenes()
+		{
+			var list = new List<SceneData>();
+
+			foreach (var pair in datasMap)
+			{
+				if (pair.Value is not SceneData sceneData)
+					continue;
+
+				list.Add(sceneData);
+			}
+			
+			return list.ToArray();
+		}
+
 		#endregion
 
 		#region Create

@@ -12,5 +12,6 @@ namespace ScriptableObjects.Enums
 		CrowdControl = 8,
 		Defense = 16,
 		RestoresEnergy = 32,
+		Scene = 64
 	}
 }

@@ -128,12 +128,14 @@ namespace Managers
 
 		private void getScenes()
 		{
-			var locations = Addressables.LoadResourceLocationsAsync("scenes").WaitForCompletion();
-			if (locations == null || locations.Count == 0)
+			var sceneDatas = ObjectManager.Instance.GetAllScenes();
+			if (sceneDatas == null || sceneDatas.Length == 0)
 				return;
 
-			foreach (var location in locations)
+			foreach (var sceneData in sceneDatas)
 			{
+				var location = Addressables.LoadResourceLocationsAsync(sceneData.Addressable.RuntimeKey).WaitForCompletion()[0];
+				
 				var key = location.PrimaryKey;
 				if (!key.StartsWith("Scenes/"))
 					continue;
