@@ -786,8 +786,10 @@ namespace AI
 			if (directionsClearances == null || directionsClearances.Count == 0)
 				return false;
 
+			var tr = GetTransform();
 			var rb = Body.Rigidbody;
-			var position = GetTransform().position;
+			
+			var position = tr.position;
 
 			var size = new Vector3(0.495f, 0f, 0.495f);
 
@@ -841,7 +843,7 @@ namespace AI
 					continue;
 				
 				var velocity = rb.linearVelocity;
-				GetTransform().position = newPosition;
+				tr.position = newPosition;
 				
 				rb.position = newPosition;
 				rb.linearVelocity = velocity;
