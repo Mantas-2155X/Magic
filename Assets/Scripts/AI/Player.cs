@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AI.Base;
 using AI.Enums;
 using Combat.Wearables.Enums;
@@ -781,17 +782,9 @@ namespace AI
 
 		private bool handleStep()
 		{
-			var directions = new [] 
-			{
-				Vector3.forward, Vector3.back, 
-				Vector3.right, Vector3.left 
-			};
-			
-			var clearanceSizes = new []
-			{
-				new Vector3(0.495f, 0f, 0f), new Vector3(0.495f, 0f, 0f), 
-				new Vector3(0f, 0f, 0.495f), new Vector3(0f, 0f, 0.495f)
-			};
+			var directionsClearances = getDirectionsClearances();
+			if (directionsClearances == null || directionsClearances.Count == 0)
+				return false;
 
 			var rb = Body.Rigidbody;
 			var position = GetTransform().position;
@@ -806,23 +799,23 @@ namespace AI
 			var firstOrigin = position + Vector3.up * firstOffset;
 			var secondOrigin = position + Vector3.up * secondOffset;
 			
-			for (var i = 0; i < directions.Length; i++)
+			for (var i = 0; i < directionsClearances.Count; i++)
 			{
-				var direction = directions[i];
+				var direction = directionsClearances[i].Item1;
 				
 				// first hit detects a step
-				if (!Physics.BoxCast(firstOrigin, size, direction, Quaternion.identity, 0.04f, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+				if (!Physics.BoxCast(firstOrigin, size, direction, Quaternion.identity, 0.04f, 0, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				// make sure the step isn't too high
-				if (Physics.BoxCast(secondOrigin, size, direction, Quaternion.identity, 0.06f, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+				if (Physics.BoxCast(secondOrigin, size, direction, Quaternion.identity, 0.06f, 0, QueryTriggerInteraction.Ignore))
 					continue;
 				
+				var clearanceSize = directionsClearances[i].Item2;
 				var thirdOrigin = position + Vector3.up + direction * 0.55f;
-				var clearanceSize = clearanceSizes[i];
 
 				// get the step height
-				if (!Physics.BoxCast(thirdOrigin, clearanceSize, Vector3.down, out var stepHit, Quaternion.identity, height, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+				if (!Physics.BoxCast(thirdOrigin, clearanceSize, Vector3.down, out var stepHit, Quaternion.identity, height, 0, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				// don't step to weird heights
@@ -844,11 +837,9 @@ namespace AI
 				newPosition += direction * 0.06f;
 				
 				// make sure there's clearance
-				if (Physics.BoxCast(stepHit.point + direction * 0.06f, clearanceSize, Vector3.up, Quaternion.identity, height, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+				if (Physics.BoxCast(stepHit.point + direction * 0.06f, clearanceSize, Vector3.up, Quaternion.identity, height, 0, QueryTriggerInteraction.Ignore))
 					continue;
 				
-				Debug.Log(stepOffset + " " + angle + " " + i);
-
 				var velocity = rb.linearVelocity;
 				GetTransform().position = newPosition;
 				
@@ -858,6 +849,63 @@ namespace AI
 			}
 
 			return false;
+		}
+
+		private List<(Vector3, Vector3)> getDirectionsClearances()
+		{
+			if (moveDirection == Vector2.zero)
+				return null;
+			
+			var angle = GetTransform().eulerAngles.y;
+
+			if (angle > 180f)
+				angle -= 360f;
+
+			var direction = moveDirection;
+			
+			switch (angle)
+			{
+				case <= 45f and >= -45f:
+					// facing forward
+					break;
+				case <= 135f and >= 45f:
+					// facing right
+					direction = new Vector2(direction.y, direction.x * -1.0f).normalized;
+					break;
+				case <= -45f and >= -135f:
+					// facing left
+					direction = new Vector2(direction.y * -1.0f, direction.x).normalized;
+					break;
+				default:
+					// facing back
+					direction = new Vector2(direction.y, direction.x * -1);
+					direction = new Vector2(direction.y, direction.x * -1);
+					break;
+			}
+			
+			var directions = new List<(Vector3, Vector3)>();
+
+			switch (direction.x)
+			{
+				case > 0:
+					directions.Add((Vector3.right, new Vector3(0f, 0f, 0.495f)));
+					break;
+				case < 0:
+					directions.Add((Vector3.left, new Vector3(0f, 0f, 0.495f)));
+					break;
+			}
+			
+			switch (direction.y)
+			{
+				case > 0:
+					directions.Add((Vector3.forward, new Vector3(0.495f, 0f, 0f)));
+					break;
+				case < 0:
+					directions.Add((Vector3.back, new Vector3(0.495f, 0f, 0f)));
+					break;
+			}
+
+			return directions;
 		}
 	}
 }
