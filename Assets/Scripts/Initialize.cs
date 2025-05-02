@@ -8,6 +8,7 @@ public static class Initialize
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 	public static void OnBeforeSceneLoad()
 	{
+		_ = ObjectManager.Instance;
 		_ = SelectionManager.Instance;
 		_ = ConsoleManager.Instance;
 		_ = SettingsManager.Instance;
