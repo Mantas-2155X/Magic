@@ -9,5 +9,8 @@ namespace ScriptableObjects
 		[Header("Scene")]
 		[SerializeField]
 		public AssetReference Addressable;
+
+		[SerializeField]
+		public bool Hidden;
 	}
 }

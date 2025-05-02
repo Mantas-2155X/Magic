@@ -21,8 +21,13 @@ namespace UI
 		[SerializeField]
 		public ScrollRect ScrollRect;
 
+		[SerializeField]
+		public Toggle ShowHiddenToggle;
+
 		[NonSerialized]
-		public readonly List<(Button, Image, Localizer)> Containers = new ();
+		public readonly List<SceneContainer> Containers = new ();
+
+		private int activeScenes;
 
 		public void OnEnable()
 		{
@@ -66,6 +71,16 @@ namespace UI
 			Display(false);
 		}
 
+		public void OnShowHiddenChanged(bool state)
+		{
+			if (!isActiveAndEnabled)
+				return;
+			
+			updateScenes();
+			updateNavigation();
+			Select();
+		}
+		
 		public void Select()
 		{
 			selectDelayed().Forget();
@@ -78,7 +93,7 @@ namespace UI
 			if (this == null || !isActiveAndEnabled)
 				return;
 			
-			SelectionManager.Instance.SetSelection(Containers[0].Item1.gameObject);
+			SelectionManager.Instance.SetSelection(Containers[0].Button.gameObject);
 		}
 		
 		public void updateScenes()
@@ -99,37 +114,50 @@ namespace UI
 						var copy = Instantiate(Template.gameObject, parent);
 						copy.name = $"Container {Containers.Count}";
 				
-						Containers.Add((copy.GetComponent<Button>(), copy.GetComponent<Image>(), copy.GetComponentInChildren<Localizer>()));
+						Containers.Add(copy.GetComponent<SceneContainer>());
 					}
 				}
 			}
 			
-			for (var i = 0; i < Containers.Count; i++)
-			{
-				var container = Containers[i];
-				
-				if (i >= scenesCount)
-				{
-					container.Item1.gameObject.SetActive(false);
-					continue;
-				}
+			activeScenes = 0;
 
+			var containerIndex = 0;
+			for (var i = 0; i < sceneDatas.Count; i++)
+			{
+				var sceneData = sceneDatas[i];
+				if (sceneData.Hidden && !ShowHiddenToggle.isOn)
+					continue;
+
+				var container = Containers[containerIndex];
 				var idx = i;
 
-				container.Item1.onClick.RemoveAllListeners();
-				container.Item1.onClick.AddListener(delegate
+				container.Button.onClick.RemoveAllListeners();
+				container.Button.onClick.AddListener(delegate
 				{
 					Display(false);
 					SceneManager.Instance.ChangeScene(sceneNames[idx], true, true, true);
 				});
 				
-				container.Item2.sprite = sceneDatas[i].Icon;
+				container.Image.sprite = sceneDatas[i].Icon;
 				
-				container.Item3.Key = sceneDatas[i].Name;
-				container.Item3.Apply();
+				container.Localizer.Key = sceneDatas[i].Name;
+				container.Localizer.Apply();
 				
-				container.Item1.gameObject.SetActive(true);
+				container.Button.gameObject.SetActive(true);
+				
+				containerIndex++;
+				activeScenes++;
 			}
+
+			if (containerIndex != Containers.Count)
+			{
+				for (var i = containerIndex; i < Containers.Count; i++)
+				{
+					Containers[i].Button.gameObject.SetActive(false);
+				}
+			}
+
+			GridLayoutGroup.cellSize = activeScenes <= 7 ? new Vector2(219, 164) : new Vector2(215, 160);
 			
 			if (isActiveAndEnabled)
 				updateNavigation();
@@ -137,10 +165,10 @@ namespace UI
 
 		private void updateNavigation()
 		{
-			var scenesCount = Containers.Count;
+			var scenesCount = activeScenes;
 			
-			var firstContainer = Containers[0].Item1;
-			var lastContainer = Containers[scenesCount - 1].Item1;
+			var firstContainer = Containers[0].Button;
+			var lastContainer = Containers[scenesCount - 1].Button;
 
 			var constraints = GridLayoutGroup.constraintCount;
 			
@@ -148,12 +176,23 @@ namespace UI
 			{
 				mode = Navigation.Mode.Explicit,
 				selectOnDown = firstContainer,
-				selectOnUp = lastContainer
+				selectOnUp = lastContainer,
+				selectOnLeft = ShowHiddenToggle,
+				selectOnRight = ShowHiddenToggle
+			};
+			
+			ShowHiddenToggle.navigation = new Navigation
+			{
+				mode = Navigation.Mode.Explicit,
+				selectOnDown = firstContainer,
+				selectOnUp = lastContainer,
+				selectOnLeft = CloseButton,
+				selectOnRight = CloseButton
 			};
 
 			for (var i = 0; i < scenesCount; i++)
 			{
-				var container = Containers[i].Item1;
+				var container = Containers[i].Button;
 
 				var nav = new Navigation
 				{
@@ -166,17 +205,17 @@ namespace UI
 				if (i == 0)
 				{
 					previousContainer = lastContainer;
-					nextContainer = scenesCount - 1 > 1 ? Containers[i + 1].Item1 : container;
+					nextContainer = scenesCount - 1 > 1 ? Containers[i + 1].Button : container;
 				}
 				else if (i == scenesCount - 1)
 				{
-					previousContainer = scenesCount - 1 > 1 ? Containers[i - 1].Item1 : container;
+					previousContainer = scenesCount - 1 > 1 ? Containers[i - 1].Button : container;
 					nextContainer = firstContainer;
 				}
 				else
 				{
-					previousContainer = Containers[i - 1].Item1;
-					nextContainer = Containers[i + 1].Item1;
+					previousContainer = Containers[i - 1].Button;
+					nextContainer = Containers[i + 1].Button;
 				}
 				
 				if (container == firstContainer)
@@ -205,7 +244,7 @@ namespace UI
 				}
 				else
 				{
-					aboveButton = Containers[aboveIndex].Item1;
+					aboveButton = Containers[aboveIndex].Button;
 				}
 				
 				var belowIndex = i + constraints;
@@ -222,7 +261,7 @@ namespace UI
 				}
 				else
 				{
-					belowButton = Containers[belowIndex].Item1;
+					belowButton = Containers[belowIndex].Button;
 				}
 
 				nav.selectOnUp = aboveButton;
