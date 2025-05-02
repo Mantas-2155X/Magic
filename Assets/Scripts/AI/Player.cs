@@ -62,13 +62,10 @@ namespace AI
 
 		private Transform colliderTr;
 
-		private List<ContactPoint> contacts = new ();
-		
-		private Collider groundCollider;
 		private Vector3 groundNormal;
 		private float groundAngle;
 
-		private const float maximumGroundAngle = 45f;
+		private const float maximumGroundAngle = 45.1f;
 		
 		#region MonoBehaviour
 
@@ -199,7 +196,7 @@ namespace AI
 				
 				var direction = tr.right * moveDirection.x + tr.forward * moveDirection.y;
 
-				if (groundCollider != null && groundAngle < maximumGroundAngle)
+				if (groundAngle < maximumGroundAngle)
 					direction -= Vector3.Project(direction, groundNormal);
 				
 				var speed = data.Speed - (data.Speed * SlowAmount);
@@ -231,44 +228,6 @@ namespace AI
 					rb.AddForce(-velocity.normalized * data.Friction);
 					break;
 			}
-		}
-		
-		public void OnCollisionStay(Collision other)
-		{
-			var count = other.GetContacts(contacts);
-			if (count == 0)
-				return;
-			
-			for (var i = 0; i < count; i++)
-			{
-				var contact = contacts[i];
-				
-				var normal = contact.normal;
-				
-				var angle = Vector3.Angle(Vector3.up, normal);
-				if (angle <= maximumGroundAngle)
-				{
-					groundCollider = contact.otherCollider;
-					groundNormal = normal;
-					groundAngle = angle;
-				}
-				else if (groundCollider == contact.otherCollider)
-				{
-					groundCollider = null;
-					groundNormal = Vector3.zero;
-					groundAngle = -1f;
-				}
-			}
-		}
-
-		public void OnCollisionExit(Collision other)
-		{
-			if (other.collider != groundCollider)
-				return;
-
-			groundCollider = null;
-			groundNormal = Vector3.zero;
-			groundAngle = -1f;
 		}
 
 		#endregion
@@ -807,14 +766,33 @@ namespace AI
 
 		public override bool IsGrounded()
 		{
-			if (!IsAlive || MovementType != EMovementType.Normal || groundCollider == null)
+			if (!IsAlive || MovementType != EMovementType.Normal)
+			{
+				groundNormal = Vector3.zero;
+				groundAngle = float.MaxValue;
+				
 				return false;
+			}
 
-			var origin = Body.Rigidbody.position - new Vector3(0f, 1f, 0f);
+			var origin = Body.Rigidbody.position - new Vector3(0f, 0.9f, 0f);
 			var extents = new Vector3(0.98f, 0.1f, 0.98f) / 2f;
 			
-			if (Physics.CheckBox(origin, extents, Quaternion.identity, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
-				return true;
+			if (Physics.BoxCast(origin, extents, Vector3.down, out var hit, Quaternion.identity, 0.1f, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+			{
+				var normal = hit.normal;
+				
+				var angle = Vector3.Angle(Vector3.up, normal);
+				if (angle <= maximumGroundAngle)
+				{
+					groundNormal = normal;
+					groundAngle = angle;
+					
+					return true;
+				}
+			}
+			
+			groundNormal = Vector3.zero;
+			groundAngle = float.MaxValue;
 			
 			return false;
 		}
