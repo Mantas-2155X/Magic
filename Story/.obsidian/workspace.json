@@ -4,123 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "78356b7341658ef7",
+        "id": "d84aec57b80280ea",
         "type": "tabs",
         "children": [
           {
-            "id": "67d278ecaff538b5",
+            "id": "f151db449097bcb1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Chapter 1/Chapter 1.md",
+                "file": "Level Design/World7.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Chapter 1"
-            }
-          },
-          {
-            "id": "86cd646305e0f270",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Chapter 1/Chapter 1-1.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Chapter 1-1"
-            }
-          },
-          {
-            "id": "448fbf2ce5dc5e4a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Chapter 1/Chapter 1.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Chapter 1"
-            }
-          },
-          {
-            "id": "7df4ab903a801816",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Chapter 1/Chapter 1.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Chapter 1"
-            }
-          },
-          {
-            "id": "00d713547da4899b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Spell Container.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Spell Container"
-            }
-          },
-          {
-            "id": "fdb50bdf069ab7ce",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Shield.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Shield"
-            }
-          },
-          {
-            "id": "d39e6ecfa1cc29fd",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Fire Ball.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Fire Ball"
-            }
-          },
-          {
-            "id": "f6cc240b4c9cabf6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Magic.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Magic"
+              "title": "World7"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -139,7 +40,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -261,10 +163,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "86cd646305e0f270",
+  "active": "f151db449097bcb1",
   "lastOpenFiles": [
+    "Level Design/img/world7_1.png",
+    "Level Design/img",
+    "Player.md",
     "Chapter 1/Chapter 1.md",
+    "Level Design/World7.md",
     "Chapter 1/Chapter 1-1.md",
+    "Level Design",
     "Chapter 0/Chapter 0-1 - Route 1.md",
     "Chapter 0/Chapter 0-1.md",
     "Chapter 0/Chapter 0 - Route 2.md",
@@ -277,7 +184,6 @@
     "Shield.md",
     "Magic.md",
     "Warp.md",
-    "Player.md",
     "Chapter 0-1 Route 1.md",
     "Chapter 1",
     "Chapter 0",
