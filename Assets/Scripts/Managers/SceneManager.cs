@@ -87,9 +87,9 @@ namespace Managers
 			PauseManager.Instance.Unpause();
 
 			var handle = Addressables.LoadSceneAsync("Scenes/" + scene, LoadSceneMode.Single, false);
-			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded && DynamicGI.isConverged);
+			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded);
 			await handle.Result.ActivateAsync();
-			await UniTask.WaitUntil(() => handle.IsDone && DynamicGI.isConverged);
+			await UniTask.WaitUntil(() => handle.IsDone);
 			await UniTask.WaitForSeconds(0.5f, true);
 
 			if (closeTitle)
