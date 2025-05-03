@@ -3,7 +3,47 @@ guid: f7e4be7aadf49b503a1acd44cec8ca0e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ceiling
+    second: {fileID: 2100000, guid: 7b5ec8a9f592b4632a36cf7ca686f580, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ControlPanel-Body
+    second: {fileID: 2100000, guid: bc737746b0d69959d9fd47594c96a6a4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ControlPanel-Glass
+    second: {fileID: 2100000, guid: e6f435e21d3e86a33a60a5aaf7d60038, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Floor
+    second: {fileID: 2100000, guid: 9e305734ca4070595a3c6366d58c6a09, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rock
+    second: {fileID: 2100000, guid: 7391857ec938bd9c2ba213b1e0680b89, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tube-Body
+    second: {fileID: 2100000, guid: 36c748dd1893a8fbdbc9409816aa4d63, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tube-Glass
+    second: {fileID: 2100000, guid: 88b4c105a18c75281bb46cdbecde1542, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wall
+    second: {fileID: 2100000, guid: 811a60ec81585b62c83e2a565adc2be0, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
