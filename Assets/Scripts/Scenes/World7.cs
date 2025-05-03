@@ -68,7 +68,7 @@ namespace Scenes
 					light.bounceIntensity += 0.5f;
 			}
 
-			await SceneManager.Instance.ChangeSceneAsync("Title", false, true, false);
+			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
 		}
 	}
 }
