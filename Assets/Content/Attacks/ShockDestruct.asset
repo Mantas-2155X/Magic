@@ -25,12 +25,12 @@ MonoBehaviour:
   IgnoreCaster: 0
   FollowCaster: 0
   AttachOffset: {x: 0, y: 0, z: 0}
-  Damage: 50
+  Damage: 42
   Slow:
     Amount: 0.25
     Duration: 2.5
   Paralyze:
-    Duration: 1
+    Duration: 0.6
   Element: 6
   AttackAngle: 0
   AttackOrigin: 0

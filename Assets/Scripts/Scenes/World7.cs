@@ -17,7 +17,9 @@ namespace Scenes
 		
 		public void BeginOrb()
 		{
-			Player.Instance.gameObject.SetActive(false);
+			var player = Player.Instance;
+			player.HUD.gameObject.SetActive(false);
+			player.Stats.gameObject.SetActive(false);
 
 			light = Orb.GetComponentInChildren<Light>();
 			
@@ -36,7 +38,7 @@ namespace Scenes
 
 		private async UniTaskVoid processOrb()
 		{
-			await UniTask.WaitForSeconds(5f);
+			await UniTask.WaitForSeconds(2.5f);
 			
 			if (this == null || !isActiveAndEnabled)
 				return;
@@ -65,7 +67,7 @@ namespace Scenes
 				}
 
 				if (size > 15f)
-					light.bounceIntensity += 0.5f;
+					light.bounceIntensity += 0.35f;
 			}
 
 			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
