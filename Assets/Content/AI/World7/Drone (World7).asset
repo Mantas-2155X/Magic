@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d095914682fd465fb83b431e5a31d2ef, type: 3}
+  m_Name: Drone (World7)
+  m_EditorClassIdentifier: 
+  Name: AI_DRONE_NAME
+  Description: AI_DRONE_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 2273498091929504843, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+  Type: 
+  Health: 90
+  Mana: 150
+  Energy: 50
+  RegenerateHealth: 2
+  RegenerateMana: 35
+  RegenerateEnergy: 5
+  Speed: 0
+  DamageStats:
+    _serializedList:
+    - Key: 6
+      Value:
+        Constant: 5
+        Percentage: 2.5
+  ProtectionStats:
+    _serializedList:
+    - Key: 3
+      Value:
+        Constant: 1
+        Percentage: 5
+    - Key: 4
+      Value:
+        Constant: 1
+        Percentage: 5
+  Spells:
+  - {fileID: 11400000, guid: 31a3ff1fdf8907b73b368372b5e49335, type: 2}
+  - {fileID: 11400000, guid: 7b8993fdb778cb39e9054cdf7d6ae5fa, type: 2}
+  Wearables: []
+  BrokenBodyPrefab: {fileID: 4830008114940874397, guid: 278eb04698d4d3f27938bb9057abee25, type: 3}
+  BrokenArmPrefab: {fileID: 0}
+  BrokenFootPrefab: {fileID: 0}
+  CanGrab: 0
+  GrabEnergy: 5
+  GrabShinkedEnergy: 7.5
+  GrabPositionSpeed: 15
+  GrabRotationSpeed: 15
+  GrabVerticalOffset: -0.15
+  GrabMass: 25
+  GrabDropDistance: 5
+  GrabDropAngle: 100
+  SenseRange: 50
+  SpotRange: 50
+  FieldOfView: 360
+  PatrolReachRange: 0.5
+  RotationSpeed: 0
+  AimAngle: 25
+  WanderEvery: 1
+  CommunicateRange: 5
+  LowResourcesMultiplier: 0.15
+  SpellCooldownVariation: 0.15
+  SpellSwitchCastCooldown: 0.25
+  UseResourceEvery: 1
+  TargetPredictInaccuracy: 0.6
+  TargetPredictMinimumRange: 5
+  TargetPredictVelocityMultiplier: 0.09
+  TargetPredictDistanceMultiplier: 0.0775
+  TargetPredictStartFakeVelocity: 4.5
+  TargetPredictMaximumFakeVelocity: 11
+  TargetMode: 2
+  AttackVerticalOffset: -0.3
+  UseExtraCasts: 1
+  UseSightCheck: 1
+  CanTakeResources: 1
+  CanSelfDestruct: 0
+  Stationary: 0
