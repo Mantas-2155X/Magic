@@ -953,6 +953,7 @@ namespace TMPro
         public char asteriskChar { get { return m_AsteriskChar; } set { if (SetPropertyUtility.SetStruct(ref m_AsteriskChar, value)) UpdateLabel(); } }
         public bool wasCanceled { get { return m_WasCanceled; } }
 
+        public bool OverrideWrappingMode;
 
         protected void ClampStringPos(ref int pos)
         {
@@ -2171,7 +2172,7 @@ namespace TMPro
                         if (ctrlOnly)
                         {
                             if (inputType != InputType.Password)
-                                clipboard = GetSelectedString();
+                                clipboard = GetSelectedString(true);
                             else
                                 clipboard = "";
                             return EditState.Continue;
@@ -2196,7 +2197,7 @@ namespace TMPro
                         if (ctrlOnly)
                         {
                             if (inputType != InputType.Password)
-                                clipboard = GetSelectedString();
+                                clipboard = GetSelectedString(true);
                             else
                                 clipboard = "";
                             Delete();
@@ -2455,7 +2456,7 @@ namespace TMPro
             return scrollPosition;
         }
 
-        private string GetSelectedString()
+        private string GetSelectedString(bool stripRichTags = false)
         {
             if (!hasSelection)
                 return "";
@@ -2476,8 +2477,17 @@ namespace TMPro
             //    Debug.Log("Character [" + m_TextComponent.textInfo.characterInfo[i].character + "] using Style [" + m_TextComponent.textInfo.characterInfo[i].style + "] has been selected.");
             //}
 
+            var result = text.Substring(startPos, endPos - startPos);
+            
+            if (!stripRichTags)
+                return result;
 
-            return text.Substring(startPos, endPos - startPos);
+            var rich = new Regex (@"<[^>]*>");
+            
+            if (rich.IsMatch(result))
+                result = rich.Replace(result, string.Empty);
+            
+            return result;
         }
 
         private int FindNextWordBegin()
@@ -4594,6 +4604,9 @@ namespace TMPro
             if (m_TextComponent == null)
                 return;
 
+            if (OverrideWrappingMode)
+                return;
+            
             if (multiLine)
                 m_TextComponent.textWrappingMode = TextWrappingModes.Normal;
             else
