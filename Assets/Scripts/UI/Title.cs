@@ -76,10 +76,20 @@ namespace UI
 			consoleAction.performed += onConsole;
 			consoleAction.Enable();
 
-			// TODO: remove when the story is in
-			var newGame = Buttons[0];
-			newGame.interactable = false;
-			newGame.GetComponentInChildren<TMP_Text>().color = Color.lightGray;
+			var disableButtons = new []
+			{
+				// needs main story
+				Buttons[0], 
+				// needs saving and loading
+				Buttons[2], Buttons[3]
+			};
+			
+			for (var i = 0; i < disableButtons.Length; i++)
+			{
+				var button = disableButtons[i];
+				button.interactable = false;
+				button.GetComponentInChildren<TMP_Text>().color = new Color(0.75f, 0.75f, 0.75f);
+			}
 		}
 
 		public void OnEnable()
@@ -229,8 +239,8 @@ namespace UI
 			
 			ButtonObjects[0].SetActive(inTitle);
 			ButtonObjects[1].SetActive(!inTitle);
-			ButtonObjects[2].SetActive(false);
-			ButtonObjects[3].SetActive(false);
+			ButtonObjects[2].SetActive(!inTitle);
+			ButtonObjects[3].SetActive(!inTitle);
 			ButtonObjects[4].SetActive(true);
 			ButtonObjects[5].SetActive(!inTitle);
 			ButtonObjects[6].SetActive(true);
