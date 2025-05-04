@@ -15,7 +15,7 @@ namespace UnityEngine.UI
     /// The anchors of the fill and handle RectTransforms are driven by the Slider. The fill and handle can be direct children of the GameObject with the Slider, or intermediary RectTransforms can be placed in between for additional control.
     /// When a change to the slider value occurs, a callback is sent to any registered listeners of UI.Slider.onValueChanged.
     /// </remarks>
-    public class Slider : Selectable, IDragHandler, IInitializePotentialDragHandler, ICanvasElement, ISubmitHandler, ICancelHandler
+    public class Slider : Selectable, IDragHandler, IInitializePotentialDragHandler, ICanvasElement
     {
         /// <summary>
         /// Setting that indicates one of four directions.
@@ -371,12 +371,7 @@ namespace UnityEngine.UI
         private bool m_DelayedUpdateVisuals = false;
 
         // Size of each step.
-        float stepSize { get { return wholeNumbers ? 1 : (maxValue - minValue) * StepSizeMultiplier; } }
-
-        [SerializeField]
-        public float StepSizeMultiplier = 0.05f;
-        
-        private bool shouldControl;
+        float stepSize { get { return wholeNumbers ? 1 : (maxValue - minValue) * 0.1f; } }
 
         protected Slider()
         {}
@@ -664,7 +659,7 @@ namespace UnityEngine.UI
 
         public override void OnMove(AxisEventData eventData)
         {
-            if (!IsActive() || !IsInteractable() || !shouldControl)
+            if (!IsActive() || !IsInteractable())
             {
                 base.OnMove(eventData);
                 return;
@@ -673,25 +668,25 @@ namespace UnityEngine.UI
             switch (eventData.moveDir)
             {
                 case MoveDirection.Left:
-                    if (axis == Axis.Horizontal)
+                    if (axis == Axis.Horizontal && FindSelectableOnLeft() == null)
                         Set(reverseValue ? value + stepSize : value - stepSize);
                     else
                         base.OnMove(eventData);
                     break;
                 case MoveDirection.Right:
-                    if (axis == Axis.Horizontal)
+                    if (axis == Axis.Horizontal && FindSelectableOnRight() == null)
                         Set(reverseValue ? value - stepSize : value + stepSize);
                     else
                         base.OnMove(eventData);
                     break;
                 case MoveDirection.Up:
-                    if (axis == Axis.Vertical)
+                    if (axis == Axis.Vertical && FindSelectableOnUp() == null)
                         Set(reverseValue ? value - stepSize : value + stepSize);
                     else
                         base.OnMove(eventData);
                     break;
                 case MoveDirection.Down:
-                    if (axis == Axis.Vertical)
+                    if (axis == Axis.Vertical && FindSelectableOnDown() == null)
                         Set(reverseValue ? value + stepSize : value - stepSize);
                     else
                         base.OnMove(eventData);
@@ -699,22 +694,6 @@ namespace UnityEngine.UI
             }
         }
 
-        public override void OnDeselect(BaseEventData eventData)
-        {
-            base.OnDeselect(eventData);
-            shouldControl = false;
-        }
-        
-        public void OnSubmit(BaseEventData eventData)
-        {
-            shouldControl = !shouldControl;
-        }
-        
-        public void OnCancel(BaseEventData eventData)
-        {
-            shouldControl = false;
-        }
-        
         /// <summary>
         /// See Selectable.FindSelectableOnLeft
         /// </summary>
