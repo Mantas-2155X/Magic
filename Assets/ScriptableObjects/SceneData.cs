@@ -12,5 +12,17 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public bool Hidden;
+
+		[SerializeField]
+		public bool NoclipInitially;
+		
+		[SerializeField]
+		public bool InvulnerableInitially;
+		
+		[SerializeField]
+		public bool PowerfulInitially;
+		
+		[SerializeField]
+		public bool FlashlightInitially;
 	}
 }

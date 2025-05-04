@@ -743,6 +743,22 @@ namespace AI
 				playerUI.HUD.Spellbook.Display(false);
 			
 			EnableInput();
+
+			var sceneData = SceneManager.Instance.GetCurrentSceneData();
+			if (sceneData == null)
+				return;
+			
+			if (sceneData.NoclipInitially)
+				SetMovementType(EMovementType.Noclip);
+			
+			if (sceneData.InvulnerableInitially)
+				SetInvulnerable(true);
+			
+			if (sceneData.PowerfulInitially)
+				SetPowerful(true);
+			
+			if (sceneData.FlashlightInitially)
+				World.World.Instance.Flashlight.enabled = true;
 		}
 		
 		public override void Kill(object source)

@@ -33,6 +33,15 @@ namespace Managers
 			return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 		}
 		
+		public SceneData GetCurrentSceneData()
+		{
+			var index = sceneNames.IndexOf(GetCurrentScene());
+			if (index == -1)
+				return null;
+
+			return sceneDatas[index];
+		}
+		
 		public List<string> GetSceneNames()
 		{
 			return sceneNames;
