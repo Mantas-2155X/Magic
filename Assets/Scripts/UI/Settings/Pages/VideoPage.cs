@@ -85,6 +85,8 @@ namespace UI.Settings.Pages
 			RenderScaleLocalizer.Apply();
 			
 			RenderScaleInputSlider.SetValueWithoutNotify(Convert.ToSingle(renderScale.Value));
+
+			updateFPSLimitSlider();
 		}
 
 		public void OnResolutionChanged(int value)
@@ -103,6 +105,7 @@ namespace UI.Settings.Pages
 		public void OnVSyncChanged(bool value)
 		{
 			SettingsManager.Instance.SetSetting("video-vsync", value);
+			updateFPSLimitSlider();
 		}
 		
 		public void OnFPSLimitChanged(float value)
@@ -113,6 +116,37 @@ namespace UI.Settings.Pages
 		public void OnRenderScaleChanged(float value)
 		{
 			SettingsManager.Instance.SetSetting("video-renderscale", value);
+		}
+
+		private void updateFPSLimitSlider()
+		{
+			// FPS limit doesn't work with VSync
+
+			var sliderBackground = FPSLimitInputSlider.Slider.transform.Find("Background").GetComponent<Image>();
+			var sliderHandle = FPSLimitInputSlider.Slider.handleRect.GetComponent<Image>();
+
+			var inputFieldImage = FPSLimitInputSlider.InputField.GetComponent<Image>();
+			
+			if (SettingsManager.Instance.GetBool("video-vsync") == true)
+			{
+				FPSLimitInputSlider.Slider.interactable = false;
+				FPSLimitInputSlider.InputField.interactable = false;
+				
+				sliderBackground.color = Color.gray;
+				sliderHandle.color = Color.gray;
+				
+				inputFieldImage.color = Color.gray;
+			}
+			else
+			{
+				FPSLimitInputSlider.Slider.interactable = true;
+				FPSLimitInputSlider.InputField.interactable = true;
+				
+				sliderBackground.color = Color.black;
+				sliderHandle.color = Color.black;
+				
+				inputFieldImage.color = Color.black;
+			}
 		}
 	}
 }
