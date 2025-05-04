@@ -953,6 +953,7 @@ namespace TMPro
         public char asteriskChar { get { return m_AsteriskChar; } set { if (SetPropertyUtility.SetStruct(ref m_AsteriskChar, value)) UpdateLabel(); } }
         public bool wasCanceled { get { return m_WasCanceled; } }
 
+        public bool OverrideWrappingMode;
 
         protected void ClampStringPos(ref int pos)
         {
@@ -1538,7 +1539,6 @@ namespace TMPro
             switch (platform)
             {
                 case RuntimePlatform.Android:
-                case RuntimePlatform.WebGLPlayer:
                     if (s_IsQuestDevice)
                         return TouchScreenKeyboard.isSupported;
 
@@ -2171,7 +2171,7 @@ namespace TMPro
                         if (ctrlOnly)
                         {
                             if (inputType != InputType.Password)
-                                clipboard = GetSelectedString();
+                                clipboard = GetSelectedString(true);
                             else
                                 clipboard = "";
                             return EditState.Continue;
@@ -2196,7 +2196,7 @@ namespace TMPro
                         if (ctrlOnly)
                         {
                             if (inputType != InputType.Password)
-                                clipboard = GetSelectedString();
+                                clipboard = GetSelectedString(true);
                             else
                                 clipboard = "";
                             Delete();
@@ -2455,7 +2455,7 @@ namespace TMPro
             return scrollPosition;
         }
 
-        private string GetSelectedString()
+        private string GetSelectedString(bool stripRichTags = false)
         {
             if (!hasSelection)
                 return "";
@@ -2476,8 +2476,17 @@ namespace TMPro
             //    Debug.Log("Character [" + m_TextComponent.textInfo.characterInfo[i].character + "] using Style [" + m_TextComponent.textInfo.characterInfo[i].style + "] has been selected.");
             //}
 
+            var result = text.Substring(startPos, endPos - startPos);
 
-            return text.Substring(startPos, endPos - startPos);
+            if (!stripRichTags)
+                return result;
+
+            var rich = new Regex (@"<[^>]*>");
+                
+            if (rich.IsMatch(result))
+                result = rich.Replace(result, string.Empty);
+
+            return result;
         }
 
         private int FindNextWordBegin()
@@ -3348,7 +3357,7 @@ namespace TMPro
             // Can't go past the character limit
             if (characterLimit > 0 && text.Length >= characterLimit)
                 return;
-
+            
             m_Text = text.Insert(m_StringPosition, replaceString);
 
             if (!char.IsHighSurrogate(c))
@@ -4192,9 +4201,6 @@ namespace TMPro
 
                     var separator = Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
                     if (ch == Convert.ToChar(separator) && characterValidation == CharacterValidation.Decimal && !text.Contains(separator)) return ch;
-
-                    //Some keyboards including Samsung require double tapping a . to get a - this allows these keyboards to input negative integers
-                    if (characterValidation == CharacterValidation.Integer && ch == '.' && (pos == 0 || selectionAtStart)) return '-';
                 }
             }
             else if (characterValidation == CharacterValidation.Digit)
@@ -4527,7 +4533,7 @@ namespace TMPro
                     {
                         m_LineType = LineType.SingleLine;
                         m_InputType = InputType.Standard;
-                        m_KeyboardType = TouchScreenKeyboardType.NumbersAndPunctuation;
+                        m_KeyboardType = TouchScreenKeyboardType.NumberPad;
                         m_CharacterValidation = CharacterValidation.Integer;
                         break;
                     }
@@ -4594,6 +4600,9 @@ namespace TMPro
             if (m_TextComponent == null)
                 return;
 
+            if (OverrideWrappingMode)
+                return;
+            
             if (multiLine)
                 m_TextComponent.textWrappingMode = TextWrappingModes.Normal;
             else

@@ -205,7 +205,7 @@ namespace UnityEngine.UIElements
             var target = currentFocusedElement ?? m_Panel.visualTree;
             ProcessImguiEvents(target);
 
-            using (var e = NavigationSubmitEvent.GetPooled(GetDeviceType(eventData), s_Modifiers))
+            using (var e = NavigationSubmitEvent.GetPooled(s_Modifiers))
             {
                 e.target = target;
                 SendEvent(e, eventData);
@@ -221,7 +221,7 @@ namespace UnityEngine.UIElements
             var target = currentFocusedElement ?? m_Panel.visualTree;
             ProcessImguiEvents(target);
 
-            using (var e = NavigationCancelEvent.GetPooled(GetDeviceType(eventData), s_Modifiers))
+            using (var e = NavigationCancelEvent.GetPooled(s_Modifiers))
             {
                 e.target = target;
                 SendEvent(e, eventData);
@@ -237,7 +237,7 @@ namespace UnityEngine.UIElements
             var target = currentFocusedElement ?? m_Panel.visualTree;
             ProcessImguiEvents(target);
 
-            using (var e = NavigationMoveEvent.GetPooled(eventData.moveVector, GetDeviceType(eventData), s_Modifiers))
+            using (var e = NavigationMoveEvent.GetPooled(eventData.moveVector, s_Modifiers))
             {
                 e.target = target;
                 SendEvent(e, eventData);
@@ -388,14 +388,6 @@ namespace UnityEngine.UIElements
             return true;
         }
 
-        private UIElements.NavigationDeviceType GetDeviceType(BaseEventData eventData)
-        {
-            if (eventSystem == null || eventSystem.currentInputModule == null)
-                return NavigationDeviceType.Unknown;
-            return (UIElements.NavigationDeviceType)eventSystem.currentInputModule.GetNavigationEventDeviceType(
-                eventData);
-        }
-
         enum PointerEventType
         {
             Default, Down, Up
@@ -456,14 +448,7 @@ namespace UnityEngine.UIElements
                 int eventDisplayIndex = (int)eventPosition.z;
 
                 if (eventDisplayIndex > 0 && eventDisplayIndex < Display.displays.Length)
-                {
-#if UNITY_ANDROID
-                    // Changed for UITK to be coherent for Android which passes display-relative rendering coordinates
-                    h = Display.displays[eventDisplayIndex].renderingHeight;
-#else
                     h = Display.displays[eventDisplayIndex].systemHeight;
-#endif
-                }
 
                 var delta = eventData.delta;
                 eventPosition.y = h - eventPosition.y;

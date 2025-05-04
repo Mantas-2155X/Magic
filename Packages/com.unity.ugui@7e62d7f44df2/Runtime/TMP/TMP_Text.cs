@@ -1100,10 +1100,6 @@ namespace TMPro
             {
                 m_IsTextObjectScaleStatic = value;
 
-                // UUM-92041. RegisterTextObjectForUpdate is not called until OnEnable.
-                if (!isActiveAndEnabled)
-                    return;
-
                 if (m_IsTextObjectScaleStatic)
                     TMP_UpdateManager.UnRegisterTextObjectForUpdate(this);
                 else
@@ -2981,13 +2977,7 @@ namespace TMPro
 
                             if (ReplaceOpeningStyleTag(ref styleDefinition, i, out int offset, ref charBuffer, ref writeIndex))
                             {
-                                int remainChar = styleLength - offset;
                                 i = offset;
-
-                                //Increase the buffer if the buffer might overflow after processing styles.
-                                if ( writeIndex + remainChar >= charBuffer.Length)
-                                    ResizeInternalArray(ref charBuffer, writeIndex + remainChar);
-
                                 continue;
                             }
                             break;
@@ -6190,7 +6180,7 @@ namespace TMPro
                 if (character != null)
                 {
                     // Add character to font asset lookup cache
-                    fontAsset.AddCharacterToLookupCache(unicode, character, FontStyles.Normal, FontWeight.Regular, isUsingAlternativeTypeface);
+                    fontAsset.AddCharacterToLookupCache(unicode, character, fontStyle, fontWeight, isUsingAlternativeTypeface);
 
                     return character;
                 }
@@ -6202,7 +6192,7 @@ namespace TMPro
                 if (character != null)
                 {
                     // Add character to font asset lookup cache
-                    fontAsset.AddCharacterToLookupCache(unicode, character, FontStyles.Normal, FontWeight.Regular, isUsingAlternativeTypeface);
+                    fontAsset.AddCharacterToLookupCache(unicode, character, fontStyle, fontWeight, isUsingAlternativeTypeface);
 
                     return character;
                 }
@@ -6214,7 +6204,7 @@ namespace TMPro
                 if (character != null)
                 {
                     // Add character to font asset lookup cache
-                    fontAsset.AddCharacterToLookupCache(unicode, character, FontStyles.Normal, FontWeight.Regular, isUsingAlternativeTypeface);
+                    fontAsset.AddCharacterToLookupCache(unicode, character, fontStyle, fontWeight, isUsingAlternativeTypeface);
 
                     return character;
                 }
@@ -7142,7 +7132,6 @@ namespace TMPro
                     case MarkupTag.SUBSCRIPT:
                         m_fontScaleMultiplier *= m_currentFontAsset.faceInfo.subscriptSize > 0 ? m_currentFontAsset.faceInfo.subscriptSize : 1;
                         m_baselineOffsetStack.Push(m_baselineOffset);
-                        m_materialReferenceStack.Push(m_materialReferences[m_currentMaterialIndex]);
                         fontScale = (m_currentFontSize / m_currentFontAsset.faceInfo.pointSize * m_currentFontAsset.faceInfo.scale * (m_isOrthographic ? 1 : 0.1f));
                         m_baselineOffset += m_currentFontAsset.faceInfo.subscriptOffset * fontScale * m_fontScaleMultiplier;
 
@@ -7152,11 +7141,10 @@ namespace TMPro
                     case MarkupTag.SLASH_SUBSCRIPT:
                         if ((m_FontStyleInternal & FontStyles.Subscript) == FontStyles.Subscript)
                         {
-                            var previousFontAsset = m_materialReferenceStack.Pop().fontAsset;
                             if (m_fontScaleMultiplier < 1)
                             {
                                 m_baselineOffset = m_baselineOffsetStack.Pop();
-                                m_fontScaleMultiplier /= previousFontAsset.faceInfo.subscriptSize > 0 ? previousFontAsset.faceInfo.subscriptSize : 1;
+                                m_fontScaleMultiplier /= m_currentFontAsset.faceInfo.subscriptSize > 0 ? m_currentFontAsset.faceInfo.subscriptSize : 1;
                             }
 
                             if (m_fontStyleStack.Remove(FontStyles.Subscript) == 0)
@@ -7166,7 +7154,6 @@ namespace TMPro
                     case MarkupTag.SUPERSCRIPT:
                         m_fontScaleMultiplier *= m_currentFontAsset.faceInfo.superscriptSize > 0 ? m_currentFontAsset.faceInfo.superscriptSize : 1;
                         m_baselineOffsetStack.Push(m_baselineOffset);
-                        m_materialReferenceStack.Push(m_materialReferences[m_currentMaterialIndex]);
                         fontScale = (m_currentFontSize / m_currentFontAsset.faceInfo.pointSize * m_currentFontAsset.faceInfo.scale * (m_isOrthographic ? 1 : 0.1f));
                         m_baselineOffset += m_currentFontAsset.faceInfo.superscriptOffset * fontScale * m_fontScaleMultiplier;
 
@@ -7176,11 +7163,10 @@ namespace TMPro
                     case MarkupTag.SLASH_SUPERSCRIPT:
                         if ((m_FontStyleInternal & FontStyles.Superscript) == FontStyles.Superscript)
                         {
-                            var previousFontAsset = m_materialReferenceStack.Pop().fontAsset;
                             if (m_fontScaleMultiplier < 1)
                             {
                                 m_baselineOffset = m_baselineOffsetStack.Pop();
-                                m_fontScaleMultiplier /= previousFontAsset.faceInfo.superscriptSize > 0 ? previousFontAsset.faceInfo.superscriptSize : 1;
+                                m_fontScaleMultiplier /= m_currentFontAsset.faceInfo.superscriptSize > 0 ? m_currentFontAsset.faceInfo.superscriptSize : 1;
                             }
 
                             if (m_fontStyleStack.Remove(FontStyles.Superscript) == 0)
