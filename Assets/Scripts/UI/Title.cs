@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Managers;
+using TMPro;
 using UI.Settings.Pages;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -74,6 +75,11 @@ namespace UI
 			var consoleAction = SettingsManager.Instance.GetKeybind("keybinds-debug-console").Item1;
 			consoleAction.performed += onConsole;
 			consoleAction.Enable();
+
+			// TODO: remove when the story is in
+			var newGame = Buttons[0];
+			newGame.interactable = false;
+			newGame.GetComponentInChildren<TMP_Text>().color = Color.lightGray;
 		}
 
 		public void OnEnable()
@@ -151,7 +157,7 @@ namespace UI
 
 		public void OnNewGame()
 		{
-			SceneManager.Instance.ChangeScene("World3", true, true, true);
+			throw new NotImplementedException();
 		}
 
 		public void OnSceneSelect()
