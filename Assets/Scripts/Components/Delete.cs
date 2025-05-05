@@ -1,4 +1,4 @@
-using AI;
+using Managers;
 using UnityEngine;
 
 namespace Components
@@ -10,8 +10,15 @@ namespace Components
 			var rb = other.attachedRigidbody;
 			var go = rb != null ? rb.gameObject : other.gameObject;
 			
-			if (go.GetComponentInChildren<Player>() != null)
-				return;
+			var aiManager = AIManager.Instance;
+			if (aiManager != null)
+			{
+				var player = aiManager.Player;
+				if (player != null && player.Body.BodyCollider == other)
+				{
+					return;
+				}
+			}
 			
 			Debug.LogWarning($"[Delete] Object {go.name} fell out of the world and was destroyed");
 			Destroy(go);

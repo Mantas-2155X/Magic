@@ -11,24 +11,30 @@ namespace Scenes
 		[SerializeField]
 		public ParticleSystem Orb;
 
-		private Light light;
+		[SerializeField]
+		public Transform OrbTr;
+
+		[SerializeField]
+		public Light Light;
+		
 		private float size = 0.0001f;
-		private List<Rigidbody> objects = new ();
+		
+		private readonly List<Rigidbody> objects = new ();
+		private readonly Collider[] results = new Collider[500];
 		
 		public void BeginOrb()
 		{
 			var player = Player.Instance;
 			player.HUD.gameObject.SetActive(false);
 			player.Stats.gameObject.SetActive(false);
-
-			light = Orb.GetComponentInChildren<Light>();
+			player.Notice.gameObject.SetActive(false);
 			
 			processOrb().Forget();
 
-			var colliders = Physics.OverlapSphere(Orb.transform.position, 50);
-			for (var i = 0; i < colliders.Length; i++)
+			var count = Physics.OverlapSphereNonAlloc(Orb.transform.position, 50, results);
+			for (var i = 0; i < count; i++)
 			{
-				var rb = colliders[i].attachedRigidbody;
+				var rb = results[i].attachedRigidbody;
 				if (rb == null)
 					continue;
 				
@@ -43,7 +49,9 @@ namespace Scenes
 			if (this == null || !isActiveAndEnabled)
 				return;
 			
-			Orb.transform.parent.gameObject.SetActive(true);
+			OrbTr.parent.gameObject.SetActive(true);
+
+			var orbPos = OrbTr.position;
 
 			while (size < 20f)
 			{
@@ -63,11 +71,11 @@ namespace Scenes
 					if (obj == null)
 						continue;
 					
-					obj.AddForce((Orb.transform.position - obj.position).normalized * 1000 * size);
+					obj.AddForce((orbPos - obj.position).normalized * 1000 * size);
 				}
 
 				if (size > 15f)
-					light.bounceIntensity += 0.35f;
+					Light.bounceIntensity += 0.35f;
 			}
 
 			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
