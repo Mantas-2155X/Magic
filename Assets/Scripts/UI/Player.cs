@@ -39,5 +39,8 @@ namespace UI
 		
 		[SerializeField]
 		public HUD HUD;
+
+		[SerializeField]
+		public Notice Notice;
 	}
 }

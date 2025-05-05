@@ -1,6 +1,7 @@
 using System;
 using Managers;
 using ScriptableObjects;
+using UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -50,6 +51,10 @@ namespace World
 
 		public void OnDestroy()
 		{
+			var player = Player.Instance;
+			if (player != null)
+				player.Notice.ClearMessage();
+
 			var renderManager = RenderManager.Instance;
 			if (renderManager == null)
 				return;
