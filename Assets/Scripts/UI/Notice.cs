@@ -72,7 +72,7 @@ namespace UI
 				builder.AppendLine(text);
 			}
 			
-			ShowMessage(builder.ToString(), 5f, HorizontalAlignmentOptions.Left, VerticalAlignmentOptions.Middle);
+			ShowMessage(builder.ToString(), 4f, HorizontalAlignmentOptions.Left, VerticalAlignmentOptions.Middle);
 		}
 		
 		public void ShowMessage(string text, float duration, HorizontalAlignmentOptions horizontalAlignment, VerticalAlignmentOptions verticalAlignment)
