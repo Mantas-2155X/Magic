@@ -265,7 +265,7 @@ namespace UI
 			ButtonObjects[4].SetActive(true);
 			ButtonObjects[5].SetActive(!inTitle);
 			ButtonObjects[6].SetActive(true);
-			ButtonObjects[7].SetActive(true);
+			ButtonObjects[7].SetActive(inTitle);
 			
 			UpdateNavigation();
 		}
