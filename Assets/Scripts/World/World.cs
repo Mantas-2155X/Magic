@@ -12,9 +12,6 @@ namespace World
 		public static World Instance;
 
 		[SerializeField]
-		public Light Flashlight;
-		
-		[SerializeField]
 		public Transform SpawnPoints;
 
 		[SerializeField]

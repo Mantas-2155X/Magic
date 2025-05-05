@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AI.Base;
 using AI.Enums;
 using Combat.Wearables.Enums;
+using Components;
 using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
@@ -566,7 +567,11 @@ namespace AI
 			if (Paralyzed)
 				return;
 
-			World.World.Instance.Flashlight.enabled = !World.World.Instance.Flashlight.enabled;
+			var flashlight = Flashlight.Instance;
+			if (flashlight == null)
+				return;
+			
+			flashlight.Toggle();
 		}
 
 		private void onScroll(InputAction.CallbackContext ctx)
@@ -758,14 +763,20 @@ namespace AI
 				SetPowerful(true);
 			
 			if (sceneData.FlashlightInitially)
-				World.World.Instance.Flashlight.enabled = true;
+			{
+				var flashlight = Flashlight.Instance;
+				if (flashlight != null) 
+					flashlight.Enable();
+			}
 		}
 		
 		public override void Kill(object source)
 		{
 			Body.Containers[EWearableType.Weapon].Wear.SetParent(Body.Shoulders[1]);
 		
-			World.World.Instance.Flashlight.enabled = false;
+			var flashlight = Flashlight.Instance;
+			if (flashlight != null) 
+				flashlight.Disable();
 			
 			var playerUI = UI.Player.Instance;
 			if (playerUI != null)
