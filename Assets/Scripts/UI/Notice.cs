@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading;
 using AI.Base;
 using AI.Interfaces;
@@ -41,24 +42,37 @@ namespace UI
 			BaseAlive.OnDeathEvent.RemoveListener(OnDeath);
 		}
 
-		public void ShowMessage(ENoticePreset preset)
+		public void ShowMessage(ENoticePresetFlags preset)
 		{
-			var text = LocalizationManager.Instance.GetLocalizedEntry($"NOTICE_{preset.ToString().ToUpper()}");
-
-			switch (preset)
+			var builder = new StringBuilder();
+		
+			var values = Enum.GetValues(typeof(ENoticePresetFlags));
+			for (var i = 0; i < values.Length; i++)
 			{
-				case ENoticePreset.Flashlight:
-					text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-light")).ToDisplayString());
-					break;
-				case ENoticePreset.Interact:
-					text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-interact")).ToDisplayString());
-					break;
-				case ENoticePreset.Grab:
-					text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-grab")).ToDisplayString());
-					break;
+				var value = (ENoticePresetFlags)values.GetValue(i);
+				if (value == ENoticePresetFlags.None || !preset.HasFlag(value))
+					continue;
+
+				var text = LocalizationManager.Instance.GetLocalizedEntry($"NOTICE_{value.ToString().ToUpper()}");
+
+				switch (value)
+				{
+					case ENoticePresetFlags.Flashlight:
+						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-light")).ToDisplayString());
+						break;
+					case ENoticePresetFlags.Resource:
+					case ENoticePresetFlags.Interact:
+						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-interact")).ToDisplayString());
+						break;
+					case ENoticePresetFlags.Grab:
+						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-grab")).ToDisplayString());
+						break;
+				}
+					
+				builder.AppendLine(text);
 			}
 			
-			ShowMessage(text, 5f, HorizontalAlignmentOptions.Left, VerticalAlignmentOptions.Middle);
+			ShowMessage(builder.ToString(), 5f, HorizontalAlignmentOptions.Left, VerticalAlignmentOptions.Middle);
 		}
 		
 		public void ShowMessage(string text, float duration, HorizontalAlignmentOptions horizontalAlignment, VerticalAlignmentOptions verticalAlignment)

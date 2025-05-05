@@ -7,7 +7,7 @@ namespace Components
 	public class Notify : MonoBehaviour
 	{
 		[SerializeField]
-		public ENoticePreset Preset;
+		public ENoticePresetFlags Preset;
 
 		public void Trigger()
 		{
