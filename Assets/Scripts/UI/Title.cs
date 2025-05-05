@@ -60,12 +60,16 @@ namespace UI
 		[SerializeField]
 		public GameObject Blocker;
 
+		[SerializeField]
+		public Localizer CurrentScene;
+		
 		#region MonoBehaviour
 
 		public void Awake()
 		{
 			UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneChanged;
 			
+			UpdateCurrentScene();
 			UpdateButtons();
 
 			var titleAction = TitleAction.action;
@@ -115,6 +119,11 @@ namespace UI
 			feature.SetActive(false);
 		}
 
+		public void OnDestroy()
+		{
+			UnityEngine.SceneManagement.SceneManager.sceneLoaded -= onSceneChanged;
+		}
+
 		#endregion
 		
 		#region Toggle
@@ -148,7 +157,9 @@ namespace UI
 				if (aiManager != null && aiManager.Player != null)
 					aiManager.Player.DisableInput();
 				
+				UpdateCurrentScene();
 				UpdateButtons();
+				
 				Select();
 			}
 			else
@@ -232,6 +243,16 @@ namespace UI
 		}
 
 		#endregion
+
+		public void UpdateCurrentScene()
+		{
+			var scene = SceneManager.Instance.GetCurrentScene();
+			
+			CurrentScene.Key = $"SCENE_{scene.ToUpper()}_NAME";
+			CurrentScene.Apply();
+			
+			CurrentScene.gameObject.SetActive(scene != "Title");
+		}
 		
 		public void UpdateButtons()
 		{
@@ -361,6 +382,7 @@ namespace UI
 			if (!isActiveAndEnabled)
 				return;
 			
+			UpdateCurrentScene();
 			UpdateButtons();
 		}
 	}
