@@ -14885,6 +14885,14 @@ PrefabInstance:
       propertyPath: m_Interpolate
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7872159411983185947, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_LinearDamping
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7872159411983185947, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_AngularDamping
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8450481027450816254, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.25
@@ -14992,6 +15000,7 @@ MonoBehaviour:
   PositionVelocityAntiStuckEnabled: 1
   PositionStuckVelocity: 0.75
   PositionStuckTime: 0.75
+  PositionStuckRecalculateAfter: 0.15
 --- !u!114 &7155503005156224709
 MonoBehaviour:
   m_ObjectHideFlags: 0

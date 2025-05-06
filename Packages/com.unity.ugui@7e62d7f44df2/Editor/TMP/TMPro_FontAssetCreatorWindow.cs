@@ -474,13 +474,13 @@ namespace TMPro.EditorUtilities
                 GUILayout.BeginHorizontal();
                 EditorGUI.BeginChangeCheck();
 
-                m_PaddingFieldValue = EditorGUILayout.FloatField("Padding", m_PaddingFieldValue);
+                m_PaddingFieldValue = Mathf.Max(EditorGUILayout.FloatField("Padding", m_PaddingFieldValue), 0);
 
                 int selection = m_PaddingMode == PaddingMode.Undefined || m_PaddingMode == PaddingMode.Pixel ? 1 : 0;
                 selection = GUILayout.SelectionGrid(selection, k_PaddingOptionLabels, 2);
 
                 if (m_PaddingMode == PaddingMode.Percentage)
-                    m_PaddingFieldValue = (int)(m_PaddingFieldValue + 0.5f);
+                    m_PaddingFieldValue = Mathf.Min((int)(m_PaddingFieldValue + 0.5f), float.MaxValue);
 
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -720,7 +720,7 @@ namespace TMPro.EditorUtilities
 
                         if (errorCode != FontEngineError.Success)
                         {
-                            Debug.Log("Font Asset Creator - Error Code [" + errorCode + "] has occurred trying to load the [" + m_SourceFont.name + "] font file. This typically results from the use of an incompatible or corrupted font file.", m_SourceFont);
+                            Debug.LogWarning("Unable to load font face for [" + m_SourceFont.name + "]. Make sure \"Include Font Data\" is enabled in the Font Import Settings. You may disable it after creating the static Font Asset.", m_SourceFont);
                         }
                     }
 
