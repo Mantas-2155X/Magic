@@ -5,6 +5,7 @@ using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Objects.Base;
 using Objects.Interfaces;
 using State;
 using UnityEngine;
@@ -69,15 +70,43 @@ namespace Managers
 			data.DestroyedObjects = DestroyedObjects;
 			data.DestroyedComponents = DestroyedComponents;
 			data.KilledAlives = KilledAlives;
+			data.Gibs = new Dictionary<string, Tuple<string, Dictionary<string, JObject>>>();
 			data.Objects = new Dictionary<string, Dictionary<string, JObject>>();
 			data.Alives = new Dictionary<string, Dictionary<string, JObject>>();
 			
 			var world = World.World.Instance;
 
-			var components = world.Objects.GetComponentsInChildren<Component>(true);
-			for (var i = 0; i < components.Length; i++)
+			var gibs = world.Ragdolls.GetComponentsInChildren<Component>(true);
+			for (var i = 0; i < gibs.Length; i++)
 			{
-				var component = components[i];
+				var component = gibs[i];
+				if (component is not BaseGib gib)
+					continue;
+				
+				// Leave gibs without ID as they are
+				if (string.IsNullOrEmpty(gib.ObjectID))
+					continue;
+				
+				// Don't save destroyed gibs data
+				if (DestroyedObjects.Contains(gib.ObjectID))
+					continue;
+				
+				// Keep data of destroyed components as it might hold stuff outside of the component and be used
+				
+				try
+				{
+					data.Gibs[gib.ObjectID] = new Tuple<string, Dictionary<string, JObject>>(gib.ObjectData.Name, gib.Save());
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"[StateManager] Failed saving gib state for {component.name} ({gib.ObjectID}), {e}");
+				}
+			}
+			
+			var objects = world.Objects.GetComponentsInChildren<Component>(true);
+			for (var i = 0; i < objects.Length; i++)
+			{
+				var component = objects[i];
 				if (component is not IObject iObject)
 					continue;
 				
@@ -152,11 +181,39 @@ namespace Managers
 			await SceneManager.Instance.ReloadSceneAsync(true, true, true);
 			
 			var world = World.World.Instance;
+			var objectManager = ObjectManager.Instance;
 
-			var components = world.Objects.GetComponentsInChildren<Component>(true);
-			for (var i = 0; i < components.Length; i++)
+			foreach (var pair in data.Gibs)
 			{
-				var component = components[i];
+				if (string.IsNullOrEmpty(pair.Key))
+					continue;
+
+				var objectData = objectManager.GetObject(pair.Value.Item1);
+				var gib = (BaseGib)objectManager.CreateObject(objectData, Vector3.zero, Vector3.zero);
+				
+				try
+				{
+					gib.ObjectID = pair.Key;
+					gib.Load(pair.Value.Item2);
+					gib.GetTransform().SetParent(world.Ragdolls);
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"[StateManager] Failed loading gib state for {gib.name} ({gib.ObjectID}), {e}");
+				}
+				
+				// Other potentially needed data is set so we can remove the component now
+				if (data.DestroyedComponents.Contains(gib.ObjectID))
+				{
+					UnityEngine.Object.Destroy(gib);
+					continue;
+				}
+			}
+			
+			var objects = world.Objects.GetComponentsInChildren<Component>(true);
+			for (var i = 0; i < objects.Length; i++)
+			{
+				var component = objects[i];
 				if (component is not IObject iObject)
 					continue;
 				
