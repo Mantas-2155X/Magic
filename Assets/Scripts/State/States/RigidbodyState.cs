@@ -39,8 +39,12 @@ namespace State.States
 			
 			rigidbody.position = state.Position;
 			rigidbody.rotation = state.Rotation;
-			rigidbody.linearVelocity = state.LinearVelocity;
-			rigidbody.angularVelocity = state.AngularVelocity;
+
+			if (!rigidbody.isKinematic)
+			{
+				rigidbody.linearVelocity = state.LinearVelocity;
+				rigidbody.angularVelocity = state.AngularVelocity;
+			}
 		}
 	}
 }

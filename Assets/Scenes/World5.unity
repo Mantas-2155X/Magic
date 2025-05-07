@@ -2045,6 +2045,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2302048365919777190, guid: e030221d431c5b271b2b9834bb7ef97e, type: 3}
+      propertyPath: <ObjectID>k__BackingField
+      value: ba5a16d1-c31b-4925-9975-c59dcfbd6ea2
+      objectReference: {fileID: 0}
     - target: {fileID: 4690929541904835870, guid: e030221d431c5b271b2b9834bb7ef97e, type: 3}
       propertyPath: m_LocalScale.y
       value: 100.000046
@@ -4352,7 +4356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf51c4d48ea49259e6be9d746670336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flashlight: {fileID: 0}
   SpawnPoints: {fileID: 1548703818}
   Characters: {fileID: 544258523}
   Ragdolls: {fileID: 1178675831}
@@ -4394,12 +4397,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedVersion: 0
   m_AgentTypeID: 0
-  m_CollectObjects: 2
+  m_CollectObjects: 0
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2049
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0

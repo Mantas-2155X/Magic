@@ -950,7 +950,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf51c4d48ea49259e6be9d746670336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flashlight: {fileID: 0}
   SpawnPoints: {fileID: 1548703818}
   Characters: {fileID: 544258523}
   Ragdolls: {fileID: 1178675831}
@@ -999,7 +998,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2049
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0

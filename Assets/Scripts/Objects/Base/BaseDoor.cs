@@ -154,13 +154,31 @@ namespace Objects.Base
 				case EDoorState.Open:
 					lastOpened = Time.time;
 					Obstacle.enabled = false;
+					OnDoorOpenedEvent?.Invoke();
 					break;
 				case EDoorState.Closed:
 					Obstacle.enabled = true;
+					OnDoorClosedEvent?.Invoke();
 					break;
 			}
 			
 			setPosition();
+
+			if (state is EDoorState.Opening or EDoorState.Closing)
+			{
+				State = state is EDoorState.Opening ? EDoorState.Closed : EDoorState.Open;
+				
+				var previousLocked = Locked;
+				var previousInterruptible = Interruptible;
+
+				Locked = false;
+				Interruptible = true;
+
+				Toggle(state is EDoorState.Opening);
+
+				Locked = previousLocked;
+				Interruptible = previousInterruptible;
+			}
 		}
 		
 		public void Open()

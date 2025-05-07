@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Objects.Base;
 using Objects.Interfaces;
+using State;
 using UnityEngine;
 
 namespace Managers
@@ -15,6 +15,12 @@ namespace Managers
 
 		public const int Version = 1;
 		
+		[SerializeField]
+		public List<string> DestroyedObjects = new ();
+		
+		[SerializeField]
+		public List<string> DestroyedComponents = new ();
+
 		public void Awake()
 		{
 			Instance = this;
@@ -26,6 +32,8 @@ namespace Managers
 			data.FileVersion = Version;
 			data.Scene = SceneManager.Instance.GetCurrentScene();
 			data.Objects = new Dictionary<string, Dictionary<Type, JObject>>();
+			data.DestroyedObjects = DestroyedObjects;
+			data.DestroyedComponents = DestroyedComponents;
 			
 			var world = World.World.Instance;
 
@@ -39,6 +47,12 @@ namespace Managers
 				// Leave objects without ID as they are
 				if (string.IsNullOrEmpty(iObject.ObjectID))
 					continue;
+				
+				// Don't save destroyed objects data
+				if (DestroyedObjects.Contains(iObject.ObjectID))
+					continue;
+				
+				// Keep data of destroyed components as it might hold stuff outside of the component and be used
 				
 				try
 				{
@@ -80,6 +94,13 @@ namespace Managers
 				if (string.IsNullOrEmpty(iObject.ObjectID))
 					continue;
 
+				// No data for destroyed objects, just remove it
+				if (data.DestroyedObjects.Contains(iObject.ObjectID))
+				{
+					Destroy(iObject.GetGameObject());
+					continue;
+				}
+				
 				if (data.Objects.TryGetValue(iObject.ObjectID, out var objectState))
 				{
 					try
@@ -91,20 +112,14 @@ namespace Managers
 						Debug.LogError($"[StateManager] Failed loading object state for {component.name} ({iObject.ObjectID}), {e}");
 					}
 				}
-			}
-		}
-		
-		[JsonObject]
-		public class SaveData
-		{
-			[JsonProperty]
-			public int FileVersion;
-			
-			[JsonProperty]
-			public string Scene;
 
-			[JsonProperty]
-			public Dictionary<string, Dictionary<Type, JObject>> Objects;
+				// Other potentially needed data is set so we can remove the component now
+				if (data.DestroyedComponents.Contains(iObject.ObjectID))
+				{
+					Destroy((Component)iObject);
+					continue;
+				}
+			}
 		}
 	}
 }
