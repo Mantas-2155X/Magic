@@ -107,19 +107,19 @@ namespace AI.Base
 
 				foreach (var pair in SlowSources)
 				{
-					if (pair.Value <= amount)
+					if (pair.Value.Item1 <= amount)
 						continue;
 					
-					amount = pair.Value;
+					amount = pair.Value.Item1;
 				}
 				
 				return amount;
 			}
 		}
-		public Dictionary<int, float> SlowSources { get; private set; } = new ();
+		public Dictionary<string, Tuple<float, float, float>> SlowSources { get; private set; } = new ();
 
 		public bool Paralyzed => ParalyzeSources.Count > 0;
-		public List<int> ParalyzeSources { get; private set; } = new ();
+		public Dictionary<string, Tuple<float, float>> ParalyzeSources { get; private set; } = new ();
 		
 		public IObject Grabbing { get; private set; }
 		public Vector3? OriginalGrabSize { get; set; }
@@ -173,54 +173,54 @@ namespace AI.Base
 			OnRelationshipGroupChangedEvent?.Invoke(this, previousRelationshipGroup, RelationshipGroup);
 		}
 		
-		public virtual int AddSlowSource(float amount, float duration)
+		public virtual void AddSlowSource(string objectID, float amount, float duration)
 		{
 			if (duration <= 0f)
-				return -1;
+				return;
 
-			var id = Random.Range(0, int.MaxValue);
-			addTemporarySlow(id, amount, duration).Forget();
-
-			return id;
+			if (Mathf.Approximately(duration, float.MaxValue))
+			{
+				SlowSources[objectID] = new Tuple<float, float, float>(Mathf.Clamp01(amount), Time.time, duration);
+			}
+			else
+			{
+				addTemporarySlow(objectID, amount, duration).Forget();
+			}
 		}
-		public virtual void AddSlowSource(int instanceID, float amount)
+		public virtual void RemoveSlowSource(string objectID)
 		{
-			SlowSources[instanceID] = Mathf.Clamp01(amount);
-		}
-		public virtual void RemoveSlowSource(int instanceID)
-		{
-			SlowSources.Remove(instanceID);
+			SlowSources.Remove(objectID);
 		}
 		public virtual void ClearSlowSources()
 		{
 			SlowSources.Clear();
 		}
 		
-		public virtual int AddParalyzeSource(float duration)
+		public virtual void AddParalyzeSource(string objectID, float duration)
 		{
-			if (duration <= 0f)
-				return -1;
-
-			var id = Random.Range(0, int.MaxValue);
-			addTemporaryParalyze(id, duration).Forget();
-
-			return id;
-		}
-		public virtual void AddParalyzeSource(int instanceID)
-		{
-			ParalyzeSources.AddUnique(instanceID);
+			if (duration <= 0)
+				return;
 			
-			if (Paralyzed)
+			if (Mathf.Approximately(duration, float.MaxValue))
 			{
-				if (Spell != null)
-					Spell.CancelCasting();
+				ParalyzeSources[objectID] = new Tuple<float, float>(Time.time, float.MaxValue);
+			
+				if (Paralyzed)
+				{
+					if (Spell != null)
+						Spell.CancelCasting();
 				
-				Body.SetMalfunction(true);
+					Body.SetMalfunction(true);
+				}
+			}
+			else
+			{
+				addTemporaryParalyze(objectID, duration).Forget();
 			}
 		}
-		public virtual void RemoveParalyzeSource(int instanceID)
+		public virtual void RemoveParalyzeSource(string objectID)
 		{
-			ParalyzeSources.Remove(instanceID);
+			ParalyzeSources.Remove(objectID);
 			
 			if (!Paralyzed)
 				Body.SetMalfunction(false);
@@ -303,6 +303,7 @@ namespace AI.Base
 			var spell = (ISpell)thisGo.AddComponent(type);
 			spell.SpellData = data;
 			spell.Owner = this;
+			spell.ObjectID = Guid.NewGuid().ToString();
 			
 			Spells.Add(spell);
 			
@@ -943,9 +944,9 @@ namespace AI.Base
 			}
 		}
 
-		private async UniTaskVoid addTemporarySlow(int id, float amount, float duration)
+		private async UniTaskVoid addTemporarySlow(string id, float amount, float duration)
 		{
-			AddSlowSource(id, amount);
+			SlowSources[id] = new Tuple<float, float, float>(Mathf.Clamp01(amount), Time.time, duration);
 
 			await UniTask.WaitForSeconds(duration);
 			
@@ -955,9 +956,17 @@ namespace AI.Base
 			RemoveSlowSource(id);
 		}
 		
-		private async UniTaskVoid addTemporaryParalyze(int id, float duration)
+		private async UniTaskVoid addTemporaryParalyze(string id, float duration)
 		{
-			AddParalyzeSource(id);
+			ParalyzeSources[id] = new Tuple<float, float>(Time.time, duration);
+			
+			if (Paralyzed)
+			{
+				if (Spell != null)
+					Spell.CancelCasting();
+				
+				Body.SetMalfunction(true);
+			}
 
 			await UniTask.WaitForSeconds(duration);
 			

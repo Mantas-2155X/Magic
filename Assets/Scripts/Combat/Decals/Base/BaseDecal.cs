@@ -13,6 +13,8 @@ namespace Combat.Decals.Base
 		[field: SerializeField]
 		public DecalData DecalData { get; private set; }
 		
+		public string ObjectID { get; set; }
+
 		[field: SerializeField]
 		public DecalProjector Projector { get; private set; }
 		

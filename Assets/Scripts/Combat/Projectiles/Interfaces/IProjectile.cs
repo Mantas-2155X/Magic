@@ -8,6 +8,8 @@ namespace Combat.Projectiles.Interfaces
 	{
 		public ProjectileData ProjectileData { get; }
 
+		public string ObjectID { get; set; }
+
 		public Component Source { get; }
 
 		public Rigidbody Rigidbody { get; }

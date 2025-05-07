@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AI.Base;
 using AI.Enums;
@@ -49,6 +50,14 @@ namespace State.States
 		[JsonProperty]
 		public bool Powerful;
 		
+		// objectid -> amount, remaining duration
+		[JsonProperty]
+		public Dictionary<string, Tuple<float, float>> SlowSources;
+		
+		// objectid -> remaining duration
+		[JsonProperty]
+		public Dictionary<string, float> ParalyzeSources;
+
 		public static BaseAliveState Read(BaseAlive baseAlive)
 		{
 			if (baseAlive == null)
@@ -85,6 +94,32 @@ namespace State.States
 			state.Alive = baseAlive.IsAlive;
 			state.Invulnerable = baseAlive.IsInvulnerable;
 			state.Powerful = baseAlive.IsPowerful;
+
+			state.SlowSources = new Dictionary<string, Tuple<float, float>>();
+			foreach (var pair in baseAlive.SlowSources)
+			{
+				Tuple<float, float> tuple;
+				
+				if (Mathf.Approximately(pair.Value.Item3, float.MaxValue))
+					tuple = new Tuple<float, float>(pair.Value.Item1, float.MaxValue);
+				else
+					tuple = new Tuple<float, float>(pair.Value.Item1, (pair.Value.Item2 + pair.Value.Item3) - Time.time);
+
+				state.SlowSources.Add(pair.Key, tuple);
+			}
+
+			state.ParalyzeSources = new Dictionary<string, float>();
+			foreach (var pair in baseAlive.ParalyzeSources)
+			{
+				float duration;
+				
+				if (Mathf.Approximately(pair.Value.Item2, float.MaxValue))
+					duration = float.MaxValue;
+				else
+					duration = (pair.Value.Item1 + pair.Value.Item2) - Time.time;
+
+				state.ParalyzeSources.Add(pair.Key, duration);
+			}
 			
 			return state;
 		}
@@ -182,6 +217,12 @@ namespace State.States
 
 			baseAlive.SetInvulnerable(state.Invulnerable);
 			baseAlive.SetPowerful(state.Powerful);
+
+			foreach (var pair in state.SlowSources)
+				baseAlive.AddSlowSource(pair.Key, pair.Value.Item1, pair.Value.Item2);
+			
+			foreach (var pair in state.ParalyzeSources)
+				baseAlive.AddParalyzeSource(pair.Key, pair.Value);
 		}
 	}
 }

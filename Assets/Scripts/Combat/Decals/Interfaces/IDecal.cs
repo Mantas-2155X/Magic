@@ -8,6 +8,8 @@ namespace Combat.Decals.Interfaces
 	{
 		public DecalData DecalData { get; }
 		
+		public string ObjectID { get; set; }
+
 		public DecalProjector Projector { get; }
 		
 		public void Spawn(Vector3 position, Quaternion angles, Transform attach);

@@ -8,6 +8,8 @@ namespace Combat.Attacks.Interfaces
 	{
 		public AttackData AttackData { get; }
 
+		public string ObjectID { get; set; }
+
 		public Component Source { get; }
 
 		public ParticleSystem System { get; }

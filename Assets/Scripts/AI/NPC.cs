@@ -550,14 +550,14 @@ namespace AI
 		
 		public override bool IsWalking => Agent.HasPath;
 
-		public override void AddSlowSource(int instanceID, float amount)
+		public override void AddSlowSource(string objectID, float amount, float duration)
 		{
-			base.AddSlowSource(instanceID, amount);
+			base.AddSlowSource(objectID, amount, duration);
 			updateAgentSpeed();
 		}
-		public override void RemoveSlowSource(int instanceID)
+		public override void RemoveSlowSource(string objectID)
 		{
-			base.RemoveSlowSource(instanceID);
+			base.RemoveSlowSource(objectID);
 			updateAgentSpeed();
 		}
 		public override void ClearSlowSources()
@@ -566,14 +566,14 @@ namespace AI
 			updateAgentSpeed();
 		}
 		
-		public override void AddParalyzeSource(int instanceID)
+		public override void AddParalyzeSource(string objectID, float duration)
 		{
-			base.AddParalyzeSource(instanceID);
+			base.AddParalyzeSource(objectID, duration);
 			updateAgentSpeed();
 		}
-		public override void RemoveParalyzeSource(int instanceID)
+		public override void RemoveParalyzeSource(string objectID)
 		{
-			base.RemoveParalyzeSource(instanceID);
+			base.RemoveParalyzeSource(objectID);
 			updateAgentSpeed();
 		}
 		public override void ClearParalyzeSources()
@@ -653,10 +653,10 @@ namespace AI
 
 			foreach (var pair in SlowSources)
 			{
-				if (pair.Value <= maximum)
+				if (pair.Value.Item1 <= maximum)
 					continue;
 				
-				maximum = pair.Value;
+				maximum = pair.Value.Item1;
 			}
 			
 			Agent.Speed = Data.Speed - (Data.Speed * maximum);

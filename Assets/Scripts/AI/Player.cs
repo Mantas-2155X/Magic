@@ -662,14 +662,14 @@ namespace AI
 			}
 		}
 		
-		public override void AddParalyzeSource(int instanceID)
+		public override void AddParalyzeSource(string objectID, float duration)
 		{
-			base.AddParalyzeSource(instanceID);
+			base.AddParalyzeSource(objectID, duration);
 			RenderManager.Instance.Desaturate(Paralyzed);
 		}
-		public override void RemoveParalyzeSource(int instanceID)
+		public override void RemoveParalyzeSource(string objectID)
 		{
-			base.RemoveParalyzeSource(instanceID);
+			base.RemoveParalyzeSource(objectID);
 			RenderManager.Instance.Desaturate(Paralyzed);
 		}
 		public override void ClearParalyzeSources()

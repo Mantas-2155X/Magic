@@ -19,6 +19,8 @@ namespace Combat.Attacks.Base
 		[field: SerializeField]
 		public AttackData AttackData { get; private set; }
 		
+		public string ObjectID { get; set; }
+
 		public Component Source { get; private set; }
 
 		[field: SerializeField]
@@ -128,8 +130,8 @@ namespace Combat.Attacks.Base
 					if (AttackData.Damage != 0f)
 						alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
 				
-					alive.AddSlowSource(AttackData.Slow.Amount, AttackData.Slow.Duration);
-					alive.AddParalyzeSource(AttackData.Paralyze.Duration);
+					alive.AddSlowSource(ObjectID, AttackData.Slow.Amount, AttackData.Slow.Duration);
+					alive.AddParalyzeSource(ObjectID, AttackData.Paralyze.Duration);
 				}
 			
 				CurrentAlives.Add(alive);

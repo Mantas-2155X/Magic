@@ -63,7 +63,7 @@ namespace Combat.Attacks
 				alives.Add(alive);
 			
 				alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
-				alive.AddParalyzeSource(AttackData.Paralyze.Duration);
+				alive.AddParalyzeSource(ObjectID, AttackData.Paralyze.Duration);
 			}
 			else if (other.TryGetComponent<IObject>(out var obj) && !objects.Contains(obj))
 			{

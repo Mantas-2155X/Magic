@@ -8,6 +8,9 @@ namespace State.States
 	public class BaseSpellState
 	{
 		[JsonProperty]
+		public string ObjectID;
+		
+		[JsonProperty]
 		public bool Selected;
 
 		[JsonProperty]
@@ -20,6 +23,7 @@ namespace State.States
 
 			var state = new BaseSpellState
 			{
+				ObjectID = baseSpell.ObjectID,
 				Selected = baseSpell.IsSelected
 			};
 
@@ -40,6 +44,7 @@ namespace State.States
 			if (baseSpell == null)
 				return;
 
+			baseSpell.ObjectID = state.ObjectID;
 			baseSpell.SetState(state.Cooldown);
 		}
 	}

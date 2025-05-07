@@ -19,6 +19,8 @@ namespace Combat.Spells.Base
 		[field: SerializeField]
 		public SpellData SpellData { get; set; }
 		
+		public string ObjectID { get; set; }
+
 		public IAlive Owner { get; set; }
 
 		public Ray LastRay { get; private set; }
@@ -132,7 +134,7 @@ namespace Combat.Spells.Base
 			Owner.Body.SetCoreCenter(true);
 
 			if (SpellData.LockWhileCasting)
-				Owner.AddSlowSource(1f, GetInstanceID());
+				Owner.AddSlowSource(ObjectID, 1f, float.MaxValue);
 			
 			LastStartedCast = Time.time;
 			PredictFinishCast = LastStartedCast + SpellData.CastingTime;
@@ -152,7 +154,7 @@ namespace Combat.Spells.Base
 			Owner.Body.SetCoreCenter(false);
 			
 			if (SpellData.LockAfterCasting != 0f)
-				Owner.AddSlowSource(1f, SpellData.LockAfterCasting);
+				Owner.AddSlowSource(ObjectID, 1f, SpellData.LockAfterCasting);
 			
 			LastFinishedCast = Time.time;
 
@@ -191,7 +193,7 @@ namespace Combat.Spells.Base
 			Owner.Body.SetCoreCenter(false);
 			
 			if (SpellData.LockWhileCasting)
-				Owner.RemoveSlowSource(GetInstanceID());
+				Owner.RemoveSlowSource(ObjectID);
 			
 			clearCast();
 		}

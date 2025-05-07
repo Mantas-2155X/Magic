@@ -174,6 +174,8 @@ namespace Managers
 		public IProjectile CreateProjectile(ProjectileData data, float range, AttackData attack, Component source, Vector3 origin, Vector3 direction)
 		{
 			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
+			projectile.ObjectID = Guid.NewGuid().ToString();
+			
 			projectile.Spawn(source, range, attack, origin, direction * data.Force);
 			
 			return projectile;
@@ -215,6 +217,8 @@ namespace Managers
 		private IDecal createDecal(DecalData data, Vector3 point, Quaternion angles, Transform attach)
 		{
 			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
+			decal.ObjectID = Guid.NewGuid().ToString();
+			
 			decal.Spawn(point, angles, attach);
 			
 			return decal;
@@ -223,6 +227,7 @@ namespace Managers
 		private IAttack createAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
 		{
 			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);
+			attack.ObjectID = Guid.NewGuid().ToString();
 
 			Quaternion angles;
 

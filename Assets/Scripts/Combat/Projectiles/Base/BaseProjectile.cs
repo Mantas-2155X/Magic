@@ -2,7 +2,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
-using Combat.Enums;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
@@ -17,6 +16,8 @@ namespace Combat.Projectiles.Base
 	{
 		[field: SerializeField]
 		public ProjectileData ProjectileData { get; private set; }
+
+		public string ObjectID { get; set; }
 
 		public Component Source { get; private set; }
 
@@ -56,8 +57,8 @@ namespace Combat.Projectiles.Base
 				{
 					attach = alive.GetTransform();
 					alive.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
-					alive.AddSlowSource(ProjectileData.Slow.Amount, ProjectileData.Slow.Duration);
-					alive.AddParalyzeSource(ProjectileData.Paralyze.Duration);
+					alive.AddSlowSource(ObjectID, ProjectileData.Slow.Amount, ProjectileData.Slow.Duration);
+					alive.AddParalyzeSource(ObjectID, ProjectileData.Paralyze.Duration);
 				}
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{
