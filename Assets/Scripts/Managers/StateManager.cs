@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,24 +22,43 @@ namespace Managers
 	// (Objects) DroppedWearable
 	// (AI) Grabbing shrink
 	
-	public class StateManager : MonoBehaviour
+	public class StateManager
 	{
-		public static StateManager Instance;
+		private static StateManager instance;
+		public static StateManager Instance
+		{
+			get
+			{
+				if (instance != null)
+					return instance;
+				
+				instance = new StateManager();
+				return instance;
+			}
+		}
 
 		public const int Version = 1;
 		
-		[SerializeField]
 		public List<string> DestroyedObjects = new ();
-		
-		[SerializeField]
 		public List<string> DestroyedComponents = new ();
-
-		[SerializeField]
 		public List<string> KilledAlives = new ();
 		
-		public void Awake()
+		private SaveData lastSaveData;
+
+		public void Reinitialize()
 		{
-			Instance = this;
+			DestroyedObjects.Clear();
+			DestroyedComponents.Clear();
+			KilledAlives.Clear();
+
+			if (lastSaveData == null)
+				return;
+
+			DestroyedObjects = lastSaveData.DestroyedObjects;
+			DestroyedComponents = lastSaveData.DestroyedComponents;
+			KilledAlives = lastSaveData.KilledAlives;
+
+			lastSaveData = null;
 		}
 
 		public void Save()
@@ -127,11 +147,9 @@ namespace Managers
 				return;
 			}
 
-			await SceneManager.Instance.ReloadSceneAsync(true, true, true);
+			lastSaveData = data;
 			
-			await UniTask.NextFrame();
-			await UniTask.NextFrame();
-			await UniTask.NextFrame();
+			await SceneManager.Instance.ReloadSceneAsync(true, true, true);
 			
 			var world = World.World.Instance;
 
@@ -149,7 +167,7 @@ namespace Managers
 				// No data for destroyed objects, just remove it
 				if (data.DestroyedObjects.Contains(iObject.ObjectID))
 				{
-					Destroy(iObject.GetGameObject());
+					UnityEngine.Object.Destroy(iObject.GetGameObject());
 					continue;
 				}
 				
@@ -168,10 +186,12 @@ namespace Managers
 				// Other potentially needed data is set so we can remove the component now
 				if (data.DestroyedComponents.Contains(iObject.ObjectID))
 				{
-					Destroy((Component)iObject);
+					UnityEngine.Object.Destroy((Component)iObject);
 					continue;
 				}
 			}
+
+			var killAlives = new List<IAlive>();
 			
 			foreach (var pair in AIManager.Instance.AlivesColliderMap)
 			{
@@ -186,7 +206,7 @@ namespace Managers
 				// No data for killed alives, just remove it
 				if (data.KilledAlives.Contains(alive.ObjectID))
 				{
-					alive.Kill(null);
+					killAlives.Add(alive);
 					continue;
 				}
 				
@@ -203,12 +223,8 @@ namespace Managers
 				}
 			}
 
-			var stateManager = Instance;
-			
-			stateManager.DestroyedObjects = data.DestroyedObjects;
-			stateManager.DestroyedComponents = data.DestroyedComponents;
-			
-			stateManager.KilledAlives = data.KilledAlives;
+			for (var i = killAlives.Count - 1; i >= 0; i--)
+				killAlives[i].Kill(null, true);
 		}
 	}
 }

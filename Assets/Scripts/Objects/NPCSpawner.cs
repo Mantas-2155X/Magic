@@ -19,6 +19,9 @@ namespace Objects
 		public List<NPCData> Datas;
 
 		[SerializeField]
+		public string[] SpawnIDs;
+		
+		[SerializeField]
 		public ESpawnerInitialization Initialization;
 		
 		[SerializeField]
@@ -160,25 +163,37 @@ namespace Objects
 				if (currentlyAlive >= AliveCount)
 					continue;
 				
-				var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], RelationshipGroup < -1 ? Random.Range(0, 9999) : RelationshipGroup);
-				if (npc == null || !npc.IsAlive)
+				var spawnID = SpawnIDs[spawned.Count];
+				
+				var killedAlives = StateManager.Instance.KilledAlives;
+				if (!killedAlives.Contains(spawnID))
 				{
-					Debug.LogWarning($"[NPCSpawner {gameObject.name}] Failed creating NPC");
-					continue;
+					var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], RelationshipGroup < -1 ? Random.Range(0, 9999) : RelationshipGroup);
+					if (npc == null || !npc.IsAlive)
+					{
+						Debug.LogWarning($"[NPCSpawner {gameObject.name}] Failed creating NPC");
+						continue;
+					}
+
+					npc.ObjectID = spawnID;
+				
+					if (WanderAction)
+						npc.Wander();
+					else if (PatrolAction != null)
+						npc.Patrol(PatrolAction);
+					else if (UseAction != null)
+						npc.Use(UseAction);
+					else if (CarryAction != null)
+						npc.Carry(CarryAction, DropAtLocation);
+					else
+						npc.Idle();
+				
+					spawned.Add(npc);
 				}
-				
-				if (WanderAction)
-					npc.Wander();
-				else if (PatrolAction != null)
-					npc.Patrol(PatrolAction);
-				else if (UseAction != null)
-					npc.Use(UseAction);
-				else if (CarryAction != null)
-					npc.Carry(CarryAction, DropAtLocation);
 				else
-					npc.Idle();
-				
-				spawned.Add(npc);
+				{
+					spawned.Add(null);
+				}
 			}
 		}
 	}

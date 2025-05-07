@@ -612,7 +612,7 @@ namespace AI
 			SendCommunication(ECommunication.Spawned, null);
 		}
 
-		public override void Kill(object source)
+		public override void Kill(object source, bool killSilently = false)
 		{
 			SendCommunication(ECommunication.Died, source);
 			
@@ -622,7 +622,7 @@ namespace AI
 			if (Agent.HasFlight)
 				Destroy(Agent.Flight);
 			
-			base.Kill(source);
+			base.Kill(source, killSilently);
 		}
 		
 		public override bool IsGrounded()

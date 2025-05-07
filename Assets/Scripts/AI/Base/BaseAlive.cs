@@ -481,7 +481,7 @@ namespace AI.Base
 			
 			OnSpawnEvent?.Invoke(this);
 		}
-		public virtual void Kill(object source)
+		public virtual void Kill(object source, bool killSilently = false)
 		{
 			if (!IsAlive)
 				return;
@@ -516,90 +516,93 @@ namespace AI.Base
 			if (Body.FeetCollider != null)
 				Body.FeetCollider.material = null;
 
-			var ragdolls = World.World.Instance.Ragdolls;
-			var length = Body.Gibs.Length;
-
-			var objectLayer = LayerMask.NameToLayer("Object");
-			var force = -thisTr.forward * 0.25f;
-			
-			for (var i = 0; i < length; i++)
+			if (!killSilently)
 			{
-				var gib = Body.Gibs[i];
-				gib.enabled = true;
+				var ragdolls = World.World.Instance.Ragdolls;
+				var length = Body.Gibs.Length;
 
-				var go = gib.gameObject;
-				go.layer = objectLayer;
-
-				var colliders = go.GetComponents<Collider>();
-				for (var k = 0; k < colliders.Length; k++)
+				var objectLayer = LayerMask.NameToLayer("Object");
+				var force = -thisTr.forward * 0.25f;
+				
+				for (var i = 0; i < length; i++)
 				{
-					var coll = colliders[k];
-					if (!coll.isTrigger)
+					var gib = Body.Gibs[i];
+					gib.enabled = true;
+
+					var go = gib.gameObject;
+					go.layer = objectLayer;
+
+					var colliders = go.GetComponents<Collider>();
+					for (var k = 0; k < colliders.Length; k++)
 					{
-						coll.excludeLayers = 0;
-						coll.material = null;
+						var coll = colliders[k];
+						if (!coll.isTrigger)
+						{
+							coll.excludeLayers = 0;
+							coll.material = null;
+						}
+
+						coll.enabled = true;
 					}
 
-					coll.enabled = true;
+					var rb = go.AddComponent<Rigidbody>();
+					rb.interpolation = RigidbodyInterpolation.Interpolate;
+					rb.excludeLayers = 0;
+					rb.mass = 5;
+
+					rb.AddForce(force, ForceMode.VelocityChange);
+					
+					go.transform.SetParent(ragdolls);
 				}
 
-				var rb = go.AddComponent<Rigidbody>();
-				rb.interpolation = RigidbodyInterpolation.Interpolate;
-				rb.excludeLayers = 0;
-				rb.mass = 5;
-
-				rb.AddForce(force, ForceMode.VelocityChange);
-				
-				go.transform.SetParent(ragdolls);
-			}
-
-			if (SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
-			{
-				var scale = thisTr.localScale;
-				
-				if (Data.BrokenBodyPrefab != null)
+				if (SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
 				{
-					var broken = Instantiate(Data.BrokenBodyPrefab, World.World.Instance.Ragdolls);
-				
-					var brokenTr = broken.transform;
-					brokenTr.position = thisTr.position;
-					brokenTr.rotation = thisTr.rotation;
-					brokenTr.localScale = scale;
-				
-					broken.SetActive(true);
-				}
-
-				if (Data.BrokenArmPrefab != null)
-				{
-					for (var i = 0; i < Body.Arms.Length; i++)
+					var scale = thisTr.localScale;
+					
+					if (Data.BrokenBodyPrefab != null)
 					{
-						var arm = Body.Arms[i];
-				
-						var broken = Instantiate(Data.BrokenArmPrefab, World.World.Instance.Ragdolls);
-				
+						var broken = Instantiate(Data.BrokenBodyPrefab, World.World.Instance.Ragdolls);
+					
 						var brokenTr = broken.transform;
-						brokenTr.position = arm.position;
-						brokenTr.rotation = arm.rotation;
+						brokenTr.position = thisTr.position;
+						brokenTr.rotation = thisTr.rotation;
 						brokenTr.localScale = scale;
-				
+					
 						broken.SetActive(true);
 					}
-				}
 
-				if (Data.BrokenFootPrefab != null)
-				{
-					for (var i = 0; i < Body.Feet.Length; i++)
+					if (Data.BrokenArmPrefab != null)
 					{
-						var foot = Body.Feet[i];
-				
-						var broken = Instantiate(Data.BrokenFootPrefab, World.World.Instance.Ragdolls);
-				
-						var brokenTr = broken.transform;
-						brokenTr.position = foot.position;
-						brokenTr.rotation = foot.rotation;
-						brokenTr.localScale = scale;
-				
-						broken.SetActive(true);
+						for (var i = 0; i < Body.Arms.Length; i++)
+						{
+							var arm = Body.Arms[i];
+					
+							var broken = Instantiate(Data.BrokenArmPrefab, World.World.Instance.Ragdolls);
+					
+							var brokenTr = broken.transform;
+							brokenTr.position = arm.position;
+							brokenTr.rotation = arm.rotation;
+							brokenTr.localScale = scale;
+					
+							broken.SetActive(true);
+						}
+					}
+
+					if (Data.BrokenFootPrefab != null)
+					{
+						for (var i = 0; i < Body.Feet.Length; i++)
+						{
+							var foot = Body.Feet[i];
+					
+							var broken = Instantiate(Data.BrokenFootPrefab, World.World.Instance.Ragdolls);
+					
+							var brokenTr = broken.transform;
+							brokenTr.position = foot.position;
+							brokenTr.rotation = foot.rotation;
+							brokenTr.localScale = scale;
+					
+							broken.SetActive(true);
+						}
 					}
 				}
 			}

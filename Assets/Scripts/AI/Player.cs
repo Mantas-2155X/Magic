@@ -773,7 +773,7 @@ namespace AI
 			}
 		}
 		
-		public override void Kill(object source)
+		public override void Kill(object source, bool killSilently = false)
 		{
 			Body.Containers[EWearableType.Weapon].Wear.SetParent(Body.Shoulders[1]);
 		
@@ -791,7 +791,7 @@ namespace AI
 			ReleaseObject();
 			
 			SetRenderMode(ShadowCastingMode.On);
-			base.Kill(source);
+			base.Kill(source, killSilently);
 		}
 
 		public override bool IsGrounded()

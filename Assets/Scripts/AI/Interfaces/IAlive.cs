@@ -86,7 +86,7 @@ namespace AI.Interfaces
 		public void RemoveAllWearables();
 
 		public void Spawn(AliveData data, int relationshipGroup);
-		public void Kill(object source);
+		public void Kill(object source, bool killSilently = false);
 
 		public void RestoreHealth(float health, object source);
 		public void RestoreMana(float mana, object source);

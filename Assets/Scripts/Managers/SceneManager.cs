@@ -94,6 +94,7 @@ namespace Managers
 			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {currentScene} to {scene}");
 			
 			PauseManager.Instance.Unpause();
+			StateManager.Instance.Reinitialize();
 
 			var handle = Addressables.LoadSceneAsync("Scenes/" + scene, LoadSceneMode.Single, false);
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded);

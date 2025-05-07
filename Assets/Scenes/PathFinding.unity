@@ -1484,6 +1484,14 @@ PrefabInstance:
       propertyPath: 'Datas.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 3b341411d1da783e08d1b3a136c5daea, type: 2}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: SpawnIDs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: 'SpawnIDs.Array.data[0]'
+      value: 088428aa-617a-4195-9549-52f725a00ed2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2279,7 +2287,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf51c4d48ea49259e6be9d746670336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flashlight: {fileID: 0}
   SpawnPoints: {fileID: 586682752}
   Characters: {fileID: 710602337}
   Ragdolls: {fileID: 141717505}
