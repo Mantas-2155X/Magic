@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using Objects.Base;
 using Objects.Interfaces;
 using State;
+using State.Enums;
 using UnityEngine;
 
 namespace Managers
@@ -70,7 +71,7 @@ namespace Managers
 			data.DestroyedObjects = DestroyedObjects;
 			data.DestroyedComponents = DestroyedComponents;
 			data.KilledAlives = KilledAlives;
-			data.Gibs = new Dictionary<string, Tuple<string, Dictionary<string, JObject>>>();
+			data.Create = new Dictionary<string, CreateData>();
 			data.Objects = new Dictionary<string, Dictionary<string, JObject>>();
 			data.Alives = new Dictionary<string, Dictionary<string, JObject>>();
 			
@@ -95,7 +96,12 @@ namespace Managers
 				
 				try
 				{
-					data.Gibs[gib.ObjectID] = new Tuple<string, Dictionary<string, JObject>>(gib.ObjectData.Name, gib.Save());
+					data.Create[gib.ObjectID] = new CreateData
+					{
+						Type = ECreateType.Gib,
+						Name = gib.ObjectData.Name,
+						States = gib.Save()
+					};
 				}
 				catch (Exception e)
 				{
@@ -183,29 +189,47 @@ namespace Managers
 			var world = World.World.Instance;
 			var objectManager = ObjectManager.Instance;
 
-			foreach (var pair in data.Gibs)
+			foreach (var pair in data.Create)
 			{
 				if (string.IsNullOrEmpty(pair.Key))
 					continue;
 
-				var objectData = objectManager.GetObject(pair.Value.Item1);
-				var gib = (BaseGib)objectManager.CreateObject(objectData, Vector3.zero, Vector3.zero);
+				IObject iObject = null;
+
+				var objectType = pair.Value.Type;
+				var objectData = objectManager.GetObject(pair.Value.Name);
+
+				switch (objectType)
+				{
+					case ECreateType.Gib:
+					{
+						var gib = (BaseGib)objectManager.CreateObject(objectData, Vector3.zero, Vector3.zero);
+						gib.ObjectID = pair.Key;
+
+						var gibTr = gib.GetTransform();
+						gibTr.SetParent(world.Ragdolls);
+
+						try
+						{
+							gib.Load(pair.Value.States);
+						}
+						catch(Exception e)
+						{
+							Debug.LogError($"[StateManager] Failed loading gib state for {gib.name} ({gib.ObjectID}), {e}");
+						}
+
+						iObject = gib;
+						break;
+					}
+				}
 				
-				try
-				{
-					gib.ObjectID = pair.Key;
-					gib.Load(pair.Value.Item2);
-					gib.GetTransform().SetParent(world.Ragdolls);
-				}
-				catch (Exception e)
-				{
-					Debug.LogError($"[StateManager] Failed loading gib state for {gib.name} ({gib.ObjectID}), {e}");
-				}
+				if (iObject == null)
+					continue;
 				
 				// Other potentially needed data is set so we can remove the component now
-				if (data.DestroyedComponents.Contains(gib.ObjectID))
+				if (data.DestroyedComponents.Contains(iObject.ObjectID))
 				{
-					UnityEngine.Object.Destroy(gib);
+					UnityEngine.Object.Destroy((Component)iObject);
 					continue;
 				}
 			}

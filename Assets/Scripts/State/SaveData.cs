@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -24,7 +23,7 @@ namespace State
 		public List<string> KilledAlives;
 
 		[JsonProperty]
-		public Dictionary<string, Tuple<string, Dictionary<string, JObject>>> Gibs;
+		public Dictionary<string, CreateData> Create;
 
 		[JsonProperty]
 		public Dictionary<string, Dictionary<string, JObject>> Objects;
