@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using AI;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
 using Objects.Interfaces;
+using ScriptableObjects;
 using State;
 using State.Enums;
 using UnityEngine;
@@ -146,17 +148,36 @@ namespace Managers
 				if (string.IsNullOrEmpty(alive.ObjectID))
 					continue;
 
-				// Don't save destroyed alives data
+				// Don't save killed alives data
 				if (KilledAlives.Contains(alive.ObjectID))
 					continue;
 
-				try
+				if (alive is NPC npc && npc.ExternallySpawned)
 				{
-					data.Alives[alive.ObjectID] = alive.Save();
+					try
+					{
+						data.Create[npc.ObjectID] = new CreateData
+						{
+							Type = ECreateType.NPC,
+							Name = npc.Data.Name,
+							States = npc.Save()
+						};
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"[StateManager] Failed saving npc state for {npc.name} ({npc.ObjectID}), {e}");
+					}
 				}
-				catch (Exception e)
+				else
 				{
-					Debug.LogError($"[StateManager] Failed saving alive state for {alive.GetGameObject().name} ({alive.ObjectID}), {e}");
+					try
+					{
+						data.Alives[alive.ObjectID] = alive.Save();
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"[StateManager] Failed saving alive state for {alive.GetGameObject().name} ({alive.ObjectID}), {e}");
+					}
 				}
 			}
 
@@ -195,15 +216,19 @@ namespace Managers
 					continue;
 
 				IObject iObject = null;
+				IAlive iAlive = null;
 
-				var objectType = pair.Value.Type;
-				var objectData = objectManager.GetObject(pair.Value.Name);
+				var type = pair.Value.Type;
 
-				switch (objectType)
+				switch (type)
 				{
 					case ECreateType.Gib:
 					{
-						var gib = (BaseGib)objectManager.CreateObject(objectData, Vector3.zero, Vector3.zero);
+						// Don't create a gib if it's supposed to be destroyed already
+						if (data.DestroyedObjects.Contains(pair.Key))
+							continue;
+						
+						var gib = (BaseGib)objectManager.CreateObject(objectManager.GetObject(pair.Value.Name), Vector3.zero, Vector3.zero);
 						gib.ObjectID = pair.Key;
 
 						var gibTr = gib.GetTransform();
@@ -221,16 +246,40 @@ namespace Managers
 						iObject = gib;
 						break;
 					}
+					case ECreateType.NPC:
+						// Don't create a npc if it's supposed to be killed already
+						if (data.KilledAlives.Contains(pair.Key))
+							continue;
+						
+						var npc = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)objectManager.GetAlive(pair.Value.Name));
+						npc.ObjectID = pair.Key;
+						
+						try
+						{
+							npc.Load(pair.Value.States);
+						}
+						catch(Exception e)
+						{
+							Debug.LogError($"[StateManager] Failed loading npc state for {npc.name} ({npc.ObjectID}), {e}");
+						}
+						
+						iAlive = npc;
+						break;
 				}
-				
-				if (iObject == null)
-					continue;
-				
-				// Other potentially needed data is set so we can remove the component now
-				if (data.DestroyedComponents.Contains(iObject.ObjectID))
+
+				if (iObject != null)
 				{
-					UnityEngine.Object.Destroy((Component)iObject);
-					continue;
+					// Other potentially needed data is set so we can remove the component now
+					if (data.DestroyedComponents.Contains(iObject.ObjectID))
+					{
+						UnityEngine.Object.Destroy((Component)iObject);
+						continue;
+					}
+				}
+
+				if (iAlive != null)
+				{
+					// 
 				}
 			}
 			

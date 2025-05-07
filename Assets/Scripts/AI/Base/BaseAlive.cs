@@ -526,21 +526,7 @@ namespace AI.Base
 			{
 				var gib = Body.Gibs[i];
 				gib.enabled = true;
-
-				var gibID = ObjectID;
-
-				switch (i)
-				{
-					case < 10:
-						gibID = gibID[..^1] + i;
-						break;
-					case < 100:
-						gibID = gibID[..^2] + i;
-						break;
-				}
-
-				// This is not good but there isn't anything else I can do that's sane
-				gib.ObjectID = gibID;
+				gib.ObjectID = Guid.NewGuid().ToString();
 				
 				var go = gib.gameObject;
 				go.layer = objectLayer;

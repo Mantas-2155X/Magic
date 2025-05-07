@@ -2,6 +2,7 @@ namespace State.Enums
 {
 	public enum ECreateType
 	{
-		Gib
+		Gib,
+		NPC
 	}
 }

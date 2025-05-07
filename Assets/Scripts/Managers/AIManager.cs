@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AI;
 using AI.Base;
@@ -130,7 +131,7 @@ namespace Managers
 			updateTargets = true;
 		}
 
-		public NPC CreateNPC(Vector3 position, Vector3 angles, NPCData data, int relationshipGroup = 0)
+		public NPC CreateNPC(Vector3 position, Vector3 angles, NPCData data, int relationshipGroup = 0, bool externallySpawned = true)
 		{
 			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME"), position, Vector3.zero);
 			
@@ -144,6 +145,8 @@ namespace Managers
 			go.SetActive(true);
 			
 			var npc = go.GetComponent<NPC>();
+			npc.ObjectID = Guid.NewGuid().ToString();
+			npc.ExternallySpawned = externallySpawned;
 			
 			AlivesColliderMap[npc.Body.BodyCollider] = npc;
 			NPCs.Add(npc);
