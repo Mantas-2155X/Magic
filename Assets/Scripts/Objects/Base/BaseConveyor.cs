@@ -26,9 +26,6 @@ namespace Objects.Base
 		public AnimationCurve Curve { get; private set; }
 
 		[field: SerializeField]
-		public Rigidbody Rigidbody { get; private set; }
-
-		[field: SerializeField]
 		public EConveyorState State { get; private set; } = EConveyorState.Stopped;
 		
 		[field: SerializeField]

@@ -29,9 +29,6 @@ namespace Objects.Base
 		public AnimationCurve Curve { get; private set; }
 
 		[field: SerializeField]
-		public Rigidbody RigidBody { get; private set; }
-
-		[field: SerializeField]
 		public Collider AntiCrush { get; private set; }
 
 		[field: SerializeField]
@@ -222,7 +219,7 @@ namespace Objects.Base
 
 			elevatorTr.localPosition = position;
 			
-			RigidBody.MovePosition(elevatorTr.position);
+			Rigidbody.MovePosition(elevatorTr.position);
 		}
 		
 		private async UniTask perform(CancellationToken token)

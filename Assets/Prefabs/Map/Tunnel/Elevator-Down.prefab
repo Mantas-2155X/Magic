@@ -335,6 +335,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: 2d8528f5e97338479b722d0605e876bb, type: 2}
+  <Rigidbody>k__BackingField: {fileID: 6604489282193379269}
+  <ObjectID>k__BackingField: 
   OnElevatorElevatedEvent:
     m_PersistentCalls:
       m_Calls:
@@ -419,7 +421,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  <RigidBody>k__BackingField: {fileID: 6604489282193379269}
   <AntiCrush>k__BackingField: {fileID: 1038355122460706277}
   <Parent>k__BackingField: {fileID: 3769866301034038043}
   <State>k__BackingField: 0
@@ -456,10 +457,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8226827204085767392}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 100
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

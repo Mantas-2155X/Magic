@@ -23,6 +23,9 @@ namespace Objects.Base
 		public ObjectData ObjectData { get; set; }
 		
 		[field: SerializeField]
+		public Rigidbody Rigidbody { get; set; }
+
+		[field: SerializeField]
 		public string ObjectID { get; set; }
 
 		private GameObject thisGo;
@@ -105,7 +108,7 @@ namespace Objects.Base
 			if (transformState != null)
 				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
 
-			var rigidbodyState = RigidbodyState.Read(GetComponent<Rigidbody>());
+			var rigidbodyState = RigidbodyState.Read(Rigidbody);
 			if (rigidbodyState != null)
 				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
 
@@ -122,7 +125,7 @@ namespace Objects.Base
 				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
 			
 			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
-				RigidbodyState.Apply(GetComponent<Rigidbody>(), rigidbodyState.ToObject<RigidbodyState>());
+				RigidbodyState.Apply(Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
 			
 			if (data.TryGetValue(typeof(BaseObject).ToString(), out var baseObjectState))
 				BaseObjectState.Apply(this, baseObjectState.ToObject<BaseObjectState>());

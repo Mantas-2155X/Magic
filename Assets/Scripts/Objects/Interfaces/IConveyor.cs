@@ -6,8 +6,6 @@ namespace Objects.Interfaces
 	public interface IConveyor
 	{
 		public AnimationCurve Curve { get; }
-
-		public Rigidbody Rigidbody { get; }
 		
 		public EConveyorState State { get; }
 		

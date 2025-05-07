@@ -477,6 +477,8 @@ namespace AI.Base
 			recalculateStats();
 			regenerateLoop().Forget();
 			
+			StateManager.Instance.KilledAlives.Remove(ObjectID);
+			
 			OnSpawnEvent?.Invoke(this);
 		}
 		public virtual void Kill(object source)
@@ -887,7 +889,7 @@ namespace AI.Base
 			if (transformState != null)
 				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
 
-			var rigidbodyState = RigidbodyState.Read(GetComponent<Rigidbody>());
+			var rigidbodyState = RigidbodyState.Read(Body.Rigidbody);
 			if (rigidbodyState != null)
 				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
 
@@ -904,7 +906,7 @@ namespace AI.Base
 				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
 			
 			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
-				RigidbodyState.Apply(GetComponent<Rigidbody>(), rigidbodyState.ToObject<RigidbodyState>());
+				RigidbodyState.Apply(Body.Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
 			
 			if (data.TryGetValue(typeof(BaseAlive).ToString(), out var baseAliveState))
 				BaseAliveState.Apply(this, baseAliveState.ToObject<BaseAliveState>());

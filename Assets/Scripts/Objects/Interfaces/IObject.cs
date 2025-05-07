@@ -12,6 +12,8 @@ namespace Objects.Interfaces
 	{
 		public ObjectData ObjectData { get; set; }
 
+		public Rigidbody Rigidbody { get; set; }
+		
 		public string ObjectID { get; set; }
 		
 		#region Breakable

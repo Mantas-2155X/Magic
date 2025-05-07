@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
@@ -98,18 +99,29 @@ namespace Managers
 
 		public void Load()
 		{
+			loadAsync().Forget();
+		}
+
+		private async UniTaskVoid loadAsync()
+		{
 			if (!File.Exists("save.json"))
 				return;
 
 			var currentScene = SceneManager.Instance.GetCurrentScene();
 
-			var data = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText("save.json"));
+			var data = JsonConvert.DeserializeObject<SaveData>(await File.ReadAllTextAsync("save.json"));
 			if (data.Scene != SceneManager.Instance.GetCurrentScene())
 			{
 				Debug.LogError($"[StateManager] Not loading save as the scene is incorrect. Expecting {data.Scene} while currently {currentScene}");
 				return;
 			}
 
+			await SceneManager.Instance.ReloadSceneAsync(true, true, true);
+			
+			await UniTask.NextFrame();
+			await UniTask.NextFrame();
+			await UniTask.NextFrame();
+			
 			var world = World.World.Instance;
 
 			var components = world.Objects.GetComponentsInChildren<Component>(true);
@@ -149,7 +161,7 @@ namespace Managers
 					continue;
 				}
 			}
-
+			
 			foreach (var pair in AIManager.Instance.AlivesColliderMap)
 			{
 				var alive = pair.Value;
@@ -161,7 +173,7 @@ namespace Managers
 					continue;
 
 				// No data for killed alives, just remove it
-				if (KilledAlives.Contains(alive.ObjectID))
+				if (data.KilledAlives.Contains(alive.ObjectID))
 				{
 					alive.Kill(null);
 					continue;
@@ -180,10 +192,12 @@ namespace Managers
 				}
 			}
 
-			DestroyedObjects = data.DestroyedObjects;
-			DestroyedComponents = data.DestroyedComponents;
+			var stateManager = Instance;
 			
-			KilledAlives = data.KilledAlives;
+			stateManager.DestroyedObjects = data.DestroyedObjects;
+			stateManager.DestroyedComponents = data.DestroyedComponents;
+			
+			stateManager.KilledAlives = data.KilledAlives;
 		}
 	}
 }
