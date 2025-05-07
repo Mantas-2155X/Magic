@@ -1,13 +1,17 @@
 //#define DEBUG_OBJ
 
+using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
 using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Enums;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.States;
 using UnityEngine;
 
 namespace Objects.Base
@@ -17,6 +21,9 @@ namespace Objects.Base
 		[field: SerializeField]
 		public ObjectData ObjectData { get; set; }
 		
+		[field: SerializeField]
+		public string ObjectID { get; set; }
+
 		private GameObject thisGo;
 		private Transform thisTr;
 
@@ -89,22 +96,51 @@ namespace Objects.Base
 			thisGo.SetActive(true);
 		}
 
+		public virtual Dictionary<Type, JObject> Save()
+		{
+			var dict = new Dictionary<Type, JObject>();
+
+			var transformState = TransformState.Read(thisTr);
+			if (transformState != null)
+				dict[typeof(Transform)] = JObject.FromObject(transformState);
+
+			var rigidbodyState = RigidbodyState.Read(GetComponent<Rigidbody>());
+			if (rigidbodyState != null)
+				dict[typeof(Rigidbody)] = JObject.FromObject(rigidbodyState);
+
+			var baseObjectState = BaseObjectState.Read(this);
+			if (baseObjectState != null)
+				dict[typeof(BaseObject)] = JObject.FromObject(baseObjectState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<Type, JObject> data)
+		{
+			if (data.TryGetValue(typeof(Transform), out var transformState))
+				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			
+			if (data.TryGetValue(typeof(Rigidbody), out var rigidbodyState))
+				RigidbodyState.Apply(GetComponent<Rigidbody>(), rigidbodyState.ToObject<RigidbodyState>());
+			
+			if (data.TryGetValue(typeof(BaseObject), out var baseObjectState))
+				BaseObjectState.Apply(this, baseObjectState.ToObject<BaseObjectState>());
+		}
+		
 		#endregion
 		
 		#region Breakable
 
-		public float Health { get; private set; }
-		public bool IsBroken { get; private set; }
+		public float Health { get; set; }
 
 		private void initializeBreakable()
 		{
 			Health = ObjectData.MaximumHealth;
-			IsBroken = false;
 		}
 		
 		public virtual void Damage(float damage, object source, EElement type)
 		{
-			if (!ObjectData.IsBreakable || IsBroken || damage < 0)
+			if (!ObjectData.IsBreakable || damage < 0)
 				return;
 			
 			Health -= damage;
@@ -117,23 +153,22 @@ namespace Objects.Base
 		
 		public virtual void Break(object source)
 		{
-			if (!ObjectData.IsBreakable || IsBroken)
+			if (!ObjectData.IsBreakable)
 				return;
 
 			if (ObjectData.BrokenPrefab != null && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
 			{
-				var broken = Instantiate(ObjectData.BrokenPrefab, World.World.Instance.Ragdolls);
+				var brokenPrefab = Instantiate(ObjectData.BrokenPrefab, World.World.Instance.Ragdolls);
 				
-				var brokenTr = broken.transform;
+				var brokenTr = brokenPrefab.transform;
 				brokenTr.position = thisTr.position;
 				brokenTr.rotation = thisTr.rotation;
 				brokenTr.localScale = thisTr.localScale;
 				
-				broken.SetActive(true);
+				brokenPrefab.SetActive(true);
 			}
 			
 			Health = 0;
-			IsBroken = true;
 			
 			// Already called inside OnDisable which should be fine but timing might not be right so just do it in case
 			ObjectManager.Instance.Unregister(this);
@@ -150,14 +185,14 @@ namespace Objects.Base
 
 		#region Pickupable
 
-		private bool pickupable;
+		public bool Pickupable { get; set; }
 
 		private void initializePickupable()
 		{
-			pickupable = false;
+			Pickupable = false;
 			
 			if (ObjectData.PickupableAfter == 0f)
-				pickupable = true;
+				Pickupable = true;
 			else
 				setPickupable().Forget();
 		}
@@ -169,12 +204,12 @@ namespace Objects.Base
 			if (this == null || !isActiveAndEnabled)
 				return;
 			
-			pickupable = true;
+			Pickupable = true;
 		}
 		
 		public virtual bool CanPickup(IAlive user)
 		{
-			return ObjectData.IsPickupable && enabled && pickupable && user.IsAlive;
+			return ObjectData.IsPickupable && enabled && Pickupable && user.IsAlive;
 		}
 		
 		public virtual bool Pickup(IAlive user)
@@ -217,14 +252,14 @@ namespace Objects.Base
 		
 		#region Usable
 
-		private bool usable;
+		public bool Usable { get; set; }
 
 		private void initializeUsable()
 		{
-			usable = false;
+			Usable = false;
 			
 			if (ObjectData.UsableAfter == 0f)
-				usable = true;
+				Usable = true;
 			else
 				setUsable().Forget();
 		}
@@ -236,12 +271,12 @@ namespace Objects.Base
 			if (this == null || !isActiveAndEnabled)
 				return;
 			
-			usable = true;
+			Usable = true;
 		}
 		
 		public virtual bool CanUse(IAlive user)
 		{
-			return ObjectData.IsUsable && enabled && usable && user.IsAlive;
+			return ObjectData.IsUsable && enabled && Usable && user.IsAlive;
 		}
 		
 		public virtual bool Use(IAlive user)

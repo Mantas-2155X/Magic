@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Events;
+using State.States;
 using Tools;
 using UnityEngine;
 
@@ -66,6 +69,25 @@ namespace Objects.Base
 		{
 			Disable();
 			base.Break(source);
+		}
+
+		public override Dictionary<Type, JObject> Save()
+		{
+			var dict = base.Save();
+			
+			var lightState = BaseLightState.Read(this);
+			if (lightState != null)
+				dict[typeof(BaseLight)] = JObject.FromObject(lightState);
+			
+			return dict;
+		}
+
+		public override void Load(Dictionary<Type, JObject> data)
+		{
+			base.Load(data);
+			
+			if (data.TryGetValue(typeof(BaseLight), out var baseLightState))
+				BaseLightState.Apply(this, baseLightState.ToObject<BaseLightState>());
 		}
 
 		#region Light

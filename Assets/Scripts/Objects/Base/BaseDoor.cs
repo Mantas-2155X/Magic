@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
+using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -66,17 +69,12 @@ namespace Objects.Base
 			switch (State)
 			{
 				case EDoorState.Open:
-					Normalized = 1f;
-					Obstacle.enabled = false;
-					lastOpened = Time.time;
+					SetState(EDoorState.Open, 1f, Locked);
 					break;
 				case EDoorState.Closed:
-					Normalized = 0f;
-					Obstacle.enabled = true;
+					SetState(EDoorState.Closed, 0f, Locked);
 					break;
 			}
-			
-			setPosition();
 		}
 
 		public void Update()
@@ -121,11 +119,50 @@ namespace Objects.Base
 		{
 			return base.CanUse(user) && !Locked;
 		}
+		
+		public override Dictionary<Type, JObject> Save()
+		{
+			var dict = base.Save();
+
+			var doorState = BaseDoorState.Read(this);
+			if (doorState != null)
+				dict[typeof(BaseDoor)] = JObject.FromObject(doorState);
+			
+			return dict;
+		}
+
+		public override void Load(Dictionary<Type, JObject> data)
+		{
+			base.Load(data);
+			
+			if (data.TryGetValue(typeof(BaseDoor), out var baseDoorState))
+				BaseDoorState.Apply(this, baseDoorState.ToObject<BaseDoorState>());
+		}
 
 		#endregion
 		
 		#region Door
 
+		public void SetState(EDoorState state, float normalized, bool locked)
+		{
+			State = state;
+			Normalized = normalized;
+			Locked = locked;
+
+			switch (state)
+			{
+				case EDoorState.Open:
+					lastOpened = Time.time;
+					Obstacle.enabled = false;
+					break;
+				case EDoorState.Closed:
+					Obstacle.enabled = true;
+					break;
+			}
+			
+			setPosition();
+		}
+		
 		public void Open()
 		{
 			Toggle(true);
