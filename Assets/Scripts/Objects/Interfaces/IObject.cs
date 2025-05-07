@@ -43,9 +43,9 @@ namespace Objects.Interfaces
 		
 		public void Spawn(Vector3 position, Vector3 angles);
 
-		public Dictionary<Type, JObject> Save();
+		public Dictionary<string, JObject> Save();
 		
-		public void Load(Dictionary<Type, JObject> data);
+		public void Load(Dictionary<string, JObject> data);
 		
 		public GameObject GetGameObject();
 		public Transform GetTransform();

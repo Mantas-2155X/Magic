@@ -13,7 +13,9 @@ using Combat.Structs;
 using Combat.Wearables.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using ScriptableObjects;
+using State.States;
 using Tools;
 using UI.Hotbar;
 using UI.Spellbook;
@@ -74,6 +76,9 @@ namespace AI.Base
 
 		[field: SerializeField]
 		public AliveData Data { get; private set; }
+
+		[field: SerializeField]
+		public string ObjectID { get; set; }
 
 		[field: SerializeField]
 		public Body Body { get; private set; }
@@ -398,10 +403,31 @@ namespace AI.Base
 			
 			recalculateStats();
 		}
+		public virtual void RemoveWearable(WearableData data)
+		{
+			for (var i = Wearables.Count - 1; i >= 0; i--)
+			{
+				var wearable = Wearables[i];
+				if (wearable.WearableData != data)
+					continue;
+				
+				Destroy(wearable.GetGameObject());
+				Wearables.RemoveAt(i);
+				
+				return;
+			}
+			
+			recalculateStats();
+		}
 		public virtual void DropAllWearables()
 		{
 			for (var i = Wearables.Count - 1; i >= 0; i--)
 				DropWearable(Wearables[i].WearableData);
+		}
+		public virtual void RemoveAllWearables()
+		{
+			for (var i = Wearables.Count - 1; i >= 0; i--)
+				RemoveWearable(Wearables[i].WearableData);
 		}
 
 		public virtual void Spawn(AliveData data, int relationshipGroup)
@@ -573,6 +599,7 @@ namespace AI.Base
 				}
 			}
 
+			StateManager.Instance.KilledAlives.AddUnique(ObjectID);
 			AIManager.Instance.AlivesColliderMap.Remove(Body.BodyCollider);
 			
 			OnDeathEvent?.Invoke(this, source);
@@ -847,6 +874,37 @@ namespace AI.Base
 		public virtual bool IsGrounded()
 		{
 			return true;
+		}
+		
+		public virtual Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+
+			var transformState = TransformState.Read(thisTr);
+			if (transformState != null)
+				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
+
+			var rigidbodyState = RigidbodyState.Read(GetComponent<Rigidbody>());
+			if (rigidbodyState != null)
+				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
+
+			var baseAliveState = BaseAliveState.Read(this);
+			if (baseAliveState != null)
+				dict[typeof(BaseAlive).ToString()] = JObject.FromObject(baseAliveState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
+				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			
+			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
+				RigidbodyState.Apply(GetComponent<Rigidbody>(), rigidbodyState.ToObject<RigidbodyState>());
+			
+			if (data.TryGetValue(typeof(BaseAlive).ToString(), out var baseAliveState))
+				BaseAliveState.Apply(this, baseAliveState.ToObject<BaseAliveState>());
 		}
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

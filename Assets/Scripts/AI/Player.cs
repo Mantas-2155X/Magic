@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using AI.Base;
 using AI.Enums;
 using Combat.Wearables.Enums;
 using Components;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.States;
 using Tools;
 using UI;
 using UnityEngine;
@@ -822,6 +825,25 @@ namespace AI
 			groundAngle = float.MaxValue;
 			
 			return false;
+		}
+		
+		public override Dictionary<string, JObject> Save()
+		{
+			var dict = base.Save();
+			
+			var playerState = PlayerState.Read(this);
+			if (playerState != null)
+				dict[typeof(Player).ToString()] = JObject.FromObject(playerState);
+			
+			return dict;
+		}
+
+		public override void Load(Dictionary<string, JObject> data)
+		{
+			base.Load(data);
+			
+			if (data.TryGetValue(typeof(Player).ToString(), out var playerState))
+				PlayerState.Apply(this, playerState.ToObject<PlayerState>());
 		}
 		
 		#endregion

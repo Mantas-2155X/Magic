@@ -12,6 +12,7 @@ using Objects.Enums;
 using Objects.Interfaces;
 using ScriptableObjects;
 using State.States;
+using Tools;
 using UnityEngine;
 
 namespace Objects.Base
@@ -96,34 +97,34 @@ namespace Objects.Base
 			thisGo.SetActive(true);
 		}
 
-		public virtual Dictionary<Type, JObject> Save()
+		public virtual Dictionary<string, JObject> Save()
 		{
-			var dict = new Dictionary<Type, JObject>();
+			var dict = new Dictionary<string, JObject>();
 
 			var transformState = TransformState.Read(thisTr);
 			if (transformState != null)
-				dict[typeof(Transform)] = JObject.FromObject(transformState);
+				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
 
 			var rigidbodyState = RigidbodyState.Read(GetComponent<Rigidbody>());
 			if (rigidbodyState != null)
-				dict[typeof(Rigidbody)] = JObject.FromObject(rigidbodyState);
+				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
 
 			var baseObjectState = BaseObjectState.Read(this);
 			if (baseObjectState != null)
-				dict[typeof(BaseObject)] = JObject.FromObject(baseObjectState);
+				dict[typeof(BaseObject).ToString()] = JObject.FromObject(baseObjectState);
 
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<Type, JObject> data)
+		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(Transform), out var transformState))
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
 				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
 			
-			if (data.TryGetValue(typeof(Rigidbody), out var rigidbodyState))
+			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
 				RigidbodyState.Apply(GetComponent<Rigidbody>(), rigidbodyState.ToObject<RigidbodyState>());
 			
-			if (data.TryGetValue(typeof(BaseObject), out var baseObjectState))
+			if (data.TryGetValue(typeof(BaseObject).ToString(), out var baseObjectState))
 				BaseObjectState.Apply(this, baseObjectState.ToObject<BaseObjectState>());
 		}
 		
@@ -177,7 +178,7 @@ namespace Objects.Base
 			Debug.Log($"[Object {gameObject.name}] IObject broken by {source}");
 #endif
 			
-			StateManager.Instance.DestroyedObjects.Add(ObjectID);
+			StateManager.Instance.DestroyedObjects.AddUnique(ObjectID);
 			Destroy(thisGo);
 			enabled = false;
 		}
@@ -227,11 +228,11 @@ namespace Objects.Base
 				case EAction.None:
 					return true;
 				case EAction.DestroyGameObject:
-					StateManager.Instance.DestroyedObjects.Add(ObjectID);
+					StateManager.Instance.DestroyedObjects.AddUnique(ObjectID);
 					Destroy(thisGo);
 					break;
 				case EAction.DestroyComponent:
-					StateManager.Instance.DestroyedComponents.Add(ObjectID);
+					StateManager.Instance.DestroyedComponents.AddUnique(ObjectID);
 					Destroy(this);
 					break;
 			}
@@ -296,11 +297,11 @@ namespace Objects.Base
 				case EAction.None:
 					return true;
 				case EAction.DestroyGameObject:
-					StateManager.Instance.DestroyedObjects.Add(ObjectID);
+					StateManager.Instance.DestroyedObjects.AddUnique(ObjectID);
 					Destroy(thisGo);
 					break;
 				case EAction.DestroyComponent:
-					StateManager.Instance.DestroyedComponents.Add(ObjectID);
+					StateManager.Instance.DestroyedComponents.AddUnique(ObjectID);
 					Destroy(this);
 					break;
 			}

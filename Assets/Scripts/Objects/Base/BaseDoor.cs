@@ -120,22 +120,22 @@ namespace Objects.Base
 			return base.CanUse(user) && !Locked;
 		}
 		
-		public override Dictionary<Type, JObject> Save()
+		public override Dictionary<string, JObject> Save()
 		{
 			var dict = base.Save();
 
 			var doorState = BaseDoorState.Read(this);
 			if (doorState != null)
-				dict[typeof(BaseDoor)] = JObject.FromObject(doorState);
+				dict[typeof(BaseDoor).ToString()] = JObject.FromObject(doorState);
 			
 			return dict;
 		}
 
-		public override void Load(Dictionary<Type, JObject> data)
+		public override void Load(Dictionary<string, JObject> data)
 		{
 			base.Load(data);
 			
-			if (data.TryGetValue(typeof(BaseDoor), out var baseDoorState))
+			if (data.TryGetValue(typeof(BaseDoor).ToString(), out var baseDoorState))
 				BaseDoorState.Apply(this, baseDoorState.ToObject<BaseDoorState>());
 		}
 

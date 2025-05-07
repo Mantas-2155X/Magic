@@ -21,6 +21,9 @@ namespace Managers
 		[SerializeField]
 		public List<string> DestroyedComponents = new ();
 
+		[SerializeField]
+		public List<string> KilledAlives = new ();
+		
 		public void Awake()
 		{
 			Instance = this;
@@ -31,9 +34,11 @@ namespace Managers
 			var data = new SaveData();
 			data.FileVersion = Version;
 			data.Scene = SceneManager.Instance.GetCurrentScene();
-			data.Objects = new Dictionary<string, Dictionary<Type, JObject>>();
 			data.DestroyedObjects = DestroyedObjects;
 			data.DestroyedComponents = DestroyedComponents;
+			data.KilledAlives = KilledAlives;
+			data.Objects = new Dictionary<string, Dictionary<string, JObject>>();
+			data.Alives = new Dictionary<string, Dictionary<string, JObject>>();
 			
 			var world = World.World.Instance;
 
@@ -61,6 +66,30 @@ namespace Managers
 				catch (Exception e)
 				{
 					Debug.LogError($"[StateManager] Failed saving object state for {component.name} ({iObject.ObjectID}), {e}");
+				}
+			}
+
+			foreach (var pair in AIManager.Instance.AlivesColliderMap)
+			{
+				var alive = pair.Value;
+				if (alive == null || !alive.IsAlive)
+					continue;
+				
+				// Leave alives without ID as they are
+				if (string.IsNullOrEmpty(alive.ObjectID))
+					continue;
+
+				// Don't save destroyed alives data
+				if (KilledAlives.Contains(alive.ObjectID))
+					continue;
+
+				try
+				{
+					data.Alives[alive.ObjectID] = alive.Save();
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"[StateManager] Failed saving alive state for {alive.GetGameObject().name} ({alive.ObjectID}), {e}");
 				}
 			}
 
@@ -118,6 +147,36 @@ namespace Managers
 				{
 					Destroy((Component)iObject);
 					continue;
+				}
+			}
+
+			foreach (var pair in AIManager.Instance.AlivesColliderMap)
+			{
+				var alive = pair.Value;
+				if (alive == null || !alive.IsAlive)
+					continue;
+
+				// Leave alives without ID as they are
+				if (string.IsNullOrEmpty(alive.ObjectID))
+					continue;
+
+				// No data for killed alives, just remove it
+				if (KilledAlives.Contains(alive.ObjectID))
+				{
+					alive.Kill(null);
+					continue;
+				}
+				
+				if (data.Alives.TryGetValue(alive.ObjectID, out var aliveState))
+				{
+					try
+					{
+						alive.Load(aliveState);
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"[StateManager] Failed loading alive state for {alive.GetGameObject().name} ({alive.ObjectID}), {e}");
+					}
 				}
 			}
 		}

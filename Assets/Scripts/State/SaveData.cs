@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,6 +20,12 @@ namespace State
 		public List<string> DestroyedComponents;
 		
 		[JsonProperty]
-		public Dictionary<string, Dictionary<Type, JObject>> Objects;
+		public List<string> KilledAlives;
+
+		[JsonProperty]
+		public Dictionary<string, Dictionary<string, JObject>> Objects;
+
+		[JsonProperty]
+		public Dictionary<string, Dictionary<string, JObject>> Alives;
 	}
 }

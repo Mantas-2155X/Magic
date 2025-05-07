@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AI.Enums;
 using AYellowpaper.SerializedCollections;
@@ -5,6 +6,7 @@ using Combat.Enums;
 using Combat.Spells.Interfaces;
 using Combat.Structs;
 using Combat.Wearables.Interfaces;
+using Newtonsoft.Json.Linq;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -13,6 +15,8 @@ namespace AI.Interfaces
 	public interface IAlive
 	{
 		public AliveData Data { get; }
+
+		public string ObjectID { get; set; }
 
 		public Body Body { get; }
 		
@@ -75,7 +79,9 @@ namespace AI.Interfaces
 		public void EquipWearable(WearableData data);
 		public void EquipWearable(IWearable wearable);
 		public void DropWearable(WearableData data);
+		public void RemoveWearable(WearableData data);
 		public void DropAllWearables();
+		public void RemoveAllWearables();
 
 		public void Spawn(AliveData data, int relationshipGroup);
 		public void Kill(object source);
@@ -95,6 +101,10 @@ namespace AI.Interfaces
 		public void ShrinkObject(bool state);
 		public void HandleGrab();
 		
+		public Dictionary<string, JObject> Save();
+		
+		public void Load(Dictionary<string, JObject> data);
+
 		public GameObject GetGameObject();
 		public Transform GetTransform();
 	}
