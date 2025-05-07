@@ -86,6 +86,14 @@ namespace Combat.Spells.Base
 		#endregion
 
 		#region ISpell
+
+		public void SetState(float cooldown)
+		{
+			var time = Time.time;
+			
+			LastStartedCast = time - SpellData.Cooldown - SpellData.CastingTime;
+			LastFinishedCast = time - SpellData.Cooldown + cooldown;
+		}
 		
 		public virtual void Select()
 		{

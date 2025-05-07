@@ -318,6 +318,7 @@ namespace AI.Base
 					continue;
 				
 				spell.Unselect();
+				Spells.RemoveAt(i);
 				
 				Destroy((Component)spell);
 			}
@@ -331,6 +332,8 @@ namespace AI.Base
 				
 				Destroy((Component)spell);
 			}
+			
+			Spells.Clear();
 		}
 		
 		public virtual bool HasWearable(WearableData data)

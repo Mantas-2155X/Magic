@@ -179,6 +179,11 @@ namespace Managers
 					}
 				}
 			}
+
+			DestroyedObjects = data.DestroyedObjects;
+			DestroyedComponents = data.DestroyedComponents;
+			
+			KilledAlives = data.KilledAlives;
 		}
 	}
 }

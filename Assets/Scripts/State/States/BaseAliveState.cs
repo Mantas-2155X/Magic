@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AI.Base;
 using AI.Enums;
 using Combat.Enums;
+using Combat.Spells.Base;
 using Managers;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -15,10 +16,7 @@ namespace State.States
 		public List<string> Wearables;
 		
 		[JsonProperty]
-		public List<string> Spells;
-		
-		[JsonProperty]
-		public string Spell;
+		public Dictionary<string, BaseSpellState> Spells;
 		
 		[JsonProperty]
 		public float CurrentHealth;
@@ -52,10 +50,6 @@ namespace State.States
 		
 		// spell casting
 		
-		// spell cooldowns
-
-		// spell override range
-		
 		public static BaseAliveState Read(BaseAlive baseAlive)
 		{
 			if (baseAlive == null)
@@ -68,12 +62,13 @@ namespace State.States
 			for (var i = 0; i < baseAlive.Wearables.Count; i++)
 				state.Wearables.Add(baseAlive.Wearables[i].WearableData.Name);
 
-			state.Spells = new List<string>();
+			state.Spells = new Dictionary<string, BaseSpellState>();
 			
 			for (var i = 0; i < baseAlive.Spells.Count; i++)
-				state.Spells.Add(baseAlive.Spells[i].SpellData.Name);
-
-			state.Spell = baseAlive.Spell.SpellData.Name;
+			{
+				var spell = baseAlive.Spells[i];
+				state.Spells.Add(spell.SpellData.Name, BaseSpellState.Read((BaseSpell)spell));
+			}
 			
 			state.CurrentHealth = baseAlive.CurrentHealth;
 			state.CurrentMana = baseAlive.CurrentMana;
@@ -101,10 +96,16 @@ namespace State.States
 			
 			baseAlive.ForgetAllSpells();
 			
-			for (var i = 0; i < state.Spells.Count; i++)
-				baseAlive.LearnSpell(ObjectManager.Instance.GetSpell(state.Spells[i]), false);
+			foreach (var pair in state.Spells)
+			{
+				var spellState = pair.Value;
 			
-			baseAlive.SelectSpell(ObjectManager.Instance.GetSpell(state.Spell));
+				var spellData = ObjectManager.Instance.GetSpell(pair.Key);
+				baseAlive.LearnSpell(spellData, spellState.Selected);
+
+				var spellIndex = baseAlive.GetSpellIndex(spellData);
+				BaseSpellState.Apply((BaseSpell)baseAlive.Spells[spellIndex], spellState);
+			}
 
 			var addHealth = state.CurrentHealth - baseAlive.CurrentHealth;
 			switch (addHealth)
