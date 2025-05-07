@@ -1,5 +1,6 @@
 using System;
 using Objects;
+using Objects.Base;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,6 +14,18 @@ namespace Editor
 			base.OnInspectorGUI();
 
 			GUILayout.Space(5);
+			
+			if (GUILayout.Button("Generate Object ID"))
+			{
+				var npcSpawners = targets;
+				for (var i = 0; i < npcSpawners.Length; i++)
+				{
+					var npcSpawner = (NPCSpawner)npcSpawners[i];
+					npcSpawner.ObjectID = Guid.NewGuid().ToString();
+					
+					EditorUtility.SetDirty(npcSpawner);
+				}
+			}
 			
 			if (GUILayout.Button("Generate SpawnIDs"))
 			{

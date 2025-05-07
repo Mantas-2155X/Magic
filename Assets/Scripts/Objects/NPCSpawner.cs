@@ -1,12 +1,13 @@
-using System;
 using System.Collections.Generic;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Base;
 using Objects.Enums;
 using Objects.Events;
 using ScriptableObjects;
+using State.States;
 using Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -57,18 +58,18 @@ namespace Objects
 		[SerializeField]
 		public Vector3 DropAtLocation;
 		
-		private readonly List<IAlive> spawned = new ();
+		public Dictionary<string, IAlive> Spawned { get; private set; } = new ();
 		
-		private bool cleared;
-		private bool activated;
-		private int triggered;
+		public bool Cleared { get; private set; }
+		public bool Activated { get; private set; }
+		public int Triggered { get; private set; }
 		
 		public void Start()
 		{
-			if (activated || Initialization != ESpawnerInitialization.OnStart)
+			if (Activated || Initialization != ESpawnerInitialization.OnStart)
 				return;
 			
-			spawn().Forget();
+			processLoop().Forget();
 		}
 
 		public void Update()
@@ -76,31 +77,80 @@ namespace Objects
 			if (PauseManager.IsPaused)
 				return;
 			
-			if (cleared || spawned.Count < SpawnCount)
+			if (Cleared || Spawned.Count < SpawnCount)
 				return;
 
-			for (var i = 0; i < spawned.Count; i++)
+			foreach (var pair in Spawned)
 			{
-				var alive = spawned[i];
+				var alive = pair.Value;
 				if (alive != null && alive.IsAlive)
 					return;
 			}
 			
-			cleared = true;
+			Cleared = true;
 			OnSpawnerClearedEvent?.Invoke();
 		}
 
+		public void SetState(List<string> spawned, int triggered, bool cleared)
+		{
+			Cleared = cleared;
+			
+			// Skip ahead if needed
+			for (var i = 0; i < spawned.Count; i++)
+			{
+				var spawnID = spawned[i];
+				
+				// Killed already, count as spawned
+				if (StateManager.Instance.KilledAlives.Contains(spawnID))
+				{
+					Spawned.TryAdd(spawnID, null);
+					continue;
+				}
+				
+				// Spawned before this was called, ignore
+				if (Spawned.ContainsKey(spawnID))
+					continue;
+				
+				spawn(spawned[i]);
+			}
+
+			if (Initialization == ESpawnerInitialization.OnTrigger)
+			{
+				for (var i = 0; i < triggered; i++)
+					Trigger();
+			}
+		}
+		
+		public override Dictionary<string, JObject> Save()
+		{
+			var dict = base.Save();
+			
+			var npcSpawnerState = NPCSpawnerState.Read(this);
+			if (npcSpawnerState != null)
+				dict[typeof(NPCSpawner).ToString()] = JObject.FromObject(npcSpawnerState);
+			
+			return dict;
+		}
+
+		public override void Load(Dictionary<string, JObject> data)
+		{
+			base.Load(data);
+			
+			if (data.TryGetValue(typeof(NPCSpawner).ToString(), out var npcSpawnerState))
+				NPCSpawnerState.Apply(this, npcSpawnerState.ToObject<NPCSpawnerState>());
+		}
+		
 		public void Trigger()
 		{
-			if (activated || Initialization != ESpawnerInitialization.OnTrigger)
+			if (Activated || Initialization != ESpawnerInitialization.OnTrigger)
 				return;
 
-			triggered++;
+			Triggered++;
 			
-			if (triggered < TriggerCount)
+			if (Triggered < TriggerCount)
 				return;
 			
-			spawn().Forget();
+			processLoop().Forget();
 		}
 
 #if UNITY_EDITOR
@@ -128,31 +178,47 @@ namespace Objects
 		}
 #endif
 
-		private async UniTaskVoid spawn()
+		private async UniTaskVoid processLoop()
 		{
-			activated = true;
+			Activated = true;
 			
 			if (Datas.Count == 0)
 				return;
-
-			var tr = GetTransform();
 			
 			while (true)
 			{
+				// Spawn count is reached, stop
+				if (Spawned.Count >= SpawnCount)
+					break;
+				
+				var spawnID = SpawnIDs[Spawned.Count];
+				
+				var killedAlives = StateManager.Instance.KilledAlives;
+				if (killedAlives.Contains(spawnID))
+				{
+					// Already died, don't wait spawnrate
+					Spawned.TryAdd(spawnID, null);
+					continue;
+				}
+				
+				// Already spawned before, don't wait spawnrate
+				if (Spawned.ContainsKey(spawnID))
+					continue;
+
 				await UniTask.WaitForSeconds(SpawnRate);
 				
 				if (this == null || !isActiveAndEnabled)
 					return;
 				
 				// Spawn count is reached, stop
-				if (spawned.Count >= SpawnCount)
+				if (Spawned.Count >= SpawnCount)
 					break;
 
 				var currentlyAlive = 0;
 				
-				for (var i = 0; i < spawned.Count; i++)
+				foreach (var pair in Spawned)
 				{
-					var alive = spawned[i];
+					var alive = pair.Value;
 					if (alive == null || !alive.IsAlive)
 						continue;
 
@@ -163,38 +229,35 @@ namespace Objects
 				if (currentlyAlive >= AliveCount)
 					continue;
 				
-				var spawnID = SpawnIDs[spawned.Count];
-				
-				var killedAlives = StateManager.Instance.KilledAlives;
-				if (!killedAlives.Contains(spawnID))
-				{
-					var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], RelationshipGroup < -1 ? Random.Range(0, 9999) : RelationshipGroup);
-					if (npc == null || !npc.IsAlive)
-					{
-						Debug.LogWarning($"[NPCSpawner {gameObject.name}] Failed creating NPC");
-						continue;
-					}
-
-					npc.ObjectID = spawnID;
-				
-					if (WanderAction)
-						npc.Wander();
-					else if (PatrolAction != null)
-						npc.Patrol(PatrolAction);
-					else if (UseAction != null)
-						npc.Use(UseAction);
-					else if (CarryAction != null)
-						npc.Carry(CarryAction, DropAtLocation);
-					else
-						npc.Idle();
-				
-					spawned.Add(npc);
-				}
-				else
-				{
-					spawned.Add(null);
-				}
+				spawn(spawnID);
 			}
+		}
+
+		private void spawn(string spawnID)
+		{
+			var tr = GetTransform();
+
+			var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], RelationshipGroup < -1 ? Random.Range(0, 9999) : RelationshipGroup);
+			if (npc == null || !npc.IsAlive)
+			{
+				Debug.LogWarning($"[NPCSpawner {gameObject.name}] Failed creating NPC");
+				return;
+			}
+
+			npc.ObjectID = spawnID;
+
+			if (WanderAction)
+				npc.Wander();
+			else if (PatrolAction != null)
+				npc.Patrol(PatrolAction);
+			else if (UseAction != null)
+				npc.Use(UseAction);
+			else if (CarryAction != null)
+				npc.Carry(CarryAction, DropAtLocation);
+			else
+				npc.Idle();
+
+			Spawned.Add(spawnID, npc);
 		}
 	}
 }
