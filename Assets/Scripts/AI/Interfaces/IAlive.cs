@@ -7,6 +7,7 @@ using Combat.Spells.Interfaces;
 using Combat.Structs;
 using Combat.Wearables.Interfaces;
 using Newtonsoft.Json.Linq;
+using Objects.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -43,7 +44,8 @@ namespace AI.Interfaces
 		public bool Paralyzed { get; }
 		public List<int> ParalyzeSources { get; }
 		
-		public Rigidbody Grabbing { get; }
+		public IObject Grabbing { get; }
+		public Vector3? OriginalGrabSize { get; }
 		
 		public bool IsAlive { get; }
 		public bool IsInvulnerable { get; }
@@ -96,7 +98,7 @@ namespace AI.Interfaces
 		
 		public bool IsGrounded();
 
-		public void GrabObject(Rigidbody body);
+		public void GrabObject(IObject obj);
 		public void ReleaseObject();
 		public void ShrinkObject(bool state);
 		public void HandleGrab();

@@ -9,6 +9,8 @@ using AI.Enums;
 using AI.Interfaces;
 using AI.PathFinding;
 using Managers;
+using Objects.Base;
+using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
@@ -168,7 +170,7 @@ namespace AI
 			setAIMode(EAIMode.Action);
 		}
 		
-		public void Carry(Rigidbody target, Vector3 dropAt)
+		public void Carry(IObject target, Vector3 dropAt)
 		{
 			var data = (NPCData)Data;
 			if (!IsAlive || data.Stationary || !data.CanGrab)
@@ -177,7 +179,7 @@ namespace AI
 			var actionMode = (Carry)ActionModes[EActionMode.Carry];
 			actionMode.DropAt = dropAt;
 
-			setOtherTarget(target);
+			setOtherTarget((BaseObject)target);
 			setActionMode(EActionMode.Carry);
 			setAIMode(EAIMode.Action);
 		}

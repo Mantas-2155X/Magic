@@ -12,13 +12,14 @@ namespace Managers
 {
 	// TODO (impl):
 	// (Objects) BaseElevator, BaseConveyor, NPCSpawner
-	// (AI) NPC, Slow/Paralyze info, Grabbing object info, Mid-cast info
+	// (AI) NPC, Slow/Paralyze info, Mid-cast info
 	// (Combat) Launched projectiles, Active attacks, Spells, Decals
 	// (World) World7 Orb, World6 Waves, World4 Timer
 	// Trigger, Notify, DelayedAttack, DelayedTrigger
 	
 	// TODO (test):
 	// (Objects) DroppedWearable
+	// (AI) Grabbing shrink
 	
 	public class StateManager : MonoBehaviour
 	{

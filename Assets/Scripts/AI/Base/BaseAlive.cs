@@ -14,6 +14,7 @@ using Combat.Wearables.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Newtonsoft.Json.Linq;
+using Objects.Interfaces;
 using ScriptableObjects;
 using State.States;
 using Tools;
@@ -36,8 +37,6 @@ namespace AI.Base
 		public static readonly OnSpawnEvent OnSpawnEvent = new ();
 		public static readonly OnRelationshipGroupChangedEvent OnRelationshipGroupChangedEvent = new ();
 		public static readonly OnSpellSelectedEvent OnSpellSelectedEvent = new ();
-
-		private Vector3? originalGrabSize;
 		
 		private LayerMask previousExcludeLayers;
 
@@ -122,7 +121,8 @@ namespace AI.Base
 		public bool Paralyzed => ParalyzeSources.Count > 0;
 		public List<int> ParalyzeSources { get; private set; } = new ();
 		
-		public Rigidbody Grabbing { get; private set; }
+		public IObject Grabbing { get; private set; }
+		public Vector3? OriginalGrabSize { get; set; }
 
 		public bool IsAlive { get; private set; }
 		public bool IsInvulnerable { get; private set; }
@@ -723,7 +723,7 @@ namespace AI.Base
 			OnTakeEnergyEvent?.Invoke(this, energy, source);
 		}
 
-		public virtual void GrabObject(Rigidbody body)
+		public virtual void GrabObject(IObject obj)
 		{
 			if (!Data.CanGrab)
 				return;
@@ -737,19 +737,21 @@ namespace AI.Base
 			var alives = AIManager.Instance.AlivesColliderMap;
 			foreach (var pair in alives)
 			{
-				if (!pair.Value.IsAlive || pair.Value.Grabbing != body)
+				if (!pair.Value.IsAlive || pair.Value.Grabbing != obj)
 					continue;
 
 				pair.Value.ReleaseObject();
 				break;
 			}
 			
-			RenderManager.Instance.OutlineFeature.AddRenderers(body.GetComponentsInChildren<Renderer>());
+			Grabbing = obj;
 
-			Grabbing = body;
-			Grabbing.useGravity = false;
-			Grabbing.linearVelocity = Vector3.zero;
-			Grabbing.angularVelocity = Vector3.zero;
+			var rb = obj.Rigidbody;
+			rb.useGravity = false;
+			rb.linearVelocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;
+			
+			RenderManager.Instance.OutlineFeature.AddRenderers(rb.GetComponentsInChildren<Renderer>());
 		}
 
 		public virtual void ReleaseObject()
@@ -757,14 +759,16 @@ namespace AI.Base
 			if (Grabbing == null)
 				return;
 			
-			RenderManager.Instance.OutlineFeature.RemoveRenderers(Grabbing.GetComponentsInChildren<Renderer>());
-
 			ShrinkObject(false);
 
-			Grabbing.useGravity = true;
-			Grabbing.linearVelocity = Vector3.zero;
-			Grabbing.angularVelocity = Vector3.zero;
+			var rb = Grabbing.Rigidbody;
+			rb.useGravity = true;
+			rb.linearVelocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;
+			
 			Grabbing = null;
+			
+			RenderManager.Instance.OutlineFeature.RemoveRenderers(rb.GetComponentsInChildren<Renderer>());
 		}
 
 		public virtual void ShrinkObject(bool state)
@@ -772,27 +776,28 @@ namespace AI.Base
 			if (Grabbing == null)
 				return;
 
-			var tr = Grabbing.transform;
+			var tr = Grabbing.GetTransform();
+			var rb = Grabbing.Rigidbody;
 			
 			if (state)
 			{
 				// Already shrinked
-				if (originalGrabSize != null)
+				if (OriginalGrabSize != null)
 					return;
 				
-				originalGrabSize = tr.localScale;
-				Grabbing.isKinematic = true;
+				OriginalGrabSize = tr.localScale;
+				rb.isKinematic = true;
 				tr.localScale = Vector3.zero;
 			}
 			else
 			{
 				// Already expanded
-				if (originalGrabSize == null)
+				if (OriginalGrabSize == null)
 					return;
 				
-				tr.localScale = originalGrabSize.Value;
-				Grabbing.isKinematic = false;
-				originalGrabSize = null;
+				tr.localScale = OriginalGrabSize.Value;
+				rb.isKinematic = false;
+				OriginalGrabSize = null;
 			}
 			
 			var portal = ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME");
@@ -805,7 +810,7 @@ namespace AI.Base
 				return;
 
 			var data = Data;
-			var grabEnergy = (originalGrabSize != null ? data.GrabShinkedEnergy : data.GrabEnergy) * Time.deltaTime;
+			var grabEnergy = (OriginalGrabSize != null ? data.GrabShinkedEnergy : data.GrabEnergy) * Time.deltaTime;
 			
 			if (CurrentEnergy >= grabEnergy)
 			{
@@ -832,13 +837,14 @@ namespace AI.Base
 					throw new NotImplementedException();
 			}
 			
-			var objPos = Grabbing.position;
+			var rb = Grabbing.Rigidbody;
+			var objPos = rb.position;
 
 			// Shrinking makes it kinematic, no velocities so use MoveX and ignore distance and angle checks
-			if (originalGrabSize != null)
+			if (OriginalGrabSize != null)
 			{
-				Grabbing.MovePosition(corePos + coreForward);
-				Grabbing.MoveRotation(Body.Rigidbody.rotation);
+				rb.MovePosition(corePos + coreForward);
+				rb.MoveRotation(Body.Rigidbody.rotation);
 				
 				return;
 			}
@@ -856,9 +862,9 @@ namespace AI.Base
 			}
 			
 			var linearVelocity = corePos + coreForward - objPos;
-			Grabbing.linearVelocity = linearVelocity * data.GrabPositionSpeed;
+			rb.linearVelocity = linearVelocity * data.GrabPositionSpeed;
 			
-			var deltaRotation = Body.Rigidbody.rotation * Quaternion.Inverse(Grabbing.rotation);
+			var deltaRotation = Body.Rigidbody.rotation * Quaternion.Inverse(rb.rotation);
 			deltaRotation.ToAngleAxis(out var angle, out var axis);
 			
 			if (angle > 180f)
@@ -866,14 +872,14 @@ namespace AI.Base
 
 			if (Mathf.Approximately(angle, 0)) 
 			{
-				Grabbing.angularVelocity = Vector3.zero;
+				rb.angularVelocity = Vector3.zero;
 				return;
 			}
 			
 			angle *= Mathf.Deg2Rad;
 
 			var angularVelocity = axis * angle;
-			Grabbing.angularVelocity = angularVelocity * data.GrabRotationSpeed;
+			rb.angularVelocity = angularVelocity * data.GrabRotationSpeed;
 		}
 		
 		public virtual bool IsGrounded()

@@ -35,7 +35,7 @@ namespace AI.ActionModes
 			var target = owner.OtherTarget;
 			
 			// Nothing to carry, return to previous action
-			if (target == null || target is not Rigidbody rb)
+			if (target == null || target is not IObject iObject)
 			{
 				owner.ReleaseObject();
 				owner.ReturnActionMode();
@@ -47,7 +47,7 @@ namespace AI.ActionModes
 				return;
 			
 			// Go grab the object
-			if (owner.Grabbing != target)
+			if (owner.Grabbing != iObject)
 			{
 				// Release any previous object
 				owner.ReleaseObject();
@@ -83,7 +83,7 @@ namespace AI.ActionModes
 					return;
 
 				// Grab object and walk to drop destination
-				owner.GrabObject(rb);
+				owner.GrabObject(iObject);
 			}
 			else
 			{

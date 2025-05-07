@@ -50,7 +50,7 @@ namespace Objects
 		public BaseObject UseAction;
 
 		[SerializeField]
-		public Rigidbody CarryAction;
+		public BaseObject CarryAction;
 		[SerializeField]
 		public Vector3 DropAtLocation;
 		

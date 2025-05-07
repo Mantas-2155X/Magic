@@ -536,20 +536,20 @@ namespace AI
 				return;
 			}
 
-			if (hit.collider.GetComponent<IObject>() == null)
+			if (!hit.collider.TryGetComponent<IObject>(out var iObject))
 			{
 				ReleaseObject();
 				return;
 			}
 			
-			var rb = hit.rigidbody;
+			var rb = iObject.Rigidbody;
 			if (rb == null || rb.mass > ((PlayerData)Data).GrabMass)
 			{
 				ReleaseObject();
 				return;
 			}
 
-			GrabObject(rb);
+			GrabObject(iObject);
 		}
 		
 		private void onNoclip(InputAction.CallbackContext ctx)

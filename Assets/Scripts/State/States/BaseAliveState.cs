@@ -5,6 +5,7 @@ using Combat.Enums;
 using Combat.Spells.Base;
 using Managers;
 using Newtonsoft.Json;
+using Objects.Interfaces;
 using UnityEngine;
 
 namespace State.States
@@ -33,11 +34,11 @@ namespace State.States
 		[JsonProperty]
 		public int RelationshipGroup;
 		
-		// slow
+		[JsonProperty]
+		public string Grabbing;
 		
-		// paralyze
-		
-		// grabbing
+		[JsonProperty]
+		public Vector3? OriginalGrabSize;
 
 		[JsonProperty]
 		public bool Alive;
@@ -47,8 +48,6 @@ namespace State.States
 
 		[JsonProperty]
 		public bool Powerful;
-		
-		// spell casting
 		
 		public static BaseAliveState Read(BaseAlive baseAlive)
 		{
@@ -77,6 +76,12 @@ namespace State.States
 			state.MovementType = baseAlive.MovementType;
 			state.RelationshipGroup = baseAlive.RelationshipGroup;
 
+			if (baseAlive.Grabbing != null)
+			{
+				state.Grabbing = baseAlive.Grabbing.ObjectID;
+				state.OriginalGrabSize = baseAlive.OriginalGrabSize;
+			}
+			
 			state.Alive = baseAlive.IsAlive;
 			state.Invulnerable = baseAlive.IsInvulnerable;
 			state.Powerful = baseAlive.IsPowerful;
@@ -143,6 +148,35 @@ namespace State.States
 			baseAlive.SetMovementType(state.MovementType);
 			baseAlive.SetRelationshipGroup(state.RelationshipGroup);
 			
+			baseAlive.ReleaseObject();
+			
+			if (!string.IsNullOrEmpty(state.Grabbing))
+			{
+				var world = World.World.Instance;
+				
+				var components = world.Objects.GetComponentsInChildren<Component>(true);
+				for (var i = 0; i < components.Length; i++)
+				{
+					var component = components[i];
+					if (component is not IObject iObject)
+						continue;
+					
+					if (iObject.ObjectID != state.Grabbing)
+						continue;
+
+					baseAlive.GrabObject(iObject);
+					
+					if (state.OriginalGrabSize != null)
+					{
+						iObject.GetTransform().localScale = state.OriginalGrabSize.Value;
+						iObject.Rigidbody.isKinematic = false;
+
+						baseAlive.ShrinkObject(true);
+					}
+					break;
+				}
+			}
+
 			if (!state.Alive && baseAlive.IsAlive)
 				baseAlive.Kill(null);
 
