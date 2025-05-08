@@ -3,6 +3,7 @@ using Managers;
 using ScriptableObjects;
 using UI;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace World
@@ -44,6 +45,19 @@ namespace World
 		public void Awake()
 		{
 			Instance = this;
+		}
+
+		public void Update()
+		{
+			if (Keyboard.current.nKey.wasPressedThisFrame)
+			{
+				StateManager.Instance.Save();
+			}
+			
+			if (Keyboard.current.mKey.wasPressedThisFrame)
+			{
+				StateManager.Instance.Load();
+			}
 		}
 
 		public void OnDestroy()

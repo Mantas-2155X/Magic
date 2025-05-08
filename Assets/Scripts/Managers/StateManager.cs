@@ -22,7 +22,7 @@ using Object = UnityEngine.Object;
 namespace Managers
 {
 	// TODO (impl):
-	// BaseElevator (needs DelayedTrigger), DelayedAttack, BaseConveyor, NPC AI, Projectiles, Attacks, Decals, World6 Waves, World4 Timer
+	// BaseElevator (needs DelayedTrigger), DelayedAttack, BaseConveyor, NPC AI, Projectiles, Decals, World6 Waves, World4 Timer (needs Attacks)
 	
 	// TODO (test):
 	// (AI) Grabbing shrink
