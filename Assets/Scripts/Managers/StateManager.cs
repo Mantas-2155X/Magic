@@ -230,6 +230,8 @@ namespace Managers
 					
 				if (data.World.TryGetValue(saveable.ObjectID, out var worldData))
 				{
+					bool loaded;
+
 					try
 					{
 						// Make sure to load correct type
@@ -244,25 +246,31 @@ namespace Managers
 						}
 						
 						saveable.Load(worldData.States);
+						loaded = true;
 					}
 					catch (Exception e)
 					{
+						loaded = false;
 						Debug.LogError($"[StateManager] Failed loading {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
 					}
+					
+					if (!loaded)
+						Debug.LogWarning($"[StateManager] World Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not loaded");
 				}
 			}
 			
 			foreach (var pair in data.Create)
 			{
+				// Nothing to create if the name is empty
 				if (string.IsNullOrEmpty(pair.Key))
 					continue;
 
 				IObject iObject = null;
 				IAlive iAlive = null;
 
-				var type = pair.Value.Type;
+				var loaded = false;
 
-				switch (type)
+				switch (pair.Value.Type)
 				{
 					case ECreateType.Gib:
 					{
@@ -279,9 +287,11 @@ namespace Managers
 						try
 						{
 							gib.Load(pair.Value.States);
+							loaded = true;
 						}
 						catch(Exception e)
 						{
+							loaded = false;
 							Debug.LogError($"[StateManager] Failed loading created gib state for {gib.name} ({gib.ObjectID}), {e}");
 						}
 
@@ -300,9 +310,11 @@ namespace Managers
 						try
 						{
 							npc.Load(pair.Value.States);
+							loaded = true;
 						}
 						catch(Exception e)
 						{
+							loaded = false;
 							Debug.LogError($"[StateManager] Failed loading created npc state for {npc.name} ({npc.ObjectID}), {e}");
 						}
 
@@ -310,6 +322,9 @@ namespace Managers
 						break;
 					}
 				}
+				
+				if (!loaded)
+					Debug.LogWarning($"[StateManager] Create Saveable {pair.Value.Type} with ObjectID {pair.Key} was not loaded");
 
 				if (iObject != null)
 				{
@@ -347,14 +362,21 @@ namespace Managers
 				
 				if (data.Objects.TryGetValue(iObject.ObjectID, out var objectState))
 				{
+					bool loaded;
+
 					try
 					{
 						iObject.Load(objectState);
+						loaded = true;
 					}
 					catch (Exception e)
 					{
+						loaded = false;
 						Debug.LogError($"[StateManager] Failed loading object state for {TransformTools.GetFullPath(component.transform)} ({iObject.ObjectID}), {e}");
 					}
+					
+					if (!loaded)
+						Debug.LogWarning($"[StateManager] Object Saveable {iObject.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not loaded");
 				}
 
 				// Other potentially needed data is set so we can remove the component now
@@ -386,14 +408,21 @@ namespace Managers
 				
 				if (data.Alives.TryGetValue(alive.ObjectID, out var aliveState))
 				{
+					bool loaded;
+
 					try
 					{
 						alive.Load(aliveState);
+						loaded = true;
 					}
 					catch (Exception e)
 					{
+						loaded = false;
 						Debug.LogError($"[StateManager] Failed loading alive state for {TransformTools.GetFullPath(alive.GetTransform())} ({alive.ObjectID}), {e}");
 					}
+					
+					if (!loaded)
+						Debug.LogWarning($"[StateManager] Alive Saveable {alive.GetType().Name} on {TransformTools.GetFullPath(alive.GetTransform())} was not loaded");
 				}
 			}
 
