@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using Events;
+using Newtonsoft.Json.Linq;
+using State.States;
 using Tools;
 using UnityEngine;
 
@@ -6,6 +9,9 @@ namespace Components
 {
 	public class Trigger : MonoBehaviour
 	{
+		[field: SerializeField]
+		public string ObjectID { get; set; }
+
 		[SerializeField]
 		public OnTriggerEvent OnTriggerEvent;
 
@@ -15,26 +21,48 @@ namespace Components
 		[SerializeField]
 		public bool TriggerOnStay;
 	
-		private bool triggered;
+		public bool Triggered { get; private set; }
 	
+		public virtual Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+
+			var triggerState = TriggerState.Read(this);
+			if (triggerState != null)
+				dict[typeof(Trigger).ToString()] = JObject.FromObject(triggerState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(Trigger).ToString(), out var triggerState))
+				TriggerState.Apply(this, triggerState.ToObject<TriggerState>());
+		}
+
+		public void SetState(bool triggered)
+		{
+			Triggered = triggered;
+		}
+
 		public void OnTriggerEnter(Collider other)
 		{
-			if (triggered)
+			if (Triggered)
 				return;
 
 			if (!IsMultiTrigger)
-				triggered = true;
+				Triggered = true;
 		
 			OnTriggerEvent?.Invoke(other);
 		}
 	
 		public void OnTriggerStay(Collider other)
 		{
-			if (triggered || !TriggerOnStay)
+			if (Triggered || !TriggerOnStay)
 				return;
 
 			if (!IsMultiTrigger)
-				triggered = true;
+				Triggered = true;
 		
 			OnTriggerEvent?.Invoke(other);
 		}

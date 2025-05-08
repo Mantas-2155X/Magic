@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using AI;
 using AI.Interfaces;
+using Components;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,7 +21,7 @@ namespace Managers
 	// (AI) NPC, Mid-cast info
 	// (Combat) Launched projectiles, Active attacks, Spells, Decals
 	// (World) World7 Orb, World6 Waves, World4 Timer
-	// Trigger, DelayedAttack, DelayedTrigger
+	// (Component) DelayedAttack, DelayedTrigger
 	
 	// TODO (test):
 	// (Objects) DroppedWearable
@@ -74,11 +75,37 @@ namespace Managers
 			data.DestroyedComponents = DestroyedComponents;
 			data.KilledAlives = KilledAlives;
 			data.Create = new Dictionary<string, CreateData>();
+			data.World = new Dictionary<string, WorldData>();
 			data.Objects = new Dictionary<string, Dictionary<string, JObject>>();
 			data.Alives = new Dictionary<string, Dictionary<string, JObject>>();
 			
 			var world = World.World.Instance;
 
+			var worldComponents = world.GetComponentsInChildren<Component>(true);
+			for (var i = 0; i < worldComponents.Length; i++)
+			{
+				var component = worldComponents[i];
+				if (component is Trigger trigger)
+				{
+					// Leave triggers without ID as they are
+					if (string.IsNullOrEmpty(trigger.ObjectID))
+						continue;
+					
+					try
+					{
+						data.World[trigger.ObjectID] = new WorldData
+						{
+							Type = EWorldDataType.Trigger,
+							States = trigger.Save()
+						};
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"[StateManager] Failed saving trigger state for {component.name} ({trigger.ObjectID}), {e}");
+					}
+				}
+			}
+			
 			var gibs = world.Ragdolls.GetComponentsInChildren<Component>(true);
 			for (var i = 0; i < gibs.Length; i++)
 			{
@@ -210,6 +237,30 @@ namespace Managers
 			var world = World.World.Instance;
 			var objectManager = ObjectManager.Instance;
 
+			var worldComponents = world.GetComponentsInChildren<Component>(true);
+			for (var i = 0; i < worldComponents.Length; i++)
+			{
+				var component = worldComponents[i];
+				if (component is Trigger trigger)
+				{
+					// Leave triggers without ID as they are
+					if (string.IsNullOrEmpty(trigger.ObjectID))
+						continue;
+					
+					if (data.World.TryGetValue(trigger.ObjectID, out var worldData))
+					{
+						try
+						{
+							trigger.Load(worldData.States);
+						}
+						catch (Exception e)
+						{
+							Debug.LogError($"[StateManager] Failed loading trigger state for {component.name} ({trigger.ObjectID}), {e}");
+						}
+					}
+				}
+			}
+			
 			foreach (var pair in data.Create)
 			{
 				if (string.IsNullOrEmpty(pair.Key))

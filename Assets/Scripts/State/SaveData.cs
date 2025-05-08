@@ -29,6 +29,9 @@ namespace State
 		public Dictionary<string, CreateData> Create;
 
 		[JsonProperty]
+		public Dictionary<string, WorldData> World;
+
+		[JsonProperty]
 		public Dictionary<string, Dictionary<string, JObject>> Objects;
 	}
 }

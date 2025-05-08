@@ -1385,7 +1385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf51c4d48ea49259e6be9d746670336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flashlight: {fileID: 0}
   SpawnPoints: {fileID: 1548703818}
   Characters: {fileID: 544258523}
   Ragdolls: {fileID: 1178675831}
@@ -3208,6 +3207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb3360309ba740799fd2661ea28e0db4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <ObjectID>k__BackingField: a5875adb-54bd-4ada-b6a7-b2a2a871ac53
   OnTriggerEvent:
     m_PersistentCalls:
       m_Calls:
@@ -3238,6 +3238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Preset: 1
+  Duration: 4
 --- !u!1 &2139124901
 GameObject:
   m_ObjectHideFlags: 0
