@@ -2,6 +2,7 @@ namespace State.Enums
 {
 	public enum EWorldDataType
 	{
-		Trigger
+		Trigger,
+		World7
 	}
 }

@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Objects;
 using Objects.Base;
 using Objects.Interfaces;
+using Scenes;
 using ScriptableObjects;
 using State;
 using State.Enums;
@@ -21,11 +22,7 @@ using Object = UnityEngine.Object;
 namespace Managers
 {
 	// TODO (impl):
-	// (Objects) BaseElevator, BaseConveyor
-	// (AI) NPC
-	// (Combat) Launched projectiles, Active attacks, Decals
-	// (World) World7 Orb, World6 Waves, World4 Timer
-	// (Component) DelayedAttack, DelayedTrigger
+	// BaseElevator (needs DelayedTrigger), DelayedAttack, BaseConveyor, NPC AI, Projectiles, Attacks, Decals, World6 Waves, World4 Timer
 	
 	// TODO (test):
 	// (AI) Grabbing shrink
@@ -119,6 +116,15 @@ namespace Managers
 							{
 								Type = EWorldDataType.Trigger,
 								States = trigger.Save()
+							};
+							saved = true;
+						}
+						else if (saveable is World7 world7)
+						{
+							data.World[world7.ObjectID] = new WorldData
+							{
+								Type = EWorldDataType.World7,
+								States = world7.Save()
 							};
 							saved = true;
 						}
@@ -257,6 +263,10 @@ namespace Managers
 									continue;
 								break;
 							}
+							case EWorldDataType.World7:
+								if (saveable is not World7)
+									continue;
+								break;
 						}
 						
 						saveable.Load(worldData.States);
