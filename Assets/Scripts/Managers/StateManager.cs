@@ -38,39 +38,68 @@ namespace Managers
 					return instance;
 				
 				instance = new StateManager();
+				instance.InitializeSaves();
+				
 				return instance;
 			}
 		}
 
-		public const int Version = 1;
+		public string Path { get; private set; } = "data/saves";
 		
 		public List<string> DestroyedObjects = new ();
 		public List<string> DestroyedComponents = new ();
+		
 		public List<string> KilledAlives = new ();
+
+		public Dictionary<string, SaveData> AvailableSaves = new ();
 		
 		private SaveData lastSaveData;
 
-		public void Reinitialize()
+		public void InitializeSaves()
 		{
-			DestroyedObjects.Clear();
-			DestroyedComponents.Clear();
-			KilledAlives.Clear();
+			if (!Directory.Exists(Path))
+				Directory.CreateDirectory(Path);
 
-			if (lastSaveData == null)
-				return;
+			AvailableSaves.Clear();
 
-			DestroyedObjects = lastSaveData.DestroyedObjects;
-			DestroyedComponents = lastSaveData.DestroyedComponents;
-			KilledAlives = lastSaveData.KilledAlives;
+			var files = Directory.GetFiles(Path, "*.json");
+			for (var i = 0; i < files.Length; i++)
+			{
+				var file = files[i];
 
-			lastSaveData = null;
+				var text = File.ReadAllText(file);
+				if (string.IsNullOrWhiteSpace(text))
+				{
+					Debug.LogWarning($"[StateManager] Save file {file} is empty, skipping");
+					continue;
+				}
+
+				var data = JsonConvert.DeserializeObject<SaveData>(text);
+				if (data == null)
+				{
+					Debug.LogWarning($"[StateManager] Save file {file} failed to deserialize, skipping");
+					continue;
+				}
+				
+				AvailableSaves[file] = data;
+			}
 		}
 
 		public void Save()
 		{
+			var sceneManager = SceneManager.Instance;
+			
+			var currentSceneData = sceneManager.GetCurrentSceneData();
+			var currentScene = sceneManager.GetCurrentScene();
+			
+			if (!currentSceneData.SupportsSaving)
+			{
+				Debug.LogError($"[StateManager] Not saving save data as the scene {currentScene} does not support saving");
+				return;
+			}
+			
 			var data = new SaveData();
-			data.FileVersion = Version;
-			data.Scene = SceneManager.Instance.GetCurrentScene();
+			data.Scene = currentScene;
 			data.DestroyedObjects = DestroyedObjects;
 			data.DestroyedComponents = DestroyedComponents;
 			data.KilledAlives = KilledAlives;
@@ -208,34 +237,59 @@ namespace Managers
 					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not saved");
 			}
 
-			File.WriteAllText("save.json", JsonConvert.SerializeObject(data, Formatting.Indented));
+			var saveData = JsonConvert.SerializeObject(data, Formatting.Indented);
+			if (string.IsNullOrEmpty(saveData))
+			{
+				Debug.LogError("[StateManager] Not saving save data as the object failed to serialize");
+				return;
+			}
+
+			File.WriteAllText(System.IO.Path.Combine(Path, $"{currentScene}_{DateTime.Now:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
+			
+			InitializeSaves();
 		}
 
-		public void Load()
+		public void Load(SaveData data)
 		{
-			loadAsync().Forget();
+			loadAsync(data).Forget();
 		}
 
-		private async UniTaskVoid loadAsync()
+		public void OnPreSceneLoad()
 		{
-			if (!File.Exists("save.json"))
+			DestroyedObjects.Clear();
+			DestroyedComponents.Clear();
+			KilledAlives.Clear();
+
+			if (lastSaveData == null)
 				return;
 
-			var currentScene = SceneManager.Instance.GetCurrentScene();
+			DestroyedObjects = lastSaveData.DestroyedObjects;
+			DestroyedComponents = lastSaveData.DestroyedComponents;
+			KilledAlives = lastSaveData.KilledAlives;
 
-			var data = JsonConvert.DeserializeObject<SaveData>(await File.ReadAllTextAsync("save.json"));
-			if (data.Scene != SceneManager.Instance.GetCurrentScene())
+			lastSaveData = null;
+		}
+
+		private async UniTaskVoid loadAsync(SaveData data)
+		{
+			var sceneManager = SceneManager.Instance;
+			var objectManager = ObjectManager.Instance;
+
+			var sceneData = objectManager.GetScene($"SCENE_{data.Scene.ToUpper()}_NAME");
+			if (!sceneData.SupportsSaving)
 			{
-				Debug.LogError($"[StateManager] Not loading save as the scene is incorrect. Expecting {data.Scene} while currently {currentScene}");
+				Debug.LogError($"[StateManager] Not loading save data as the scene {data.Scene} does not support saving");
 				return;
 			}
 
 			lastSaveData = data;
 			
-			await SceneManager.Instance.ReloadSceneAsync(true, true, true);
+			if (data.Scene == sceneManager.GetCurrentScene())
+				await sceneManager.ReloadSceneAsync(true, true, true);
+			else
+				await sceneManager.ChangeSceneAsync(data.Scene, true, true, true);
 			
 			var world = World.World.Instance;
-			var objectManager = ObjectManager.Instance;
 
 			var worldComponents = world.GetComponentsInChildren<Component>(true);
 			for (var i = 0; i < worldComponents.Length; i++)

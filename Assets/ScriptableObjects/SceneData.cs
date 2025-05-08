@@ -14,6 +14,9 @@ namespace ScriptableObjects
 		public bool Hidden;
 
 		[SerializeField]
+		public bool SupportsSaving;
+		
+		[SerializeField]
 		public bool NoclipInitially;
 		
 		[SerializeField]

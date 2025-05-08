@@ -45,8 +45,12 @@ namespace Editor
 			if (GUILayout.Button("Save State"))
 				StateManager.Instance.Save();
 			
-			if (GUILayout.Button("Load State"))
-				StateManager.Instance.Load();
+			var saves = StateManager.Instance.AvailableSaves;
+			foreach (var pair in saves)
+			{
+				if (GUILayout.Button($"Load {pair.Key}"))
+					StateManager.Instance.Load(pair.Value);
+			}
 			
 			serializedObject.ApplyModifiedProperties();
 			Repaint();

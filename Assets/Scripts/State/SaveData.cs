@@ -8,9 +8,6 @@ namespace State
 	public class SaveData
 	{
 		[JsonProperty]
-		public int FileVersion;
-			
-		[JsonProperty]
 		public string Scene;
 
 		[JsonProperty]
