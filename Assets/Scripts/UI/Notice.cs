@@ -21,7 +21,11 @@ namespace UI
 		[SerializeField]
 		public TMP_Text Text;
 
-		private float animationDuration = 0.5f;
+		[SerializeField]
+		public float AnimationDuration = 0.5f;
+
+		public ENoticePresetFlags CurrentPreset { get; private set; }
+		public float EndTime { get; private set; }
 		
 		private CancellationTokenSource cancellationToken;
 		
@@ -42,7 +46,7 @@ namespace UI
 			BaseAlive.OnDeathEvent.RemoveListener(OnDeath);
 		}
 
-		public void ShowMessage(ENoticePresetFlags preset)
+		public void ShowMessage(ENoticePresetFlags preset, float duration)
 		{
 			var builder = new StringBuilder();
 		
@@ -72,18 +76,16 @@ namespace UI
 				builder.AppendLine(text);
 			}
 			
-			ShowMessage(builder.ToString(), 4f, HorizontalAlignmentOptions.Left, VerticalAlignmentOptions.Middle);
-		}
-		
-		public void ShowMessage(string text, float duration, HorizontalAlignmentOptions horizontalAlignment, VerticalAlignmentOptions verticalAlignment)
-		{
+			CurrentPreset = preset;
+			EndTime = Time.time + duration + (AnimationDuration * 2);
+			
 			if (cancellationToken != null)
 				cancellationToken.Cancel();
 			
 			cancellationToken = new CancellationTokenSource();
-			processMessage(cancellationToken.Token, text, duration, horizontalAlignment, verticalAlignment).Forget();
+			processMessage(cancellationToken.Token, builder.ToString(), duration, HorizontalAlignmentOptions.Left, VerticalAlignmentOptions.Middle).Forget();
 		}
-
+		
 		public void ClearMessage()
 		{
 			if (cancellationToken == null)
@@ -167,7 +169,7 @@ namespace UI
 				textColor.a = value;
 				Text.color = textColor;
 				
-				normalizedTime += Time.unscaledDeltaTime / animationDuration;
+				normalizedTime += Time.unscaledDeltaTime / AnimationDuration;
 			}
 			
 			imageColor.a = fadeIn ? 1f : 0f;

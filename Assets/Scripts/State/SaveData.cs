@@ -23,12 +23,12 @@ namespace State
 		public List<string> KilledAlives;
 
 		[JsonProperty]
+		public Dictionary<string, Dictionary<string, JObject>> Alives;
+
+		[JsonProperty]
 		public Dictionary<string, CreateData> Create;
 
 		[JsonProperty]
 		public Dictionary<string, Dictionary<string, JObject>> Objects;
-
-		[JsonProperty]
-		public Dictionary<string, Dictionary<string, JObject>> Alives;
 	}
 }

@@ -20,7 +20,7 @@ namespace Managers
 	// (AI) NPC, Mid-cast info
 	// (Combat) Launched projectiles, Active attacks, Spells, Decals
 	// (World) World7 Orb, World6 Waves, World4 Timer
-	// Trigger, Notify, DelayedAttack, DelayedTrigger
+	// Trigger, DelayedAttack, DelayedTrigger
 	
 	// TODO (test):
 	// (Objects) DroppedWearable
