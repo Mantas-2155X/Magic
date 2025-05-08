@@ -22,7 +22,7 @@ namespace Managers
 {
 	// TODO (impl):
 	// (Objects) BaseElevator, BaseConveyor
-	// (AI) NPC, Mid-cast info
+	// (AI) NPC
 	// (Combat) Launched projectiles, Active attacks, Spells, Decals
 	// (World) World7 Orb, World6 Waves, World4 Timer
 	// (Component) DelayedAttack, DelayedTrigger

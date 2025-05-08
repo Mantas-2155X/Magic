@@ -62,7 +62,13 @@ namespace Combat.Spells.Base
 				case Player:
 				{
 					if (SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1.IsPressed())
+					{
 						FinishCasting();
+					}
+					else
+					{
+						CancelCasting();
+					}
 					break;
 				}
 				case NPC npc:
@@ -89,12 +95,19 @@ namespace Combat.Spells.Base
 
 		#region ISpell
 
-		public void SetState(float cooldown)
+		public void SetState(float cooldown, bool casting, float castedTime)
 		{
 			var time = Time.time;
 			
 			LastStartedCast = time - SpellData.Cooldown - SpellData.CastingTime;
 			LastFinishedCast = time - SpellData.Cooldown + cooldown;
+
+			if (casting)
+			{
+				StartCasting();
+
+				PredictFinishCast -= castedTime;
+			}
 		}
 		
 		public virtual void Select()

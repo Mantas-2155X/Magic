@@ -14,6 +14,12 @@ namespace State.States
 		public bool Selected;
 
 		[JsonProperty]
+		public bool Casting;
+		
+		[JsonProperty]
+		public float CastedTime;
+		
+		[JsonProperty]
 		public float Cooldown;
 		
 		public static BaseSpellState Read(BaseSpell baseSpell)
@@ -34,6 +40,12 @@ namespace State.States
 			else
 			{
 				state.Cooldown = 0f;
+
+				if (baseSpell.IsCasting)
+				{
+					state.Casting = true;
+					state.CastedTime = Time.time - baseSpell.LastStartedCast;
+				}
 			}
 			
 			return state;
@@ -45,7 +57,7 @@ namespace State.States
 				return;
 
 			baseSpell.ObjectID = state.ObjectID;
-			baseSpell.SetState(state.Cooldown);
+			baseSpell.SetState(state.Cooldown, state.Casting, state.CastedTime);
 		}
 	}
 }
