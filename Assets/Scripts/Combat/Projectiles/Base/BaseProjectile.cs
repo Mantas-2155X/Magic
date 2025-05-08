@@ -197,6 +197,7 @@ namespace Combat.Projectiles.Base
 			if (this == null)
 				return;
 			
+			ObjectID = "";
 			PoolingManager.Instance.Add(ProjectileData, thisGo);
 		}
 	}

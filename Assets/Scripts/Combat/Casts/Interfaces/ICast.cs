@@ -8,6 +8,8 @@ namespace Combat.Casts.Interfaces
 	{
 		public CastData CastData { get; }
 
+		public string ObjectID { get; set; }
+
 		public Component Source { get; }
 
 		public ParticleSystem System { get; }

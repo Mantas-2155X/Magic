@@ -9,6 +9,8 @@ namespace Combat.Wearables.Interfaces
 	{
 		public WearableData WearableData { get; }
 		
+		public string ObjectID { get; set; }
+
 		public IAlive Owner { get; }
 		
 		public Rigidbody Rigidbody { get; }

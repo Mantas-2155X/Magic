@@ -100,11 +100,13 @@ namespace Combat.Attacks.Base
 
 		public virtual void OnDisable()
 		{
+			ObjectID = "";
 			PoolingManager.Instance.Add(AttackData, thisGo);
 		}
 
 		public void OnParticleSystemStopped()
 		{
+			ObjectID = "";
 			PoolingManager.Instance.Add(AttackData, thisGo);
 		}
 

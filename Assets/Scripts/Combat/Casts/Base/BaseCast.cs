@@ -15,6 +15,8 @@ namespace Combat.Casts.Base
 		[field: SerializeField]
 		public CastData CastData { get; private set; }
 
+		public string ObjectID { get; set; }
+
 		public Component Source { get; private set; }
 
 		[field: SerializeField]
@@ -47,6 +49,7 @@ namespace Combat.Casts.Base
 
 		public void OnDisable()
 		{
+			ObjectID = "";
 			PoolingManager.Instance.Add(CastData, thisGo);
 		}
 		

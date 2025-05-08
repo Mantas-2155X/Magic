@@ -69,6 +69,8 @@ namespace Combat.Decals.Base
 			}
 			
 			thisTr.SetParent(World.World.Instance.Decals);
+			
+			ObjectID = "";
 			PoolingManager.Instance.Add(DecalData, thisGo);
 		}
 		

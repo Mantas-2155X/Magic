@@ -63,6 +63,7 @@ namespace Objects.Base
 			if (ObjectData.IsPoolable != EObjectPool.OnDisable)
 				return;
 
+			ObjectID = "";
 			PoolingManager.Instance.Add(ObjectData, thisGo);
 		}
 
@@ -72,6 +73,8 @@ namespace Objects.Base
 				return;
 
 			ObjectManager.Instance.Unregister(this);
+			
+			ObjectID = "";
 			PoolingManager.Instance.Add(ObjectData, thisGo);
 		}
 

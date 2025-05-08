@@ -13,20 +13,20 @@ using ScriptableObjects;
 using State;
 using State.Enums;
 using State.Interfaces;
+using Tools;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Managers
 {
 	// TODO (impl):
-	// (Objects) BaseElevator, BaseConveyor
+	// (Objects) BaseElevator, BaseConveyor, DroppedWearable
 	// (AI) NPC, Mid-cast info
 	// (Combat) Launched projectiles, Active attacks, Spells, Decals
 	// (World) World7 Orb, World6 Waves, World4 Timer
 	// (Component) DelayedAttack, DelayedTrigger
 	
 	// TODO (test):
-	// (Objects) DroppedWearable
 	// (AI) Grabbing shrink
 	
 	public class StateManager
@@ -93,12 +93,20 @@ namespace Managers
 				
 				// Leave saveables without ID as they are
 				if (string.IsNullOrEmpty(saveable.ObjectID))
+				{
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
 					continue;
+				}
 
 				// Make sure there is a root transform
 				var root = component.transform.root;
 				if (root == null)
-					return;
+				{
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
+					continue;
+				}
+
+				var saved = false;
 				
 				try
 				{
@@ -111,6 +119,7 @@ namespace Managers
 								Type = EWorldDataType.Trigger,
 								States = trigger.Save()
 							};
+							saved = true;
 						}
 					}
 					else
@@ -131,12 +140,16 @@ namespace Managers
 									Name = gib.ObjectData.Name,
 									States = gib.Save()
 								};
+								saved = true;
 							}
 						}
 						else if (root == world.Objects)
 						{
 							if (saveable is IObject iObject)
+							{
 								data.Objects[iObject.ObjectID] = iObject.Save();
+								saved = true;
+							}
 						}
 						else if (root == world.Characters)
 						{
@@ -159,14 +172,20 @@ namespace Managers
 								{
 									data.Alives[iAlive.ObjectID] = iAlive.Save();
 								}
+								
+								saved = true;
 							}
 						}
 					}
 				}
 				catch (Exception e)
 				{
-					Debug.LogError($"[StateManager] Failed saving {saveable.GetType()} state for {component.name} ({saveable.ObjectID}), {e}");
+					saved = false;
+					Debug.LogError($"[StateManager] Failed saving {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
 				}
+
+				if (!saved)
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not saved");
 			}
 
 			File.WriteAllText("save.json", JsonConvert.SerializeObject(data, Formatting.Indented));
@@ -228,7 +247,7 @@ namespace Managers
 					}
 					catch (Exception e)
 					{
-						Debug.LogError($"[StateManager] Failed loading {saveable.GetType()} state for {component.name} ({saveable.ObjectID}), {e}");
+						Debug.LogError($"[StateManager] Failed loading {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
 					}
 				}
 			}
@@ -263,7 +282,7 @@ namespace Managers
 						}
 						catch(Exception e)
 						{
-							Debug.LogError($"[StateManager] Failed loading gib state for {gib.name} ({gib.ObjectID}), {e}");
+							Debug.LogError($"[StateManager] Failed loading created gib state for {gib.name} ({gib.ObjectID}), {e}");
 						}
 
 						iObject = gib;
@@ -284,7 +303,7 @@ namespace Managers
 						}
 						catch(Exception e)
 						{
-							Debug.LogError($"[StateManager] Failed loading npc state for {npc.name} ({npc.ObjectID}), {e}");
+							Debug.LogError($"[StateManager] Failed loading created npc state for {npc.name} ({npc.ObjectID}), {e}");
 						}
 
 						iAlive = npc;
@@ -334,7 +353,7 @@ namespace Managers
 					}
 					catch (Exception e)
 					{
-						Debug.LogError($"[StateManager] Failed loading object state for {component.name} ({iObject.ObjectID}), {e}");
+						Debug.LogError($"[StateManager] Failed loading object state for {TransformTools.GetFullPath(component.transform)} ({iObject.ObjectID}), {e}");
 					}
 				}
 
@@ -373,7 +392,7 @@ namespace Managers
 					}
 					catch (Exception e)
 					{
-						Debug.LogError($"[StateManager] Failed loading alive state for {alive.GetGameObject().name} ({alive.ObjectID}), {e}");
+						Debug.LogError($"[StateManager] Failed loading alive state for {TransformTools.GetFullPath(alive.GetTransform())} ({alive.ObjectID}), {e}");
 					}
 				}
 			}

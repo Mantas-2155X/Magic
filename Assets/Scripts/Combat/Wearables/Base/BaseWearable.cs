@@ -16,6 +16,8 @@ namespace Combat.Wearables.Base
 		[field: SerializeField]
 		public WearableData WearableData { get; private set; }
 
+		public string ObjectID { get; set; }
+
 		public IAlive Owner { get; private set; }
 		
 		[field: SerializeField]
@@ -39,6 +41,7 @@ namespace Combat.Wearables.Base
 
 		public void OnDisable()
 		{
+			ObjectID = "";
 			PoolingManager.Instance.Add(WearableData, gameObject);
 		}
 
