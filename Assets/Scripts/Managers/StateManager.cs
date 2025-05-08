@@ -12,7 +12,9 @@ using Objects.Interfaces;
 using ScriptableObjects;
 using State;
 using State.Enums;
+using State.Interfaces;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Managers
 {
@@ -80,131 +82,90 @@ namespace Managers
 			data.Alives = new Dictionary<string, Dictionary<string, JObject>>();
 			
 			var world = World.World.Instance;
+			var worldTr = world.transform;
 
-			var worldComponents = world.GetComponentsInChildren<Component>(true);
-			for (var i = 0; i < worldComponents.Length; i++)
+			var components = Object.FindObjectsByType<Component>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+			for (var i = 0; i < components.Length; i++)
 			{
-				var component = worldComponents[i];
-				if (component is Trigger trigger)
-				{
-					// Leave triggers without ID as they are
-					if (string.IsNullOrEmpty(trigger.ObjectID))
-						continue;
-					
-					try
-					{
-						data.World[trigger.ObjectID] = new WorldData
-						{
-							Type = EWorldDataType.Trigger,
-							States = trigger.Save()
-						};
-					}
-					catch (Exception e)
-					{
-						Debug.LogError($"[StateManager] Failed saving trigger state for {component.name} ({trigger.ObjectID}), {e}");
-					}
-				}
-			}
-			
-			var gibs = world.Ragdolls.GetComponentsInChildren<Component>(true);
-			for (var i = 0; i < gibs.Length; i++)
-			{
-				var component = gibs[i];
-				if (component is not BaseGib gib)
+				var component = components[i];
+				if (component is not ISaveable saveable)
 					continue;
 				
-				// Leave gibs without ID as they are
-				if (string.IsNullOrEmpty(gib.ObjectID))
+				// Leave saveables without ID as they are
+				if (string.IsNullOrEmpty(saveable.ObjectID))
 					continue;
-				
-				// Don't save destroyed gibs data
-				if (DestroyedObjects.Contains(gib.ObjectID))
-					continue;
-				
-				// Keep data of destroyed components as it might hold stuff outside of the component and be used
+
+				// Make sure there is a root transform
+				var root = component.transform.root;
+				if (root == null)
+					return;
 				
 				try
 				{
-					data.Create[gib.ObjectID] = new CreateData
+					if (root == worldTr)
 					{
-						Type = ECreateType.Gib,
-						Name = gib.ObjectData.Name,
-						States = gib.Save()
-					};
-				}
-				catch (Exception e)
-				{
-					Debug.LogError($"[StateManager] Failed saving gib state for {component.name} ({gib.ObjectID}), {e}");
-				}
-			}
-			
-			var objects = world.Objects.GetComponentsInChildren<Component>(true);
-			for (var i = 0; i < objects.Length; i++)
-			{
-				var component = objects[i];
-				if (component is not IObject iObject)
-					continue;
-				
-				// Leave objects without ID as they are
-				if (string.IsNullOrEmpty(iObject.ObjectID))
-					continue;
-				
-				// Don't save destroyed objects data
-				if (DestroyedObjects.Contains(iObject.ObjectID))
-					continue;
-				
-				// Keep data of destroyed components as it might hold stuff outside of the component and be used
-				
-				try
-				{
-					data.Objects[iObject.ObjectID] = iObject.Save();
-				}
-				catch (Exception e)
-				{
-					Debug.LogError($"[StateManager] Failed saving object state for {component.name} ({iObject.ObjectID}), {e}");
-				}
-			}
-
-			foreach (var pair in AIManager.Instance.AlivesColliderMap)
-			{
-				var alive = pair.Value;
-				if (alive == null || !alive.IsAlive)
-					continue;
-				
-				// Leave alives without ID as they are
-				if (string.IsNullOrEmpty(alive.ObjectID))
-					continue;
-
-				// Don't save killed alives data
-				if (KilledAlives.Contains(alive.ObjectID))
-					continue;
-
-				if (alive is NPC npc && npc.ExternallySpawned)
-				{
-					try
-					{
-						data.Create[npc.ObjectID] = new CreateData
+						if (saveable is Trigger trigger)
 						{
-							Type = ECreateType.NPC,
-							Name = npc.Data.Name,
-							States = npc.Save()
-						};
+							data.World[trigger.ObjectID] = new WorldData
+							{
+								Type = EWorldDataType.Trigger,
+								States = trigger.Save()
+							};
+						}
 					}
-					catch (Exception e)
+					else
 					{
-						Debug.LogError($"[StateManager] Failed saving npc state for {npc.name} ({npc.ObjectID}), {e}");
+						// Don't save destroyed data
+						if (DestroyedObjects.Contains(saveable.ObjectID))
+							continue;
+
+						// Keep data of destroyed components as it might hold stuff outside of the component and be used
+						
+						if (root == world.Ragdolls)
+						{
+							if (saveable is BaseGib gib)
+							{
+								data.Create[gib.ObjectID] = new CreateData
+								{
+									Type = ECreateType.Gib,
+									Name = gib.ObjectData.Name,
+									States = gib.Save()
+								};
+							}
+						}
+						else if (root == world.Objects)
+						{
+							if (saveable is IObject iObject)
+								data.Objects[iObject.ObjectID] = iObject.Save();
+						}
+						else if (root == world.Characters)
+						{
+							if (saveable is IAlive iAlive)
+							{
+								// Don't save killed alives data
+								if (!iAlive.IsAlive || KilledAlives.Contains(iAlive.ObjectID))
+									continue;
+
+								if (iAlive is NPC npc && npc.ExternallySpawned)
+								{
+									data.Create[npc.ObjectID] = new CreateData
+									{
+										Type = ECreateType.NPC,
+										Name = npc.Data.Name,
+										States = npc.Save()
+									};
+								}
+								else
+								{
+									data.Alives[iAlive.ObjectID] = iAlive.Save();
+								}
+							}
+						}
 					}
 				}
-				else
+				catch (Exception e)
 				{
-					try
-					{
-						data.Alives[alive.ObjectID] = alive.Save();
-					}
-					catch (Exception e)
-					{
-						Debug.LogError($"[StateManager] Failed saving alive state for {alive.GetGameObject().name} ({alive.ObjectID}), {e}");
-					}
+					Debug.LogError($"[StateManager] Failed saving {saveable.GetType()} state for {component.name} ({saveable.ObjectID}), {e}");
 				}
 			}
 
@@ -241,22 +202,33 @@ namespace Managers
 			for (var i = 0; i < worldComponents.Length; i++)
 			{
 				var component = worldComponents[i];
-				if (component is Trigger trigger)
-				{
-					// Leave triggers without ID as they are
-					if (string.IsNullOrEmpty(trigger.ObjectID))
-						continue;
+				if (component is not ISaveable saveable)
+					continue;
+
+				// Leave saveables without ID as they are
+				if (string.IsNullOrEmpty(saveable.ObjectID))
+					continue;
 					
-					if (data.World.TryGetValue(trigger.ObjectID, out var worldData))
+				if (data.World.TryGetValue(saveable.ObjectID, out var worldData))
+				{
+					try
 					{
-						try
+						// Make sure to load correct type
+						switch (worldData.Type)
 						{
-							trigger.Load(worldData.States);
+							case EWorldDataType.Trigger:
+							{
+								if (saveable is not Trigger)
+									continue;
+								break;
+							}
 						}
-						catch (Exception e)
-						{
-							Debug.LogError($"[StateManager] Failed loading trigger state for {component.name} ({trigger.ObjectID}), {e}");
-						}
+						
+						saveable.Load(worldData.States);
+					}
+					catch (Exception e)
+					{
+						Debug.LogError($"[StateManager] Failed loading {saveable.GetType()} state for {component.name} ({saveable.ObjectID}), {e}");
 					}
 				}
 			}
@@ -298,13 +270,14 @@ namespace Managers
 						break;
 					}
 					case ECreateType.NPC:
+					{
 						// Don't create a npc if it's supposed to be killed already
 						if (data.KilledAlives.Contains(pair.Key))
 							continue;
-						
+
 						var npc = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)objectManager.GetAlive(pair.Value.Name));
 						npc.ObjectID = pair.Key;
-						
+
 						try
 						{
 							npc.Load(pair.Value.States);
@@ -313,9 +286,10 @@ namespace Managers
 						{
 							Debug.LogError($"[StateManager] Failed loading npc state for {npc.name} ({npc.ObjectID}), {e}");
 						}
-						
+
 						iAlive = npc;
 						break;
+					}
 				}
 
 				if (iObject != null)
@@ -323,7 +297,7 @@ namespace Managers
 					// Other potentially needed data is set so we can remove the component now
 					if (data.DestroyedComponents.Contains(iObject.ObjectID))
 					{
-						UnityEngine.Object.Destroy((Component)iObject);
+						Object.Destroy((Component)iObject);
 						continue;
 					}
 				}
@@ -348,7 +322,7 @@ namespace Managers
 				// No data for destroyed objects, just remove it
 				if (data.DestroyedObjects.Contains(iObject.ObjectID))
 				{
-					UnityEngine.Object.Destroy(iObject.GetGameObject());
+					Object.Destroy(iObject.GetGameObject());
 					continue;
 				}
 				
@@ -367,7 +341,7 @@ namespace Managers
 				// Other potentially needed data is set so we can remove the component now
 				if (data.DestroyedComponents.Contains(iObject.ObjectID))
 				{
-					UnityEngine.Object.Destroy((Component)iObject);
+					Object.Destroy((Component)iObject);
 					continue;
 				}
 			}

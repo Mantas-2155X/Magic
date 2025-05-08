@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using Events;
 using Newtonsoft.Json.Linq;
+using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
 
 namespace Components
 {
-	public class Trigger : MonoBehaviour
+	public class Trigger : MonoBehaviour, ISaveable
 	{
 		[field: SerializeField]
 		public string ObjectID { get; set; }

@@ -9,15 +9,14 @@ using Combat.Wearables.Interfaces;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 
 namespace AI.Interfaces
 {
-	public interface IAlive
+	public interface IAlive : ISaveable
 	{
 		public AliveData Data { get; }
-
-		public string ObjectID { get; set; }
 
 		public Body Body { get; }
 		
@@ -100,10 +99,6 @@ namespace AI.Interfaces
 		public void ReleaseObject();
 		public void ShrinkObject(bool state);
 		public void HandleGrab();
-		
-		public Dictionary<string, JObject> Save();
-		
-		public void Load(Dictionary<string, JObject> data);
 
 		public GameObject GetGameObject();
 		public Transform GetTransform();

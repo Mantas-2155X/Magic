@@ -4,17 +4,16 @@ using AI.Interfaces;
 using Combat.Enums;
 using Newtonsoft.Json.Linq;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 
 namespace Objects.Interfaces
 {
-	public interface IObject
+	public interface IObject : ISaveable
 	{
 		public ObjectData ObjectData { get; set; }
 
 		public Rigidbody Rigidbody { get; set; }
-		
-		public string ObjectID { get; set; }
 		
 		#region Breakable
 
@@ -44,10 +43,6 @@ namespace Objects.Interfaces
 		#endregion
 		
 		public void Spawn(Vector3 position, Vector3 angles);
-
-		public Dictionary<string, JObject> Save();
-		
-		public void Load(Dictionary<string, JObject> data);
 		
 		public GameObject GetGameObject();
 		public Transform GetTransform();
