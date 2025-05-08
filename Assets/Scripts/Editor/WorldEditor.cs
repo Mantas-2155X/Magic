@@ -48,8 +48,18 @@ namespace Editor
 			var saves = StateManager.Instance.AvailableSaves;
 			foreach (var pair in saves)
 			{
+				GUILayout.BeginHorizontal();
+				
 				if (GUILayout.Button($"Load {pair.Key}"))
 					StateManager.Instance.Load(pair.Value);
+				
+				if (GUILayout.Button("X", GUILayout.Width(25)))
+				{
+					StateManager.Instance.Delete(pair.Key);
+					break;
+				}
+				
+				GUILayout.EndHorizontal();
 			}
 			
 			serializedObject.ApplyModifiedProperties();

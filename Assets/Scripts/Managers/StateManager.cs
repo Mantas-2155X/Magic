@@ -254,6 +254,25 @@ namespace Managers
 			loadAsync(data).Forget();
 		}
 
+		public void Delete(string path)
+		{
+			if (!AvailableSaves.ContainsKey(path))
+			{
+				Debug.LogError("[StateManager] Not deleting save data as the file is not part of available saves");
+				return;
+			}
+			
+			if (!File.Exists(path))
+			{
+				Debug.LogError("[StateManager] Not deleting save data as the file does not exist");
+				return;
+			}
+
+			File.Delete(path);
+			
+			InitializeSaves();
+		}
+		
 		public void OnPreSceneLoad()
 		{
 			DestroyedObjects.Clear();
