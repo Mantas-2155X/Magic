@@ -74,6 +74,7 @@ namespace AI.Interfaces
 		public void ForgetSpell(SpellData data);
 		public void ForgetAllSpells();
 		
+		public int GetWearableIndex(WearableData data);
 		public bool HasWearable(WearableData data);
 		public void EquipWearable(WearableData data);
 		public void EquipWearable(IWearable wearable);

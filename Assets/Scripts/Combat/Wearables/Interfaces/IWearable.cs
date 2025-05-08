@@ -15,7 +15,6 @@ namespace Combat.Wearables.Interfaces
 		
 		public Rigidbody Rigidbody { get; }
 		public Collider[] Colliders { get; }
-		public DroppedWearable DroppedWearable { get; }
 
 		public void Spawn(Vector3 position, Vector3 angles);
 

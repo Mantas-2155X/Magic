@@ -24,23 +24,25 @@ namespace Combat.Wearables.Base
 		public Rigidbody Rigidbody { get; set; }
 		[field: SerializeField]
 		public Collider[] Colliders { get; set; }
-		[field: SerializeField]
-		public DroppedWearable DroppedWearable { get; set; }
+
+		private DroppedWearable droppedWearable;
 
 		private GameObject thisGo;
 		private Transform thisTr;
 
 		private bool init;
-
+		private bool ignorePooling;
+		
 		public void Awake()
 		{
 			initializeObject();
-			
-			DroppedWearable.Wearable = this;
 		}
 
 		public void OnDisable()
 		{
+			if (ignorePooling)
+				return;
+			
 			ObjectID = "";
 			PoolingManager.Instance.Add(WearableData, gameObject);
 		}
@@ -62,7 +64,11 @@ namespace Combat.Wearables.Base
 			
 			Owner = alive;
 
-			DroppedWearable.enabled = false;
+			if (droppedWearable != null)
+			{
+				ObjectID = droppedWearable.ObjectID;
+				Destroy(droppedWearable);
+			}
 
 			Rigidbody.isKinematic = true;
 			Rigidbody.detectCollisions = false;
@@ -82,16 +88,19 @@ namespace Combat.Wearables.Base
 		
 		public virtual void Drop()
 		{
-			if (Owner == null)
-				return;
+			var movePos = Vector3.zero;
+			var moveAng = Vector3.zero;
 			
-			if (Owner is Player)
-				setRenderMode(ShadowCastingMode.On);
+			if (Owner != null)
+			{
+				if (Owner is Player)
+					setRenderMode(ShadowCastingMode.On);
+				
+				var dropTr = Owner.Body.Containers[WearableData.WearableType].Drop;
 
-			var dropTr = Owner.Body.Containers[WearableData.WearableType].Drop;
-
-			var movePos = dropTr.position + (Vector3.down * 0.1f) + (dropTr.right * 0.1f);
-			var moveAng = dropTr.eulerAngles;
+				movePos = dropTr.position + (Vector3.down * 0.1f) + (dropTr.right * 0.1f);
+				moveAng = dropTr.eulerAngles;
+			}
 			
 			thisTr.SetParent(World.World.Instance.Objects);
 			thisTr.position = movePos;
@@ -108,7 +117,21 @@ namespace Combat.Wearables.Base
 			Rigidbody.MovePosition(movePos);
 			Rigidbody.MoveRotation(Quaternion.Euler(moveAng));
 
-			DroppedWearable.enabled = true;
+			if (droppedWearable == null)
+			{
+				// Needed to prevent OnEnable getting called on DroppedWearable before the data is set
+				ignorePooling = true;
+				thisGo.SetActive(false);
+				
+				droppedWearable = thisGo.AddComponent<DroppedWearable>();
+				droppedWearable.ObjectData = ObjectManager.Instance.GetObject("OBJECT_DROPPEDWEARABLE_NAME");
+				droppedWearable.ObjectID = ObjectID;
+				droppedWearable.Rigidbody = Rigidbody;
+				droppedWearable.Wearable = this;
+
+				ignorePooling = false;
+				thisGo.SetActive(true);
+			}
 
 			Owner = null;
 		}

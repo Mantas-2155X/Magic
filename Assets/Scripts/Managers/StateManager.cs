@@ -7,6 +7,7 @@ using Components;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Objects;
 using Objects.Base;
 using Objects.Interfaces;
 using ScriptableObjects;
@@ -20,7 +21,7 @@ using Object = UnityEngine.Object;
 namespace Managers
 {
 	// TODO (impl):
-	// (Objects) BaseElevator, BaseConveyor, DroppedWearable
+	// (Objects) BaseElevator, BaseConveyor
 	// (AI) NPC, Mid-cast info
 	// (Combat) Launched projectiles, Active attacks, Spells, Decals
 	// (World) World7 Orb, World6 Waves, World4 Timer
@@ -147,7 +148,20 @@ namespace Managers
 						{
 							if (saveable is IObject iObject)
 							{
-								data.Objects[iObject.ObjectID] = iObject.Save();
+								if (saveable is DroppedWearable droppedWearable)
+								{
+									data.Create[droppedWearable.ObjectID] = new CreateData
+									{
+										Type = ECreateType.DroppedWearable,
+										Name = droppedWearable.Wearable.WearableData.Name, // Actual wearable name here instead of droppedwearable
+										States = droppedWearable.Save()
+									};
+								}
+								else
+								{
+									data.Objects[iObject.ObjectID] = iObject.Save();
+								}
+								
 								saved = true;
 							}
 						}
@@ -319,6 +333,32 @@ namespace Managers
 						}
 
 						iAlive = npc;
+						break;
+					}
+					case ECreateType.DroppedWearable:
+					{
+						// Don't create a dropped wearable if it's supposed to be destroyed already
+						if (data.DestroyedObjects.Contains(pair.Key))
+							continue;
+						
+						var wearable = objectManager.CreateWearable(objectManager.GetWearable(pair.Value.Name), Vector3.zero, Vector3.zero);
+						wearable.ObjectID = pair.Key;
+						wearable.Drop();
+
+						var droppedWearable = wearable.GetGameObject().GetComponent<DroppedWearable>();
+
+						try
+						{
+							droppedWearable.Load(pair.Value.States);
+							loaded = true;
+						}
+						catch(Exception e)
+						{
+							loaded = false;
+							Debug.LogError($"[StateManager] Failed loading created dropped wearable state for {droppedWearable.name} ({droppedWearable.ObjectID}), {e}");
+						}
+
+						iObject = droppedWearable;
 						break;
 					}
 				}

@@ -105,9 +105,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8584383134835422118}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7635341922397970938}
     - targetCorrespondingSourceObject: {fileID: -534632489212797966, guid: 8d4ffba131743e2ab9c3524415948a83, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2253220343047811042}
@@ -182,7 +179,7 @@ MonoBehaviour:
   <Colliders>k__BackingField:
   - {fileID: 2886060341139500075}
   - {fileID: 2253220343047811042}
-  <DroppedWearable>k__BackingField: {fileID: 7635341922397970938}
+  <DroppedWearable>k__BackingField: {fileID: 0}
 --- !u!54 &8584383134835422118
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -190,10 +187,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9150455038998059246}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -210,16 +207,3 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7635341922397970938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9150455038998059246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 951eace190fb41e4b9c55e2551725e3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <ObjectData>k__BackingField: {fileID: 11400000, guid: c7fb8b85c7c0457be9940efe08cd6a87, type: 2}

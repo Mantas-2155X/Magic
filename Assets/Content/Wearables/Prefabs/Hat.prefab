@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: -2399338845636368930}
   - component: {fileID: 6656124334614098649}
   - component: {fileID: 2674095172515678096}
-  - component: {fileID: 1335226118888787235}
   m_Layer: 0
   m_Name: Hat
   m_TagString: Untagged
@@ -74,7 +73,7 @@ MonoBehaviour:
   <Colliders>k__BackingField:
   - {fileID: -2399338845636368930}
   - {fileID: 7258286790245382415}
-  <DroppedWearable>k__BackingField: {fileID: 1335226118888787235}
+  <DroppedWearable>k__BackingField: {fileID: 0}
 --- !u!54 &2674095172515678096
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -82,10 +81,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5530983718038463331}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -102,19 +101,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1335226118888787235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5530983718038463331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 951eace190fb41e4b9c55e2551725e3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <ObjectData>k__BackingField: {fileID: 11400000, guid: c7fb8b85c7c0457be9940efe08cd6a87, type: 2}
 --- !u!1001 &8930031685097841602
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -337,6 +337,18 @@ namespace AI.Base
 			Spells.Clear();
 		}
 		
+		public virtual int GetWearableIndex(WearableData data)
+		{
+			for (var i = 0; i < Wearables.Count; i++)
+			{
+				if (Wearables[i].WearableData != data)
+					continue;
+
+				return i;
+			}
+			
+			return -1;
+		}
 		public virtual bool HasWearable(WearableData data)
 		{
 			for (var i = 0; i < Wearables.Count; i++)
@@ -364,6 +376,7 @@ namespace AI.Base
 			}
 
 			var wearable = ObjectManager.Instance.CreateWearable(data, Vector3.zero, Vector3.zero);
+			wearable.ObjectID = Guid.NewGuid().ToString();
 			
 			wearable.Equip(this);
 			Wearables.Add(wearable);

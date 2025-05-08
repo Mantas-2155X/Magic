@@ -4,6 +4,7 @@ using AI.Base;
 using AI.Enums;
 using Combat.Enums;
 using Combat.Spells.Base;
+using Combat.Wearables.Base;
 using Managers;
 using Newtonsoft.Json;
 using Objects.Interfaces;
@@ -15,7 +16,7 @@ namespace State.States
 	public class BaseAliveState
 	{
 		[JsonProperty]
-		public List<string> Wearables;
+		public Dictionary<string, BaseWearableState> Wearables;
 		
 		[JsonProperty]
 		public Dictionary<string, BaseSpellState> Spells;
@@ -65,10 +66,13 @@ namespace State.States
 
 			var state = new BaseAliveState();
 			
-			state.Wearables = new List<string>();
+			state.Wearables = new Dictionary<string, BaseWearableState>();
 			
 			for (var i = 0; i < baseAlive.Wearables.Count; i++)
-				state.Wearables.Add(baseAlive.Wearables[i].WearableData.Name);
+			{
+				var wearable = baseAlive.Wearables[i];
+				state.Wearables.Add(wearable.WearableData.Name, BaseWearableState.Read((BaseWearable)wearable));
+			}
 
 			state.Spells = new Dictionary<string, BaseSpellState>();
 			
@@ -131,8 +135,16 @@ namespace State.States
 			
 			baseAlive.RemoveAllWearables();
 
-			for (var i = 0; i < state.Wearables.Count; i++)
-				baseAlive.EquipWearable(ObjectManager.Instance.GetWearable(state.Wearables[i]));
+			foreach (var pair in state.Wearables)
+			{
+				var wearableState = pair.Value;
+
+				var wearableData = ObjectManager.Instance.GetWearable(pair.Key);
+				baseAlive.EquipWearable(wearableData);
+				
+				var wearableIndex = baseAlive.GetWearableIndex(wearableData);
+				BaseWearableState.Apply((BaseWearable)baseAlive.Wearables[wearableIndex], wearableState);
+			}
 			
 			baseAlive.ForgetAllSpells();
 			
