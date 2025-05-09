@@ -109,14 +109,10 @@ namespace Objects.Base
 			
 			if (ObjectData.IsUsable)
 				initializeUsable();
-			
-			ObjectManager.Instance.Register(this);
 		}
 
 		public virtual void OnDisable()
 		{
-			ObjectManager.Instance.Unregister(this);
-
 			if (ObjectData.IsPoolable != EObjectPool.OnDisable)
 				return;
 
@@ -128,8 +124,6 @@ namespace Objects.Base
 		{
 			if (ObjectData.IsPoolable != EObjectPool.OnParticleSystemStopped)
 				return;
-
-			ObjectManager.Instance.Unregister(this);
 			
 			ObjectID = "";
 			PoolingManager.Instance.Add(ObjectData, thisGo);
@@ -203,9 +197,6 @@ namespace Objects.Base
 			
 			Health = 0;
 			
-			// Already called inside OnDisable which should be fine but timing might not be right so just do it in case
-			ObjectManager.Instance.Unregister(this);
-			
 #if DEBUG_OBJ
 			Debug.Log($"[Object {gameObject.name}] IObject broken by {source}");
 #endif
@@ -268,9 +259,6 @@ namespace Objects.Base
 					Destroy(this);
 					break;
 			}
-
-			// Already called inside OnDisable which should be fine but timing might not be right so just do it in case
-			ObjectManager.Instance.Unregister(this);
 
 			enabled = false;
 			return true;
@@ -337,9 +325,6 @@ namespace Objects.Base
 					Destroy(this);
 					break;
 			}
-			
-			// Already called inside OnDisable which should be fine but timing might not be right so just do it in case
-			ObjectManager.Instance.Unregister(this);
 			
 			enabled = false;
 			return true;

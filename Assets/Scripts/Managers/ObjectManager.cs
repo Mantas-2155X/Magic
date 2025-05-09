@@ -33,7 +33,6 @@ namespace Managers
 		}
 
 		private readonly Dictionary<string, Data> datasMap = new ();
-		private readonly List<IObject> activeObjects = new ();
 
 		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes" };
 
@@ -51,28 +50,6 @@ namespace Managers
 					datasMap[$"{dataPath}/{data.Name}"] = data;
 				}
 			}
-		}
-
-		#endregion
-
-		#region Registry
-
-		public void Register(IObject obj)
-		{
-			if (activeObjects.Contains(obj))
-				return;
-			
-			activeObjects.Add(obj);
-		}
-
-		public void Unregister(IObject obj)
-		{
-			activeObjects.Remove(obj);
-		}
-
-		public List<IObject> GetRegisteredObjects()
-		{
-			return activeObjects;
 		}
 
 		#endregion

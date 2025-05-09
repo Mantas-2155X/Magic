@@ -155,13 +155,17 @@ namespace AI.ActionModes.Shared
 			tempResources.Clear();
 			tempResourcePositions.Clear();
 
-			var resources = ObjectManager.Instance.GetRegisteredObjects();
-			for (var i = 0; i < resources.Count; i++)
+			var resources = StateManager.Instance.RegisteredObjects;
+			foreach (var pair in resources)
 			{
-				var resource = resources[i];
-				if (resource == null)
+				if (pair.Value == null || pair.Value is not IObject resource)
 					continue;
 
+				// Don't grab disabled ones
+				if (resource is MonoBehaviour mono && !mono.enabled)
+					continue;
+				
+				// Make sure it's a resource
 				if (!resource.ObjectData.Tags.HasFlag(tag))
 					continue;
 
