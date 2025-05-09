@@ -100,6 +100,7 @@ namespace Managers
 			
 			var data = new SaveData();
 			data.Scene = currentScene;
+			data.SavedTime = DateTimeOffset.Now;
 			data.DestroyedObjects = DestroyedObjects;
 			data.DestroyedComponents = DestroyedComponents;
 			data.KilledAlives = KilledAlives;
@@ -244,7 +245,7 @@ namespace Managers
 				return;
 			}
 
-			File.WriteAllText(System.IO.Path.Combine(Path, $"{currentScene}_{DateTime.Now:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
+			File.WriteAllText(System.IO.Path.Combine(Path, $"{currentScene}_{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			
 			InitializeSaves();
 		}

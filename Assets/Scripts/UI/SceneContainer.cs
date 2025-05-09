@@ -1,3 +1,4 @@
+using TMPro;
 using Tools;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,14 +16,19 @@ namespace UI
 		
 		[SerializeField]
 		public Localizer Localizer;
+
+		[SerializeField]
+		public TMP_Text Date;
+		
+		public ScrollRect ScrollRect;
+		public MonoBehaviour Parent;
 		
 		public void OnSelect(BaseEventData eventData)
 		{
 			if (eventData is not AxisEventData)
 				return;
 			
-			var sceneSelect = Title.Instance.SceneSelect;
-			sceneSelect.ScrollRect.ScrollToCenter((RectTransform)transform, sceneSelect);
+			ScrollRect.ScrollToCenter((RectTransform)transform, Parent);
 		}
 	}
 }

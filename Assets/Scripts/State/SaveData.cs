@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,6 +11,9 @@ namespace State
 		[JsonProperty]
 		public string Scene;
 
+		[JsonProperty]
+		public DateTimeOffset SavedTime;
+		
 		[JsonProperty]
 		public List<string> DestroyedObjects;
 

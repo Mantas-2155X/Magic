@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI
@@ -88,15 +89,22 @@ namespace UI
 		
 		private async UniTaskVoid selectDelayed()
 		{
+			if (activeScenes == 0)
+			{
+				SelectionManager.Instance.SetSelection(CloseButton.gameObject);
+				return;
+			}
+			
 			await UniTask.NextFrame();
 			
 			if (this == null || !isActiveAndEnabled)
 				return;
 			
 			SelectionManager.Instance.SetSelection(Containers[0].Button.gameObject);
+			Containers[0].OnSelect(new AxisEventData(null));
 		}
 		
-		public void updateScenes()
+		private void updateScenes()
 		{
 			var sceneNames = SceneManager.Instance.GetSceneNames();
 			var sceneDatas = SceneManager.Instance.GetSceneDatas();
@@ -166,6 +174,27 @@ namespace UI
 		private void updateNavigation()
 		{
 			var scenesCount = activeScenes;
+			if (scenesCount == 0)
+			{
+				CloseButton.navigation = new Navigation
+				{
+					mode = Navigation.Mode.Explicit,
+					selectOnDown = ShowHiddenToggle,
+					selectOnUp = ShowHiddenToggle,
+					selectOnLeft = ShowHiddenToggle,
+					selectOnRight = ShowHiddenToggle
+				};
+			
+				ShowHiddenToggle.navigation = new Navigation
+				{
+					mode = Navigation.Mode.Explicit,
+					selectOnDown = CloseButton,
+					selectOnUp = CloseButton,
+					selectOnLeft = CloseButton,
+					selectOnRight = CloseButton
+				};
+				return;
+			}
 			
 			var firstContainer = Containers[0].Button;
 			var lastContainer = Containers[scenesCount - 1].Button;
@@ -250,14 +279,7 @@ namespace UI
 				var belowIndex = i + constraints;
 				if (belowIndex >= scenesCount)
 				{
-					if (aboveButton != CloseButton)
-					{
-						belowButton = CloseButton;
-					}
-					else
-					{
-						belowButton = lastContainer;
-					}
+					belowButton = CloseButton;
 				}
 				else
 				{

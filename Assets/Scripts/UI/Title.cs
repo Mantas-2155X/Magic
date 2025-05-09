@@ -44,7 +44,7 @@ namespace UI
 		public InputActionReference TitleAction;
 
 		[SerializeField]
-		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - load, 3 - save, 4 - settings, 5 - returntotitle, 6 - quitgame, 7 - sceneselect
+		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - saveload, 3 - unused, 4 - settings, 5 - returntotitle, 6 - quitgame, 7 - sceneselect
 		[SerializeField]
 		public List<GameObject> ButtonObjects;
 
@@ -57,6 +57,9 @@ namespace UI
 		[SerializeField]
 		public SceneSelect SceneSelect;
 		
+		[SerializeField]
+		public SaveLoad SaveLoad;
+
 		[SerializeField]
 		public GameObject Blocker;
 
@@ -84,8 +87,6 @@ namespace UI
 			{
 				// needs main story
 				Buttons[0], 
-				// needs saving and loading
-				Buttons[2], Buttons[3]
 			};
 			
 			for (var i = 0; i < disableButtons.Length; i++)
@@ -194,14 +195,12 @@ namespace UI
 			Close();
 		}
 
-		public void OnLoad()
+		public void OnSaveLoad()
 		{
-			throw new NotImplementedException();
-		}
-
-		public void OnSave()
-		{
-			throw new NotImplementedException();
+			if (SaveLoad == null)
+				return;
+			
+			SaveLoad.Toggle();
 		}
 
 		public void OnSettings()
@@ -260,8 +259,7 @@ namespace UI
 			
 			ButtonObjects[0].SetActive(inTitle);
 			ButtonObjects[1].SetActive(!inTitle);
-			ButtonObjects[2].SetActive(!inTitle);
-			ButtonObjects[3].SetActive(!inTitle);
+			ButtonObjects[2].SetActive(true);
 			ButtonObjects[4].SetActive(true);
 			ButtonObjects[5].SetActive(!inTitle);
 			ButtonObjects[6].SetActive(true);
@@ -285,7 +283,7 @@ namespace UI
 			var continueButton = Buttons[1];
 			var quitGameButton = Buttons[6];
 
-			var shouldExplicit = Console.isActiveAndEnabled || Settings.isActiveAndEnabled || SceneSelect.isActiveAndEnabled;
+			var shouldExplicit = Console.isActiveAndEnabled || Settings.isActiveAndEnabled || SceneSelect.isActiveAndEnabled || SaveLoad.isActiveAndEnabled;
 			if (shouldExplicit)
 			{
 				Button topButton;
@@ -355,6 +353,12 @@ namespace UI
 					SceneSelect.Select();
 					return;
 				}
+				
+				if (SaveLoad.isActiveAndEnabled)
+				{
+					SaveLoad.Select();
+					return;
+				}
 			}
 
 			SelectionManager.Instance.SetSelection(ButtonObjects[0].activeSelf ? ButtonObjects[0] : ButtonObjects[1]);
@@ -371,6 +375,9 @@ namespace UI
 					return;
 				
 				if (SceneSelect.isActiveAndEnabled)
+					return;
+				
+				if (SaveLoad.isActiveAndEnabled)
 					return;
 			}
 			
