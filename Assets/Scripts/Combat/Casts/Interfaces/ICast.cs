@@ -1,14 +1,13 @@
 using AI.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 
 namespace Combat.Casts.Interfaces
 {
-	public interface ICast
+	public interface ICast : IIdentifiable
 	{
 		public CastData CastData { get; }
-
-		public string ObjectID { get; set; }
 
 		public Component Source { get; }
 

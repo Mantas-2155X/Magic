@@ -1,15 +1,14 @@
 using AI.Interfaces;
 using Objects;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 
 namespace Combat.Spells.Interfaces
 {
-	public interface ISpell
+	public interface ISpell : IIdentifiable
 	{
 		public SpellData SpellData { get; set; }
-	
-		public string ObjectID { get; set; }
 
 		public IAlive Owner { get; set; }
 

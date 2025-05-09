@@ -491,8 +491,6 @@ namespace AI.Base
 			recalculateStats();
 			regenerateLoop().Forget();
 			
-			StateManager.Instance.KilledAlives.Remove(ObjectID);
-			
 			OnSpawnEvent?.Invoke(this);
 		}
 		public virtual void Kill(object source, bool killSilently = false)

@@ -1,14 +1,13 @@
 using AI.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 
 namespace Combat.Attacks.Interfaces
 {
-	public interface IAttack
+	public interface IAttack : IIdentifiable
 	{
 		public AttackData AttackData { get; }
-
-		public string ObjectID { get; set; }
 
 		public Component Source { get; }
 

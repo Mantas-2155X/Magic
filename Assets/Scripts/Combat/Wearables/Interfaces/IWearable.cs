@@ -1,16 +1,15 @@
 using AI.Interfaces;
 using Objects;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 
 namespace Combat.Wearables.Interfaces
 {
-	public interface IWearable
+	public interface IWearable : IIdentifiable
 	{
 		public WearableData WearableData { get; }
 		
-		public string ObjectID { get; set; }
-
 		public IAlive Owner { get; }
 		
 		public Rigidbody Rigidbody { get; }

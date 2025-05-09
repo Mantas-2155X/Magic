@@ -526,6 +526,10 @@ namespace Managers
 				// No data for killed alives, just remove it
 				if (data.KilledAlives.Contains(alive.ObjectID))
 				{
+					// Don't kill the player, you can't save while dead anyway
+					if (alive is Player)
+						continue;
+					
 					killAlives.Add(alive);
 					continue;
 				}
