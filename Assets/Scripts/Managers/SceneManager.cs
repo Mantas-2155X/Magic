@@ -94,8 +94,7 @@ namespace Managers
 			if (title != null)
 				title.CloseWindows();
 			
-			var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {currentScene} to {scene}");
+			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {GetCurrentScene()} to {scene}");
 			
 			PauseManager.Instance.Unpause();
 			StateManager.Instance.OnPreSceneLoad();

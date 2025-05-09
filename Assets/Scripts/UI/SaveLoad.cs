@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Managers;
+using ScriptableObjects;
 using State;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -173,10 +174,20 @@ namespace UI
 		
 		private void updateSaves()
 		{
-			var availableSaves = StateManager.Instance.AvailableSaves;
+			var currentScene = SceneManager.Instance.GetCurrentScene();
+			var availableSaves = new List<Tuple<string, SaveData>>();
+
+			foreach (var pair in StateManager.Instance.AvailableSaves)
+			{
+				// Show all saves in title, otherwise only show current scene saves
+				if (currentScene != pair.Value.Scene && currentScene != "Title")
+					continue;
 			
-			// Make this more efficient
-			var saveDatas = availableSaves.OrderByDescending(save => save.Value.SavedTime);
+				availableSaves.Add(new Tuple<string, SaveData>(pair.Key, pair.Value));
+			}
+
+			// Sort by saved time descending
+			availableSaves.Sort((x, y) => y.Item2.SavedTime.CompareTo(x.Item2.SavedTime));
 			
 			var savesCount = availableSaves.Count;
 			if (savesCount > Containers.Count)
@@ -200,29 +211,29 @@ namespace UI
 			onContainerClicked(null);
 
 			var containerIndex = 0;
-			foreach (var pair in saveDatas)
+			for (var i = 0; i < availableSaves.Count; i++)
 			{
-				var saveData = pair.Value;
+				var (savePath, saveData) = availableSaves[i];
+
 				var sceneData = ObjectManager.Instance.GetScene($"SCENE_{saveData.Scene.ToUpper()}_NAME");
-				
 				var container = Containers[containerIndex];
 
 				container.Button.onClick.RemoveAllListeners();
 				container.Button.onClick.AddListener(delegate
 				{
-					selectedSave = new Tuple<string, SaveData>(pair.Key, saveData);
+					selectedSave = new Tuple<string, SaveData>(savePath, saveData);
 					onContainerClicked(container);
 				});
-				
+
 				container.Image.sprite = sceneData.Icon;
-				
+
 				container.Localizer.Key = sceneData.Name;
 				container.Localizer.Apply();
 
 				container.Date.text = saveData.SavedTime.ToString("yyyy-MM-dd\nHH:mm:ss");
-				
+
 				container.Button.gameObject.SetActive(true);
-				
+
 				containerIndex++;
 				activeSaves++;
 			}

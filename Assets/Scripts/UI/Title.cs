@@ -82,19 +82,6 @@ namespace UI
 			var consoleAction = SettingsManager.Instance.GetKeybind("keybinds-debug-console").Item1;
 			consoleAction.performed += onConsole;
 			consoleAction.Enable();
-
-			var disableButtons = new []
-			{
-				// needs main story
-				Buttons[0], 
-			};
-			
-			for (var i = 0; i < disableButtons.Length; i++)
-			{
-				var button = disableButtons[i];
-				button.interactable = false;
-				button.GetComponentInChildren<TMP_Text>().color = new Color(0.75f, 0.75f, 0.75f);
-			}
 		}
 
 		public void OnEnable()
@@ -237,7 +224,7 @@ namespace UI
 
 		private void onTitle(InputAction.CallbackContext ctx)
 		{
-			if (KeybindsPage.IsRebinding || UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title")
+			if (KeybindsPage.IsRebinding || SceneManager.Instance.GetCurrentScene() == "Title")
 				return;
 			
 			Toggle();
@@ -265,7 +252,10 @@ namespace UI
 		
 		public void UpdateButtons()
 		{
-			var inTitle = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title";
+			var sceneManager = SceneManager.Instance;
+
+			var inTitle = sceneManager.GetCurrentScene() == "Title";
+			var currentSceneData = sceneManager.GetCurrentSceneData();
 			
 			ButtonObjects[0].SetActive(inTitle);
 			ButtonObjects[1].SetActive(!inTitle);
@@ -274,6 +264,14 @@ namespace UI
 			ButtonObjects[5].SetActive(!inTitle);
 			ButtonObjects[6].SetActive(true);
 			ButtonObjects[7].SetActive(inTitle);
+			
+			// needs main story
+			Buttons[0].interactable = false;
+			Buttons[0].GetComponentInChildren<TMP_Text>().color = new Color(0.75f, 0.75f, 0.75f);
+			
+			// only show saving for scenes that support it and for title
+			Buttons[2].interactable = inTitle || currentSceneData != null && currentSceneData.SupportsSaving;
+			Buttons[2].GetComponentInChildren<TMP_Text>().color = Buttons[2].interactable ? Color.white : new Color(0.75f, 0.75f, 0.75f);
 			
 			UpdateNavigation();
 		}
