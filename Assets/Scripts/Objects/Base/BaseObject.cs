@@ -14,6 +14,7 @@ using ScriptableObjects;
 using State.States;
 using Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Objects.Base
 {
@@ -25,21 +26,77 @@ namespace Objects.Base
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; set; }
 
-		[field: SerializeField]
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		private GameObject thisGo;
 		private Transform thisTr;
 
 		private bool init;
 
-		#region MonoBehaviour
+		#region Identify / SaveLoad
+
+		public virtual Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+
+			var transformState = TransformState.Read(thisTr);
+			if (transformState != null)
+				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
+
+			var rigidbodyState = RigidbodyState.Read(Rigidbody);
+			if (rigidbodyState != null)
+				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
+
+			var baseObjectState = BaseObjectState.Read(this);
+			if (baseObjectState != null)
+				dict[typeof(BaseObject).ToString()] = JObject.FromObject(baseObjectState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
+				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			
+			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
+				RigidbodyState.Apply(Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
+			
+			if (data.TryGetValue(typeof(BaseObject).ToString(), out var baseObjectState))
+				BaseObjectState.Apply(this, baseObjectState.ToObject<BaseObjectState>());
+		}
 
 		public virtual void Awake()
 		{
 			initializeObject();
+			
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
 		}
 		
+		public virtual void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
+		
+		#region MonoBehaviour
+
 		public virtual void OnEnable()
 		{
 			initializeObject();
@@ -66,7 +123,7 @@ namespace Objects.Base
 			ObjectID = "";
 			PoolingManager.Instance.Add(ObjectData, thisGo);
 		}
-
+		
 		public virtual void OnParticleSystemStopped()
 		{
 			if (ObjectData.IsPoolable != EObjectPool.OnParticleSystemStopped)
@@ -101,37 +158,6 @@ namespace Objects.Base
 			thisTr.eulerAngles = angles;
 			
 			thisGo.SetActive(true);
-		}
-
-		public virtual Dictionary<string, JObject> Save()
-		{
-			var dict = new Dictionary<string, JObject>();
-
-			var transformState = TransformState.Read(thisTr);
-			if (transformState != null)
-				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
-
-			var rigidbodyState = RigidbodyState.Read(Rigidbody);
-			if (rigidbodyState != null)
-				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
-
-			var baseObjectState = BaseObjectState.Read(this);
-			if (baseObjectState != null)
-				dict[typeof(BaseObject).ToString()] = JObject.FromObject(baseObjectState);
-
-			return dict;
-		}
-
-		public virtual void Load(Dictionary<string, JObject> data)
-		{
-			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
-				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
-			
-			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
-				RigidbodyState.Apply(Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
-			
-			if (data.TryGetValue(typeof(BaseObject).ToString(), out var baseObjectState))
-				BaseObjectState.Apply(this, baseObjectState.ToObject<BaseObjectState>());
 		}
 		
 		#endregion

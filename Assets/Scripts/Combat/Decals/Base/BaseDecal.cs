@@ -5,6 +5,7 @@ using Managers;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 
 namespace Combat.Decals.Base
 {
@@ -13,7 +14,20 @@ namespace Combat.Decals.Base
 		[field: SerializeField]
 		public DecalData DecalData { get; private set; }
 		
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		[field: SerializeField]
 		public DecalProjector Projector { get; private set; }
@@ -23,6 +37,22 @@ namespace Combat.Decals.Base
 		
 		private bool init;
 
+		#region Identify / SaveLoad
+		
+		public void Awake()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+		}
+
+		public void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
+		
 		public void Spawn(Vector3 position, Quaternion angles, Transform attach)
 		{
 			if (!init)

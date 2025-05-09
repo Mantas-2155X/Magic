@@ -70,19 +70,46 @@ namespace AI
 		private float groundAngle;
 
 		private const float maximumGroundAngle = 45.1f;
+
+		#region Identify / SaveLoad
+
+		public override Dictionary<string, JObject> Save()
+		{
+			var dict = base.Save();
+			
+			var playerState = PlayerState.Read(this);
+			if (playerState != null)
+				dict[typeof(Player).ToString()] = JObject.FromObject(playerState);
+			
+			return dict;
+		}
+
+		public override void Load(Dictionary<string, JObject> data)
+		{
+			base.Load(data);
+			
+			if (data.TryGetValue(typeof(Player).ToString(), out var playerState))
+				PlayerState.Apply(this, playerState.ToObject<PlayerState>());
+		}
+
+		#endregion
 		
 		#region MonoBehaviour
 
-		public void Awake()
+		public override void Awake()
 		{
+			base.Awake();
+			
 			Camera = Camera.main;
 			CameraTr = Camera!.transform;
 
 			colliderTr = Body.BodyCollider.transform;
 		}
 
-		public void OnDestroy()
+		public override void OnDestroy()
 		{
+			base.Awake();
+
 			DisableInput();
 		}
 
@@ -825,25 +852,6 @@ namespace AI
 			groundAngle = float.MaxValue;
 			
 			return false;
-		}
-		
-		public override Dictionary<string, JObject> Save()
-		{
-			var dict = base.Save();
-			
-			var playerState = PlayerState.Read(this);
-			if (playerState != null)
-				dict[typeof(Player).ToString()] = JObject.FromObject(playerState);
-			
-			return dict;
-		}
-
-		public override void Load(Dictionary<string, JObject> data)
-		{
-			base.Load(data);
-			
-			if (data.TryGetValue(typeof(Player).ToString(), out var playerState))
-				PlayerState.Apply(this, playerState.ToObject<PlayerState>());
 		}
 		
 		#endregion

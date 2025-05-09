@@ -10,6 +10,7 @@ using Managers;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Combat.Spells.Base
@@ -19,7 +20,20 @@ namespace Combat.Spells.Base
 		[field: SerializeField]
 		public SpellData SpellData { get; set; }
 		
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID; 
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		public IAlive Owner { get; set; }
 
@@ -38,7 +52,21 @@ namespace Combat.Spells.Base
 		
 		private ICast cast;
 
-		#region MonoBehaviour
+		#region Identify / SaveLoad
+		
+		public void Awake()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+		}
+
+		public void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
 
 		public virtual void Update()
 		{
@@ -91,8 +119,6 @@ namespace Combat.Spells.Base
 		}
 #endif
 		
-		#endregion
-
 		#region ISpell
 
 		public void SetState(float cooldown, bool casting, float castedTime)

@@ -60,6 +60,67 @@ namespace Objects.Base
 
 		private float lastOpened;
 
+		#region Identify / SaveLoad
+
+		public override Dictionary<string, JObject> Save()
+		{
+			var dict = base.Save();
+
+			var doorState = BaseDoorState.Read(this);
+			if (doorState != null)
+				dict[typeof(BaseDoor).ToString()] = JObject.FromObject(doorState);
+			
+			return dict;
+		}
+
+		public override void Load(Dictionary<string, JObject> data)
+		{
+			base.Load(data);
+			
+			if (data.TryGetValue(typeof(BaseDoor).ToString(), out var baseDoorState))
+				BaseDoorState.Apply(this, baseDoorState.ToObject<BaseDoorState>());
+		}
+		
+		public void SetState(EDoorState state, float normalized, bool locked)
+		{
+			State = state;
+			Normalized = normalized;
+			Locked = locked;
+
+			switch (state)
+			{
+				case EDoorState.Open:
+					lastOpened = Time.time;
+					Obstacle.enabled = false;
+					OnDoorOpenedEvent?.Invoke();
+					break;
+				case EDoorState.Closed:
+					Obstacle.enabled = true;
+					OnDoorClosedEvent?.Invoke();
+					break;
+			}
+			
+			setPosition();
+
+			if (state is EDoorState.Opening or EDoorState.Closing)
+			{
+				State = state is EDoorState.Opening ? EDoorState.Closed : EDoorState.Open;
+				
+				var previousLocked = Locked;
+				var previousInterruptible = Interruptible;
+
+				Locked = false;
+				Interruptible = true;
+
+				Toggle(state is EDoorState.Opening);
+
+				Locked = previousLocked;
+				Interruptible = previousInterruptible;
+			}
+		}
+		
+		#endregion
+		
 		#region MonoBehaviour
 
 		public override void Awake()
@@ -119,67 +180,10 @@ namespace Objects.Base
 		{
 			return base.CanUse(user) && !Locked;
 		}
-		
-		public override Dictionary<string, JObject> Save()
-		{
-			var dict = base.Save();
-
-			var doorState = BaseDoorState.Read(this);
-			if (doorState != null)
-				dict[typeof(BaseDoor).ToString()] = JObject.FromObject(doorState);
-			
-			return dict;
-		}
-
-		public override void Load(Dictionary<string, JObject> data)
-		{
-			base.Load(data);
-			
-			if (data.TryGetValue(typeof(BaseDoor).ToString(), out var baseDoorState))
-				BaseDoorState.Apply(this, baseDoorState.ToObject<BaseDoorState>());
-		}
 
 		#endregion
 		
 		#region Door
-
-		public void SetState(EDoorState state, float normalized, bool locked)
-		{
-			State = state;
-			Normalized = normalized;
-			Locked = locked;
-
-			switch (state)
-			{
-				case EDoorState.Open:
-					lastOpened = Time.time;
-					Obstacle.enabled = false;
-					OnDoorOpenedEvent?.Invoke();
-					break;
-				case EDoorState.Closed:
-					Obstacle.enabled = true;
-					OnDoorClosedEvent?.Invoke();
-					break;
-			}
-			
-			setPosition();
-
-			if (state is EDoorState.Opening or EDoorState.Closing)
-			{
-				State = state is EDoorState.Opening ? EDoorState.Closed : EDoorState.Open;
-				
-				var previousLocked = Locked;
-				var previousInterruptible = Interruptible;
-
-				Locked = false;
-				Interruptible = true;
-
-				Toggle(state is EDoorState.Opening);
-
-				Locked = previousLocked;
-				Interruptible = previousInterruptible;
-			}
-		}
 		
 		public void Open()
 		{

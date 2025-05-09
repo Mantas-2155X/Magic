@@ -9,6 +9,7 @@ using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Combat.Projectiles.Base
 {
@@ -17,7 +18,20 @@ namespace Combat.Projectiles.Base
 		[field: SerializeField]
 		public ProjectileData ProjectileData { get; private set; }
 
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		public Component Source { get; private set; }
 
@@ -42,6 +56,22 @@ namespace Combat.Projectiles.Base
 		private float spellRange;
 		
 		private bool init;
+		
+		#region Identify / SaveLoad
+
+		public void Awake()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+		}
+
+		public void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
 		
 		public void OnCollisionEnter(Collision collision)
 		{

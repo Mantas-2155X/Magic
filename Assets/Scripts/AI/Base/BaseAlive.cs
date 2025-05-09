@@ -21,6 +21,7 @@ using Tools;
 using UI.Hotbar;
 using UI.Spellbook;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace AI.Base
@@ -44,6 +45,53 @@ namespace AI.Base
 		private Transform thisTr;
 
 		private bool init;
+		
+		#region Identify / SaveLoad
+		
+		public virtual Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+
+			var transformState = TransformState.Read(thisTr);
+			if (transformState != null)
+				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
+
+			var rigidbodyState = RigidbodyState.Read(Body.Rigidbody);
+			if (rigidbodyState != null)
+				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
+
+			var baseAliveState = BaseAliveState.Read(this);
+			if (baseAliveState != null)
+				dict[typeof(BaseAlive).ToString()] = JObject.FromObject(baseAliveState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
+				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			
+			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
+				RigidbodyState.Apply(Body.Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
+			
+			if (data.TryGetValue(typeof(BaseAlive).ToString(), out var baseAliveState))
+				BaseAliveState.Apply(this, baseAliveState.ToObject<BaseAliveState>());
+		}
+		
+		public virtual void Awake()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+		}
+
+		public virtual void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
 		
 		#region MonoBehaviour
 
@@ -76,8 +124,20 @@ namespace AI.Base
 		[field: SerializeField]
 		public AliveData Data { get; private set; }
 
-		[field: SerializeField]
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		[field: SerializeField]
 		public Body Body { get; private set; }
@@ -376,8 +436,6 @@ namespace AI.Base
 			}
 
 			var wearable = ObjectManager.Instance.CreateWearable(data, Vector3.zero, Vector3.zero);
-			wearable.ObjectID = Guid.NewGuid().ToString();
-			
 			wearable.Equip(this);
 			Wearables.Add(wearable);
 			
@@ -901,37 +959,6 @@ namespace AI.Base
 		public virtual bool IsGrounded()
 		{
 			return true;
-		}
-		
-		public virtual Dictionary<string, JObject> Save()
-		{
-			var dict = new Dictionary<string, JObject>();
-
-			var transformState = TransformState.Read(thisTr);
-			if (transformState != null)
-				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
-
-			var rigidbodyState = RigidbodyState.Read(Body.Rigidbody);
-			if (rigidbodyState != null)
-				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
-
-			var baseAliveState = BaseAliveState.Read(this);
-			if (baseAliveState != null)
-				dict[typeof(BaseAlive).ToString()] = JObject.FromObject(baseAliveState);
-
-			return dict;
-		}
-
-		public virtual void Load(Dictionary<string, JObject> data)
-		{
-			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
-				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
-			
-			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
-				RigidbodyState.Apply(Body.Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
-			
-			if (data.TryGetValue(typeof(BaseAlive).ToString(), out var baseAliveState))
-				BaseAliveState.Apply(this, baseAliveState.ToObject<BaseAliveState>());
 		}
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

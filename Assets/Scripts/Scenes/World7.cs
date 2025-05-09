@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -6,13 +7,26 @@ using State.Interfaces;
 using State.States;
 using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Scenes
 {
 	public class World7 : MonoBehaviour, ISaveable
 	{
-		[field: SerializeField]
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		[SerializeField]
 		public ParticleSystem Orb;
@@ -44,6 +58,25 @@ namespace Scenes
 		
 		private readonly List<Rigidbody> objects = new ();
 		private readonly Collider[] results = new Collider[500];
+
+		#region Identify / SaveLoad
+		
+		public Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+			
+			var world7State = World7State.Read(this);
+			if (world7State != null)
+				dict[typeof(World7).ToString()] = JObject.FromObject(world7State);
+			
+			return dict;
+		}
+
+		public void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(World7).ToString(), out var world7State))
+				World7State.Apply(this, world7State.ToObject<World7State>());
+		}
 
 		public void SetState(bool activated, bool playerIncluded, float size, float bounceIntensity, float elapsedTime)
 		{
@@ -84,23 +117,20 @@ namespace Scenes
 				SmallOrbs.Play(false);
 			}
 		}
-		
-		public Dictionary<string, JObject> Save()
+
+		public void Awake()
 		{
-			var dict = new Dictionary<string, JObject>();
-			
-			var world7State = World7State.Read(this);
-			if (world7State != null)
-				dict[typeof(World7).ToString()] = JObject.FromObject(world7State);
-			
-			return dict;
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
 		}
 
-		public void Load(Dictionary<string, JObject> data)
+		public void OnDestroy()
 		{
-			if (data.TryGetValue(typeof(World7).ToString(), out var world7State))
-				World7State.Apply(this, world7State.ToObject<World7State>());
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
 		}
+		
+		#endregion
 		
 		public void BeginOrb()
 		{

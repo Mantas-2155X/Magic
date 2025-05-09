@@ -150,6 +150,8 @@ namespace Managers
 		public IObject CreateObject(ObjectData data, Vector3 position, Vector3 angles)
 		{
 			var obj = PoolingManager.Instance.TakeOrCreate<IObject>(data, false);
+			obj.ObjectID = Guid.NewGuid().ToString();
+			
 			obj.Spawn(position, angles);
 			
 			return obj;
@@ -158,6 +160,8 @@ namespace Managers
 		public IWearable CreateWearable(WearableData data, Vector3 position, Vector3 angles)
 		{
 			var wearable = PoolingManager.Instance.TakeOrCreate<IWearable>(data, false);
+			wearable.ObjectID = Guid.NewGuid().ToString();
+			
 			wearable.Spawn(position, angles);
 			
 			return wearable;
@@ -166,6 +170,8 @@ namespace Managers
 		public ICast CreateCast(CastData data, Component source)
 		{
 			var cast = PoolingManager.Instance.TakeOrCreate<ICast>(data, false);
+			cast.ObjectID = Guid.NewGuid().ToString();
+			
 			cast.Spawn(source);
 			
 			return cast;
@@ -199,6 +205,8 @@ namespace Managers
 		public IDecal CreateDecal(DecalData data, ContactPoint contact, Transform attach)
 		{
 			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
+			decal.ObjectID = Guid.NewGuid().ToString();
+			
 			decal.Spawn(contact.point, Quaternion.LookRotation(-contact.normal), attach);
 			
 			return decal;

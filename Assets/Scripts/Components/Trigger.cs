@@ -1,17 +1,31 @@
 using System.Collections.Generic;
 using Events;
+using Managers;
 using Newtonsoft.Json.Linq;
 using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Components
 {
 	public class Trigger : MonoBehaviour, ISaveable
 	{
-		[field: SerializeField]
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		[SerializeField]
 		public OnTriggerEvent OnTriggerEvent;
@@ -24,6 +38,8 @@ namespace Components
 	
 		public bool Triggered { get; private set; }
 	
+		#region Identify / SaveLoad
+		
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
@@ -45,6 +61,20 @@ namespace Components
 		{
 			Triggered = triggered;
 		}
+		
+		public void Awake()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+		}
+
+		public void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
 
 		public void OnTriggerEnter(Collider other)
 		{

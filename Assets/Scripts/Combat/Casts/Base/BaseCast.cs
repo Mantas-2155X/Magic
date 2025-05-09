@@ -7,6 +7,7 @@ using Combat.Spells.Interfaces;
 using Managers;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Combat.Casts.Base
 {
@@ -15,7 +16,20 @@ namespace Combat.Casts.Base
 		[field: SerializeField]
 		public CastData CastData { get; private set; }
 
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		public Component Source { get; private set; }
 
@@ -30,6 +44,22 @@ namespace Combat.Casts.Base
 		private IAlive owner;
 
 		private bool init;
+		
+		#region Identify / SaveLoad
+
+		public void Awake()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+		}
+
+		public void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
 		
 		public void Update()
 		{

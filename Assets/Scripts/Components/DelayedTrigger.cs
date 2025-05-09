@@ -6,13 +6,26 @@ using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Components
 {
 	public class DelayedTrigger : MonoBehaviour, ISaveable
 	{
-		[field: SerializeField]
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		[SerializeField]
 		public OnTriggerEvent OnTriggerEvent;
@@ -30,6 +43,8 @@ namespace Components
 
 		private float? adjustNextEnter;
 
+		#region Identify / SaveLoad
+		
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
@@ -52,6 +67,20 @@ namespace Components
 			Triggered = triggered;
 			adjustNextEnter = enterTime;
 		}
+		
+		public void Awake()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+		}
+
+		public void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
 		
 		public void Update()
 		{

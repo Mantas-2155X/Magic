@@ -45,6 +45,8 @@ namespace Managers
 		}
 
 		public string Path { get; private set; } = "data/saves";
+
+		public Dictionary<string, Object> RegisteredObjects = new ();
 		
 		public List<string> DestroyedObjects = new ();
 		public List<string> DestroyedComponents = new ();

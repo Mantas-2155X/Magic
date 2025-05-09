@@ -64,33 +64,27 @@ namespace Objects
 		public bool Activated { get; private set; }
 		public int Triggered { get; private set; }
 		
-		public void Start()
+		#region Identify / SaveLoad
+
+		public override Dictionary<string, JObject> Save()
 		{
-			if (Activated || Initialization != ESpawnerInitialization.OnStart)
-				return;
+			var dict = base.Save();
 			
-			processLoop().Forget();
+			var npcSpawnerState = NPCSpawnerState.Read(this);
+			if (npcSpawnerState != null)
+				dict[typeof(NPCSpawner).ToString()] = JObject.FromObject(npcSpawnerState);
+			
+			return dict;
 		}
 
-		public void Update()
+		public override void Load(Dictionary<string, JObject> data)
 		{
-			if (PauseManager.IsPaused)
-				return;
+			base.Load(data);
 			
-			if (Cleared || Spawned.Count < SpawnCount)
-				return;
-
-			foreach (var pair in Spawned)
-			{
-				var alive = pair.Value;
-				if (alive != null && alive.IsAlive)
-					return;
-			}
-			
-			Cleared = true;
-			OnSpawnerClearedEvent?.Invoke();
+			if (data.TryGetValue(typeof(NPCSpawner).ToString(), out var npcSpawnerState))
+				NPCSpawnerState.Apply(this, npcSpawnerState.ToObject<NPCSpawnerState>());
 		}
-
+		
 		public void SetState(List<string> spawned, int triggered, bool cleared)
 		{
 			Cleared = cleared;
@@ -121,23 +115,33 @@ namespace Objects
 			}
 		}
 		
-		public override Dictionary<string, JObject> Save()
+		#endregion
+		
+		public void Start()
 		{
-			var dict = base.Save();
+			if (Activated || Initialization != ESpawnerInitialization.OnStart)
+				return;
 			
-			var npcSpawnerState = NPCSpawnerState.Read(this);
-			if (npcSpawnerState != null)
-				dict[typeof(NPCSpawner).ToString()] = JObject.FromObject(npcSpawnerState);
-			
-			return dict;
+			processLoop().Forget();
 		}
 
-		public override void Load(Dictionary<string, JObject> data)
+		public void Update()
 		{
-			base.Load(data);
+			if (PauseManager.IsPaused)
+				return;
 			
-			if (data.TryGetValue(typeof(NPCSpawner).ToString(), out var npcSpawnerState))
-				NPCSpawnerState.Apply(this, npcSpawnerState.ToObject<NPCSpawnerState>());
+			if (Cleared || Spawned.Count < SpawnCount)
+				return;
+
+			foreach (var pair in Spawned)
+			{
+				var alive = pair.Value;
+				if (alive != null && alive.IsAlive)
+					return;
+			}
+			
+			Cleared = true;
+			OnSpawnerClearedEvent?.Invoke();
 		}
 		
 		public void Trigger()

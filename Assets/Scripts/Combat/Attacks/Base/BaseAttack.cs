@@ -11,6 +11,7 @@ using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Combat.Attacks.Base
 {
@@ -19,7 +20,20 @@ namespace Combat.Attacks.Base
 		[field: SerializeField]
 		public AttackData AttackData { get; private set; }
 		
-		public string ObjectID { get; set; }
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects.Remove(objectID);
+				objectID = value;
+				if (!string.IsNullOrWhiteSpace(objectID))
+					StateManager.Instance.RegisteredObjects[objectID] = this;
+			}
+		}
 
 		public Component Source { get; private set; }
 
@@ -42,6 +56,22 @@ namespace Combat.Attacks.Base
 		private IAlive owner;
 		
 		private bool init;
+		
+		#region Identify / SaveLoad
+
+		public void Awake()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+		}
+
+		public void OnDestroy()
+		{
+			if (!string.IsNullOrWhiteSpace(ObjectID))
+				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+		}
+		
+		#endregion
 		
 		public virtual void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
 		{

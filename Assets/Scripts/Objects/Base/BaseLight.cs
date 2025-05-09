@@ -43,6 +43,29 @@ namespace Objects.Base
 
 		private Material material;
 		
+		#region Identify / SaveLoad
+
+		public override Dictionary<string, JObject> Save()
+		{
+			var dict = base.Save();
+			
+			var lightState = BaseLightState.Read(this);
+			if (lightState != null)
+				dict[typeof(BaseLight).ToString()] = JObject.FromObject(lightState);
+			
+			return dict;
+		}
+
+		public override void Load(Dictionary<string, JObject> data)
+		{
+			base.Load(data);
+			
+			if (data.TryGetValue(typeof(BaseLight).ToString(), out var baseLightState))
+				BaseLightState.Apply(this, baseLightState.ToObject<BaseLightState>());
+		}
+		
+		#endregion
+		
 		public override void Awake()
 		{
 			base.Awake();
@@ -69,25 +92,6 @@ namespace Objects.Base
 		{
 			Disable();
 			base.Break(source);
-		}
-
-		public override Dictionary<string, JObject> Save()
-		{
-			var dict = base.Save();
-			
-			var lightState = BaseLightState.Read(this);
-			if (lightState != null)
-				dict[typeof(BaseLight).ToString()] = JObject.FromObject(lightState);
-			
-			return dict;
-		}
-
-		public override void Load(Dictionary<string, JObject> data)
-		{
-			base.Load(data);
-			
-			if (data.TryGetValue(typeof(BaseLight).ToString(), out var baseLightState))
-				BaseLightState.Apply(this, baseLightState.ToObject<BaseLightState>());
 		}
 
 		#region Light

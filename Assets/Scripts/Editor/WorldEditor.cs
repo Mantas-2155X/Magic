@@ -8,7 +8,7 @@ namespace Editor
 	public class WorldEditor : UnityEditor.Editor
 	{
 		[SerializeField]
-		public bool[] Folds = new bool[3];
+		public bool[] Folds = new bool[4];
 		
 		public override void OnInspectorGUI()
 		{
@@ -38,6 +38,18 @@ namespace Editor
 				var list = StateManager.Instance.KilledAlives;
 				for (var i = 0; i < list.Count; i++)
 					EditorGUILayout.TextField(list[i]);
+			}
+			
+			Folds[3] = EditorGUILayout.Foldout(Folds[3], $"Registered Objects ({StateManager.Instance.RegisteredObjects.Count})", true);
+			if (Folds[3])
+			{
+				foreach (var pair in StateManager.Instance.RegisteredObjects)
+				{
+					GUILayout.BeginHorizontal();
+					EditorGUILayout.TextField(pair.Key, GUILayout.Width(175));
+					EditorGUILayout.ObjectField(pair.Value, typeof(Object), true);
+					GUILayout.EndHorizontal();
+				}
 			}
 			
 			GUILayout.Space(5);
