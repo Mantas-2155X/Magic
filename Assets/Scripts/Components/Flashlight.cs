@@ -14,6 +14,11 @@ namespace Components
 			Instance = this;
 		}
 
+		public void Toggle(bool state)
+		{
+			Light.enabled = state;
+		}
+		
 		public void Toggle()
 		{
 			Light.enabled = !Light.enabled;

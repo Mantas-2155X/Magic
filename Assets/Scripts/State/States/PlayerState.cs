@@ -16,6 +16,9 @@ namespace State.States
 		
 		[JsonProperty]
 		public float NoticeDuration;
+
+		[JsonProperty]
+		public bool Flashlight;
 		
 		public static PlayerState Read(Player player)
 		{
@@ -25,6 +28,7 @@ namespace State.States
 			var state = new PlayerState
 			{
 				CameraAngles = player.CameraTr.eulerAngles,
+				Flashlight = Components.Flashlight.Instance.Light.enabled
 			};
 
 			var playerUI = UI.Player.Instance;
@@ -43,6 +47,7 @@ namespace State.States
 				return;
 
 			player.CameraTr.eulerAngles = state.CameraAngles;
+			Components.Flashlight.Instance.Toggle(state.Flashlight);
 			
 			var playerUI = UI.Player.Instance;
 			if (playerUI != null && state.NoticePreset != null)

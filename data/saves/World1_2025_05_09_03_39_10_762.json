@@ -1,0 +1,4148 @@
+{
+  "Scene": "World1",
+  "SavedTime": "2025-05-09T03:39:10.762373+03:00",
+  "DestroyedObjects": [
+    "b41dadfc-5695-44bf-acd8-09d90949b789",
+    "3d00ad99-f765-48d4-b339-0810c78d862f",
+    "666c7b91-b421-45df-8f55-ec7a40db9ee8"
+  ],
+  "DestroyedComponents": [],
+  "KilledAlives": [
+    "0a6333eb-c5d6-4d95-aef9-6589c7404184",
+    "4f706edf-8f13-4a6a-9ae6-99b61af60f4f",
+    "c0c7cb41-5f2d-4f46-b72d-fc08c8a0d872",
+    "8a8c6287-878e-4fb3-ba55-862cb6c49e49",
+    "8cecdc54-8615-4245-b8d0-47ae307aa944",
+    "252fdfc4-33f6-40eb-bb22-302d2fa500f3",
+    "4012791e-e449-4601-8ef2-7c7f6d69ed06",
+    "db4a9e1e-0176-43db-bf1a-68551a198d74",
+    "1ac03f45-58d2-484b-aef9-8591d17fe0d7",
+    "91e28b80-27c8-41bb-8176-0e1881828477",
+    "7d484299-f236-4306-ba03-852b203c751d",
+    "76ce1a79-6155-421d-9339-2f0008588a28",
+    "abb4a1e1-ec71-4318-bf77-a2c099d0fd51",
+    "b42e66fa-e1e2-41fd-ab75-e0208bf1f21d",
+    "613eb550-e045-44bc-a03b-25c54a499e3c"
+  ],
+  "Alives": {
+    "fff5cf31-7d47-47f3-99c5-4ea0a8a6af56": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -7.05357933,
+          "y": -1.39592385,
+          "z": -15.6145554
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.898648739,
+          "z": 0.0,
+          "w": 0.438669
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "UnityEngine.Rigidbody": {
+        "Position": {
+          "x": -7.053483,
+          "y": -1.39593863,
+          "z": -15.61471
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.898648739,
+          "z": 0.0,
+          "w": 0.438669
+        },
+        "LinearVelocity": {
+          "x": 0.0082636,
+          "y": -0.00128205121,
+          "z": -0.013331119
+        },
+        "AngularVelocity": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      },
+      "AI.Base.BaseAlive": {
+        "Wearables": {},
+        "Spells": {
+          "SPELL_FIREBALL_NAME": {
+            "ObjectID": "a2df01ac-8403-4b3c-9430-b2344c7ef37e",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_MANABALL_NAME": {
+            "ObjectID": "74b2303a-17f2-461d-b6db-2a3027aeba9a",
+            "Selected": true,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_RESTOREHEALTH_NAME": {
+            "ObjectID": "5bdb32a0-b35b-451b-a8b2-9140ba7cd1c2",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_RESTOREMANA_NAME": {
+            "ObjectID": "67712b8e-17a7-4bcd-a9cb-db7202b35f4d",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_LIGHTNING_NAME": {
+            "ObjectID": "935c4bea-495c-4eb8-b344-3f3e0259ed07",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_WARP_NAME": {
+            "ObjectID": "0a3be1f0-3c0a-4734-b46d-ce2794d4966b",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_CREATETORUS_NAME": {
+            "ObjectID": "2eddc852-192c-4baa-be80-f0c4c68cbb9c",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_MANABLAST_NAME": {
+            "ObjectID": "622a5719-3738-40f4-8b20-164816730f9e",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_SHOCKDESTRUCT_NAME": {
+            "ObjectID": "066d10b5-8f0f-4a16-8e87-0e35941ee37c",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_BIND_NAME": {
+            "ObjectID": "a72d7e3a-e02a-4635-9a4f-06617de17fac",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_INCINERATE_NAME": {
+            "ObjectID": "343f3ce4-5cdf-4f76-abba-3b5c636b8b8e",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_SHIELD_NAME": {
+            "ObjectID": "3cc4cfa4-f57a-4d20-ad56-259c1537518a",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          },
+          "SPELL_RESTOREENERGY_NAME": {
+            "ObjectID": "f39f48c9-67aa-4d7e-8adf-af6ea3eb945d",
+            "Selected": false,
+            "Casting": false,
+            "CastedTime": 0.0,
+            "Cooldown": 0.0
+          }
+        },
+        "CurrentHealth": 110.0,
+        "CurrentMana": 150.0,
+        "CurrentEnergy": 25.0,
+        "MovementType": "Normal",
+        "RelationshipGroup": -1,
+        "Grabbing": null,
+        "OriginalGrabSize": null,
+        "Alive": true,
+        "Invulnerable": false,
+        "Powerful": false,
+        "SlowSources": {},
+        "ParalyzeSources": {}
+      },
+      "AI.Player": {
+        "CameraAngles": {
+          "x": 22.45959,
+          "y": 127.962021,
+          "z": 9.23848063E-07
+        },
+        "NoticePreset": null,
+        "NoticeDuration": 0.0,
+        "Flashlight": true
+      }
+    }
+  },
+  "Create": {
+    "39cd8b80-fa2d-4434-9570-25f78bcdc0b0": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -77.88797,
+            "y": -2.866867,
+            "z": -43.695797
+          },
+          "Rotation": {
+            "x": 0.6638601,
+            "y": 0.187027767,
+            "z": 0.186077058,
+            "w": -0.6997756
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.0,
+            "z": 99.99999
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -77.88797,
+            "y": -2.866867,
+            "z": -43.695797
+          },
+          "Rotation": {
+            "x": 0.6638601,
+            "y": 0.187027767,
+            "z": 0.186077058,
+            "w": -0.6997756
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "e7e21ac7-dd5d-48d7-b65e-9c4785cd4eae": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -40.7170334,
+            "y": -2.55579638,
+            "z": -43.4350624
+          },
+          "Rotation": {
+            "x": 0.959450543,
+            "y": -0.110452026,
+            "z": -0.236358956,
+            "w": -0.106721826
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.000053,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -40.7270851,
+            "y": -2.55570364,
+            "z": -43.43003
+          },
+          "Rotation": {
+            "x": 0.963974833,
+            "y": -0.05901932,
+            "z": -0.2303346,
+            "w": -0.119227633
+          },
+          "LinearVelocity": {
+            "x": -0.8678698,
+            "y": 0.007161066,
+            "z": 0.433441043
+          },
+          "AngularVelocity": {
+            "x": 3.970349,
+            "y": -2.37216783,
+            "z": 7.993219
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "2b119891-921d-43fe-b062-18e12078019b": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -102.206085,
+            "y": -2.686544,
+            "z": -10.9533825
+          },
+          "Rotation": {
+            "x": -0.261609584,
+            "y": 0.9605003,
+            "z": 0.0281026382,
+            "w": 0.09060825
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.000038,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -102.202011,
+            "y": -2.68612933,
+            "z": -10.9526711
+          },
+          "Rotation": {
+            "x": -0.24241221,
+            "y": 0.9655256,
+            "z": 0.029912252,
+            "w": 0.090010196
+          },
+          "LinearVelocity": {
+            "x": 0.352995068,
+            "y": 0.0325509757,
+            "z": 0.0607489422
+          },
+          "AngularVelocity": {
+            "x": 0.5467306,
+            "y": 0.35008812,
+            "z": -3.36359334
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "a41dbfb5-05ec-4095-9bb0-4bb36a11fc1e": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -110.261459,
+            "y": -2.37563944,
+            "z": 11.8431568
+          },
+          "Rotation": {
+            "x": -0.05907774,
+            "y": 0.0456660725,
+            "z": 0.0185465384,
+            "w": 0.997035861
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.000053,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -110.254349,
+            "y": -2.37545586,
+            "z": 11.8424921
+          },
+          "Rotation": {
+            "x": -0.0606035367,
+            "y": 0.0436045937,
+            "z": -0.0155208334,
+            "w": 0.9970883
+          },
+          "LinearVelocity": {
+            "x": 0.614777148,
+            "y": 0.0153162628,
+            "z": -0.0569561571
+          },
+          "AngularVelocity": {
+            "x": -0.521186352,
+            "y": -0.70508486,
+            "z": -5.81635761
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "86a84d88-c357-4fcb-9c96-617fb7fa403a": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -30.3206062,
+            "y": -2.20024824,
+            "z": 15.6124935
+          },
+          "Rotation": {
+            "x": -0.265743077,
+            "y": 0.2518084,
+            "z": 0.588838637,
+            "w": -0.72058475
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.000046,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -30.3189487,
+            "y": -2.19999933,
+            "z": 15.614131
+          },
+          "Rotation": {
+            "x": -0.268658757,
+            "y": 0.248666868,
+            "z": 0.5967839,
+            "w": -0.714028239
+          },
+          "LinearVelocity": {
+            "x": 0.1452054,
+            "y": 0.0189415514,
+            "z": 0.139815658
+          },
+          "AngularVelocity": {
+            "x": 1.31591666,
+            "y": 0.17094031,
+            "z": -1.39203072
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "0826b723-52c7-483a-8388-93fd8d817942": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -52.0358047,
+            "y": -2.58808351,
+            "z": 16.4329472
+          },
+          "Rotation": {
+            "x": 0.004139302,
+            "y": -0.07417258,
+            "z": 0.7098747,
+            "w": -0.7003994
+          },
+          "Scale": {
+            "x": 99.99998,
+            "y": 100.000038,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -52.0358047,
+            "y": -2.58808351,
+            "z": 16.4329472
+          },
+          "Rotation": {
+            "x": 0.004139302,
+            "y": -0.07417258,
+            "z": 0.7098747,
+            "w": -0.7003994
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "dffd7def-e714-4635-9260-76b184edc842": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -102.117325,
+            "y": -2.74940729,
+            "z": -10.0500059
+          },
+          "Rotation": {
+            "x": -0.21246545,
+            "y": 0.457761973,
+            "z": 0.803284466,
+            "w": -0.3163012
+          },
+          "Scale": {
+            "x": 0.100000016,
+            "y": 0.1,
+            "z": 0.100000016
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -102.1152,
+            "y": -2.74926162,
+            "z": -10.0436192
+          },
+          "Rotation": {
+            "x": -0.2501924,
+            "y": 0.42326054,
+            "z": 0.8275943,
+            "w": -0.270817518
+          },
+          "LinearVelocity": {
+            "x": 0.184350312,
+            "y": 0.0126094371,
+            "z": 0.5513348
+          },
+          "AngularVelocity": {
+            "x": 10.4391127,
+            "y": -6.054788,
+            "z": -3.361723
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "afdded6b-8341-4749-b2e6-0910bff64c5b": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -102.234261,
+            "y": -2.756857,
+            "z": -9.928133
+          },
+          "Rotation": {
+            "x": -0.0903497,
+            "y": 0.5714577,
+            "z": 0.4765329,
+            "w": 0.661958754
+          },
+          "Scale": {
+            "x": 0.100000016,
+            "y": 0.1,
+            "z": 0.100000016
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -102.231728,
+            "y": -2.756694,
+            "z": -9.929286
+          },
+          "Rotation": {
+            "x": -0.08226487,
+            "y": 0.5810246,
+            "z": 0.455146641,
+            "w": 0.6696898
+          },
+          "LinearVelocity": {
+            "x": 0.219152555,
+            "y": 0.0141014159,
+            "z": -0.0994616747
+          },
+          "AngularVelocity": {
+            "x": -1.85448062,
+            "y": 0.662062645,
+            "z": -4.002384
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "71c31ada-d085-4023-966a-e1de87ccfff7": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -81.078125,
+            "y": -2.57102466,
+            "z": -18.0984974
+          },
+          "Rotation": {
+            "x": 0.758615851,
+            "y": 0.111717917,
+            "z": -0.399368972,
+            "w": -0.50251925
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -81.0845261,
+            "y": -2.57154179,
+            "z": -18.0975685
+          },
+          "Rotation": {
+            "x": 0.742831,
+            "y": 0.154085353,
+            "z": -0.434806168,
+            "w": -0.485183835
+          },
+          "LinearVelocity": {
+            "x": -0.5521305,
+            "y": -0.0446208119,
+            "z": 0.08020151
+          },
+          "AngularVelocity": {
+            "x": 1.33600712,
+            "y": 1.71942,
+            "z": 10.1440935
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "c928d5b9-8410-4e98-a599-280741b81221": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -47.7468529,
+            "y": -2.672184,
+            "z": -30.3646851
+          },
+          "Rotation": {
+            "x": 0.561500847,
+            "y": -0.283008963,
+            "z": -0.6410253,
+            "w": 0.440124273
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -47.7462463,
+            "y": -2.67216158,
+            "z": -30.3649387
+          },
+          "Rotation": {
+            "x": 0.5589566,
+            "y": -0.287635535,
+            "z": -0.6427389,
+            "w": 0.4378586
+          },
+          "LinearVelocity": {
+            "x": 0.0522882976,
+            "y": 0.00193633139,
+            "z": -0.0219227374
+          },
+          "AngularVelocity": {
+            "x": -0.4013183,
+            "y": -0.0145878261,
+            "z": -0.953479946
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "5fe74369-d780-4880-8510-a54ef6260b76": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -57.47541,
+            "y": -2.4215,
+            "z": -64.19801
+          },
+          "Rotation": {
+            "x": -0.861937046,
+            "y": -0.0165407173,
+            "z": -0.5067092,
+            "w": -0.006072598
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.000046,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -57.47541,
+            "y": -2.4215,
+            "z": -64.19801
+          },
+          "Rotation": {
+            "x": -0.861937046,
+            "y": -0.01654072,
+            "z": -0.5067092,
+            "w": -0.006072599
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "8080fe25-0b3d-4096-81f8-693bd3cc3f77": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -16.295578,
+            "y": -2.574138,
+            "z": 20.8551483
+          },
+          "Rotation": {
+            "x": 0.131436735,
+            "y": -0.6844317,
+            "z": 0.694892168,
+            "w": 0.177207991
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.0,
+            "z": 100.000008
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -16.295578,
+            "y": -2.574138,
+            "z": 20.8551483
+          },
+          "Rotation": {
+            "x": 0.131436735,
+            "y": -0.6844317,
+            "z": 0.694892168,
+            "w": 0.177207991
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "e8ab9f1b-1945-47e7-9fda-7d27120020cd": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -75.66308,
+            "y": -2.27748537,
+            "z": 28.2055969
+          },
+          "Rotation": {
+            "x": 0.415330678,
+            "y": -0.394947946,
+            "z": 0.585336864,
+            "w": -0.5734957
+          },
+          "Scale": {
+            "x": 99.99998,
+            "y": 100.000023,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -75.66376,
+            "y": -2.27745152,
+            "z": 28.207634
+          },
+          "Rotation": {
+            "x": 0.411069244,
+            "y": -0.399360478,
+            "z": 0.579600453,
+            "w": -0.579307139
+          },
+          "LinearVelocity": {
+            "x": -0.05791686,
+            "y": 0.002758503,
+            "z": 0.175846055
+          },
+          "AngularVelocity": {
+            "x": 1.67949092,
+            "y": 0.0233579855,
+            "z": 0.5518245
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "b57fa640-f19a-46e3-8294-ddce2b3a3fa5": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -106.002029,
+            "y": -2.40654969,
+            "z": 10.8071823
+          },
+          "Rotation": {
+            "x": 0.0676404461,
+            "y": 0.237748042,
+            "z": -0.07437271,
+            "w": 0.9661104
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.000053,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -105.99157,
+            "y": -2.40708852,
+            "z": 10.8017187
+          },
+          "Rotation": {
+            "x": 0.0541288927,
+            "y": 0.241182491,
+            "z": -0.12872313,
+            "w": 0.960380852
+          },
+          "LinearVelocity": {
+            "x": 0.903588057,
+            "y": -0.0475300848,
+            "z": -0.47194013
+          },
+          "AngularVelocity": {
+            "x": -4.37084866,
+            "y": 1.61339283,
+            "z": -8.531787
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "ef022097-7ba0-40cc-8729-26861767990c": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -14.851325,
+            "y": -2.583972,
+            "z": 22.2458878
+          },
+          "Rotation": {
+            "x": -0.8689641,
+            "y": 0.3159166,
+            "z": -0.319455981,
+            "w": -0.207475588
+          },
+          "Scale": {
+            "x": 0.100000009,
+            "y": 0.1,
+            "z": 0.100000009
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -14.8495731,
+            "y": -2.58398438,
+            "z": 22.2473545
+          },
+          "Rotation": {
+            "x": -0.8684913,
+            "y": 0.332707,
+            "z": -0.306359857,
+            "w": -0.202910736
+          },
+          "LinearVelocity": {
+            "x": 0.151356161,
+            "y": -0.00106999278,
+            "z": 0.126514837
+          },
+          "AngularVelocity": {
+            "x": 2.31105661,
+            "y": 1.0881995,
+            "z": -2.7582624
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "b33f4c41-f2f2-417c-81cd-ac0e4ae9f5f9": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -99.6824951,
+            "y": -2.187962,
+            "z": -47.6944771
+          },
+          "Rotation": {
+            "x": 0.699083269,
+            "y": 0.116700329,
+            "z": 0.01987711,
+            "w": -0.7051727
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.0,
+            "z": 100.000008
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -99.6824951,
+            "y": -2.187962,
+            "z": -47.6944771
+          },
+          "Rotation": {
+            "x": 0.699083269,
+            "y": 0.116700329,
+            "z": 0.01987711,
+            "w": -0.7051727
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "1fe712ff-9e49-4e17-94af-c46d97df9e83": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -75.02115,
+            "y": -2.327414,
+            "z": -15.1384563
+          },
+          "Rotation": {
+            "x": -0.431519359,
+            "y": 0.23365432,
+            "z": 0.754438937,
+            "w": -0.435911238
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.000046,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -75.01942,
+            "y": -2.32735276,
+            "z": -15.1355648
+          },
+          "Rotation": {
+            "x": -0.435228437,
+            "y": 0.2266724,
+            "z": 0.7613634,
+            "w": -0.423700064
+          },
+          "LinearVelocity": {
+            "x": 0.150649518,
+            "y": 0.0052536875,
+            "z": 0.2493946
+          },
+          "AngularVelocity": {
+            "x": 2.37412071,
+            "y": 0.06520291,
+            "z": -1.43601859
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "d1215f1d-f501-44ea-8902-255f586e416c": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -48.01021,
+            "y": -2.571928,
+            "z": -14.6529989
+          },
+          "Rotation": {
+            "x": 0.3722627,
+            "y": 0.7888913,
+            "z": -0.244883507,
+            "w": -0.4232057
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.000061,
+            "z": 100.000053
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -48.01021,
+            "y": -2.571928,
+            "z": -14.6529989
+          },
+          "Rotation": {
+            "x": 0.3722627,
+            "y": 0.7888913,
+            "z": -0.244883507,
+            "w": -0.4232057
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "f9775538-9077-4dee-bc1f-4d727b74c3e2": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -110.050354,
+            "y": -2.51241827,
+            "z": 11.0403423
+          },
+          "Rotation": {
+            "x": -0.570444643,
+            "y": -0.3013148,
+            "z": 0.5164377,
+            "w": -0.563111365
+          },
+          "Scale": {
+            "x": 0.1,
+            "y": 0.1,
+            "z": 0.1
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -110.046379,
+            "y": -2.51194382,
+            "z": 11.0432444
+          },
+          "Rotation": {
+            "x": -0.5956022,
+            "y": -0.2940379,
+            "z": 0.5290457,
+            "w": -0.528119743
+          },
+          "LinearVelocity": {
+            "x": 0.34380877,
+            "y": 0.0410682559,
+            "z": 0.250377476
+          },
+          "AngularVelocity": {
+            "x": 4.59027958,
+            "y": 0.110254273,
+            "z": -6.33476448
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "b5a7d567-9e6e-498e-a1f6-350c6d63aa81": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -78.90141,
+            "y": -2.87390947,
+            "z": -42.7736855
+          },
+          "Rotation": {
+            "x": 0.470126718,
+            "y": -0.8084685,
+            "z": -0.348944455,
+            "w": -0.05997792
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -78.9011154,
+            "y": -2.87391019,
+            "z": -42.77376
+          },
+          "Rotation": {
+            "x": 0.46614942,
+            "y": -0.810104847,
+            "z": -0.3511301,
+            "w": -0.0560584627
+          },
+          "LinearVelocity": {
+            "x": 0.0252425466,
+            "y": -6.61462545E-05,
+            "z": -0.00643686671
+          },
+          "AngularVelocity": {
+            "x": -0.07364186,
+            "y": 0.980952442,
+            "z": -0.425536662
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "bd4e4572-54b4-413b-a1a5-bff9a6fbf164": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -39.6609535,
+            "y": -2.41145,
+            "z": 12.1628876
+          },
+          "Rotation": {
+            "x": -0.118440211,
+            "y": -0.8519421,
+            "z": 0.265760332,
+            "w": 0.4353596
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -39.669548,
+            "y": -2.41146064,
+            "z": 12.158596
+          },
+          "Rotation": {
+            "x": -0.06770555,
+            "y": -0.8463646,
+            "z": 0.332337439,
+            "w": 0.410651833
+          },
+          "LinearVelocity": {
+            "x": -0.7418403,
+            "y": -0.0009364784,
+            "z": -0.370464653
+          },
+          "AngularVelocity": {
+            "x": -6.74650145,
+            "y": 0.4753753,
+            "z": 13.5058479
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "8ff23fa3-5ba7-4887-9fc7-376d977a378d": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -15.12697,
+            "y": -2.58651352,
+            "z": 22.4611053
+          },
+          "Rotation": {
+            "x": -0.3334503,
+            "y": -0.79301393,
+            "z": -0.1984429,
+            "w": 0.469638437
+          },
+          "Scale": {
+            "x": 0.100000009,
+            "y": 0.1,
+            "z": 0.100000009
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -15.12483,
+            "y": -2.58648849,
+            "z": 22.46072
+          },
+          "Rotation": {
+            "x": -0.350140572,
+            "y": -0.787871659,
+            "z": -0.20534724,
+            "w": 0.4631332
+          },
+          "LinearVelocity": {
+            "x": 0.18472366,
+            "y": 0.002172768,
+            "z": -0.03332911
+          },
+          "AngularVelocity": {
+            "x": -0.6033843,
+            "y": -0.299301416,
+            "z": -3.35955548
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "73f0269c-5f0e-423a-95c0-c461a7b0ad06": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -78.2726,
+            "y": -2.48731232,
+            "z": -14.34215
+          },
+          "Rotation": {
+            "x": -0.447821826,
+            "y": -0.1256894,
+            "z": 0.8344834,
+            "w": 0.2954579
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.000046,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -78.27228,
+            "y": -2.48722482,
+            "z": -14.34174
+          },
+          "Rotation": {
+            "x": -0.447571278,
+            "y": -0.1267477,
+            "z": 0.8336984,
+            "w": 0.297593653
+          },
+          "LinearVelocity": {
+            "x": 0.0274093132,
+            "y": 0.007627055,
+            "z": 0.0354270376
+          },
+          "AngularVelocity": {
+            "x": 0.347920239,
+            "y": -0.0296056513,
+            "z": -0.2598248
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "7b36e713-8657-4d5e-b6fc-eebb0ff1eb3d": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -28.101881,
+            "y": -1.969041,
+            "z": 17.1699924
+          },
+          "Rotation": {
+            "x": -0.410389066,
+            "y": 0.4938814,
+            "z": 0.697674453,
+            "w": 0.317667067
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.0,
+            "z": 100.0
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -28.101881,
+            "y": -1.969041,
+            "z": 17.1699924
+          },
+          "Rotation": {
+            "x": -0.410389066,
+            "y": 0.4938814,
+            "z": 0.697674453,
+            "w": 0.317667067
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "19eeb1de-744f-4f67-948e-499fa77409f7": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -47.20893,
+            "y": -2.47729635,
+            "z": -14.424284
+          },
+          "Rotation": {
+            "x": -0.8407862,
+            "y": -0.244236633,
+            "z": 0.482965142,
+            "w": 0.0131059941
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.000061,
+            "z": 100.000053
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -47.2022476,
+            "y": -2.47758436,
+            "z": -14.4352751
+          },
+          "Rotation": {
+            "x": -0.853674054,
+            "y": -0.193011343,
+            "z": 0.483374327,
+            "w": -0.0183477513
+          },
+          "LinearVelocity": {
+            "x": 0.5778115,
+            "y": -0.0251943916,
+            "z": -0.9481733
+          },
+          "AngularVelocity": {
+            "x": -8.88668,
+            "y": -2.22565484,
+            "z": -5.3581357
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "d8afb57e-4b9d-4d7b-93ca-c41f36766001": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -141.914764,
+            "y": -2.2692852,
+            "z": -31.2622852
+          },
+          "Rotation": {
+            "x": -0.2988965,
+            "y": 0.260033756,
+            "z": 0.6606868,
+            "w": -0.6376021
+          },
+          "Scale": {
+            "x": 99.99998,
+            "y": 100.000023,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -141.914764,
+            "y": -2.2692852,
+            "z": -31.2622852
+          },
+          "Rotation": {
+            "x": -0.2988965,
+            "y": 0.260033756,
+            "z": 0.6606868,
+            "w": -0.6376021
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "5ebbde1a-64f4-4f58-8756-2a5792fe1851": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -39.2002869,
+            "y": -2.791201,
+            "z": -42.8142662
+          },
+          "Rotation": {
+            "x": 0.446941972,
+            "y": 0.680166,
+            "z": -0.5385745,
+            "w": -0.218070284
+          },
+          "Scale": {
+            "x": 0.1,
+            "y": 0.1,
+            "z": 0.1
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -39.20061,
+            "y": -2.79118347,
+            "z": -42.8133736
+          },
+          "Rotation": {
+            "x": 0.441727668,
+            "y": 0.6853214,
+            "z": -0.5348039,
+            "w": -0.221802011
+          },
+          "LinearVelocity": {
+            "x": -0.02798253,
+            "y": 0.001535505,
+            "z": 0.07697229
+          },
+          "AngularVelocity": {
+            "x": 1.40591466,
+            "y": 0.4380244,
+            "z": 0.518522
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "39b6b209-22dc-4ef8-851c-553919bb4aff": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -48.5181046,
+            "y": -2.643312,
+            "z": -14.5022564
+          },
+          "Rotation": {
+            "x": -0.0805819556,
+            "y": 0.179963842,
+            "z": 0.1731416,
+            "w": -0.96495676
+          },
+          "Scale": {
+            "x": 0.100000009,
+            "y": 0.1,
+            "z": 0.100000009
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -48.5167351,
+            "y": -2.64348674,
+            "z": -14.5078783
+          },
+          "Rotation": {
+            "x": -0.0283799432,
+            "y": 0.175024912,
+            "z": 0.177301571,
+            "w": -0.968052268
+          },
+          "LinearVelocity": {
+            "x": 0.118215896,
+            "y": -0.0151243955,
+            "z": -0.485223979
+          },
+          "AngularVelocity": {
+            "x": -8.467195,
+            "y": 2.53820777,
+            "z": -2.14477682
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "25a3cfe3-8e11-4861-95b3-0c93e8d8432f": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -16.06771,
+            "y": -2.50674558,
+            "z": 21.560791
+          },
+          "Rotation": {
+            "x": 0.2743856,
+            "y": 0.1500155,
+            "z": 0.799259067,
+            "w": 0.5132182
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.000023,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -16.06771,
+            "y": -2.50674558,
+            "z": 21.560791
+          },
+          "Rotation": {
+            "x": 0.274385571,
+            "y": 0.150015488,
+            "z": 0.799259,
+            "w": 0.513218164
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "5b3f9d9a-2989-4ba5-aafb-2136a57b7eb9": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -102.257782,
+            "y": -2.53294063,
+            "z": -13.2082167
+          },
+          "Rotation": {
+            "x": 0.449499041,
+            "y": 0.0600829571,
+            "z": -0.8895345,
+            "w": -0.0553996824
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.000038,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -102.252373,
+            "y": -2.532916,
+            "z": -13.2004128
+          },
+          "Rotation": {
+            "x": 0.4462421,
+            "y": 0.08130221,
+            "z": -0.8861046,
+            "w": -0.09527165
+          },
+          "LinearVelocity": {
+            "x": 0.468538016,
+            "y": 0.00157642365,
+            "z": 0.6731354
+          },
+          "AngularVelocity": {
+            "x": 6.415861,
+            "y": 0.443815231,
+            "z": -4.468657
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "19a6ea7c-f6d2-4d70-b429-9680037dd398": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -57.0053978,
+            "y": -2.416447,
+            "z": -64.4060745
+          },
+          "Rotation": {
+            "x": 0.9383917,
+            "y": -0.228659362,
+            "z": 0.245676711,
+            "w": -0.0823343247
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.000046,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -57.0053978,
+            "y": -2.416447,
+            "z": -64.4060745
+          },
+          "Rotation": {
+            "x": 0.9383917,
+            "y": -0.228659362,
+            "z": 0.245676711,
+            "w": -0.0823343247
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "015f6f12-3020-41f4-83ea-4e58e34f8023": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -59.34731,
+            "y": -2.38519359,
+            "z": -64.07062
+          },
+          "Rotation": {
+            "x": 0.5753524,
+            "y": 0.33048144,
+            "z": 0.257779032,
+            "w": -0.702354431
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.0,
+            "z": 99.99999
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -59.34731,
+            "y": -2.38519359,
+            "z": -64.07062
+          },
+          "Rotation": {
+            "x": 0.5753524,
+            "y": 0.33048144,
+            "z": 0.257779032,
+            "w": -0.702354431
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "5ff6e1ca-41fe-4754-9484-520183078cfc": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -95.50847,
+            "y": -2.44783545,
+            "z": -39.7807
+          },
+          "Rotation": {
+            "x": 0.406660765,
+            "y": -0.659524262,
+            "z": 0.224075288,
+            "w": -0.59113884
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.000023,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -95.50664,
+            "y": -2.44574356,
+            "z": -39.76918
+          },
+          "Rotation": {
+            "x": 0.368881673,
+            "y": -0.681277752,
+            "z": 0.189680129,
+            "w": -0.603165448
+          },
+          "LinearVelocity": {
+            "x": 0.159948021,
+            "y": 0.180903018,
+            "z": 0.994061
+          },
+          "AngularVelocity": {
+            "x": 9.457066,
+            "y": 1.8052187,
+            "z": -1.852252
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "2d9b1228-11a7-452e-945b-97204537652a": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -50.5364075,
+            "y": -2.71488523,
+            "z": 16.8276615
+          },
+          "Rotation": {
+            "x": 0.0534916371,
+            "y": -0.456990063,
+            "z": 0.139490038,
+            "w": -0.876835942
+          },
+          "Scale": {
+            "x": 0.100000016,
+            "y": 0.1,
+            "z": 0.100000016
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -50.5357,
+            "y": -2.71410179,
+            "z": 16.8217564
+          },
+          "Rotation": {
+            "x": 0.09810356,
+            "y": -0.4496729,
+            "z": 0.169819519,
+            "w": -0.8713961
+          },
+          "LinearVelocity": {
+            "x": 0.06134527,
+            "y": 0.06767343,
+            "z": -0.509710431
+          },
+          "AngularVelocity": {
+            "x": -9.371782,
+            "y": 0.114011511,
+            "z": -1.11857665
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "a2f315d5-63c6-4bfb-bb8a-f50704441550": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -50.3010559,
+            "y": -2.48531318,
+            "z": -31.1799812
+          },
+          "Rotation": {
+            "x": 0.655854166,
+            "y": 0.100120045,
+            "z": 0.343054324,
+            "w": -0.66493994
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.0,
+            "z": 100.0
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -50.3010559,
+            "y": -2.48531032,
+            "z": -31.1799717
+          },
+          "Rotation": {
+            "x": 0.6558529,
+            "y": 0.100115925,
+            "z": 0.3430585,
+            "w": -0.664939642
+          },
+          "LinearVelocity": {
+            "x": -0.00011323567,
+            "y": 0.000217363238,
+            "z": 0.0007810347
+          },
+          "AngularVelocity": {
+            "x": 0.000475386274,
+            "y": 0.000433026318,
+            "z": -0.0006995946
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "2cd2f8ba-0ac1-4d0a-832f-50673b749eea": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -47.7219925,
+            "y": -2.596686,
+            "z": -30.7258625
+          },
+          "Rotation": {
+            "x": -0.49875927,
+            "y": -0.841344059,
+            "z": -0.134182021,
+            "w": -0.15929392
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.000046,
+            "z": 100.000053
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -47.7233658,
+            "y": -2.596655,
+            "z": -30.7264671
+          },
+          "Rotation": {
+            "x": -0.492783964,
+            "y": -0.844856143,
+            "z": -0.133053482,
+            "w": -0.160246342
+          },
+          "LinearVelocity": {
+            "x": -0.118437283,
+            "y": 0.00241424143,
+            "z": -0.0521082953
+          },
+          "AngularVelocity": {
+            "x": -0.496326864,
+            "y": -0.08232555,
+            "z": 1.12383175
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "8c149f45-a0b8-466f-bece-8c9d4456966f": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -140.540619,
+            "y": -2.341638,
+            "z": -29.1239357
+          },
+          "Rotation": {
+            "x": 0.70346117,
+            "y": 0.066432,
+            "z": -0.175481513,
+            "w": -0.6855184
+          },
+          "Scale": {
+            "x": 0.100000009,
+            "y": 0.1,
+            "z": 0.100000009
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -140.54126,
+            "y": -2.34165239,
+            "z": -29.1235256
+          },
+          "Rotation": {
+            "x": 0.700218439,
+            "y": 0.07003069,
+            "z": -0.180134729,
+            "w": -0.687271
+          },
+          "LinearVelocity": {
+            "x": -0.055227004,
+            "y": -0.00125579536,
+            "z": 0.03552292
+          },
+          "AngularVelocity": {
+            "x": 0.648003757,
+            "y": 0.256397247,
+            "z": 1.00319278
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "c4b7c043-3ee4-47f8-b67d-c213722a8177": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -77.1812744,
+            "y": -2.63691521,
+            "z": -45.5274658
+          },
+          "Rotation": {
+            "x": -0.872595,
+            "y": 0.2586261,
+            "z": -0.3779298,
+            "w": 0.1698813
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.000038,
+            "z": 100.000031
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -77.1795959,
+            "y": -2.63702869,
+            "z": -45.52551
+          },
+          "Rotation": {
+            "x": -0.869354665,
+            "y": 0.269320041,
+            "z": -0.3757453,
+            "w": 0.174656421
+          },
+          "LinearVelocity": {
+            "x": 0.145210072,
+            "y": -0.009811208,
+            "z": 0.168671042
+          },
+          "AngularVelocity": {
+            "x": 1.60895991,
+            "y": 0.217654854,
+            "z": -1.37912917
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "ba558dc7-e1ab-4140-ae94-f114a3ef67af": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -50.7622223,
+            "y": -2.70534253,
+            "z": 16.7535229
+          },
+          "Rotation": {
+            "x": 0.321094424,
+            "y": 0.181275517,
+            "z": -0.8259482,
+            "w": 0.426435381
+          },
+          "Scale": {
+            "x": 0.100000016,
+            "y": 0.1,
+            "z": 0.100000016
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -50.76134,
+            "y": -2.70525336,
+            "z": 16.7526283
+          },
+          "Rotation": {
+            "x": 0.327498,
+            "y": 0.166739851,
+            "z": -0.8277757,
+            "w": 0.423946142
+          },
+          "LinearVelocity": {
+            "x": 0.07545674,
+            "y": 0.00774917,
+            "z": -0.07748412
+          },
+          "AngularVelocity": {
+            "x": -1.50481212,
+            "y": -1.80318332,
+            "z": -1.5136342
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "4143f9b6-d74f-465a-b4f5-d34896f35b70": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -101.135155,
+            "y": -2.5705626,
+            "z": -11.5754871
+          },
+          "Rotation": {
+            "x": -0.632934034,
+            "y": 0.240476608,
+            "z": 0.339315236,
+            "w": 0.6530167
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.0,
+            "z": 100.000008
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -101.135155,
+            "y": -2.5705626,
+            "z": -11.5754871
+          },
+          "Rotation": {
+            "x": -0.632934034,
+            "y": 0.240476608,
+            "z": 0.339315236,
+            "w": 0.6530167
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "ce8aec71-784e-4d7b-a508-81b86e866eea": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -73.36542,
+            "y": -2.278327,
+            "z": -15.932147
+          },
+          "Rotation": {
+            "x": -0.314121336,
+            "y": 0.624652,
+            "z": 0.657659054,
+            "w": 0.2803967
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.0,
+            "z": 99.99999
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -73.36542,
+            "y": -2.278327,
+            "z": -15.932147
+          },
+          "Rotation": {
+            "x": -0.314121336,
+            "y": 0.624652,
+            "z": 0.657659054,
+            "w": 0.2803967
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "02313385-8f7d-4988-aaa4-9cdd566c8c94": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -48.44123,
+            "y": -2.64726543,
+            "z": -14.6073055
+          },
+          "Rotation": {
+            "x": 0.401892126,
+            "y": 0.268220365,
+            "z": 0.345145971,
+            "w": -0.8046209
+          },
+          "Scale": {
+            "x": 0.100000009,
+            "y": 0.1,
+            "z": 0.100000009
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -48.44168,
+            "y": -2.64728832,
+            "z": -14.6068707
+          },
+          "Rotation": {
+            "x": 0.404189438,
+            "y": 0.255155444,
+            "z": 0.334866,
+            "w": -0.8120292
+          },
+          "LinearVelocity": {
+            "x": -0.0390335657,
+            "y": -0.001985088,
+            "z": 0.0373188481
+          },
+          "AngularVelocity": {
+            "x": 0.508611262,
+            "y": 3.00909877,
+            "z": 0.8459796
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "dd9b2ce8-9ee3-46c2-935e-11a71bf0933a": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -59.0591278,
+            "y": -2.435963,
+            "z": -64.07907
+          },
+          "Rotation": {
+            "x": 0.3555667,
+            "y": 0.4133096,
+            "z": 0.164122239,
+            "w": -0.8220776
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -59.0591278,
+            "y": -2.435963,
+            "z": -64.07907
+          },
+          "Rotation": {
+            "x": 0.3555667,
+            "y": 0.4133096,
+            "z": 0.164122239,
+            "w": -0.8220776
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "afc9b745-50e0-48c1-aab6-0ca435cd176c": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -78.88118,
+            "y": -2.875884,
+            "z": -42.6655
+          },
+          "Rotation": {
+            "x": -0.1399414,
+            "y": 0.531780064,
+            "z": 0.8289225,
+            "w": -0.1025372
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -78.87999,
+            "y": -2.87588882,
+            "z": -42.6657
+          },
+          "Rotation": {
+            "x": -0.131673485,
+            "y": 0.534453034,
+            "z": 0.8294387,
+            "w": -0.0951514244
+          },
+          "LinearVelocity": {
+            "x": 0.1028982,
+            "y": -0.000423982739,
+            "z": -0.0171208326
+          },
+          "AngularVelocity": {
+            "x": -0.3067752,
+            "y": 0.469949573,
+            "z": -1.8700825
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "aec8dae8-0687-40ae-aa5a-544edff28a22": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -78.00749,
+            "y": -2.588532,
+            "z": -15.8164768
+          },
+          "Rotation": {
+            "x": -0.3148442,
+            "y": -0.309836626,
+            "z": -0.0442937,
+            "w": -0.8960539
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -78.00496,
+            "y": -2.588552,
+            "z": -15.8048124
+          },
+          "Rotation": {
+            "x": -0.414683849,
+            "y": -0.3152388,
+            "z": -0.0492174439,
+            "w": -0.8521969
+          },
+          "LinearVelocity": {
+            "x": 0.219434083,
+            "y": -0.00171227753,
+            "z": 1.00693965
+          },
+          "AngularVelocity": {
+            "x": 18.0764046,
+            "y": 3.68263865,
+            "z": -3.938844
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "d541f920-2904-4236-b843-8b7df3c1588a": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -102.63797,
+            "y": -2.47028446,
+            "z": -44.7559738
+          },
+          "Rotation": {
+            "x": -0.957189143,
+            "y": 0.154547259,
+            "z": 0.144631177,
+            "w": -0.197448656
+          },
+          "Scale": {
+            "x": 0.100000009,
+            "y": 0.1,
+            "z": 0.100000009
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -102.640617,
+            "y": -2.47040558,
+            "z": -44.7491951
+          },
+          "Rotation": {
+            "x": -0.9712223,
+            "y": 0.122954413,
+            "z": 0.147272691,
+            "w": -0.141139939
+          },
+          "LinearVelocity": {
+            "x": -0.227954119,
+            "y": -0.0104952753,
+            "z": 0.5853149
+          },
+          "AngularVelocity": {
+            "x": 10.642869,
+            "y": -0.34010613,
+            "z": 4.128537
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "54966b02-6f23-4b9c-9624-2a839b5deff4": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -57.24179,
+            "y": -2.48235464,
+            "z": -64.04208
+          },
+          "Rotation": {
+            "x": -0.1947983,
+            "y": 0.819131553,
+            "z": 0.0212120488,
+            "w": -0.5390985
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -57.2412949,
+            "y": -2.482411,
+            "z": -64.04094
+          },
+          "Rotation": {
+            "x": -0.1966084,
+            "y": 0.8201304,
+            "z": 0.03214963,
+            "w": -0.5363747
+          },
+          "LinearVelocity": {
+            "x": 0.0430988632,
+            "y": -0.004872173,
+            "z": 0.09859698
+          },
+          "AngularVelocity": {
+            "x": 1.796008,
+            "y": -0.1174084,
+            "z": -0.793874145
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "1b2a4696-3b60-4db1-800c-98451c5cbf46": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -77.07014,
+            "y": -2.698932,
+            "z": -44.5374451
+          },
+          "Rotation": {
+            "x": -0.4667099,
+            "y": -0.5967905,
+            "z": -0.474565923,
+            "w": -0.448118478
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.000038,
+            "z": 100.000031
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -77.07014,
+            "y": -2.698932,
+            "z": -44.5374451
+          },
+          "Rotation": {
+            "x": -0.4667099,
+            "y": -0.5967905,
+            "z": -0.474565923,
+            "w": -0.448118478
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "3ecfaa0c-59fa-472d-967c-11779e711e71": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -40.96939,
+            "y": -2.7603054,
+            "z": -42.244957
+          },
+          "Rotation": {
+            "x": -0.5530655,
+            "y": 0.409906447,
+            "z": 0.380692,
+            "w": 0.6173887
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.0,
+            "z": 99.99999
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -40.96939,
+            "y": -2.7603054,
+            "z": -42.244957
+          },
+          "Rotation": {
+            "x": -0.553065538,
+            "y": 0.4099065,
+            "z": 0.380692065,
+            "w": 0.6173888
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "1eeedb0c-af31-4c9a-8863-61fa5506101a": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -47.08022,
+            "y": -2.218137,
+            "z": -11.2679663
+          },
+          "Rotation": {
+            "x": -0.6188454,
+            "y": 0.3804551,
+            "z": 0.3946854,
+            "w": 0.5625902
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.0,
+            "z": 100.0
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -47.08022,
+            "y": -2.218137,
+            "z": -11.2679663
+          },
+          "Rotation": {
+            "x": -0.6188454,
+            "y": 0.3804551,
+            "z": 0.3946854,
+            "w": 0.5625902
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "b8d02b9b-fac8-4cd8-a052-7af801013271": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -48.540493,
+            "y": -2.59001279,
+            "z": -30.5300388
+          },
+          "Rotation": {
+            "x": -0.173849761,
+            "y": 0.67437,
+            "z": -0.209435508,
+            "w": 0.686395049
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.000046,
+            "z": 100.000053
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -48.540493,
+            "y": -2.59001279,
+            "z": -30.5300388
+          },
+          "Rotation": {
+            "x": -0.173849761,
+            "y": 0.67437,
+            "z": -0.209435508,
+            "w": 0.686395049
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "36da84ff-c0e2-47ad-b4b0-3636b77c2d6e": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -29.1688423,
+            "y": -2.391669,
+            "z": 20.5665722
+          },
+          "Rotation": {
+            "x": -0.649921834,
+            "y": 0.24218978,
+            "z": 0.6415888,
+            "w": -0.327581346
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.000046,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -29.1683636,
+            "y": -2.39134,
+            "z": 20.5801582
+          },
+          "Rotation": {
+            "x": -0.664223552,
+            "y": 0.1996435,
+            "z": 0.6614518,
+            "w": -0.28536135
+          },
+          "LinearVelocity": {
+            "x": 0.0432275981,
+            "y": 0.0152050853,
+            "z": 1.17261326
+          },
+          "AngularVelocity": {
+            "x": 11.0964336,
+            "y": 1.28628385,
+            "z": -0.426037878
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "2662e60c-0f4c-4374-886e-d75b66c2957e": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -15.8723917,
+            "y": -2.52420568,
+            "z": 21.47281
+          },
+          "Rotation": {
+            "x": 0.305131078,
+            "y": 0.06959277,
+            "z": 0.910958052,
+            "w": 0.268714249
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.000023,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -15.8723917,
+            "y": -2.52420568,
+            "z": 21.47281
+          },
+          "Rotation": {
+            "x": 0.305131078,
+            "y": 0.06959277,
+            "z": 0.910958052,
+            "w": 0.268714249
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "c3f8cb43-da17-412e-b1b7-fb9ad0f43aaf": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -39.2425,
+            "y": -2.8327384,
+            "z": 32.63803
+          },
+          "Rotation": {
+            "x": 0.7981715,
+            "y": 0.228687555,
+            "z": 0.330366522,
+            "w": 0.4488677
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -39.2204552,
+            "y": -2.83248019,
+            "z": 32.6337166
+          },
+          "Rotation": {
+            "x": 0.8097937,
+            "y": 0.07793052,
+            "z": 0.224571735,
+            "w": 0.5364032
+          },
+          "LinearVelocity": {
+            "x": 1.90303743,
+            "y": 0.02224885,
+            "z": -0.372424543
+          },
+          "AngularVelocity": {
+            "x": -6.783722,
+            "y": 0.103663847,
+            "z": -34.6549377
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "b64d2a00-5b4a-470f-9d85-50b90febfddd": {
+      "Type": "Gib",
+      "Name": "OBJECT_CORE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -107.922409,
+            "y": -2.25492382,
+            "z": 9.828979
+          },
+          "Rotation": {
+            "x": 0.0264648087,
+            "y": 0.6835997,
+            "z": 0.728432059,
+            "w": -0.03711995
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.0,
+            "z": 100.0
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -107.922409,
+            "y": -2.25492382,
+            "z": 9.828979
+          },
+          "Rotation": {
+            "x": 0.0264648087,
+            "y": 0.6835997,
+            "z": 0.728432059,
+            "w": -0.03711995
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "696465a0-acf0-46c3-a5c7-e4db3a86c2db": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -50.4468765,
+            "y": -2.53555155,
+            "z": -31.2282619
+          },
+          "Rotation": {
+            "x": 0.1866966,
+            "y": -0.649866,
+            "z": 0.220321745,
+            "w": -0.703048348
+          },
+          "Scale": {
+            "x": 0.099999994,
+            "y": 0.1,
+            "z": 0.099999994
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -50.4468651,
+            "y": -2.5355432,
+            "z": -31.2283363
+          },
+          "Rotation": {
+            "x": 0.1855015,
+            "y": -0.644902945,
+            "z": 0.223041683,
+            "w": -0.707065642
+          },
+          "LinearVelocity": {
+            "x": 0.000778439,
+            "y": 0.00078625977,
+            "z": -0.00687744049
+          },
+          "AngularVelocity": {
+            "x": -0.226235658,
+            "y": -1.18225133,
+            "z": -0.148435891
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "763821b3-c126-4a7d-83d6-1d8debd63427": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -101.012024,
+            "y": -2.243038,
+            "z": -50.5534439
+          },
+          "Rotation": {
+            "x": -0.175719276,
+            "y": 0.960642159,
+            "z": 0.0294585526,
+            "w": 0.2131235
+          },
+          "Scale": {
+            "x": 99.99999,
+            "y": 100.000023,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -101.022369,
+            "y": -2.24375224,
+            "z": -50.55809
+          },
+          "Rotation": {
+            "x": -0.227277547,
+            "y": 0.9497658,
+            "z": 0.0179214254,
+            "w": 0.214403585
+          },
+          "LinearVelocity": {
+            "x": -0.891626656,
+            "y": -0.0617741346,
+            "z": -0.4013862
+          },
+          "AngularVelocity": {
+            "x": -3.72639585,
+            "y": -1.22622955,
+            "z": 8.465365
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "60054ad9-6e2f-42b0-b96e-a8baa9133b34": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -91.759285,
+            "y": -2.4734726,
+            "z": 24.40038
+          },
+          "Rotation": {
+            "x": 0.9177222,
+            "y": 0.0662499741,
+            "z": -0.37200436,
+            "w": -0.122513711
+          },
+          "Scale": {
+            "x": 0.1,
+            "y": 0.1,
+            "z": 0.1
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -91.75612,
+            "y": -2.47331738,
+            "z": 24.4009342
+          },
+          "Rotation": {
+            "x": 0.9177258,
+            "y": 0.04094269,
+            "z": -0.370204657,
+            "w": -0.138027787
+          },
+          "LinearVelocity": {
+            "x": 0.27356407,
+            "y": 0.0134112686,
+            "z": 0.0478099063
+          },
+          "AngularVelocity": {
+            "x": 0.8550793,
+            "y": 0.428789675,
+            "z": -5.02413845
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "28243238-b2e1-4db1-86f7-080507d41163": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -42.9425468,
+            "y": -2.54039335,
+            "z": -41.6449776
+          },
+          "Rotation": {
+            "x": 0.67460984,
+            "y": 0.336332768,
+            "z": -0.544464648,
+            "w": -0.367886
+          },
+          "Scale": {
+            "x": 100.000008,
+            "y": 100.000053,
+            "z": 100.000046
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -42.94229,
+            "y": -2.54028773,
+            "z": -41.6467819
+          },
+          "Rotation": {
+            "x": 0.6774702,
+            "y": 0.330500931,
+            "z": -0.547627747,
+            "w": -0.3631903
+          },
+          "LinearVelocity": {
+            "x": 0.022192888,
+            "y": 0.00851123,
+            "z": -0.155293211
+          },
+          "AngularVelocity": {
+            "x": -1.468391,
+            "y": 0.195095658,
+            "z": -0.199210316
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "8266ec7e-ea89-4842-bce3-ae4f4b16df34": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -51.7721024,
+            "y": -2.60872984,
+            "z": 16.5834713
+          },
+          "Rotation": {
+            "x": -0.0600936078,
+            "y": -0.14265658,
+            "z": -0.0650020242,
+            "w": -0.9858056
+          },
+          "Scale": {
+            "x": 99.99998,
+            "y": 100.000038,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -51.7721024,
+            "y": -2.60872984,
+            "z": 16.5834713
+          },
+          "Rotation": {
+            "x": -0.0600936078,
+            "y": -0.14265658,
+            "z": -0.0650020242,
+            "w": -0.9858056
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "47ec81b9-4f2d-4c35-b970-7ba1074ae100": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -141.881088,
+            "y": -2.27362251,
+            "z": -30.8827763
+          },
+          "Rotation": {
+            "x": 0.1304412,
+            "y": 0.107945278,
+            "z": -0.8068926,
+            "w": -0.5659129
+          },
+          "Scale": {
+            "x": 99.99998,
+            "y": 100.000023,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -141.881088,
+            "y": -2.27362251,
+            "z": -30.8827763
+          },
+          "Rotation": {
+            "x": 0.1304412,
+            "y": 0.107945278,
+            "z": -0.8068926,
+            "w": -0.5659129
+          },
+          "LinearVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "AngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "636dc62a-ee71-4d89-b722-79802b1303aa": {
+      "Type": "Gib",
+      "Name": "OBJECT_EYE_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -40.53356,
+            "y": -2.80023932,
+            "z": -41.9349976
+          },
+          "Rotation": {
+            "x": 0.2748961,
+            "y": -0.340319842,
+            "z": 0.387709051,
+            "w": 0.811354637
+          },
+          "Scale": {
+            "x": 0.1,
+            "y": 0.1,
+            "z": 0.1
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -40.53673,
+            "y": -2.80002236,
+            "z": -41.9344635
+          },
+          "Rotation": {
+            "x": 0.289375246,
+            "y": -0.332832634,
+            "z": 0.4088162,
+            "w": 0.798970461
+          },
+          "LinearVelocity": {
+            "x": -0.273275256,
+            "y": 0.01870571,
+            "z": 0.0463205725
+          },
+          "AngularVelocity": {
+            "x": 0.8695983,
+            "y": 0.288578,
+            "z": 5.00033665
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 0.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    },
+    "238625ff-ed3b-4b14-ba15-7f393ceb95eb": {
+      "Type": "Gib",
+      "Name": "OBJECT_MANACANISTER_NAME",
+      "States": {
+        "UnityEngine.Transform": {
+          "Position": {
+            "x": -76.09478,
+            "y": -2.36047673,
+            "z": 27.5438461
+          },
+          "Rotation": {
+            "x": 0.060893707,
+            "y": 0.193269476,
+            "z": 0.578272045,
+            "w": 0.7902786
+          },
+          "Scale": {
+            "x": 99.99998,
+            "y": 100.000023,
+            "z": 100.000038
+          }
+        },
+        "UnityEngine.Rigidbody": {
+          "Position": {
+            "x": -76.0988541,
+            "y": -2.3607316,
+            "z": 27.5455437
+          },
+          "Rotation": {
+            "x": 0.06492576,
+            "y": 0.191952646,
+            "z": 0.5946877,
+            "w": 0.778000951
+          },
+          "LinearVelocity": {
+            "x": -0.350751221,
+            "y": -0.0223713219,
+            "z": 0.146897852
+          },
+          "AngularVelocity": {
+            "x": 1.36457086,
+            "y": 0.460953325,
+            "z": 3.32716179
+          }
+        },
+        "Objects.Base.BaseObject": {
+          "Health": 5.0,
+          "Pickupable": false,
+          "Usable": true
+        }
+      }
+    }
+  },
+  "World": {
+    "6eb5b4ad-0a25-466b-a59e-0214a764b45e": {
+      "Type": "Trigger",
+      "States": {
+        "Components.Trigger": {
+          "Triggered": false
+        }
+      }
+    },
+    "a0be4a82-cb12-41b3-bd8f-6c1f5299b51e": {
+      "Type": "Trigger",
+      "States": {
+        "Components.Trigger": {
+          "Triggered": true
+        }
+      }
+    }
+  },
+  "Objects": {
+    "5e2ab174-d67d-491e-b716-08a1d6bdbab5": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": 28.06,
+          "y": -15.847,
+          "z": -27.03
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.7197206,
+          "z": 0.0,
+          "w": 0.6942638
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [],
+        "Triggered": 0,
+        "Cleared": false
+      }
+    },
+    "02f83471-5727-465e-b70b-3bf85323714a": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": 10.55,
+          "y": -15.847,
+          "z": -34.7
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.430984855,
+          "z": 0.0,
+          "w": -0.9023592
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [],
+        "Triggered": 0,
+        "Cleared": false
+      }
+    },
+    "d6b0fdd9-2021-46e0-8187-451b41e37f60": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -77.54,
+          "y": -2.063,
+          "z": -44.29
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.2690725,
+          "z": 0.0,
+          "w": 0.9631199
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "91e28b80-27c8-41bb-8176-0e1881828477"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "e7400c64-576e-45f9-af66-f4ca7bd3741d": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -75.17,
+          "y": -2.063,
+          "z": 26.1
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.985523,
+          "z": 0.0,
+          "w": -0.169541851
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "c0c7cb41-5f2d-4f46-b72d-fc08c8a0d872"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "49857bf6-5f76-4272-a5c9-431d6fc37d72": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": 14.968,
+          "y": -16.08,
+          "z": -40.087
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.08803792,
+          "z": 0.0,
+          "w": -0.9961172
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [],
+        "Triggered": 0,
+        "Cleared": false
+      }
+    },
+    "fcb4adc9-2fde-45dc-ba52-75b8c9faed19": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -41.67,
+          "y": -2.063,
+          "z": -42.47
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.6499871,
+          "z": 0.0,
+          "w": 0.7599452
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "db4a9e1e-0176-43db-bf1a-68551a198d74"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "9cd59487-245b-4a35-a7ef-2b6b863fe2a9": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -16.522,
+          "y": -2.063,
+          "z": 20.648
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.981259644,
+          "z": 0.0,
+          "w": -0.192690611
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "0a6333eb-c5d6-4d95-aef9-6589c7404184"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "abd0e0ce-8f18-4136-a8d0-0d87d3a1e45d": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -101.32,
+          "y": -2.063,
+          "z": -12.15
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.27514112,
+          "z": 0.0,
+          "w": -0.9614039
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "4f706edf-8f13-4a6a-9ae6-99b61af60f4f"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "48203648-7486-45f8-a3f8-879ae4a3b699": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": 19.98,
+          "y": -15.847,
+          "z": -19.07
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.9753878,
+          "z": 0.0,
+          "w": -0.2204964
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [],
+        "Triggered": 0,
+        "Cleared": false
+      }
+    },
+    "430decf6-cc76-497a-9614-741f7454d0fa": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": 23.908,
+          "y": -14.462,
+          "z": -18.404
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.983020544,
+          "z": 0.0,
+          "w": -0.183495581
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [],
+        "Triggered": 0,
+        "Cleared": false
+      }
+    },
+    "ea2679df-f092-4cdf-9e29-ddc453ccbe3f": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -32.7,
+          "y": -2.063,
+          "z": 15.31
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.0697083548,
+          "z": 0.0,
+          "w": 0.9975674
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "252fdfc4-33f6-40eb-bb22-302d2fa500f3"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "274ceefe-6e84-473f-a72c-7a4994298e46": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -73.71,
+          "y": -2.063,
+          "z": -15.63
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.894105256,
+          "z": 0.0,
+          "w": 0.4478569
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "8cecdc54-8615-4245-b8d0-47ae307aa944"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "e533bcb2-aa11-47bf-95b4-522d7b9c258d": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -107.83,
+          "y": -2.063,
+          "z": 10.39
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.9986994,
+          "z": 0.0,
+          "w": -0.0509852469
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "613eb550-e045-44bc-a03b-25c54a499e3c"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "a8cf05ea-0201-472d-b5a0-9511bd2c4c60": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -58.96,
+          "y": -2.063,
+          "z": -64.3
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.476066858,
+          "z": 0.0,
+          "w": 0.879409134
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "8a8c6287-878e-4fb3-ba55-862cb6c49e49"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "ab6a95c7-08b6-4bcb-9f35-378e57442180": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -10.47,
+          "y": -2.063,
+          "z": -14.8
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.379910082,
+          "z": 0.0,
+          "w": -0.925023437
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "b42e66fa-e1e2-41fd-ab75-e0208bf1f21d"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "c67d6629-9d88-46e7-8e61-8d6ee1dd92a9": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -47.44,
+          "y": -2.063,
+          "z": -11.48
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.578762,
+          "z": 0.0,
+          "w": -0.815496564
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "7d484299-f236-4306-ba03-852b203c751d"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "9499d737-3168-4eb5-88fc-d887f1889af4": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -140.74,
+          "y": -2.063,
+          "z": -31.95
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.9375509,
+          "z": 0.0,
+          "w": -0.347848117
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "abb4a1e1-ec71-4318-bf77-a2c099d0fd51"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "603f4e96-287e-482e-b2f3-cae33446546d": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": 24.06,
+          "y": -15.847,
+          "z": -38.07
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.437403321,
+          "z": 0.0,
+          "w": -0.899265468
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [],
+        "Triggered": 0,
+        "Cleared": false
+      }
+    },
+    "dc1c531a-bab5-44ca-8451-fd0977376392": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -51.81,
+          "y": -2.063,
+          "z": 15.24
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": -0.9996633,
+          "z": 0.0,
+          "w": 0.02594997
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "1ac03f45-58d2-484b-aef9-8591d17fe0d7"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "89e3f7c1-42f9-4b50-8ee4-ec3db2794e28": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -99.01,
+          "y": -2.063,
+          "z": -48.14
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.432324648,
+          "z": 0.0,
+          "w": -0.9017181
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "4012791e-e449-4601-8ef2-7c7f6d69ed06"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    },
+    "f043c4f6-c42d-4f53-9d3b-416b438485f0": {
+      "UnityEngine.Transform": {
+        "Position": {
+          "x": -50.54,
+          "y": -2.063,
+          "z": -31.38
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.5493738,
+          "z": 0.0,
+          "w": -0.8355768
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Objects.Base.BaseObject": {
+        "Health": 0.0,
+        "Pickupable": false,
+        "Usable": false
+      },
+      "Objects.NPCSpawner": {
+        "Spawned": [
+          "76ce1a79-6155-421d-9339-2f0008588a28"
+        ],
+        "Triggered": 0,
+        "Cleared": true
+      }
+    }
+  }
+}
