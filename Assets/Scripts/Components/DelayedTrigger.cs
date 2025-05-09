@@ -12,6 +12,8 @@ namespace Components
 {
 	public class DelayedTrigger : MonoBehaviour, ISaveable
 	{
+		public bool ShouldSave => true;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID

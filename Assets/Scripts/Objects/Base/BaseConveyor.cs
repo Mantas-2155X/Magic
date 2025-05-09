@@ -10,6 +10,8 @@ namespace Objects.Base
 {
 	public class BaseConveyor : BaseObject, IConveyor
 	{
+		public override bool ShouldSave => false;
+		
 		[SerializeField]
 		public OnConveyorRunningEvent OnConveyorRunningEvent = new ();
 		

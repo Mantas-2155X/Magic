@@ -9,6 +9,8 @@ namespace Objects.Base
 {
 	public class BaseButton : BaseObject
 	{
+		public override bool ShouldSave => false;
+		
 		[SerializeField]
 		public OnButtonUsedEvent OnButtonUsedEvent = new ();
 

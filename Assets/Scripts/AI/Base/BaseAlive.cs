@@ -124,6 +124,8 @@ namespace AI.Base
 		[field: SerializeField]
 		public AliveData Data { get; private set; }
 
+		public bool ShouldSave => true;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID

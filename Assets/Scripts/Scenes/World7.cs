@@ -13,6 +13,8 @@ namespace Scenes
 {
 	public class World7 : MonoBehaviour, ISaveable
 	{
+		public bool ShouldSave => true;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID

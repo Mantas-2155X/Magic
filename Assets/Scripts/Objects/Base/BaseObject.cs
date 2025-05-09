@@ -26,6 +26,8 @@ namespace Objects.Base
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; set; }
 
+		public virtual bool ShouldSave => true;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID

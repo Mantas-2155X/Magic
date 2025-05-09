@@ -131,10 +131,10 @@ namespace Managers
 				if (component is not ISaveable saveable)
 					continue;
 				
-				// Leave saveables without ID as they are
-				if (string.IsNullOrEmpty(saveable.ObjectID))
+				// Skip what's not supported
+				if (!saveable.ShouldSave)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
 					continue;
 				}
 
@@ -143,6 +143,20 @@ namespace Managers
 				if (root == null)
 				{
 					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
+					continue;
+				}
+				
+				// Prevent saving stuff like gibs on characters
+				if (root == world.Characters && saveable is not IAlive)
+				{
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
+					continue;
+				}
+				
+				// Leave saveables without ID as they are
+				if (string.IsNullOrEmpty(saveable.ObjectID))
+				{
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
 					continue;
 				}
 

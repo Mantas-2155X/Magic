@@ -5,6 +5,8 @@ namespace Objects
 {
 	public class Portal : BaseObject
 	{
+		public override bool ShouldSave => false;
+		
 		[SerializeField]
 		public ParticleSystem System;
 

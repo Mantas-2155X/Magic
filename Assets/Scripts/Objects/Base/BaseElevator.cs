@@ -13,6 +13,8 @@ namespace Objects.Base
 {
 	public class BaseElevator : BaseObject, IElevator
 	{
+		public override bool ShouldSave => false;
+		
 		[SerializeField]
 		public OnElevatorElevatedEvent OnElevatorElevatedEvent = new ();
 		
