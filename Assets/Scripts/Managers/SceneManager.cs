@@ -104,7 +104,7 @@ namespace Managers
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded);
 			await handle.Result.ActivateAsync();
 			await UniTask.WaitUntil(() => handle.IsDone);
-			await UniTask.WaitForSeconds(0.5f, true);
+			await UniTask.WaitForSeconds(0.2f, true);
 
 			if (closeTitle && title != null)
 				title.Close();

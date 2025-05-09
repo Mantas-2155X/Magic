@@ -19,6 +19,17 @@ namespace State.States
 				Triggered = trigger.Triggered,
 			};
 		}
+		
+		public static TriggerState Read(DelayedTrigger delayedTrigger)
+		{
+			if (delayedTrigger == null)
+				return null;
+
+			return new TriggerState
+			{
+				Triggered = delayedTrigger.Triggered,
+			};
+		}
 
 		public static void Apply(Trigger trigger, TriggerState state)
 		{
@@ -26,6 +37,14 @@ namespace State.States
 				return;
 
 			trigger.SetState(state.Triggered);
+		}
+		
+		public static void Apply(DelayedTrigger delayedTrigger, TriggerState state)
+		{
+			if (delayedTrigger == null)
+				return;
+
+			delayedTrigger.SetState(state.Triggered);
 		}
 	}
 }

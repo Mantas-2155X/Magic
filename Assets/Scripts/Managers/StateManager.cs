@@ -22,7 +22,7 @@ using Object = UnityEngine.Object;
 namespace Managers
 {
 	// TODO (impl):
-	// BaseElevator (needs DelayedTrigger), DelayedAttack, BaseConveyor, NPC AI, Projectiles, Decals, World6 Waves, World4 Timer (needs Attacks)
+	// BaseElevator, DelayedAttack, BaseConveyor, NPC AI, Projectiles, Decals, World6 Waves, World4 Timer (needs Attacks)
 	
 	// TODO (test):
 	// (AI) Grabbing shrink
@@ -140,12 +140,12 @@ namespace Managers
 				{
 					if (root == worldTr)
 					{
-						if (saveable is Trigger trigger)
+						if (saveable is Trigger or DelayedTrigger)
 						{
-							data.World[trigger.ObjectID] = new WorldData
+							data.World[saveable.ObjectID] = new WorldData
 							{
 								Type = EWorldDataType.Trigger,
-								States = trigger.Save()
+								States = saveable.Save()
 							};
 							saved = true;
 						}
@@ -333,7 +333,7 @@ namespace Managers
 						{
 							case EWorldDataType.Trigger:
 							{
-								if (saveable is not Trigger)
+								if (saveable is not Trigger and not DelayedTrigger)
 									continue;
 								break;
 							}
