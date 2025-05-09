@@ -619,7 +619,8 @@ namespace AI.Base
 				}
 			}
 
-			StateManager.Instance.KilledAlives.AddUnique(ObjectID);
+			if (this is not Player)
+				StateManager.Instance.KilledAlives.AddUnique(ObjectID);
 			AIManager.Instance.AlivesColliderMap.Remove(Body.BodyCollider);
 			
 			OnDeathEvent?.Invoke(this, source);
