@@ -46,14 +46,14 @@ namespace Managers
 
 		public string Path { get; private set; } = "data/saves";
 
-		public Dictionary<string, Object> RegisteredObjects = new ();
+		public readonly Dictionary<string, Object> RegisteredObjects = new ();
 		
-		public List<string> DestroyedObjects = new ();
-		public List<string> DestroyedComponents = new ();
+		public readonly List<string> DestroyedObjects = new ();
+		public readonly List<string> DestroyedComponents = new ();
 		
-		public List<string> KilledAlives = new ();
+		public readonly List<string> KilledAlives = new ();
 
-		public Dictionary<string, SaveData> AvailableSaves = new ();
+		public readonly Dictionary<string, SaveData> AvailableSaves = new ();
 		
 		private SaveData lastSaveData;
 
@@ -103,9 +103,19 @@ namespace Managers
 			var data = new SaveData();
 			data.Scene = currentScene;
 			data.SavedTime = DateTimeOffset.Now;
-			data.DestroyedObjects = DestroyedObjects;
-			data.DestroyedComponents = DestroyedComponents;
-			data.KilledAlives = KilledAlives;
+			
+			data.DestroyedObjects = new List<string>();
+			for (var i = 0; i < DestroyedObjects.Count; i++)
+				data.DestroyedObjects.Add(DestroyedObjects[i]);
+			
+			data.DestroyedComponents = new List<string>();
+			for (var i = 0; i < DestroyedComponents.Count; i++)
+				data.DestroyedComponents.Add(DestroyedComponents[i]);
+			
+			data.KilledAlives = new List<string>();
+			for (var i = 0; i < KilledAlives.Count; i++)
+				data.KilledAlives.Add(KilledAlives[i]);
+			
 			data.Create = new Dictionary<string, CreateData>();
 			data.World = new Dictionary<string, WorldData>();
 			data.Objects = new Dictionary<string, Dictionary<string, JObject>>();
@@ -285,9 +295,17 @@ namespace Managers
 			if (lastSaveData == null)
 				return;
 
-			DestroyedObjects = lastSaveData.DestroyedObjects;
-			DestroyedComponents = lastSaveData.DestroyedComponents;
-			KilledAlives = lastSaveData.KilledAlives;
+			var destroyedObjects = lastSaveData.DestroyedObjects;
+			for (var i = 0; i < destroyedObjects.Count; i++)
+				DestroyedObjects.Add(destroyedObjects[i]);
+
+			var destroyedComponents = lastSaveData.DestroyedComponents;
+			for (var i = 0; i < destroyedComponents.Count; i++)
+				DestroyedComponents.Add(destroyedComponents[i]);
+
+			var killedAlives = lastSaveData.KilledAlives;
+			for (var i = 0; i < killedAlives.Count; i++)
+				KilledAlives.Add(killedAlives[i]);
 
 			lastSaveData = null;
 		}
