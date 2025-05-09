@@ -24,9 +24,11 @@ namespace Components
 		public float TriggerAfter;
 
 		public bool Triggered { get; private set; }
+		public float EnterTime { get; private set; } = -1f;
 
-		private float enterTime = -1f;
-		private Collider enterCollider;
+		public Collider EnterCollider { get; private set; }
+
+		private float? adjustNextEnter;
 
 		public virtual Dictionary<string, JObject> Save()
 		{
@@ -45,9 +47,10 @@ namespace Components
 				TriggerState.Apply(this, triggerState.ToObject<TriggerState>());
 		}
 		
-		public void SetState(bool triggered)
+		public void SetState(bool triggered, float? enterTime)
 		{
 			Triggered = triggered;
+			adjustNextEnter = enterTime;
 		}
 		
 		public void Update()
@@ -55,19 +58,19 @@ namespace Components
 			if (PauseManager.IsPaused)
 				return;
 			
-			if (Triggered || enterTime < 0f)
+			if (Triggered || EnterCollider == null)
 				return;
 
-			if (Time.time < enterTime + TriggerAfter)
+			if (Time.time < EnterTime + TriggerAfter)
 				return;
 		
 			if (!IsMultiTrigger)
 				Triggered = true;
 			
-			enterTime = -1f;
-			enterCollider = null;
+			EnterTime = 0f;
+			EnterCollider = null;
 			
-			OnTriggerEvent.Invoke(enterCollider);
+			OnTriggerEvent.Invoke(EnterCollider);
 		}
 	
 		public void OnTriggerEnter(Collider other)
@@ -75,8 +78,11 @@ namespace Components
 			if (Triggered)
 				return;
 		
-			enterTime = Time.time;
-			enterCollider = other;
+			EnterTime = Time.time;
+			EnterCollider = other;
+			
+			if (adjustNextEnter != null)
+				EnterTime -= adjustNextEnter.Value;
 		}
 	
 		public void OnTriggerExit(Collider other)
@@ -84,8 +90,8 @@ namespace Components
 			if (Triggered)
 				return;
 
-			enterTime = -1f;
-			enterCollider = null;
+			EnterTime = 0f;
+			EnterCollider = null;
 		}
 
 #if UNITY_EDITOR

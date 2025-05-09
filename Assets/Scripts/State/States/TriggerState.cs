@@ -1,5 +1,6 @@
 using Components;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace State.States
 {
@@ -9,6 +10,9 @@ namespace State.States
 		[JsonProperty]
 		public bool Triggered;
 				
+		[JsonProperty]
+		public float? EnterTime;
+		
 		public static TriggerState Read(Trigger trigger)
 		{
 			if (trigger == null)
@@ -25,10 +29,15 @@ namespace State.States
 			if (delayedTrigger == null)
 				return null;
 
-			return new TriggerState
+			var state = new TriggerState
 			{
-				Triggered = delayedTrigger.Triggered,
+				Triggered = delayedTrigger.Triggered
 			};
+
+			if (delayedTrigger.EnterCollider != null)
+				state.EnterTime = Time.time - delayedTrigger.EnterTime;
+			
+			return state;
 		}
 
 		public static void Apply(Trigger trigger, TriggerState state)
@@ -44,7 +53,7 @@ namespace State.States
 			if (delayedTrigger == null)
 				return;
 
-			delayedTrigger.SetState(state.Triggered);
+			delayedTrigger.SetState(state.Triggered, state.EnterTime);
 		}
 	}
 }
