@@ -172,6 +172,16 @@ namespace UI
 				Deselect();
 			}
 		}
+
+		public void CloseWindows(bool includeConsole = false)
+		{
+			if (includeConsole)
+				Console.Display(false);
+			
+			Settings.Display(false);
+			SceneSelect.Display(false);
+			SaveLoad.Display(false);
+		}
 		
 		#endregion
 

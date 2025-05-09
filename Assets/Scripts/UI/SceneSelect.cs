@@ -142,7 +142,6 @@ namespace UI
 				container.Button.onClick.RemoveAllListeners();
 				container.Button.onClick.AddListener(delegate
 				{
-					Display(false);
 					SceneManager.Instance.ChangeScene(sceneNames[idx], true, true, true);
 				});
 				

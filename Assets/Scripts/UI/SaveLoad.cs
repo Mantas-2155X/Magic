@@ -107,7 +107,6 @@ namespace UI
 			if (selectedContainer == null)
 				return;
 
-			Display(false);
 			StateManager.Instance.Load(selectedSave.Item2);
 		}
 

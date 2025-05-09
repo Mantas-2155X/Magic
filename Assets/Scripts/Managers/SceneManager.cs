@@ -90,6 +90,10 @@ namespace Managers
 				return;
 			}
 
+			var title = Title.Instance;
+			if (title != null)
+				title.CloseWindows();
+			
 			var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {currentScene} to {scene}");
 			
@@ -102,12 +106,8 @@ namespace Managers
 			await UniTask.WaitUntil(() => handle.IsDone);
 			await UniTask.WaitForSeconds(0.5f, true);
 
-			if (closeTitle)
-			{
-				var title = Title.Instance;
-				if (title != null) 
-					title.Close();
-			}
+			if (closeTitle && title != null)
+				title.Close();
 			
 			if (fadeOut)
 				await fade(false, fadeDuration);
