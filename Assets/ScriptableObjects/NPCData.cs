@@ -155,6 +155,18 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public bool Stationary;
+
+		[SerializeField]
+		public bool CanChaseInterrupt;
+		
+		[SerializeField]
+		public float ChaseInterruptEvery = 5;
+		
+		[SerializeField]
+		public float ChaseInterruptDistance = 7.5f;
+
+		[SerializeField]
+		public float ChaseInterruptDuration = 3;
 		
 		/// <summary>
 		/// Can the NPC self-destruct

@@ -128,6 +128,8 @@ namespace AI
 			{ EActionMode.Carry, new Carry() }
 		};
 		
+		private float chaseInterruptTimer;
+
 		private EAIMode previousAIMode;
 		private EActionMode previousActionMode;
 		private Component previousAttackTarget;
@@ -572,11 +574,38 @@ namespace AI
 			ActionModeObj.Update();
 			AIModeObj.Update();
 
+			var time = Time.time;
+
 			var npcData = (NPCData)Data;
+			if (npcData.CanChaseInterrupt && AttackTarget != null && AIMode == EAIMode.Action && ActionMode is EActionMode.Idle or EActionMode.Patrol or EActionMode.Wander)
+			{
+				if (Chase.InterruptUntil < time)
+				{
+					chaseInterruptTimer += Time.deltaTime;
+
+					// Wait some time before interrupting
+					if (chaseInterruptTimer >= npcData.ChaseInterruptEvery)
+					{
+						chaseInterruptTimer = 0f;
+					
+						// Interrupt for some time allowing walking
+						Chase.InterruptUntil = time + npcData.ChaseInterruptDuration;
+						Chase.ResetChaseRange(true);
+					
+						Wandering.WalkRandomly(true, npcData.ChaseInterruptDistance);
+					}
+				}
+				else
+				{
+					// Already reached interrupt destination, cancel it early
+					Chase.InterruptUntil = time;
+				}
+			}
+			
 			if (!npcData.CanSelfDestruct || SelfDestructed)
 				return;
 
-			if (Time.time < SelfDestructStart + npcData.SelfDestructAfter)
+			if (time < SelfDestructStart + npcData.SelfDestructAfter)
 				return;
 
 			SelfDestructed = true;

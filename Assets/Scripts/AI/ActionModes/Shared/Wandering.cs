@@ -19,7 +19,7 @@ namespace AI.ActionModes.Shared
 		/// Has the npc walk randomly by adding a random circle range to the current position and setting that as the destination
 		/// Setting force to true will set this immediately, otherwise it will be ignored if the last time walk state was exited is less than WanderEvery 
 		/// </summary>
-		public void WalkRandomly(bool force)
+		public void WalkRandomly(bool force, float maxRange = 15f)
 		{
 			if (!force && Time.time < owner.AIModes[EAIMode.Walking].LastExited + ((NPCData)owner.Data).WanderEvery)
 				return;
@@ -27,9 +27,9 @@ namespace AI.ActionModes.Shared
 			var pos = owner.Body.Rigidbody.position;
 			
 			var circle = Random.insideUnitSphere;
-			circle.x *= Random.Range(owner.Agent.StoppingDistance, 15f);
-			circle.y *= Random.Range(owner.Agent.StoppingDistance, 15f);
-			circle.z *= Random.Range(owner.Agent.StoppingDistance, 15f);
+			circle.x *= Random.Range(owner.Agent.StoppingDistance, maxRange);
+			circle.y *= Random.Range(owner.Agent.StoppingDistance, maxRange);
+			circle.z *= Random.Range(owner.Agent.StoppingDistance, maxRange);
 
 			if (!owner.Agent.HasFlight)
 				circle.y = 0f;

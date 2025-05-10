@@ -14,6 +14,8 @@ namespace AI.ActionModes.Shared
 			this.owner = owner;
 		}
 
+		public float InterruptUntil;
+		
 		private float currentChaseRange;
 		
 		/// <summary>
@@ -21,6 +23,10 @@ namespace AI.ActionModes.Shared
 		/// </summary>
 		public bool ChaseAndKill(Transform target)
 		{
+			// Allow interrupting chasing so other actions can be done
+			if (Time.time < InterruptUntil)
+				return false;
+			
 			// Target within sense range, chase until it is reached
 			if (!ChaseCheck(target))
 				return false;

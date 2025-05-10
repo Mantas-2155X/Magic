@@ -81,6 +81,10 @@ MonoBehaviour:
   UseSightCheck: 1
   CanTakeResources: 1
   Stationary: 0
+  CanChaseInterrupt: 1
+  ChaseInterruptEvery: 5
+  ChaseInterruptDistance: 12.5
+  ChaseInterruptDuration: 3
   CanSelfDestruct: 0
   SelfDestructAfter: 0
   SelfDestructAttack: {fileID: 0}
