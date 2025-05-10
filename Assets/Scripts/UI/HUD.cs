@@ -61,7 +61,7 @@ namespace UI
 				return;
 
 			var spell = player.Spell;
-			if (!spell.IsNull())
+			if (spell.NotNull())
 			{
 				if (spell.IsCasting)
 				{

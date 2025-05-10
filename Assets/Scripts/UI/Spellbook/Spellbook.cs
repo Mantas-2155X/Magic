@@ -44,7 +44,7 @@ namespace UI.Spellbook
 				return;
 
 			var spell = previousContainer.Spell;
-			if (!spell.IsNull())
+			if (spell.NotNull())
 			{
 				// Move previously grabbed container to the newly grabbed containers index
 				AIManager.Instance.Player.SetSpellIndex(spell.SpellData, grabbedContainer.Index);

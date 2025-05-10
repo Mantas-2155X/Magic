@@ -129,7 +129,7 @@ namespace Combat.Projectiles.Base
 			spellRange = range;
 			attackData = attack;
 
-			if (!owner.IsNull())
+			if (owner.NotNull())
 			{
 				var body = owner.Body;
 			
@@ -165,7 +165,7 @@ namespace Combat.Projectiles.Base
 			if (Source == null)
 				return null;
 
-			if (!owner.IsNull())
+			if (owner.NotNull())
 				return owner;
 
 			switch (Source)

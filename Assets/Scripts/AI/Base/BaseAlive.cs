@@ -181,7 +181,7 @@ namespace AI.Base
 		public bool IsInvulnerable { get; private set; }
 		public bool IsPowerful { get; private set; }
 		public virtual bool IsWalking { get; private set; }
-		public bool IsCasting => !Spell.IsNull() && Spell.IsCasting;
+		public bool IsCasting => Spell.NotNull() && Spell.IsCasting;
 
 		public virtual void SetInvulnerable(bool value)
 		{
@@ -260,7 +260,7 @@ namespace AI.Base
 			
 				if (Paralyzed)
 				{
-					if (!Spell.IsNull())
+					if (Spell.NotNull())
 						Spell.CancelCasting();
 				
 					Body.SetMalfunction(true);
@@ -314,7 +314,7 @@ namespace AI.Base
 		{
 			var previousSpell = Spell;
 			
-			if (!Spell.IsNull())
+			if (Spell.NotNull())
 				Spell.Unselect();
 			
 			SpellRange = float.MaxValue;
@@ -551,7 +551,7 @@ namespace AI.Base
 			
 			Debug.Log($"[Alive {gameObject.name}] was killed by {source}");
 			
-			if (!Spell.IsNull())
+			if (Spell.NotNull())
 				Spell.CancelCasting();
 			
 			SetMovementType(EMovementType.Normal);
@@ -796,7 +796,7 @@ namespace AI.Base
 			if (!Data.CanGrab)
 				return;
 			
-			if (!Grabbing.IsNull())
+			if (Grabbing.NotNull())
 			{
 				ReleaseObject();
 				return;
@@ -995,7 +995,7 @@ namespace AI.Base
 			
 			if (Paralyzed)
 			{
-				if (!Spell.IsNull())
+				if (Spell.NotNull())
 					Spell.CancelCasting();
 				
 				Body.SetMalfunction(true);

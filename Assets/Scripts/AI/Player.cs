@@ -123,7 +123,7 @@ namespace AI
 
 			colliderTr.rotation = Quaternion.identity;
 			
-			if (SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1.IsPressed() && !Spell.IsNull())
+			if (SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1.IsPressed() && Spell.NotNull())
 				Spell.StartCasting();
 
 			var weaponContainer = Body.Containers[EWearableType.Weapon].Wear;
@@ -528,13 +528,13 @@ namespace AI
 		
 		private void onAttackPerformed(InputAction.CallbackContext ctx)
 		{
-			if (!Spell.IsNull())
+			if (Spell.NotNull())
 				Spell.StartCasting();
 		}
 
 		private void onAttackCanceled(InputAction.CallbackContext ctx)
 		{
-			if (!Spell.IsNull())
+			if (Spell.NotNull())
 				Spell.CancelCasting();
 		}
 
@@ -613,7 +613,7 @@ namespace AI
 			if (!AllowHotbarScrolling && ctx.control.device is Mouse)
 				return;
 			
-			var currentIndex = GetSpellIndex(!Spell.IsNull() ? Spell.SpellData : null);
+			var currentIndex = GetSpellIndex(Spell.NotNull() ? Spell.SpellData : null);
 			currentIndex -= (int)ctx.ReadValue<Vector2>().y;
 
 			var maxSpell = Mathf.Min(UI.Player.Instance.HUD.Hotbar.Size, Spells.Count);
@@ -713,7 +713,7 @@ namespace AI
 			if (playerUI == null)
 				return;
 			
-			if (!Spell.IsNull())
+			if (Spell.NotNull())
             {
             	// Changing spell index might put it outside of hotbar size, put it to the first one if so
             	if (GetSpellIndex(Spell.SpellData) >= playerUI.HUD.Hotbar.Size)

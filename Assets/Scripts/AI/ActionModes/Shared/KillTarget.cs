@@ -38,7 +38,7 @@ namespace AI.ActionModes.Shared
 				if (!owner.AimAt.AimTowards(target))
 					return false;
 
-				if (!owner.Spell.IsNull())
+				if (owner.Spell.NotNull())
 					owner.Spell.StartCasting();
 			}
 

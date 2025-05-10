@@ -136,7 +136,7 @@ namespace Objects
 			foreach (var pair in Spawned)
 			{
 				var alive = pair.Value;
-				if (!alive.IsNull() && alive.IsAlive)
+				if (alive.NotNull() && alive.IsAlive)
 					return;
 			}
 			
@@ -222,7 +222,7 @@ namespace Objects
 				foreach (var pair in Spawned)
 				{
 					var alive = pair.Value;
-					if (alive == null || !alive.IsAlive)
+					if (alive.IsNull() || !alive.IsAlive)
 						continue;
 
 					currentlyAlive++;

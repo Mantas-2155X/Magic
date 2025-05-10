@@ -109,7 +109,7 @@ namespace AI.ActionModes.Shared
 				}
 
 				var resource = FindNearbyResource(ETag.RestoresHealth);
-				if (!resource.IsNull())
+				if (resource.NotNull())
 				{
 					owner.Use((Component)resource);
 					return true;
@@ -125,7 +125,7 @@ namespace AI.ActionModes.Shared
 				}
 				
 				var resource = FindNearbyResource(ETag.RestoresMana);
-				if (!resource.IsNull())
+				if (resource.NotNull())
 				{
 					owner.Use((Component)resource);
 					return true;
@@ -141,7 +141,7 @@ namespace AI.ActionModes.Shared
 				}
 				
 				var resource = FindNearbyResource(ETag.RestoresEnergy);
-				if (!resource.IsNull())
+				if (resource.NotNull())
 				{
 					owner.Use((Component)resource);
 					return true;

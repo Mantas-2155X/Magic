@@ -339,7 +339,7 @@ namespace Combat.Spells.Base
 		
 		private void clearCast()
 		{
-			if (cast == null)
+			if (cast.IsNull())
 				return;
 
 			cast.StopParticles();

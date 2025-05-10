@@ -90,7 +90,7 @@ namespace Combat.Casts.Base
 			owner = null;
 			owner = GetAlive();
 
-			ownerTr = !owner.IsNull() ? owner.GetTransform() : Source.transform;
+			ownerTr = owner.NotNull() ? owner.GetTransform() : Source.transform;
 			
 			setPosition();
 			
@@ -103,7 +103,7 @@ namespace Combat.Casts.Base
 			if (Source == null)
 				return null;
 
-			if (!owner.IsNull())
+			if (owner.NotNull())
 				return owner;
 
 			switch (Source)
@@ -135,7 +135,7 @@ namespace Combat.Casts.Base
 		{
 			var newPos = ownerTr.position + -ownerTr.up * (0.95f * ownerTr.localScale.y);
 
-			if (!owner.IsNull())
+			if (owner.NotNull())
 				newPos.y = owner.Body.CanSway ? owner.Body.Feet[0].position.y : owner.Body.Core.position.y;
 			
 			thisTr.position = newPos;

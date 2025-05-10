@@ -77,7 +77,7 @@ namespace Combat.Wearables.Base
 		
 		public virtual void Equip(IAlive alive)
 		{
-			if (alive.IsNull() || !Owner.IsNull())
+			if (alive.IsNull() || Owner.NotNull())
 				return;
 			
 			Owner = alive;
@@ -109,7 +109,7 @@ namespace Combat.Wearables.Base
 			var movePos = Vector3.zero;
 			var moveAng = Vector3.zero;
 			
-			if (!Owner.IsNull())
+			if (Owner.NotNull())
 			{
 				if (Owner is Player)
 					setRenderMode(ShadowCastingMode.On);

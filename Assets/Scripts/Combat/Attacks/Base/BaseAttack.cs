@@ -84,7 +84,7 @@ namespace Combat.Attacks.Base
 
 			Target = AttackData.AttachToTarget ? attach : null;
 
-			if (AttackData.FollowCaster && !owner.IsNull())
+			if (AttackData.FollowCaster && owner.NotNull())
 				Target = owner.GetTransform();
 			
 			if (Target == null)
@@ -221,7 +221,7 @@ namespace Combat.Attacks.Base
 			if (Source == null)
 				return null;
 
-			if (!owner.IsNull())
+			if (owner.NotNull())
 				return owner;
 			
 			switch (Source)

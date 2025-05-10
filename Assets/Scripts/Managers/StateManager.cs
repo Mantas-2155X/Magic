@@ -573,7 +573,7 @@ namespace Managers
 				if (!loaded)
 					Debug.LogWarning($"[StateManager] Create Saveable {pair.Value.Type} with ObjectID {pair.Key} was not loaded");
 
-				if (!iObject.IsNull())
+				if (iObject.NotNull())
 				{
 					// Other potentially needed data is set so we can remove the component now
 					if (data.DestroyedComponents.Contains(iObject.ObjectID))
@@ -583,7 +583,7 @@ namespace Managers
 					}
 				}
 
-				if (!iAlive.IsNull())
+				if (iAlive.NotNull())
 				{
 					// 
 				}

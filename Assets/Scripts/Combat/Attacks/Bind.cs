@@ -14,7 +14,7 @@ namespace Combat.Attacks
 		{
 			base.OnTriggerEnter(other);
 			
-			if (!alive.IsNull() || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var targetAlive))
+			if (alive.NotNull() || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var targetAlive))
 				return;
 
 			alive = targetAlive;
@@ -33,7 +33,7 @@ namespace Combat.Attacks
 		{
 			base.OnTriggersDisabled();
 
-			if (!alive.IsNull())
+			if (alive.NotNull())
 				alive.RemoveSlowSource(ObjectID);
 		}
 	}

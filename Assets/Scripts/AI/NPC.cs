@@ -341,7 +341,7 @@ namespace AI
 			if (AIMode == mode)
 				return;
 			
-			if (!Spell.IsNull())
+			if (Spell.NotNull())
 				Spell.CancelCasting();
 			
 			previousAIMode = AIMode;
@@ -361,7 +361,7 @@ namespace AI
 			if (ActionMode == mode)
 				return;
 			
-			if (!Spell.IsNull())
+			if (Spell.NotNull())
 				Spell.CancelCasting();
 			
 			previousActionMode = ActionMode;
@@ -381,7 +381,7 @@ namespace AI
 			if (AttackTarget == target)
 				return;
 			
-			if (!Spell.IsNull())
+			if (Spell.NotNull())
 				Spell.CancelCasting();
 			
 			previousAttackTarget = AttackTarget;

@@ -90,7 +90,7 @@ namespace State.States
 			state.MovementType = baseAlive.MovementType;
 			state.RelationshipGroup = baseAlive.RelationshipGroup;
 
-			if (!baseAlive.Grabbing.IsNull())
+			if (baseAlive.Grabbing.NotNull())
 			{
 				state.Grabbing = baseAlive.Grabbing.ObjectID;
 				state.OriginalGrabSize = baseAlive.OriginalGrabSize;
