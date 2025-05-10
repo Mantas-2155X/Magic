@@ -35,17 +35,18 @@ namespace AI.ActionModes.Shared
 				circle.y = 0f;
 
 			var target = new Vector3(pos.x + circle.x, pos.y + circle.y, pos.z + circle.z);
+			var direction = target - pos;
 
 			if (owner.Agent.IsNavMesh)
 			{
 				// Prevent wandering picking a destination that's cutting a navmesh
-				if (NavMesh.Raycast(pos, target, out var hit, NavMesh.AllAreas))
+				if (NavMesh.Raycast(pos, target, out var hit, NavMesh.AllAreas) && hit.distance <= direction.magnitude)
 					target = hit.position + hit.normal;
 			}
 			else
 			{
 				// If hit something, use that as the point to prevent going through it
-				if (Physics.Raycast(pos, (target - pos).normalized, out var hit, float.MaxValue, ~LayerMaskTools.GetMask()))
+				if (Physics.Raycast(pos, direction.normalized, out var hit, direction.magnitude, ~LayerMaskTools.GetMask()))
 					target = hit.point + hit.normal;
 			}
 			
