@@ -374,12 +374,36 @@ namespace Editor
 				
 				GUILayout.BeginHorizontal();
 
-				EditorGUIUtility.labelWidth = 20f;
-				EditorGUILayout.EnumPopup("AI: ", npc.AIMode, GUILayout.Width(95f));
-				EditorGUIUtility.labelWidth = 25f;
-				EditorGUILayout.EnumPopup("Act: ", npc.ActionMode, GUILayout.Width(130f));
-				EditorGUIUtility.labelWidth = 45f;
-				EditorGUILayout.ObjectField("Attack: ", (Component)npc.AttackTarget, typeof(Component), true);
+				EditorGUIUtility.labelWidth = 30f;
+				EditorGUILayout.EnumPopup("AI: ", npc.AIMode);
+				EditorGUIUtility.labelWidth = 0f;
+				
+				EditorGUIUtility.labelWidth = 30f;
+				EditorGUILayout.EnumPopup("Act: ", npc.ActionMode);
+				EditorGUIUtility.labelWidth = 0f;
+
+				GUILayout.EndHorizontal();
+				
+				GUILayout.BeginHorizontal();
+				
+				EditorGUIUtility.labelWidth = 30f;
+				EditorGUILayout.ObjectField("AT: ", (Component)npc.AttackTarget, typeof(Component), true);
+				EditorGUIUtility.labelWidth = 0f;
+				
+				EditorGUIUtility.labelWidth = 30f;
+				EditorGUILayout.ObjectField("OT: ", (Component)npc.OtherTarget, typeof(Component), true);
+				EditorGUIUtility.labelWidth = 0f;
+
+				GUILayout.EndHorizontal();
+				
+				GUILayout.BeginHorizontal();
+				
+				EditorGUIUtility.labelWidth = 30f;
+				EditorGUILayout.ObjectField("PAT: ", (Component)npc.PreviousAttackTarget, typeof(Component), true);
+				EditorGUIUtility.labelWidth = 0f;
+				
+				EditorGUIUtility.labelWidth = 30f;
+				EditorGUILayout.ObjectField("POT: ", (Component)npc.PreviousOtherTarget, typeof(Component), true);
 				EditorGUIUtility.labelWidth = 0f;
 
 				GUILayout.EndHorizontal();
