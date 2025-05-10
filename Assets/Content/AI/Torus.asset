@@ -79,5 +79,7 @@ MonoBehaviour:
   UseExtraCasts: 0
   UseSightCheck: 0
   CanTakeResources: 0
-  CanSelfDestruct: 1
   Stationary: 0
+  CanSelfDestruct: 1
+  SelfDestructAfter: 7.5
+  SelfDestructAttack: {fileID: 11400000, guid: ca485fbe64df111cba21f83d47ccc93e, type: 2}

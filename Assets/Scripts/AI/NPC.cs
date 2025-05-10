@@ -9,9 +9,11 @@ using AI.Enums;
 using AI.Interfaces;
 using AI.PathFinding;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Base;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -32,6 +34,9 @@ namespace AI
 		/// Marks if this alive was spawned outside of a npc spawner and should be included in saves as a "create"
 		/// </summary>
 		public bool ExternallySpawned { get; set; }
+
+		public bool SelfDestructed { get; set; }
+		public float SelfDestructStart { get; set; }
 
 		#region Jump
 
@@ -512,6 +517,40 @@ namespace AI
 		
 		#endregion
 
+		#region Identify / SaveLoad
+
+		public override Dictionary<string, JObject> Save()
+		{
+			var dict = base.Save();
+			
+			var npcState = NPCState.Read(this);
+			if (npcState != null)
+				dict[typeof(NPC).ToString()] = JObject.FromObject(npcState);
+			
+			return dict;
+		}
+
+		public override void Load(Dictionary<string, JObject> data)
+		{
+			base.Load(data);
+			
+			if (data.TryGetValue(typeof(NPC).ToString(), out var npcState))
+				NPCState.Apply(this, npcState.ToObject<NPCState>());
+		}
+		
+		public void SetState(bool selfDestructed, float selfDestructElapsed)
+		{
+			if (selfDestructed)
+			{
+				SelfDestructed = true;
+				return;
+			}
+			
+			SelfDestructStart -= selfDestructElapsed;
+		}
+
+		#endregion
+
 		#region MonoBehaviour
 
 		public void Update()
@@ -532,6 +571,18 @@ namespace AI
 
 			ActionModeObj.Update();
 			AIModeObj.Update();
+
+			var npcData = (NPCData)Data;
+			if (!npcData.CanSelfDestruct || SelfDestructed)
+				return;
+
+			if (Time.time < SelfDestructStart + npcData.SelfDestructAfter)
+				return;
+
+			SelfDestructed = true;
+
+			var tr = GetTransform();
+			ObjectManager.Instance.CreateAttack(npcData.SelfDestructAttack, this, tr.position, Vector3.zero, tr);
 		}
 
 #if UNITY_EDITOR
@@ -612,6 +663,9 @@ namespace AI
 			Agent.Speed = data.Speed;
 			Agent.AngularSpeed = npcData.RotationSpeed;
 
+			if (npcData.CanSelfDestruct)
+				SelfDestructStart = Time.time;
+			
 			base.Spawn(data, relationshipGroup);
 			
 			SendCommunication(ECommunication.Spawned, null);

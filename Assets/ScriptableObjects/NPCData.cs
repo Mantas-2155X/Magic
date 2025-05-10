@@ -149,16 +149,30 @@ namespace ScriptableObjects
 		/// </summary>
 		[SerializeField]
 		public bool CanTakeResources = true;
-
-		/// <summary>
-		/// Can the NPC self-destruct if it has such mechanisms
-		/// </summary>
-		public bool CanSelfDestruct = false;
 		
 		/// <summary>
 		/// Is the npc able to walk at all? Turning is allowed either way
 		/// </summary>
 		[SerializeField]
 		public bool Stationary;
+		
+		/// <summary>
+		/// Can the NPC self-destruct
+		/// </summary>
+		[Header("Self Destruct")]
+		[SerializeField]
+		public bool CanSelfDestruct;
+
+		/// <summary>
+		/// How long after the NPC spawns should it self-destruct
+		/// </summary>
+		[SerializeField]
+		public float SelfDestructAfter;
+		
+		/// <summary>
+		/// What attack to use for self-destructing
+		/// </summary>
+		[SerializeField]
+		public AttackData SelfDestructAttack;
 	}
 }

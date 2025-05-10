@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d095914682fd465fb83b431e5a31d2ef, type: 3}
   m_Name: Drone (World7)
   m_EditorClassIdentifier: 
-  Name: AI_DRONE_NAME
-  Description: AI_DRONE_DESC
+  Name: AI_DRONE_WORLD7_NAME
+  Description: AI_DRONE_WORLD7_DESC
   Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 2273498091929504843, guid: f87096318aaafc244997e6f00eca6740, type: 3}
@@ -80,5 +80,7 @@ MonoBehaviour:
   UseExtraCasts: 1
   UseSightCheck: 1
   CanTakeResources: 1
-  CanSelfDestruct: 0
   Stationary: 0
+  CanSelfDestruct: 0
+  SelfDestructAfter: 0
+  SelfDestructAttack: {fileID: 0}

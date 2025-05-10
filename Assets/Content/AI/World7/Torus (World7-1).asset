@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d095914682fd465fb83b431e5a31d2ef, type: 3}
   m_Name: Torus (World7-1)
   m_EditorClassIdentifier: 
-  Name: AI_TORUS_NAME
-  Description: AI_TORUS_DESC
+  Name: AI_TORUS_WORLD7_1_NAME
+  Description: AI_TORUS_WORLD7_1_DESC
   Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 1302894152738733886, guid: cda0798f1ffa180948c9abf3a013b45c, type: 3}
@@ -79,5 +79,7 @@ MonoBehaviour:
   UseExtraCasts: 0
   UseSightCheck: 0
   CanTakeResources: 0
-  CanSelfDestruct: 0
   Stationary: 0
+  CanSelfDestruct: 0
+  SelfDestructAfter: 0
+  SelfDestructAttack: {fileID: 0}
