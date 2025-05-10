@@ -22,14 +22,7 @@ namespace Combat.Wearables.Base
 		public string ObjectID
 		{
 			get => objectID;
-			set
-			{
-				if (!string.IsNullOrWhiteSpace(objectID))
-					StateManager.Instance.RegisteredObjects.Remove(objectID);
-				objectID = value;
-				if (!string.IsNullOrWhiteSpace(objectID))
-					StateManager.Instance.RegisteredObjects[objectID] = this;
-			}
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
 		public IAlive Owner { get; private set; }
@@ -51,16 +44,13 @@ namespace Combat.Wearables.Base
 		
 		public void Awake()
 		{
+			StateManager.Instance.RegisterObject(this);
 			initializeObject();
-			
-			if (!string.IsNullOrWhiteSpace(ObjectID))
-				StateManager.Instance.RegisteredObjects[ObjectID] = this;
 		}
 
 		public void OnDestroy()
 		{
-			if (!string.IsNullOrWhiteSpace(ObjectID))
-				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+			StateManager.Instance.UnregisterObject(this);
 		}
 		
 		#endregion

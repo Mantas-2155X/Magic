@@ -155,7 +155,7 @@ namespace AI.ActionModes.Shared
 			tempResources.Clear();
 			tempResourcePositions.Clear();
 
-			var resources = StateManager.Instance.RegisteredObjects;
+			var resources = StateManager.Instance.GetRegisteredObjects();
 			foreach (var pair in resources)
 			{
 				if (pair.Value == null || pair.Value is not IObject resource)

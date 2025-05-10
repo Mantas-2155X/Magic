@@ -81,14 +81,12 @@ namespace AI.Base
 		
 		public virtual void Awake()
 		{
-			if (!string.IsNullOrWhiteSpace(ObjectID))
-				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+			StateManager.Instance.RegisterObject(this);
 		}
 
 		public virtual void OnDestroy()
 		{
-			if (!string.IsNullOrWhiteSpace(ObjectID))
-				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+			StateManager.Instance.UnregisterObject(this);
 		}
 		
 		#endregion
@@ -131,14 +129,7 @@ namespace AI.Base
 		public string ObjectID
 		{
 			get => objectID;
-			set
-			{
-				if (!string.IsNullOrWhiteSpace(objectID))
-					StateManager.Instance.RegisteredObjects.Remove(objectID);
-				objectID = value;
-				if (!string.IsNullOrWhiteSpace(objectID))
-					StateManager.Instance.RegisteredObjects[objectID] = this;
-			}
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
 		[field: SerializeField]

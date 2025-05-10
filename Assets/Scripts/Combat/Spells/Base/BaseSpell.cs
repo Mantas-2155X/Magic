@@ -24,15 +24,8 @@ namespace Combat.Spells.Base
 		private string objectID;
 		public string ObjectID
 		{
-			get => objectID; 
-			set
-			{
-				if (!string.IsNullOrWhiteSpace(objectID))
-					StateManager.Instance.RegisteredObjects.Remove(objectID);
-				objectID = value;
-				if (!string.IsNullOrWhiteSpace(objectID))
-					StateManager.Instance.RegisteredObjects[objectID] = this;
-			}
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
 		public IAlive Owner { get; set; }
@@ -56,14 +49,12 @@ namespace Combat.Spells.Base
 		
 		public void Awake()
 		{
-			if (!string.IsNullOrWhiteSpace(ObjectID))
-				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+			StateManager.Instance.RegisterObject(this);
 		}
 
 		public void OnDestroy()
 		{
-			if (!string.IsNullOrWhiteSpace(ObjectID))
-				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+			StateManager.Instance.UnregisterObject(this);
 		}
 		
 		#endregion

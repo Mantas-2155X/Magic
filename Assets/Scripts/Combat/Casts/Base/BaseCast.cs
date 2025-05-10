@@ -21,14 +21,7 @@ namespace Combat.Casts.Base
 		public string ObjectID
 		{
 			get => objectID;
-			set
-			{
-				if (!string.IsNullOrWhiteSpace(objectID))
-					StateManager.Instance.RegisteredObjects.Remove(objectID);
-				objectID = value;
-				if (!string.IsNullOrWhiteSpace(objectID))
-					StateManager.Instance.RegisteredObjects[objectID] = this;
-			}
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
 		public Component Source { get; private set; }
@@ -49,14 +42,12 @@ namespace Combat.Casts.Base
 
 		public void Awake()
 		{
-			if (!string.IsNullOrWhiteSpace(ObjectID))
-				StateManager.Instance.RegisteredObjects[ObjectID] = this;
+			StateManager.Instance.RegisterObject(this);
 		}
 
 		public void OnDestroy()
 		{
-			if (!string.IsNullOrWhiteSpace(ObjectID))
-				StateManager.Instance.RegisteredObjects.Remove(ObjectID);
+			StateManager.Instance.UnregisterObject(this);
 		}
 		
 		#endregion

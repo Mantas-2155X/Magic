@@ -40,14 +40,14 @@ namespace Editor
 					EditorGUILayout.TextField(list[i]);
 			}
 			
-			Folds[3] = EditorGUILayout.Foldout(Folds[3], $"Registered Objects ({StateManager.Instance.RegisteredObjects.Count})", true);
+			Folds[3] = EditorGUILayout.Foldout(Folds[3], $"Registered Objects ({StateManager.Instance.GetRegisteredObjects().Count})", true);
 			if (Folds[3])
 			{
-				foreach (var pair in StateManager.Instance.RegisteredObjects)
+				foreach (var pair in StateManager.Instance.GetRegisteredObjects())
 				{
 					GUILayout.BeginHorizontal();
 					EditorGUILayout.TextField(pair.Key, GUILayout.Width(175));
-					EditorGUILayout.ObjectField(pair.Value, typeof(Object), true);
+					EditorGUILayout.ObjectField((Object)pair.Value, typeof(Object), true);
 					GUILayout.EndHorizontal();
 				}
 			}

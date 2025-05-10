@@ -45,8 +45,6 @@ namespace Managers
 		}
 
 		public string Path { get; private set; } = "data/saves";
-
-		public readonly Dictionary<string, Object> RegisteredObjects = new ();
 		
 		public readonly List<string> DestroyedObjects = new ();
 		public readonly List<string> DestroyedComponents = new ();
@@ -56,6 +54,46 @@ namespace Managers
 		public readonly Dictionary<string, SaveData> AvailableSaves = new ();
 		
 		private SaveData lastSaveData;
+		
+		#region Registered Objects
+		
+		private readonly Dictionary<string, IIdentifiable> registeredObjects = new ();
+
+		public Dictionary<string, IIdentifiable> GetRegisteredObjects()
+		{
+			return registeredObjects;
+		}
+
+		public void RegisterObject(IIdentifiable identifiable)
+		{
+			registerObject(identifiable, identifiable.ObjectID);
+		}
+		
+		public void UnregisterObject(IIdentifiable identifiable)
+		{
+			if (string.IsNullOrWhiteSpace(identifiable.ObjectID))
+				return;
+
+			registeredObjects.Remove(identifiable.ObjectID);
+		}
+		
+		public string ChangeObjectID(IIdentifiable identifiable, string newObjectID)
+		{
+			UnregisterObject(identifiable);
+			registerObject(identifiable, newObjectID);
+
+			return newObjectID;
+		}
+
+		private void registerObject(IIdentifiable identifiable, string objectID)
+		{
+			if (string.IsNullOrWhiteSpace(objectID))
+				return;
+			
+			registeredObjects[objectID] = identifiable;
+		}
+
+		#endregion
 
 		public void InitializeSaves()
 		{
