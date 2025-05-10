@@ -1480,6 +1480,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: be330308-472a-4ebc-be4c-e61d510074e5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: PatrolAction
       value: 
       objectReference: {fileID: 11400000, guid: e54a00514554e1b84988d8e59ff58d80, type: 2}
@@ -2752,11 +2756,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4093284366663789129, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
   m_PrefabInstance: {fileID: 321892287}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &321892289 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 8590110310615143507, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
-  m_PrefabInstance: {fileID: 321892287}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &324666429
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3144,6 +3143,10 @@ PrefabInstance:
     - target: {fileID: 2766956888433377728, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: 3cce6ec8-c14c-46b7-9959-22026e23a4de
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: PatrolAction
@@ -4785,6 +4788,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: 9c7e00cc-c61e-4fdf-90fc-c1ad2024d85f
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: Datas.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5203,6 +5210,10 @@ PrefabInstance:
     - target: {fileID: 2766956888433377728, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: 512eda8a-6956-465a-96f6-c9c3de221eca
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: PatrolAction
@@ -6015,9 +6026,13 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: 8d8b67fb-56df-4616-aed3-8eeb4e93ae8f
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: CarryAction
       value: 
-      objectReference: {fileID: 321892289}
+      objectReference: {fileID: 916908387}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: Datas.Array.size
       value: 1
@@ -6775,6 +6790,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4093284366663789129, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
   m_PrefabInstance: {fileID: 916908381}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &916908387 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2145331915627541957, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+  m_PrefabInstance: {fileID: 916908381}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b4c522d4df34b9eb7e12fc89870a313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &948984813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7720,6 +7746,10 @@ PrefabInstance:
     - target: {fileID: 2766956888433377728, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: 0082f2e7-25d9-471e-8d38-e475ef3c92fd
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: PatrolAction
@@ -24018,6 +24048,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: df2f2cce-fa73-4ead-b069-04ea74ac068d
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: PatrolAction
       value: 
       objectReference: {fileID: 11400000, guid: d5c40fbe13c2ce4cea7dfe08910ae3aa, type: 2}
@@ -24198,6 +24232,10 @@ PrefabInstance:
     - target: {fileID: 2766956888433377728, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: 3fdb0b6e-fec9-4d54-b209-c9b81c8f0d8f
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: PatrolAction
@@ -27572,6 +27610,10 @@ PrefabInstance:
     - target: {fileID: 2766956888433377728, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
+      propertyPath: objectID
+      value: 3789205a-bbf7-419a-a978-8973f68fa8ee
       objectReference: {fileID: 0}
     - target: {fileID: 4712453358548831473, guid: 6f23caf797b1c42b18ace5bf6f320126, type: 3}
       propertyPath: PatrolAction

@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3502a9a36b9d421b87f7dd857598c6a7, type: 3}
-  m_Name: Title Path
+  m_Name: World3_2
   m_EditorClassIdentifier: 
+  Name: PATH_WORLD3_2_NAME
+  Description: PATH_WORLD3_2_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 0}
+  Type: 
   Points:
-  - Point: {x: 1.137147, y: -2.4, z: -11.25049}
-    Pause: 2.5
-  - Point: {x: -4.483701, y: -2.4, z: -10.34144}
+  - Point: {x: -19.253134, y: -2.4, z: -12.95026}
     Pause: 0
-  - Point: {x: -6.9107656, y: -2.4, z: 0.015396357}
+  - Point: {x: -42.145844, y: -2.4, z: 0.09184933}
     Pause: 0
-  - Point: {x: -14.001151, y: -2.4, z: 0.5669105}
-    Pause: 5

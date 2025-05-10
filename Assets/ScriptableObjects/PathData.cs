@@ -5,14 +5,14 @@ using UnityEngine;
 namespace ScriptableObjects
 {
 	[CreateAssetMenu]
-	public class Path : ScriptableObject
+	public class PathData : Data
 	{
 		[SerializeField]
 		public List<SPathPoint> Points = new ();
 
-		public static Path FromVectors(List<Vector3> points, List<float> pauses = null)
+		public static PathData FromVectors(List<Vector3> points, List<float> pauses = null)
 		{
-			var path = CreateInstance<Path>();
+			var path = CreateInstance<PathData>();
 			path.Points = new List<SPathPoint>();
 
 			for (var i = 0; i < points.Count; i++)

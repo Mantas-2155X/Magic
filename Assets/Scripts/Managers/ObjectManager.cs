@@ -34,7 +34,7 @@ namespace Managers
 
 		private readonly Dictionary<string, Data> datasMap = new ();
 
-		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes" };
+		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes", "Paths" };
 
 		#region Init
 
@@ -99,6 +99,11 @@ namespace Managers
 		public SceneData GetScene(string path)
 		{
 			return (SceneData)datasMap.GetValueOrDefault($"Scenes/{path}");
+		}
+		
+		public PathData GethPath(string path)
+		{
+			return (PathData)datasMap.GetValueOrDefault($"Paths/{path}");
 		}
 		
 		#endregion

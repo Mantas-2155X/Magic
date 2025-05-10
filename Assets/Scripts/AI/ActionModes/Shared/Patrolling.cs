@@ -13,7 +13,7 @@ namespace AI.ActionModes.Shared
 		}
 		
 		public int CurrentPoint { get; private set; }
-		public Path CurrentPath { get; private set; }
+		public PathData CurrentPathData { get; private set; }
 
 		public float WaitUntil { get; private set; } = -1f;
 		public bool WaitOnArrival { get; private set; } = true;
@@ -21,10 +21,10 @@ namespace AI.ActionModes.Shared
 		// (Reached, Waiting)
 		public (bool, bool) HasReachedPoint()
 		{
-			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
+			if (CurrentPathData == null || CurrentPathData.Points.Count <= CurrentPoint)
 				return (true, false);
 			
-			var reached = Vector3.Distance(owner.GetTransform().position, CurrentPath.Points[CurrentPoint].Point) <= owner.Agent.StoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
+			var reached = Vector3.Distance(owner.GetTransform().position, CurrentPathData.Points[CurrentPoint].Point) <= owner.Agent.StoppingDistance + ((NPCData)owner.Data).PatrolReachRange;
 			if (!reached)
 				return (false, false);
 
@@ -33,7 +33,7 @@ namespace AI.ActionModes.Shared
 			{
 				if (WaitUntil < 0f)
 				{
-					var pauseLength = CurrentPath.Points[CurrentPoint].Pause;
+					var pauseLength = CurrentPathData.Points[CurrentPoint].Pause;
 					if (pauseLength > 0f)
 					{
 						WaitUntil = Time.time + pauseLength;
@@ -51,9 +51,9 @@ namespace AI.ActionModes.Shared
 			return (true, false);
 		}
 		
-		public void SetPath(Path path, int startAt)
+		public void SetPath(PathData pathData, int startAt)
 		{
-			CurrentPath = path;
+			CurrentPathData = pathData;
 
 			if (startAt == -1)
 			{
@@ -68,7 +68,7 @@ namespace AI.ActionModes.Shared
 
 		public int GetClosestPoint()
 		{
-			var points = CurrentPath == null ? null : CurrentPath.Points;
+			var points = CurrentPathData == null ? null : CurrentPathData.Points;
 			if (points == null)
 				return -1;
 			
@@ -92,10 +92,10 @@ namespace AI.ActionModes.Shared
 		
 		public void GoToCurrentPoint()
 		{
-			if (CurrentPath == null || CurrentPath.Points.Count <= CurrentPoint)
+			if (CurrentPathData == null || CurrentPathData.Points.Count <= CurrentPoint)
 				return;
 
-			var pathPoint = CurrentPath.Points[CurrentPoint];
+			var pathPoint = CurrentPathData.Points[CurrentPoint];
 			if (pathPoint.Pause > 0f)
 				WaitOnArrival = true;
 			
@@ -104,12 +104,12 @@ namespace AI.ActionModes.Shared
 		
 		public void GoToNextPoint()
 		{
-			if (CurrentPath == null)
+			if (CurrentPathData == null)
 				return;
 			
 			CurrentPoint++;
 			
-			if (CurrentPoint >= CurrentPath.Points.Count)
+			if (CurrentPoint >= CurrentPathData.Points.Count)
 				CurrentPoint = 0;
 			
 			GoToCurrentPoint();
@@ -117,13 +117,13 @@ namespace AI.ActionModes.Shared
 
 		public void GoToPreviousPoint()
 		{
-			if (CurrentPath == null)
+			if (CurrentPathData == null)
 				return;
 			
 			CurrentPoint--;
 			
 			if (CurrentPoint < 0)
-				CurrentPoint = CurrentPath.Points.Count - 1;
+				CurrentPoint = CurrentPathData.Points.Count - 1;
 			
 			GoToCurrentPoint();
 		}

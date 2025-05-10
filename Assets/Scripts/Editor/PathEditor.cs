@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Editor
 {
-	[CustomEditor(typeof(Path), true)]
+	[CustomEditor(typeof(PathData), true)]
 	public class PathEditor : UnityEditor.Editor
 	{
 		[SerializeField]
@@ -22,7 +22,9 @@ namespace Editor
 
 		public override void OnInspectorGUI()
 		{
-			var path = (Path)target;
+			base.OnInspectorGUI();
+
+			var path = (PathData)target;
 			
 			GUILayout.Label($"Points ({path.Points.Count})", EditorStyles.boldLabel);
 			
@@ -40,7 +42,7 @@ namespace Editor
 					pause = pathPoint.Pause;
 				}
 				
-				path.Points.Add(new Path.SPathPoint { Point = point, Pause = pause });
+				path.Points.Add(new PathData.SPathPoint { Point = point, Pause = pause });
 				SelectedPoint = path.Points.Count - 1;
 			}
 
@@ -123,7 +125,7 @@ namespace Editor
 
 		public void DrawSceneGUI(SceneView sceneView)
 		{
-			var path = (Path)target;
+			var path = (PathData)target;
 
 			var previousColor = Handles.color;
 			Handles.color = Color.green;

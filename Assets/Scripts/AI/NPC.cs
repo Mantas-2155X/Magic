@@ -19,7 +19,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Action = AI.AIModes.Action;
 using Idle = AI.ActionModes.Idle;
-using Path = ScriptableObjects.Path;
 using Patrol = AI.ActionModes.Patrol;
 using Random = UnityEngine.Random;
 
@@ -149,12 +148,12 @@ namespace AI
 			setAIMode(EAIMode.Action);
 		}
 
-		public void Patrol(Path path, int startAt = -1)
+		public void Patrol(PathData pathData, int startAt = -1)
 		{
 			if (!IsAlive || ((NPCData)Data).Stationary)
 				return;
 			
-			Patrolling.SetPath(path, startAt);
+			Patrolling.SetPath(pathData, startAt);
 			
 			setActionMode(EActionMode.Patrol);
 			setAIMode(EAIMode.Action);

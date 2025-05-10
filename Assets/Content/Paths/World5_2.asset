@@ -10,8 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3502a9a36b9d421b87f7dd857598c6a7, type: 3}
-  m_Name: Patrol Test
+  m_Name: World5_2
   m_EditorClassIdentifier: 
+  Name: PATH_WORLD5_2_NAME
+  Description: PATH_WORLD5_2_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 0}
+  Type: 
   Points:
   - Point: {x: -21, y: 4, z: 0}
     Pause: 0

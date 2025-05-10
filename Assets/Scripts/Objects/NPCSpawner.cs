@@ -48,7 +48,7 @@ namespace Objects
 		public bool WanderAction;
 
 		[SerializeField]
-		public Path PatrolAction;
+		public PathData PatrolAction;
 
 		[SerializeField]
 		public BaseObject UseAction;
