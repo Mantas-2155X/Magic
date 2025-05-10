@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using Objects.Base;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
@@ -53,10 +54,10 @@ namespace AI
 		public IAIMode AIModeObj { get; private set; }
 		public IActionMode ActionModeObj { get; private set; }
 
-		public Component AttackTarget { get; private set; }
+		public IIdentifiable AttackTarget { get; private set; }
 		public Transform AttackTargetTransform { get; private set; }
 		
-		public Component OtherTarget { get; private set; }
+		public IIdentifiable OtherTarget { get; private set; }
 		public Transform OtherTargetTransform { get; private set; }
 		
 		public Vector3 Destination { get; private set; }
@@ -131,8 +132,8 @@ namespace AI
 
 		private EAIMode previousAIMode;
 		private EActionMode previousActionMode;
-		private Component previousAttackTarget;
-		private Component previousOtherTarget;
+		private IIdentifiable previousAttackTarget;
+		private IIdentifiable previousOtherTarget;
 		private Vector3 previousDestination;
 
 		#region AI
@@ -168,7 +169,7 @@ namespace AI
 			setAIMode(EAIMode.Action);
 		}
 
-		public void Use(Component target, Vector3? walkAfterwards = null)
+		public void Use(IIdentifiable target, Vector3? walkAfterwards = null)
 		{
 			if (!IsAlive || ((NPCData)Data).Stationary)
 				return;
@@ -181,7 +182,7 @@ namespace AI
 			setAIMode(EAIMode.Action);
 		}
 		
-		public void Carry(IObject target, Vector3 dropAt)
+		public void Carry(IIdentifiable target, Vector3 dropAt)
 		{
 			var data = (NPCData)Data;
 			if (!IsAlive || data.Stationary || !data.CanGrab)
@@ -279,7 +280,7 @@ namespace AI
 			return false;
 		}
 		
-		public void AssignAttackTarget(Component target)
+		public void AssignAttackTarget(IIdentifiable target)
 		{
 			if (!IsAlive)
 				return;
@@ -287,7 +288,7 @@ namespace AI
 			setAttackTarget(target);
 		}
 		
-		public void AssignOtherTarget(Component target)
+		public void AssignOtherTarget(IIdentifiable target)
 		{
 			if (!IsAlive)
 				return;
@@ -375,7 +376,7 @@ namespace AI
 #endif
 		}
 
-		private void setAttackTarget(Component target)
+		private void setAttackTarget(IIdentifiable target)
 		{
 			if (AttackTarget == target)
 				return;
@@ -385,12 +386,12 @@ namespace AI
 			
 			previousAttackTarget = AttackTarget;
 			AttackTarget = target;
-			AttackTargetTransform = target == null ? null : target.GetComponent<Transform>();
+			AttackTargetTransform = target.IsNull() ? null : ((Component)target).GetComponent<Transform>();
 			
 			ActionModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
 			AIModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
 
-			if (AttackTarget != null)
+			if (AttackTarget.NotNull())
 				SendCommunication(ECommunication.AttackTargetFound, AttackTarget);
 			else
 				SendCommunication(ECommunication.AttackTargetLost, null);
@@ -400,19 +401,19 @@ namespace AI
 #endif
 		}
 		
-		private void setOtherTarget(Component target)
+		private void setOtherTarget(IIdentifiable target)
 		{
 			if (OtherTarget == target)
 				return;
 			
 			previousOtherTarget = OtherTarget;
 			OtherTarget = target;
-			OtherTargetTransform = target == null ? null : target.GetComponent<Transform>();
+			OtherTargetTransform = target.IsNull() ? null : ((Component)target).GetComponent<Transform>();
 			
 			ActionModeObj.OtherTargetChanged(previousOtherTarget, OtherTarget);
 			AIModeObj.OtherTargetChanged(previousOtherTarget, OtherTarget);
 
-			if (OtherTarget != null)
+			if (OtherTarget.NotNull())
 				SendCommunication(ECommunication.OtherTargetFound, OtherTarget);
 			else
 				SendCommunication(ECommunication.OtherTargetLost, null);
@@ -576,7 +577,7 @@ namespace AI
 			var time = Time.time;
 
 			var npcData = (NPCData)Data;
-			if (npcData.CanChaseInterrupt && AttackTarget != null && AIMode == EAIMode.Action && ActionMode is EActionMode.Idle or EActionMode.Patrol or EActionMode.Wander)
+			if (npcData.CanChaseInterrupt && AttackTarget.NotNull() && AIMode == EAIMode.Action && ActionMode is EActionMode.Idle or EActionMode.Patrol or EActionMode.Wander)
 			{
 				if (Chase.InterruptUntil < time)
 				{

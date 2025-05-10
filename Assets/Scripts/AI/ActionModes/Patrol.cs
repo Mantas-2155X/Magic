@@ -1,6 +1,7 @@
 using AI.Enums;
 using AI.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 
 namespace AI.ActionModes
@@ -60,12 +61,12 @@ namespace AI.ActionModes
 				Owner.Chase.ChaseAndKill(target);
 		}
 		
-		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
+		public void AttackTargetChanged(IIdentifiable previousAttackTarget, IIdentifiable newAttackTarget)
 		{
 			Owner.Chase.ResetChaseRange(true);
 		}
 		
-		public void OtherTargetChanged(Component previousOtherTarget, Component newOtherTarget)
+		public void OtherTargetChanged(IIdentifiable previousOtherTarget, IIdentifiable newOtherTarget)
 		{
 			
 		}

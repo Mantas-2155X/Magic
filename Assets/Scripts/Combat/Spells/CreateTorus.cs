@@ -5,6 +5,7 @@ using AI.Interfaces;
 using Combat.Spells.Base;
 using Managers;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 
 namespace Combat.Spells
@@ -34,7 +35,7 @@ namespace Combat.Spells
 				}
 				case NPC npc:
 				{
-					if (npc.AttackTarget != null && npc.AttackTarget is BaseAlive alive)
+					if (npc.AttackTarget.NotNull() && npc.AttackTarget is BaseAlive alive)
 						target = alive;
 					break;
 				}

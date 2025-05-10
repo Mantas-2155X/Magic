@@ -379,7 +379,7 @@ namespace Editor
 				EditorGUIUtility.labelWidth = 25f;
 				EditorGUILayout.EnumPopup("Act: ", npc.ActionMode, GUILayout.Width(130f));
 				EditorGUIUtility.labelWidth = 45f;
-				EditorGUILayout.ObjectField("Attack: ", npc.AttackTarget, typeof(Component), true);
+				EditorGUILayout.ObjectField("Attack: ", (Component)npc.AttackTarget, typeof(Component), true);
 				EditorGUIUtility.labelWidth = 0f;
 
 				GUILayout.EndHorizontal();

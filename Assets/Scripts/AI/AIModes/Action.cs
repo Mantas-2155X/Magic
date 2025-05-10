@@ -1,6 +1,7 @@
 using AI.Enums;
 using AI.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 
 namespace AI.AIModes
@@ -66,12 +67,12 @@ namespace AI.AIModes
 			}
 		}
 
-		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
+		public void AttackTargetChanged(IIdentifiable previousAttackTarget, IIdentifiable newAttackTarget)
 		{
 			
 		}
 
-		public void OtherTargetChanged(Component previousOtherTarget, Component newOtherTarget)
+		public void OtherTargetChanged(IIdentifiable previousOtherTarget, IIdentifiable newOtherTarget)
 		{
 			
 		}

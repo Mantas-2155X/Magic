@@ -111,7 +111,7 @@ namespace AI.ActionModes.Shared
 				var resource = FindNearbyResource(ETag.RestoresHealth);
 				if (resource.NotNull())
 				{
-					owner.Use((Component)resource);
+					owner.Use(resource);
 					return true;
 				}
 			}
@@ -127,7 +127,7 @@ namespace AI.ActionModes.Shared
 				var resource = FindNearbyResource(ETag.RestoresMana);
 				if (resource.NotNull())
 				{
-					owner.Use((Component)resource);
+					owner.Use(resource);
 					return true;
 				}
 			}
@@ -143,7 +143,7 @@ namespace AI.ActionModes.Shared
 				var resource = FindNearbyResource(ETag.RestoresEnergy);
 				if (resource.NotNull())
 				{
-					owner.Use((Component)resource);
+					owner.Use(resource);
 					return true;
 				}
 			}
@@ -159,7 +159,7 @@ namespace AI.ActionModes.Shared
 			var resources = StateManager.Instance.GetRegisteredObjects();
 			foreach (var pair in resources)
 			{
-				if (pair.Value == null || pair.Value is not IObject resource || resource.IsNull())
+				if (pair.Value.IsNull() || pair.Value is not IObject resource || resource.IsNull())
 					continue;
 
 				// Don't grab disabled ones
@@ -222,7 +222,7 @@ namespace AI.ActionModes.Shared
 		public bool CurrentResourceValid(ETag tag)
 		{
 			var resource = owner.OtherTarget;
-			if (resource == null || resource is not IObject obj)
+			if (resource.IsNull() || resource is not IObject obj)
 				return false;
 
 			if (!obj.ObjectData.Tags.HasFlag(tag))

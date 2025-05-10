@@ -1,4 +1,5 @@
 using AI.Enums;
+using State.Interfaces;
 using UnityEngine;
 
 namespace AI.Interfaces
@@ -16,9 +17,9 @@ namespace AI.Interfaces
 		
 		public void Update();
 		
-		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget);
+		public void AttackTargetChanged(IIdentifiable previousAttackTarget, IIdentifiable newAttackTarget);
 		
-		public void OtherTargetChanged(Component previousOtherTarget, Component newOtherTarget);
+		public void OtherTargetChanged(IIdentifiable previousOtherTarget, IIdentifiable newOtherTarget);
 		
 		public void DestinationChanged(Vector3 previousDestination, Vector3 newDestination);
 		

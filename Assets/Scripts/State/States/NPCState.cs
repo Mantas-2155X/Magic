@@ -94,14 +94,12 @@ namespace State.States
 			
 			#region Use
 
-			// useobjectid
 			state.UseWalkAfterwards = ((Use)npc.ActionModes[EActionMode.Use]).WalkAfterwards;
 
 			#endregion
 			
 			#region Carry
 			
-			// carryobjectid
 			state.CarryDropAt = ((Carry)npc.ActionModes[EActionMode.Carry]).DropAt;
 
 			#endregion

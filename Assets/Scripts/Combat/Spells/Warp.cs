@@ -2,6 +2,7 @@ using System;
 using AI;
 using Combat.Spells.Base;
 using Managers;
+using Tools;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -43,7 +44,7 @@ namespace Combat.Spells
 				{
 					var tryCircle = true;
 
-					if (npc.AttackTarget != null)
+					if (npc.AttackTarget.NotNull())
 					{
 						endPos = npc.AttackTargetTransform.position - npc.AttackTargetTransform.forward * Random.Range(1.5f, WarpRange);
 

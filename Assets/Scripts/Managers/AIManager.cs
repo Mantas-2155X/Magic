@@ -111,7 +111,7 @@ namespace Managers
 			if (!npc.WithinRange.SenseDistanceCheck(aggressor.GetTransform(), false, false))
 				return;
 			
-			npc.AssignAttackTarget((Component)aggressor);
+			npc.AssignAttackTarget(aggressor);
 		}
 
 		private void onSpawn(IAlive alive)

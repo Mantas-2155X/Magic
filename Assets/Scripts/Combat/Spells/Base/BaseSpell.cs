@@ -92,7 +92,7 @@ namespace Combat.Spells.Base
 				}
 				case NPC npc:
 				{
-					if (SpellData.IsResource || npc.AttackTarget != null)
+					if (SpellData.IsResource || npc.AttackTarget.NotNull())
 						FinishCasting();
 					break;
 				}
@@ -255,7 +255,7 @@ namespace Combat.Spells.Base
 					var targetPos = calculatePrediction(npc);
 					var verticalOffset = ownerTr.up * ((NPCData)npc.Data).AttackVerticalOffset;
 					
-					var direction = npc.AttackTarget == null ? ownerTr.forward : (targetPos - (ownerTr.position + verticalOffset)).normalized;
+					var direction = npc.AttackTarget.IsNull() ? ownerTr.forward : (targetPos - (ownerTr.position + verticalOffset)).normalized;
 					LastRay = new Ray(Owner.Body.Core.position + verticalOffset, direction);
 					break;
 				default:
@@ -277,7 +277,7 @@ namespace Combat.Spells.Base
 		private Vector3 calculatePrediction(NPC npc)
 		{
 			// No target, nothing to predict
-			if (npc.AttackTarget == null)
+			if (npc.AttackTarget.IsNull())
 				return Vector3.zero;
 			
 			var targetPos = npc.AttackTargetTransform.position;

@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Objects.Base;
 using Objects.Enums;
 using ScriptableObjects;
+using State.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -180,12 +181,12 @@ namespace AI.AIModes
 			Owner.ReturnAIMode();
 		}
 
-		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
+		public void AttackTargetChanged(IIdentifiable previousAttackTarget, IIdentifiable newAttackTarget)
 		{
 			
 		}
 		
-		public void OtherTargetChanged(Component previousOtherTarget, Component newOtherTarget)
+		public void OtherTargetChanged(IIdentifiable previousOtherTarget, IIdentifiable newOtherTarget)
 		{
 			
 		}

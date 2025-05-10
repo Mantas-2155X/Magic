@@ -147,12 +147,12 @@ namespace AI
 					var attackTarget = NPC.AttackTargetTransform;
 					var otherTarget = NPC.OtherTargetTransform;
 
-					if (attackTarget != null)
+					if (attackTarget.NotNull())
 					{
 						RotateTowards(attackTarget.position);
 						rotating = true;
 					}
-					else if (otherTarget != null)
+					else if (otherTarget.NotNull())
 					{
 						RotateTowards(otherTarget.position);
 						rotating = true;

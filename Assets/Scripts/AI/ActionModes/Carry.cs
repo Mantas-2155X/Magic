@@ -2,6 +2,8 @@ using AI.Enums;
 using AI.Interfaces;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
+using Tools;
 using UnityEngine;
 
 namespace AI.ActionModes
@@ -35,7 +37,7 @@ namespace AI.ActionModes
 			var target = owner.OtherTarget;
 			
 			// Nothing to carry, return to previous action
-			if (target == null || target is not IObject iObject)
+			if (target.IsNull() || target is not IObject iObject)
 			{
 				owner.ReleaseObject();
 				owner.ReturnActionMode();
@@ -115,12 +117,12 @@ namespace AI.ActionModes
 			}
 		}
 		
-		public void AttackTargetChanged(Component previousAttackTarget, Component newAttackTarget)
+		public void AttackTargetChanged(IIdentifiable previousAttackTarget, IIdentifiable newAttackTarget)
 		{
 			
 		}
 		
-		public void OtherTargetChanged(Component previousOtherTarget, Component newOtherTarget)
+		public void OtherTargetChanged(IIdentifiable previousOtherTarget, IIdentifiable newOtherTarget)
 		{
 			
 		}
