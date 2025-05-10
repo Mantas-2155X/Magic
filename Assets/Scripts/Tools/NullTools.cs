@@ -14,44 +14,9 @@ namespace Tools
 	public static class NullTools
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNull(this IObject obj) => isNull(obj);
+		public static bool IsNull(this object obj) => isNull(obj);
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool NotNull(this IObject obj) => !isNull(obj);
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNull(this IAlive obj) => isNull(obj);
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool NotNull(this IAlive obj) => !isNull(obj);
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNull(this IAttack obj) => isNull(obj);
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool NotNull(this IAttack obj) => !isNull(obj);
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNull(this ICast obj) => isNull(obj);
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool NotNull(this ICast obj) => !isNull(obj);
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNull(this IDecal obj) => isNull(obj);
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool NotNull(this IDecal obj) => !isNull(obj);
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNull(this IProjectile obj) => isNull(obj);
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool NotNull(this IProjectile obj) => !isNull(obj);
-		
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNull(this ISpell obj) => isNull(obj);
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool NotNull(this ISpell obj) => !isNull(obj);
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool IsNull(this IWearable obj) => isNull(obj);
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static bool NotNull(this IWearable obj) => !isNull(obj);
+		public static bool NotNull(this object obj) => !isNull(obj);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static bool isNull(object obj)
