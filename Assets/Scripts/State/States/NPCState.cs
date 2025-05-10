@@ -50,9 +50,8 @@ namespace State.States
 		[JsonProperty]
 		public float SelfDestructElapsed;
 
-		// switch cast cooldown
-		// chase interrupt timer
-		// off mesh link travelling
+		[JsonProperty]
+		public Vector3? FlightMovementTarget;
 		
 		#region Patrol
 
@@ -132,6 +131,12 @@ namespace State.States
 			state.SelfDestructElapsed = npcData.CanSelfDestruct ? Time.time - npc.SelfDestructStart : 0f;
 			
 			#endregion
+
+			#region Flight
+
+			state.FlightMovementTarget = npc.Agent.Flight != null ? npc.Agent.Flight.MovementTarget : null;
+
+			#endregion
 			
 			return state;
 		}
@@ -141,7 +146,24 @@ namespace State.States
 			if (npc == null)
 				return;
 
+			npc.SetAIState(
+				state.AIMode, state.PreviousAIMode, 
+				state.ActionMode, state.PreviousActionMode, 
+				state.Destination, state.PreviousDestination, 
+				state.AttackTargetObjectID, state.PreviousAttackTargetObjectID, 
+				state.OtherTargetObjectID, state.PreviousOtherTargetObjectID, 
+				state.AgentPosition,
+				state.PatrolPath, state.PatrolStartAt, state.PatrolAlreadyWaited,
+				state.UseWalkAfterwards,
+				state.CarryDropAt);
+			
 			npc.SetSelfDestructState(state.SelfDestructed, state.SelfDestructElapsed);
+
+			var flight = npc.Agent.Flight;
+			if (flight == null)
+				return;
+			
+			flight.SetState(state.FlightMovementTarget);
 		}
 	}
 }

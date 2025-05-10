@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using AI;
 using AI.Interfaces;
 using Components;
@@ -22,10 +23,13 @@ using Object = UnityEngine.Object;
 namespace Managers
 {
 	// TODO (impl):
-	// BaseElevator, BaseConveyor, NPC AI, Projectiles, Decals, World6 Waves, World4 Timer (needs Attacks)
+	// (Objects) BaseElevator, BaseConveyor
+	// (Combat) Projectiles, Decals, Attacks
+	// (World) World6 Waves, World4 Timer
+	// (AI) Switch cast cooldown, Chase interrupt timer, Off mesh link travelling
 	
 	// TODO (test):
-	// (AI) Grabbing shrink
+	// (AI) Grabbing shrink, Patrol Already Waited
 	
 	public class StateManager
 	{
@@ -54,6 +58,14 @@ namespace Managers
 		public Dictionary<string, IIdentifiable> GetRegisteredObjects()
 		{
 			return registeredObjects;
+		}
+
+		public IIdentifiable GetRegisteredObject(string objectID)
+		{
+			if (string.IsNullOrWhiteSpace(objectID))
+				return null;
+			
+			return registeredObjects.GetValueOrDefault(objectID);
 		}
 
 		public void RegisterObject(IIdentifiable identifiable)
@@ -636,9 +648,10 @@ namespace Managers
 
 			var killAlives = new List<IAlive>();
 			
-			foreach (var pair in AIManager.Instance.AlivesColliderMap)
+			var currentAlives = AIManager.Instance.AlivesColliderMap.Values.ToList();
+			for (var i = currentAlives.Count - 1; i >= 0; i--)
 			{
-				var alive = pair.Value;
+				var alive = currentAlives[i];
 				if (alive.IsNull() || !alive.IsAlive)
 					continue;
 

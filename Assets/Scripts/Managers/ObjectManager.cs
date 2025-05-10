@@ -101,7 +101,7 @@ namespace Managers
 			return (SceneData)datasMap.GetValueOrDefault($"Scenes/{path}");
 		}
 		
-		public PathData GethPath(string path)
+		public PathData GetPath(string path)
 		{
 			return (PathData)datasMap.GetValueOrDefault($"Paths/{path}");
 		}

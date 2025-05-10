@@ -11,7 +11,6 @@ using AI.PathFinding;
 using Managers;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
-using Objects.Interfaces;
 using ScriptableObjects;
 using State.Interfaces;
 using State.States;
@@ -149,7 +148,7 @@ namespace AI
 			setAIMode(EAIMode.Action);
 		}
 
-		public void Patrol(PathData pathData, int startAt = -1)
+		public void Patrol(PathData pathData, int startAt = -1, float waitSkipAhead = 0f)
 		{
 			if (!IsAlive || ((NPCData)Data).Stationary)
 				return;
@@ -158,6 +157,11 @@ namespace AI
 			
 			setActionMode(EActionMode.Patrol);
 			setAIMode(EAIMode.Action);
+			
+			if (waitSkipAhead <= 0f)
+				return;
+			
+			Patrolling.WaitUntil -= waitSkipAhead;
 		}
 		
 		public void Idle()
@@ -538,6 +542,90 @@ namespace AI
 			
 			if (data.TryGetValue(typeof(NPC).ToString(), out var npcState))
 				NPCState.Apply(this, npcState.ToObject<NPCState>());
+		}
+
+		public void SetAIState(
+			EAIMode aiMode, EAIMode previousAIMode,
+			EActionMode actionMode, EActionMode previousActionMode,
+			Vector3 destination, Vector3 previousDestination,
+			string attackTargetObjectID, string previousAttackTargetObjectID,
+			string otherTargetObjectID, string previousOtherTargetObjectID,
+			Vector3? agentPosition,
+			string patrolPath, int patrolStartAt, float patrolAlreadyWaited,
+			Vector3? useWalkAfterwards,
+			Vector3 carryDropAt)
+		{
+			if (!IsAlive)
+				return;
+			
+			var navMeshAgent = Agent.NavMeshAgent;
+			
+			if (agentPosition != null && navMeshAgent != null && navMeshAgent.enabled)
+				navMeshAgent.Warp(agentPosition.Value);
+			
+			var attackTarget = StateManager.Instance.GetRegisteredObject(attackTargetObjectID);
+			var otherTarget = StateManager.Instance.GetRegisteredObject(otherTargetObjectID);
+			
+			var previousAttackTarget = StateManager.Instance.GetRegisteredObject(previousAttackTargetObjectID);
+			var previousOtherTarget = StateManager.Instance.GetRegisteredObject(previousOtherTargetObjectID);
+
+			AIMode = previousAIMode;
+			ActionMode = previousActionMode;
+
+			Destination = previousDestination;
+			
+			AttackTarget = previousAttackTarget;
+			OtherTarget = previousOtherTarget;
+			
+			if (actionMode == EActionMode.None)
+			{
+				setAttackTarget(attackTarget);
+				setOtherTarget(otherTarget);
+			}
+			else if (actionMode == EActionMode.Wander)
+			{
+				setAttackTarget(attackTarget);
+				setOtherTarget(otherTarget);
+				Wander();
+			}
+			else if (actionMode == EActionMode.Patrol)
+			{
+				setAttackTarget(attackTarget);
+				setOtherTarget(otherTarget);
+				Patrol(ObjectManager.Instance.GetPath(patrolPath), patrolStartAt, patrolAlreadyWaited);
+			}
+			else if (actionMode == EActionMode.Idle)
+			{
+				setAttackTarget(attackTarget);
+				setOtherTarget(otherTarget);
+				Idle();
+			}
+			else if (actionMode == EActionMode.Use)
+			{
+				setAttackTarget(attackTarget);
+				Use(otherTarget, useWalkAfterwards);
+			}
+			else if (actionMode == EActionMode.Carry)
+			{
+				setAttackTarget(attackTarget);
+				Carry(otherTarget, carryDropAt);
+			}
+			
+			if (aiMode == EAIMode.Idle)
+			{
+				setDestination(destination);
+			}
+			else if (aiMode == EAIMode.Walking)
+			{
+				Walk(destination);
+			}
+			else if (aiMode == EAIMode.Action)
+			{
+				setDestination(destination);
+			}
+			
+			if (agentPosition != null && navMeshAgent != null && navMeshAgent.enabled)
+				navMeshAgent.Warp(agentPosition.Value);
 		}
 		
 		public void SetSelfDestructState(bool selfDestructed, float selfDestructElapsed)

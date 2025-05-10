@@ -15,7 +15,7 @@ namespace AI.ActionModes.Shared
 		public int CurrentPoint { get; private set; }
 		public PathData CurrentPathData { get; private set; }
 
-		public float WaitUntil { get; private set; } = -1f;
+		public float WaitUntil { get; set; } = -1f;
 		public bool WaitOnArrival { get; private set; } = true;
 		
 		// (Reached, Waiting)

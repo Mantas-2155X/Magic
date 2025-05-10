@@ -59,6 +59,8 @@ namespace AI
 		[SerializeField]
 		public float PositionStuckRecalculateAfter = 0.15f;
 		
+		public Vector3? MovementTarget { get; private set; }
+
 		private Rigidbody rb;
 		
 		private float angleStuckDuration;
@@ -66,7 +68,14 @@ namespace AI
 
 		private float lastPositionStuck;
 
-		private Vector3? movementTarget;
+		#region Identify / SaveLoad
+
+		public void SetState(Vector3? flightMovementTarget)
+		{
+			MovementTarget = flightMovementTarget;
+		}
+
+		#endregion
 		
 		#region MonoBehaviour
 
@@ -86,11 +95,11 @@ namespace AI
 				Gizmos.DrawLine(position, position + -Vector3.up * PositionStuckDistance);
 			}
 			
-			if (movementTarget == null)
+			if (MovementTarget == null)
 				return;
 
 			Gizmos.color = Color.yellow;
-			Gizmos.DrawSphere(movementTarget.Value, 0.1f);
+			Gizmos.DrawSphere(MovementTarget.Value, 0.1f);
 		}
 #endif
 
@@ -128,15 +137,15 @@ namespace AI
 			if (aiMode == EAIMode.Walking)
 			{
 				if (NPC.Agent.HasPath)
-					movementTarget = NPC.Agent.Agent.NextNode;
+					MovementTarget = NPC.Agent.Agent.NextNode;
 
-				if (movementTarget == null)
+				if (MovementTarget == null)
 					return;
 #if UNITY_EDITOR
-				Debug.DrawLine(position, movementTarget.Value, new Color(0.25f, 0.5f, 0.75f));
+				Debug.DrawLine(position, MovementTarget.Value, new Color(0.25f, 0.5f, 0.75f));
 #endif
-				FlyTowards(movementTarget.Value);
-				RotateTowards(movementTarget.Value);
+				FlyTowards(MovementTarget.Value);
+				RotateTowards(MovementTarget.Value);
 			}
 			else
 			{
