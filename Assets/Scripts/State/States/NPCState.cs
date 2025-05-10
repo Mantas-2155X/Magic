@@ -109,7 +109,7 @@ namespace State.States
 
 			state.PatrolPath = npc.Patrolling.CurrentPathData != null ? npc.Patrolling.CurrentPathData.Name : null;
 			state.PatrolStartAt = npc.Patrolling.CurrentPoint;
-			state.PatrolAlreadyWaited = npc.Patrolling.WaitOnArrival ? npc.Patrolling.WaitUntil - Time.time : 0f;
+			state.PatrolAlreadyWaited = npc.Patrolling.CurrentPathData != null && npc.Patrolling.WaitOnArrival ? npc.Patrolling.WaitUntil - Time.time : 0f;
 
 			#endregion
 			
