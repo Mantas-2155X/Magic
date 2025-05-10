@@ -62,6 +62,12 @@ namespace AI
 		
 		public Vector3 Destination { get; private set; }
 
+		public EAIMode PreviousAIMode { get; private set; }
+		public EActionMode PreviousActionMode { get; private set; }
+		public IIdentifiable PreviousAttackTarget { get; private set; }
+		public IIdentifiable PreviousOtherTarget { get; private set; }
+		public Vector3 PreviousDestination { get; private set; }
+		
 		public float SwitchCastCooldown { get; set; }
 		
 		public AimAt AimAt { get; private set; }
@@ -129,12 +135,6 @@ namespace AI
 		};
 		
 		private float chaseInterruptTimer;
-
-		private EAIMode previousAIMode;
-		private EActionMode previousActionMode;
-		private IIdentifiable previousAttackTarget;
-		private IIdentifiable previousOtherTarget;
-		private Vector3 previousDestination;
 
 		#region AI
 
@@ -301,7 +301,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
-			setAIMode(previousAIMode);
+			setAIMode(PreviousAIMode);
 		}
 		
 		public void ReturnActionMode()
@@ -309,7 +309,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
-			setActionMode(previousActionMode);
+			setActionMode(PreviousActionMode);
 		}
 		
 		public void ReturnAttackTarget()
@@ -317,7 +317,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
-			setAttackTarget(previousAttackTarget);
+			setAttackTarget(PreviousAttackTarget);
 		}
 		
 		public void ReturnOtherTarget()
@@ -325,7 +325,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
-			setOtherTarget(previousOtherTarget);
+			setOtherTarget(PreviousOtherTarget);
 		}
 		
 		public void ReturnDestination()
@@ -333,7 +333,7 @@ namespace AI
 			if (!IsAlive)
 				return;
 			
-			setDestination(previousDestination);
+			setDestination(PreviousDestination);
 		}
 		
 		private void setAIMode(EAIMode mode)
@@ -344,7 +344,7 @@ namespace AI
 			if (Spell.NotNull())
 				Spell.CancelCasting();
 			
-			previousAIMode = AIMode;
+			PreviousAIMode = AIMode;
 			
 			AIModeObj?.Disabled();
 			AIMode = mode;
@@ -364,7 +364,7 @@ namespace AI
 			if (Spell.NotNull())
 				Spell.CancelCasting();
 			
-			previousActionMode = ActionMode;
+			PreviousActionMode = ActionMode;
 			
 			ActionModeObj?.Disabled();
 			ActionMode = mode;
@@ -384,12 +384,12 @@ namespace AI
 			if (Spell.NotNull())
 				Spell.CancelCasting();
 			
-			previousAttackTarget = AttackTarget;
+			PreviousAttackTarget = AttackTarget;
 			AttackTarget = target;
 			AttackTargetTransform = target.IsNull() ? null : ((Component)target).GetComponent<Transform>();
 			
-			ActionModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
-			AIModeObj.AttackTargetChanged(previousAttackTarget, AttackTarget);
+			ActionModeObj.AttackTargetChanged(PreviousAttackTarget, AttackTarget);
+			AIModeObj.AttackTargetChanged(PreviousAttackTarget, AttackTarget);
 
 			if (AttackTarget.NotNull())
 				SendCommunication(ECommunication.AttackTargetFound, AttackTarget);
@@ -406,12 +406,12 @@ namespace AI
 			if (OtherTarget == target)
 				return;
 			
-			previousOtherTarget = OtherTarget;
+			PreviousOtherTarget = OtherTarget;
 			OtherTarget = target;
 			OtherTargetTransform = target.IsNull() ? null : ((Component)target).GetComponent<Transform>();
 			
-			ActionModeObj.OtherTargetChanged(previousOtherTarget, OtherTarget);
-			AIModeObj.OtherTargetChanged(previousOtherTarget, OtherTarget);
+			ActionModeObj.OtherTargetChanged(PreviousOtherTarget, OtherTarget);
+			AIModeObj.OtherTargetChanged(PreviousOtherTarget, OtherTarget);
 
 			if (OtherTarget.NotNull())
 				SendCommunication(ECommunication.OtherTargetFound, OtherTarget);
@@ -428,11 +428,11 @@ namespace AI
 			if (Destination == destination)
 				return;
 			
-			previousDestination = Destination;
+			PreviousDestination = Destination;
 			Destination = destination;
 			
-			ActionModeObj.DestinationChanged(previousDestination, Destination);
-			AIModeObj.DestinationChanged(previousDestination, Destination);
+			ActionModeObj.DestinationChanged(PreviousDestination, Destination);
+			AIModeObj.DestinationChanged(PreviousDestination, Destination);
 		
 #if DEBUG_NPC
 			Debug.Log($"[NPC {gameObject.name}] Changed Destination from {previousDestination} to {Destination}");
@@ -540,7 +540,7 @@ namespace AI
 				NPCState.Apply(this, npcState.ToObject<NPCState>());
 		}
 		
-		public void SetState(bool selfDestructed, float selfDestructElapsed)
+		public void SetSelfDestructState(bool selfDestructed, float selfDestructElapsed)
 		{
 			if (selfDestructed)
 			{

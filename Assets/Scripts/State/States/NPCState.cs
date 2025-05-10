@@ -3,6 +3,7 @@ using AI.ActionModes;
 using AI.Enums;
 using Newtonsoft.Json;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 
 namespace State.States
@@ -14,16 +15,44 @@ namespace State.States
 		public EAIMode AIMode;
 		
 		[JsonProperty]
+		public EAIMode PreviousAIMode;
+		
+		[JsonProperty]
 		public EActionMode ActionMode;
+		
+		[JsonProperty]
+		public EActionMode PreviousActionMode;
 
 		[JsonProperty]
 		public Vector3 Destination;
+		
+		[JsonProperty]
+		public Vector3 PreviousDestination;
 
 		[JsonProperty]
 		public string AttackTargetObjectID;
 		
 		[JsonProperty]
+		public string PreviousAttackTargetObjectID;
+		
+		[JsonProperty]
 		public string OtherTargetObjectID;
+		
+		[JsonProperty]
+		public string PreviousOtherTargetObjectID;
+		
+		[JsonProperty]
+		public Vector3? AgentPosition;
+		
+		[JsonProperty]
+		public bool SelfDestructed;
+
+		[JsonProperty]
+		public float SelfDestructElapsed;
+
+		// switch cast cooldown
+		// chase interrupt timer
+		// off mesh link travelling
 		
 		#region Patrol
 
@@ -39,9 +68,6 @@ namespace State.States
 		#endregion
 
 		#region Use
-
-		[JsonProperty]
-		public string UseObjectID;
 		
 		[JsonProperty]
 		public Vector3? UseWalkAfterwards;
@@ -49,23 +75,10 @@ namespace State.States
 		#endregion
 
 		#region Carry
-
-		[JsonProperty]
-		public string CarryObjectID;
 		
 		[JsonProperty]
 		public Vector3 CarryDropAt;
 
-		#endregion
-		
-		#region Self-Destruct
-
-		[JsonProperty]
-		public bool SelfDestructed;
-
-		[JsonProperty]
-		public float SelfDestructElapsed;
-		
 		#endregion
 
 		public static NPCState Read(NPC npc)
@@ -77,12 +90,21 @@ namespace State.States
 			var state = new NPCState();
 
 			state.AIMode = npc.AIMode;
+			state.PreviousAIMode = npc.PreviousAIMode;
+			
 			state.ActionMode = npc.ActionMode;
+			state.PreviousActionMode = npc.PreviousActionMode;
 			
 			state.Destination = npc.Destination;
+			state.PreviousDestination = npc.PreviousDestination;
 			
-			// attacktarget
-			// othertarget
+			state.AttackTargetObjectID = npc.AttackTarget.NotNull() ? npc.AttackTarget.ObjectID : null;
+			state.PreviousAttackTargetObjectID = npc.PreviousAttackTarget.NotNull() ? npc.PreviousAttackTarget.ObjectID : null;
+			
+			state.OtherTargetObjectID = npc.OtherTarget.NotNull() ? npc.OtherTarget.ObjectID : null;
+			state.PreviousOtherTargetObjectID = npc.PreviousOtherTarget.NotNull() ? npc.PreviousOtherTarget.ObjectID : null;
+			
+			state.AgentPosition = npc.Agent.NavMeshAgent != null && npc.Agent.NavMeshAgent.enabled ? npc.Agent.NavMeshAgent.nextPosition : null;
 			
 			#region Patrol
 
@@ -119,7 +141,7 @@ namespace State.States
 			if (npc == null)
 				return;
 
-			npc.SetState(state.SelfDestructed, state.SelfDestructElapsed);
+			npc.SetSelfDestructState(state.SelfDestructed, state.SelfDestructElapsed);
 		}
 	}
 }
