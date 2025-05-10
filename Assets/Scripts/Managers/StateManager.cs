@@ -29,7 +29,7 @@ namespace Managers
 	// (AI) Switch cast cooldown, Chase interrupt timer, Off mesh link travelling
 	
 	// TODO (test):
-	// (AI) Grabbing shrink, Patrol Already Waited
+	// (AI) Grabbing shrink, Patrol Already Waited, BaseDoor (with button)
 	
 	public class StateManager
 	{
@@ -65,7 +65,11 @@ namespace Managers
 			if (string.IsNullOrWhiteSpace(objectID))
 				return null;
 			
-			return registeredObjects.GetValueOrDefault(objectID);
+			if (registeredObjects.TryGetValue(objectID, out var obj))
+				return obj;
+
+			Debug.LogWarning($"[StateManager] No registered object with ID {objectID} found");
+			return null;
 		}
 
 		public void RegisterObject(IIdentifiable identifiable)
