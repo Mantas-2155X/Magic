@@ -1,5 +1,6 @@
 //#define DEBUG_SIGHT
 
+using System.Collections.Generic;
 using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
@@ -11,6 +12,8 @@ namespace AI.ActionModes.Shared
 	public class HasSight
 	{
 		private readonly NPC owner;
+		
+		private readonly List<int> validColliders = new ();
 
 		public HasSight(NPC owner)
 		{
@@ -30,19 +33,35 @@ namespace AI.ActionModes.Shared
 			var transform = owner.GetTransform();
 			var position = transform.position;
 
-			var direction = target.position - position;
+			var direction = (target.position - position).normalized;
 			var originCenter = owner.Body.Core.position;
 
 			if (!data.UseSightCheck)
 				return true;
 			
-			if (!Physics.Raycast(originCenter, direction, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
-				return false;
+			validColliders.Clear();
+			
+			var hitOrigin = originCenter;
+			var breakablesHit = 0;
 
-			// Check if the hit is the target so we don't waste extra casts calls
-			var hitTransform = hit.transform;
-			if (hitTransform != target)
+			Transform hitTransform = null;
+			RaycastHit hit = default;
+			
+			while (hitTransform != target)
 			{
+				if (!Physics.Raycast(hitOrigin, direction, out hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
+					return false;
+
+				hitOrigin = hit.point + (direction * 0.1f);
+				hitTransform = hit.transform;
+				
+				// Hit the target, count as fine
+				if (hitTransform == target)
+				{
+					validColliders.Add(hit.colliderInstanceID);
+					break;
+				}
+				
 				var iObject = hitTransform.GetComponent<IObject>();
 				if (iObject.IsNull())
 					return false;
@@ -50,7 +69,14 @@ namespace AI.ActionModes.Shared
 				if (!iObject.ObjectData.IsBreakable)
 					return false;
 				
-				// In case a breakable object is in the way, count it as in-sight so it gets shot at
+				// Hit a breakable object, count as fine
+				breakablesHit++;
+
+				// Allow 3 breakable objects to count as still visible
+				if (breakablesHit > 3)
+					return false;
+				
+				validColliders.Add(hit.colliderInstanceID);
 			}
 #if UNITY_EDITOR && DEBUG_SIGHT
 			Debug.DrawLine(originCenter, direction * 50f, Color.magenta);
@@ -61,13 +87,12 @@ namespace AI.ActionModes.Shared
 			{
 				var halfSize = owner.Agent.IsNavMesh ? (NavMesh.GetSettingsByID(owner.Agent.NavMeshAgent.agentTypeID).agentRadius / 2f) : owner.Agent.Agent.Grid.Radius / 2f;
 				
-				var instance = hit.colliderInstanceID;
 				var originRight = originCenter + transform.right * halfSize;
 				var directionRight = target.position - (position + transform.right * halfSize);
 #if UNITY_EDITOR && DEBUG_SIGHT
 				Debug.DrawLine(originRight, directionRight * 50f, Color.cyan);
 #endif
-				if (!Physics.Raycast(originRight, directionRight, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitRight.colliderInstanceID != instance)
+				if (!Physics.Raycast(originRight, directionRight, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || !validColliders.Contains(hitRight.colliderInstanceID))
 					return false;
 				
 				var originLeft = originCenter - transform.right * halfSize;
@@ -75,7 +100,7 @@ namespace AI.ActionModes.Shared
 #if UNITY_EDITOR && DEBUG_SIGHT
 				Debug.DrawLine(originLeft, directionLeft * 50f, Color.yellow);
 #endif
-				if (!Physics.Raycast(originLeft, directionLeft, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || hitLeft.colliderInstanceID != instance)
+				if (!Physics.Raycast(originLeft, directionLeft, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || !validColliders.Contains(hitLeft.colliderInstanceID))
 					return false;
 			}
 			
