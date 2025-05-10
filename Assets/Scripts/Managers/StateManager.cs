@@ -38,7 +38,8 @@ namespace Managers
 					return instance;
 				
 				instance = new StateManager();
-				instance.InitializeSaves();
+				instance.initializeManager();
+				instance.initializeSaves();
 				
 				return instance;
 			}
@@ -46,16 +47,7 @@ namespace Managers
 
 		public string Path { get; private set; } = "data/saves";
 		
-		public readonly List<string> DestroyedObjects = new ();
-		public readonly List<string> DestroyedComponents = new ();
-		
-		public readonly List<string> KilledAlives = new ();
-
-		public readonly Dictionary<string, SaveData> AvailableSaves = new ();
-		
-		private SaveData lastSaveData;
-		
-		#region Registered Objects
+		#region Registered Objects (Global)
 		
 		private readonly Dictionary<string, IIdentifiable> registeredObjects = new ();
 
@@ -85,46 +77,56 @@ namespace Managers
 			return newObjectID;
 		}
 
-		private void registerObject(IIdentifiable identifiable, string objectID)
+		#endregion
+
+		#region Destroyed Objects (Saving State)
+
+		private readonly List<string> destroyedObjects = new ();
+		private readonly List<string> destroyedComponents = new ();
+		
+		private readonly List<string> killedAlives = new ();
+
+		public List<string> GetDestroyedObjects()
 		{
-			if (string.IsNullOrWhiteSpace(objectID))
-				return;
-			
-			registeredObjects[objectID] = identifiable;
+			return destroyedObjects;
+		}
+		
+		public List<string> GetDestroyedComponents()
+		{
+			return destroyedComponents;
+		}
+		
+		public List<string> GetKilledAlives()
+		{
+			return killedAlives;
+		}
+
+		public void RegisterDestroyedObject(string objectID)
+		{
+			destroyedObjects.AddUnique(objectID);
+		}
+
+		public void RegisterDestroyedComponent(string objectID)
+		{
+			destroyedComponents.AddUnique(objectID);
+		}
+
+		public void RegisterKilledAlive(string objectID)
+		{
+			killedAlives.AddUnique(objectID);
 		}
 
 		#endregion
+		
+		#region Save & Load
 
-		public void InitializeSaves()
+		private readonly Dictionary<string, SaveData> availableSaves = new ();
+
+		public Dictionary<string, SaveData> GetSaves()
 		{
-			if (!Directory.Exists(Path))
-				Directory.CreateDirectory(Path);
-
-			AvailableSaves.Clear();
-
-			var files = Directory.GetFiles(Path, "*.json");
-			for (var i = 0; i < files.Length; i++)
-			{
-				var file = files[i];
-
-				var text = File.ReadAllText(file);
-				if (string.IsNullOrWhiteSpace(text))
-				{
-					Debug.LogWarning($"[StateManager] Save file {file} is empty, skipping");
-					continue;
-				}
-
-				var data = JsonConvert.DeserializeObject<SaveData>(text);
-				if (data == null)
-				{
-					Debug.LogWarning($"[StateManager] Save file {file} failed to deserialize, skipping");
-					continue;
-				}
-				
-				AvailableSaves[file] = data;
-			}
+			return availableSaves;
 		}
-
+		
 		public void Save()
 		{
 			var sceneManager = SceneManager.Instance;
@@ -143,16 +145,16 @@ namespace Managers
 			data.SavedTime = DateTimeOffset.Now;
 			
 			data.DestroyedObjects = new List<string>();
-			for (var i = 0; i < DestroyedObjects.Count; i++)
-				data.DestroyedObjects.Add(DestroyedObjects[i]);
+			for (var i = 0; i < destroyedObjects.Count; i++)
+				data.DestroyedObjects.Add(destroyedObjects[i]);
 			
 			data.DestroyedComponents = new List<string>();
-			for (var i = 0; i < DestroyedComponents.Count; i++)
-				data.DestroyedComponents.Add(DestroyedComponents[i]);
+			for (var i = 0; i < destroyedComponents.Count; i++)
+				data.DestroyedComponents.Add(destroyedComponents[i]);
 			
 			data.KilledAlives = new List<string>();
-			for (var i = 0; i < KilledAlives.Count; i++)
-				data.KilledAlives.Add(KilledAlives[i]);
+			for (var i = 0; i < killedAlives.Count; i++)
+				data.KilledAlives.Add(killedAlives[i]);
 			
 			data.Create = new Dictionary<string, CreateData>();
 			data.World = new Dictionary<string, WorldData>();
@@ -226,7 +228,7 @@ namespace Managers
 					else
 					{
 						// Don't save destroyed data
-						if (DestroyedObjects.Contains(saveable.ObjectID))
+						if (destroyedObjects.Contains(saveable.ObjectID))
 							continue;
 
 						// Keep data of destroyed components as it might hold stuff outside of the component and be used
@@ -270,7 +272,7 @@ namespace Managers
 							if (saveable is IAlive iAlive)
 							{
 								// Don't save killed alives data
-								if (!iAlive.IsAlive || KilledAlives.Contains(iAlive.ObjectID))
+								if (!iAlive.IsAlive || killedAlives.Contains(iAlive.ObjectID))
 									continue;
 
 								if (iAlive is NPC npc && npc.ExternallySpawned)
@@ -311,7 +313,7 @@ namespace Managers
 
 			File.WriteAllText(System.IO.Path.Combine(Path, $"{currentScene}_{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			
-			InitializeSaves();
+			initializeSaves();
 		}
 
 		public void Load(SaveData data)
@@ -321,7 +323,7 @@ namespace Managers
 
 		public void Delete(string path)
 		{
-			if (!AvailableSaves.ContainsKey(path))
+			if (!availableSaves.ContainsKey(path))
 			{
 				Debug.LogError("[StateManager] Not deleting save data as the file is not part of available saves");
 				return;
@@ -335,29 +337,78 @@ namespace Managers
 
 			File.Delete(path);
 			
-			InitializeSaves();
+			initializeSaves();
+		}
+
+		#endregion
+
+		#region Internals
+
+		private SaveData lastSaveData;
+
+		private void registerObject(IIdentifiable identifiable, string objectID)
+		{
+			if (string.IsNullOrWhiteSpace(objectID))
+				return;
+			
+			registeredObjects[objectID] = identifiable;
+		}
+
+		private void initializeManager()
+		{
+			SceneManager.OnPreSceneLoadEvent.AddListener(instance.onPreSceneLoad);
 		}
 		
-		public void OnPreSceneLoad()
+		private void initializeSaves()
 		{
-			DestroyedObjects.Clear();
-			DestroyedComponents.Clear();
-			KilledAlives.Clear();
+			if (!Directory.Exists(Path))
+				Directory.CreateDirectory(Path);
+
+			availableSaves.Clear();
+
+			var files = Directory.GetFiles(Path, "*.json");
+			for (var i = 0; i < files.Length; i++)
+			{
+				var file = files[i];
+
+				var text = File.ReadAllText(file);
+				if (string.IsNullOrWhiteSpace(text))
+				{
+					Debug.LogWarning($"[StateManager] Save file {file} is empty, skipping");
+					continue;
+				}
+
+				var data = JsonConvert.DeserializeObject<SaveData>(text);
+				if (data == null)
+				{
+					Debug.LogWarning($"[StateManager] Save file {file} failed to deserialize, skipping");
+					continue;
+				}
+				
+				availableSaves[file] = data;
+			}
+		}
+
+		private void onPreSceneLoad(string scene)
+		{
+			destroyedObjects.Clear();
+			destroyedComponents.Clear();
+			killedAlives.Clear();
 
 			if (lastSaveData == null)
 				return;
 
-			var destroyedObjects = lastSaveData.DestroyedObjects;
-			for (var i = 0; i < destroyedObjects.Count; i++)
-				DestroyedObjects.Add(destroyedObjects[i]);
+			var destroyedObjectsList = lastSaveData.DestroyedObjects;
+			for (var i = 0; i < destroyedObjectsList.Count; i++)
+				destroyedObjects.Add(destroyedObjectsList[i]);
 
-			var destroyedComponents = lastSaveData.DestroyedComponents;
-			for (var i = 0; i < destroyedComponents.Count; i++)
-				DestroyedComponents.Add(destroyedComponents[i]);
+			var destroyedComponentsList = lastSaveData.DestroyedComponents;
+			for (var i = 0; i < destroyedComponentsList.Count; i++)
+				destroyedComponents.Add(destroyedComponentsList[i]);
 
-			var killedAlives = lastSaveData.KilledAlives;
-			for (var i = 0; i < killedAlives.Count; i++)
-				KilledAlives.Add(killedAlives[i]);
+			var killedAlivesList = lastSaveData.KilledAlives;
+			for (var i = 0; i < killedAlivesList.Count; i++)
+				killedAlives.Add(killedAlivesList[i]);
 
 			lastSaveData = null;
 		}
@@ -625,5 +676,7 @@ namespace Managers
 			for (var i = killAlives.Count - 1; i >= 0; i--)
 				killAlives[i].Kill(null, true);
 		}
+		
+		#endregion
 	}
 }

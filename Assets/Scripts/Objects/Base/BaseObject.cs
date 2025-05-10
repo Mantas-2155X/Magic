@@ -193,7 +193,7 @@ namespace Objects.Base
 			Debug.Log($"[Object {gameObject.name}] IObject broken by {source}");
 #endif
 			
-			StateManager.Instance.DestroyedObjects.AddUnique(ObjectID);
+			StateManager.Instance.RegisterDestroyedObject(ObjectID);
 			Destroy(thisGo);
 			enabled = false;
 		}
@@ -243,11 +243,11 @@ namespace Objects.Base
 				case EAction.None:
 					return true;
 				case EAction.DestroyGameObject:
-					StateManager.Instance.DestroyedObjects.AddUnique(ObjectID);
+					StateManager.Instance.RegisterDestroyedObject(ObjectID);
 					Destroy(thisGo);
 					break;
 				case EAction.DestroyComponent:
-					StateManager.Instance.DestroyedComponents.AddUnique(ObjectID);
+					StateManager.Instance.RegisterDestroyedComponent(ObjectID);
 					Destroy(this);
 					break;
 			}
@@ -309,11 +309,11 @@ namespace Objects.Base
 				case EAction.None:
 					return true;
 				case EAction.DestroyGameObject:
-					StateManager.Instance.DestroyedObjects.AddUnique(ObjectID);
+					StateManager.Instance.RegisterDestroyedObject(ObjectID);
 					Destroy(thisGo);
 					break;
 				case EAction.DestroyComponent:
-					StateManager.Instance.DestroyedComponents.AddUnique(ObjectID);
+					StateManager.Instance.RegisterDestroyedComponent(ObjectID);
 					Destroy(this);
 					break;
 			}

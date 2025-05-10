@@ -95,7 +95,7 @@ namespace Objects
 				var spawnID = spawned[i];
 				
 				// Killed already, count as spawned
-				if (StateManager.Instance.KilledAlives.Contains(spawnID))
+				if (StateManager.Instance.GetKilledAlives().Contains(spawnID))
 				{
 					Spawned.TryAdd(spawnID, null);
 					continue;
@@ -197,8 +197,7 @@ namespace Objects
 				
 				var spawnID = SpawnIDs[Spawned.Count];
 				
-				var killedAlives = StateManager.Instance.KilledAlives;
-				if (killedAlives.Contains(spawnID))
+				if (StateManager.Instance.GetKilledAlives().Contains(spawnID))
 				{
 					// Already died, don't wait spawnrate
 					Spawned.TryAdd(spawnID, null);

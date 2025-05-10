@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Managers.Events;
 using ScriptableObjects;
 using UI;
 using UnityEngine;
@@ -25,6 +26,8 @@ namespace Managers
 			}
 		}
 
+		public static OnPreSceneLoadEvent OnPreSceneLoadEvent = new ();
+		
 		private readonly List<string> sceneNames = new ();
 		private readonly List<SceneData> sceneDatas = new ();
 
@@ -97,7 +100,7 @@ namespace Managers
 			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {GetCurrentScene()} to {scene}");
 			
 			PauseManager.Instance.Unpause();
-			StateManager.Instance.OnPreSceneLoad();
+			OnPreSceneLoadEvent?.Invoke(scene);
 
 			var handle = Addressables.LoadSceneAsync("Scenes/" + scene, LoadSceneMode.Single, false);
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded);

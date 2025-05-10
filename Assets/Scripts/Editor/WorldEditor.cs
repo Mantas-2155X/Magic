@@ -16,26 +16,26 @@ namespace Editor
 
 			GUILayout.Space(5);
 
-			Folds[0] = EditorGUILayout.Foldout(Folds[0], $"Destroyed Objects ({StateManager.Instance.DestroyedObjects.Count})", true);
+			Folds[0] = EditorGUILayout.Foldout(Folds[0], $"Destroyed Objects ({StateManager.Instance.GetDestroyedObjects().Count})", true);
 			if (Folds[0])
 			{
-				var list = StateManager.Instance.DestroyedObjects;
+				var list = StateManager.Instance.GetDestroyedObjects();
 				for (var i = 0; i < list.Count; i++)
 					EditorGUILayout.TextField(list[i]);
 			}
 			
-			Folds[1] = EditorGUILayout.Foldout(Folds[1], $"Destroyed Components ({StateManager.Instance.DestroyedComponents.Count})", true);
+			Folds[1] = EditorGUILayout.Foldout(Folds[1], $"Destroyed Components ({StateManager.Instance.GetDestroyedComponents().Count})", true);
 			if (Folds[1])
 			{
-				var list = StateManager.Instance.DestroyedComponents;
+				var list = StateManager.Instance.GetDestroyedComponents();
 				for (var i = 0; i < list.Count; i++)
 					EditorGUILayout.TextField(list[i]);
 			}
 			
-			Folds[2] = EditorGUILayout.Foldout(Folds[2], $"Killed Alives ({StateManager.Instance.KilledAlives.Count})", true);
+			Folds[2] = EditorGUILayout.Foldout(Folds[2], $"Killed Alives ({StateManager.Instance.GetKilledAlives().Count})", true);
 			if (Folds[2])
 			{
-				var list = StateManager.Instance.KilledAlives;
+				var list = StateManager.Instance.GetKilledAlives();
 				for (var i = 0; i < list.Count; i++)
 					EditorGUILayout.TextField(list[i]);
 			}
@@ -57,7 +57,7 @@ namespace Editor
 			if (GUILayout.Button("Save State"))
 				StateManager.Instance.Save();
 			
-			var saves = StateManager.Instance.AvailableSaves;
+			var saves = StateManager.Instance.GetSaves();
 			foreach (var pair in saves)
 			{
 				GUILayout.BeginHorizontal();

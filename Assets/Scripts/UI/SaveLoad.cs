@@ -175,9 +175,11 @@ namespace UI
 		private void updateSaves()
 		{
 			var currentScene = SceneManager.Instance.GetCurrentScene();
+
+			var allSaves = StateManager.Instance.GetSaves();
 			var availableSaves = new List<Tuple<string, SaveData>>();
 
-			foreach (var pair in StateManager.Instance.AvailableSaves)
+			foreach (var pair in allSaves)
 			{
 				// Show all saves in title, otherwise only show current scene saves
 				if (currentScene != pair.Value.Scene && currentScene != "Title")
