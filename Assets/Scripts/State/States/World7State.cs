@@ -33,7 +33,7 @@ namespace State.States
 				PlayerIncluded = world7.PlayerIncluded,
 				OrbSize = world7.CurrentSize,
 				OrbLightBounceIntensity = world7.CurrentBounceIntensity,
-				ElapsedTime = Time.time - world7.ActivatedTime
+				ElapsedTime = world7.ActivatedTime >= 0f ? Time.time - world7.ActivatedTime : 0f
 			};
 
 			return state;
