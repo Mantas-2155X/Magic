@@ -6,6 +6,7 @@ using AI.Interfaces;
 using Combat.Spells.Interfaces;
 using Managers;
 using TMPro;
+using Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -102,7 +103,7 @@ namespace UI.Hotbar
 			if (alive is not AI.Player)
 				return;
 
-			if (newSpell == null)
+			if (newSpell.IsNull())
 			{
 				SelectedSpellLocalizer.Key = "";
 				SelectedSpellLocalizer.Text.text = "";

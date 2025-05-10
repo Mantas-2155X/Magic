@@ -181,7 +181,7 @@ namespace AI.Base
 		public bool IsInvulnerable { get; private set; }
 		public bool IsPowerful { get; private set; }
 		public virtual bool IsWalking { get; private set; }
-		public bool IsCasting => Spell != null && Spell.IsCasting;
+		public bool IsCasting => !Spell.IsNull() && Spell.IsCasting;
 
 		public virtual void SetInvulnerable(bool value)
 		{
@@ -260,7 +260,7 @@ namespace AI.Base
 			
 				if (Paralyzed)
 				{
-					if (Spell != null)
+					if (!Spell.IsNull())
 						Spell.CancelCasting();
 				
 					Body.SetMalfunction(true);
@@ -314,7 +314,7 @@ namespace AI.Base
 		{
 			var previousSpell = Spell;
 			
-			if (Spell != null)
+			if (!Spell.IsNull())
 				Spell.Unselect();
 			
 			SpellRange = float.MaxValue;
@@ -551,7 +551,7 @@ namespace AI.Base
 			
 			Debug.Log($"[Alive {gameObject.name}] was killed by {source}");
 			
-			if (Spell != null)
+			if (!Spell.IsNull())
 				Spell.CancelCasting();
 			
 			SetMovementType(EMovementType.Normal);
@@ -796,7 +796,7 @@ namespace AI.Base
 			if (!Data.CanGrab)
 				return;
 			
-			if (Grabbing != null)
+			if (!Grabbing.IsNull())
 			{
 				ReleaseObject();
 				return;
@@ -824,7 +824,7 @@ namespace AI.Base
 
 		public virtual void ReleaseObject()
 		{
-			if (Grabbing == null)
+			if (Grabbing.IsNull())
 				return;
 			
 			ShrinkObject(false);
@@ -841,7 +841,7 @@ namespace AI.Base
 
 		public virtual void ShrinkObject(bool state)
 		{
-			if (Grabbing == null)
+			if (Grabbing.IsNull())
 				return;
 
 			var tr = Grabbing.GetTransform();
@@ -874,7 +874,7 @@ namespace AI.Base
 
 		public virtual void HandleGrab()
 		{
-			if (Grabbing == null)
+			if (Grabbing.IsNull())
 				return;
 
 			var data = Data;
@@ -995,7 +995,7 @@ namespace AI.Base
 			
 			if (Paralyzed)
 			{
-				if (Spell != null)
+				if (!Spell.IsNull())
 					Spell.CancelCasting();
 				
 				Body.SetMalfunction(true);

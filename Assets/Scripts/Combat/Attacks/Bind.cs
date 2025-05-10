@@ -1,6 +1,7 @@
 using AI.Interfaces;
 using Combat.Attacks.Base;
 using Managers;
+using Tools;
 using UnityEngine;
 
 namespace Combat.Attacks
@@ -13,7 +14,7 @@ namespace Combat.Attacks
 		{
 			base.OnTriggerEnter(other);
 			
-			if (alive != null || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var targetAlive))
+			if (!alive.IsNull() || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var targetAlive))
 				return;
 
 			alive = targetAlive;
@@ -32,7 +33,7 @@ namespace Combat.Attacks
 		{
 			base.OnTriggersDisabled();
 
-			if (alive != null)
+			if (!alive.IsNull())
 				alive.RemoveSlowSource(ObjectID);
 		}
 	}

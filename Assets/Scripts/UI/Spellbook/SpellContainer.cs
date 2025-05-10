@@ -38,7 +38,7 @@ namespace UI.Spellbook
 			Spell = spell;
 			Index = index;
 
-			if (spell == null)
+			if (spell.IsNull())
 			{
 				gameObject.SetActive(false);
 				return;

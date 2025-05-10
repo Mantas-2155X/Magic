@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Combat.Spells.Interfaces;
 using Managers;
+using Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,7 +44,7 @@ namespace UI.Spellbook
 				return;
 
 			var spell = previousContainer.Spell;
-			if (spell != null)
+			if (!spell.IsNull())
 			{
 				// Move previously grabbed container to the newly grabbed containers index
 				AIManager.Instance.Player.SetSpellIndex(spell.SpellData, grabbedContainer.Index);

@@ -33,7 +33,7 @@ namespace UI.Hotbar
 			if (PauseManager.IsPaused)
 				return;
 			
-			if (Spell == null)
+			if (Spell.IsNull())
 				return;
 
 			var hotbar = Player.Instance.HUD.Hotbar;
@@ -65,7 +65,7 @@ namespace UI.Hotbar
 			Spell = spell;
 			Index = index;
 
-			if (spell == null)
+			if (spell.IsNull())
 			{
 				gameObject.SetActive(false);
 				return;

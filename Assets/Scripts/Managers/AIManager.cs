@@ -9,6 +9,7 @@ using Combat.Enums;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 
 namespace Managers
@@ -103,7 +104,7 @@ namespace Managers
 			}
 			
 			// Don't attack allies or dead targets
-			if (aggressor == null || !aggressor.IsAlive || aggressor.RelationshipGroup == alive.RelationshipGroup)
+			if (aggressor.IsNull() || !aggressor.IsAlive || aggressor.RelationshipGroup == alive.RelationshipGroup)
 				return;
 
 			// Make sure its within sense range

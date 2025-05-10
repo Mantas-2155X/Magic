@@ -8,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -128,7 +129,7 @@ namespace Combat.Projectiles.Base
 			spellRange = range;
 			attackData = attack;
 
-			if (owner != null)
+			if (!owner.IsNull())
 			{
 				var body = owner.Body;
 			
@@ -164,7 +165,7 @@ namespace Combat.Projectiles.Base
 			if (Source == null)
 				return null;
 
-			if (owner != null)
+			if (!owner.IsNull())
 				return owner;
 
 			switch (Source)

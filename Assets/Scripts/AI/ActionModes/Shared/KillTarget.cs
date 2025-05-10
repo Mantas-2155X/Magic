@@ -1,4 +1,5 @@
 using AI.Enums;
+using Tools;
 using UnityEngine;
 
 namespace AI.ActionModes.Shared
@@ -37,7 +38,7 @@ namespace AI.ActionModes.Shared
 				if (!owner.AimAt.AimTowards(target))
 					return false;
 
-				if (owner.Spell != null)
+				if (!owner.Spell.IsNull())
 					owner.Spell.StartCasting();
 			}
 

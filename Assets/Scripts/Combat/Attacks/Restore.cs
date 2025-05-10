@@ -1,6 +1,7 @@
 using System;
 using Combat.Attacks.Base;
 using Combat.Attacks.Enums;
+using Tools;
 using UnityEngine;
 
 namespace Combat.Attacks
@@ -18,7 +19,7 @@ namespace Combat.Attacks
 			base.Spawn(source, position, angles, attach);
 
 			var alive = GetAlive();
-			if (alive == null)
+			if (alive.IsNull())
 				return;
 			
 			switch (Type)

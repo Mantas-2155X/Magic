@@ -18,8 +18,8 @@ MonoBehaviour:
   Tags: 0
   Prefab: {fileID: 2273498091929504843, guid: f87096318aaafc244997e6f00eca6740, type: 3}
   Type: 
-  Health: 90
-  Mana: 150
+  Health: 150
+  Mana: 100
   Energy: 50
   RegenerateHealth: 2
   RegenerateMana: 35
@@ -27,10 +27,10 @@ MonoBehaviour:
   Speed: 0
   DamageStats:
     _serializedList:
-    - Key: 6
+    - Key: 3
       Value:
-        Constant: 5
-        Percentage: 2.5
+        Constant: 0
+        Percentage: -10
   ProtectionStats:
     _serializedList:
     - Key: 3
@@ -66,7 +66,7 @@ MonoBehaviour:
   WanderEvery: 1
   CommunicateRange: 5
   LowResourcesMultiplier: 0.15
-  SpellCooldownVariation: 0.15
+  SpellCooldownVariation: 0.25
   SpellSwitchCastCooldown: 0.25
   UseResourceEvery: 1
   TargetPredictInaccuracy: 0.6
@@ -79,10 +79,10 @@ MonoBehaviour:
   AttackVerticalOffset: -0.3
   UseExtraCasts: 1
   UseSightCheck: 1
-  CanTakeResources: 1
+  CanTakeResources: 0
   Stationary: 0
   CanChaseInterrupt: 1
-  ChaseInterruptEvery: 5
+  ChaseInterruptEvery: 4
   ChaseInterruptDistance: 12.5
   ChaseInterruptDuration: 3
   CanSelfDestruct: 0

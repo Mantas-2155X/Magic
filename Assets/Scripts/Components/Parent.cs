@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AI.Interfaces;
 using Managers;
+using Tools;
 using UnityEngine;
 
 namespace Components
@@ -40,7 +41,7 @@ namespace Components
 
 			foreach (var (alive, parent) in alives)
 			{
-				if (alive == null)
+				if (alive.IsNull())
 					continue;
 
 				alive.GetTransform().parent = parent;

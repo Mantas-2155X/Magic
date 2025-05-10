@@ -6,6 +6,7 @@ using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Managers;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -89,7 +90,7 @@ namespace Combat.Casts.Base
 			owner = null;
 			owner = GetAlive();
 
-			ownerTr = owner != null ? owner.GetTransform() : Source.transform;
+			ownerTr = !owner.IsNull() ? owner.GetTransform() : Source.transform;
 			
 			setPosition();
 			
@@ -102,7 +103,7 @@ namespace Combat.Casts.Base
 			if (Source == null)
 				return null;
 
-			if (owner != null)
+			if (!owner.IsNull())
 				return owner;
 
 			switch (Source)
@@ -134,7 +135,7 @@ namespace Combat.Casts.Base
 		{
 			var newPos = ownerTr.position + -ownerTr.up * (0.95f * ownerTr.localScale.y);
 
-			if (owner != null)
+			if (!owner.IsNull())
 				newPos.y = owner.Body.CanSway ? owner.Body.Feet[0].position.y : owner.Body.Core.position.y;
 			
 			thisTr.position = newPos;

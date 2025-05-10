@@ -8,6 +8,7 @@ using Combat.Wearables.Base;
 using Managers;
 using Newtonsoft.Json;
 using Objects.Interfaces;
+using Tools;
 using UnityEngine;
 
 namespace State.States
@@ -89,7 +90,7 @@ namespace State.States
 			state.MovementType = baseAlive.MovementType;
 			state.RelationshipGroup = baseAlive.RelationshipGroup;
 
-			if (baseAlive.Grabbing != null)
+			if (!baseAlive.Grabbing.IsNull())
 			{
 				state.Grabbing = baseAlive.Grabbing.ObjectID;
 				state.OriginalGrabSize = baseAlive.OriginalGrabSize;

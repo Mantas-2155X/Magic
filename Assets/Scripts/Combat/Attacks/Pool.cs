@@ -3,6 +3,7 @@ using AI.Interfaces;
 using Combat.Attacks.Base;
 using Combat.Attacks.Enums;
 using Cysharp.Threading.Tasks;
+using Tools;
 using UnityEngine;
 
 namespace Combat.Attacks
@@ -61,7 +62,7 @@ namespace Combat.Attacks
 				for (var i = 0; i < CurrentAlives.Count; i++)
 				{
 					var alive = CurrentAlives[i];
-					if (alive == null || !alive.IsAlive)
+					if (alive.IsNull() || !alive.IsAlive)
 						continue;
 
 					OnPoolLooped(alive);

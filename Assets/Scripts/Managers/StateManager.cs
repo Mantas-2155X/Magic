@@ -573,7 +573,7 @@ namespace Managers
 				if (!loaded)
 					Debug.LogWarning($"[StateManager] Create Saveable {pair.Value.Type} with ObjectID {pair.Key} was not loaded");
 
-				if (iObject != null)
+				if (!iObject.IsNull())
 				{
 					// Other potentially needed data is set so we can remove the component now
 					if (data.DestroyedComponents.Contains(iObject.ObjectID))
@@ -583,7 +583,7 @@ namespace Managers
 					}
 				}
 
-				if (iAlive != null)
+				if (!iAlive.IsNull())
 				{
 					// 
 				}
@@ -639,7 +639,7 @@ namespace Managers
 			foreach (var pair in AIManager.Instance.AlivesColliderMap)
 			{
 				var alive = pair.Value;
-				if (alive == null || !alive.IsAlive)
+				if (alive.IsNull() || !alive.IsAlive)
 					continue;
 
 				// Leave alives without ID as they are

@@ -1,5 +1,6 @@
 //#define DEBUG_SIGHT
 
+using Objects.Interfaces;
 using ScriptableObjects;
 using Tools;
 using UnityEngine;
@@ -41,7 +42,16 @@ namespace AI.ActionModes.Shared
 			// Check if the hit is the target so we don't waste extra casts calls
 			var hitTransform = hit.transform;
 			if (hitTransform != target)
-				return false;
+			{
+				var iObject = hitTransform.GetComponent<IObject>();
+				if (iObject.IsNull())
+					return false;
+			
+				if (!iObject.ObjectData.IsBreakable)
+					return false;
+				
+				// In case a breakable object is in the way, count it as in-sight so it gets shot at
+			}
 #if UNITY_EDITOR && DEBUG_SIGHT
 			Debug.DrawLine(originCenter, direction * 50f, Color.magenta);
 #endif

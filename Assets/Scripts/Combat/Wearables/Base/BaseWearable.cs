@@ -6,6 +6,7 @@ using Combat.Wearables.Interfaces;
 using Managers;
 using Objects;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
@@ -76,7 +77,7 @@ namespace Combat.Wearables.Base
 		
 		public virtual void Equip(IAlive alive)
 		{
-			if (alive == null || Owner != null)
+			if (alive.IsNull() || !Owner.IsNull())
 				return;
 			
 			Owner = alive;
@@ -108,7 +109,7 @@ namespace Combat.Wearables.Base
 			var movePos = Vector3.zero;
 			var moveAng = Vector3.zero;
 			
-			if (Owner != null)
+			if (!Owner.IsNull())
 			{
 				if (Owner is Player)
 					setRenderMode(ShadowCastingMode.On);

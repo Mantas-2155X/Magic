@@ -3,6 +3,7 @@ using AI.Interfaces;
 using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Tools;
 using UnityEngine;
 
 namespace World
@@ -49,7 +50,7 @@ namespace World
 				
 				foreach (var alive in alives)
 				{
-					if (alive == null || !alive.IsAlive)
+					if (alive.IsNull() || !alive.IsAlive)
 						continue;
 				
 					alive.Damage(Damage, this, EElement.Unknown);

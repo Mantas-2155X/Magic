@@ -4,6 +4,7 @@ using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
 using ScriptableObjects.Enums;
+using Tools;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -108,7 +109,7 @@ namespace AI.ActionModes.Shared
 				}
 
 				var resource = FindNearbyResource(ETag.RestoresHealth);
-				if (resource != null)
+				if (!resource.IsNull())
 				{
 					owner.Use((Component)resource);
 					return true;
@@ -124,7 +125,7 @@ namespace AI.ActionModes.Shared
 				}
 				
 				var resource = FindNearbyResource(ETag.RestoresMana);
-				if (resource != null)
+				if (!resource.IsNull())
 				{
 					owner.Use((Component)resource);
 					return true;
@@ -140,7 +141,7 @@ namespace AI.ActionModes.Shared
 				}
 				
 				var resource = FindNearbyResource(ETag.RestoresEnergy);
-				if (resource != null)
+				if (!resource.IsNull())
 				{
 					owner.Use((Component)resource);
 					return true;
@@ -158,7 +159,7 @@ namespace AI.ActionModes.Shared
 			var resources = StateManager.Instance.GetRegisteredObjects();
 			foreach (var pair in resources)
 			{
-				if (pair.Value == null || pair.Value is not IObject resource)
+				if (pair.Value == null || pair.Value is not IObject resource || resource.IsNull())
 					continue;
 
 				// Don't grab disabled ones
