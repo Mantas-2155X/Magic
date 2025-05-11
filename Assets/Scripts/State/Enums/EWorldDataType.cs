@@ -4,6 +4,6 @@ namespace State.Enums
 	{
 		Trigger,
 		World7,
-		DelayedTrigger
+		Water
 	}
 }

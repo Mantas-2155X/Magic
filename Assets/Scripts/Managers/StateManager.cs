@@ -18,6 +18,7 @@ using State.Enums;
 using State.Interfaces;
 using Tools;
 using UnityEngine;
+using World;
 using Object = UnityEngine.Object;
 
 namespace Managers
@@ -237,6 +238,15 @@ namespace Managers
 							{
 								Type = EWorldDataType.World7,
 								States = world7.Save()
+							};
+							saved = true;
+						}
+						else if (saveable is Water water)
+						{
+							data.World[water.ObjectID] = new WorldData
+							{
+								Type = EWorldDataType.Water,
+								States = water.Save()
 							};
 							saved = true;
 						}
@@ -478,6 +488,10 @@ namespace Managers
 							}
 							case EWorldDataType.World7:
 								if (saveable is not World7)
+									continue;
+								break;
+							case EWorldDataType.Water:
+								if (saveable is not Water)
 									continue;
 								break;
 						}
