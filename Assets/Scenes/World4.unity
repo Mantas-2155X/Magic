@@ -1001,7 +1001,7 @@ MonoBehaviour:
   RangeZ: {x: -8.27, y: 8.27}
   Y: -0.75
   Timer: {fileID: 1880694446}
-  Info: {fileID: 682050709}
+  TextWalker: {fileID: 682050711}
 --- !u!1 &682050707
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,6 +1013,7 @@ GameObject:
   - component: {fileID: 682050708}
   - component: {fileID: 682050710}
   - component: {fileID: 682050709}
+  - component: {fileID: 682050711}
   m_Layer: 5
   m_Name: Info
   m_TagString: Untagged
@@ -1138,6 +1139,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682050707}
   m_CullTransparentMesh: 1
+--- !u!114 &682050711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682050707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb30dd578f84b2485e983729ef3988a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: {fileID: 682050709}
 --- !u!1001 &815728686
 PrefabInstance:
   m_ObjectHideFlags: 0

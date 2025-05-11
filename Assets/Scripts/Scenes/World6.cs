@@ -1,16 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects;
 using Objects.Base;
-using TMPro;
+using State.Interfaces;
+using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Scenes
 {
-	public class World6 : MonoBehaviour
+	public class World6 : MonoBehaviour, IIdentifiable
 	{
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+
 		[SerializeField]
 		public BaseLight[] Indicators1;
 		
@@ -33,28 +44,64 @@ namespace Scenes
 		public float TimeBetweenWaves = 5f;
 
 		[SerializeField]
-		public TMP_Text Info;
+		public TextWalker TextWalker;
 
 		public int CurrentWave { get; private set; } = -1;
+		public int RemainingSpawners { get; private set; }
 
-		private int currentCharacter;
-		private int remainingSpawners;
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
+
+		#region Identify / SaveLoad
+
+		public void Awake()
+		{
+			StateManager.Instance.RegisterObject(this);
+			initializeObject();
+		}
+
+		public void OnDestroy()
+		{
+			StateManager.Instance.UnregisterObject(this);
+		}
+		
+		#endregion
 
 		public void Start()
 		{
-			textLoop(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_INFO")).Forget();
+			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_INFO"), 0f, 2f, 0.1f, 0.0025f, delegate
+			{
+				nextWave().Forget();
+			});
 		}
 		
 		public void OnSpawnerCleared()
 		{
-			remainingSpawners--;
+			RemainingSpawners--;
 
-			if (remainingSpawners > 0)
+			if (RemainingSpawners > 0)
 				return;
 		
 			nextWave().Forget();
 		}
 		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
+		
+		private void initializeObject()
+		{
+			if (init)
+				return;
+
+			thisGo = gameObject;
+			thisTr = thisGo.transform;
+			init = true;
+		}
+
 		private async UniTaskVoid nextWave()
 		{
 			if (CurrentWave != -1)
@@ -64,9 +111,10 @@ namespace Scenes
 
 			if (CurrentWave >= Waves.Count)
 			{
-				textLoop(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_CLEARED")).Forget();
-				await UniTask.WaitForSeconds(10f);
-				await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
+				TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_CLEARED"), 0f, 2f, 0.1f, 0.0025f, delegate
+				{
+					endWorld().Forget();
+				});
 				return;
 			}
 			
@@ -84,7 +132,7 @@ namespace Scenes
 			for (var i = 0; i < Indicators4.Length; i++)
 				Indicators4[i].Toggle(i < wave.Indicators4);
 			
-			remainingSpawners = wave.Spawners.GetComponentsInChildren<NPCSpawner>().Length;
+			RemainingSpawners = wave.Spawners.GetComponentsInChildren<NPCSpawner>().Length;
 
 			await UniTask.WaitForSeconds(TimeBetweenWaves);
 			
@@ -97,44 +145,10 @@ namespace Scenes
 			wave.Spawners.gameObject.SetActive(true);
 		}
 		
-		private async UniTaskVoid textLoop(string text)
+		private async UniTaskVoid endWorld()
 		{
-			currentCharacter = 0;
-
-			Info.text = "";
-			Info.gameObject.SetActive(true);
-		
-			while (currentCharacter < text.Length)
-			{
-				await UniTask.WaitForSeconds(0.1f);
-				
-				if (this == null || !isActiveAndEnabled)
-					return;
-				
-				Info.text = text[..(currentCharacter + 1)];
-				currentCharacter++;
-			}
-
-			await UniTask.WaitForSeconds(2f);
-			
-			if (this == null || !isActiveAndEnabled)
-				return;
-			
-			while (currentCharacter >= 0)
-			{
-				await UniTask.WaitForSeconds(0.0025f);
-				
-				if (this == null || !isActiveAndEnabled)
-					return;
-				
-				Info.text = text[..currentCharacter];
-				currentCharacter--;
-			}
-			
-			Info.gameObject.SetActive(false);
-
-			if (CurrentWave == -1)
-				nextWave().Forget();
+			await UniTask.WaitForSeconds(5f);
+			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
 		}
 		
 		[Serializable]

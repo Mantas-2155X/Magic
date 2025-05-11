@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using AI;
 using AI.Base;
 using AI.Interfaces;
 using Combat.Enums;
@@ -9,8 +8,10 @@ using Managers;
 using ScriptableObjects;
 using State.Interfaces;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Player = AI.Player;
 using Random = UnityEngine.Random;
 
 namespace Scenes
@@ -56,11 +57,10 @@ namespace Scenes
 		public TMP_Text Timer;
 
 		[SerializeField]
-		public TMP_Text Info;
+		public TextWalker TextWalker;
 		
 		private float startTime;
 		private bool stopTimer;
-		private int currentCharacter;
 
 		private GameObject thisGo;
 		private Transform thisTr;
@@ -95,9 +95,10 @@ namespace Scenes
 			
 			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("AI_PLAYER_WORLD4_NAME"));
 			
-			attackLoop().Forget();
-			damageLoop().Forget();
-			textLoop().Forget();
+			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE4_INFO"), 0f, 2f, 0.1f, 0.0025f, delegate
+			{
+				startLoops().Forget();
+			});
 		}
 
 		public void Update()
@@ -135,14 +136,16 @@ namespace Scenes
 			stopTimer = true;
 			respawnDelayed().Forget();
 		}
+
+		private async UniTaskVoid startLoops()
+		{
+			attackLoop().Forget();
+			await UniTask.WaitForSeconds(5f);
+			damageLoop().Forget();
+		}
 		
 		private async UniTaskVoid attackLoop()
 		{
-			await UniTask.WaitForSeconds(10f);
-			
-			if (this == null || !isActiveAndEnabled)
-				return;
-
 			var incinerate = ObjectManager.Instance.GetAttack("ATTACK_INCINERATE_NAME");
 			
 			while (true)
@@ -167,11 +170,6 @@ namespace Scenes
 		
 		private async UniTaskVoid damageLoop()
 		{
-			await UniTask.WaitForSeconds(15f);
-			
-			if (this == null || !isActiveAndEnabled)
-				return;
-
 			var player = AIManager.Instance.Player;
 			
 			while (true)
@@ -189,40 +187,6 @@ namespace Scenes
 				
 				player.Damage(DamageAmount, this, EElement.Unknown);
 			}
-		}
-
-		private async UniTaskVoid textLoop()
-		{
-			var text = LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE4_INFO");
-			
-			while (currentCharacter < text.Length)
-			{
-				await UniTask.WaitForSeconds(0.1f);
-				
-				if (this == null || !isActiveAndEnabled)
-					return;
-				
-				Info.text = text[..(currentCharacter + 1)];
-				currentCharacter++;
-			}
-
-			await UniTask.WaitForSeconds(2f);
-			
-			if (this == null || !isActiveAndEnabled)
-				return;
-			
-			while (currentCharacter >= 0)
-			{
-				await UniTask.WaitForSeconds(0.0025f);
-				
-				if (this == null || !isActiveAndEnabled)
-					return;
-				
-				Info.text = text[..currentCharacter];
-				currentCharacter--;
-			}
-			
-			Info.gameObject.SetActive(false);
 		}
 
 		private async UniTaskVoid respawnDelayed()
