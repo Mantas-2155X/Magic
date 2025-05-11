@@ -8,24 +8,24 @@ namespace Combat.Attacks
 {
 	public class Bind : BaseAttack
 	{
-		private IAlive alive;
+		public IAlive BoundAlive { get; private set; }
 		
 		public override void OnTriggerEnter(Collider other)
 		{
 			base.OnTriggerEnter(other);
 			
-			if (alive.NotNull() || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var targetAlive))
+			if (BoundAlive.NotNull() || !AIManager.Instance.AlivesColliderMap.TryGetValue(other, out var targetAlive))
 				return;
 
-			alive = targetAlive;
-			alive.AddSlowSource(ObjectID, 1f, float.MaxValue);
+			BoundAlive = targetAlive;
+			BoundAlive.AddSlowSource(ObjectID, 1f, float.MaxValue);
 
-			Target = targetAlive.GetTransform();
+			Target = targetAlive;
 		}
 
 		public override void OnTriggersEnabled()
 		{
-			alive = null;
+			BoundAlive = null;
 			base.OnTriggersEnabled();
 		}
 
@@ -33,8 +33,8 @@ namespace Combat.Attacks
 		{
 			base.OnTriggersDisabled();
 
-			if (alive.NotNull())
-				alive.RemoveSlowSource(ObjectID);
+			if (BoundAlive.NotNull())
+				BoundAlive.RemoveSlowSource(ObjectID);
 		}
 	}
 }

@@ -14,9 +14,9 @@ namespace Combat.Attacks.Interfaces
 		public ParticleSystem System { get; }
 		public Collider[] Triggers { get; }
 		
-		public Transform Target { get; set; }
+		public IIdentifiable Target { get; set; }
 
-		public void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, Transform attach);
+		public void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach);
 
 		public IAlive GetAlive();
 	}

@@ -707,7 +707,7 @@ namespace AI
 			SelfDestructed = true;
 
 			var tr = GetTransform();
-			ObjectManager.Instance.CreateAttack(npcData.SelfDestructAttack, this, tr.position, Vector3.zero, tr);
+			ObjectManager.Instance.CreateAttack(npcData.SelfDestructAttack, this, tr.position, Vector3.zero, this);
 		}
 
 #if UNITY_EDITOR

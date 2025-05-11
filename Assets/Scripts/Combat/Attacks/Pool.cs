@@ -23,7 +23,7 @@ namespace Combat.Attacks
 		[field: SerializeField]
 		public virtual float Lifetime { get; set; }
 		
-		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, Transform attach)
+		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach)
 		{
 			base.Spawn(source, position, angles, attach);
 			

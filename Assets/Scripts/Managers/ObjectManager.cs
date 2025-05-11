@@ -170,17 +170,17 @@ namespace Managers
 			return projectile;
 		}
 
-		public IAttack CreateAttack(AttackData data, IIdentifiable source, RaycastHit hit, Transform attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, RaycastHit hit, IIdentifiable attach)
 		{
 			return createAttack(data, source, hit.point, hit.normal, attach);
 		}
 
-		public IAttack CreateAttack(AttackData data, IIdentifiable source, ContactPoint contact, Transform attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, ContactPoint contact, IIdentifiable attach)
 		{
 			return createAttack(data, source, contact.point, contact.normal, attach);
 		}
 		
-		public IAttack CreateAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, Transform attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, IIdentifiable attach)
 		{
 			return createAttack(data, source, point, normal, attach);
 		}
@@ -215,7 +215,7 @@ namespace Managers
 			return decal;
 		}
 		
-		private IAttack createAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, Transform attach)
+		private IAttack createAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, IIdentifiable attach)
 		{
 			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);
 			attack.ObjectID = Guid.NewGuid().ToString();

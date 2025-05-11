@@ -111,7 +111,6 @@ namespace Combat.Projectiles.Base
 		public void OnCollisionEnter(Collision collision)
 		{
 			IIdentifiable attach = null;
-			Transform attachTr = null;
 			
 			var contact = collision.contacts[0];
 			
@@ -122,7 +121,6 @@ namespace Combat.Projectiles.Base
 				if (AIManager.Instance.AlivesColliderMap.TryGetValue(coll, out var alive))
 				{
 					attach = alive;
-					attachTr = alive.GetTransform();
 					alive.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
 					alive.AddSlowSource(ObjectID, ProjectileData.Slow.Amount, ProjectileData.Slow.Duration);
 					alive.AddParalyzeSource(ObjectID, ProjectileData.Paralyze.Duration);
@@ -130,13 +128,12 @@ namespace Combat.Projectiles.Base
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{
 					attach = obj;
-					attachTr = obj.GetTransform();
 					obj.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
 				}
 			}
 			
 			if (AttackData != null)
-				ObjectManager.Instance.CreateAttack(AttackData, Source, contact, attachTr);
+				ObjectManager.Instance.CreateAttack(AttackData, Source, contact, attach);
 
 			if (ProjectileData.Decal != null)
 				ObjectManager.Instance.CreateDecal(ProjectileData.Decal, contact, attach);

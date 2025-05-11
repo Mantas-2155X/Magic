@@ -36,7 +36,7 @@ namespace Combat.Attacks.Base
 		[field: SerializeField]
 		public Collider[] Triggers { get; private set; }
 
-		public Transform Target { get; set; }
+		public IIdentifiable Target { get; set; }
 
 		public readonly List<IAlive> TriggeredAlives = new ();
 		public readonly List<IAlive> CurrentAlives = new ();
@@ -65,7 +65,7 @@ namespace Combat.Attacks.Base
 		
 		#endregion
 		
-		public virtual void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, Transform attach)
+		public virtual void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach)
 		{
 			if (!init)
 			{
@@ -86,9 +86,9 @@ namespace Combat.Attacks.Base
 			Target = AttackData.AttachToTarget ? attach : null;
 
 			if (AttackData.FollowCaster && owner.NotNull())
-				Target = owner.GetTransform();
+				Target = owner;
 			
-			if (Target == null)
+			if (Target.IsNull())
 			{
 				thisTr.position = position + Vector3.up * 0.1f;
 				thisTr.rotation = angles;
@@ -210,11 +210,13 @@ namespace Combat.Attacks.Base
 		
 		public void FollowTarget()
 		{
-			if (Target == null)
+			if (Target.IsNull())
 				return;
 			
-			var scale = Target.localScale.y;
-			thisTr.position = Target.position + -Target.up * (0.95f * scale) + (AttackData.AttachOffset * scale);
+			var targetTr = Target.GetTransform();
+			var scale = targetTr.localScale.y;
+			
+			thisTr.position = targetTr.position + -targetTr.up * (0.95f * scale) + (AttackData.AttachOffset * scale);
 		}
 		
 		public IAlive GetAlive()

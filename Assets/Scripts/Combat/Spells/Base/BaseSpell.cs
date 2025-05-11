@@ -9,6 +9,7 @@ using Combat.Enums;
 using Combat.Spells.Interfaces;
 using Managers;
 using ScriptableObjects;
+using State.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -215,7 +216,7 @@ namespace Combat.Spells.Base
 			else if (SpellData.Attack != null)
 			{
 				// No projectile, create the attack straight away
-				ObjectManager.Instance.CreateAttack(SpellData.Attack, this, LastHit, LastHit.transform);
+				ObjectManager.Instance.CreateAttack(SpellData.Attack, this, LastHit, LastHit.transform.GetComponent<IIdentifiable>());
 			}
 			
 			return true;

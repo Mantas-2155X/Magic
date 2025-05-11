@@ -22,7 +22,7 @@ namespace Combat.Attacks
 		private readonly List<ParticleCollisionEvent> collisions = new ();
 		private readonly Dictionary<ParticleSystem, int> systemDecals = new ();
 
-		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, Transform attach)
+		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach)
 		{
 			base.Spawn(source, position, angles, attach);
 			
