@@ -52,6 +52,15 @@ namespace State.States
 
 		[JsonProperty]
 		public Vector3? FlightMovementTarget;
+
+		[JsonProperty]
+		public float SwitchCastCooldown;
+
+		[JsonProperty]
+		public float ChaseInterruptTimer;
+		
+		[JsonProperty]
+		public float ChaseInterruptDuration;
 		
 		#region Patrol
 
@@ -86,6 +95,8 @@ namespace State.States
 				return null;
 
 			var npcData = (NPCData)npc.Data;
+			var time = Time.time;
+			
 			var state = new NPCState();
 
 			state.AIMode = npc.AIMode;
@@ -104,12 +115,17 @@ namespace State.States
 			state.PreviousOtherTargetObjectID = npc.PreviousOtherTarget.NotNull() ? npc.PreviousOtherTarget.ObjectID : null;
 			
 			state.AgentPosition = npc.Agent.NavMeshAgent != null && npc.Agent.NavMeshAgent.enabled ? npc.Agent.NavMeshAgent.nextPosition : null;
+
+			state.SwitchCastCooldown = npc.SwitchCastCooldown > 0f && time < npc.SwitchCastCooldown ? npc.SwitchCastCooldown - time : 0f;
+
+			state.ChaseInterruptTimer = npc.Chase.InterruptTimer;
+			state.ChaseInterruptDuration = time < npc.Chase.InterruptUntil ? npc.Chase.InterruptUntil - Time.time : 0f;
 			
 			#region Patrol
 
 			state.PatrolPath = npc.Patrolling.CurrentPathData != null ? npc.Patrolling.CurrentPathData.Name : null;
 			state.PatrolStartAt = npc.Patrolling.CurrentPoint;
-			state.PatrolAlreadyWaited = npc.Patrolling.CurrentPathData != null && npc.Patrolling.WaitOnArrival ? npc.Patrolling.WaitUntil - Time.time : 0f;
+			state.PatrolAlreadyWaited = npc.Patrolling.CurrentPathData != null && npc.Patrolling.WaitOnArrival ? npc.Patrolling.WaitUntil - time : 0f;
 
 			#endregion
 			
@@ -128,7 +144,7 @@ namespace State.States
 			#region Self-Destruct
 
 			state.SelfDestructed = npc.SelfDestructed;
-			state.SelfDestructElapsed = npcData.CanSelfDestruct ? Time.time - npc.SelfDestructStart : 0f;
+			state.SelfDestructElapsed = npcData.CanSelfDestruct ? time - npc.SelfDestructStart : 0f;
 			
 			#endregion
 
@@ -155,7 +171,9 @@ namespace State.States
 				state.AgentPosition,
 				state.PatrolPath, state.PatrolStartAt, state.PatrolAlreadyWaited,
 				state.UseWalkAfterwards,
-				state.CarryDropAt);
+				state.CarryDropAt,
+				state.SwitchCastCooldown,
+				state.ChaseInterruptTimer, state.ChaseInterruptDuration);
 			
 			npc.SetSelfDestructState(state.SelfDestructed, state.SelfDestructElapsed);
 

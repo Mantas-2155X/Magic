@@ -29,14 +29,14 @@ namespace Managers
 	// (Objects) BaseElevator, BaseConveyor
 	// (Combat) Attacks
 	// (World) World6 Waves, World4 Timer
-	// (AI) Switch cast cooldown, Chase interrupt timer, Off mesh link travelling
+	// (AI) Off mesh link travelling
 	
 	// TODO (other):
 	// Figure out how to simulate particle systems correctly
 	// Used in a bunch of places like world7, projectiles, attacks etc
 	
 	// TODO (test):
-	// (AI) Grabbing shrink, Patrol Already Waited, BaseDoor (with button)
+	// (AI) Grabbing shrink, Patrol Already Waited, BaseDoor (with button), Switch cast cooldown
 	
 	public class StateManager
 	{

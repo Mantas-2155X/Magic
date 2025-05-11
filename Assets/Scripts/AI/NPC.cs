@@ -133,8 +133,6 @@ namespace AI
 			{ EActionMode.Carry, new Carry() }
 		};
 		
-		private float chaseInterruptTimer;
-
 		#region AI
 
 		#region Action Modes
@@ -553,7 +551,9 @@ namespace AI
 			Vector3? agentPosition,
 			string patrolPath, int patrolStartAt, float patrolAlreadyWaited,
 			Vector3? useWalkAfterwards,
-			Vector3 carryDropAt)
+			Vector3 carryDropAt,
+			float switchCastCooldown,
+			float chaseInterruptTimer, float chaseInterruptDuration)
 		{
 			if (!IsAlive)
 				return;
@@ -576,6 +576,14 @@ namespace AI
 			
 			AttackTarget = previousAttackTarget;
 			OtherTarget = previousOtherTarget;
+
+			Chase.InterruptTimer = chaseInterruptTimer;
+			
+			if (chaseInterruptDuration > 0f)
+				Chase.InterruptUntil = Time.time + chaseInterruptDuration;
+			
+			if (switchCastCooldown > 0f)
+				SwitchCastCooldown = Time.time + switchCastCooldown;
 			
 			if (actionMode == EActionMode.None)
 			{
@@ -669,12 +677,12 @@ namespace AI
 			{
 				if (Chase.InterruptUntil < time)
 				{
-					chaseInterruptTimer += Time.deltaTime;
+					Chase.InterruptTimer += Time.deltaTime;
 
 					// Wait some time before interrupting
-					if (chaseInterruptTimer >= npcData.ChaseInterruptEvery)
+					if (Chase.InterruptTimer >= npcData.ChaseInterruptEvery)
 					{
-						chaseInterruptTimer = 0f;
+						Chase.InterruptTimer = 0f;
 					
 						// Interrupt for some time allowing walking
 						Chase.InterruptUntil = time + npcData.ChaseInterruptDuration;

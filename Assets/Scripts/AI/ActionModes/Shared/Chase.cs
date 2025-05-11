@@ -15,6 +15,7 @@ namespace AI.ActionModes.Shared
 		}
 
 		public float InterruptUntil;
+		public float InterruptTimer;
 		
 		private float currentChaseRange;
 		
