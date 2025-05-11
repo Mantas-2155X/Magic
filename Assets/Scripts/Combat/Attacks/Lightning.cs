@@ -22,9 +22,9 @@ namespace Combat.Attacks
 		private readonly List<ParticleCollisionEvent> collisions = new ();
 		private readonly Dictionary<ParticleSystem, int> systemDecals = new ();
 
-		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach)
+		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f)
 		{
-			base.Spawn(source, position, angles, attach);
+			base.Spawn(source, position, angles, attach, elapsedTime);
 			
 			alives.Clear();
 			objects.Clear();
@@ -32,6 +32,9 @@ namespace Combat.Attacks
 			for (var i = 0; i < Systems.Count; i++)
 				systemDecals[Systems[i]] = 0;
 
+			if (elapsedTime > 0f)
+				Systems[0].Simulate(elapsedTime);
+			
 			Systems[0].Play(true);
 		}
 		

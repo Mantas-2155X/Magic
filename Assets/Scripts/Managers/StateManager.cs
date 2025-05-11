@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using AI;
 using AI.Interfaces;
+using Combat.Attacks.Interfaces;
 using Combat.Decals.Interfaces;
 using Combat.Projectiles.Interfaces;
 using Components;
@@ -27,13 +28,8 @@ namespace Managers
 {
 	// TODO (impl):
 	// (Objects) BaseElevator, BaseConveyor
-	// (Combat) Attacks
 	// (World) World6 Waves, World4 Timer
 	// (AI) Off mesh link travelling
-	
-	// TODO (other):
-	// Figure out how to simulate particle systems correctly
-	// Used in a bunch of places like world7, projectiles, attacks etc
 	
 	// TODO (test):
 	// (AI) Grabbing shrink, Patrol Already Waited, BaseDoor (with button), Switch cast cooldown
@@ -288,6 +284,24 @@ namespace Managers
 								};
 								
 								data.DeferredCreate[projectile.ObjectID] = JObject.FromObject(projectileCreateData);
+								saved = true;
+							}
+						}
+						else if (root == world.Attacks)
+						{
+							if (saveable is IAttack attack)
+							{
+								var attackCreateData = new AttackCreateData
+								{
+									Type = ECreateType.Attack,
+									Name = attack.AttackData.Name, 
+									SourceObjectID = attack.Source.NotNull() ? attack.Source.ObjectID : null,
+									TargetObjectID = attack.Target.NotNull() ? attack.Target.ObjectID : null,
+									ElapsedTime = Time.time - attack.CreatedTime,
+									States = attack.Save()
+								};
+								
+								data.VeryDeferredCreate[attack.ObjectID] = JObject.FromObject(attackCreateData);
 								saved = true;
 							}
 						}
@@ -606,6 +620,7 @@ namespace Managers
 				IAlive iAlive = null;
 				IProjectile iProjectile = null;
 				IDecal iDecal = null;
+				IAttack iAttack = null;
 
 				var loaded = false;
 
@@ -739,6 +754,31 @@ namespace Managers
 						iDecal = decal;
 						break;
 					}
+					case ECreateType.Attack:
+					{
+						// Don't create an attack if it's supposed to be destroyed already
+						if (data.DestroyedObjects.Contains(pair.Key))
+							continue;
+
+						var attackCreateData = createDataJObject.ToObject<AttackCreateData>();
+						
+						var attack = objectManager.CreateAttack(objectManager.GetAttack(attackCreateData.Name), GetRegisteredObject(attackCreateData.SourceObjectID), Vector3.zero, Vector3.zero, GetRegisteredObject(attackCreateData.TargetObjectID), attackCreateData.ElapsedTime);
+						attack.ObjectID = pair.Key;
+
+						try
+						{
+							attack.Load(attackCreateData.States);
+							loaded = true;
+						}
+						catch (Exception e)
+						{
+							loaded = false;
+							Debug.LogError($"[StateManager] Failed loading created attack state for {((Component)attack).name} ({attack.ObjectID}), {e}");
+						}
+
+						iAttack = attack;
+						break;
+					}
 				}
 				
 				if (!loaded)
@@ -765,6 +805,11 @@ namespace Managers
 				}
 				
 				if (iDecal.NotNull())
+				{
+					// 
+				}
+				
+				if (iAttack.NotNull())
 				{
 					// 
 				}

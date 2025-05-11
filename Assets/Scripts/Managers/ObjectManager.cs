@@ -170,19 +170,19 @@ namespace Managers
 			return projectile;
 		}
 
-		public IAttack CreateAttack(AttackData data, IIdentifiable source, RaycastHit hit, IIdentifiable attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, RaycastHit hit, IIdentifiable attach, float elapsedTime = 0f)
 		{
-			return createAttack(data, source, hit.point, hit.normal, attach);
+			return createAttack(data, source, hit.point, hit.normal, attach, elapsedTime);
 		}
 
-		public IAttack CreateAttack(AttackData data, IIdentifiable source, ContactPoint contact, IIdentifiable attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, ContactPoint contact, IIdentifiable attach, float elapsedTime = 0f)
 		{
-			return createAttack(data, source, contact.point, contact.normal, attach);
+			return createAttack(data, source, contact.point, contact.normal, attach, elapsedTime);
 		}
 		
-		public IAttack CreateAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, IIdentifiable attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, IIdentifiable attach, float elapsedTime = 0f)
 		{
-			return createAttack(data, source, point, normal, attach);
+			return createAttack(data, source, point, normal, attach, elapsedTime);
 		}
 		
 		public IDecal CreateDecal(DecalData data, ContactPoint contact, IIdentifiable attach, float elapsedTime = 0f, float normalizedTime = 0f)
@@ -215,7 +215,7 @@ namespace Managers
 			return decal;
 		}
 		
-		private IAttack createAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, IIdentifiable attach)
+		private IAttack createAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, IIdentifiable attach, float elapsedTime)
 		{
 			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);
 			attack.ObjectID = Guid.NewGuid().ToString();
@@ -268,7 +268,7 @@ namespace Managers
 					throw new NotImplementedException();
 			}
 			
-			attack.Spawn(source, point, angles, attach);
+			attack.Spawn(source, point, angles, attach, elapsedTime);
 			return attack;
 		}
 		

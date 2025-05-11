@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Combat.Attacks.Interfaces
 {
-	public interface IAttack : IIdentifiable
+	public interface IAttack : ISaveable
 	{
 		public AttackData AttackData { get; }
 
@@ -16,7 +16,9 @@ namespace Combat.Attacks.Interfaces
 		
 		public IIdentifiable Target { get; set; }
 
-		public void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach);
+		public float CreatedTime { get; }
+
+		public void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f);
 
 		public IAlive GetAlive();
 	}

@@ -2,14 +2,15 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
-using Combat.Enums;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
 using State.Interfaces;
+using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -21,6 +22,8 @@ namespace Combat.Attacks.Base
 		[field: SerializeField]
 		public AttackData AttackData { get; private set; }
 		
+		public bool ShouldSave => true;
+
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -44,6 +47,8 @@ namespace Combat.Attacks.Base
 		public readonly List<IObject> TriggeredObjects = new ();
 		public readonly List<IObject> CurrentObjects = new ();
 		
+		public float CreatedTime { get; private set; }
+
 		private GameObject thisGo;
 		private Transform thisTr;
 
@@ -52,6 +57,71 @@ namespace Combat.Attacks.Base
 		private bool init;
 		
 		#region Identify / SaveLoad
+
+		public virtual Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+
+			var transformState = TransformState.Read(thisTr);
+			if (transformState != null)
+				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
+			
+			var baseAttackState = BaseAttackState.Read(this);
+			if (baseAttackState != null)
+				dict[typeof(BaseAttack).ToString()] = JObject.FromObject(baseAttackState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
+				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			
+			if (data.TryGetValue(typeof(BaseAttack).ToString(), out var baseAttackState))
+				BaseAttackState.Apply(this, baseAttackState.ToObject<BaseAttackState>());
+		}
+
+		public virtual void SetState(List<string> triggeredAlivesIDs, List<string> currentAlivesIDs, List<string> triggeredObjectIDs, List<string> currentObjectIDs)
+		{
+			var stateManager = StateManager.Instance;
+
+			for (var i = 0; i < triggeredAlivesIDs.Count; i++)
+			{
+				var identifiable = stateManager.GetRegisteredObject(triggeredAlivesIDs[i]);
+				if (identifiable.IsNull() || identifiable is not IAlive alive)
+					continue;
+				
+				TriggeredAlives.Add(alive);
+			}
+			
+			for (var i = 0; i < currentAlivesIDs.Count; i++)
+			{
+				var identifiable = stateManager.GetRegisteredObject(currentAlivesIDs[i]);
+				if (identifiable.IsNull() || identifiable is not IAlive alive)
+					continue;
+				
+				CurrentAlives.Add(alive);
+			}
+			
+			for (var i = 0; i < triggeredObjectIDs.Count; i++)
+			{
+				var identifiable = stateManager.GetRegisteredObject(triggeredObjectIDs[i]);
+				if (identifiable.IsNull() || identifiable is not IObject obj)
+					continue;
+				
+				TriggeredObjects.Add(obj);
+			}
+			
+			for (var i = 0; i < currentObjectIDs.Count; i++)
+			{
+				var identifiable = stateManager.GetRegisteredObject(currentObjectIDs[i]);
+				if (identifiable.IsNull() || identifiable is not IObject obj)
+					continue;
+				
+				CurrentObjects.Add(obj);
+			}
+		}
 
 		public void Awake()
 		{
@@ -65,7 +135,7 @@ namespace Combat.Attacks.Base
 		
 		#endregion
 		
-		public virtual void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach)
+		public virtual void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f)
 		{
 			if (!init)
 			{
@@ -84,6 +154,7 @@ namespace Combat.Attacks.Base
 			owner = GetAlive();
 
 			Target = AttackData.AttachToTarget ? attach : null;
+			CreatedTime = Time.time;
 
 			if (AttackData.FollowCaster && owner.NotNull())
 				Target = owner;
@@ -103,13 +174,18 @@ namespace Combat.Attacks.Base
 				for (var i = 0; i < Triggers.Length; i++)
 					Triggers[i].enabled = false;
 				
-				trigger().Forget();
+				trigger(elapsedTime).Forget();
 			}
 
 			thisGo.SetActive(true);
 			
 			if (System != null)
+			{
+				if (elapsedTime > 0)
+					System.Simulate(elapsedTime, true);
+				
 				System.Play(true);
+			}
 		}
 		
 		public void Update()
@@ -247,20 +323,31 @@ namespace Combat.Attacks.Base
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Transform GetTransform() => thisTr;
 		
-		private async UniTaskVoid trigger()
+		private async UniTaskVoid trigger(float elapsedTime)
 		{
-			await UniTask.WaitForSeconds(AttackData.EnableTriggerAfter);
-			
-			if (this == null || !isActiveAndEnabled)
-				return;
+			if (elapsedTime < AttackData.EnableTriggerAfter)
+			{
+				await UniTask.WaitForSeconds(AttackData.EnableTriggerAfter - elapsedTime);
+				
+				if (this == null || !isActiveAndEnabled)
+					return;
+			}
 
 			OnTriggersEnabled();
 			
-			await UniTask.WaitForSeconds(AttackData.DisableTriggerAfter);
+			elapsedTime -= AttackData.EnableTriggerAfter;
 			
-			if (this == null || !isActiveAndEnabled)
-				return;
+			if (elapsedTime < 0f)
+				elapsedTime = 0f;
 
+			if (elapsedTime < AttackData.DisableTriggerAfter)
+			{
+				await UniTask.WaitForSeconds(AttackData.DisableTriggerAfter - elapsedTime);
+			
+				if (this == null || !isActiveAndEnabled)
+					return;
+			}
+			
 			OnTriggersDisabled();
 		}
 	}

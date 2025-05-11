@@ -23,14 +23,14 @@ namespace Combat.Attacks
 		[field: SerializeField]
 		public virtual float Lifetime { get; set; }
 		
-		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach)
+		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f)
 		{
-			base.Spawn(source, position, angles, attach);
+			base.Spawn(source, position, angles, attach, elapsedTime);
 			
 			loop().Forget();
 			
 			if (Lifetime > 0f)
-				lifetime().Forget();
+				lifetime(elapsedTime).Forget();
 		}
 
 		public void OnPoolLooped(IAlive alive)
@@ -71,9 +71,10 @@ namespace Combat.Attacks
 			}
 		}
 
-		private async UniTaskVoid lifetime()
+		private async UniTaskVoid lifetime(float elapsedTime)
 		{
-			await UniTask.WaitForSeconds(Lifetime);
+			if (elapsedTime < Lifetime)
+				await UniTask.WaitForSeconds(Lifetime - elapsedTime);
 			
 			if (this == null || !isActiveAndEnabled)
 				return;

@@ -15,9 +15,9 @@ namespace Combat.Attacks
 		[field: SerializeField]
 		public float Amount { get; private set; }
 		
-		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach)
+		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f)
 		{
-			base.Spawn(source, position, angles, attach);
+			base.Spawn(source, position, angles, attach, elapsedTime);
 
 			var alive = GetAlive();
 			if (alive.IsNull())

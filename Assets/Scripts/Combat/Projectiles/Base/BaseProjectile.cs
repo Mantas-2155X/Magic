@@ -44,7 +44,7 @@ namespace Combat.Projectiles.Base
 		public AttackData AttackData { get; private set; }
 		public float SpellRange { get; private set; }
 
-		public float CreatedTime { get; }
+		public float CreatedTime { get; private set; }
 
 		private CancellationTokenSource rangeToken;
 
@@ -171,6 +171,8 @@ namespace Combat.Projectiles.Base
 			StartingPosition = origin;
 			SpellRange = range;
 			AttackData = attack;
+
+			CreatedTime = Time.time;
 
 			if (owner.NotNull())
 			{
