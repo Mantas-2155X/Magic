@@ -27,7 +27,7 @@ namespace Managers
 {
 	// TODO (impl):
 	// (Objects) BaseElevator, BaseConveyor
-	// (Combat) Decals, Attacks
+	// (Combat) Attacks
 	// (World) World6 Waves, World4 Timer
 	// (AI) Switch cast cooldown, Chase interrupt timer, Off mesh link travelling
 	
