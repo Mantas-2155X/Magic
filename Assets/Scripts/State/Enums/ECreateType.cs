@@ -4,6 +4,7 @@ namespace State.Enums
 	{
 		Gib,
 		NPC,
-		DroppedWearable
+		DroppedWearable,
+		Projectile
 	}
 }

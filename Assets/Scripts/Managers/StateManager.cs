@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using AI;
 using AI.Interfaces;
+using Combat.Projectiles.Interfaces;
 using Components;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -25,7 +26,7 @@ namespace Managers
 {
 	// TODO (impl):
 	// (Objects) BaseElevator, BaseConveyor
-	// (Combat) Projectiles, Decals, Attacks
+	// (Combat) Decals, Attacks
 	// (World) World6 Waves, World4 Timer
 	// (AI) Switch cast cooldown, Chase interrupt timer, Off mesh link travelling
 	
@@ -173,9 +174,15 @@ namespace Managers
 			for (var i = 0; i < killedAlives.Count; i++)
 				data.KilledAlives.Add(killedAlives[i]);
 			
-			data.Create = new Dictionary<string, CreateData>();
-			data.World = new Dictionary<string, WorldData>();
+			data.Create = new Dictionary<string, JObject>();
+			data.DeferredCreate = new Dictionary<string, JObject>();
+			
+			data.World = new Dictionary<string, JObject>();
+			data.DeferredWorld = new Dictionary<string, JObject>();
+			
 			data.Objects = new Dictionary<string, Dictionary<string, JObject>>();
+			data.DeferredObjects = new Dictionary<string, Dictionary<string, JObject>>();
+			
 			data.Alives = new Dictionary<string, Dictionary<string, JObject>>();
 			
 			var world = World.World.Instance;
@@ -225,29 +232,35 @@ namespace Managers
 					{
 						if (saveable is Trigger or DelayedTrigger)
 						{
-							data.World[saveable.ObjectID] = new WorldData
+							var worldData = new WorldData
 							{
 								Type = EWorldDataType.Trigger,
 								States = saveable.Save()
 							};
+							
+							data.DeferredWorld[saveable.ObjectID] = JObject.FromObject(worldData);
 							saved = true;
 						}
 						else if (saveable is World7 world7)
 						{
-							data.World[world7.ObjectID] = new WorldData
+							var worldData = new WorldData
 							{
 								Type = EWorldDataType.World7,
 								States = world7.Save()
 							};
+							
+							data.World[world7.ObjectID] = JObject.FromObject(worldData);
 							saved = true;
 						}
 						else if (saveable is Water water)
 						{
-							data.World[water.ObjectID] = new WorldData
+							var worldData = new WorldData
 							{
 								Type = EWorldDataType.Water,
 								States = water.Save()
 							};
+							
+							data.DeferredWorld[water.ObjectID] = JObject.FromObject(worldData);
 							saved = true;
 						}
 					}
@@ -263,12 +276,32 @@ namespace Managers
 						{
 							if (saveable is BaseGib gib)
 							{
-								data.Create[gib.ObjectID] = new CreateData
+								var createData = new CreateData
 								{
 									Type = ECreateType.Gib,
 									Name = gib.ObjectData.Name,
 									States = gib.Save()
 								};
+								
+								data.Create[gib.ObjectID] = JObject.FromObject(createData);
+								saved = true;
+							}
+						}
+						else if (root == world.Projectiles)
+						{
+							if (saveable is IProjectile projectile)
+							{
+								var projectileCreateData = new ProjectileCreateData
+								{
+									Type = ECreateType.Projectile,
+									Name = projectile.ProjectileData.Name,
+									Range = projectile.SpellRange,
+									Attack = projectile.AttackData != null ? projectile.AttackData.Name : null,
+									SourceObjectID = projectile.Source.NotNull() ? projectile.Source.ObjectID : null,
+									States = projectile.Save()
+								};
+								
+								data.DeferredCreate[projectile.ObjectID] = JObject.FromObject(projectileCreateData);
 								saved = true;
 							}
 						}
@@ -278,12 +311,14 @@ namespace Managers
 							{
 								if (saveable is DroppedWearable droppedWearable)
 								{
-									data.Create[droppedWearable.ObjectID] = new CreateData
+									var createData = new CreateData
 									{
 										Type = ECreateType.DroppedWearable,
 										Name = droppedWearable.Wearable.WearableData.Name, // Actual wearable name here instead of droppedwearable
 										States = droppedWearable.Save()
 									};
+									
+									data.Create[droppedWearable.ObjectID] = JObject.FromObject(createData);
 								}
 								else
 								{
@@ -303,12 +338,14 @@ namespace Managers
 
 								if (iAlive is NPC npc && npc.ExternallySpawned)
 								{
-									data.Create[npc.ObjectID] = new CreateData
+									var createData = new CreateData
 									{
 										Type = ECreateType.NPC,
 										Name = npc.Data.Name,
 										States = npc.Save()
 									};
+									
+									data.Create[npc.ObjectID] = JObject.FromObject(createData);
 								}
 								else
 								{
@@ -442,9 +479,8 @@ namespace Managers
 		private async UniTaskVoid loadAsync(SaveData data)
 		{
 			var sceneManager = SceneManager.Instance;
-			var objectManager = ObjectManager.Instance;
 
-			var sceneData = objectManager.GetScene($"SCENE_{data.Scene.ToUpper()}_NAME");
+			var sceneData = ObjectManager.Instance.GetScene($"SCENE_{data.Scene.ToUpper()}_NAME");
 			if (!sceneData.SupportsSaving)
 			{
 				Debug.LogError($"[StateManager] Not loading save data as the scene {data.Scene} does not support saving");
@@ -458,8 +494,27 @@ namespace Managers
 			else
 				await sceneManager.ChangeSceneAsync(data.Scene, true, true, true);
 			
-			var world = World.World.Instance;
+			var killAlives = new List<IAlive>();
+			
+			loadWorld(data, false);
+			loadCreate(data, false);
+			loadObjects(data, false);
 
+			loadAlives(data, killAlives);
+				
+			loadWorld(data, true);
+			loadCreate(data, true);
+			loadObjects(data, true);
+
+			for (var i = killAlives.Count - 1; i >= 0; i--)
+				killAlives[i].Kill(null, true);
+		}
+		
+		private void loadWorld(SaveData data, bool deferred)
+		{
+			var world = World.World.Instance;
+			var dict = deferred ? data.DeferredWorld : data.World;
+			
 			var worldComponents = world.GetComponentsInChildren<Component>(true);
 			for (var i = 0; i < worldComponents.Length; i++)
 			{
@@ -471,12 +526,14 @@ namespace Managers
 				if (string.IsNullOrEmpty(saveable.ObjectID))
 					continue;
 					
-				if (data.World.TryGetValue(saveable.ObjectID, out var worldData))
+				if (dict.TryGetValue(saveable.ObjectID, out var worldDataJObject))
 				{
 					bool loaded;
 
 					try
 					{
+						var worldData = worldDataJObject.ToObject<WorldData>();
+						
 						// Make sure to load correct type
 						switch (worldData.Type)
 						{
@@ -509,8 +566,15 @@ namespace Managers
 						Debug.LogWarning($"[StateManager] World Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not loaded");
 				}
 			}
-			
-			foreach (var pair in data.Create)
+		}
+
+		private void loadCreate(SaveData data, bool deferred)
+		{
+			var world = World.World.Instance;
+			var objectManager = ObjectManager.Instance;
+			var dict = deferred ? data.DeferredCreate : data.Create;
+
+			foreach (var pair in dict)
 			{
 				// Nothing to create if the name is empty
 				if (string.IsNullOrEmpty(pair.Key))
@@ -518,10 +582,14 @@ namespace Managers
 
 				IObject iObject = null;
 				IAlive iAlive = null;
+				IProjectile iProjectile = null;
 
 				var loaded = false;
 
-				switch (pair.Value.Type)
+				var createDataJObject = pair.Value;
+				var createData = createDataJObject.ToObject<CreateData>();
+				
+				switch (createData.Type)
 				{
 					case ECreateType.Gib:
 					{
@@ -529,7 +597,7 @@ namespace Managers
 						if (data.DestroyedObjects.Contains(pair.Key))
 							continue;
 						
-						var gib = (BaseGib)objectManager.CreateObject(objectManager.GetObject(pair.Value.Name), Vector3.zero, Vector3.zero);
+						var gib = (BaseGib)objectManager.CreateObject(objectManager.GetObject(createData.Name), Vector3.zero, Vector3.zero);
 						gib.ObjectID = pair.Key;
 
 						var gibTr = gib.GetTransform();
@@ -537,10 +605,10 @@ namespace Managers
 
 						try
 						{
-							gib.Load(pair.Value.States);
+							gib.Load(createData.States);
 							loaded = true;
 						}
-						catch(Exception e)
+						catch (Exception e)
 						{
 							loaded = false;
 							Debug.LogError($"[StateManager] Failed loading created gib state for {gib.name} ({gib.ObjectID}), {e}");
@@ -555,15 +623,15 @@ namespace Managers
 						if (data.KilledAlives.Contains(pair.Key))
 							continue;
 
-						var npc = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)objectManager.GetAlive(pair.Value.Name));
+						var npc = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)objectManager.GetAlive(createData.Name));
 						npc.ObjectID = pair.Key;
 
 						try
 						{
-							npc.Load(pair.Value.States);
+							npc.Load(createData.States);
 							loaded = true;
 						}
-						catch(Exception e)
+						catch (Exception e)
 						{
 							loaded = false;
 							Debug.LogError($"[StateManager] Failed loading created npc state for {npc.name} ({npc.ObjectID}), {e}");
@@ -578,7 +646,7 @@ namespace Managers
 						if (data.DestroyedObjects.Contains(pair.Key))
 							continue;
 						
-						var wearable = objectManager.CreateWearable(objectManager.GetWearable(pair.Value.Name), Vector3.zero, Vector3.zero);
+						var wearable = objectManager.CreateWearable(objectManager.GetWearable(createData.Name), Vector3.zero, Vector3.zero);
 						wearable.ObjectID = pair.Key;
 						wearable.Drop();
 
@@ -586,10 +654,10 @@ namespace Managers
 
 						try
 						{
-							droppedWearable.Load(pair.Value.States);
+							droppedWearable.Load(createData.States);
 							loaded = true;
 						}
-						catch(Exception e)
+						catch (Exception e)
 						{
 							loaded = false;
 							Debug.LogError($"[StateManager] Failed loading created dropped wearable state for {droppedWearable.name} ({droppedWearable.ObjectID}), {e}");
@@ -598,10 +666,35 @@ namespace Managers
 						iObject = droppedWearable;
 						break;
 					}
+					case ECreateType.Projectile:
+					{
+						// Don't create a projectile if it's supposed to be destroyed already
+						if (data.DestroyedObjects.Contains(pair.Key))
+							continue;
+
+						var projectileCreateData = createDataJObject.ToObject<ProjectileCreateData>();
+						
+						var projectile = objectManager.CreateProjectile(objectManager.GetProjectile(projectileCreateData.Name), projectileCreateData.Range, objectManager.GetAttack(projectileCreateData.Attack), GetRegisteredObject(projectileCreateData.SourceObjectID), Vector3.zero, Vector3.zero);
+						projectile.ObjectID = pair.Key;
+
+						try
+						{
+							projectile.Load(projectileCreateData.States);
+							loaded = true;
+						}
+						catch (Exception e)
+						{
+							loaded = false;
+							Debug.LogError($"[StateManager] Failed loading created projectile state for {((Component)projectile).name} ({projectile.ObjectID}), {e}");
+						}
+
+						iProjectile = projectile;
+						break;
+					}
 				}
 				
 				if (!loaded)
-					Debug.LogWarning($"[StateManager] Create Saveable {pair.Value.Type} with ObjectID {pair.Key} was not loaded");
+					Debug.LogWarning($"[StateManager] Create Saveable {createData.Type} with ObjectID {pair.Key} was not loaded");
 
 				if (iObject.NotNull())
 				{
@@ -617,8 +710,19 @@ namespace Managers
 				{
 					// 
 				}
+				
+				if (iProjectile.NotNull())
+				{
+					// 
+				}
 			}
-			
+		}
+
+		private void loadObjects(SaveData data, bool deferred)
+		{
+			var world = World.World.Instance;
+			var dict = deferred ? data.DeferredObjects : data.Objects;
+
 			var objects = world.Objects.GetComponentsInChildren<Component>(true);
 			for (var i = 0; i < objects.Length; i++)
 			{
@@ -637,7 +741,7 @@ namespace Managers
 					continue;
 				}
 				
-				if (data.Objects.TryGetValue(iObject.ObjectID, out var objectState))
+				if (dict.TryGetValue(iObject.ObjectID, out var objectState))
 				{
 					bool loaded;
 
@@ -663,9 +767,10 @@ namespace Managers
 					continue;
 				}
 			}
+		}
 
-			var killAlives = new List<IAlive>();
-			
+		private void loadAlives(SaveData data, List<IAlive> killAlives)
+		{
 			var currentAlives = AIManager.Instance.AlivesColliderMap.Values.ToList();
 			for (var i = currentAlives.Count - 1; i >= 0; i--)
 			{
@@ -703,11 +808,8 @@ namespace Managers
 						Debug.LogWarning($"[StateManager] Alive Saveable {alive.GetType().Name} on {TransformTools.GetFullPath(alive.GetTransform())} was not loaded");
 				}
 			}
-
-			for (var i = killAlives.Count - 1; i >= 0; i--)
-				killAlives[i].Kill(null, true);
 		}
-		
+
 		#endregion
 	}
 }

@@ -27,12 +27,21 @@ namespace State
 		public Dictionary<string, Dictionary<string, JObject>> Alives;
 
 		[JsonProperty]
-		public Dictionary<string, CreateData> Create;
+		public Dictionary<string, JObject> Create;
 
 		[JsonProperty]
-		public Dictionary<string, WorldData> World;
+		public Dictionary<string, JObject> DeferredCreate;
+
+		[JsonProperty]
+		public Dictionary<string, JObject> World;
+		
+		[JsonProperty]
+		public Dictionary<string, JObject> DeferredWorld;
 
 		[JsonProperty]
 		public Dictionary<string, Dictionary<string, JObject>> Objects;
+		
+		[JsonProperty]
+		public Dictionary<string, Dictionary<string, JObject>> DeferredObjects;
 	}
 }

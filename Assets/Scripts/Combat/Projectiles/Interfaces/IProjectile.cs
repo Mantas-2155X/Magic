@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Combat.Projectiles.Interfaces
 {
-	public interface IProjectile : IIdentifiable
+	public interface IProjectile : ISaveable
 	{
 		public ProjectileData ProjectileData { get; }
 
@@ -14,6 +14,9 @@ namespace Combat.Projectiles.Interfaces
 		public Rigidbody Rigidbody { get; }
 		public Collider Collider { get; }
 		
+		public AttackData AttackData { get; }
+		public float SpellRange { get; }
+
 		public void Spawn(IIdentifiable source, float range, AttackData attack, Vector3 origin, Vector3 force);
 
 		public IAlive GetAlive();

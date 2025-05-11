@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using AI.Interfaces;
@@ -6,9 +7,11 @@ using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
 using State.Interfaces;
+using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -19,6 +22,8 @@ namespace Combat.Projectiles.Base
 	{
 		[field: SerializeField]
 		public ProjectileData ProjectileData { get; private set; }
+
+		public bool ShouldSave => true;
 
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
@@ -35,8 +40,11 @@ namespace Combat.Projectiles.Base
 		[field: SerializeField]
 		public Collider Collider { get; private set; }
 		
+		public Vector3 StartingPosition { get; private set; }
+		public AttackData AttackData { get; private set; }
+		public float SpellRange { get; private set; }
+
 		private CancellationTokenSource rangeToken;
-		private Vector3 startingPosition;
 
 		private Collider ignoreBodyCollider;
 		private Collider ignoreFeetCollider;
@@ -45,15 +53,47 @@ namespace Combat.Projectiles.Base
 		private Transform thisTr;
 
 		private IAlive owner;
-
-		private AttackData attackData;
-		
-		private float spellRange;
 		
 		private bool init;
 		
 		#region Identify / SaveLoad
 
+		public virtual Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+
+			var transformState = TransformState.Read(thisTr);
+			if (transformState != null)
+				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
+
+			var rigidbodyState = RigidbodyState.Read(Rigidbody);
+			if (rigidbodyState != null)
+				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
+
+			var baseProjectileState = BaseProjectileState.Read(this);
+			if (baseProjectileState != null)
+				dict[typeof(BaseProjectile).ToString()] = JObject.FromObject(baseProjectileState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
+				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			
+			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
+				RigidbodyState.Apply(Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
+			
+			if (data.TryGetValue(typeof(BaseProjectile).ToString(), out var baseProjectileState))
+				BaseProjectileState.Apply(this, baseProjectileState.ToObject<BaseProjectileState>());
+		}
+
+		public virtual void SetState(Vector3 startingPosition)
+		{
+			StartingPosition = startingPosition;
+		}
+		
 		public void Awake()
 		{
 			StateManager.Instance.RegisterObject(this);
@@ -90,8 +130,8 @@ namespace Combat.Projectiles.Base
 				}
 			}
 			
-			if (attackData != null)
-				ObjectManager.Instance.CreateAttack(attackData, Source, contact, attach);
+			if (AttackData != null)
+				ObjectManager.Instance.CreateAttack(AttackData, Source, contact, attach);
 
 			if (ProjectileData.Decal != null)
 				ObjectManager.Instance.CreateDecal(ProjectileData.Decal, contact, attach != null ? attach : collision.transform);
@@ -104,8 +144,8 @@ namespace Combat.Projectiles.Base
 			if (PauseManager.IsPaused)
 				return;
 			
-			var distance = Vector3.Distance(startingPosition, thisTr.position);
-			if (distance < spellRange)
+			var distance = Vector3.Distance(StartingPosition, thisTr.position);
+			if (distance < SpellRange)
 				return;
 
 			clearVelocityAndPool().Forget();
@@ -126,9 +166,9 @@ namespace Combat.Projectiles.Base
 			owner = null;
 			owner = GetAlive();
 
-			startingPosition = origin;
-			spellRange = range;
-			attackData = attack;
+			StartingPosition = origin;
+			SpellRange = range;
+			AttackData = attack;
 
 			if (owner.NotNull())
 			{
