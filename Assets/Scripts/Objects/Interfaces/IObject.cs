@@ -43,8 +43,5 @@ namespace Objects.Interfaces
 		#endregion
 		
 		public void Spawn(Vector3 position, Vector3 angles);
-		
-		public GameObject GetGameObject();
-		public Transform GetTransform();
 	}
 }

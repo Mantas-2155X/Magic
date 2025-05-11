@@ -6,6 +6,7 @@ using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Managers;
 using ScriptableObjects;
+using State.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -25,7 +26,7 @@ namespace Combat.Casts.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
-		public Component Source { get; private set; }
+		public IIdentifiable Source { get; private set; }
 
 		[field: SerializeField]
 		public ParticleSystem System { get; private set; }
@@ -58,7 +59,7 @@ namespace Combat.Casts.Base
 			if (PauseManager.IsPaused)
 				return;
 			
-			if (Source == null)
+			if (Source.IsNull())
 				return;
 
 			setPosition();
@@ -75,7 +76,7 @@ namespace Combat.Casts.Base
 			PoolingManager.Instance.Add(CastData, thisGo);
 		}
 		
-		public void Spawn(Component source)
+		public void Spawn(IIdentifiable source)
 		{
 			if (!init)
 			{
@@ -90,7 +91,7 @@ namespace Combat.Casts.Base
 			owner = null;
 			owner = GetAlive();
 
-			ownerTr = owner.NotNull() ? owner.GetTransform() : Source.transform;
+			ownerTr = owner.NotNull() ? owner.GetTransform() : Source.GetTransform();
 			
 			setPosition();
 			
@@ -100,7 +101,7 @@ namespace Combat.Casts.Base
 		
 		public IAlive GetAlive()
 		{
-			if (Source == null)
+			if (Source.IsNull())
 				return null;
 
 			if (owner.NotNull())

@@ -195,7 +195,7 @@ namespace AI
 			var actionMode = (Carry)ActionModes[EActionMode.Carry];
 			actionMode.DropAt = dropAt;
 
-			setOtherTarget((BaseObject)target);
+			setOtherTarget(target);
 			setActionMode(EActionMode.Carry);
 			setAIMode(EAIMode.Action);
 		}
@@ -390,7 +390,7 @@ namespace AI
 			
 			PreviousAttackTarget = AttackTarget;
 			AttackTarget = target;
-			AttackTargetTransform = target.IsNull() ? null : ((Component)target).GetComponent<Transform>();
+			AttackTargetTransform = target.IsNull() ? null : target.GetTransform();
 			
 			ActionModeObj.AttackTargetChanged(PreviousAttackTarget, AttackTarget);
 			AIModeObj.AttackTargetChanged(PreviousAttackTarget, AttackTarget);
@@ -412,7 +412,7 @@ namespace AI
 			
 			PreviousOtherTarget = OtherTarget;
 			OtherTarget = target;
-			OtherTargetTransform = target.IsNull() ? null : ((Component)target).GetComponent<Transform>();
+			OtherTargetTransform = target.IsNull() ? null : target.GetTransform();
 			
 			ActionModeObj.OtherTargetChanged(PreviousOtherTarget, OtherTarget);
 			AIModeObj.OtherTargetChanged(PreviousOtherTarget, OtherTarget);

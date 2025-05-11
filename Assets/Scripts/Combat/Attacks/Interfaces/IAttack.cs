@@ -9,18 +9,15 @@ namespace Combat.Attacks.Interfaces
 	{
 		public AttackData AttackData { get; }
 
-		public Component Source { get; }
+		public IIdentifiable Source { get; }
 
 		public ParticleSystem System { get; }
 		public Collider[] Triggers { get; }
 		
 		public Transform Target { get; set; }
 
-		public void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach);
+		public void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, Transform attach);
 
 		public IAlive GetAlive();
-
-		public GameObject GetGameObject();
-		public Transform GetTransform();
 	}
 }

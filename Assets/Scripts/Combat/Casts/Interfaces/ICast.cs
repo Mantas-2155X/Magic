@@ -9,17 +9,14 @@ namespace Combat.Casts.Interfaces
 	{
 		public CastData CastData { get; }
 
-		public Component Source { get; }
+		public IIdentifiable Source { get; }
 
 		public ParticleSystem System { get; }
 		
-		public void Spawn(Component source);
+		public void Spawn(IIdentifiable source);
 
 		public IAlive GetAlive();
 
 		public void StopParticles();
-		
-		public GameObject GetGameObject();
-		public Transform GetTransform();
 	}
 }

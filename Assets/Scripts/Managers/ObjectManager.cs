@@ -10,6 +10,7 @@ using Combat.Spells.Interfaces;
 using Combat.Wearables.Interfaces;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -149,7 +150,7 @@ namespace Managers
 			return wearable;
 		}
 		
-		public ICast CreateCast(CastData data, Component source)
+		public ICast CreateCast(CastData data, IIdentifiable source)
 		{
 			var cast = PoolingManager.Instance.TakeOrCreate<ICast>(data, false);
 			cast.ObjectID = Guid.NewGuid().ToString();
@@ -159,7 +160,7 @@ namespace Managers
 			return cast;
 		}
 		
-		public IProjectile CreateProjectile(ProjectileData data, float range, AttackData attack, Component source, Vector3 origin, Vector3 direction)
+		public IProjectile CreateProjectile(ProjectileData data, float range, AttackData attack, IIdentifiable source, Vector3 origin, Vector3 direction)
 		{
 			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
 			projectile.ObjectID = Guid.NewGuid().ToString();
@@ -169,17 +170,17 @@ namespace Managers
 			return projectile;
 		}
 
-		public IAttack CreateAttack(AttackData data, Component source, RaycastHit hit, Transform attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, RaycastHit hit, Transform attach)
 		{
 			return createAttack(data, source, hit.point, hit.normal, attach);
 		}
 
-		public IAttack CreateAttack(AttackData data, Component source, ContactPoint contact, Transform attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, ContactPoint contact, Transform attach)
 		{
 			return createAttack(data, source, contact.point, contact.normal, attach);
 		}
 		
-		public IAttack CreateAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
+		public IAttack CreateAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, Transform attach)
 		{
 			return createAttack(data, source, point, normal, attach);
 		}
@@ -214,7 +215,7 @@ namespace Managers
 			return decal;
 		}
 		
-		private IAttack createAttack(AttackData data, Component source, Vector3 point, Vector3 normal, Transform attach)
+		private IAttack createAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, Transform attach)
 		{
 			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);
 			attack.ObjectID = Guid.NewGuid().ToString();
@@ -245,7 +246,7 @@ namespace Managers
 							angles = projectile.GetAlive().GetTransform().rotation;
 							break;
 						default:
-							angles = source.transform.rotation;
+							angles = source.GetTransform().rotation;
 							break;
 					}
 					break;

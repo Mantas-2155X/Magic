@@ -3,6 +3,7 @@ using AI.Interfaces;
 using Combat.Attacks.Base;
 using Combat.Attacks.Enums;
 using Cysharp.Threading.Tasks;
+using State.Interfaces;
 using Tools;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ namespace Combat.Attacks
 		[field: SerializeField]
 		public virtual float Lifetime { get; set; }
 		
-		public override void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
+		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, Transform attach)
 		{
 			base.Spawn(source, position, angles, attach);
 			

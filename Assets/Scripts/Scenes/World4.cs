@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using AI;
 using AI.Base;
 using AI.Interfaces;
@@ -6,14 +7,24 @@ using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
+using State.Interfaces;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Scenes
 {
-	public class World4 : MonoBehaviour
+	public class World4 : MonoBehaviour, IIdentifiable
 	{
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+		
 		[SerializeField]
 		public float AttackEvery = 1f;
 
@@ -51,15 +62,29 @@ namespace Scenes
 		private bool stopTimer;
 		private int currentCharacter;
 
+		private GameObject thisGo;
+		private Transform thisTr;
+		
+		private bool init;
+
+		#region Identify / SaveLoad
+
 		public void Awake()
 		{
+			StateManager.Instance.RegisterObject(this);
+			initializeObject();
+
 			BaseAlive.OnDeathEvent.AddListener(onDeath);
 		}
 
 		public void OnDestroy()
 		{
+			StateManager.Instance.UnregisterObject(this);
+
 			BaseAlive.OnDeathEvent.RemoveListener(onDeath);
 		}
+		
+		#endregion
 		
 		public void Start()
 		{
@@ -85,6 +110,21 @@ namespace Scenes
 			
 			var timeSpan = TimeSpan.FromSeconds(Time.time - startTime);
 			Timer.text = $"<mspace=0.6em>{timeSpan.Minutes:00}:{timeSpan.Seconds:00}:{timeSpan.Milliseconds:000}</mspace>";
+		}
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
+		
+		private void initializeObject()
+		{
+			if (init)
+				return;
+
+			thisGo = gameObject;
+			thisTr = thisGo.transform;
+			init = true;
 		}
 		
 		private void onDeath(IAlive alive, object source)

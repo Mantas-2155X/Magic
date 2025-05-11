@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Newtonsoft.Json.Linq;
@@ -53,6 +54,11 @@ namespace Scenes
 		
 		private readonly List<Rigidbody> objects = new ();
 		private readonly Collider[] results = new Collider[500];
+
+		private GameObject thisGo;
+		private Transform thisTr;
+		
+		private bool init;
 
 		#region Identify / SaveLoad
 		
@@ -116,6 +122,7 @@ namespace Scenes
 		public void Awake()
 		{
 			StateManager.Instance.RegisterObject(this);
+			initializeObject();
 		}
 
 		public void OnDestroy()
@@ -151,6 +158,21 @@ namespace Scenes
 			processOrb().Forget();
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
+		
+		private void initializeObject()
+		{
+			if (init)
+				return;
+
+			thisGo = gameObject;
+			thisTr = thisGo.transform;
+			init = true;
+		}
+		
 		private async UniTaskVoid processOrb()
 		{
 			await UniTask.WaitForSeconds(startDelay);

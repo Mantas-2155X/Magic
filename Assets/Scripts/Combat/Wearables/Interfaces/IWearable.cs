@@ -21,8 +21,5 @@ namespace Combat.Wearables.Interfaces
 		public void Drop();
 
 		public IAlive GetAlive();
-		
-		public GameObject GetGameObject();
-		public Transform GetTransform();
 	}
 }

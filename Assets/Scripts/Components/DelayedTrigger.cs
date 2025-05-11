@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Events;
 using Managers;
 using Newtonsoft.Json.Linq;
@@ -38,6 +39,11 @@ namespace Components
 
 		private float? adjustNextEnter;
 
+		private GameObject thisGo;
+		private Transform thisTr;
+		
+		private bool init;
+		
 		#region Identify / SaveLoad
 		
 		public virtual Dictionary<string, JObject> Save()
@@ -66,6 +72,7 @@ namespace Components
 		public void Awake()
 		{
 			StateManager.Instance.RegisterObject(this);
+			initializeObject();
 		}
 
 		public void OnDestroy()
@@ -122,5 +129,20 @@ namespace Components
 			EventTools.DrawListeners(transform, OnTriggerEvent, Color.blue);
 		}
 #endif
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
+		
+		private void initializeObject()
+		{
+			if (init)
+				return;
+
+			thisGo = gameObject;
+			thisTr = thisGo.transform;
+			init = true;
+		}
 	}
 }

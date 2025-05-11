@@ -9,6 +9,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -28,7 +29,7 @@ namespace Combat.Attacks.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
-		public Component Source { get; private set; }
+		public IIdentifiable Source { get; private set; }
 
 		[field: SerializeField]
 		public ParticleSystem System { get; private set; }
@@ -64,7 +65,7 @@ namespace Combat.Attacks.Base
 		
 		#endregion
 		
-		public virtual void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
+		public virtual void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, Transform attach)
 		{
 			if (!init)
 			{
@@ -218,7 +219,7 @@ namespace Combat.Attacks.Base
 		
 		public IAlive GetAlive()
 		{
-			if (Source == null)
+			if (Source.IsNull())
 				return null;
 
 			if (owner.NotNull())

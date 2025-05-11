@@ -8,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -27,7 +28,7 @@ namespace Combat.Projectiles.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
-		public Component Source { get; private set; }
+		public IIdentifiable Source { get; private set; }
 
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; private set; }
@@ -110,7 +111,7 @@ namespace Combat.Projectiles.Base
 			clearVelocityAndPool().Forget();
 		}
 		
-		public void Spawn(Component source, float range, AttackData attack, Vector3 origin, Vector3 force)
+		public void Spawn(IIdentifiable source, float range, AttackData attack, Vector3 origin, Vector3 force)
 		{
 			if (!init)
 			{
@@ -162,7 +163,7 @@ namespace Combat.Projectiles.Base
 		
 		public IAlive GetAlive()
 		{
-			if (Source == null)
+			if (Source.IsNull())
 				return null;
 
 			if (owner.NotNull())

@@ -3,6 +3,7 @@ using AI.Interfaces;
 using Combat.Attacks.Base;
 using Managers;
 using Objects.Interfaces;
+using State.Interfaces;
 using UnityEngine;
 
 namespace Combat.Attacks
@@ -21,7 +22,7 @@ namespace Combat.Attacks
 		private readonly List<ParticleCollisionEvent> collisions = new ();
 		private readonly Dictionary<ParticleSystem, int> systemDecals = new ();
 
-		public override void Spawn(Component source, Vector3 position, Quaternion angles, Transform attach)
+		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, Transform attach)
 		{
 			base.Spawn(source, position, angles, attach);
 			

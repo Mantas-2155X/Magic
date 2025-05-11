@@ -1,6 +1,7 @@
 //#define DEBUG_SPELL
 
 using System;
+using System.Runtime.CompilerServices;
 using AI;
 using AI.Interfaces;
 using Combat.Casts.Interfaces;
@@ -43,13 +44,19 @@ namespace Combat.Spells.Base
 		public float LastFinishedCast { get; private set; } = float.NegativeInfinity;
 		public float PredictFinishCast { get; private set; } = float.NegativeInfinity;
 		
+		private GameObject thisGo;
+		private Transform thisTr;
+
 		private ICast cast;
+
+		private bool init;
 
 		#region Identify / SaveLoad
 		
 		public void Awake()
 		{
 			StateManager.Instance.RegisterObject(this);
+			initializeObject();
 		}
 
 		public void OnDestroy()
@@ -227,11 +234,26 @@ namespace Combat.Spells.Base
 			
 			clearCast();
 		}
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
 
 		#endregion
 
 		#region Internal
 
+		private void initializeObject()
+		{
+			if (init)
+				return;
+
+			thisGo = gameObject;
+			thisTr = thisGo.transform;
+			init = true;
+		}
+		
 		private void calculateHit()
 		{
 			LastRay = default;

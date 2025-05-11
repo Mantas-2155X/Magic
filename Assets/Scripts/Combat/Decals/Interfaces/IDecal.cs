@@ -12,8 +12,5 @@ namespace Combat.Decals.Interfaces
 		public DecalProjector Projector { get; }
 		
 		public void Spawn(Vector3 position, Quaternion angles, Transform attach);
-		
-		public GameObject GetGameObject();
-		public Transform GetTransform();
 	}
 }
