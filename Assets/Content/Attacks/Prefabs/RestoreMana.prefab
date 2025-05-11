@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7134174960870428385
 Transform:
   m_ObjectHideFlags: 0
@@ -4847,6 +4847,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <AttackData>k__BackingField: {fileID: 11400000, guid: 369cf2f7db72252a99b2b7c50ef81beb, type: 2}
+  objectID: 
   <System>k__BackingField: {fileID: 1415210487458940227}
   <Triggers>k__BackingField: []
   <Type>k__BackingField: 1

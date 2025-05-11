@@ -34,8 +34,7 @@ namespace Components
 
 		public bool Triggered { get; private set; }
 		public float EnterTime { get; private set; } = -1f;
-
-		public Collider EnterCollider { get; private set; }
+		public IIdentifiable EnterObject { get; private set; }
 
 		private float? adjustNextEnter;
 
@@ -63,10 +62,11 @@ namespace Components
 				TriggerState.Apply(this, triggerState.ToObject<TriggerState>());
 		}
 		
-		public void SetState(bool triggered, float? enterTime)
+		public void SetState(bool triggered, float? enterTime, string enterObjectID)
 		{
 			Triggered = triggered;
 			adjustNextEnter = enterTime;
+			EnterObject = StateManager.Instance.GetRegisteredObject(enterObjectID);
 		}
 		
 		public void Awake()
@@ -87,7 +87,7 @@ namespace Components
 			if (PauseManager.IsPaused)
 				return;
 			
-			if (Triggered || EnterCollider == null)
+			if (Triggered || EnterObject.IsNull())
 				return;
 
 			if (Time.time < EnterTime + TriggerAfter)
@@ -97,9 +97,9 @@ namespace Components
 				Triggered = true;
 			
 			EnterTime = 0f;
-			EnterCollider = null;
+			EnterObject = null;
 			
-			OnTriggerEvent.Invoke(EnterCollider);
+			OnTriggerEvent.Invoke(EnterObject);
 		}
 	
 		public void OnTriggerEnter(Collider other)
@@ -107,8 +107,16 @@ namespace Components
 			if (Triggered)
 				return;
 		
+			var rb = other.attachedRigidbody;
+			if (rb == null)
+				return;
+
+			var identifiable = rb.GetComponent<IIdentifiable>();
+			if (identifiable.IsNull())
+				return;
+			
 			EnterTime = Time.time;
-			EnterCollider = other;
+			EnterObject = identifiable;
 			
 			if (adjustNextEnter != null)
 				EnterTime -= adjustNextEnter.Value;
@@ -120,7 +128,7 @@ namespace Components
 				return;
 
 			EnterTime = 0f;
-			EnterCollider = null;
+			EnterObject = null;
 		}
 
 #if UNITY_EDITOR

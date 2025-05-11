@@ -81,10 +81,18 @@ namespace Components
 			if (Triggered)
 				return;
 
+			var rb = other.attachedRigidbody;
+			if (rb == null)
+				return;
+			
+			var identifiable = rb.GetComponent<IIdentifiable>();
+			if (identifiable.IsNull())
+				return;
+
 			if (!IsMultiTrigger)
 				Triggered = true;
 		
-			OnTriggerEvent?.Invoke(other);
+			OnTriggerEvent?.Invoke(identifiable);
 		}
 	
 		public void OnTriggerStay(Collider other)
@@ -92,10 +100,18 @@ namespace Components
 			if (Triggered || !TriggerOnStay)
 				return;
 
+			var rb = other.attachedRigidbody;
+			if (rb == null)
+				return;
+
+			var identifiable = rb.GetComponent<IIdentifiable>();
+			if (identifiable.IsNull())
+				return;
+			
 			if (!IsMultiTrigger)
 				Triggered = true;
 		
-			OnTriggerEvent?.Invoke(other);
+			OnTriggerEvent?.Invoke(identifiable);
 		}
 	
 #if UNITY_EDITOR
