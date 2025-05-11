@@ -5,6 +5,7 @@ namespace State.Enums
 		Gib,
 		NPC,
 		DroppedWearable,
-		Projectile
+		Projectile,
+		Decal
 	}
 }

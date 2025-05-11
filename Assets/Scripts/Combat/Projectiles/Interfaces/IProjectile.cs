@@ -17,7 +17,9 @@ namespace Combat.Projectiles.Interfaces
 		public AttackData AttackData { get; }
 		public float SpellRange { get; }
 
-		public void Spawn(IIdentifiable source, float range, AttackData attack, Vector3 origin, Vector3 force);
+		public float CreatedTime { get; }
+
+		public void Spawn(IIdentifiable source, float range, AttackData attack, Vector3 origin, Vector3 force, float elapsedTime = 0f);
 
 		public IAlive GetAlive();
 	}

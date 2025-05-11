@@ -12,5 +12,8 @@ namespace State
 
 		[JsonProperty]
 		public string SourceObjectID;
+		
+		[JsonProperty]
+		public float ElapsedTime;
 	}
 }

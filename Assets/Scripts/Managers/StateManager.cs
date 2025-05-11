@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using AI;
 using AI.Interfaces;
+using Combat.Decals.Interfaces;
 using Combat.Projectiles.Interfaces;
 using Components;
 using Cysharp.Threading.Tasks;
@@ -180,12 +181,15 @@ namespace Managers
 			
 			data.Create = new Dictionary<string, JObject>();
 			data.DeferredCreate = new Dictionary<string, JObject>();
+			data.VeryDeferredCreate = new Dictionary<string, JObject>();
 			
-			data.World = new Dictionary<string, JObject>();
-			data.DeferredWorld = new Dictionary<string, JObject>();
+			data.World = new Dictionary<string, Dictionary<string, JObject>>();
+			data.DeferredWorld = new Dictionary<string, Dictionary<string, JObject>>();
+			data.VeryDeferredWorld = new Dictionary<string, Dictionary<string, JObject>>();
 			
 			data.Objects = new Dictionary<string, Dictionary<string, JObject>>();
 			data.DeferredObjects = new Dictionary<string, Dictionary<string, JObject>>();
+			data.VeryDeferredObjects = new Dictionary<string, Dictionary<string, JObject>>();
 			
 			data.Alives = new Dictionary<string, Dictionary<string, JObject>>();
 			
@@ -215,7 +219,7 @@ namespace Managers
 				}
 				
 				// Prevent saving stuff like gibs on characters
-				if (root == world.Characters && saveable is not IAlive)
+				if (root == world.Characters && saveable is not IAlive and not IDecal)
 				{
 					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
 					continue;
@@ -234,37 +238,14 @@ namespace Managers
 				{
 					if (root == worldTr)
 					{
-						if (saveable is Trigger or DelayedTrigger)
+						if (saveable is World7)
 						{
-							var worldData = new WorldData
-							{
-								Type = EWorldDataType.Trigger,
-								States = saveable.Save()
-							};
-							
-							data.DeferredWorld[saveable.ObjectID] = JObject.FromObject(worldData);
+							data.World[saveable.ObjectID] = saveable.Save();
 							saved = true;
 						}
-						else if (saveable is World7 world7)
+						else if (saveable is Trigger or DelayedTrigger or Water)
 						{
-							var worldData = new WorldData
-							{
-								Type = EWorldDataType.World7,
-								States = world7.Save()
-							};
-							
-							data.World[world7.ObjectID] = JObject.FromObject(worldData);
-							saved = true;
-						}
-						else if (saveable is Water water)
-						{
-							var worldData = new WorldData
-							{
-								Type = EWorldDataType.Water,
-								States = water.Save()
-							};
-							
-							data.DeferredWorld[water.ObjectID] = JObject.FromObject(worldData);
+							data.DeferredWorld[saveable.ObjectID] = saveable.Save();
 							saved = true;
 						}
 					}
@@ -302,6 +283,7 @@ namespace Managers
 									Range = projectile.SpellRange,
 									Attack = projectile.AttackData != null ? projectile.AttackData.Name : null,
 									SourceObjectID = projectile.Source.NotNull() ? projectile.Source.ObjectID : null,
+									ElapsedTime = Time.time - projectile.CreatedTime,
 									States = projectile.Save()
 								};
 								
@@ -311,7 +293,7 @@ namespace Managers
 						}
 						else if (root == world.Objects)
 						{
-							if (saveable is IObject iObject)
+							if (saveable is IObject)
 							{
 								if (saveable is DroppedWearable droppedWearable)
 								{
@@ -326,9 +308,14 @@ namespace Managers
 								}
 								else
 								{
-									data.Objects[iObject.ObjectID] = iObject.Save();
+									data.Objects[saveable.ObjectID] = saveable.Save();
 								}
 								
+								saved = true;
+							}
+							else if (saveable is Trigger or DelayedTrigger)
+							{
+								data.DeferredObjects[saveable.ObjectID] = saveable.Save();
 								saved = true;
 							}
 						}
@@ -359,6 +346,22 @@ namespace Managers
 								saved = true;
 							}
 						}
+					}
+					
+					if (saveable is IDecal decal)
+					{
+						var decalCreateData = new DecalCreateData
+						{
+							Type = ECreateType.Decal,
+							Name = decal.DecalData.Name,
+							AttachObjectID = decal.Attach.NotNull() ? decal.Attach.ObjectID : null,
+							NormalizedTime = decal.NormalizedTime,
+							ElapsedTime = Time.time - decal.CreatedTime,
+							States = decal.Save()
+						};
+								
+						data.VeryDeferredCreate[decal.ObjectID] = JObject.FromObject(decalCreateData);
+						saved = true;
 					}
 				}
 				catch (Exception e)
@@ -500,24 +503,44 @@ namespace Managers
 			
 			var killAlives = new List<IAlive>();
 			
-			loadWorld(data, false);
-			loadCreate(data, false);
-			loadObjects(data, false);
+			loadWorld(data, EDefer.Normal);
+			loadCreate(data, EDefer.Normal);
+			loadObjects(data, EDefer.Normal);
 
 			loadAlives(data, killAlives);
 				
-			loadWorld(data, true);
-			loadCreate(data, true);
-			loadObjects(data, true);
+			loadWorld(data, EDefer.Deferred);
+			loadCreate(data, EDefer.Deferred);
+			loadObjects(data, EDefer.Deferred);
+
+			loadWorld(data, EDefer.VeryDeferred);
+			loadCreate(data, EDefer.VeryDeferred);
+			loadObjects(data, EDefer.VeryDeferred);
 
 			for (var i = killAlives.Count - 1; i >= 0; i--)
 				killAlives[i].Kill(null, true);
 		}
 		
-		private void loadWorld(SaveData data, bool deferred)
+		private void loadWorld(SaveData data, EDefer defer)
 		{
 			var world = World.World.Instance;
-			var dict = deferred ? data.DeferredWorld : data.World;
+
+			Dictionary<string, Dictionary<string, JObject>> dict;
+
+			switch (defer)
+			{
+				case EDefer.Normal:
+					dict = data.World;
+					break;
+				case EDefer.Deferred:
+					dict = data.DeferredWorld;
+					break;
+				case EDefer.VeryDeferred:
+					dict = data.VeryDeferredWorld;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(defer), defer, null);
+			}
 			
 			var worldComponents = world.GetComponentsInChildren<Component>(true);
 			for (var i = 0; i < worldComponents.Length; i++)
@@ -530,34 +553,13 @@ namespace Managers
 				if (string.IsNullOrEmpty(saveable.ObjectID))
 					continue;
 					
-				if (dict.TryGetValue(saveable.ObjectID, out var worldDataJObject))
+				if (dict.TryGetValue(saveable.ObjectID, out var worldState))
 				{
 					bool loaded;
 
 					try
 					{
-						var worldData = worldDataJObject.ToObject<WorldData>();
-						
-						// Make sure to load correct type
-						switch (worldData.Type)
-						{
-							case EWorldDataType.Trigger:
-							{
-								if (saveable is not Trigger and not DelayedTrigger)
-									continue;
-								break;
-							}
-							case EWorldDataType.World7:
-								if (saveable is not World7)
-									continue;
-								break;
-							case EWorldDataType.Water:
-								if (saveable is not Water)
-									continue;
-								break;
-						}
-						
-						saveable.Load(worldData.States);
+						saveable.Load(worldState);
 						loaded = true;
 					}
 					catch (Exception e)
@@ -572,11 +574,27 @@ namespace Managers
 			}
 		}
 
-		private void loadCreate(SaveData data, bool deferred)
+		private void loadCreate(SaveData data, EDefer defer)
 		{
 			var world = World.World.Instance;
 			var objectManager = ObjectManager.Instance;
-			var dict = deferred ? data.DeferredCreate : data.Create;
+
+			Dictionary<string, JObject> dict;
+
+			switch (defer)
+			{
+				case EDefer.Normal:
+					dict = data.Create;
+					break;
+				case EDefer.Deferred:
+					dict = data.DeferredCreate;
+					break;
+				case EDefer.VeryDeferred:
+					dict = data.VeryDeferredCreate;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(defer), defer, null);
+			}
 
 			foreach (var pair in dict)
 			{
@@ -587,6 +605,7 @@ namespace Managers
 				IObject iObject = null;
 				IAlive iAlive = null;
 				IProjectile iProjectile = null;
+				IDecal iDecal = null;
 
 				var loaded = false;
 
@@ -678,7 +697,7 @@ namespace Managers
 
 						var projectileCreateData = createDataJObject.ToObject<ProjectileCreateData>();
 						
-						var projectile = objectManager.CreateProjectile(objectManager.GetProjectile(projectileCreateData.Name), projectileCreateData.Range, objectManager.GetAttack(projectileCreateData.Attack), GetRegisteredObject(projectileCreateData.SourceObjectID), Vector3.zero, Vector3.zero);
+						var projectile = objectManager.CreateProjectile(objectManager.GetProjectile(projectileCreateData.Name), projectileCreateData.Range, objectManager.GetAttack(projectileCreateData.Attack), GetRegisteredObject(projectileCreateData.SourceObjectID), Vector3.zero, Vector3.zero, projectileCreateData.ElapsedTime);
 						projectile.ObjectID = pair.Key;
 
 						try
@@ -693,6 +712,31 @@ namespace Managers
 						}
 
 						iProjectile = projectile;
+						break;
+					}
+					case ECreateType.Decal:
+					{
+						// Don't create a decal if it's supposed to be destroyed already
+						if (data.DestroyedObjects.Contains(pair.Key))
+							continue;
+
+						var decalCreateData = createDataJObject.ToObject<DecalCreateData>();
+						
+						var decal = objectManager.CreateDecal(objectManager.GetDecal(decalCreateData.Name), Vector3.zero, Quaternion.identity, GetRegisteredObject(decalCreateData.AttachObjectID), decalCreateData.ElapsedTime, decalCreateData.NormalizedTime);
+						decal.ObjectID = pair.Key;
+
+						try
+						{
+							decal.Load(decalCreateData.States);
+							loaded = true;
+						}
+						catch (Exception e)
+						{
+							loaded = false;
+							Debug.LogError($"[StateManager] Failed loading created decal state for {((Component)decal).name} ({decal.ObjectID}), {e}");
+						}
+
+						iDecal = decal;
 						break;
 					}
 				}
@@ -719,55 +763,76 @@ namespace Managers
 				{
 					// 
 				}
+				
+				if (iDecal.NotNull())
+				{
+					// 
+				}
 			}
 		}
 
-		private void loadObjects(SaveData data, bool deferred)
+		private void loadObjects(SaveData data, EDefer defer)
 		{
 			var world = World.World.Instance;
-			var dict = deferred ? data.DeferredObjects : data.Objects;
+			
+			Dictionary<string, Dictionary<string, JObject>> dict;
+
+			switch (defer)
+			{
+				case EDefer.Normal:
+					dict = data.Objects;
+					break;
+				case EDefer.Deferred:
+					dict = data.DeferredObjects;
+					break;
+				case EDefer.VeryDeferred:
+					dict = data.VeryDeferredObjects;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(defer), defer, null);
+			}
 
 			var objects = world.Objects.GetComponentsInChildren<Component>(true);
 			for (var i = 0; i < objects.Length; i++)
 			{
 				var component = objects[i];
-				if (component is not IObject iObject)
+				if (component is not ISaveable saveable)
 					continue;
 				
 				// Leave objects without ID as they are
-				if (string.IsNullOrEmpty(iObject.ObjectID))
+				if (string.IsNullOrEmpty(saveable.ObjectID))
 					continue;
 
 				// No data for destroyed objects, just remove it
-				if (data.DestroyedObjects.Contains(iObject.ObjectID))
+				if (data.DestroyedObjects.Contains(saveable.ObjectID))
 				{
-					Object.Destroy(iObject.GetGameObject());
+					Object.Destroy(saveable.GetGameObject());
 					continue;
 				}
 				
-				if (dict.TryGetValue(iObject.ObjectID, out var objectState))
+				if (dict.TryGetValue(saveable.ObjectID, out var objectState))
 				{
 					bool loaded;
 
 					try
 					{
-						iObject.Load(objectState);
+						saveable.Load(objectState);
 						loaded = true;
 					}
 					catch (Exception e)
 					{
 						loaded = false;
-						Debug.LogError($"[StateManager] Failed loading object state for {TransformTools.GetFullPath(component.transform)} ({iObject.ObjectID}), {e}");
+						Debug.LogError($"[StateManager] Failed loading object state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
 					}
 					
 					if (!loaded)
-						Debug.LogWarning($"[StateManager] Object Saveable {iObject.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not loaded");
+						Debug.LogWarning($"[StateManager] Object Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not loaded");
 				}
 
 				// Other potentially needed data is set so we can remove the component now
-				if (data.DestroyedComponents.Contains(iObject.ObjectID))
+				if (data.DestroyedComponents.Contains(saveable.ObjectID))
 				{
-					Object.Destroy((Component)iObject);
+					Object.Destroy((Component)saveable);
 					continue;
 				}
 			}

@@ -33,15 +33,24 @@ namespace State
 		public Dictionary<string, JObject> DeferredCreate;
 
 		[JsonProperty]
-		public Dictionary<string, JObject> World;
+		public Dictionary<string, JObject> VeryDeferredCreate;
+
+		[JsonProperty]
+		public Dictionary<string, Dictionary<string, JObject>> World;
 		
 		[JsonProperty]
-		public Dictionary<string, JObject> DeferredWorld;
+		public Dictionary<string, Dictionary<string, JObject>> DeferredWorld;
+		
+		[JsonProperty]
+		public Dictionary<string, Dictionary<string, JObject>> VeryDeferredWorld;
 
 		[JsonProperty]
 		public Dictionary<string, Dictionary<string, JObject>> Objects;
 		
 		[JsonProperty]
 		public Dictionary<string, Dictionary<string, JObject>> DeferredObjects;
+		
+		[JsonProperty]
+		public Dictionary<string, Dictionary<string, JObject>> VeryDeferredObjects;
 	}
 }

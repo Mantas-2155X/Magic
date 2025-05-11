@@ -1,8 +1,13 @@
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Combat.Decals.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using ScriptableObjects;
+using State.Interfaces;
+using State.States;
+using Tools;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
@@ -14,6 +19,8 @@ namespace Combat.Decals.Base
 		[field: SerializeField]
 		public DecalData DecalData { get; private set; }
 		
+		public bool ShouldSave => true;
+
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -25,12 +32,34 @@ namespace Combat.Decals.Base
 		[field: SerializeField]
 		public DecalProjector Projector { get; private set; }
 		
+		public IIdentifiable Attach { get; private set; }
+		
+		public float CreatedTime { get; private set; }
+		public float NormalizedTime { get; private set; }
+
 		private GameObject thisGo;
 		private Transform thisTr;
 		
 		private bool init;
 
 		#region Identify / SaveLoad
+		
+		public virtual Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+
+			var transformState = TransformState.Read(thisTr);
+			if (transformState != null)
+				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
+				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+		}
 		
 		public void Awake()
 		{
@@ -44,7 +73,7 @@ namespace Combat.Decals.Base
 		
 		#endregion
 		
-		public void Spawn(Vector3 position, Quaternion angles, Transform attach)
+		public void Spawn(Vector3 position, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f, float normalizedTime = 0f)
 		{
 			if (!init)
 			{
@@ -59,34 +88,40 @@ namespace Combat.Decals.Base
 			
 			thisTr.position = position;
 			thisTr.rotation = angles;
-			thisTr.parent = attach;
+			
+			Attach = attach;
+			CreatedTime = Time.time;
+
+			if (attach.NotNull())
+				thisTr.parent = attach.GetTransform();
 			
 			thisTr.Rotate(new Vector3(0, 0, Random.Range(0, 360)), Space.Self);
 			thisGo.SetActive(true);
 			
-			fade().Forget();
+			fade(elapsedTime, normalizedTime).Forget();
 		}
 		
-		private async UniTask fade()
+		private async UniTask fade(float elapsedTime = 0f, float normalizedTime = 0f)
 		{
-			await UniTask.WaitForSeconds(DecalData.FadeAfter);
+			if (elapsedTime < DecalData.FadeAfter)
+				await UniTask.WaitForSeconds(DecalData.FadeAfter - elapsedTime);
 			
 			if (this == null || !isActiveAndEnabled)
 				return;
 
 			var duration = DecalData.FadeDuration;
 			
-			var normalizedTime = 0.0f;
-			while (normalizedTime < 1.0f)
+			NormalizedTime = normalizedTime;
+			while (NormalizedTime < 1.0f)
 			{
 				await UniTask.NextFrame();
 
 				if (this == null || !isActiveAndEnabled)
 					return;
 
-				Projector.fadeFactor = 1 - normalizedTime;
+				Projector.fadeFactor = 1 - NormalizedTime;
 				
-				normalizedTime += Time.deltaTime / duration;
+				NormalizedTime += Time.deltaTime / duration;
 			}
 			
 			thisTr.SetParent(World.World.Instance.Decals);

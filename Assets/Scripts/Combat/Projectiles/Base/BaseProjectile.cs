@@ -44,6 +44,8 @@ namespace Combat.Projectiles.Base
 		public AttackData AttackData { get; private set; }
 		public float SpellRange { get; private set; }
 
+		public float CreatedTime { get; }
+
 		private CancellationTokenSource rangeToken;
 
 		private Collider ignoreBodyCollider;
@@ -108,7 +110,8 @@ namespace Combat.Projectiles.Base
 		
 		public void OnCollisionEnter(Collision collision)
 		{
-			Transform attach = null;
+			IIdentifiable attach = null;
+			Transform attachTr = null;
 			
 			var contact = collision.contacts[0];
 			
@@ -118,23 +121,25 @@ namespace Combat.Projectiles.Base
 				
 				if (AIManager.Instance.AlivesColliderMap.TryGetValue(coll, out var alive))
 				{
-					attach = alive.GetTransform();
+					attach = alive;
+					attachTr = alive.GetTransform();
 					alive.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
 					alive.AddSlowSource(ObjectID, ProjectileData.Slow.Amount, ProjectileData.Slow.Duration);
 					alive.AddParalyzeSource(ObjectID, ProjectileData.Paralyze.Duration);
 				}
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{
-					attach = obj.GetTransform();
+					attach = obj;
+					attachTr = obj.GetTransform();
 					obj.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
 				}
 			}
 			
 			if (AttackData != null)
-				ObjectManager.Instance.CreateAttack(AttackData, Source, contact, attach);
+				ObjectManager.Instance.CreateAttack(AttackData, Source, contact, attachTr);
 
 			if (ProjectileData.Decal != null)
-				ObjectManager.Instance.CreateDecal(ProjectileData.Decal, contact, attach != null ? attach : collision.transform);
+				ObjectManager.Instance.CreateDecal(ProjectileData.Decal, contact, attach);
 				
 			clearVelocityAndPool().Forget();
 		}
@@ -151,7 +156,7 @@ namespace Combat.Projectiles.Base
 			clearVelocityAndPool().Forget();
 		}
 		
-		public void Spawn(IIdentifiable source, float range, AttackData attack, Vector3 origin, Vector3 force)
+		public void Spawn(IIdentifiable source, float range, AttackData attack, Vector3 origin, Vector3 force, float elapsedTime = 0f)
 		{
 			if (!init)
 			{
@@ -199,6 +204,14 @@ namespace Combat.Projectiles.Base
 			thisGo.SetActive(true);
 
 			Rigidbody.AddForce(force, ForceMode.Impulse);
+
+			var particleSystems = thisGo.GetComponentsInChildren<ParticleSystem>();
+			for (var i = 0; i < particleSystems.Length; i++)
+			{
+				var system = particleSystems[i];
+				system.Simulate(elapsedTime, false);
+				system.Play();
+			}
 		}
 		
 		public IAlive GetAlive()

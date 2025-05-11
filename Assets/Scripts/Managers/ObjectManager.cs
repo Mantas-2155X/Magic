@@ -160,12 +160,12 @@ namespace Managers
 			return cast;
 		}
 		
-		public IProjectile CreateProjectile(ProjectileData data, float range, AttackData attack, IIdentifiable source, Vector3 origin, Vector3 direction)
+		public IProjectile CreateProjectile(ProjectileData data, float range, AttackData attack, IIdentifiable source, Vector3 origin, Vector3 direction, float elapsedTime = 0f)
 		{
 			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
 			projectile.ObjectID = Guid.NewGuid().ToString();
 			
-			projectile.Spawn(source, range, attack, origin, direction * data.Force);
+			projectile.Spawn(source, range, attack, origin, direction * data.Force, elapsedTime);
 			
 			return projectile;
 		}
@@ -185,32 +185,32 @@ namespace Managers
 			return createAttack(data, source, point, normal, attach);
 		}
 		
-		public IDecal CreateDecal(DecalData data, ContactPoint contact, Transform attach)
+		public IDecal CreateDecal(DecalData data, ContactPoint contact, IIdentifiable attach, float elapsedTime = 0f, float normalizedTime = 0f)
 		{
 			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
 			decal.ObjectID = Guid.NewGuid().ToString();
 			
-			decal.Spawn(contact.point, Quaternion.LookRotation(-contact.normal), attach);
+			decal.Spawn(contact.point, Quaternion.LookRotation(-contact.normal), attach, elapsedTime, normalizedTime);
 			
 			return decal;
 		}
 		
-		public IDecal CreateDecal(DecalData data, ParticleCollisionEvent collisionEvent, Transform attach)
+		public IDecal CreateDecal(DecalData data, ParticleCollisionEvent collisionEvent, IIdentifiable attach, float elapsedTime = 0f, float normalizedTime = 0f)
 		{
-			return createDecal(data, collisionEvent.intersection, Quaternion.LookRotation(-collisionEvent.normal), attach);
+			return createDecal(data, collisionEvent.intersection, Quaternion.LookRotation(-collisionEvent.normal), attach, elapsedTime, normalizedTime);
 		}
 		
-		public IDecal CreateDecal(DecalData data, Vector3 point, Quaternion angles, Transform attach)
+		public IDecal CreateDecal(DecalData data, Vector3 point, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f, float normalizedTime = 0f)
 		{
-			return createDecal(data, point, angles, attach);
+			return createDecal(data, point, angles, attach, elapsedTime, normalizedTime);
 		}
 
-		private IDecal createDecal(DecalData data, Vector3 point, Quaternion angles, Transform attach)
+		private IDecal createDecal(DecalData data, Vector3 point, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f, float normalizedTime = 0f)
 		{
 			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
 			decal.ObjectID = Guid.NewGuid().ToString();
 			
-			decal.Spawn(point, angles, attach);
+			decal.Spawn(point, angles, attach, elapsedTime, normalizedTime);
 			
 			return decal;
 		}
