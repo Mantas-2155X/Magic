@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Components;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Objects;
@@ -71,10 +72,7 @@ namespace Scenes
 
 		public void Start()
 		{
-			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_INFO"), 0f, 2f, 0.1f, 0.0025f, delegate
-			{
-				nextWave().Forget();
-			});
+			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_INFO"), 0f, 2f, 0.1f, 0.0025f);
 		}
 		
 		public void OnSpawnerCleared()
@@ -87,6 +85,18 @@ namespace Scenes
 			nextWave().Forget();
 		}
 		
+		public void OnTextWalkerFinished()
+		{
+			if (CurrentWave >= Waves.Count)
+			{
+				endWorld().Forget();
+			}
+			else
+			{
+				nextWave().Forget();
+			}
+		}
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public GameObject GetGameObject() => thisGo;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -111,10 +121,7 @@ namespace Scenes
 
 			if (CurrentWave >= Waves.Count)
 			{
-				TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_CLEARED"), 0f, 2f, 0.1f, 0.0025f, delegate
-				{
-					endWorld().Forget();
-				});
+				TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_CLEARED"), 0f, 2f, 0.1f, 0.0025f);
 				return;
 			}
 			

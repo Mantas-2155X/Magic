@@ -1,4 +1,4 @@
-namespace UI.Enums
+namespace Components.Enums
 {
 	public enum ETextWalkerState
 	{

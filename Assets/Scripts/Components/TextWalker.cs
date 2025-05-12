@@ -1,16 +1,19 @@
 using System.Threading;
+using Components.Enums;
+using Components.Events;
 using Cysharp.Threading.Tasks;
 using TMPro;
-using UI.Enums;
 using UnityEngine;
-using UnityEngine.Events;
 
-namespace UI
+namespace Components
 {
 	public class TextWalker : MonoBehaviour
 	{
 		[SerializeField]
 		public TMP_Text Text;
+		
+		[SerializeField]
+		public OnTextWalkerFinishedEvent OnTextWalkerFinishedEvent = new ();
 		
 		public ETextWalkerState CurrentState { get; private set; }
 		public string CurrentText { get; private set; }
@@ -18,7 +21,7 @@ namespace UI
 		
 		private CancellationTokenSource cancellationToken = new ();
 		
-		public void Walk(string text, float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay, UnityAction onFinishedCallback = null)
+		public void Walk(string text, float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay)
 		{
 			if (cancellationToken != null)
 				cancellationToken?.Cancel();
@@ -27,10 +30,10 @@ namespace UI
 			CurrentCharacter = 0;
 			
 			cancellationToken = new CancellationTokenSource();
-			textLoop(startDelay, endDelay, startCharacterDelay, endCharacterDelay, onFinishedCallback, cancellationToken.Token).Forget();
+			textLoop(startDelay, endDelay, startCharacterDelay, endCharacterDelay, cancellationToken.Token).Forget();
 		}
 
-		private async UniTaskVoid textLoop(float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay, UnityAction onFinishedCallback, CancellationToken token)
+		private async UniTaskVoid textLoop(float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay, CancellationToken token)
 		{
 			CurrentState = ETextWalkerState.StartWait;
 			await UniTask.WaitForSeconds(startDelay, cancellationToken: token);
@@ -54,7 +57,7 @@ namespace UI
 			await endText(endCharacterDelay, token);
 
 			CurrentState = ETextWalkerState.Done;
-			onFinishedCallback?.Invoke();
+			OnTextWalkerFinishedEvent?.Invoke();
 		}
 		
 		private async UniTask startText(float delayBetweenCharacters, CancellationToken token)

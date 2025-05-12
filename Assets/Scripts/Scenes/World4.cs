@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using AI.Base;
 using AI.Interfaces;
 using Combat.Enums;
+using Components;
 using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
@@ -94,11 +95,7 @@ namespace Scenes
 			var spawnPoint = world.SpawnPoints.GetChild(Random.Range(0, world.SpawnPoints.childCount));
 			
 			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("AI_PLAYER_WORLD4_NAME"));
-			
-			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE4_INFO"), 0f, 2f, 0.1f, 0.0025f, delegate
-			{
-				startLoops().Forget();
-			});
+			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE4_INFO"), 0f, 2f, 0.1f, 0.0025f);
 		}
 
 		public void Update()
@@ -111,6 +108,11 @@ namespace Scenes
 			
 			var timeSpan = TimeSpan.FromSeconds(Time.time - startTime);
 			Timer.text = $"<mspace=0.6em>{timeSpan.Minutes:00}:{timeSpan.Seconds:00}:{timeSpan.Milliseconds:000}</mspace>";
+		}
+
+		public void OnTextWalkerFinished()
+		{
+			startLoops().Forget();
 		}
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
