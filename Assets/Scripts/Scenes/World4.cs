@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Base;
 using AI.Interfaces;
@@ -6,10 +7,11 @@ using Combat.Enums;
 using Components;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using ScriptableObjects;
 using State.Interfaces;
+using State.States;
 using TMPro;
-using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Player = AI.Player;
@@ -17,8 +19,10 @@ using Random = UnityEngine.Random;
 
 namespace Scenes
 {
-	public class World4 : MonoBehaviour, IIdentifiable
+	public class World4 : MonoBehaviour, ISaveable
 	{
+		public bool ShouldSave => true;
+
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -60,8 +64,10 @@ namespace Scenes
 		[SerializeField]
 		public TextWalker TextWalker;
 		
-		private float startTime;
-		private bool stopTimer;
+		public float StartTime { get; private set; }
+		public float AttacksStartTime { get; private set; }
+		public bool TimerStopped { get; private set; }
+		public bool AttacksStarted { get; private set; }
 
 		private GameObject thisGo;
 		private Transform thisTr;
@@ -70,6 +76,50 @@ namespace Scenes
 
 		#region Identify / SaveLoad
 
+		public Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+			
+			var world4State = World4State.Read(this);
+			if (world4State != null)
+				dict[typeof(World4).ToString()] = JObject.FromObject(world4State);
+			
+			return dict;
+		}
+
+		public void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(World4).ToString(), out var world4State))
+				World4State.Apply(this, world4State.ToObject<World4State>());
+		}
+		
+		public void SetState(float startTimeElapsed, bool timerStopped, float attackEvery, bool attacksStarted, float attacksStartTimeElapsed)
+		{
+			var time = Time.time;
+			
+			StartTime = time - startTimeElapsed;
+			TimerStopped = timerStopped;
+			AttackEvery = attackEvery;
+
+			if (attacksStarted)
+			{
+				AttacksStarted = true;
+				AttacksStartTime = time - attacksStartTimeElapsed;
+				
+				startLoops().Forget();
+			}
+			
+			if (!timerStopped)
+				return;
+
+			var player = AIManager.Instance.Player;
+			if (player == null || !player.IsAlive)
+				return;
+			
+			player.Kill(this, true);
+			updateTime();
+		}
+		
 		public void Awake()
 		{
 			StateManager.Instance.RegisterObject(this);
@@ -89,7 +139,7 @@ namespace Scenes
 		
 		public void Start()
 		{
-			startTime = Time.time;
+			StartTime = Time.time;
 			
 			var world = World.World.Instance;
 			var spawnPoint = world.SpawnPoints.GetChild(Random.Range(0, world.SpawnPoints.childCount));
@@ -100,18 +150,20 @@ namespace Scenes
 
 		public void Update()
 		{
-			if (PauseManager.IsPaused)
+			if (PauseManager.IsPaused || TimerStopped)
 				return;
 			
-			if (stopTimer)
-				return;
-			
-			var timeSpan = TimeSpan.FromSeconds(Time.time - startTime);
-			Timer.text = $"<mspace=0.6em>{timeSpan.Minutes:00}:{timeSpan.Seconds:00}:{timeSpan.Milliseconds:000}</mspace>";
+			updateTime();
 		}
 
 		public void OnTextWalkerFinished()
 		{
+			if (AttacksStarted)
+				return;
+			
+			AttacksStarted = true;
+			AttacksStartTime = Time.time;
+
 			startLoops().Forget();
 		}
 		
@@ -135,14 +187,24 @@ namespace Scenes
 			if (alive is not Player)
 				return;
 
-			stopTimer = true;
+			TimerStopped = true;
 			respawnDelayed().Forget();
 		}
 
+		private void updateTime()
+		{
+			var timeSpan = TimeSpan.FromSeconds(Time.time - StartTime);
+			Timer.text = $"<mspace=0.6em>{timeSpan.Minutes:00}:{timeSpan.Seconds:00}:{timeSpan.Milliseconds:000}</mspace>";
+		}
+		
 		private async UniTaskVoid startLoops()
 		{
 			attackLoop().Forget();
-			await UniTask.WaitForSeconds(5f);
+
+			var waitDuration = AttacksStartTime + 5f - Time.time;
+			if (waitDuration > 0f)
+				await UniTask.WaitForSeconds(waitDuration);
+			
 			damageLoop().Forget();
 		}
 		

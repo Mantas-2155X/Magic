@@ -28,7 +28,7 @@ namespace Managers
 {
 	// TODO (impl):
 	// (Objects) BaseElevator, BaseConveyor
-	// (World) World6 Waves, World4 Timer
+	// (World) World6 Waves
 	// (AI) Off mesh link travelling
 	
 	// TODO (test):
@@ -234,7 +234,7 @@ namespace Managers
 				{
 					if (root == worldTr)
 					{
-						if (saveable is World7 or TextWalker)
+						if (saveable is World7 or World4 or TextWalker)
 						{
 							data.World[saveable.ObjectID] = saveable.Save();
 							saved = true;
