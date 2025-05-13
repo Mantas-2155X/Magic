@@ -1,70 +1,190 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Components.Enums;
 using Components.Events;
 using Cysharp.Threading.Tasks;
+using Managers;
+using Newtonsoft.Json.Linq;
+using State.Interfaces;
+using State.States;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Components
 {
-	public class TextWalker : MonoBehaviour
+	public class TextWalker : MonoBehaviour, ISaveable
 	{
+		public bool ShouldSave => true;
+		
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+		
 		[SerializeField]
 		public TMP_Text Text;
 		
 		[SerializeField]
 		public OnTextWalkerFinishedEvent OnTextWalkerFinishedEvent = new ();
 		
-		public ETextWalkerState CurrentState { get; private set; }
+		private ETextWalkerState currentState;
+		public ETextWalkerState CurrentState
+		{
+			get => currentState;
+			private set
+			{
+				CurrentStateChangeTime = Time.time;
+				currentState = value;
+			}
+		}
+		public float CurrentStateChangeTime { get; private set; }
+
 		public string CurrentText { get; private set; }
 		public int CurrentCharacter { get; private set; }
 		
+		public float CurrentStartDelay { get; private set; }
+		public float CurrentEndDelay { get; private set; }
+		
+		public float CurrentStartCharacterDelay { get; private set; }
+		public float CurrentEndCharacterDelay { get; private set; }
+		
 		private CancellationTokenSource cancellationToken = new ();
 		
-		public void Walk(string text, float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay)
+		private GameObject thisGo;
+		private Transform thisTr;
+		
+		private bool init;
+
+		#region Identify / SaveLoad
+		
+		public virtual Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+
+			var textWalkerState = TextWalkerState.Read(this);
+			if (textWalkerState != null)
+				dict[typeof(TextWalker).ToString()] = JObject.FromObject(textWalkerState);
+
+			return dict;
+		}
+
+		public virtual void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(TextWalker).ToString(), out var textWalkerState))
+				TextWalkerState.Apply(this, textWalkerState.ToObject<TextWalkerState>());
+		}
+
+		public void SetState(ETextWalkerState state, float stateChangeElapsed, string text, int character, float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay)
+		{
+			if (state is ETextWalkerState.Idle or ETextWalkerState.Done)
+			{
+				cancellationToken?.Cancel();
+				
+				CurrentState = state;
+				
+				CurrentText = "";
+				CurrentCharacter = 0;
+
+				Text.text = "";
+				return;
+			}
+
+			switch (state)
+			{
+				case ETextWalkerState.StartWait:
+					startDelay -= stateChangeElapsed;
+					break;
+				case ETextWalkerState.EndWait:
+					endDelay -= stateChangeElapsed;
+					break;
+			}
+			
+			Walk(text, startDelay, endDelay, startCharacterDelay, endCharacterDelay, character, state);
+		}
+		
+		public void Awake()
+		{
+			StateManager.Instance.RegisterObject(this);
+			initializeObject();
+		}
+
+		public void OnDestroy()
+		{
+			StateManager.Instance.UnregisterObject(this);
+		}
+		
+		#endregion
+
+		public void Walk(string text, float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay, int startAtCharacter = 0, ETextWalkerState startAtState = ETextWalkerState.Idle)
 		{
 			if (cancellationToken != null)
 				cancellationToken?.Cancel();
+
+			CurrentState = startAtState;
 			
 			CurrentText = text;
-			CurrentCharacter = 0;
+			CurrentCharacter = startAtCharacter;
+			
+			CurrentStartDelay = startDelay;
+			CurrentEndDelay = endDelay;
+			
+			CurrentStartCharacterDelay = startCharacterDelay;
+			CurrentEndCharacterDelay = endCharacterDelay;
+
+			Text.text = CurrentText[..(CurrentCharacter)];
 			
 			cancellationToken = new CancellationTokenSource();
-			textLoop(startDelay, endDelay, startCharacterDelay, endCharacterDelay, cancellationToken.Token).Forget();
+			textLoop(cancellationToken.Token).Forget();
 		}
 
-		private async UniTaskVoid textLoop(float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay, CancellationToken token)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
+		
+		private void initializeObject()
 		{
-			CurrentState = ETextWalkerState.StartWait;
-			await UniTask.WaitForSeconds(startDelay, cancellationToken: token);
-			
-			if (token.IsCancellationRequested || this == null || !isActiveAndEnabled)
+			if (init)
 				return;
 
-			CurrentState = ETextWalkerState.Starting;
-			await startText(startCharacterDelay, token);
-
-			if (token.IsCancellationRequested || this == null || !isActiveAndEnabled)
-				return;
-
-			CurrentState = ETextWalkerState.EndWait;
-			await UniTask.WaitForSeconds(endDelay, cancellationToken: token);
-			
-			if (token.IsCancellationRequested || this == null || !isActiveAndEnabled)
-				return;
-
-			CurrentState = ETextWalkerState.Ending;
-			await endText(endCharacterDelay, token);
-
-			CurrentState = ETextWalkerState.Done;
-			OnTextWalkerFinishedEvent?.Invoke();
+			thisGo = gameObject;
+			thisTr = thisGo.transform;
+			init = true;
 		}
 		
-		private async UniTask startText(float delayBetweenCharacters, CancellationToken token)
+		private async UniTaskVoid textLoop(CancellationToken token)
 		{
+			if (CurrentState is ETextWalkerState.Idle or ETextWalkerState.StartWait)
+				await startWait(token);
+
+			if (CurrentState is ETextWalkerState.StartWait or ETextWalkerState.Starting)
+				await startText(token);
+			
+			if (CurrentState is ETextWalkerState.Starting or ETextWalkerState.EndWait)
+				await endWait(token);
+
+			if (CurrentState is ETextWalkerState.EndWait or ETextWalkerState.Ending)
+				await endText(token);
+		}
+		
+		private async UniTask startWait(CancellationToken token)
+		{
+			CurrentState = ETextWalkerState.StartWait;
+			await UniTask.WaitForSeconds(CurrentStartDelay, cancellationToken: token);
+		}
+		
+		private async UniTask startText(CancellationToken token)
+		{
+			CurrentState = ETextWalkerState.Starting;
+
 			while (CurrentCharacter < CurrentText.Length)
 			{
-				await UniTask.WaitForSeconds(delayBetweenCharacters, cancellationToken: token);
+				await UniTask.WaitForSeconds(CurrentStartCharacterDelay, cancellationToken: token);
 				
 				if (token.IsCancellationRequested || this == null || !isActiveAndEnabled)
 					return;
@@ -74,11 +194,19 @@ namespace Components
 			}
 		}
 		
-		private async UniTask endText(float delayBetweenCharacters, CancellationToken token)
+		private async UniTask endWait(CancellationToken token)
 		{
+			CurrentState = ETextWalkerState.EndWait;
+			await UniTask.WaitForSeconds(CurrentEndDelay, cancellationToken: token);
+		}
+		
+		private async UniTask endText(CancellationToken token)
+		{
+			CurrentState = ETextWalkerState.Ending;
+
 			while (CurrentCharacter >= 0)
 			{
-				await UniTask.WaitForSeconds(delayBetweenCharacters, cancellationToken: token);
+				await UniTask.WaitForSeconds(CurrentEndCharacterDelay, cancellationToken: token);
 				
 				if (token.IsCancellationRequested || this == null || !isActiveAndEnabled)
 					return;
@@ -86,6 +214,9 @@ namespace Components
 				Text.text = CurrentText[..CurrentCharacter];
 				CurrentCharacter--;
 			}
+			
+			CurrentState = ETextWalkerState.Done;
+			OnTextWalkerFinishedEvent?.Invoke();
 		}
 	}
 }
