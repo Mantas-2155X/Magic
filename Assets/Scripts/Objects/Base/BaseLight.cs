@@ -85,6 +85,20 @@ namespace Objects.Base
 		{
 			EventTools.DrawListeners(transform, OnLightEnabledEvent, Color.blue);
 			EventTools.DrawListeners(transform, OnLightDisabledEvent, Color.cyan);
+
+			var previousColor = Gizmos.color;
+			Gizmos.color = Color.yellow;
+			
+			for (var i = 0; i < UpdateProbes.Count; i++)
+			{
+				var updateProbe = UpdateProbes[i];
+				if (updateProbe == null)
+					continue;
+				
+				Gizmos.DrawLine(transform.position, updateProbe.transform.position);
+			}
+			
+			Gizmos.color = previousColor;
 		}
 #endif
 		

@@ -1,5 +1,6 @@
 using Components.Events;
 using Cysharp.Threading.Tasks;
+using Tools;
 using UnityEngine;
 
 namespace Components
@@ -17,6 +18,13 @@ namespace Components
 			processBlink().Forget();
 		}
 
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+		{
+			EventTools.DrawListeners(transform, OnBlinkedEvent, Color.blue);
+		}
+#endif
+		
 		private async UniTaskVoid processBlink()
 		{
 			while (true)

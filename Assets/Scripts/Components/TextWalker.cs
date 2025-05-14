@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using State.Interfaces;
 using State.States;
 using TMPro;
+using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -142,6 +143,13 @@ namespace Components
 			textLoop(cancellationToken.Token).Forget();
 		}
 
+#if UNITY_EDITOR
+		public void OnDrawGizmos()
+		{
+			EventTools.DrawListeners(transform, OnTextWalkerFinishedEvent, Color.blue);
+		}
+#endif
+		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public GameObject GetGameObject() => thisGo;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
