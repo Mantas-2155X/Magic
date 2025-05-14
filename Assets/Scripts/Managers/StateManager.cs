@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using AI;
 using AI.Interfaces;
+using AI.Navigation;
 using Combat.Attacks.Interfaces;
 using Combat.Decals.Interfaces;
 using Combat.Projectiles.Interfaces;
@@ -31,7 +32,7 @@ namespace Managers
 	// (AI) Off mesh link travelling
 	
 	// TODO (test):
-	// (AI) Grabbing shrink, Patrol Already Waited, BaseDoor (with button), Switch cast cooldown
+	// (AI) Grabbing shrink, Patrol Already Waited, Switch cast cooldown
 	
 	public class StateManager
 	{
@@ -319,6 +320,10 @@ namespace Managers
 									
 									data.Create[droppedWearable.ObjectID] = JObject.FromObject(createData);
 								}
+								else if (saveable is IDoor)
+								{
+									data.DeferredObjects[saveable.ObjectID] = saveable.Save();
+								}
 								else
 								{
 									data.Objects[saveable.ObjectID] = saveable.Save();
@@ -329,6 +334,11 @@ namespace Managers
 							else if (saveable is Trigger or DelayedTrigger)
 							{
 								data.DeferredObjects[saveable.ObjectID] = saveable.Save();
+								saved = true;
+							}
+							else if (saveable is NavMeshDoorLink)
+							{
+								data.VeryDeferredObjects[saveable.ObjectID] = saveable.Save();
 								saved = true;
 							}
 						}

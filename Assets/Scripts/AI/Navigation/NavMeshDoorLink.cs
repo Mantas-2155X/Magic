@@ -1,16 +1,31 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using AI.Enums;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Base;
+using State.Interfaces;
+using State.States;
 using Tools;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace AI.Navigation
 {
-	public class NavMeshDoorLink : MonoBehaviour
+	public class NavMeshDoorLink : MonoBehaviour, ISaveable
 	{
+		public bool ShouldSave => true;
+
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+
 		[SerializeField]
 		public NavMeshLink[] Links;
 	
@@ -24,7 +39,66 @@ namespace AI.Navigation
 
 		public NPC User { get; private set; }
 	
-		private readonly List<NPC> linkUsers = new ();
+		public List<NPC> LinkUsers { get; private set; } = new ();
+	
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
+	
+		#region Identify / SaveLoad
+
+		public Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+			
+			var navMeshDoorLinkState = NavMeshDoorLinkState.Read(this);
+			if (navMeshDoorLinkState != null)
+				dict[typeof(NavMeshDoorLink).ToString()] = JObject.FromObject(navMeshDoorLinkState);
+			
+			return dict;
+		}
+
+		public void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(NavMeshDoorLink).ToString(), out var navMeshDoorLinkState))
+				NavMeshDoorLinkState.Apply(this, navMeshDoorLinkState.ToObject<NavMeshDoorLinkState>());
+		}
+
+		public void SetState(List<string> linkUsersAlivesIDs, string userObjectID, bool partial)
+		{
+			var stateManager = StateManager.Instance;
+			
+			LinkUsers.Clear();
+			
+			for (var i = 0; i < linkUsersAlivesIDs.Count; i++)
+			{
+				var linkUserIdentifiable = stateManager.GetRegisteredObject(linkUsersAlivesIDs[i]);
+				if (linkUserIdentifiable.IsNull() || linkUserIdentifiable is not NPC linkUser)
+					continue;
+				
+				LinkUsers.Add(linkUser);
+			}
+
+			var userIdentifiable = stateManager.GetRegisteredObject(userObjectID);
+			if (userIdentifiable.NotNull() && userIdentifiable is NPC user)
+				User = user;
+			
+			IsPartial = partial;
+		}
+		
+		public void Awake()
+		{
+			StateManager.Instance.RegisterObject(this);
+			initializeObject();
+		}
+
+		public void OnDestroy()
+		{
+			StateManager.Instance.UnregisterObject(this);
+		}
+		
+		#endregion
 	
 		public void Update()
 		{
@@ -119,9 +193,24 @@ namespace AI.Navigation
 			return true;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public GameObject GetGameObject() => thisGo;
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Transform GetTransform() => thisTr;
+		
+		private void initializeObject()
+		{
+			if (init)
+				return;
+
+			thisGo = gameObject;
+			thisTr = thisGo.transform;
+			init = true;
+		}
+		
 		private void toggleLinks(bool state)
 		{
-			linkUsers.Clear();
+			LinkUsers.Clear();
 
 			for (var i = 0; i < Links.Length; i++)
 			{
@@ -138,16 +227,16 @@ namespace AI.Navigation
 						if (!npc.IsAlive || !agent.NavMeshAgent.enabled || !agent.IsOnOffMeshLink || agent.CurrentOffMeshLinkData.owner != link)
 							continue;
 
-						linkUsers.Add(npc);
+						LinkUsers.Add(npc);
 					}
 				}
 		
 				link.enabled = state;
 
 				// Cancel the isOnOffMeshLink check
-				for (var k = 0; k < linkUsers.Count; k++)
+				for (var k = 0; k < LinkUsers.Count; k++)
 				{
-					var linkUser = linkUsers[k];
+					var linkUser = LinkUsers[k];
 					linkUser.Agent.Warp(linkUser.GetTransform().position);
 					linkUser.Agent.Destination = linkUser.Destination;
 				}
