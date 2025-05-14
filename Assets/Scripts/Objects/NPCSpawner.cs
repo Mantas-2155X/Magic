@@ -188,6 +188,8 @@ namespace Objects
 			
 			if (Datas.Count == 0)
 				return;
+
+			var waitForNext = true;
 			
 			while (true)
 			{
@@ -199,17 +201,31 @@ namespace Objects
 				
 				if (StateManager.Instance.GetKilledAlives().Contains(spawnID))
 				{
-					// Already died, don't wait spawnrate
+					// Already died
 					Spawned.TryAdd(spawnID, null);
+					waitForNext = false;
 					continue;
 				}
 				
 				// Already spawned before, don't wait spawnrate
 				if (Spawned.ContainsKey(spawnID))
+				{
+					waitForNext = false;
 					continue;
+				}
 
-				await UniTask.WaitForSeconds(SpawnRate);
+				if (waitForNext)
+					await UniTask.WaitForSeconds(SpawnRate);
+				else
+					waitForNext = true;
 				
+				// Do it again because async is fun
+				if (Spawned.ContainsKey(spawnID))
+				{
+					waitForNext = false;
+					continue;
+				}
+
 				if (this == null || !isActiveAndEnabled)
 					return;
 				
