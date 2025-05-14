@@ -4,17 +4,21 @@ using System.Runtime.CompilerServices;
 using Components;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json.Linq;
 using Objects;
 using Objects.Base;
 using State.Interfaces;
+using State.States;
 using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Scenes
 {
-	public class World6 : MonoBehaviour, IIdentifiable
+	public class World6 : MonoBehaviour, ISaveable
 	{
+		public bool ShouldSave => true;
+
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -42,13 +46,15 @@ namespace Scenes
 		public List<STorusWave> Waves;
 
 		[SerializeField]
-		public float TimeBetweenWaves = 5f;
-
-		[SerializeField]
 		public TextWalker TextWalker;
 
 		public int CurrentWave { get; private set; }
 		public int RemainingSpawners { get; private set; }
+		
+		public float WaveStartTime { get; private set; }
+		
+		public bool WorldStarted { get; private set; }
+		public bool WorldEnded { get; private set; }
 
 		private GameObject thisGo;
 		private Transform thisTr;
@@ -57,6 +63,43 @@ namespace Scenes
 
 		#region Identify / SaveLoad
 
+		public Dictionary<string, JObject> Save()
+		{
+			var dict = new Dictionary<string, JObject>();
+			
+			var world6State = World6State.Read(this);
+			if (world6State != null)
+				dict[typeof(World6).ToString()] = JObject.FromObject(world6State);
+			
+			return dict;
+		}
+
+		public void Load(Dictionary<string, JObject> data)
+		{
+			if (data.TryGetValue(typeof(World6).ToString(), out var world6State))
+				World6State.Apply(this, world6State.ToObject<World6State>());
+		}
+		
+		public void SetState(int currentWave, int remainingSpawners, float waveStartElapsed, bool worldStarted, bool worldEnded)
+		{
+			CurrentWave = currentWave;
+			RemainingSpawners = remainingSpawners;
+			WorldStarted = worldStarted;
+			WorldEnded = worldEnded;
+
+			if (worldEnded)
+			{
+				endWorld().Forget();
+				return;
+			}
+			
+			if (CurrentWave >= Waves.Count && RemainingSpawners == 0)
+				return;
+			
+			if (worldStarted)
+				startWave(waveStartElapsed).Forget();
+		}
+		
 		public void Awake()
 		{
 			StateManager.Instance.RegisterObject(this);
@@ -90,6 +133,7 @@ namespace Scenes
 				return;
 			}
 			
+			RemainingSpawners = Waves[CurrentWave].Spawners.Length;
 			startWave().Forget();
 		}
 		
@@ -97,10 +141,18 @@ namespace Scenes
 		{
 			if (CurrentWave >= Waves.Count)
 			{
+				if (WorldEnded)
+					return;
+
+				WorldEnded = true;
 				endWorld().Forget();
 			}
 			else
 			{
+				if (WorldStarted || WorldEnded)
+					return;
+				
+				RemainingSpawners = Waves[CurrentWave].Spawners.Length;
 				startWave().Forget();
 			}
 		}
@@ -120,8 +172,11 @@ namespace Scenes
 			init = true;
 		}
 
-		private async UniTaskVoid startWave()
+		private async UniTaskVoid startWave(float elapsedTime = 0f)
 		{
+			WorldStarted = true;
+			WaveStartTime = Time.time - elapsedTime;
+			
 			var wave = Waves[CurrentWave];
 			
 			for (var i = 0; i < Indicators1.Length; i++)
@@ -136,9 +191,8 @@ namespace Scenes
 			for (var i = 0; i < Indicators4.Length; i++)
 				Indicators4[i].Toggle(i < wave.Indicators4);
 			
-			RemainingSpawners = wave.Spawners.Length;
-
-			await UniTask.WaitForSeconds(TimeBetweenWaves);
+			if (elapsedTime < 5f)
+				await UniTask.WaitForSeconds(5f - elapsedTime);
 			
 			if (this == null || !isActiveAndEnabled)
 				return;
