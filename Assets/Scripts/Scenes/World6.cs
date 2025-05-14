@@ -36,7 +36,7 @@ namespace Scenes
 		public BaseLight[] Indicators4;
 
 		[SerializeField]
-		public BaseButton LightButton;
+		public BaseLight[] Lights;
 		
 		[SerializeField]
 		public List<STorusWave> Waves;
@@ -47,7 +47,7 @@ namespace Scenes
 		[SerializeField]
 		public TextWalker TextWalker;
 
-		public int CurrentWave { get; private set; } = -1;
+		public int CurrentWave { get; private set; }
 		public int RemainingSpawners { get; private set; }
 
 		private GameObject thisGo;
@@ -82,7 +82,15 @@ namespace Scenes
 			if (RemainingSpawners > 0)
 				return;
 		
-			nextWave().Forget();
+			CurrentWave++;
+
+			if (CurrentWave >= Waves.Count)
+			{
+				TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_CLEARED"), 0f, 2f, 0.1f, 0.0025f);
+				return;
+			}
+			
+			startWave().Forget();
 		}
 		
 		public void OnTextWalkerFinished()
@@ -93,7 +101,7 @@ namespace Scenes
 			}
 			else
 			{
-				nextWave().Forget();
+				startWave().Forget();
 			}
 		}
 
@@ -112,19 +120,8 @@ namespace Scenes
 			init = true;
 		}
 
-		private async UniTaskVoid nextWave()
+		private async UniTaskVoid startWave()
 		{
-			if (CurrentWave != -1)
-				Waves[CurrentWave].Spawners.SetActive(false);
-			
-			CurrentWave++;
-
-			if (CurrentWave >= Waves.Count)
-			{
-				TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_CLEARED"), 0f, 2f, 0.1f, 0.0025f);
-				return;
-			}
-			
 			var wave = Waves[CurrentWave];
 			
 			for (var i = 0; i < Indicators1.Length; i++)
@@ -139,7 +136,7 @@ namespace Scenes
 			for (var i = 0; i < Indicators4.Length; i++)
 				Indicators4[i].Toggle(i < wave.Indicators4);
 			
-			RemainingSpawners = wave.Spawners.GetComponentsInChildren<NPCSpawner>().Length;
+			RemainingSpawners = wave.Spawners.Length;
 
 			await UniTask.WaitForSeconds(TimeBetweenWaves);
 			
@@ -147,9 +144,11 @@ namespace Scenes
 				return;
 
 			if (wave.ToggleLight)
-				LightButton.Use(AIManager.Instance.Player);
+				for (var i = 0; i < Lights.Length; i++)
+					Lights[i].Toggle(false);
 		
-			wave.Spawners.gameObject.SetActive(true);
+			for (var i = 0; i < wave.Spawners.Length; i++)
+				wave.Spawners[i].Trigger();
 		}
 		
 		private async UniTaskVoid endWorld()
@@ -162,7 +161,7 @@ namespace Scenes
 		public struct STorusWave
 		{
 			[SerializeField]
-			public GameObject Spawners;
+			public NPCSpawner[] Spawners;
 
 			[SerializeField]
 			[Range(0, 3)]
