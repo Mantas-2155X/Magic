@@ -66,6 +66,7 @@ namespace AI
 
 		private Transform colliderTr;
 
+		private Rigidbody groundRigidbody;
 		private Vector3 groundNormal;
 		private float groundAngle;
 
@@ -211,6 +212,7 @@ namespace AI
 			}
 			
 			var isGrounded = IsGrounded();
+			var groundVelocity = groundRigidbody != null ? groundRigidbody.linearVelocity : Vector3.zero;
 
 			if (moveDirection != Vector2.zero && !Paralyzed && SlowAmount < 1f)
 			{
@@ -236,7 +238,7 @@ namespace AI
 				var targetVelocity = direction * speed;
 				
 				var currentVelocity = rb.linearVelocity;
-				currentVelocity = Vector3.MoveTowards(currentVelocity, new Vector3(targetVelocity.x, isGrounded ? targetVelocity.y : currentVelocity.y, targetVelocity.z), acceleration);
+				currentVelocity = Vector3.MoveTowards(currentVelocity, new Vector3(targetVelocity.x, isGrounded ? targetVelocity.y : currentVelocity.y, targetVelocity.z) + groundVelocity, acceleration);
 				
 				rb.linearVelocity = currentVelocity;
 			}
@@ -252,15 +254,16 @@ namespace AI
 			switch (velocity.magnitude)
 			{
 				case <= 0f:
+					rb.linearVelocity = groundVelocity;
 					return;
 				case < 0.5f:
 					// prevent horizontal micro-sliding
 					if (moveDirection == Vector2.zero)
-						rb.linearVelocity = Vector3.zero;
+						rb.linearVelocity = groundVelocity;
 					break;
 				default:
 					// apply friction
-					rb.AddForce(-velocity.normalized * data.Friction);
+					rb.AddForce(-(velocity - groundVelocity).normalized * data.Friction);
 					break;
 			}
 		}
@@ -832,6 +835,7 @@ namespace AI
 		{
 			if (!IsAlive || MovementType != EMovementType.Normal)
 			{
+				groundRigidbody = null;
 				groundNormal = Vector3.zero;
 				groundAngle = float.MaxValue;
 				
@@ -848,6 +852,7 @@ namespace AI
 				var angle = Vector3.Angle(Vector3.up, normal);
 				if (angle <= maximumGroundAngle)
 				{
+					groundRigidbody = hit.rigidbody;
 					groundNormal = normal;
 					groundAngle = angle;
 					
@@ -855,6 +860,7 @@ namespace AI
 				}
 			}
 			
+			groundRigidbody = null;
 			groundNormal = Vector3.zero;
 			groundAngle = float.MaxValue;
 			
