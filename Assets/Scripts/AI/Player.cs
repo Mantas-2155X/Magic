@@ -242,7 +242,11 @@ namespace AI
 			}
 
 			if (!isGrounded)
+			{
+				// Apply gravity when not grounded to prevent sliding
+				rb.AddForce(Physics.gravity, ForceMode.Acceleration);
 				return;
+			}
 
 			var velocity = rb.linearVelocity;
 			switch (velocity.magnitude)
@@ -675,6 +679,9 @@ namespace AI
 			
 			base.SetMovementType(value);
 
+			// Gravity is manually applied when not grounded
+			Body.Rigidbody.useGravity = false;
+			
 			if (previous == value)
 				return;
 
