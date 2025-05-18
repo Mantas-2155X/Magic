@@ -128,6 +128,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 5238415708173528890, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5352134489899751883, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -180,7 +184,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 6498104957624570322}
   m_Enabled: 0
   m_AgentTypeID: 0
-  m_Radius: 0.35
+  m_Radius: 0.55
   m_Speed: 7
   m_Acceleration: 32
   avoidancePriority: 50
@@ -206,6 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Data>k__BackingField: {fileID: 0}
+  objectID: 
   <Body>k__BackingField: {fileID: 42988670619036741}
   Agent: {fileID: 2209360275711873519}
   JumpCurve:

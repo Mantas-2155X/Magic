@@ -1,75 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2938269799512979262
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5749111869335286697}
-  - component: {fileID: 7442224888820584587}
-  - component: {fileID: 8914244078205421221}
-  m_Layer: 12
-  m_Name: Collider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5749111869335286697
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2938269799512979262}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4509256183828895656}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7442224888820584587
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2938269799512979262}
-  m_Material: {fileID: 13400000, guid: 4aa6be4c17e6f1a039fbbe6a49774d85, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 2, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!208 &8914244078205421221
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2938269799512979262}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 1, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1001 &507694346338418688
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -237,10 +167,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
-      propertyPath: BodyCollider
-      value: 
-      objectReference: {fileID: 7442224888820584587}
-    - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: FeetCollider
       value: 
       objectReference: {fileID: 0}
@@ -255,7 +181,7 @@ PrefabInstance:
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: MovementCollider
       value: 
-      objectReference: {fileID: 7442224888820584587}
+      objectReference: {fileID: 388664321479156398}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[1]'
       value: 
@@ -308,6 +234,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4055737707903912597, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 4aa6be4c17e6f1a039fbbe6a49774d85, type: 2}
     - target: {fileID: 4192352802564906907, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -401,9 +331,6 @@ PrefabInstance:
     - {fileID: 607894946075846565, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
     - {fileID: 5286605390456971389, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 267989786726104979, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5749111869335286697}
     - targetCorrespondingSourceObject: {fileID: 2230819132751065594, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       insertIndex: 0
       addedObject: {fileID: 5026772258642148058}
@@ -414,7 +341,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5238415708173528890, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4568386568268556787}
+    - targetCorrespondingSourceObject: {fileID: 419297802487609867, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9049415635439129539}
   m_SourcePrefab: {fileID: 100100000, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+--- !u!65 &388664321479156398 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 4055737707903912597, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+  m_PrefabInstance: {fileID: 4407915526272526395}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2583230000260094401 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2230819132751065594, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -431,11 +366,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de8b59232c5647598acb747fcd45cc32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4509256183828895656 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 267989786726104979, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+--- !u!1 &4106626383454081584 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 419297802487609867, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
   m_PrefabInstance: {fileID: 4407915526272526395}
   m_PrefabAsset: {fileID: 0}
+--- !u!208 &9049415635439129539
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4106626383454081584}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!136 &5366303718956293901 stripped
 CapsuleCollider:
   m_CorrespondingSourceObject: {fileID: 8598778091971049270, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -479,7 +430,7 @@ MonoBehaviour:
   ViewmodelAngles: {x: 15.4, y: -20.1, z: 0}
   CastViewmodelPosition: {x: 0.76, y: -1.24, z: 1.09}
   CastViewmodelAngles: {x: 50, y: -20.1, z: 0}
-  Obstacle: {fileID: 8914244078205421221}
+  Obstacle: {fileID: 9049415635439129539}
 --- !u!1001 &5626358672587968050
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -71,6 +71,9 @@ namespace AI
 		
 		private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
 
+		private Transform movementColliderTr;
+		private bool hasMovementCollider;
+
 		private bool swayDirection;
 
 		private Material glowMaterial;
@@ -86,6 +89,12 @@ namespace AI
 			var materials = Core.GetComponent<Renderer>().materials;
 			glowMaterial = materials[1];
 			centerMaterial = materials[2];
+			
+			if (MovementCollider != null)
+			{
+				hasMovementCollider = true;
+				movementColliderTr = MovementCollider.transform;
+			}
 		}
 
 		public void SetCoreGlow(EElement element)
@@ -142,8 +151,35 @@ namespace AI
 			if (!Alive.IsAlive)
 				return;
 			
+			if (hasMovementCollider)
+				movementColliderTr.rotation = Quaternion.identity;
+
 			if (ShouldSway && CanSway)
 				swayLimbs();
+		}
+
+		public void LateUpdate()
+		{
+			if (PauseManager.IsPaused)
+				return;
+			
+			if (!Alive.IsAlive)
+				return;
+
+			if (hasMovementCollider)
+				movementColliderTr.rotation = Quaternion.identity;
+		}
+		
+		public void FixedUpdate()
+		{
+			if (PauseManager.IsPaused)
+				return;
+			
+			if (!Alive.IsAlive)
+				return;
+
+			if (hasMovementCollider)
+				movementColliderTr.rotation = Quaternion.identity;
 		}
 
 		private void swayLimbs()

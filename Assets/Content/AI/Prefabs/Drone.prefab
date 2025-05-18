@@ -14602,6 +14602,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 42988670619036741, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: MovementCollider
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 42988670619036741, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: 'Gibs.Array.data[0]'
       value: 
       objectReference: {fileID: 8150402506135299492}
@@ -14736,6 +14740,22 @@ PrefabInstance:
     - target: {fileID: 2209360275711873519, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: NavMeshAgent
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087112712366175357, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087112712366175357, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_Size.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087112712366175357, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_Size.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087112712366175357, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_Center.y
+      value: 0.0675
       objectReference: {fileID: 0}
     - target: {fileID: 3799399758149138879, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_Name
@@ -14933,6 +14953,7 @@ PrefabInstance:
     - {fileID: 6402401941283923747, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
     - {fileID: 1941282789126281549, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
     - {fileID: 6612045961440190101, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+    - {fileID: 1679519902329242851, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1236071076481810811, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       insertIndex: 3
@@ -15043,7 +15064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StoppingDistance: 1
-  Radius: 1
+  Radius: 0.9
 --- !u!114 &2524303300372934529 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7397406505081074200, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}

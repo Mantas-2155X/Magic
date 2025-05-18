@@ -64,8 +64,6 @@ namespace AI
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
 
-		private Transform colliderTr;
-
 		private Vector3 groundPointVelocity;
 		private Vector3 groundNormal;
 		private float groundAngle;
@@ -103,8 +101,6 @@ namespace AI
 			
 			Camera = Camera.main;
 			CameraTr = Camera!.transform;
-
-			colliderTr = Body.MovementCollider.transform;
 		}
 
 		public override void OnDestroy()
@@ -121,8 +117,6 @@ namespace AI
 			
 			if (!IsAlive)
 				return;
-
-			colliderTr.rotation = Quaternion.identity;
 			
 			if (SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1.IsPressed() && Spell.NotNull())
 				Spell.StartCasting();
@@ -151,8 +145,6 @@ namespace AI
 			
 			if (!IsAlive)
 				return;
-
-			colliderTr.rotation = Quaternion.identity;
 			
 			CameraTr.position = transform.position + Vector3.up * 0.5f;
 
@@ -190,8 +182,6 @@ namespace AI
 			
 			if (!IsAlive)
 				return;
-			
-			colliderTr.rotation = Quaternion.identity;
 			
 			var tr = GetTransform();
 			var rb = Body.Rigidbody;

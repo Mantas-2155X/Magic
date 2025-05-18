@@ -1197,6 +1197,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3087112712366175357, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_Size.y
+      value: 0.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087112712366175357, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: m_Center.y
+      value: -0.075
+      objectReference: {fileID: 0}
     - target: {fileID: 5185515141565135134, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1211,11 +1219,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7175161009213997453, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_Height
-      value: 1
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 7175161009213997453, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_Radius
-      value: 0.4
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 7175161009213997453, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: m_Enabled
@@ -1275,8 +1283,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.65, z: 1}
-  m_Center: {x: 0, y: -0.075, z: 0}
+  m_Size: {x: 0.5, y: 0.5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &6275577297364192989 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1236071076481810811, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
