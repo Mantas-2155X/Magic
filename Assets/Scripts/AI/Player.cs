@@ -104,7 +104,7 @@ namespace AI
 			Camera = Camera.main;
 			CameraTr = Camera!.transform;
 
-			colliderTr = Body.BodyCollider.transform;
+			colliderTr = Body.MovementCollider.transform;
 		}
 
 		public override void OnDestroy()

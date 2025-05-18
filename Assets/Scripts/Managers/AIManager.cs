@@ -149,7 +149,7 @@ namespace Managers
 			npc.ObjectID = Guid.NewGuid().ToString();
 			npc.ExternallySpawned = externallySpawned;
 			
-			AlivesColliderMap[npc.Body.BodyCollider] = npc;
+			AlivesColliderMap[npc.Body.HitboxCollider] = npc;
 			NPCs.Add(npc);
 
 			npc.Spawn(data, relationshipGroup);
@@ -181,7 +181,7 @@ namespace Managers
 			
 			player.CameraTr.eulerAngles = camAngles;
 			
-			AlivesColliderMap[player.Body.BodyCollider] = player;
+			AlivesColliderMap[player.Body.HitboxCollider] = player;
 			Player = player;
 
 			player.Spawn(data, relationshipGroup);

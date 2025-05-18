@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5749111869335286697}
   - component: {fileID: 7442224888820584587}
   - component: {fileID: 8914244078205421221}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,9 +245,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: HitboxCollider
+      value: 
+      objectReference: {fileID: 5366303718956293901}
+    - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: Gibs.Array.size
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: MovementCollider
+      value: 
+      objectReference: {fileID: 7442224888820584587}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: 'Gibs.Array.data[1]'
       value: 
@@ -366,11 +374,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8598778091971049270, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Height
-      value: 1.99
+      value: 1.999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8598778091971049270, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8598778091971049270, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_Center.y
-      value: 0.005
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 9196623204031514355, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: m_UseGravity
@@ -381,8 +393,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 2876092449613239704, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
-    - {fileID: 8598778091971049270, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects:
     - {fileID: 2073094155178259440, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
     - {fileID: 4683780981325718410, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
@@ -423,6 +434,11 @@ MonoBehaviour:
 --- !u!4 &4509256183828895656 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 267989786726104979, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+  m_PrefabInstance: {fileID: 4407915526272526395}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &5366303718956293901 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 8598778091971049270, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
   m_PrefabInstance: {fileID: 4407915526272526395}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7076290890346785360 stripped

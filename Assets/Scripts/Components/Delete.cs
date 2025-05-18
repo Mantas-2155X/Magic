@@ -11,14 +11,8 @@ namespace Components
 			var go = rb != null ? rb.gameObject : other.gameObject;
 			
 			var aiManager = AIManager.Instance;
-			if (aiManager != null)
-			{
-				var player = aiManager.Player;
-				if (player != null && player.Body.BodyCollider == other)
-				{
-					return;
-				}
-			}
+			if (aiManager != null && rb != null && rb == aiManager.Player.Body.Rigidbody)
+				return;
 			
 			Debug.LogWarning($"[Delete] Object {go.name} fell out of the world and was destroyed");
 			Destroy(go);

@@ -14582,6 +14582,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 42988670619036741, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: HitboxCollider
+      value: 
+      objectReference: {fileID: 7755395723750798938}
+    - target: {fileID: 42988670619036741, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: Arms.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -15083,6 +15087,10 @@ PrefabInstance:
     - target: {fileID: 2248593398703734327, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2248593398703734327, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
+      propertyPath: <Rigidbody>k__BackingField
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3260939462562074914, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
       propertyPath: m_Enabled

@@ -178,12 +178,12 @@ namespace Combat.Projectiles.Base
 			{
 				var body = owner.Body;
 			
-				ignoreBodyCollider = body.BodyCollider;
+				ignoreBodyCollider = body.HitboxCollider;
 				Physics.IgnoreCollision(ignoreBodyCollider, Collider, true);
 
-				if (body.FeetCollider != null)
+				if (body.MovementCollider != null)
 				{
-					ignoreFeetCollider = body.FeetCollider;
+					ignoreFeetCollider = body.MovementCollider;
 					Physics.IgnoreCollision(ignoreFeetCollider, Collider, true);
 				}
 				else

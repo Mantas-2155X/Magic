@@ -205,15 +205,15 @@ namespace AI.Base
 			MovementType = value;
 
 			Body.Rigidbody.useGravity = MovementType == EMovementType.Normal;
-			Body.BodyCollider.enabled = MovementType == EMovementType.Normal;
+			Body.HitboxCollider.enabled = MovementType == EMovementType.Normal;
 			
 			if (MovementType != EMovementType.Normal)
 				previousExcludeLayers = Body.Rigidbody.excludeLayers;
 			else
 				Body.Rigidbody.excludeLayers = previousExcludeLayers;
 
-			if (Body.FeetCollider != null)
-				Body.FeetCollider.enabled = MovementType == EMovementType.Normal;
+			if (Body.MovementCollider != null)
+				Body.MovementCollider.enabled = MovementType == EMovementType.Normal;
 		}
 		public virtual void SetRelationshipGroup(int value)
 		{
@@ -574,10 +574,10 @@ namespace AI.Base
 			Body.Rigidbody.isKinematic = false;
 			Body.Rigidbody.useGravity = true;
 
-			Body.BodyCollider.material = null;
+			Body.HitboxCollider.material = null;
 			
-			if (Body.FeetCollider != null)
-				Body.FeetCollider.material = null;
+			if (Body.MovementCollider != null)
+				Body.MovementCollider.material = null;
 
 			var ragdolls = World.World.Instance.Ragdolls;
 			var length = Body.Gibs.Length;
@@ -673,7 +673,7 @@ namespace AI.Base
 			if (this is not Player)
 				StateManager.Instance.RegisterKilledAlive(ObjectID);
 			
-			AIManager.Instance.AlivesColliderMap.Remove(Body.BodyCollider);
+			AIManager.Instance.AlivesColliderMap.Remove(Body.HitboxCollider);
 			
 			OnDeathEvent?.Invoke(this, source);
 			

@@ -15,7 +15,7 @@ namespace Tools
 			if (lmask != null)
 				return lmask.Value;
 
-			lmask = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Broken");
+			lmask = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Broken", "Movement");
 			return lmask!.Value;
 		}
 		
@@ -24,7 +24,7 @@ namespace Tools
 			if (lmaskWithAlives != null)
 				return lmaskWithAlives.Value;
 
-			lmaskWithAlives = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Broken", "NPC", "Player");
+			lmaskWithAlives = GetMask() + LayerMask.GetMask("NPC", "Player");
 			return lmaskWithAlives!.Value;
 		}
 		
@@ -33,7 +33,7 @@ namespace Tools
 			if (lmaskWithPlayer != null)
 				return lmaskWithPlayer.Value;
 
-			lmaskWithPlayer = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Broken", "Player");
+			lmaskWithPlayer = GetMask() + LayerMask.GetMask("Player");
 			return lmaskWithPlayer!.Value;
 		}
 		
@@ -42,7 +42,7 @@ namespace Tools
 			if (lmaskWithNPC != null)
 				return lmaskWithNPC.Value;
 
-			lmaskWithNPC = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Broken", "NPC");
+			lmaskWithNPC = GetMask() + LayerMask.GetMask("NPC");
 			return lmaskWithNPC!.Value;
 		}
 		

@@ -19,10 +19,10 @@ namespace AI
 		public Rigidbody Rigidbody;
 
 		[SerializeField]
-		public Collider BodyCollider;
+		public Collider HitboxCollider;
 		
 		[SerializeField]
-		public Collider FeetCollider;
+		public Collider MovementCollider;
 
 		[SerializeField]
 		public BaseGib[] Gibs;

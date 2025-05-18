@@ -955,6 +955,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2248593398703734327, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
+      propertyPath: <Rigidbody>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3260939462562074914, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1062,13 +1066,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8697116557332168049}
     - target: {fileID: 42988670619036741, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
-      propertyPath: FeetCollider
-      value: 
-      objectReference: {fileID: 5651442733893399648}
-    - target: {fileID: 42988670619036741, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: SwayAngles.y
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 42988670619036741, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
+      propertyPath: HitboxCollider
+      value: 
+      objectReference: {fileID: 8697116557332168049}
     - target: {fileID: 42988670619036741, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       propertyPath: Gibs.Array.size
       value: 6
@@ -1246,9 +1250,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8697116557332168049}
-    - targetCorrespondingSourceObject: {fileID: 6498104957624570322, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5651442733893399648}
   m_SourcePrefab: {fileID: 100100000, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
 --- !u!1 &2026008860188843636 stripped
 GameObject:
@@ -1262,7 +1263,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2026008860188843636}
-  m_Material: {fileID: 13400000, guid: 4aa6be4c17e6f1a039fbbe6a49774d85, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1274,29 +1275,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.5, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &5651442733893399648
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026008860188843636}
-  m_Material: {fileID: 13400000, guid: b7282c1091adf97acaa7bf35be876282, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.5, y: 0.15, z: 1}
-  m_Center: {x: 0, y: -0.325, z: 0}
+  m_Size: {x: 0.5, y: 0.65, z: 1}
+  m_Center: {x: 0, y: -0.075, z: 0}
 --- !u!4 &6275577297364192989 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1236071076481810811, guid: 8d3da0475da0042609dcc8d374de9356, type: 3}
@@ -1373,6 +1353,10 @@ PrefabInstance:
     - target: {fileID: 3046283344021728352, guid: a70eb1798bcedcfea88bb7c6886f9a84, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3046283344021728352, guid: a70eb1798bcedcfea88bb7c6886f9a84, type: 3}
+      propertyPath: <Rigidbody>k__BackingField
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5999390028957862103, guid: a70eb1798bcedcfea88bb7c6886f9a84, type: 3}
       propertyPath: m_Enabled
@@ -1586,6 +1570,10 @@ PrefabInstance:
     - target: {fileID: 2248593398703734327, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2248593398703734327, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
+      propertyPath: <Rigidbody>k__BackingField
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3260939462562074914, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
       propertyPath: m_Enabled

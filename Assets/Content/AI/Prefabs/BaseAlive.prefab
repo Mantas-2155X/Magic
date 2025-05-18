@@ -427,7 +427,6 @@ GameObject:
   - component: {fileID: 779082925154528359}
   - component: {fileID: 8598778091971049270}
   - component: {fileID: 1299225429599949485}
-  - component: {fileID: 2876092449613239704}
   m_Layer: 0
   m_Name: BaseAlive
   m_TagString: Untagged
@@ -575,8 +574,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Alive: {fileID: 0}
   Rigidbody: {fileID: 9196623204031514355}
-  BodyCollider: {fileID: 8598778091971049270}
-  FeetCollider: {fileID: 2876092449613239704}
+  HitboxCollider: {fileID: 8598778091971049270}
+  MovementCollider: {fileID: 0}
   Gibs:
   - {fileID: 2748192791704831701}
   - {fileID: 8374339427915123952}
@@ -643,29 +642,6 @@ MonoBehaviour:
   Malfunction: {fileID: 607477498260355474}
   CanSway: 1
   ShouldSway: 0
---- !u!136 &2876092449613239704
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5238415708173528890}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.4
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: -0.027, z: 0}
 --- !u!1 &5352134489899751883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,6 +1092,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2248593398703734327, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
+      propertyPath: <Rigidbody>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3260939462562074914, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1201,6 +1181,10 @@ PrefabInstance:
     - target: {fileID: 2248593398703734327, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2248593398703734327, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
+      propertyPath: <Rigidbody>k__BackingField
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3260939462562074914, guid: 070b77f5be000070ca1c76ee6ab7a73c, type: 3}
       propertyPath: m_Enabled
@@ -1335,6 +1319,10 @@ PrefabInstance:
     - target: {fileID: 3046283344021728352, guid: a70eb1798bcedcfea88bb7c6886f9a84, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3046283344021728352, guid: a70eb1798bcedcfea88bb7c6886f9a84, type: 3}
+      propertyPath: <Rigidbody>k__BackingField
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5999390028957862103, guid: a70eb1798bcedcfea88bb7c6886f9a84, type: 3}
       propertyPath: m_Enabled

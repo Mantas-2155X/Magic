@@ -19497,6 +19497,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 357787155468347808}
     - target: {fileID: 4987815237274792412, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+      propertyPath: HitboxCollider
+      value: 
+      objectReference: {fileID: 357787155468347808}
+    - target: {fileID: 4987815237274792412, guid: f87096318aaafc244997e6f00eca6740, type: 3}
       propertyPath: Gibs.Array.size
       value: 0
       objectReference: {fileID: 0}
