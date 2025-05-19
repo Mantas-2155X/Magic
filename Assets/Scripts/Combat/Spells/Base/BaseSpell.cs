@@ -215,8 +215,10 @@ namespace Combat.Spells.Base
 			}
 			else if (SpellData.Attack != null)
 			{
+				var hitTr = LastHit.transform;
+				
 				// No projectile, create the attack straight away
-				ObjectManager.Instance.CreateAttack(SpellData.Attack, this, LastHit, LastHit.transform.GetComponent<IIdentifiable>());
+				ObjectManager.Instance.CreateAttack(SpellData.Attack, this, LastHit, hitTr != null ? hitTr.GetComponent<IIdentifiable>() : null);
 			}
 			
 			return true;

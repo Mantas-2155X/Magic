@@ -47,30 +47,27 @@ namespace AI.PathFinding
 
 			// todo: handle grid changes
 			
-			var grids = Grid.Grids;
+			var pos = thisTr.position;
+
+			var grids = Grid.GridsAtPoint(pos);
 			if (grids.Count == 0)
 			{
-				Debug.LogWarning("[Agent] No grids available");
+				Debug.LogWarning($"[Agent] No grids available at position {pos}");
 				return;
 			}
 			
-			var agentPos = thisTr.position;
-			
-			var closestDistance = float.MaxValue;
+			var closestRadius = float.MaxValue;
 			Grid closestGrid = null;
 
 			for (var i = 0; i < grids.Count; i++)
 			{
 				var grid = grids[i];
-				if (grid.Radius != Radius)
-					continue;
 
-				// todo: this should use the bounds instead of center to determine distance
-				var distance = Vector3.Distance(agentPos, grid.transform.position);
-				if (distance >= closestDistance)
+				var radiusDifference = Mathf.Abs(Radius - grid.Radius);
+				if (radiusDifference >= closestRadius)
 					continue;
 				
-				closestDistance = distance;
+				closestRadius = radiusDifference;
 				closestGrid = grid;
 			}
 

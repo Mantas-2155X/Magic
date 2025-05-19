@@ -679,6 +679,32 @@ namespace AI.PathFinding
 
 			return result;
 		}
+
+		public static List<Grid> GridsAtPoint(Vector3 point)
+		{
+			var list = new List<Grid>();
+
+			for (var i = 0; i < Grids.Count; i++)
+			{
+				var grid = Grids[i];
+				
+				var halfSize = grid.Size / 2f;
+				var pos = grid.transform.position + grid.Offset;
+
+				var minX = pos.x - halfSize.x;
+				var minY = pos.y - halfSize.y;
+				var minZ = pos.z - halfSize.z;
+				
+				var maxX = pos.x + halfSize.x;
+				var maxY = pos.y + halfSize.y;
+				var maxZ = pos.z + halfSize.z;
+
+				if ((point.x > minX && point.x < maxX) && (point.y > minY && point.y < maxY) && (point.z > minZ && point.z < maxZ))
+					list.Add(grid);
+			}
+			
+			return list;
+		}
 		
 		#endregion
 
