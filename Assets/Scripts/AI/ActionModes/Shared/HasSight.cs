@@ -85,22 +85,16 @@ namespace AI.ActionModes.Shared
 			// Projectiles have thickness so we need to cast more rays to make sure the projectile isn't going to just hit a wall. Spherecast does not work here because it spawns inside a collider and therefore it ignores the wall 
 			if (extraCasts && data.UseExtraCasts)
 			{
-				var halfSize = owner.Agent.IsNavMesh ? (NavMesh.GetSettingsByID(owner.Agent.NavMeshAgent.agentTypeID).agentRadius / 2f) : owner.Agent.Agent.Grid.Radius / 2f;
+				var halfRadius = owner.Agent.IsNavMesh ? (NavMesh.GetSettingsByID(owner.Agent.NavMeshAgent.agentTypeID).agentRadius / 2f) : owner.Agent.Agent.Grid.Radius / 2f;
 				
-				var originRight = originCenter + transform.right * halfSize;
-				var directionRight = target.position - (position + transform.right * halfSize);
 #if UNITY_EDITOR && DEBUG_SIGHT
-				Debug.DrawLine(originRight, directionRight * 50f, Color.cyan);
+			Debug.DrawLine(originCenter + transform.right * halfRadius, direction * 50f, Color.magenta);
+			Debug.DrawLine(originCenter + -transform.right * halfRadius, direction * 50f, Color.magenta);
+			Debug.DrawLine(originCenter + transform.up * halfRadius, direction * 50f, Color.magenta);
+			Debug.DrawLine(originCenter + -transform.up * halfRadius, direction * 50f, Color.magenta);
 #endif
-				if (!Physics.Raycast(originRight, directionRight, out var hitRight, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || !validColliders.Contains(hitRight.colliderInstanceID))
-					return false;
 				
-				var originLeft = originCenter - transform.right * halfSize;
-				var directionLeft = target.position - (position + -transform.right * halfSize);
-#if UNITY_EDITOR && DEBUG_SIGHT
-				Debug.DrawLine(originLeft, directionLeft * 50f, Color.yellow);
-#endif
-				if (!Physics.Raycast(originLeft, directionLeft, out var hitLeft, hit.distance + 1f, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || !validColliders.Contains(hitLeft.colliderInstanceID))
+				if (!Physics.SphereCast(transform.position, halfRadius, direction, out var extraHit, hit.distance + 1, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || !validColliders.Contains(extraHit.colliderInstanceID))
 					return false;
 			}
 			
