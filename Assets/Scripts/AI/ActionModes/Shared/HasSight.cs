@@ -42,7 +42,7 @@ namespace AI.ActionModes.Shared
 			validColliders.Clear();
 			
 			var hitOrigin = originCenter;
-			var breakablesHit = 0;
+			var breakableHit = false;
 
 			Transform hitTransform = null;
 			RaycastHit hit = default;
@@ -68,13 +68,13 @@ namespace AI.ActionModes.Shared
 			
 				if (!iObject.ObjectData.IsBreakable)
 					return false;
+
+				// Allow one breakable object to count as still visible
+				if (breakableHit)
+					return false;
 				
 				// Hit a breakable object, count as fine
-				breakablesHit++;
-
-				// Allow 3 breakable objects to count as still visible
-				if (breakablesHit > 3)
-					return false;
+				breakableHit = true;
 				
 				validColliders.Add(hit.colliderInstanceID);
 			}
@@ -94,8 +94,21 @@ namespace AI.ActionModes.Shared
 			Debug.DrawLine(originCenter + -transform.up * halfRadius, direction * 50f, Color.magenta);
 #endif
 				
-				if (!Physics.SphereCast(transform.position, halfRadius, direction, out var extraHit, hit.distance + 1, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore) || !validColliders.Contains(extraHit.colliderInstanceID))
+				if (!Physics.SphereCast(transform.position, halfRadius, direction, out var extraHit, hit.distance + 1, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 					return false;
+
+				if (!validColliders.Contains(extraHit.colliderInstanceID))
+				{
+					var iObject = extraHit.transform.GetComponent<IObject>();
+					if (iObject.IsNull())
+						return false;
+			
+					if (!iObject.ObjectData.IsBreakable)
+						return false;
+					
+					// allow one breakable
+					return true;
+				}
 			}
 			
 			return true;

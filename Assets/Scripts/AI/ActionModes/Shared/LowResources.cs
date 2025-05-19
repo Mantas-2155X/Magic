@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Managers;
+using Objects.Base;
 using Objects.Interfaces;
 using ScriptableObjects;
 using ScriptableObjects.Enums;
@@ -176,8 +177,7 @@ namespace AI.ActionModes.Shared
 				if (!owner.WithinRange.SenseDistanceCheck(resourceTr, false, false))
 					continue;
 
-				// Prevent picking a destination that's behind a wall
-				if (NavMesh.Raycast(owner.GetTransform().position, resourcePos, out _, NavMesh.AllAreas))
+				if (!owner.HasSight.SightCheck(resourceTr, false))
 					continue;
 				
 				tempResources.Add(resource);
@@ -222,7 +222,7 @@ namespace AI.ActionModes.Shared
 		public bool CurrentResourceValid(ETag tag)
 		{
 			var resource = owner.OtherTarget;
-			if (resource.IsNull() || resource is not IObject obj)
+			if (resource.IsNull() || resource is not BaseObject obj || !obj.enabled)
 				return false;
 
 			if (!obj.ObjectData.Tags.HasFlag(tag))

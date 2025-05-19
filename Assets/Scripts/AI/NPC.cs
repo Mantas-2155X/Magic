@@ -456,7 +456,7 @@ namespace AI
 				if (WithinRange.SenseDistanceCheck(AttackTargetTransform, false, false))
 				{
 					// Make sure it can be seen
-					if (HasSight.SightCheck(AttackTargetTransform, true))
+					if (HasSight.SightCheck(AttackTargetTransform, false))
 					{
 						// Must be alive and have a different relationship
 						if (AttackTarget is IAlive alive && alive.IsAlive && alive.RelationshipGroup != RelationshipGroup)
@@ -502,7 +502,7 @@ namespace AI
 				var aliveTransform = alive.GetTransform();
 				
 				// Make sure it's within sense (and spot) range, field of view and can be seen
-				if (!WithinRange.SenseDistanceCheck(aliveTransform, true, false) || !WithinRange.FieldOfViewCheck(aliveTransform) || !HasSight.SightCheck(aliveTransform, true))
+				if (!WithinRange.SenseDistanceCheck(aliveTransform, true, false) || !WithinRange.FieldOfViewCheck(aliveTransform) || !HasSight.SightCheck(aliveTransform, false))
 					continue;
 				
 				var distance = Vector3.Distance(position, aliveTransform.position);
