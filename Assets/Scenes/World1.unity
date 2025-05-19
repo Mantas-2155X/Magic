@@ -314,7 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb3360309ba740799fd2661ea28e0db4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ObjectID>k__BackingField: 6eb5b4ad-0a25-466b-a59e-0214a764b45e
+  objectID: 6eb5b4ad-0a25-466b-a59e-0214a764b45e
   OnTriggerEvent:
     m_PersistentCalls:
       m_Calls:
@@ -1107,10 +1107,10 @@ MonoBehaviour:
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
+  m_OverrideTileSize: 1
+  m_TileSize: 32
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.23666666
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 2a0a280da3a89c160b3b791935ee13e0, type: 2}
   m_BuildHeightMesh: 0

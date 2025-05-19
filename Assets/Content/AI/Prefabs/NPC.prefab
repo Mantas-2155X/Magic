@@ -61,6 +61,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5086737948386064533}
     - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1299225429599949485, guid: a346750b223c8888ab19d1ae288889e7, type: 3}
       propertyPath: EyesColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -184,7 +188,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 6498104957624570322}
   m_Enabled: 0
   m_AgentTypeID: 0
-  m_Radius: 0.55
+  m_Radius: 0.71
   m_Speed: 7
   m_Acceleration: 32
   avoidancePriority: 50
