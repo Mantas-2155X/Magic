@@ -61,6 +61,9 @@ namespace AI
 		private bool jumpPressed;
 		private bool fallPressed;
 		
+		private float airTime;
+		private bool sticked;
+
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
 
@@ -136,6 +139,8 @@ namespace AI
 			
 			if (IsGrounded())
 				handleStep();
+			else
+				handleStick();
 		}
 		
 		public void LateUpdate()
@@ -145,6 +150,8 @@ namespace AI
 			
 			if (!IsAlive)
 				return;
+
+			sticked = false;
 			
 			CameraTr.position = transform.position + Vector3.up * 0.5f;
 
@@ -202,6 +209,11 @@ namespace AI
 			}
 			
 			var isGrounded = IsGrounded();
+			
+			if (isGrounded)
+				airTime = 0f;
+			else
+				airTime += Time.fixedDeltaTime;
 
 			if (moveDirection != Vector2.zero && !Paralyzed && SlowAmount < 1f)
 			{
@@ -834,7 +846,10 @@ namespace AI
 			var origin = Body.Rigidbody.position - new Vector3(0f, 0.9f, 0f);
 			var extents = new Vector3(0.98f, 0.1f, 0.98f) / 2f;
 			
-			if (Physics.BoxCast(origin, extents, Vector3.down, out var hit, Quaternion.identity, 0.1f, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+			// when sticked, it will 100% be grounded so cast a longer ray just in case
+			var groundDist = sticked ? 0.25f : 0.1f;
+			
+			if (Physics.BoxCast(origin, extents, Vector3.down, out var hit, Quaternion.identity, groundDist, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
 			{
 				var normal = hit.normal;
 				
@@ -867,6 +882,43 @@ namespace AI
 				rend.shadowCastingMode = mode;
 		}
 
+		private bool handleStick()
+		{
+			if (airTime > 0.12f || Body.Rigidbody.linearVelocity.y > 0f)
+				return false;
+
+			var rb = Body.Rigidbody;
+			var tr = GetTransform();
+			
+			var pos = rb.position;
+			
+			var origin = pos - new Vector3(0f, 0.9f, 0f);
+			var extents = new Vector3(0.98f, 0.1f, 0.98f) / 2f;
+
+			if (!Physics.BoxCast(origin, extents, Vector3.down, out var hit, Quaternion.identity, 0.35f, ~LayerMaskTools.GetMaskWithPlayer(), QueryTriggerInteraction.Ignore))
+				return false;
+
+			// don't stick to weird heights
+			var heightDiff = (pos.y - 1f) - hit.point.y;
+			if (heightDiff < 0.025f || heightDiff > 0.251f)
+				return false;
+				
+			var newPosition = pos;
+			newPosition.y -= heightDiff;
+				
+			var velocity = rb.linearVelocity;
+			tr.position = newPosition;
+				
+			rb.position = newPosition;
+			rb.linearVelocity = velocity;
+
+			// treat it as if the player landed
+			airTime = 0f;
+			sticked = true;
+
+			return true;
+		}
+		
 		private bool handleStep()
 		{
 			var directionsClearances = getDirectionsClearances();
