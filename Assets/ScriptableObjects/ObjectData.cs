@@ -38,5 +38,8 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public EAction UseAction;
+
+		[Header("Other")]
+		public bool AttachDecals = true;
 	}
 }

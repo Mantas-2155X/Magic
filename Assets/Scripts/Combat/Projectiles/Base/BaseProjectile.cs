@@ -136,7 +136,12 @@ namespace Combat.Projectiles.Base
 				ObjectManager.Instance.CreateAttack(AttackData, Source, contact, attach);
 
 			if (ProjectileData.Decal != null)
-				ObjectManager.Instance.CreateDecal(ProjectileData.Decal, contact, attach);
+			{
+				if (!attach.NotNull() || attach is not IObject obj || obj.ObjectData.AttachDecals)
+				{
+					ObjectManager.Instance.CreateDecal(ProjectileData.Decal, contact, attach);
+				}
+			}
 				
 			clearVelocityAndPool().Forget();
 		}

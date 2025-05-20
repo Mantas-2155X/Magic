@@ -56,7 +56,8 @@ namespace Combat.Attacks
 			}
 			else if (other.TryGetComponent<IObject>(out var obj) && !objects.Contains(obj))
 			{
-				attach = obj;
+				if (obj.ObjectData.AttachDecals)
+					attach = obj;
 				objects.Add(obj);
 				
 				obj.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
