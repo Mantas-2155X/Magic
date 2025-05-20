@@ -62,7 +62,9 @@ namespace AI
 		private bool fallPressed;
 		
 		private float airTime;
+		
 		private bool sticked;
+		private bool stepped;
 
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
@@ -155,6 +157,7 @@ namespace AI
 				return;
 
 			sticked = false;
+			stepped = false;
 			
 			CameraTr.position = transform.position + Vector3.up * 0.5f;
 
@@ -887,7 +890,7 @@ namespace AI
 
 		private bool handleStick()
 		{
-			if (airTime > 0.12f || Body.Rigidbody.linearVelocity.y > 0f)
+			if (airTime > 0.12f || Body.Rigidbody.linearVelocity.y > 0f || sticked)
 				return false;
 
 			var rb = Body.Rigidbody;
@@ -924,6 +927,9 @@ namespace AI
 		
 		private bool handleStep()
 		{
+			if (airTime > 0.01f || stepped)
+				return false;
+
 			var directionsClearances = getDirectionsClearances();
 			if (directionsClearances == null || directionsClearances.Count == 0)
 				return false;
@@ -943,25 +949,25 @@ namespace AI
 			var firstOrigin = position + Vector3.up * firstOffset;
 			var secondOrigin = position + Vector3.up * secondOffset;
 
-			var groundLayer = LayerMask.GetMask("Default");
+			var mask = LayerMaskTools.GetMaskWithPlayer();
 			
 			for (var i = 0; i < directionsClearances.Count; i++)
 			{
 				var direction = directionsClearances[i].Item1;
 				
 				// first hit detects a step
-				if (!Physics.BoxCast(firstOrigin, size, direction, Quaternion.identity, 0.04f, groundLayer, QueryTriggerInteraction.Ignore))
+				if (!Physics.BoxCast(firstOrigin, size, direction, Quaternion.identity, 0.04f, ~mask, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				// make sure the step isn't too high
-				if (Physics.BoxCast(secondOrigin, size, direction, Quaternion.identity, 0.06f, groundLayer, QueryTriggerInteraction.Ignore))
+				if (Physics.BoxCast(secondOrigin, size, direction, Quaternion.identity, 0.06f, ~mask, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				var clearanceSize = directionsClearances[i].Item2;
 				var thirdOrigin = position + Vector3.up + direction * 0.55f;
 
 				// get the step height
-				if (!Physics.BoxCast(thirdOrigin, clearanceSize, Vector3.down, out var stepHit, Quaternion.identity, height, groundLayer, QueryTriggerInteraction.Ignore))
+				if (!Physics.BoxCast(thirdOrigin, clearanceSize, Vector3.down, out var stepHit, Quaternion.identity, height, ~mask, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				// don't step to weird heights
@@ -983,7 +989,7 @@ namespace AI
 				newPosition += direction * 0.06f;
 				
 				// make sure there's clearance
-				if (Physics.BoxCast(stepHit.point + direction * 0.06f, clearanceSize, Vector3.up, Quaternion.identity, height, groundLayer, QueryTriggerInteraction.Ignore))
+				if (Physics.BoxCast(stepHit.point + direction * 0.06f, clearanceSize, Vector3.up, Quaternion.identity, height, ~mask, QueryTriggerInteraction.Ignore))
 					continue;
 				
 				var velocity = rb.linearVelocity;
@@ -991,6 +997,11 @@ namespace AI
 				
 				rb.position = newPosition;
 				rb.linearVelocity = velocity;
+				
+				// treat it as if the player landed
+				airTime = 0f;
+				stepped = true;
+
 				return true;
 			}
 
