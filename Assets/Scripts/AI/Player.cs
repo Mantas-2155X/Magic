@@ -137,6 +137,9 @@ namespace AI
 				weaponContainer.localEulerAngles = ViewmodelAngles;
 			}
 			
+			if (MovementType != EMovementType.Normal)
+				return;
+			
 			if (IsGrounded())
 				handleStep();
 			else
