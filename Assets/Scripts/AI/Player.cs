@@ -76,6 +76,8 @@ namespace AI
 		private Vector3 groundNormal;
 		private float groundAngle;
 
+		private Vector3? smoothPosition;
+		
 		private const float maximumGroundAngle = 45.1f;
 
 		#region Identify / SaveLoad
@@ -162,7 +164,21 @@ namespace AI
 			sticked = false;
 			stepped = false;
 			
-			CameraTr.position = transform.position + Vector3.up * 0.5f;
+			if (smoothPosition != null)
+			{
+				var cameraSmoothPosition = smoothPosition.Value + Vector3.up * 0.5f;
+				
+				var newPosition = Vector3.Lerp(CameraTr.position, cameraSmoothPosition, Time.deltaTime * 45f);
+				CameraTr.position = newPosition;
+
+				var magnitude = (newPosition - cameraSmoothPosition).sqrMagnitude;
+				if (magnitude < 0.005f)
+					smoothPosition = null;
+			}
+			else
+			{
+				CameraTr.position = transform.position + Vector3.up * 0.5f;
+			}
 
 			var cameraAngle = CameraTr.eulerAngles;
 			cameraAngle.z = Paralyzed ? -15f : 0f;
@@ -675,7 +691,7 @@ namespace AI
 			if (previous == value)
 				return;
 
-			UnityEngine.Debug.Log(value ? $"[Player {gameObject.name}] Enabled god mode" : $"[Player {gameObject.name}] Disabled god mode");
+			Debug.Log(value ? $"[Player {gameObject.name}] Enabled god mode" : $"[Player {gameObject.name}] Disabled god mode");
 		}
 		
 		public override void SetPowerful(bool value)
@@ -687,7 +703,7 @@ namespace AI
 			if (previous == value)
 				return;
 
-			UnityEngine.Debug.Log(value ? $"[Player {gameObject.name}] Enabled power mode" : $"[Player {gameObject.name}] Disabled power mode");
+			Debug.Log(value ? $"[Player {gameObject.name}] Enabled power mode" : $"[Player {gameObject.name}] Disabled power mode");
 		}
 		
 		public override void SetMovementType(EMovementType value)
@@ -699,16 +715,19 @@ namespace AI
 			// Gravity is manually applied when not grounded
 			Body.Rigidbody.useGravity = false;
 			
+			// Cancel any step smoothing
+			smoothPosition = null;
+			
 			if (previous == value)
 				return;
 
 			switch (value)
 			{
 				case EMovementType.Noclip:
-					UnityEngine.Debug.Log($"[Player {gameObject.name}] Enabled noclip mode");
+					Debug.Log($"[Player {gameObject.name}] Enabled noclip mode");
 					break;
 				case EMovementType.Normal when previous == EMovementType.Noclip:
-					UnityEngine.Debug.Log($"[Player {gameObject.name}] Disabled noclip mode");
+					Debug.Log($"[Player {gameObject.name}] Disabled noclip mode");
 					break;
 			}
 		}
@@ -931,6 +950,8 @@ namespace AI
 			rb.position = newPosition;
 			rb.linearVelocity = velocity;
 
+			smoothPosition = newPosition;
+			
 			// treat it as if the player landed
 			airTime = 0f;
 			sticked = true;
@@ -1010,6 +1031,8 @@ namespace AI
 				
 				rb.position = newPosition;
 				rb.linearVelocity = velocity;
+
+				smoothPosition = newPosition;
 				
 				// treat it as if the player landed
 				airTime = 0f;
