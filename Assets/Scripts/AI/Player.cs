@@ -69,6 +69,9 @@ namespace AI
 		private Vector2 lookDirection;
 		private Vector2 moveDirection;
 
+		private Rigidbody groundBody;
+		private Vector3 groundPoint;
+
 		private Vector3 groundPointVelocity;
 		private Vector3 groundNormal;
 		private float groundAngle;
@@ -256,6 +259,10 @@ namespace AI
 				rb.AddForce(Physics.gravity, ForceMode.Acceleration);
 				return;
 			}
+			
+			// Apply some force on the object the player is standing on
+			if (groundBody != null)
+				groundBody.AddForceAtPosition(Vector3.down * rb.mass, groundPoint);
 
 			var velocity = rb.linearVelocity;
 			switch (velocity.magnitude)
@@ -844,7 +851,9 @@ namespace AI
 			{
 				groundPointVelocity = Vector3.zero;
 				groundNormal = Vector3.zero;
+				groundPoint = Vector3.zero;
 				groundAngle = float.MaxValue;
+				groundBody = null;
 				
 				return false;
 			}
@@ -866,7 +875,9 @@ namespace AI
 					
 					groundPointVelocity = rb != null ? rb.GetPointVelocity(hit.point) : Vector3.zero;
 					groundNormal = normal;
+					groundPoint = hit.point;
 					groundAngle = angle;
+					groundBody = rb;
 					
 					return true;
 				}
@@ -874,7 +885,9 @@ namespace AI
 			
 			groundPointVelocity = Vector3.zero;
 			groundNormal = Vector3.zero;
+			groundPoint = Vector3.zero;
 			groundAngle = float.MaxValue;
+			groundBody = null;
 			
 			return false;
 		}
