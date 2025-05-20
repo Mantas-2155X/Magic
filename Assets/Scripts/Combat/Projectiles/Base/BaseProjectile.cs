@@ -137,7 +137,7 @@ namespace Combat.Projectiles.Base
 
 			if (ProjectileData.Decal != null)
 			{
-				if (!attach.NotNull() || attach is not IObject obj || obj.ObjectData.AttachDecals)
+				if (attach.IsNull() || ((attach is not IObject obj || obj.ObjectData.AttachDecals) && (attach is not IAlive alive || alive.Data.AttachDecals)))
 				{
 					ObjectManager.Instance.CreateDecal(ProjectileData.Decal, contact, attach);
 				}

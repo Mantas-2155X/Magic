@@ -36,6 +36,7 @@ MonoBehaviour:
   BrokenBodyPrefab: {fileID: 295334512180552911, guid: 3888f632278c1dcb2a4f9b6ddb275b38, type: 3}
   BrokenArmPrefab: {fileID: 4027122668051800298, guid: 6b769d4d7ce6fdd75991852972882303, type: 3}
   BrokenFootPrefab: {fileID: 6523054473690755916, guid: 518a3fdcc001d4c1bb6e5a63c6a0e19e, type: 3}
+  CanGrab: 1
   GrabEnergy: 4
   GrabShinkedEnergy: 6.5
   GrabPositionSpeed: 15
@@ -44,10 +45,11 @@ MonoBehaviour:
   GrabMass: 25
   GrabDropDistance: 3
   GrabDropAngle: 65
-  MovementForce: 75
-  JumpForce: 125
+  AttachDecals: 0
   SprintMultiplier: 1.25
-  StopSlide: 0.65
-  AirMovement: 0.1
-  SpeedClampModifier: 0.8179
+  NoclipSpeed: 10
+  Acceleration: 1.75
+  AirAcceleration: 0.15
+  Friction: 750
+  JumpForce: 125
   SprintEnergy: 0

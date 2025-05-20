@@ -47,7 +47,9 @@ namespace Combat.Attacks
 				// Don't damage caster
 				if (GetAlive() != alive)
 				{
-					attach = alive;
+					if (alive.Data.AttachDecals)
+						attach = alive;
+					
 					alives.Add(alive);
 			
 					alive.Damage(AttackData.Damage, GetAlive(), AttackData.Element);
@@ -58,6 +60,7 @@ namespace Combat.Attacks
 			{
 				if (obj.ObjectData.AttachDecals)
 					attach = obj;
+				
 				objects.Add(obj);
 				
 				obj.Damage(AttackData.Damage, GetAlive(), AttackData.Element);

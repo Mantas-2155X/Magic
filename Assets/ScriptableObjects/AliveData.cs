@@ -85,5 +85,8 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public float GrabDropAngle = 100f;
+		
+		[Header("Other")]
+		public bool AttachDecals = true;
 	}
 }
