@@ -14,6 +14,9 @@ namespace ScriptableObjects
 		public bool IsBreakable;
 
 		[SerializeField]
+		public bool BreakAtCollisionPoint;
+		
+		[SerializeField]
 		public float MaximumHealth;
 
 		[SerializeField]

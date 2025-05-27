@@ -13,9 +13,11 @@ namespace Components
 		[SerializeField]
 		public Rigidbody[] Rigidbodies;
 		
+		public Vector3? ExplosionPoint;
+		
 		public void Awake()
 		{
-			var position = transform.position;
+			var position = ExplosionPoint ?? transform.position;
 			var scale = transform.localScale;
 
 			Radius *= Mathf.Max(scale.x, scale.y, scale.z);

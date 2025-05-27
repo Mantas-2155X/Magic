@@ -19,7 +19,7 @@ namespace Objects.Interfaces
 
 		public float Health { get; }
 
-		public void Damage(float damage, object source, EElement type);
+		public void Damage(float damage, object source, EElement type, Vector3? hitPoint = null);
 		public void Break(object source);
 
 		#endregion

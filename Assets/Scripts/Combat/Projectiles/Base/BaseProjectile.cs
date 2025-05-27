@@ -128,7 +128,7 @@ namespace Combat.Projectiles.Base
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{
 					attach = obj;
-					obj.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
+					obj.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element, contact.point);
 				}
 			}
 			

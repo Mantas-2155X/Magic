@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
 using Combat.Enums;
+using Components;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Newtonsoft.Json.Linq;
@@ -36,6 +37,8 @@ namespace Objects.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
+		public Vector3? LastHitPoint { get; private set; }
+		
 		private GameObject thisGo;
 		private Transform thisTr;
 
@@ -157,8 +160,10 @@ namespace Objects.Base
 			Health = ObjectData.MaximumHealth;
 		}
 		
-		public virtual void Damage(float damage, object source, EElement type)
+		public virtual void Damage(float damage, object source, EElement type, Vector3? hitPoint = null)
 		{
+			LastHitPoint = hitPoint;
+			
 			if (!ObjectData.IsBreakable || damage < 0)
 				return;
 			
@@ -184,6 +189,9 @@ namespace Objects.Base
 				brokenTr.rotation = thisTr.rotation;
 				brokenTr.localScale = thisTr.localScale;
 				
+				if (ObjectData.BreakAtCollisionPoint && LastHitPoint != null && brokenPrefab.TryGetComponent<Explode>(out var explode))
+					explode.ExplosionPoint = LastHitPoint;
+
 				brokenPrefab.SetActive(true);
 			}
 			
