@@ -179,6 +179,14 @@ namespace Scenes
 			
 			if (this == null || !isActiveAndEnabled)
 				return;
+
+			// Objects will kill the player with the huge velocities. Just godmode as its the end anyway
+			if (PlayerIncluded)
+			{
+				var player = AIManager.Instance.Player;
+				if (player != null)
+					player.SetInvulnerable(true);
+			}
 			
 			OrbTr.parent.gameObject.SetActive(true);
 

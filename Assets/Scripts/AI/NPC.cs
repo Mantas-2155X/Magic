@@ -651,8 +651,10 @@ namespace AI
 
 		#region MonoBehaviour
 
-		public void Update()
+		public override void Update()
 		{
+			base.Update();
+			
 			if (PauseManager.IsPaused)
 				return;
 			

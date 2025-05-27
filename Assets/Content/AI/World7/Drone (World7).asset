@@ -57,6 +57,9 @@ MonoBehaviour:
   GrabMass: 25
   GrabDropDistance: 5
   GrabDropAngle: 100
+  ImpactMinimumThreshold: 2250
+  ImpactDamageScale: 0.0115
+  AttachDecals: 1
   SenseRange: 50
   SpotRange: 50
   FieldOfView: 360

@@ -85,6 +85,13 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public float GrabDropAngle = 100f;
+
+		[Header("Impact")]
+		[SerializeField]
+		public float ImpactMinimumThreshold = 1800;
+
+		[SerializeField]
+		public float ImpactDamageScale = 0.0115f;
 		
 		[Header("Other")]
 		public bool AttachDecals = true;

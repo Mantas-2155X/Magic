@@ -56,6 +56,9 @@ MonoBehaviour:
   GrabMass: 25
   GrabDropDistance: 5
   GrabDropAngle: 100
+  ImpactMinimumThreshold: 2250
+  ImpactDamageScale: 0.0115
+  AttachDecals: 1
   SenseRange: 40
   SpotRange: 40
   FieldOfView: 360
@@ -80,6 +83,10 @@ MonoBehaviour:
   UseSightCheck: 0
   CanTakeResources: 0
   Stationary: 0
+  CanChaseInterrupt: 0
+  ChaseInterruptEvery: 5
+  ChaseInterruptDistance: 7.5
+  ChaseInterruptDuration: 3
   CanSelfDestruct: 1
   SelfDestructAfter: 7.5
   SelfDestructAttack: {fileID: 11400000, guid: ca485fbe64df111cba21f83d47ccc93e, type: 2}

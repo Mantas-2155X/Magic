@@ -39,6 +39,8 @@ namespace AI.Base
 		public static readonly OnRelationshipGroupChangedEvent OnRelationshipGroupChangedEvent = new ();
 		public static readonly OnSpellSelectedEvent OnSpellSelectedEvent = new ();
 		
+		private readonly List<Rigidbody> collidedRigidbodies = new ();
+		
 		private LayerMask previousExcludeLayers;
 
 		private GameObject thisGo;
@@ -93,27 +95,45 @@ namespace AI.Base
 		
 		#region MonoBehaviour
 
+		public virtual void Update()
+		{
+			if (PauseManager.IsPaused)
+				return;
+
+			if (!IsAlive)
+				return;
+
+			collidedRigidbodies.Clear();
+		}
+
 		public virtual void FixedUpdate()
 		{
+			if (PauseManager.IsPaused)
+				return;
+
 			if (!IsAlive)
 				return;
 			
 			HandleGrab();
 		}
 
-		// todo: needs fixing, sometimes very wrong
-		/*public void OnCollisionEnter(Collision coll)
+		public void OnCollisionEnter(Collision collision)
 		{
 			if (!IsAlive)
 				return;
 
-			var velocity = coll.relativeVelocity.y - Body.FallMinimumVelocity;
-			if (velocity < 0f)
+			var rb = collision.rigidbody;
+			if (rb == null || rb.linearVelocity.magnitude < 5f || collidedRigidbodies.Contains(rb) || rb.GetComponent<IObject>().IsNull())
 				return;
 
-			var damage = Mathf.FloorToInt(Body.FallDamageMultiplier * (velocity * velocity));
-			Damage(damage, null, EElement.Unknown);
-		}*/
+			collidedRigidbodies.Add(rb);
+			
+			var magnitude = Mathf.Max(0f, (collision.relativeVelocity.sqrMagnitude * rb.mass) - Data.ImpactMinimumThreshold);
+			if (magnitude == 0f)
+				return;
+
+			Damage(magnitude * Data.ImpactDamageScale, null, EElement.Unknown);
+		}
 
 		#endregion
 		

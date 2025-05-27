@@ -120,8 +120,10 @@ namespace AI
 			DisableInput();
 		}
 
-		public void Update()
+		public override void Update()
 		{
+			base.Update();
+			
 			if (PauseManager.IsPaused)
 				return;
 			
@@ -212,6 +214,9 @@ namespace AI
 		{
 			base.FixedUpdate();
 			
+			if (PauseManager.IsPaused)
+				return;
+
 			if (!IsAlive)
 				return;
 			
