@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AI.Base;
 using AI.Enums;
 using AI.Events;
+using Combat.Spells;
 using Combat.Wearables.Enums;
 using Components;
 using Managers;
@@ -615,7 +616,7 @@ namespace AI
 			}
 			
 			var rb = iObject.Rigidbody;
-			if (rb == null || rb.mass > ((PlayerData)Data).GrabMass)
+			if (rb == null || rb.mass > ((PlayerData)Data).GrabMass || PhysicsManipulator.ManipulatingObjects.Contains(iObject))
 			{
 				ReleaseObject();
 				return;

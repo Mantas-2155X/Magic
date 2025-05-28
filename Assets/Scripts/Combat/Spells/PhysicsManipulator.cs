@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AI;
 using Combat.Spells.Base;
 using Managers;
@@ -15,6 +16,8 @@ namespace Combat.Spells
 	{
 		public IObject Object { get; private set; }
 
+		public static readonly List<IObject> ManipulatingObjects = new ();
+		
 		private static readonly float moveSpeed = 15f;
 		private static readonly float distanceStep = 0.5f;
 		private static readonly float minimumDistance = 1.25f;
@@ -114,7 +117,7 @@ namespace Combat.Spells
 				return false;
 
 			var rb = LastHit.rigidbody;
-			if (rb == null || rb.isKinematic || !rb.TryGetComponent<IObject>(out var obj) || obj.IsNull())
+			if (rb == null || rb.isKinematic || !rb.TryGetComponent<IObject>(out var obj) || obj.IsNull() || obj == Owner.Grabbing)
 				return false;
 
 			grabObject(obj);
@@ -138,7 +141,6 @@ namespace Combat.Spells
 		private void grabObject(IObject obj)
 		{
 			Player.PreventHotbarScrolling = true;
-
 			lineRenderer.enabled = true;
 			
 			if (Object.NotNull())
@@ -152,7 +154,7 @@ namespace Combat.Spells
 			
 			grabAction = SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1;
 			grabAngles = obj.GetTransform().eulerAngles - Owner.GetTransform().eulerAngles;
-			grabDistance = Vector3.Distance(Object.Rigidbody.position, ((Player)Owner).CameraTr.position);
+			grabDistance = Vector3.Distance(obj.Rigidbody.position, ((Player)Owner).CameraTr.position);
 			
 			grabCollisionDetectionMode = rb.collisionDetectionMode;
 
@@ -160,13 +162,16 @@ namespace Combat.Spells
 			rb.linearVelocity = Vector3.zero;
 			rb.angularVelocity = Vector3.zero;
 			rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+			
+			ManipulatingObjects.Add(obj);
 		}
 		
 		private void releaseObject()
 		{
 			Player.PreventHotbarScrolling = false;
-
 			lineRenderer.enabled = false;
+
+			ManipulatingObjects.Remove(Object);
 			
 			if (Object.IsNull())
 				return;
