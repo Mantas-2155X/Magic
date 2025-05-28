@@ -44,6 +44,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5a555ac887240f60783c7b2f6a5c415e, type: 2}
   - {fileID: 11400000, guid: f691199c7c3c6738f868a06103fa27fd, type: 2}
   - {fileID: 11400000, guid: f5ae129144c89e844bc0b34ff40400b3, type: 2}
+  - {fileID: 11400000, guid: 888762c6131e7053ebd7f952814e7839, type: 2}
   - {fileID: 11400000, guid: b3f9e84641edc21bd8ace559a38abb96, type: 2}
   - {fileID: 11400000, guid: e502e34055ebe87dfad248d2b1f05eba, type: 2}
   - {fileID: 11400000, guid: 904aa1215e24b6521a8d67b2a8f52b81, type: 2}
@@ -64,6 +65,8 @@ MonoBehaviour:
   GrabMass: 25
   GrabDropDistance: 3
   GrabDropAngle: 65
+  ImpactMinimumThreshold: 1800
+  ImpactDamageScale: 0.0115
   AttachDecals: 0
   SprintMultiplier: 1.25
   NoclipSpeed: 10

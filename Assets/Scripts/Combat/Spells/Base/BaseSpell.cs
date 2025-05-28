@@ -54,13 +54,13 @@ namespace Combat.Spells.Base
 
 		#region Identify / SaveLoad
 		
-		public void Awake()
+		public virtual void Awake()
 		{
 			StateManager.Instance.RegisterObject(this);
 			initializeObject();
 		}
 
-		public void OnDestroy()
+		public virtual void OnDestroy()
 		{
 			StateManager.Instance.UnregisterObject(this);
 		}

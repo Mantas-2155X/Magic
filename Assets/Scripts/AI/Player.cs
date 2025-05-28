@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using AI.Base;
 using AI.Enums;
+using AI.Events;
 using Combat.Wearables.Enums;
 using Components;
 using Managers;
@@ -35,6 +35,7 @@ namespace AI
 		public static float MouseSensitivity = 1f;
 		public static float ControllerSensitivity = 1f;
 		public static bool AllowHotbarScrolling = true;
+		public static bool PreventHotbarScrolling;
 		
 		[SerializeField]
 		public float UseDistance = 2.5f;
@@ -56,6 +57,8 @@ namespace AI
 
 		public Camera Camera { get; private set; }
 		public Transform CameraTr { get; private set; }
+
+		public static readonly OnScrollEvent OnScrollEvent = new ();
 
 		private bool walking;
 		private bool jumpPressed;
@@ -648,15 +651,24 @@ namespace AI
 
 		private void onScroll(InputAction.CallbackContext ctx)
 		{
+			var device = ctx.control.device;
+			var value = ctx.ReadValue<Vector2>().y;
+
+			OnScrollEvent?.Invoke(this, device, value);
+			
 			if (Spells.Count < 2)
 				return;
 
 			// Scrollwheel switching might be disabled
-			if (!AllowHotbarScrolling && ctx.control.device is Mouse)
+			if (!AllowHotbarScrolling && device is Mouse)
+				return;
+			
+			// Some spells might disable scrolling
+			if (PreventHotbarScrolling)
 				return;
 			
 			var currentIndex = GetSpellIndex(Spell.NotNull() ? Spell.SpellData : null);
-			currentIndex -= (int)ctx.ReadValue<Vector2>().y;
+			currentIndex -= (int)value;
 
 			var maxSpell = Mathf.Min(UI.Player.Instance.HUD.Hotbar.Size, Spells.Count);
 			
