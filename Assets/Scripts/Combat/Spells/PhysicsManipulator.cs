@@ -79,7 +79,7 @@ namespace Combat.Spells
 			var tr = Object.GetTransform();
 			
 			lineRenderer.SetPosition(0, cameraTr.position - cameraTr.up * 0.25f);
-			lineRenderer.SetPosition(1, tr.position + (tr.right * grabPosition.x + tr.up * grabPosition.y + tr.forward * grabPosition.z));
+			lineRenderer.SetPosition(1, tr.position + (tr.right * (grabPosition.x * tr.localScale.x) + tr.up * (grabPosition.y * tr.localScale.y) + tr.forward * (grabPosition.z * tr.localScale.z)));
 		}
 
 		public void LateUpdate()
@@ -159,7 +159,7 @@ namespace Combat.Spells
 			grabAction = SettingsManager.Instance.GetKeybind("keybinds-gameplay-attack").Item1;
 			grabPosition = tr.InverseTransformPoint(LastHit.point);
 			grabAngles = tr.eulerAngles - Owner.GetTransform().eulerAngles;
-			grabDistance = Vector3.Distance(obj.Rigidbody.position + (tr.right * grabPosition.x + tr.up * grabPosition.y + tr.forward * grabPosition.z), ((Player)Owner).CameraTr.position);
+			grabDistance = Vector3.Distance(obj.Rigidbody.position + (tr.right * (grabPosition.x * tr.localScale.x) + tr.up * (grabPosition.y * tr.localScale.y) + tr.forward * (grabPosition.z * tr.localScale.z)), ((Player)Owner).CameraTr.position);
 			
 			grabCollisionDetectionMode = rb.collisionDetectionMode;
 
@@ -199,7 +199,7 @@ namespace Combat.Spells
 			var rb = Object.Rigidbody;
 			var tr = Object.GetTransform();
 			
-			var linearVelocity = (cameraTr.position + (cameraTr.forward * grabDistance)) - (rb.position + (tr.right * grabPosition.x + tr.up * grabPosition.y + tr.forward * grabPosition.z));
+			var linearVelocity = (cameraTr.position + (cameraTr.forward * grabDistance)) - (rb.position + (tr.right * (grabPosition.x * tr.localScale.x) + tr.up * (grabPosition.y * tr.localScale.y) + tr.forward * (grabPosition.z * tr.localScale.z)));
 			rb.linearVelocity = linearVelocity * moveSpeed;
 
 			// todo: make this use velocity
