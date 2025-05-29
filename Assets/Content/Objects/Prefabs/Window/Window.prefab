@@ -180,6 +180,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: 0acba2072db03b4c1bf9a03cc3eeb0da, type: 2}
+  <Rigidbody>k__BackingField: {fileID: 0}
+  objectID: 
 --- !u!65 &770517336782103236
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -199,5 +201,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 0.002, z: 2}
+  m_Size: {x: 2, y: 0.01, z: 2}
   m_Center: {x: 0, y: 0, z: 0}

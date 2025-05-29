@@ -911,7 +911,7 @@ namespace AI.Base
 			}
 
 			var corePos = Body.Core.position;
-			var coreForward = Body.Core.forward;
+			var coreUp = Body.Core.up;
 
 			switch (this)
 			{
@@ -931,7 +931,7 @@ namespace AI.Base
 			// Shrinking makes it kinematic, no velocities so use MoveX and ignore distance and angle checks
 			if (OriginalGrabSize != null)
 			{
-				rb.MovePosition(corePos + coreForward);
+				rb.MovePosition(corePos + coreUp);
 				rb.MoveRotation(Body.Rigidbody.rotation);
 				
 				return;
@@ -943,13 +943,13 @@ namespace AI.Base
 				return;
 			}
 			
-			if (Vector3.Angle(objPos - corePos, coreForward) > data.GrabDropAngle)
+			if (Vector3.Angle(objPos - corePos, coreUp) > data.GrabDropAngle)
 			{
 				ReleaseObject();
 				return;
 			}
 			
-			var linearVelocity = corePos + coreForward - objPos;
+			var linearVelocity = corePos + coreUp - objPos;
 			rb.linearVelocity = linearVelocity * data.GrabPositionSpeed;
 			
 			var deltaRotation = Body.Rigidbody.rotation * Quaternion.Inverse(rb.rotation);

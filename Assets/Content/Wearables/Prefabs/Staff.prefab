@@ -175,11 +175,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <WearableData>k__BackingField: {fileID: 11400000, guid: f9d97d9436995e760970b566bd4d326a, type: 2}
+  objectID: 
   <Rigidbody>k__BackingField: {fileID: 8584383134835422118}
   <Colliders>k__BackingField:
   - {fileID: 2886060341139500075}
   - {fileID: 2253220343047811042}
-  <DroppedWearable>k__BackingField: {fileID: 0}
 --- !u!54 &8584383134835422118
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -30,9 +30,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5422014121488987390}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100.00003, z: 100.00003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -110,9 +110,9 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.002
-  m_Height: 0.009
-  m_Direction: 2
+  m_Radius: 0.2
+  m_Height: 0.9
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2302048365919777190
 MonoBehaviour:
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: 22e0057c6b8d6f77eb1edb0dbaa0b7ed, type: 2}
   <Rigidbody>k__BackingField: {fileID: -8164142931239711949}
-  <ObjectID>k__BackingField: 
+  objectID: 
   Type: 2
   Amount: 15
 --- !u!54 &-8164142931239711949
@@ -177,7 +177,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.00105
-  m_Height: 0.006
-  m_Direction: 2
+  m_Radius: 0.105
+  m_Height: 0.6
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}

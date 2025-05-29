@@ -24315,8 +24315,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0045, y: 0.0045, z: 0.00065}
-  m_Center: {x: 0, y: 0, z: -0.00011760991}
+  m_Size: {x: 0.45, y: 0.065, z: 0.45}
+  m_Center: {x: 0, y: -0.01176099, z: 0}
 --- !u!65 &2944650891538244446
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24336,8 +24336,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.005, y: 0.005, z: 0.002}
-  m_Center: {x: 0, y: 0, z: -0.00011760991}
+  m_Size: {x: 0.5, y: 0.2, z: 0.5}
+  m_Center: {x: 0, y: -0.01176099, z: 0}
 --- !u!114 &3046283344021728352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24352,7 +24352,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: 1fcf5a9e4cda647c4bdc130001aaef03, type: 2}
   <Rigidbody>k__BackingField: {fileID: -2719960796659631280}
-  <ObjectID>k__BackingField: 
+  objectID: 
   Type: 1
   Amount: 30
 --- !u!54 &-2719960796659631280

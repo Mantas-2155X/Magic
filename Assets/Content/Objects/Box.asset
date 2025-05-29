@@ -20,6 +20,7 @@ MonoBehaviour:
   Type: 
   IsPoolable: 0
   IsBreakable: 1
+  BreakAtCollisionPoint: 0
   MaximumHealth: 25
   BrokenPrefab: {fileID: 1264454106364523822, guid: 4ff7ca61c8d34000ab2b65180516b290, type: 3}
   IsPickupable: 0
@@ -28,3 +29,4 @@ MonoBehaviour:
   IsUsable: 0
   UsableAfter: 0
   UseAction: 0
+  AttachDecals: 1

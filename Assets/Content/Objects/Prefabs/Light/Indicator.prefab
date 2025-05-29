@@ -142,22 +142,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c07c519d34e871303988f40ba1850b75, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: c07c519d34e871303988f40ba1850b75, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: c07c519d34e871303988f40ba1850b75, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: c07c519d34e871303988f40ba1850b75, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: c07c519d34e871303988f40ba1850b75, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -176,6 +160,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: c07c519d34e871303988f40ba1850b75, type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c07c519d34e871303988f40ba1850b75, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -219,6 +207,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: 1919b5955907580d09afdf6392a6d5da, type: 2}
+  <Rigidbody>k__BackingField: {fileID: 0}
+  objectID: 
   Light: {fileID: 9110891862701272855}
   Enabled: 0
   Renderer: {fileID: 6941647360419453289}
@@ -231,6 +221,7 @@ MonoBehaviour:
   OnLightDisabledEvent:
     m_PersistentCalls:
       m_Calls: []
+  UpdateProbes: []
 --- !u!65 &4022905641897726778
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -250,5 +241,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.002, y: 0.0020000006, z: 0.00090846064}
-  m_Center: {x: 0, y: 0, z: 0.00045423032}
+  m_Size: {x: 0.2, y: 0.09084606, z: 0.2}
+  m_Center: {x: 0, y: 0.04542303, z: 0}

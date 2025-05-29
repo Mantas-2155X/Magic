@@ -27,9 +27,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 289324834980497232}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2446116486164113013}
@@ -37,7 +37,7 @@ Transform:
   - {fileID: 1604936868021578409}
   - {fileID: 3715673255086439455}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2338142867299825006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4949,10 +4949,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1652587318077026865}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5019,7 +5019,6 @@ GameObject:
   - component: {fileID: 449613947390352052}
   - component: {fileID: 5099138299677915897}
   - component: {fileID: 4770532286693542085}
-  - component: {fileID: 4775011666463845377}
   - component: {fileID: 7191043942380267139}
   m_Layer: 9
   m_Name: Container-Destroyed.004
@@ -5104,10 +5103,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4968606440048855768}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5139,29 +5138,6 @@ MonoBehaviour:
   DissolveAfter: 5
   DissolveDuration: 1.5
   ShouldDissolve: 1
---- !u!136 &4775011666463845377
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4968606440048855768}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.001
-  m_Height: 0.001
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: -0.001806501}
 --- !u!64 &7191043942380267139
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5280,10 +5256,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6761990036296928854}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5350,7 +5326,6 @@ GameObject:
   - component: {fileID: 3077345581908997967}
   - component: {fileID: 7210711798740305914}
   - component: {fileID: 6799481278712226852}
-  - component: {fileID: 5851577217853718339}
   - component: {fileID: 2825225045212424094}
   m_Layer: 9
   m_Name: Container-Destroyed.001
@@ -5435,10 +5410,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7599331858211723262}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 5
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5470,29 +5445,6 @@ MonoBehaviour:
   DissolveAfter: 5
   DissolveDuration: 1.5
   ShouldDissolve: 1
---- !u!136 &5851577217853718339
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7599331858211723262}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.001
-  m_Height: 0.0020967284
-  m_Direction: 1
-  m_Center: {x: 0, y: -0.00005816396, z: 0.0021828967}
 --- !u!64 &2825225045212424094
 MeshCollider:
   m_ObjectHideFlags: 0
