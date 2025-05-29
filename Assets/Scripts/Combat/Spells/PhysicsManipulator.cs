@@ -22,6 +22,20 @@ namespace Combat.Spells
 		private static readonly float distanceStep = 0.5f;
 		private static readonly float minimumDistance = 1.25f;
 
+		private Transform end;
+		public Transform End
+		{
+			get
+			{
+				if (end != null)
+					return end;
+
+				var asset = Addressables.LoadAssetAsync<GameObject>("Spells/Prefabs/Physics Manipulator End.prefab").WaitForCompletion();
+				end = Instantiate(asset, World.World.Instance.Ragdolls).transform;
+				return end;
+			}
+		}
+
 		private LineRenderer lineRenderer;
 		private Transform cameraTr;
 		
@@ -77,9 +91,12 @@ namespace Combat.Spells
 				return;
 
 			var tr = Object.GetTransform();
+			var endPosition = tr.position + (tr.right * (grabPosition.x * tr.localScale.x) + tr.up * (grabPosition.y * tr.localScale.y) + tr.forward * (grabPosition.z * tr.localScale.z));
 			
 			lineRenderer.SetPosition(0, cameraTr.position - cameraTr.up * 0.25f);
-			lineRenderer.SetPosition(1, tr.position + (tr.right * (grabPosition.x * tr.localScale.x) + tr.up * (grabPosition.y * tr.localScale.y) + tr.forward * (grabPosition.z * tr.localScale.z)));
+			lineRenderer.SetPosition(1, endPosition);
+			
+			End.position = endPosition;
 		}
 
 		public void LateUpdate()
@@ -146,6 +163,8 @@ namespace Combat.Spells
 			Player.PreventHotbarScrolling = true;
 			lineRenderer.enabled = true;
 			
+			End.gameObject.SetActive(true);
+
 			if (Object.NotNull())
 				releaseObject();
 
@@ -176,6 +195,7 @@ namespace Combat.Spells
 			Player.PreventHotbarScrolling = false;
 			lineRenderer.enabled = false;
 
+			End.gameObject.SetActive(false);
 			ManipulatingObjects.Remove(Object);
 			
 			if (Object.IsNull())
