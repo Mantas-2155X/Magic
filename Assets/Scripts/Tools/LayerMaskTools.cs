@@ -15,7 +15,7 @@ namespace Tools
 			if (lmask != null)
 				return lmask.Value;
 
-			lmask = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Broken", "Movement");
+			lmask = LayerMask.GetMask("TransparentFX", "Ignore Raycast", "UI", "Projectile", "Broken", "Movement", "AfterPostProcessing");
 			return lmask!.Value;
 		}
 		
