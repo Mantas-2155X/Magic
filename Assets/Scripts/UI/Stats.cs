@@ -1,7 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using AI.Base;
 using AI.Interfaces;
 using Combat.Enums;
 using Managers;
+using State.Interfaces;
 using TMPro;
 using Tools;
 using UnityEngine;
@@ -38,6 +42,14 @@ namespace UI
 		[SerializeField]
 		public float Smoothing;
 
+		[SerializeField]
+		public Transform DamageSourceTemplate;
+		
+		private readonly Dictionary<Transform, Tuple<Vector3, float>> damageSources = new ();
+		private readonly List<Transform> clearDamageSources = new ();
+
+		private AI.Player currentPlayer;
+		
 		private float targetRed;
 		
 		private float targetHealth;
@@ -87,6 +99,55 @@ namespace UI
 				offset.y = Mathf.Lerp(offset.y, targetEnergy, Time.unscaledDeltaTime * Smoothing);
 				EnergyBottle.offsetMax = offset;
 			}
+			
+			// Damage sources
+			if (currentPlayer != null)
+			{
+				var time = Time.time;
+				var playerTr = currentPlayer.GetTransform();
+				
+				var playerPos = playerTr.position;
+				playerPos.y = 0f;
+				
+				clearDamageSources.Clear();
+				
+				foreach (var pair in damageSources)
+				{
+					var tr = pair.Key;
+					var go = tr.gameObject;
+					
+					if (pair.Value == null)
+					{
+						if (go.activeSelf)
+							go.SetActive(false);
+						
+						continue;
+					}
+
+					if (time > pair.Value.Item2)
+					{
+						clearDamageSources.Add(pair.Key);
+						go.SetActive(false);
+						continue;
+					}
+					
+					if (!go.activeSelf)
+						go.SetActive(true);
+
+					var direction = (playerPos - pair.Value.Item1).normalized;
+					
+					var newDirection = new Vector3(-direction.x, 0f, -direction.z);
+					var projected = Vector3.ProjectOnPlane(playerTr.forward, Vector3.up);
+					
+					var angle = Vector3.SignedAngle(projected, newDirection, Vector3.up);
+					var radian = angle * Mathf.Deg2Rad;
+					
+					tr.localPosition = new Vector3(Mathf.Sin(radian), Mathf.Cos(radian), 0f) * 128f;
+				}
+
+				for (var i = clearDamageSources.Count - 1; i >= 0; i--)
+					damageSources[clearDamageSources[i]] = null;
+			}
 		}
 
 		public void OnDestroy()
@@ -115,6 +176,28 @@ namespace UI
 				return;
 
 			setHealth(player.CurrentHealth, player.Data.Health);
+			
+			if (type == EElement.Unknown || source is not IIdentifiable identifiable || identifiable.IsNull())
+				return;
+
+			Transform damageIndicator = null;
+			
+			foreach (var pair in damageSources)
+			{
+				if (pair.Value != null)
+					continue;
+
+				damageIndicator = pair.Key;
+				break;
+			}
+
+			if (damageIndicator == null)
+				damageIndicator = Instantiate(DamageSourceTemplate.gameObject, DamageSourceTemplate.parent).transform;
+
+			var pos = identifiable.GetTransform().position;
+			pos.y = 0f;
+			
+			damageSources[damageIndicator] = new Tuple<Vector3, float>(pos, Time.time + 2.5f);
 		}
 		
 		public void OnRestoreMana(IAlive alive, float generated, object source)
@@ -157,6 +240,9 @@ namespace UI
 			setHealth(0, 100);
 			setMana(0, 100);
 			setEnergy(0, 100);
+			
+			resetDamageSources();
+			currentPlayer = null;
 		}
 		
 		public void OnSpawn(IAlive alive)
@@ -164,11 +250,14 @@ namespace UI
 			if (alive is not AI.Player player)
 				return;
 
+			currentPlayer = player;
 			gameObject.SetActive(true);
 			
 			setHealth(player.CurrentHealth, player.Data.Health);
 			setMana(player.CurrentMana, player.Data.Mana);
 			setEnergy(player.CurrentEnergy, player.Data.Energy);
+			
+			resetDamageSources();
 		}
 		
 		private void setHealth(float amount, float maximum)
@@ -200,6 +289,13 @@ namespace UI
 				amount = maximum;
 			
 			targetEnergy = -MathTools.Remap(amount, 0f, maximum, 111f, 0f);
+		}
+
+		private void resetDamageSources()
+		{
+			var keys = damageSources.Keys.ToList();
+			for (var i = keys.Count - 1; i >= 0; i--)
+				damageSources[keys[i]] = null;
 		}
 	}
 }
