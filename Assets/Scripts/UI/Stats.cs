@@ -142,7 +142,7 @@ namespace UI
 					var angle = Vector3.SignedAngle(projected, newDirection, Vector3.up);
 					var radian = angle * Mathf.Deg2Rad;
 					
-					tr.localPosition = new Vector3(Mathf.Sin(radian), Mathf.Cos(radian), 0f) * 128f;
+					tr.localPosition = new Vector3(Mathf.Sin(radian), Mathf.Cos(radian), 0f) * 13f;
 				}
 
 				for (var i = clearDamageSources.Count - 1; i >= 0; i--)
