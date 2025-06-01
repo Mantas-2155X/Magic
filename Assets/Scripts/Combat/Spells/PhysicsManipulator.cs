@@ -43,6 +43,7 @@ namespace Combat.Spells
 		private Vector3 grabPosition;
 		private Vector3 grabAngles;
 		private float grabDistance;
+		private bool grabbing;
 
 		private CollisionDetectionMode grabCollisionDetectionMode;
 
@@ -85,7 +86,12 @@ namespace Combat.Spells
 				return;
 			
 			if (Object.IsNull())
+			{
+				if (grabbing)
+					releaseObject();
+				
 				return;
+			}
 			
 			if (lineRenderer == null)
 				return;
@@ -182,6 +188,8 @@ namespace Combat.Spells
 			
 			grabCollisionDetectionMode = rb.collisionDetectionMode;
 
+			grabbing = true;
+
 			rb.useGravity = false;
 			rb.linearVelocity = Vector3.zero;
 			rb.angularVelocity = Vector3.zero;
@@ -198,6 +206,8 @@ namespace Combat.Spells
 			End.gameObject.SetActive(false);
 			ManipulatingObjects.Remove(Object);
 			
+			grabbing = false;
+
 			if (Object.IsNull())
 				return;
 			
