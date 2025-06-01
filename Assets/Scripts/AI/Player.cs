@@ -733,6 +733,9 @@ namespace AI
 			// Gravity is manually applied when not grounded
 			Body.Rigidbody.useGravity = false;
 			
+			// Don't block npc way
+			Obstacle.enabled = value == EMovementType.Normal;
+			
 			// Cancel any step smoothing
 			smoothPosition = null;
 			
