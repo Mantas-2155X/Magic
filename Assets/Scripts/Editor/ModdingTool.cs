@@ -28,9 +28,9 @@ namespace Editor
 		private readonly Regex fileFilter = new (@"\W|_");
 		private readonly Regex versionFilter = new (@"^(0|[1-9]\d*)(\.(0|[1-9]\d*)){0,3}$");
 		
-		private readonly string modsPath = "data/mods";
+		private readonly string exportPath = "data/mods";
 		
-		private readonly List<Type> allowedDatas = new ()
+		private readonly List<Type> allowedModdedDatas = new ()
 		{
 			typeof(AttackData), 
 			typeof(CastData), 
@@ -96,18 +96,11 @@ namespace Editor
 					var type = Objects[i].GetType();
 					var invalid = false;
 					
-					if (!allowedDatas.Contains(type))
+					if (!allowedModdedDatas.Contains(type))
 					{
 						invalid = true;
 						Objects[i] = null;
 						Debug.LogWarning($"[ModdingTools] Objects of data {type} are not supported");
-					}
-
-					if (Objects[i].Type != "")
-					{
-						invalid = true;
-						Objects[i] = null;
-						Debug.LogWarning("[ModdingTools] Objects using custom types are not supported");
 					}
 
 					if (!invalid)
@@ -127,11 +120,11 @@ namespace Editor
 			
 			if (shouldBuild)
 			{
-				if (!Directory.Exists(modsPath))
-					Directory.CreateDirectory(modsPath);
+				if (!Directory.Exists(exportPath))
+					Directory.CreateDirectory(exportPath);
 
 				var directory = $"{Author}.{Name}-{Version}";
-				var path = Path.Combine(modsPath, directory);
+				var path = Path.Combine(exportPath, directory);
 				
 				if (!Directory.Exists(path))
 					Directory.CreateDirectory(path);
@@ -164,7 +157,7 @@ namespace Editor
 
 					var assetBundleBuild = new AssetBundleBuild
 					{
-						assetBundleName = directory,
+						assetBundleName = "asset",
 						assetNames = new string[validObjects]
 					};
 

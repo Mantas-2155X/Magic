@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using AI.Interfaces;
 using Combat.Attacks.Enums;
 using Combat.Attacks.Interfaces;
@@ -28,15 +29,30 @@ namespace Managers
 				
 				instance = new ObjectManager();
 				instance.setupDatasMap();
+				instance.setupModdedDatasMap();
 				
 				return instance;
 			}
 		}
 
+		public static string ModsPath => "data/mods";
+		
 		private readonly Dictionary<string, Data> datasMap = new ();
+		
+		private readonly List<ModInfo> mods = new ();
 
 		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes", "Paths" };
 
+		private readonly List<Type> allowedModdedDatas = new ()
+		{
+			typeof(AttackData), 
+			typeof(CastData), 
+			typeof(DecalData), 
+			typeof(ProjectileData), 
+			typeof(SpellData), 
+			typeof(WearableData)
+		};
+		
 		#region Init
 
 		private void setupDatasMap()
@@ -49,6 +65,161 @@ namespace Managers
 				{
 					var data = datas[i];
 					datasMap[$"{dataPath}/{data.Name}"] = data;
+				}
+			}
+		}
+
+		private void setupModdedDatasMap()
+		{
+			if (!Directory.Exists(ModsPath))
+				Directory.CreateDirectory(ModsPath);
+
+			var platform = "";
+
+			switch (Application.platform)
+			{
+				case RuntimePlatform.LinuxPlayer or RuntimePlatform.LinuxEditor:
+					platform = "StandaloneLinux64";
+					break;
+				case RuntimePlatform.WindowsPlayer or RuntimePlatform.WindowsEditor:
+					platform = "StandaloneWindows64";
+					break;
+			}
+
+			if (platform == "")
+			{
+				Debug.LogError($"[ObjectManager] Modding on platform {Application.platform} is not supported");
+				return;
+			}
+			
+			var files = Directory.GetFiles(ModsPath, "info.tsv", SearchOption.AllDirectories);
+			for (var i = 0; i < files.Length; i++)
+			{
+				var file = files[i];
+				var fileInfo = new FileInfo(file);
+				
+				var directory = fileInfo.Directory!.FullName;
+				
+				try
+				{
+					var lines = File.ReadAllLines(file);
+					if (lines.Length < 5)
+					{
+						Debug.LogWarning($"[ObjectManager] Mod info at {directory} is incomplete, skipping");
+						continue;
+					}
+					
+					var authorSplit = lines[0].Split('\t');
+					if (authorSplit.Length < 2 || authorSplit[0] != "Author" || string.IsNullOrWhiteSpace(authorSplit[1]))
+					{
+						Debug.LogWarning($"[ObjectManager] Author info at {directory} is incomplete, skipping");
+						continue;
+					}
+					
+					var author = authorSplit[1];
+
+					var nameSplit = lines[1].Split('\t');
+					if (nameSplit.Length < 2 || nameSplit[0] != "Name" || string.IsNullOrWhiteSpace(nameSplit[1]))
+					{
+						Debug.LogWarning($"[ObjectManager] Name info at {directory} is incomplete, skipping");
+						continue;
+					}
+					
+					var name = nameSplit[1];
+					
+					var versionSplit = lines[2].Split('\t');
+					if (versionSplit.Length < 2 || versionSplit[0] != "Version" || string.IsNullOrWhiteSpace(versionSplit[1]))
+					{
+						Debug.LogWarning($"[ObjectManager] Version info at {directory} is incomplete, skipping");
+						continue;
+					}
+
+					var version = versionSplit[1];
+					
+					if (!string.IsNullOrWhiteSpace(lines[3]))
+					{
+						Debug.LogWarning($"[ObjectManager] Separator at {directory} is invalid, skipping");
+						continue;
+					}
+					
+					var bundlePath = Path.Combine(directory, platform);
+					var assetPath = Path.Combine(bundlePath, "asset");
+					
+					if (!Directory.Exists(bundlePath) || !File.Exists(assetPath))
+					{
+						Debug.LogWarning($"[ObjectManager] Mod at {directory} does not have data for platform {platform}, skipping");
+						continue;
+					}
+
+					var bundle = AssetBundle.LoadFromFile(assetPath);
+					if (bundle == null)
+					{
+						Debug.LogWarning($"[ObjectManager] Failed to load bundle for mod at {directory}, skipping");
+						continue;
+					}
+
+					var prefix = $"{author}.{name}.";
+					var bundleDatas = bundle.LoadAllAssets<Data>();
+					
+					var datas = new Dictionary<string, Data>();
+					for (var k = 4; k < lines.Length; k++)
+					{
+						var dataSplit = lines[k].Split('\t');
+						if (dataSplit.Length != 2)
+						{
+							Debug.LogWarning($"[ObjectManager] Data info at line {k} for mod at {directory} is incomplete, skipping");
+							continue;
+						}
+
+						var dataType = Type.GetType($"ScriptableObjects.{dataSplit[0]}");
+						if (dataType == null)
+						{
+							Debug.LogWarning($"[ObjectManager] Data type at line {k} for mod at {directory} is invalid, skipping");
+							continue;
+						}
+						
+						if (!allowedModdedDatas.Contains(dataType))
+						{
+							Debug.LogWarning($"[ObjectManager] Data type at line {k} for mod at {directory} is not supported, skipping");
+							continue;
+						}
+
+						var found = false;
+						var dataName = dataSplit[1];
+
+						for (var l = 0; l < bundleDatas.Length; l++)
+						{
+							var bundleData = bundleDatas[l];
+							if (bundleData.Name != dataName || bundleData.GetType() != dataType)
+								continue;
+							
+							bundleData.Name = prefix + bundleData.Name;
+							bundleData.Description = prefix + bundleData.Description;
+							
+							found = true;
+							datas[bundleData.Name] = bundleData;
+							break;
+						}
+
+						if (!found)
+						{
+							Debug.LogWarning($"[ObjectManager] Mod bundle at {directory} does not contain object described at line {k}, skipping");
+							continue;
+						}
+					}
+
+					if (datas.Count == 0)
+					{
+						Debug.LogWarning($"[ObjectManager] Mod info at {directory} does not contain any datas, skipping");
+						continue;
+					}
+					
+					var mod = new ModInfo(author, name, version, bundle, datas);
+					mods.Add(mod);
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"[ObjectManager] Exception loading mod at {directory}, {e}");
 				}
 			}
 		}
@@ -273,5 +444,36 @@ namespace Managers
 		}
 		
 		#endregion
+		
+		public class ModInfo
+		{
+			public string Author { get; }
+			public string Name { get; }
+			public string Version { get; }
+			
+			public AssetBundle Bundle { get; }
+			
+			public Dictionary<string, Data> Datas { get; }
+
+			public ModInfo(string author, string name, string version, AssetBundle bundle, Dictionary<string, Data> datas)
+			{
+				Author = author;
+				Name = name;
+				Version = version;
+				Bundle = bundle;
+				Datas = datas;
+
+				foreach (var pair in datas)
+				{
+					var typeName = pair.Value.GetType().Name;
+					typeName = typeName[..^4];
+					typeName += $"s/{pair.Key}";
+
+					Instance.datasMap[typeName] = pair.Value;
+				}
+				
+				Debug.Log($"[ObjectManager] Loaded mod {author}.{name}-{version} with {datas.Count} datas");
+			}
+		}
 	}
 }
