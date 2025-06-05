@@ -49,13 +49,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 0
   iterations: 4
-  intensity: 0.5
   downsample: 2
+  enableMipMaps: 1
   scale: 1
   offset: 2
   scaleBlurWith: 1
   scaleReferenceSize: 1080
-  shaderPass: 0
+  blurType: 0
   injectionPoint: 600
   shader: {fileID: 4800000, guid: bb11bdc2e8aaf4c80b5315f3778d7ad4, type: 3}
 --- !u!114 &11400000
