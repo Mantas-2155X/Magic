@@ -58,6 +58,23 @@ namespace Managers
 			typeof(SpellData), 
 			typeof(WearableData)
 		};
+
+		private readonly List<string> defaultSharedReferences = new ()
+		{
+			"mscorlib", 
+			"netstandard", 
+			"Assembly-CSharp"
+		};
+
+		private readonly List<string> whitelistedReferences = new()
+		{
+			"UnityEngine.CoreModule",
+			"UnityEngine.PhysicsModule",
+			"UnityEngine.AIModule",
+			"Unity.InputSystem",
+			"UnityEngine.ParticleSystemModule",
+			"UniTask",
+		};
 		
 		#region Init
 
@@ -436,6 +453,8 @@ namespace Managers
 
 			public void Load()
 			{
+				var currentReferences = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+
 				if (!CustomAssembly)
 				{
 					var assemblyPath = Path.Combine(Directory, $"{Author}.{Name}.dll");
@@ -450,6 +469,42 @@ namespace Managers
 							return;
 						}
 
+						var referencedAssemblies = reflectionAssembly.GetReferencedAssemblies();
+						for (var i = 0; i < referencedAssemblies.Length; i++)
+						{
+							var referencedAssembly = referencedAssemblies[i];
+							var sharedReference = false;
+
+							if (Instance.defaultSharedReferences.Contains(referencedAssembly.Name))
+							{
+								sharedReference = true;
+							}
+							else
+							{
+								for (var k = 0; k < currentReferences.Length; k++)
+								{
+									var currentReference = currentReferences[k];
+									if (currentReference.FullName != referencedAssembly.FullName)
+										continue;
+
+									sharedReference = true;
+									break;
+								}
+							}
+
+							if (!sharedReference)
+							{
+								Debug.LogWarning($"[ObjectManager] Custom assembly references non-shared reference {referencedAssembly.FullName} for mod at {Directory}, no content added");
+								return;
+							}
+
+							if (!Instance.whitelistedReferences.Contains(referencedAssembly.Name) && !Instance.defaultSharedReferences.Contains(referencedAssembly.Name))
+							{
+								Debug.LogWarning($"[ObjectManager] Custom assembly references non-whitelisted reference {referencedAssembly.FullName} for mod at {Directory}, no content added");
+								return;
+							}
+						}
+						
 						var assemblyName = reflectionAssembly.GetName().Name;
 						if (assemblyName != $"{Author}.{Name}")
 						{
