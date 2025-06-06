@@ -73,11 +73,11 @@ namespace UI.Settings.Pages
 				var mod = mods[i];
 
 				var item = Items[i];
-				item.Title.text = $"{mod.Author}.{mod.Name}";
-				item.Version.text = mod.Version;
+				item.Title.text = $"{mod.Info.Author}.{mod.Info.Name}";
+				item.Version.text = mod.Info.Version;
 				
 				item.Toggle.interactable = isTitle;
-				item.Toggle.SetIsOnWithoutNotify(!mod.Disabled);
+				item.Toggle.SetIsOnWithoutNotify(!mod.Info.Disabled);
 			}
 		}
 		
@@ -133,7 +133,7 @@ namespace UI.Settings.Pages
 			
 			var mod = ObjectManager.Instance.Mods[index];
 
-			if (mod.Disabled)
+			if (mod.Info.Disabled)
 				mod.Enable();
 			else
 				mod.Disable();

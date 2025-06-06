@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
+using Managers;
+using Newtonsoft.Json;
 using ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
@@ -119,7 +119,7 @@ namespace Editor
 			
 			GUILayout.FlexibleSpace();
 
-			GUI.enabled = Author != "" && Name != "" && Version != "" && validObjects > 0 && (CustomAssembly == "" || (CustomAssembly.EndsWith($"{Author}.{Name}.dll") && File.Exists(CustomAssembly)));
+			GUI.enabled = !string.IsNullOrWhiteSpace(Author) && !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Version) && validObjects > 0 && (string.IsNullOrEmpty(CustomAssembly) || (CustomAssembly.EndsWith($"{Author}.{Name}.dll") && File.Exists(CustomAssembly)));
 			var shouldBuild = GUILayout.Button("Build Mod");
 			GUI.enabled = true;
 			
@@ -128,18 +128,19 @@ namespace Editor
 				if (!Directory.Exists(exportPath))
 					Directory.CreateDirectory(exportPath);
 
-				var directory = $"{Author}.{Name}-{Version}";
+				var directory = $"{Author}.{Name}";
 				var path = Path.Combine(exportPath, directory);
 				
 				if (!Directory.Exists(path))
 					Directory.CreateDirectory(path);
 
-				var builder = new StringBuilder();
-				builder.AppendLine($"Author\t{Author}");
-				builder.AppendLine($"Name\t{Name}");
-				builder.AppendLine($"Version\t{Version}");
-				
-				builder.AppendLine();
+				var modInfo = new ObjectManager.ModInfo();
+				modInfo.Author = Author;
+				modInfo.Name = Name;
+				modInfo.Version = Version;
+				modInfo.Disabled = false;
+				modInfo.UseCustomAssembly = !string.IsNullOrWhiteSpace(CustomAssembly);
+				modInfo.Objects = new List<ObjectManager.ModInfo.ObjectInfo>();
 
 				for (var i = 0; i < Objects.Count; i++)
 				{
@@ -147,10 +148,14 @@ namespace Editor
 					if (obj == null)
 						continue;
 					
-					builder.AppendLine($"{obj.GetType().Name}\t{obj.Name}");
+					var objectInfo = new ObjectManager.ModInfo.ObjectInfo();
+					objectInfo.Type = obj.GetType().Name;
+					objectInfo.Name = obj.Name;
+					
+					modInfo.Objects.Add(objectInfo);
 				}
 				
-				File.WriteAllText(Path.Combine(path, "info.tsv"), builder.ToString());
+				File.WriteAllText(Path.Combine(path, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
 
 				for (var i = 0; i < buildTargets.Length; i++)
 				{
@@ -180,7 +185,7 @@ namespace Editor
 					BuildPipeline.BuildAssetBundles(bundlePath, new [] {assetBundleBuild}, BuildAssetBundleOptions.None, buildTarget);
 				}
 
-				if (CustomAssembly != "")
+				if (!string.IsNullOrWhiteSpace(CustomAssembly))
 				{
 					var fileInfo = new FileInfo(CustomAssembly);
 					File.Move(CustomAssembly, Path.Combine(path, fileInfo.Name));

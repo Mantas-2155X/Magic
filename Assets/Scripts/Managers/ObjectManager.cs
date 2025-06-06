@@ -12,6 +12,7 @@ using Combat.Decals.Interfaces;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Combat.Wearables.Interfaces;
+using Newtonsoft.Json;
 using Objects.Interfaces;
 using ScriptableObjects;
 using State.Interfaces;
@@ -43,7 +44,7 @@ namespace Managers
 
 		public static string ModsPath => "data/mods";
 		
-		public readonly List<ModInfo> Mods = new ();
+		public readonly List<Mod> Mods = new ();
 
 		private readonly Dictionary<string, Data> datasMap = new ();
 		
@@ -112,13 +113,13 @@ namespace Managers
 					break;
 			}
 
-			if (platform == "")
+			if (string.IsNullOrWhiteSpace(platform))
 			{
 				Debug.LogError($"[ObjectManager] Modding on platform {Application.platform} is not supported");
 				return;
 			}
 			
-			var files = Directory.GetFiles(ModsPath, "info.tsv", SearchOption.AllDirectories);
+			var files = Directory.GetFiles(ModsPath, "info.json", SearchOption.AllDirectories);
 			for (var i = 0; i < files.Length; i++)
 			{
 				var file = files[i];
@@ -128,49 +129,39 @@ namespace Managers
 				
 				try
 				{
-					var lines = File.ReadAllLines(file);
-					if (lines.Length < 5)
-					{
-						Debug.LogWarning($"[ObjectManager] Mod info at {directory} is incomplete, skipping");
-						continue;
-					}
+					var text = File.ReadAllText(file);
 					
-					var authorSplit = lines[0].Split('\t');
-					if (authorSplit.Length < 2 || authorSplit[0] != "Author" || string.IsNullOrWhiteSpace(authorSplit[1]))
+					var modInfo = JsonConvert.DeserializeObject<ModInfo>(text);
+					if (modInfo == null)
 					{
-						Debug.LogWarning($"[ObjectManager] Author info at {directory} is incomplete, skipping");
-						continue;
-					}
-					
-					var author = authorSplit[1];
-
-					var nameSplit = lines[1].Split('\t');
-					if (nameSplit.Length < 2 || nameSplit[0] != "Name" || string.IsNullOrWhiteSpace(nameSplit[1]))
-					{
-						Debug.LogWarning($"[ObjectManager] Name info at {directory} is incomplete, skipping");
-						continue;
-					}
-					
-					var name = nameSplit[1];
-					
-					var versionSplit = lines[2].Split('\t');
-					if (versionSplit.Length < 2 || versionSplit[0] != "Version" || string.IsNullOrWhiteSpace(versionSplit[1]))
-					{
-						Debug.LogWarning($"[ObjectManager] Version info at {directory} is incomplete, skipping");
+						Debug.LogWarning($"[ObjectManager] Failed to load ModInfo for mod at {directory}, skipping");
 						continue;
 					}
 
-					var version = versionSplit[1];
-					var disabled = lines[3] == "Disabled";
-					
-					if (!string.IsNullOrWhiteSpace(lines[3]) && !disabled)
+					var validity = modInfo.Validate();
+					if (validity != ModInfo.EModInfoValidity.Valid)
 					{
-						Debug.LogWarning($"[ObjectManager] Separator at {directory} is invalid, skipping");
+						switch (validity)
+						{
+							case ModInfo.EModInfoValidity.InvalidAuthor:
+								Debug.LogWarning($"[ObjectManager] Author is invalid for mod at {directory}, skipping");
+								break;
+							case ModInfo.EModInfoValidity.InvalidName:
+								Debug.LogWarning($"[ObjectManager] Name is invalid for mod at {directory}, skipping");
+								break;
+							case ModInfo.EModInfoValidity.InvalidVersion:
+								Debug.LogWarning($"[ObjectManager] Version is invalid for mod at {directory}, skipping");
+								break;
+							case ModInfo.EModInfoValidity.NoObjects:
+								Debug.LogWarning($"[ObjectManager] No data objects for mod at {directory}, skipping");
+								break;
+						}
+						
 						continue;
 					}
 					
 					var bundlePath = Path.Combine(directory, platform);
-					var assetPath = Path.Combine(bundlePath, $"{author}.{name}-{version}".ToLower());
+					var assetPath = Path.Combine(bundlePath, $"{modInfo.Author}.{modInfo.Name}".ToLower());
 					
 					if (!Directory.Exists(bundlePath) || !File.Exists(assetPath))
 					{
@@ -178,7 +169,7 @@ namespace Managers
 						continue;
 					}
 
-					var mod = new ModInfo(author, name, version, directory, disabled, assetPath, lines);
+					var mod = new Mod(modInfo, directory, assetPath);
 					Mods.Add(mod);
 				}
 				catch (Exception e)
@@ -417,38 +408,87 @@ namespace Managers
 		
 		#endregion
 		
+		[JsonObject]
 		public class ModInfo
 		{
-			public string Author { get; private set; }
-			public string Name { get; private set; }
-			public string Version { get; private set; }
+			[JsonProperty]
+			public string Author;
+			
+			[JsonProperty]
+			public string Name;
+			
+			[JsonProperty]
+			public string Version;
+
+			[JsonProperty]
+			public bool Disabled;
+			
+			[JsonProperty]
+			public bool UseCustomAssembly;
+
+			[JsonProperty]
+			public List<ObjectInfo> Objects;
+			
+			public EModInfoValidity Validate()
+			{
+				if (string.IsNullOrWhiteSpace(Author))
+					return EModInfoValidity.InvalidAuthor;
+
+				if (string.IsNullOrWhiteSpace(Name))
+					return EModInfoValidity.InvalidName;
+
+				if (string.IsNullOrWhiteSpace(Version))
+					return EModInfoValidity.InvalidVersion;
+
+				if (Objects == null || Objects.Count == 0)
+					return EModInfoValidity.NoObjects;
+
+				return EModInfoValidity.Valid;
+			}
+
+			public enum EModInfoValidity
+			{
+				InvalidAuthor,
+				InvalidName,
+				InvalidVersion,
+				NoObjects,
+				Valid
+			}
+			
+			[JsonObject]
+			public class ObjectInfo
+			{
+				[JsonProperty]
+				public string Type;
+				
+				[JsonProperty]
+				public string Name;
+			}
+		}
+		
+		public class Mod
+		{
+			public ModInfo Info { get; private set; }
 			
 			public string Directory { get; private set; }
-			public bool Disabled { get; private set; }
-
-			public string[] Lines { get; private set; }
 			
 			public Tuple<string, AssetBundle> Bundle { get; private set; }
 
 			public List<string> Addresses { get; private set; }
 			
-			public bool CustomAssembly { get; private set; }
+			public bool CustomAssemblyLoaded { get; private set; }
 
-			public ModInfo(string author, string name, string version, string directory, bool disabled, string bundlePath, string[] lines)
+			public Mod(ModInfo info, string directory, string assetPath)
 			{
-				Author = author;
-				Name = name;
-				Version = version;
+				Info = info;
 				Directory = directory;
-				Disabled = disabled;
-				Lines = lines;
-				Bundle = new Tuple<string, AssetBundle>(bundlePath, null);
+				Bundle = new Tuple<string, AssetBundle>(assetPath, null);
 				Addresses = new List<string>();
-				CustomAssembly = false;
+				CustomAssemblyLoaded = false;
 
-				Debug.Log($"[ObjectManager] Preloaded mod {Author}.{Name}-{Version} ({(disabled ? "Disabled" : "Enabled")})");
+				Debug.Log($"[ObjectManager] Preloaded mod {Info.Author}.{Info.Name} {Info.Version} ({(Info.Disabled ? "Disabled" : "Enabled")})");
 
-				if (disabled)
+				if (Info.Disabled)
 					return;
 				
 				Load();
@@ -456,11 +496,9 @@ namespace Managers
 
 			public void Load()
 			{
-				var currentReferences = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
-
-				if (!CustomAssembly)
+				if (!CustomAssemblyLoaded && Info.UseCustomAssembly)
 				{
-					var assemblyPath = Path.Combine(Directory, $"{Author}.{Name}.dll");
+					var assemblyPath = Path.Combine(Directory, $"{Info.Author}.{Info.Name}.dll");
 					if (File.Exists(assemblyPath))
 					{
 						var assemblyBytes = File.ReadAllBytes(assemblyPath);
@@ -471,6 +509,8 @@ namespace Managers
 							Debug.LogWarning($"[ObjectManager] Failed to load custom assembly for mod at {Directory}, no content added");
 							return;
 						}
+
+						var currentReferences = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
 
 						var referencedAssemblies = reflectionAssembly.GetReferencedAssemblies();
 						for (var i = 0; i < referencedAssemblies.Length; i++)
@@ -509,14 +549,19 @@ namespace Managers
 						}
 						
 						var assemblyName = reflectionAssembly.GetName().Name;
-						if (assemblyName != $"{Author}.{Name}")
+						if (assemblyName != $"{Info.Author}.{Info.Name}")
 						{
-							Debug.LogWarning($"[ObjectManager] Invalid custom assembly name (should be {Author}.{Name}, is {assemblyName}) for mod at {Directory}, no content added");
+							Debug.LogWarning($"[ObjectManager] Invalid custom assembly name (should be {Info.Author}.{Info.Name}, is {assemblyName}) for mod at {Directory}, no content added");
 							return;
 						}
 					
-						CustomAssembly = true;
+						CustomAssemblyLoaded = true;
 						Assembly.Load(assemblyBytes);
+					}
+					else
+					{
+						Debug.LogWarning($"[ObjectManager] Could not find custom assembly for mod at {Directory}, no content added");
+						return;
 					}
 				}
 				
@@ -529,19 +574,20 @@ namespace Managers
 
 				Bundle = new Tuple<string, AssetBundle>(Bundle.Item1, bundle);
 				
-				var prefix = $"{Author}.{Name}.";
+				var prefix = $"{Info.Author}.{Info.Name}.";
 				var bundleDatas = bundle.LoadAllAssets<Data>();
 
-				for (var i = 4; i < Lines.Length; i++)
+				for (var i = 0; i < Info.Objects.Count; i++)
 				{
-					var dataSplit = Lines[i].Split('\t');
-					if (dataSplit.Length != 2)
+					var obj = Info.Objects[i];
+					
+					if (string.IsNullOrEmpty(obj.Name) || string.IsNullOrEmpty(obj.Type))
 					{
-						Debug.LogWarning($"[ObjectManager] Data info at line {i} for mod at {Directory} is incomplete, skipping object");
+						Debug.LogWarning($"[ObjectManager] Data type at line {i} for mod at {Directory} is invalid, skipping object");
 						continue;
 					}
 
-					var dataType = Type.GetType($"ScriptableObjects.{dataSplit[0]}");
+					var dataType = Type.GetType($"ScriptableObjects.{obj.Type}");
 					if (dataType == null)
 					{
 						Debug.LogWarning($"[ObjectManager] Data type at line {i} for mod at {Directory} is invalid, skipping object");
@@ -555,19 +601,18 @@ namespace Managers
 					}
 
 					var found = false;
-					var dataName = dataSplit[1];
 
 					for (var k = 0; k < bundleDatas.Length; k++)
 					{
 						var bundleData = bundleDatas[k];
-						if (bundleData.Name != dataName || bundleData.GetType() != dataType)
+						if (bundleData.Name != obj.Name || bundleData.GetType() != dataType)
 							continue;
 							
 						bundleData.Name = prefix + bundleData.Name;
 						bundleData.Description = prefix + bundleData.Description;
 
-						if (bundleData.Type != "")
-							bundleData.Assembly = $"{Author}.{Name}";
+						if (!string.IsNullOrWhiteSpace(bundleData.Type))
+							bundleData.Assembly = $"{Info.Author}.{Info.Name}";
 
 						var address = dataType.Name[..^4] + $"s/{bundleData.Name}";
 						Addresses.Add(address);
@@ -591,7 +636,7 @@ namespace Managers
 					return;
 				}
 
-				Debug.Log($"[ObjectManager] Loaded mod {Author}.{Name}-{Version} with {Addresses.Count} datas {(CustomAssembly ? "and custom assembly" : "")}");
+				Debug.Log($"[ObjectManager] Loaded mod {Info.Author}.{Info.Name} {Info.Version} with {Addresses.Count} datas {(CustomAssemblyLoaded ? "and custom assembly" : "")}");
 			}
 				
 			public void Unload()
@@ -606,42 +651,30 @@ namespace Managers
 					assetBundle.Unload(true);
 				
 				Bundle = new Tuple<string, AssetBundle>(Bundle.Item1, null);
-				Debug.Log($"[ObjectManager] Unloaded mod {Author}.{Name}-{Version}");
+				Debug.Log($"[ObjectManager] Unloaded mod {Info.Author}.{Info.Name} {Info.Version}");
 			}
 
 			public void Enable()
 			{
-				if (!Disabled)
+				if (!Info.Disabled)
 					return;
 				
 				Load();
 				
-				Disabled = false;
-
-				var infoPath = Path.Combine(Directory, "info.tsv");
-				
-				var lines = File.ReadAllLines(infoPath);
-				lines[3] = "";
-				
-				File.WriteAllLines(infoPath, lines);
+				Info.Disabled = false;
+				File.WriteAllText(Path.Combine(Directory, "info.json"), JsonConvert.SerializeObject(Info));
 			}
 
 			public void Disable()
 			{
-				if (Disabled)
+				if (Info.Disabled)
 					return;
 				
 				if (Bundle.Item2 != null)
 					Unload();
 
-				Disabled = true;
-				
-				var infoPath = Path.Combine(Directory, "info.tsv");
-				
-				var lines = File.ReadAllLines(infoPath);
-				lines[3] = "Disabled";
-				
-				File.WriteAllLines(infoPath, lines);
+				Info.Disabled = true;
+				File.WriteAllText(Path.Combine(Directory, "info.json"), JsonConvert.SerializeObject(Info));
 			}
 		}
 	}

@@ -1,0 +1,17 @@
+{
+  "Author": "MyName",
+  "Name": "ModName",
+  "Version": "1.0.0",
+  "Disabled": false,
+  "UseCustomAssembly": false,
+  "Objects": [
+    {
+      "Type": "SpellData",
+      "Name": "SPELL_MANABALL_NAME"
+    },
+    {
+      "Type": "SpellData",
+      "Name": "SPELL_FIREBALL_NAME"
+    }
+  ]
+}
