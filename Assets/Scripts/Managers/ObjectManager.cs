@@ -68,6 +68,9 @@ namespace Managers
 
 		private readonly List<string> whitelistedReferences = new()
 		{
+			"mscorlib", 
+			"netstandard", 
+			"Assembly-CSharp",
 			"UnityEngine.CoreModule",
 			"UnityEngine.PhysicsModule",
 			"UnityEngine.AIModule",
@@ -498,7 +501,7 @@ namespace Managers
 								return;
 							}
 
-							if (!Instance.whitelistedReferences.Contains(referencedAssembly.Name) && !Instance.defaultSharedReferences.Contains(referencedAssembly.Name))
+							if (!Instance.whitelistedReferences.Contains(referencedAssembly.Name))
 							{
 								Debug.LogWarning($"[ObjectManager] Custom assembly references non-whitelisted reference {referencedAssembly.FullName} for mod at {Directory}, no content added");
 								return;
