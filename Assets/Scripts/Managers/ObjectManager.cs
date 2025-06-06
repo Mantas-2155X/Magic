@@ -143,7 +143,7 @@ namespace Managers
 					}
 					
 					var bundlePath = Path.Combine(directory, platform);
-					var assetPath = Path.Combine(bundlePath, "asset");
+					var assetPath = Path.Combine(bundlePath, $"{author}.{name}-{version}".ToLower());
 					
 					if (!Directory.Exists(bundlePath) || !File.Exists(assetPath))
 					{

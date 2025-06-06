@@ -1,0 +1,70 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.1.6f1
+CRC: 1460412261
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 13f840e4d53754ddda9183f61cf70180
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7c88ac77fc61b6824892295d950dd084
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: e6692c98b9985f114f748aeb2523aec5
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 393761d27ad94631a07ef101c0fbf3db, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 38265b3f53394812ab2b891cb9203b15, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a72b6aab001340ec811d664e79ea6111, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 69597995f0ab489383c01ab05006b995, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fd0ae0db49104ff39ef235d001464c3a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0d16a66298d84f7e8182915241237f80, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a3108076ab274062951da4af58ebcf64, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 15952e4bbfce4c6bb83d5d7f90cb4510, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: ScriptableObjects.Structs.SParalyze
+- AssemblyName: Assembly-CSharp
+  ClassName: ScriptableObjects.Structs.SSlow
+Assets:
+- Assets/Content/Spells/Fire Ball.asset
+- Assets/Content/Spells/Mana Ball.asset
+Dependencies: []

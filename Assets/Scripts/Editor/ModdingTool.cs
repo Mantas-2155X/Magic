@@ -157,7 +157,7 @@ namespace Editor
 
 					var assetBundleBuild = new AssetBundleBuild
 					{
-						assetBundleName = "asset",
+						assetBundleName = directory.ToLower(),
 						assetNames = new string[validObjects]
 					};
 
