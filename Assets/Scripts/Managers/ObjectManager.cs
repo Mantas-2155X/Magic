@@ -1,3 +1,5 @@
+//#define PRINT_DATAS
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,6 +32,9 @@ namespace Managers
 				instance = new ObjectManager();
 				instance.setupDatasMap();
 				instance.setupModdedDatasMap();
+#if PRINT_DATAS
+				instance.printDatasMap();
+#endif
 				
 				return instance;
 			}
@@ -135,8 +140,9 @@ namespace Managers
 					}
 
 					var version = versionSplit[1];
+					var disabled = lines[3] == "Disabled";
 					
-					if (!string.IsNullOrWhiteSpace(lines[3]))
+					if (!string.IsNullOrWhiteSpace(lines[3]) && !disabled)
 					{
 						Debug.LogWarning($"[ObjectManager] Separator at {directory} is invalid, skipping");
 						continue;
@@ -151,70 +157,7 @@ namespace Managers
 						continue;
 					}
 
-					var bundle = AssetBundle.LoadFromFile(assetPath);
-					if (bundle == null)
-					{
-						Debug.LogWarning($"[ObjectManager] Failed to load bundle for mod at {directory}, skipping");
-						continue;
-					}
-
-					var prefix = $"{author}.{name}.";
-					var bundleDatas = bundle.LoadAllAssets<Data>();
-					
-					var datas = new Dictionary<string, Data>();
-					for (var k = 4; k < lines.Length; k++)
-					{
-						var dataSplit = lines[k].Split('\t');
-						if (dataSplit.Length != 2)
-						{
-							Debug.LogWarning($"[ObjectManager] Data info at line {k} for mod at {directory} is incomplete, skipping");
-							continue;
-						}
-
-						var dataType = Type.GetType($"ScriptableObjects.{dataSplit[0]}");
-						if (dataType == null)
-						{
-							Debug.LogWarning($"[ObjectManager] Data type at line {k} for mod at {directory} is invalid, skipping");
-							continue;
-						}
-						
-						if (!allowedModdedDatas.Contains(dataType))
-						{
-							Debug.LogWarning($"[ObjectManager] Data type at line {k} for mod at {directory} is not supported, skipping");
-							continue;
-						}
-
-						var found = false;
-						var dataName = dataSplit[1];
-
-						for (var l = 0; l < bundleDatas.Length; l++)
-						{
-							var bundleData = bundleDatas[l];
-							if (bundleData.Name != dataName || bundleData.GetType() != dataType)
-								continue;
-							
-							bundleData.Name = prefix + bundleData.Name;
-							bundleData.Description = prefix + bundleData.Description;
-							
-							found = true;
-							datas[bundleData.Name] = bundleData;
-							break;
-						}
-
-						if (!found)
-						{
-							Debug.LogWarning($"[ObjectManager] Mod bundle at {directory} does not contain object described at line {k}, skipping");
-							continue;
-						}
-					}
-
-					if (datas.Count == 0)
-					{
-						Debug.LogWarning($"[ObjectManager] Mod info at {directory} does not contain any datas, skipping");
-						continue;
-					}
-					
-					var mod = new ModInfo(author, name, version, bundle, datas);
+					var mod = new ModInfo(author, name, version, directory, disabled, assetPath, lines);
 					mods.Add(mod);
 				}
 				catch (Exception e)
@@ -224,6 +167,14 @@ namespace Managers
 			}
 		}
 
+		private void printDatasMap()
+		{
+			Debug.Log("[ContentManager] Printing datas map");
+
+			foreach (var pair in datasMap)
+				Debug.Log($"[ContentManager] {pair.Value.GetType().Name} - {pair.Key}");
+		}
+		
 		#endregion
 		
 		#region Get
@@ -447,32 +398,155 @@ namespace Managers
 		
 		public class ModInfo
 		{
-			public string Author { get; }
-			public string Name { get; }
-			public string Version { get; }
+			public string Author { get; private set; }
+			public string Name { get; private set; }
+			public string Version { get; private set; }
 			
-			public AssetBundle Bundle { get; }
-			
-			public Dictionary<string, Data> Datas { get; }
+			public string Directory { get; private set; }
+			public bool Disabled { get; private set; }
 
-			public ModInfo(string author, string name, string version, AssetBundle bundle, Dictionary<string, Data> datas)
+			public string[] Lines { get; private set; }
+			
+			public Tuple<string, AssetBundle> Bundle { get; private set; }
+
+			public List<string> Addresses { get; private set; }
+
+			public ModInfo(string author, string name, string version, string directory, bool disabled, string bundlePath, string[] lines)
 			{
 				Author = author;
 				Name = name;
 				Version = version;
-				Bundle = bundle;
-				Datas = datas;
+				Directory = directory;
+				Disabled = disabled;
+				Lines = lines;
+				Bundle = new Tuple<string, AssetBundle>(bundlePath, null);
+				Addresses = new List<string>();
 
-				foreach (var pair in datas)
-				{
-					var typeName = pair.Value.GetType().Name;
-					typeName = typeName[..^4];
-					typeName += $"s/{pair.Key}";
+				Debug.Log($"[ObjectManager] Preloaded mod {Author}.{Name}-{Version} ({(disabled ? "Disabled" : "Enabled")})");
 
-					Instance.datasMap[typeName] = pair.Value;
-				}
+				if (disabled)
+					return;
 				
-				Debug.Log($"[ObjectManager] Loaded mod {author}.{name}-{version} with {datas.Count} datas");
+				Load();
+			}
+
+			public void Load()
+			{
+				var bundle = AssetBundle.LoadFromFile(Bundle.Item1);
+				if (bundle == null)
+				{
+					Debug.LogWarning($"[ObjectManager] Failed to load bundle for mod at {Directory}, no content added");
+					return;
+				}
+
+				var prefix = $"{Author}.{Name}.";
+				var bundleDatas = bundle.LoadAllAssets<Data>();
+
+				for (var i = 4; i < Lines.Length; i++)
+				{
+					var dataSplit = Lines[i].Split('\t');
+					if (dataSplit.Length != 2)
+					{
+						Debug.LogWarning($"[ObjectManager] Data info at line {i} for mod at {Directory} is incomplete, skipping object");
+						continue;
+					}
+
+					var dataType = Type.GetType($"ScriptableObjects.{dataSplit[0]}");
+					if (dataType == null)
+					{
+						Debug.LogWarning($"[ObjectManager] Data type at line {i} for mod at {Directory} is invalid, skipping object");
+						continue;
+					}
+						
+					if (!Instance.allowedModdedDatas.Contains(dataType))
+					{
+						Debug.LogWarning($"[ObjectManager] Data type at line {i} for mod at {Directory} is not supported, skipping object");
+						continue;
+					}
+
+					var found = false;
+					var dataName = dataSplit[1];
+
+					for (var k = 0; k < bundleDatas.Length; k++)
+					{
+						var bundleData = bundleDatas[k];
+						if (bundleData.Name != dataName || bundleData.GetType() != dataType)
+							continue;
+							
+						bundleData.Name = prefix + bundleData.Name;
+						bundleData.Description = prefix + bundleData.Description;
+
+						var address = dataType.Name[..^4] + $"s/{bundleData.Name}";
+						Addresses.Add(address);
+						
+						Instance.datasMap[address] = bundleData;
+						
+						found = true;
+						break;
+					}
+
+					if (!found)
+					{
+						Debug.LogWarning($"[ObjectManager] Mod bundle at {Directory} does not contain object described at line {i}, skipping object");
+						continue;
+					}
+				}
+
+				if (Addresses.Count == 0)
+				{
+					Debug.LogWarning($"[ObjectManager] Mod info at {Directory} does not contain any datas, no content added");
+					return;
+				}
+
+				Debug.Log($"[ObjectManager] Loaded mod {Author}.{Name}-{Version} with {Addresses.Count} datas");
+			}
+				
+			public void Unload()
+			{
+				for (var i = 0; i < Addresses.Count; i++)
+					Instance.datasMap.Remove(Addresses[i]);
+
+				var assetBundle = Bundle.Item2;
+				if (assetBundle != null)
+					assetBundle.Unload(true);
+				
+				Bundle = new Tuple<string, AssetBundle>(Bundle.Item1, null);
+				Debug.Log($"[ObjectManager] Unloaded mod {Author}.{Name}-{Version}");
+			}
+
+			public void Enable()
+			{
+				if (!Disabled)
+					return;
+				
+				Load();
+				
+				Disabled = false;
+
+				var infoPath = Path.Combine(Directory, "info.tsv");
+				
+				var lines = File.ReadAllLines(infoPath);
+				lines[4] = "";
+				
+				File.WriteAllLines(infoPath, lines);
+			}
+
+			public void Disable()
+			{
+				if (Disabled)
+					return;
+				
+				if (Bundle.Item2 != null)
+					Unload();
+
+				Disabled = true;
+				
+				var infoPath = Path.Combine(Directory, "info.tsv");
+				
+				var lines = File.ReadAllLines(infoPath);
+				lines[4] = "Disabled";
+				
+				File.WriteAllLines(infoPath, lines);
 			}
 		}
 	}
