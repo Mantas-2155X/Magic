@@ -18,11 +18,14 @@ MonoBehaviour:
   Tags: 16
   Prefab: {fileID: 0}
   Type: Combat.Spells.Warp
+  Assembly: Assembly-CSharp
   Cooldown: 9
   CastingTime: 0
   CastingCost: 35
   Range: 50
   IsResource: 0
+  LockWhileCasting: 0
+  LockAfterCasting: 0
   Element: 3
   Cast: {fileID: 0}
   Projectile: {fileID: 0}

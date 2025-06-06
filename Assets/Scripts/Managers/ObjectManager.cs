@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using AI.Interfaces;
 using Combat.Attacks.Enums;
 using Combat.Attacks.Interfaces;
@@ -410,6 +411,8 @@ namespace Managers
 			public Tuple<string, AssetBundle> Bundle { get; private set; }
 
 			public List<string> Addresses { get; private set; }
+			
+			public bool CustomAssembly { get; private set; }
 
 			public ModInfo(string author, string name, string version, string directory, bool disabled, string bundlePath, string[] lines)
 			{
@@ -421,6 +424,7 @@ namespace Managers
 				Lines = lines;
 				Bundle = new Tuple<string, AssetBundle>(bundlePath, null);
 				Addresses = new List<string>();
+				CustomAssembly = false;
 
 				Debug.Log($"[ObjectManager] Preloaded mod {Author}.{Name}-{Version} ({(disabled ? "Disabled" : "Enabled")})");
 
@@ -432,6 +436,29 @@ namespace Managers
 
 			public void Load()
 			{
+				var assemblyPath = Path.Combine(Directory, $"{Author}.{Name}.dll");
+				if (File.Exists(assemblyPath))
+				{
+					var assemblyBytes = File.ReadAllBytes(assemblyPath);
+
+					var reflectionAssembly = Assembly.ReflectionOnlyLoad(assemblyBytes);
+					if (reflectionAssembly == null)
+					{
+						Debug.LogWarning($"[ObjectManager] Failed to load custom assembly for mod at {Directory}, no content added");
+						return;
+					}
+
+					var assemblyName = reflectionAssembly.GetName().Name;
+					if (assemblyName != $"{Author}.{Name}")
+					{
+						Debug.LogWarning($"[ObjectManager] Invalid custom assembly name (should be {Author}.{Name}, is {assemblyName}) for mod at {Directory}, no content added");
+						return;
+					}
+					
+					CustomAssembly = true;
+					Assembly.Load(assemblyBytes);
+				}
+				
 				var bundle = AssetBundle.LoadFromFile(Bundle.Item1);
 				if (bundle == null)
 				{
@@ -478,6 +505,9 @@ namespace Managers
 						bundleData.Name = prefix + bundleData.Name;
 						bundleData.Description = prefix + bundleData.Description;
 
+						if (bundleData.Type != "")
+							bundleData.Assembly = $"{Author}.{Name}";
+
 						var address = dataType.Name[..^4] + $"s/{bundleData.Name}";
 						Addresses.Add(address);
 						
@@ -500,7 +530,7 @@ namespace Managers
 					return;
 				}
 
-				Debug.Log($"[ObjectManager] Loaded mod {Author}.{Name}-{Version} with {Addresses.Count} datas");
+				Debug.Log($"[ObjectManager] Loaded mod {Author}.{Name}-{Version} with {Addresses.Count} datas {(CustomAssembly ? "and custom assembly" : "")}");
 			}
 				
 			public void Unload()

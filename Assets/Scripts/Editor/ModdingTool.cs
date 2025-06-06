@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using ScriptableObjects;
@@ -20,6 +21,9 @@ namespace Editor
 		[SerializeField]
 		public string Version = "1.0.0";
 
+		[SerializeField]
+		public string CustomAssembly = "";
+		
 		[SerializeField]
 		public List<Data> Objects = new ();
 		
@@ -55,6 +59,7 @@ namespace Editor
 			Author = EditorGUILayout.TextField("Author", fileFilter.Replace(Author, ""));
 			Name = EditorGUILayout.TextField("Name", fileFilter.Replace(Name, ""));
 			Version = EditorGUILayout.TextField("Version", versionFilter.Match(Version).Value);
+			CustomAssembly = EditorGUILayout.TextField("Custom Assembly", CustomAssembly);
 
 			GUILayout.Space(5);
 			
@@ -114,7 +119,7 @@ namespace Editor
 			
 			GUILayout.FlexibleSpace();
 
-			GUI.enabled = Author != "" && Name != "" && Version != "" && validObjects > 0;
+			GUI.enabled = Author != "" && Name != "" && Version != "" && validObjects > 0 && (CustomAssembly == "" || (CustomAssembly.EndsWith($"{Author}.{Name}.dll") && File.Exists(CustomAssembly)));
 			var shouldBuild = GUILayout.Button("Build Mod");
 			GUI.enabled = true;
 			
@@ -173,6 +178,12 @@ namespace Editor
 					}
 					
 					BuildPipeline.BuildAssetBundles(bundlePath, new [] {assetBundleBuild}, BuildAssetBundleOptions.None, buildTarget);
+				}
+
+				if (CustomAssembly != "")
+				{
+					var fileInfo = new FileInfo(CustomAssembly);
+					File.Move(CustomAssembly, Path.Combine(path, fileInfo.Name));
 				}
 			}
 		}

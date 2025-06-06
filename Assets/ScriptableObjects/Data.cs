@@ -24,5 +24,8 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public string Type;
+		
+		[SerializeField]
+		public string Assembly;
 	}
 }
