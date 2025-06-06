@@ -372,6 +372,11 @@ namespace AI.Base
 				return;
 
 			var type = data.Type == "" ? typeof(BaseSpell) : Type.GetType(data.Assembly == "" ? data.Type : $"{data.Type}, {data.Assembly}");
+			if (type == null || typeof(ISpell).IsAssignableFrom(type))
+			{
+				Debug.LogError($"[BaseAlive] Failed to learn spell {data.Name} as the custom type is not valid");
+				return;
+			}
 			
 			var spell = (ISpell)thisGo.AddComponent(type);
 			spell.SpellData = data;
