@@ -1,0 +1,141 @@
+using System;
+using System.Collections.Generic;
+using Managers;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace UI.Settings.Pages
+{
+	public class ModsPage : SettingsPage
+	{
+		[SerializeField]
+		public List<SModsPageItem> Items = new ();
+
+		[SerializeField]
+		public GameObject Template;
+
+		public override void Select(bool state)
+		{
+			base.Select(state);
+			
+			if (Items.Count == 0)
+				createItems();
+
+			if (Items.Count == 0 || SceneManager.Instance.GetCurrentScene() != "Title")
+				AutoSelect = Tab.gameObject;
+			else
+				AutoSelect = Items[0].Toggle.gameObject;
+			
+			setupItems();
+		}
+
+		public void OnEnable()
+		{
+			if (gameObject.activeSelf)
+				Select(true);
+		}
+
+		private void createItems()
+		{
+			var mods = ObjectManager.Instance.Mods;
+			var parent = Template.transform.parent;
+
+			for (var i = 0; i < mods.Count; i++)
+			{
+				var copy = Instantiate(Template, parent).transform;
+
+				var item = new SModsPageItem();
+				item.Title = copy.Find("Title").GetComponent<TMP_Text>();
+				item.Version = copy.Find("Version").GetComponent<TMP_Text>();
+				item.Toggle = copy.Find("Toggle (TMP)").GetComponent<Toggle>();
+
+				var index = i;
+				item.Toggle.onValueChanged.AddListener(delegate
+				{
+					toggleMod(index);
+				});
+
+				copy.gameObject.SetActive(true);
+				Items.Add(item);
+			}
+
+			setupNavigation();
+		}
+
+		private void setupItems()
+		{
+			var isTitle = SceneManager.Instance.GetCurrentScene() == "Title";
+			var mods = ObjectManager.Instance.Mods;
+			
+			for (var i = 0; i < Items.Count; i++)
+			{
+				var mod = mods[i];
+
+				var item = Items[i];
+				item.Title.text = $"{mod.Author}.{mod.Name}";
+				item.Version.text = mod.Version;
+				
+				item.Toggle.interactable = isTitle;
+				item.Toggle.SetIsOnWithoutNotify(!mod.Disabled);
+			}
+		}
+		
+		private void setupNavigation()
+		{
+			for (var i = 0; i < Items.Count; i++)
+			{
+				var item = Items[i];
+
+				var nav = new Navigation();
+				nav.mode = Navigation.Mode.Explicit;
+				
+				if (i == 0)
+				{
+					nav.selectOnUp = Tab;
+					nav.selectOnDown = Items[i + 1].Toggle;
+				}
+				else if (i == Items.Count - 1)
+				{
+					nav.selectOnUp = Items[i - 1].Toggle;
+					nav.selectOnDown = Items[0].Toggle;
+				}
+				else
+				{
+					nav.selectOnUp = Items[i - 1].Toggle;
+					nav.selectOnDown = Items[i + 1].Toggle;
+				}
+
+				item.Toggle.navigation = nav;
+			}
+		}
+		
+		private void toggleMod(int index)
+		{
+			if (SceneManager.Instance.GetCurrentScene() != "Title")
+				return;
+			
+			var mod = ObjectManager.Instance.Mods[index];
+
+			if (mod.Disabled)
+				mod.Enable();
+			else
+				mod.Disable();
+			
+			setupItems();
+		}
+		
+		[Serializable]
+		public struct SModsPageItem
+		{
+			[SerializeField]
+			public TMP_Text Title;
+			
+			[SerializeField]
+			public TMP_Text Version;
+
+			[SerializeField]
+			public Toggle Toggle;
+		}
+	}
+}

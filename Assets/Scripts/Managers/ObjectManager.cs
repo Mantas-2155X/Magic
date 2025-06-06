@@ -42,10 +42,10 @@ namespace Managers
 
 		public static string ModsPath => "data/mods";
 		
+		public readonly List<ModInfo> Mods = new ();
+
 		private readonly Dictionary<string, Data> datasMap = new ();
 		
-		private readonly List<ModInfo> mods = new ();
-
 		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes", "Paths" };
 
 		private readonly List<Type> allowedModdedDatas = new ()
@@ -158,7 +158,7 @@ namespace Managers
 					}
 
 					var mod = new ModInfo(author, name, version, directory, disabled, assetPath, lines);
-					mods.Add(mod);
+					Mods.Add(mod);
 				}
 				catch (Exception e)
 				{
@@ -439,6 +439,8 @@ namespace Managers
 					return;
 				}
 
+				Bundle = new Tuple<string, AssetBundle>(Bundle.Item1, bundle);
+				
 				var prefix = $"{Author}.{Name}.";
 				var bundleDatas = bundle.LoadAllAssets<Data>();
 
@@ -526,7 +528,7 @@ namespace Managers
 				var infoPath = Path.Combine(Directory, "info.tsv");
 				
 				var lines = File.ReadAllLines(infoPath);
-				lines[4] = "";
+				lines[3] = "";
 				
 				File.WriteAllLines(infoPath, lines);
 			}
@@ -544,7 +546,7 @@ namespace Managers
 				var infoPath = Path.Combine(Directory, "info.tsv");
 				
 				var lines = File.ReadAllLines(infoPath);
-				lines[4] = "Disabled";
+				lines[3] = "Disabled";
 				
 				File.WriteAllLines(infoPath, lines);
 			}
