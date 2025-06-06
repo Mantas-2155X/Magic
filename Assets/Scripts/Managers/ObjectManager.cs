@@ -12,6 +12,7 @@ using Combat.Decals.Interfaces;
 using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Combat.Wearables.Interfaces;
+using Mono.Cecil;
 using Newtonsoft.Json;
 using Objects.Interfaces;
 using ScriptableObjects;
@@ -63,14 +64,12 @@ namespace Managers
 		private readonly List<string> defaultSharedReferences = new ()
 		{
 			"mscorlib", 
-			"netstandard", 
 			"Assembly-CSharp"
 		};
 
-		private readonly List<string> whitelistedReferences = new()
+		private readonly List<string> whitelistedReferences = new ()
 		{
 			"mscorlib", 
-			"netstandard", 
 			"Assembly-CSharp",
 			"UnityEngine.CoreModule",
 			"UnityEngine.PhysicsModule",
@@ -78,6 +77,39 @@ namespace Managers
 			"Unity.InputSystem",
 			"UnityEngine.ParticleSystemModule",
 			"UniTask",
+		};
+
+		private readonly List<string> blacklistedNamespaces = new ()
+		{
+			"Microsoft.CSharp",
+			"Microsoft.VisualBasic",
+			"Microsoft.Win32",
+			"Microsoft.Win32.SafeHandles",
+			"Mono.Net.Security",
+			"System.CodeDom",
+			"System.CodeDom.Compiler",
+			"System.Diagnostics",
+			"System.Diagnostics.CodeAnalysis",
+			"System.IO",
+			"System.IO.Compression",
+			"System.IO.Ports",
+			"System.Net",
+			"System.Net.Cache",
+			"System.Net.Configuration",
+			"System.Net.Mail",
+			"System.Net.Mime",
+			"System.Net.NetworkInformation",
+			"System.Net.Security",
+			"System.Net.Sockets",
+			"System.Net.WebSockets",
+			"System.Net.Reflection",
+			"System.Web",
+			"System.Dynamic",
+			"System.IO.MemoryMappedFiles",
+			"System.IO.Pipes",
+			"System.Runtime.CompilerServices",
+			"System.Runtime.InteropServices",
+			"System.Reflection",
 		};
 		
 		#region Init
@@ -555,6 +587,34 @@ namespace Managers
 							return;
 						}
 					
+						var assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyPath);
+						
+						var types = assemblyDefinition.MainModule.Types;
+						foreach (var typeDefinition in types)
+						{
+							var methods = typeDefinition.Methods;
+							foreach (var methodDefinition in methods)
+							{
+								if (!methodDefinition.HasBody)
+									continue;
+
+								var instructions = methodDefinition.Body.Instructions;
+								foreach (var instruction in instructions)
+								{
+									var operand = instruction.Operand;
+									if (operand is not MethodReference reference)
+										continue;
+									
+									var referenceNamespace = reference.DeclaringType.Namespace;
+									if (!Instance.blacklistedNamespaces.Contains(referenceNamespace))
+										continue;
+
+									Debug.LogWarning($"[ObjectManager] Custom assembly uses blacklisted namespace {referenceNamespace} for mod at {Directory}, no content added");
+									return;
+								}
+							}
+						}
+						
 						CustomAssemblyLoaded = true;
 						Assembly.Load(assemblyBytes);
 					}
