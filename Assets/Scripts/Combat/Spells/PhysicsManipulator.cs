@@ -51,7 +51,11 @@ namespace Combat.Spells
 		{
 			base.Awake();
 			
-			lineRenderer = gameObject.AddComponent<LineRenderer>();
+			lineRenderer = gameObject.GetComponent<LineRenderer>();
+			
+			if (lineRenderer == null)
+				lineRenderer = gameObject.AddComponent<LineRenderer>();
+			
 			lineRenderer.startWidth = 0.25f;
 			lineRenderer.endWidth = 0.25f;
 			lineRenderer.shadowCastingMode = ShadowCastingMode.Off;
@@ -60,14 +64,6 @@ namespace Combat.Spells
 			lineRenderer.enabled = false;
 		}
 
-		public override void OnDestroy()
-		{
-			base.OnDestroy();
-			
-			if (lineRenderer != null)
-				Destroy(lineRenderer);
-		}
-		
 		public void OnEnable()
 		{
 			Player.OnScrollEvent?.AddListener(onScroll);
