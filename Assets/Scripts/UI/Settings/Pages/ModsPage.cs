@@ -83,6 +83,22 @@ namespace UI.Settings.Pages
 		
 		private void setupNavigation()
 		{
+			if (Items.Count == 0)
+				return;
+			
+			if (Items.Count == 1)
+			{
+				var item = Items[0];
+				
+				var nav = new Navigation();
+				nav.mode = Navigation.Mode.Explicit;
+				nav.selectOnUp = Tab;
+				nav.selectOnDown = Tab;
+
+				item.Toggle.navigation = nav;
+				return;
+			}
+			
 			for (var i = 0; i < Items.Count; i++)
 			{
 				var item = Items[i];

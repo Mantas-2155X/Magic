@@ -436,27 +436,30 @@ namespace Managers
 
 			public void Load()
 			{
-				var assemblyPath = Path.Combine(Directory, $"{Author}.{Name}.dll");
-				if (File.Exists(assemblyPath))
+				if (!CustomAssembly)
 				{
-					var assemblyBytes = File.ReadAllBytes(assemblyPath);
-
-					var reflectionAssembly = Assembly.ReflectionOnlyLoad(assemblyBytes);
-					if (reflectionAssembly == null)
+					var assemblyPath = Path.Combine(Directory, $"{Author}.{Name}.dll");
+					if (File.Exists(assemblyPath))
 					{
-						Debug.LogWarning($"[ObjectManager] Failed to load custom assembly for mod at {Directory}, no content added");
-						return;
-					}
+						var assemblyBytes = File.ReadAllBytes(assemblyPath);
 
-					var assemblyName = reflectionAssembly.GetName().Name;
-					if (assemblyName != $"{Author}.{Name}")
-					{
-						Debug.LogWarning($"[ObjectManager] Invalid custom assembly name (should be {Author}.{Name}, is {assemblyName}) for mod at {Directory}, no content added");
-						return;
-					}
+						var reflectionAssembly = Assembly.ReflectionOnlyLoad(assemblyBytes);
+						if (reflectionAssembly == null)
+						{
+							Debug.LogWarning($"[ObjectManager] Failed to load custom assembly for mod at {Directory}, no content added");
+							return;
+						}
+
+						var assemblyName = reflectionAssembly.GetName().Name;
+						if (assemblyName != $"{Author}.{Name}")
+						{
+							Debug.LogWarning($"[ObjectManager] Invalid custom assembly name (should be {Author}.{Name}, is {assemblyName}) for mod at {Directory}, no content added");
+							return;
+						}
 					
-					CustomAssembly = true;
-					Assembly.Load(assemblyBytes);
+						CustomAssembly = true;
+						Assembly.Load(assemblyBytes);
+					}
 				}
 				
 				var bundle = AssetBundle.LoadFromFile(Bundle.Item1);
@@ -538,6 +541,8 @@ namespace Managers
 				for (var i = 0; i < Addresses.Count; i++)
 					Instance.datasMap.Remove(Addresses[i]);
 
+				Addresses.Clear();
+				
 				var assetBundle = Bundle.Item2;
 				if (assetBundle != null)
 					assetBundle.Unload(true);
