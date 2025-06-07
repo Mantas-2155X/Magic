@@ -188,7 +188,7 @@ namespace Editor
 				if (!string.IsNullOrWhiteSpace(CustomAssembly))
 				{
 					var fileInfo = new FileInfo(CustomAssembly);
-					File.Move(CustomAssembly, Path.Combine(path, fileInfo.Name));
+					File.Copy(CustomAssembly, Path.Combine(path, fileInfo.Name));
 				}
 			}
 		}

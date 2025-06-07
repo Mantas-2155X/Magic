@@ -61,12 +61,6 @@ namespace Managers
 			typeof(WearableData)
 		};
 
-		private readonly List<string> defaultSharedReferences = new ()
-		{
-			"mscorlib", 
-			"Assembly-CSharp"
-		};
-
 		private readonly List<string> whitelistedReferences = new ()
 		{
 			"mscorlib", 
@@ -531,98 +525,94 @@ namespace Managers
 				if (!CustomAssemblyLoaded && Info.UseCustomAssembly)
 				{
 					var assemblyPath = Path.Combine(Directory, $"{Info.Author}.{Info.Name}.dll");
-					if (File.Exists(assemblyPath))
-					{
-						var assemblyBytes = File.ReadAllBytes(assemblyPath);
-
-						var reflectionAssembly = Assembly.ReflectionOnlyLoad(assemblyBytes);
-						if (reflectionAssembly == null)
-						{
-							Debug.LogWarning($"[ObjectManager] Failed to load custom assembly for mod at {Directory}, no content added");
-							return;
-						}
-
-						var currentReferences = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
-
-						var referencedAssemblies = reflectionAssembly.GetReferencedAssemblies();
-						for (var i = 0; i < referencedAssemblies.Length; i++)
-						{
-							var referencedAssembly = referencedAssemblies[i];
-							var sharedReference = false;
-
-							if (Instance.defaultSharedReferences.Contains(referencedAssembly.Name))
-							{
-								sharedReference = true;
-							}
-							else
-							{
-								for (var k = 0; k < currentReferences.Length; k++)
-								{
-									var currentReference = currentReferences[k];
-									if (currentReference.FullName != referencedAssembly.FullName)
-										continue;
-
-									sharedReference = true;
-									break;
-								}
-							}
-
-							if (!sharedReference)
-							{
-								Debug.LogWarning($"[ObjectManager] Custom assembly references non-shared reference {referencedAssembly.FullName} for mod at {Directory}, no content added");
-								return;
-							}
-
-							if (!Instance.whitelistedReferences.Contains(referencedAssembly.Name))
-							{
-								Debug.LogWarning($"[ObjectManager] Custom assembly references non-whitelisted reference {referencedAssembly.FullName} for mod at {Directory}, no content added");
-								return;
-							}
-						}
-						
-						var assemblyName = reflectionAssembly.GetName().Name;
-						if (assemblyName != $"{Info.Author}.{Info.Name}")
-						{
-							Debug.LogWarning($"[ObjectManager] Invalid custom assembly name (should be {Info.Author}.{Info.Name}, is {assemblyName}) for mod at {Directory}, no content added");
-							return;
-						}
-					
-						var assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyPath);
-						
-						var types = assemblyDefinition.MainModule.Types;
-						foreach (var typeDefinition in types)
-						{
-							var methods = typeDefinition.Methods;
-							foreach (var methodDefinition in methods)
-							{
-								if (!methodDefinition.HasBody)
-									continue;
-
-								var instructions = methodDefinition.Body.Instructions;
-								foreach (var instruction in instructions)
-								{
-									var operand = instruction.Operand;
-									if (operand is not MethodReference reference)
-										continue;
-									
-									var referenceNamespace = reference.DeclaringType.Namespace;
-									if (!Instance.blacklistedNamespaces.Contains(referenceNamespace))
-										continue;
-
-									Debug.LogWarning($"[ObjectManager] Custom assembly uses blacklisted namespace {referenceNamespace} for mod at {Directory}, no content added");
-									return;
-								}
-							}
-						}
-						
-						CustomAssemblyLoaded = true;
-						Assembly.Load(assemblyBytes);
-					}
-					else
+					if (!File.Exists(assemblyPath))
 					{
 						Debug.LogWarning($"[ObjectManager] Could not find custom assembly for mod at {Directory}, no content added");
 						return;
 					}
+					
+					AssemblyDefinition assemblyDefinition;
+
+					try
+					{
+						assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyPath);
+					}
+					catch (Exception e)
+					{
+						Debug.LogWarning($"[ObjectManager] Failed to read custom assembly definition for mod at {Directory}, no content added, {e}");
+						return;
+					}
+
+					var assemblyName = assemblyDefinition.Name.Name;
+					if (assemblyName != $"{Info.Author}.{Info.Name}")
+					{
+						Debug.LogWarning($"[ObjectManager] Invalid custom assembly name (should be {Info.Author}.{Info.Name}, is {assemblyName}) for mod at {Directory}, no content added");
+						return;
+					}
+
+					var references = assemblyDefinition.MainModule.AssemblyReferences;
+					for (var i = 0; i < references.Count; i++)
+					{
+						var reference = references[i];
+
+						if (Instance.whitelistedReferences.Contains(reference.Name))
+							continue;
+
+						Debug.LogWarning($"[ObjectManager] Custom assembly references non-whitelisted reference {reference.FullName} for mod at {Directory}, no content added");
+						return;
+					}
+
+					var currentReferences = AssemblyDefinition.ReadAssembly(typeof(ObjectManager).Assembly.Location).MainModule.AssemblyReferences;
+
+					for (var i = references.Count - 1; i >= 0; i--)
+					{
+						var reference = references[i];
+
+						for (var k = 0; k < currentReferences.Count; k++)
+						{
+							var currentReference = currentReferences[k];
+
+							if (reference.Name != currentReference.Name)
+								continue;
+
+							references[i] = currentReference;
+						}
+					}
+
+					var types = assemblyDefinition.MainModule.Types;
+					for (var i = 0; i < types.Count; i++)
+					{
+						var typeDefinition = types[i];
+
+						var methods = typeDefinition.Methods;
+						for (var k = 0; k < methods.Count; k++)
+						{
+							var methodDefinition = methods[k];
+							if (!methodDefinition.HasBody)
+								continue;
+
+							var instructions = methodDefinition.Body.Instructions;
+							for (var j = 0; j < instructions.Count; j++)
+							{
+								var instruction = instructions[j];
+
+								var operand = instruction.Operand;
+								if (operand is not MethodReference reference)
+									continue;
+
+								var referenceNamespace = reference.DeclaringType.Namespace;
+
+								if (!Instance.blacklistedNamespaces.Contains(referenceNamespace))
+									continue;
+
+								Debug.LogWarning($"[ObjectManager] Custom assembly uses blacklisted namespace {referenceNamespace} for mod at {Directory}, no content added");
+								return;
+							}
+						}
+					}
+
+					CustomAssemblyLoaded = true;
+					Assembly.Load(File.ReadAllBytes(assemblyPath));
 				}
 				
 				var bundle = AssetBundle.LoadFromFile(Bundle.Item1);
