@@ -118,20 +118,6 @@ namespace UI
 						UnityEngine.Debug.LogWarning("Command not found");
 						break;
 					case ConsoleManager.EConsoleCommandResult.Success:
-						if (history.Count > 0)
-						{
-							var lastEntry = history[^1];
-							if (lastEntry != text)
-							{
-								history.Add(text);
-								historyIndex = history.Count;
-							}
-						}
-						else
-						{
-							history.Add(text);
-							historyIndex = history.Count;
-						}
 						break;
 					case ConsoleManager.EConsoleCommandResult.InvalidParameter:
 						UnityEngine.Debug.LogWarning("Invalid parameters");
@@ -144,6 +130,21 @@ namespace UI
 						break;
 					default:
 						throw new NotImplementedException();
+				}
+				
+				if (history.Count > 0)
+				{
+					var lastEntry = history[^1];
+					if (lastEntry != text)
+					{
+						history.Add(text);
+						historyIndex = history.Count;
+					}
+				}
+				else
+				{
+					history.Add(text);
+					historyIndex = history.Count;
 				}
 			}
 			catch (Exception e)

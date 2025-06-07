@@ -1,11 +1,8 @@
 using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using AI.Enums;
 using Managers.Events;
-using Microsoft.CSharp;
 using Tools;
 using UI;
 using UI.Settings.Pages;
@@ -27,7 +24,6 @@ namespace Managers
 				
 				instance = new ConsoleManager();
 				Application.logMessageReceived += instance.logReceived;
-				instance.printInfo();
 				instance.setupCommands();
 				return instance;
 			}
@@ -320,46 +316,6 @@ namespace Managers
 				}
 			});
 			
-			AddCommand("eval", "Compile and run code (Dangerous, do not use)", new [] {EConsoleCommandParameter.String}, args =>
-			{
-				var parameters = new CompilerParameters
-				{
-					GenerateExecutable = false,
-					GenerateInMemory = true,
-				};
-
-				var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-				foreach (var assembly in assemblies)
-				{
-					if (assembly.IsDynamic || assembly.FullName.Contains("mscorlib") || !assembly.Location.Contains("Magic_Data") || !assembly.Location.Contains("Managed"))
-						continue;
-
-					parameters.ReferencedAssemblies.Add(assembly.Location);
-				}
-				
-				var compileString = $"public class TestClass {{ public void TestMethod() {{ {args[0]} }} }}";
-				
-				var provider = new CSharpCodeProvider();
-				var result = provider.CompileAssemblyFromSource(parameters, compileString);
-
-				var anyErrors = false;
-				
-				foreach (CompilerError error in result.Errors)
-				{
-					Debug.LogError(error);
-					anyErrors = true;
-				}
-				
-				if (anyErrors)
-					return;
-
-				var compiledAssembly = result.CompiledAssembly;
-				var compiledType = compiledAssembly.GetType("TestClass");
-				var compiledInstance = Activator.CreateInstance(compiledType);
-				var compiledMethod = compiledInstance.GetType().GetMethod("TestMethod");
-				compiledMethod!.Invoke(compiledInstance, null);
-			});
-			
 			AddCommand("scenes", "Lists all available scenes", () =>
 			{
 				Debug.Log("Available Scenes:");
@@ -403,6 +359,34 @@ namespace Managers
 					return;
 
 				player.SetPowerful(!player.IsPowerful);
+			});
+			
+			AddCommand("learn", "Give the player a spell", new [] {EConsoleCommandParameter.String}, args =>
+			{
+				var player = AIManager.Instance.Player;
+				if (player == null || !player.IsAlive)
+					return;
+
+				var spell = "";
+
+				for (var i = 0; i < args.Length; i++)
+					spell += (string)args[i];
+				
+				player.LearnSpell(ObjectManager.Instance.GetSpell(spell), false);
+			});
+			
+			AddCommand("give", "Give the player a wearable", new [] {EConsoleCommandParameter.String}, args =>
+			{
+				var player = AIManager.Instance.Player;
+				if (player == null || !player.IsAlive)
+					return;
+
+				var wearable = "";
+
+				for (var i = 0; i < args.Length; i++)
+					wearable += (string)args[i];
+				
+				player.EquipWearable(ObjectManager.Instance.GetWearable(wearable));
 			});
 			
 			AddCommand("timescale", "Sets the time scale", new [] {EConsoleCommandParameter.Float}, args =>
@@ -502,14 +486,6 @@ namespace Managers
 		}
 
 		#endregion
-
-		private void printInfo()
-		{
-			Debug.Log($"Build {Application.version} at {Path.GetDirectoryName(Application.dataPath)}");
-			Debug.Log($"OS: {SystemInfo.operatingSystem}");
-			Debug.Log($"CPU: {SystemInfo.processorType} (RAM: {SystemInfo.systemMemorySize} MB)");
-			Debug.Log($"GPU: {SystemInfo.graphicsDeviceName} (VRAM: {SystemInfo.graphicsMemorySize} MB)");
-		}
 		
 		private void logReceived(string logString, string stackTrace, LogType type)
 		{
