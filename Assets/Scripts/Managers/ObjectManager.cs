@@ -83,8 +83,9 @@ namespace Managers
 			"System.CodeDom",
 			"System.CodeDom.Compiler",
 			"System.Diagnostics",
-			"System.Diagnostics.CodeAnalysis",
 			"System.IO",
+			"System.IO.Enumeration",
+			"System.IO.IsolatedStorage",
 			"System.IO.Compression",
 			"System.IO.Ports",
 			"System.Net",
@@ -104,6 +105,30 @@ namespace Managers
 			"System.Runtime.CompilerServices",
 			"System.Runtime.InteropServices",
 			"System.Reflection",
+			"System.Reflection.Emit",
+		};
+
+		private readonly Dictionary<string, List<string>> blacklistedTypes = new()
+		{
+			{"System", new List<string>
+			{
+				"ActivationContext", 
+				"Activator", 
+				"AppDomain", 
+				"AppDomainInitializer", 
+				"AppDomainManager", 
+				"AppDomainSetup",
+				"Environment",
+				"GC",
+				"MemoryExtensions"
+			}},
+			{"Managers", new List<string>
+			{
+				"ConsoleManager",
+				"LocalizationManager",
+				"SceneManager",
+				"StateManager"
+			}}
 		};
 		
 		#region Init
@@ -602,11 +627,19 @@ namespace Managers
 
 								var referenceNamespace = reference.DeclaringType.Namespace;
 
-								if (!Instance.blacklistedNamespaces.Contains(referenceNamespace))
-									continue;
+								if (Instance.blacklistedNamespaces.Contains(referenceNamespace))
+								{
+									Debug.LogWarning($"[ObjectManager] Custom assembly uses blacklisted namespace {referenceNamespace} for mod at {Directory}, no content added");
+									return;
+								}
 
-								Debug.LogWarning($"[ObjectManager] Custom assembly uses blacklisted namespace {referenceNamespace} for mod at {Directory}, no content added");
-								return;
+								var referenceType = reference.DeclaringType.Name;
+
+								if (Instance.blacklistedTypes.TryGetValue(referenceNamespace, out var typesList) && typesList.Contains(referenceType))
+								{
+									Debug.LogWarning($"[ObjectManager] Custom assembly uses blacklisted type {referenceNamespace}.{referenceType} for mod at {Directory}, no content added");
+									return;
+								}
 							}
 						}
 					}
