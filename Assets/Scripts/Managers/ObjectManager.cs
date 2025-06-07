@@ -644,8 +644,14 @@ namespace Managers
 						}
 					}
 
+					using var stream = new MemoryStream();
+					assemblyDefinition.Write(stream);
+					stream.Position = 0;
+					
+					var bytes = stream.ToArray();
+					
 					CustomAssemblyLoaded = true;
-					Assembly.Load(File.ReadAllBytes(assemblyPath));
+					Assembly.Load(bytes);
 				}
 				
 				var bundle = AssetBundle.LoadFromFile(Bundle.Item1);
