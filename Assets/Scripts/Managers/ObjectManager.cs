@@ -751,7 +751,7 @@ namespace Managers
 				Load();
 				
 				Info.Disabled = false;
-				File.WriteAllText(Path.Combine(Directory, "info.json"), JsonConvert.SerializeObject(Info));
+				File.WriteAllText(Path.Combine(Directory, "info.json"), JsonConvert.SerializeObject(Info, Formatting.Indented));
 			}
 
 			public void Disable()
@@ -763,7 +763,7 @@ namespace Managers
 					Unload();
 
 				Info.Disabled = true;
-				File.WriteAllText(Path.Combine(Directory, "info.json"), JsonConvert.SerializeObject(Info));
+				File.WriteAllText(Path.Combine(Directory, "info.json"), JsonConvert.SerializeObject(Info, Formatting.Indented));
 			}
 		}
 	}
