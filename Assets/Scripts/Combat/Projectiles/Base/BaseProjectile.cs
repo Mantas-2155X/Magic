@@ -23,16 +23,6 @@ namespace Combat.Projectiles.Base
 		[field: SerializeField]
 		public ProjectileData ProjectileData { get; private set; }
 
-		public bool ShouldSave => true;
-
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
-
 		public IIdentifiable Source { get; private set; }
 
 		[field: SerializeField]
@@ -60,6 +50,16 @@ namespace Combat.Projectiles.Base
 		
 		#region Identify / SaveLoad
 
+		public virtual bool ShouldSave => true;
+
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+		
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();

@@ -15,16 +15,6 @@ namespace World
 {
 	public class Water : MonoBehaviour, ISaveable
 	{
-		public bool ShouldSave => true;
-		
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
-		
 		[SerializeField]
 		public float DamageRate = 0.1f;
 
@@ -40,7 +30,17 @@ namespace World
 
 		#region Identify / SaveLoad
 		
-		public Dictionary<string, JObject> Save()
+		public virtual bool ShouldSave => true;
+		
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+
+		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
 			
@@ -51,7 +51,7 @@ namespace World
 			return dict;
 		}
 
-		public void Load(Dictionary<string, JObject> data)
+		public virtual void Load(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(Water).ToString(), out var waterState))
 				WaterState.Apply(this, waterState.ToObject<WaterState>());

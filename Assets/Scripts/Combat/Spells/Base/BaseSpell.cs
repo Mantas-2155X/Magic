@@ -21,14 +21,6 @@ namespace Combat.Spells.Base
 	{
 		[field: SerializeField]
 		public SpellData SpellData { get; set; }
-		
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
 
 		public IAlive Owner { get; set; }
 
@@ -53,6 +45,14 @@ namespace Combat.Spells.Base
 		private bool init;
 
 		#region Identify / SaveLoad
+		
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
 		
 		public virtual void Awake()
 		{

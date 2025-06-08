@@ -27,6 +27,15 @@ namespace Objects.Base
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; set; }
 
+		public Vector3? LastHitPoint { get; private set; }
+		
+		private GameObject thisGo;
+		private Transform thisTr;
+
+		private bool init;
+
+		#region Identify / SaveLoad
+
 		public virtual bool ShouldSave => true;
 		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
@@ -36,15 +45,6 @@ namespace Objects.Base
 			get => objectID;
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
-
-		public Vector3? LastHitPoint { get; private set; }
-		
-		private GameObject thisGo;
-		private Transform thisTr;
-
-		private bool init;
-
-		#region Identify / SaveLoad
 
 		public virtual Dictionary<string, JObject> Save()
 		{

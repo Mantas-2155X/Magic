@@ -18,16 +18,6 @@ namespace Combat.Decals.Base
 	{
 		[field: SerializeField]
 		public DecalData DecalData { get; private set; }
-		
-		public bool ShouldSave => true;
-
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
 
 		[field: SerializeField]
 		public DecalProjector Projector { get; private set; }
@@ -43,6 +33,16 @@ namespace Combat.Decals.Base
 		private bool init;
 
 		#region Identify / SaveLoad
+		
+		public virtual bool ShouldSave => true;
+
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
 		
 		public virtual Dictionary<string, JObject> Save()
 		{

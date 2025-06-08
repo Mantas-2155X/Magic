@@ -10,8 +10,6 @@ namespace Objects.Base
 {
 	public class BaseConveyor : BaseObject, IConveyor
 	{
-		public override bool ShouldSave => false;
-		
 		[SerializeField]
 		public OnConveyorRunningEvent OnConveyorRunningEvent = new ();
 		
@@ -44,6 +42,12 @@ namespace Objects.Base
 
 		private CancellationTokenSource cancellationToken = new ();
 
+		#region Identify / SaveLoad
+
+		public override bool ShouldSave => false;
+
+		#endregion
+		
 		#region MonoBehaviour
 
 		public override void Awake()

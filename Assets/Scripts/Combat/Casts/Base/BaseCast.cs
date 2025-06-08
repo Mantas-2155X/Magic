@@ -18,14 +18,6 @@ namespace Combat.Casts.Base
 		[field: SerializeField]
 		public CastData CastData { get; private set; }
 
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
-
 		public IIdentifiable Source { get; private set; }
 
 		[field: SerializeField]
@@ -42,6 +34,14 @@ namespace Combat.Casts.Base
 		
 		#region Identify / SaveLoad
 
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+		
 		public void Awake()
 		{
 			StateManager.Instance.RegisterObject(this);

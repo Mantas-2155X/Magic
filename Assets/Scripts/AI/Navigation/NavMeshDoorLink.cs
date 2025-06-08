@@ -16,16 +16,6 @@ namespace AI.Navigation
 {
 	public class NavMeshDoorLink : MonoBehaviour, ISaveable
 	{
-		public bool ShouldSave => true;
-
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
-
 		[SerializeField]
 		public NavMeshLink[] Links;
 	
@@ -48,7 +38,17 @@ namespace AI.Navigation
 	
 		#region Identify / SaveLoad
 
-		public Dictionary<string, JObject> Save()
+		public virtual bool ShouldSave => true;
+
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+
+		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
 			
@@ -59,7 +59,7 @@ namespace AI.Navigation
 			return dict;
 		}
 
-		public void Load(Dictionary<string, JObject> data)
+		public virtual void Load(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(NavMeshDoorLink).ToString(), out var navMeshDoorLinkState))
 				NavMeshDoorLinkState.Apply(this, navMeshDoorLinkState.ToObject<NavMeshDoorLinkState>());

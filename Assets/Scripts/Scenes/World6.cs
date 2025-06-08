@@ -17,16 +17,6 @@ namespace Scenes
 {
 	public class World6 : MonoBehaviour, ISaveable
 	{
-		public bool ShouldSave => true;
-
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
-
 		[SerializeField]
 		public BaseLight[] Indicators1;
 		
@@ -63,7 +53,17 @@ namespace Scenes
 
 		#region Identify / SaveLoad
 
-		public Dictionary<string, JObject> Save()
+		public virtual bool ShouldSave => true;
+
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
+
+		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
 			
@@ -74,7 +74,7 @@ namespace Scenes
 			return dict;
 		}
 
-		public void Load(Dictionary<string, JObject> data)
+		public virtual void Load(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(World6).ToString(), out var world6State))
 				World6State.Apply(this, world6State.ToObject<World6State>());

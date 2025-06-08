@@ -13,16 +13,6 @@ namespace Components
 {
 	public class DelayedTrigger : MonoBehaviour, ISaveable
 	{
-		public bool ShouldSave => true;
-		
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
-
 		[SerializeField]
 		public OnTriggerEvent OnTriggerEvent;
 	
@@ -44,6 +34,16 @@ namespace Components
 		private bool init;
 		
 		#region Identify / SaveLoad
+		
+		public virtual bool ShouldSave => true;
+		
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
 		
 		public virtual Dictionary<string, JObject> Save()
 		{

@@ -13,8 +13,6 @@ namespace Objects.Base
 {
 	public class BaseElevator : BaseObject, IElevator
 	{
-		public override bool ShouldSave => false;
-		
 		[SerializeField]
 		public OnElevatorElevatedEvent OnElevatorElevatedEvent = new ();
 		
@@ -66,6 +64,12 @@ namespace Objects.Base
 		private float lastElevated;
 		private float lastLowered;
 
+		#region Identify / SaveLoad
+
+		public override bool ShouldSave => false;
+
+		#endregion
+		
 		#region MonoBehaviour
 
 		public override void Awake()

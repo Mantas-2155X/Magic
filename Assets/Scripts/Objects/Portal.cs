@@ -5,11 +5,15 @@ namespace Objects
 {
 	public class Portal : BaseObject
 	{
-		public override bool ShouldSave => false;
-		
 		[SerializeField]
 		public ParticleSystem System;
 
+		#region Identify / SaveLoad
+
+		public override bool ShouldSave => false;
+
+		#endregion
+		
 		public override void Spawn(Vector3 position, Vector3 angles)
 		{
 			base.Spawn(position, angles);

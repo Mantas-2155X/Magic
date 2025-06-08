@@ -18,14 +18,6 @@ namespace Combat.Wearables.Base
 		[field: SerializeField]
 		public WearableData WearableData { get; private set; }
 
-		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
-		private string objectID;
-		public string ObjectID
-		{
-			get => objectID;
-			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
-		}
-
 		public IAlive Owner { get; private set; }
 		
 		[field: SerializeField]
@@ -42,6 +34,14 @@ namespace Combat.Wearables.Base
 		private bool ignorePooling;
 		
 		#region Identify / SaveLoad
+		
+		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
+		private string objectID;
+		public string ObjectID
+		{
+			get => objectID;
+			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
+		}
 		
 		public void Awake()
 		{
