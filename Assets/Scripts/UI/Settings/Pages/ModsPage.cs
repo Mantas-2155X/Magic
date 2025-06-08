@@ -48,7 +48,7 @@ namespace UI.Settings.Pages
 				var item = new SModsPageItem();
 				item.Title = copy.Find("Title").GetComponent<TMP_Text>();
 				item.Version = copy.Find("Version").GetComponent<TMP_Text>();
-				item.Toggle = copy.Find("Toggle (TMP)").GetComponent<Toggle>();
+				item.Toggle = copy.Find("Left Toggle").GetComponent<Toggle>();
 
 				var index = i;
 				item.Toggle.onValueChanged.AddListener(delegate
