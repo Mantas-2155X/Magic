@@ -59,7 +59,14 @@ namespace Editor
 			Author = EditorGUILayout.TextField("Author", fileFilter.Replace(Author, ""));
 			Name = EditorGUILayout.TextField("Name", fileFilter.Replace(Name, ""));
 			Version = EditorGUILayout.TextField("Version", versionFilter.Match(Version).Value);
+			
+			GUILayout.Space(5);
+			
+			GUILayout.BeginHorizontal();
 			CustomAssembly = EditorGUILayout.TextField("Custom Assembly", CustomAssembly);
+			if (GUILayout.Button("Pick", GUILayout.Width(45)))
+				CustomAssembly = EditorUtility.OpenFilePanel("Custom Assembly", "Assets", "dll");
+			GUILayout.EndHorizontal();
 
 			GUILayout.Space(5);
 			
@@ -81,8 +88,6 @@ namespace Editor
 			GUILayout.EndHorizontal();
 
 			scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-
-			var validObjects = 0;
 			
 			for (var i = 0; i < Objects.Count; i++)
 			{
@@ -99,17 +104,12 @@ namespace Editor
 				if (Objects[i] != null)
 				{
 					var type = Objects[i].GetType();
-					var invalid = false;
 					
 					if (!allowedModdedDatas.Contains(type))
 					{
-						invalid = true;
 						Objects[i] = null;
 						Debug.LogWarning($"[ModdingTools] Objects of data {type} are not supported");
 					}
-
-					if (!invalid)
-						validObjects++;
 				}
 				
 				GUILayout.EndHorizontal();
@@ -119,7 +119,7 @@ namespace Editor
 			
 			GUILayout.FlexibleSpace();
 
-			GUI.enabled = !string.IsNullOrWhiteSpace(Author) && !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Version) && validObjects > 0 && (string.IsNullOrEmpty(CustomAssembly) || (CustomAssembly.EndsWith($"{Author}.{Name}.dll") && File.Exists(CustomAssembly)));
+			GUI.enabled = validate();
 			var shouldBuild = GUILayout.Button("Build Mod");
 			GUI.enabled = true;
 			
@@ -145,9 +145,7 @@ namespace Editor
 				for (var i = 0; i < Objects.Count; i++)
 				{
 					var obj = Objects[i];
-					if (obj == null)
-						continue;
-					
+
 					var objectInfo = new ObjectManager.ModInfo.ObjectInfo();
 					objectInfo.Type = obj.GetType().Name;
 					objectInfo.Name = obj.Name;
@@ -168,7 +166,7 @@ namespace Editor
 					var assetBundleBuild = new AssetBundleBuild
 					{
 						assetBundleName = directory.ToLower(),
-						assetNames = new string[validObjects]
+						assetNames = new string[Objects.Count]
 					};
 
 					var index = 0;
@@ -191,6 +189,59 @@ namespace Editor
 					File.Copy(CustomAssembly, Path.Combine(path, fileInfo.Name));
 				}
 			}
+		}
+
+		private bool validate()
+		{
+			if (string.IsNullOrWhiteSpace(Author))
+			{
+				GUILayout.Label("Author is empty or invalid");
+				return false;
+			}
+			
+			if (string.IsNullOrWhiteSpace(Name))
+			{
+				GUILayout.Label("Name is empty or invalid");
+				return false;
+			}
+			
+			if (string.IsNullOrWhiteSpace(Version))
+			{
+				GUILayout.Label("Version is empty or invalid");
+				return false;
+			}
+			
+			if (Objects.Count == 0)
+			{
+				GUILayout.Label("No objects specified");
+				return false;
+			}
+			
+			if (!string.IsNullOrEmpty(CustomAssembly))
+			{
+				if (!CustomAssembly.EndsWith($"{Author}.{Name}.dll"))
+				{
+					GUILayout.Label("Custom assembly must be called Author.Name.dll");
+					return false;
+				}
+				
+				if (!File.Exists(CustomAssembly))
+				{
+					GUILayout.Label("Custom assembly does not exist");
+					return false;
+				}
+			}
+			
+			for (var i = 0; i < Objects.Count; i++)
+			{
+				if (Objects[i] != null)
+					continue;
+
+				GUILayout.Label("Null objects are not allowed");
+				return false;
+			}
+
+			return true;
 		}
 	}
 }
