@@ -7,7 +7,7 @@ namespace Objects.Interfaces
 	{
 		public AnimationCurve Curve { get; }
 		
-		public EConveyorState State { get; }
+		public EConveyorState ConveyorState { get; }
 		
 		public bool Interruptible { get; }
 		public bool Locked { get; }

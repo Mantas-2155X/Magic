@@ -5,6 +5,7 @@ using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Objects.Base
 {
@@ -25,8 +26,9 @@ namespace Objects.Base
 		[field: SerializeField]
 		public AnimationCurve Curve { get; private set; }
 
+		[field: FormerlySerializedAs("<State>k__BackingField")]
 		[field: SerializeField]
-		public EConveyorState State { get; private set; } = EConveyorState.Stopped;
+		public EConveyorState ConveyorState { get; private set; } = EConveyorState.Stopped;
 		
 		[field: SerializeField]
 		public bool Interruptible { get; private set; }
@@ -54,7 +56,7 @@ namespace Objects.Base
 		{
 			base.Awake();
 			
-			switch (State)
+			switch (ConveyorState)
 			{
 				case EConveyorState.Running:
 					Normalized = 1f;
@@ -67,12 +69,12 @@ namespace Objects.Base
 
 		public void FixedUpdate()
 		{
-			if (State == EConveyorState.Stopped)
+			if (ConveyorState == EConveyorState.Stopped)
 				return;
 
 			var currentSpeed = Speed;
 			
-			switch (State)
+			switch (ConveyorState)
 			{
 				case EConveyorState.Accelerating:
 					currentSpeed *= Normalized;
@@ -125,7 +127,7 @@ namespace Objects.Base
 			if (Locked)
 				return;
 
-			switch (State)
+			switch (ConveyorState)
 			{
 				case EConveyorState.Accelerating or EConveyorState.Running:
 					Stop();
@@ -140,23 +142,23 @@ namespace Objects.Base
 			if (Locked)
 				return;
 
-			if (!Interruptible && State is EConveyorState.Accelerating or EConveyorState.Decelerating)
+			if (!Interruptible && ConveyorState is EConveyorState.Accelerating or EConveyorState.Decelerating)
 				return;
 			
 			if (state)
 			{
-				if (State is EConveyorState.Running or EConveyorState.Accelerating)
+				if (ConveyorState is EConveyorState.Running or EConveyorState.Accelerating)
 					return;
 
-				State = EConveyorState.Accelerating;
+				ConveyorState = EConveyorState.Accelerating;
 				OnConveyorAcceleratingEvent?.Invoke();
 			}
 			else
 			{
-				if (State is EConveyorState.Stopped or EConveyorState.Decelerating)
+				if (ConveyorState is EConveyorState.Stopped or EConveyorState.Decelerating)
 					return;
 
-				State = EConveyorState.Decelerating;
+				ConveyorState = EConveyorState.Decelerating;
 				OnConveyorDeceleratingEvent?.Invoke();
 			}
 
@@ -185,15 +187,15 @@ namespace Objects.Base
 				if (token.IsCancellationRequested)
 					return;
 
-				switch (State)
+				switch (ConveyorState)
 				{
 					case EConveyorState.Accelerating when Normalized >= 1f:
-						State = EConveyorState.Running;
+						ConveyorState = EConveyorState.Running;
 						Normalized = 1f;
 						OnConveyorRunningEvent?.Invoke();
 						return;
 					case EConveyorState.Decelerating when Normalized <= 0f:
-						State = EConveyorState.Stopped;
+						ConveyorState = EConveyorState.Stopped;
 						Normalized = 0f;
 						OnConveyorStoppedEvent?.Invoke();
 						return;
@@ -207,7 +209,7 @@ namespace Objects.Base
 				if (token.IsCancellationRequested)
 					return;
 				
-				switch (State)
+				switch (ConveyorState)
 				{
 					case EConveyorState.Accelerating:
 						Normalized += Time.deltaTime / StartStopDuration;

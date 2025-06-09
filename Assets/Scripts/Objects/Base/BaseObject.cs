@@ -8,10 +8,12 @@ using Combat.Enums;
 using Components;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Enums;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
@@ -49,32 +51,26 @@ namespace Objects.Base
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-
-			var transformState = TransformState.Read(thisTr);
-			if (transformState != null)
-				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
-
-			var rigidbodyState = RigidbodyState.Read(Rigidbody);
-			if (rigidbodyState != null)
-				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
-
-			var baseObjectState = BaseObjectState.Read(this);
-			if (baseObjectState != null)
-				dict[typeof(BaseObject).ToString()] = JObject.FromObject(baseObjectState);
+			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
+			
+			if (Rigidbody != null)
+				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(new RigidbodyState(Rigidbody));
+			
+			dict[typeof(BaseObject).ToString()] = JObject.FromObject(new BaseObjectState(this));
 
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
-				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
+				transformState.ToObject<TransformState>().Apply(thisTr);
 			
-			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
-				RigidbodyState.Apply(Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
+			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState) && rigidbodyState != null)
+				rigidbodyState.ToObject<RigidbodyState>().Apply(Rigidbody);
 			
-			if (data.TryGetValue(typeof(BaseObject).ToString(), out var baseObjectState))
-				BaseObjectState.Apply(this, baseObjectState.ToObject<BaseObjectState>());
+			if (data.TryGetValue(typeof(BaseObject).ToString(), out var baseObjectState) && baseObjectState != null)
+				baseObjectState.ToObject<BaseObjectState>().Apply(this);
 		}
 
 		public virtual void Awake()
@@ -336,5 +332,45 @@ namespace Objects.Base
 		public GameObject GetGameObject() => thisGo;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Transform GetTransform() => thisTr;
+
+		[JsonObject]
+		public class BaseObjectState : IState
+		{
+			[JsonProperty]
+			public float Health;
+
+			[JsonProperty]
+			public bool Pickupable;
+
+			[JsonProperty]
+			public bool Usable;
+
+			public BaseObjectState() { }
+			
+			public BaseObjectState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not BaseObject baseObject)
+					return;
+
+				Health = baseObject.Health;
+				Pickupable = baseObject.Pickupable;
+				Usable = baseObject.Usable;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not BaseObject baseObject)
+					return;
+
+				baseObject.Health = Health;
+				baseObject.Pickupable = Pickupable;
+				baseObject.Usable = Usable;
+			}
+		}
 	}
 }

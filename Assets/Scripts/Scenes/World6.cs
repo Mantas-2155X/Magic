@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Components;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects;
 using Objects.Base;
@@ -54,7 +55,7 @@ namespace Scenes
 		#region Identify / SaveLoad
 
 		public virtual bool ShouldSave => true;
-
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -66,18 +67,15 @@ namespace Scenes
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-			
-			var world6State = World6State.Read(this);
-			if (world6State != null)
-				dict[typeof(World6).ToString()] = JObject.FromObject(world6State);
+			dict[typeof(World6).ToString()] = JObject.FromObject(new World6State(this));
 			
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(World6).ToString(), out var world6State))
-				World6State.Apply(this, world6State.ToObject<World6State>());
+			if (data.TryGetValue(typeof(World6).ToString(), out var world6State) && world6State != null)
+				world6State.ToObject<World6State>().Apply(this);
 		}
 		
 		public void SetState(int currentWave, int remainingSpawners, float waveStartElapsed, bool worldStarted, bool worldEnded)
@@ -235,6 +233,52 @@ namespace Scenes
 
 			[SerializeField]
 			public bool ToggleLight;
+		}
+		
+		[JsonObject]
+		public class World6State : IState
+		{
+			[JsonProperty]
+			public int CurrentWave;
+		
+			[JsonProperty]
+			public int RemainingSpawners;
+		
+			[JsonProperty]
+			public float WaveStartElapsed;
+		
+			[JsonProperty]
+			public bool WorldStarted;
+		
+			[JsonProperty]
+			public bool WorldEnded;
+
+			public World6State() { }
+			
+			public World6State(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not World6 world6)
+					return;
+
+				CurrentWave = world6.CurrentWave;
+				RemainingSpawners = world6.RemainingSpawners;
+				WaveStartElapsed = world6.WorldStarted ? Time.time - world6.WaveStartTime : 0f;
+				WorldStarted = world6.WorldStarted;
+				WorldEnded = world6.WorldEnded;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not World6 world6)
+					return;
+
+				world6.SetState(CurrentWave, RemainingSpawners, WaveStartElapsed, WorldStarted, WorldEnded);
+			}
 		}
 	}
 }

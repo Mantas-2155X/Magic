@@ -8,6 +8,7 @@ using Combat.Casts.Interfaces;
 using Combat.Enums;
 using Combat.Spells.Interfaces;
 using Managers;
+using Newtonsoft.Json;
 using ScriptableObjects;
 using State.Interfaces;
 using Tools;
@@ -372,5 +373,64 @@ namespace Combat.Spells.Base
 		}
 
 		#endregion
+		
+		[JsonObject]
+		public class BaseSpellState : IState
+		{
+			[JsonProperty]
+			public string ObjectID;
+		
+			[JsonProperty]
+			public bool Selected;
+
+			[JsonProperty]
+			public bool Casting;
+		
+			[JsonProperty]
+			public float CastedTime;
+		
+			[JsonProperty]
+			public float Cooldown;
+
+			public BaseSpellState() { }
+			
+			public BaseSpellState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not BaseSpell baseSpell)
+					return;
+				
+				Selected = baseSpell.IsSelected;
+				ObjectID = baseSpell.ObjectID;
+
+				if (baseSpell.IsOnCooldown)
+				{
+					Cooldown = (baseSpell.LastFinishedCast + baseSpell.SpellData.Cooldown) - Time.time;
+				}
+				else
+				{
+					Cooldown = 0f;
+
+					if (baseSpell.IsCasting)
+					{
+						Casting = true;
+						CastedTime = Time.time - baseSpell.LastStartedCast;
+					}
+				}
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not BaseSpell baseSpell)
+					return;
+
+				baseSpell.ObjectID = ObjectID;
+				baseSpell.SetState(Cooldown, Casting, CastedTime);
+			}
+		}
 	}
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Events;
+using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
@@ -44,14 +46,11 @@ namespace Objects.Base
 		private Material material;
 		
 		#region Identify / SaveLoad
-
+		
 		public override Dictionary<string, JObject> Save()
 		{
 			var dict = base.Save();
-			
-			var lightState = BaseLightState.Read(this);
-			if (lightState != null)
-				dict[typeof(BaseLight).ToString()] = JObject.FromObject(lightState);
+			dict[typeof(BaseLight).ToString()] = JObject.FromObject(new BaseLightState(this));
 			
 			return dict;
 		}
@@ -60,8 +59,8 @@ namespace Objects.Base
 		{
 			base.Load(data);
 			
-			if (data.TryGetValue(typeof(BaseLight).ToString(), out var baseLightState))
-				BaseLightState.Apply(this, baseLightState.ToObject<BaseLightState>());
+			if (data.TryGetValue(typeof(BaseLight).ToString(), out var baseLightState) && baseLightState != null)
+				baseLightState.ToObject<BaseLightState>().Apply(this);
 		}
 		
 		#endregion
@@ -163,5 +162,35 @@ namespace Objects.Base
 		}
 
 		#endregion
+		
+		[JsonObject]
+		public class BaseLightState : IState
+		{
+			[JsonProperty]
+			public bool Enabled;
+
+			public BaseLightState() { }
+			
+			public BaseLightState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not BaseLight baseLight)
+					return;
+
+				Enabled = baseLight.Enabled;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not BaseLight baseLight)
+					return;
+
+				baseLight.Toggle(Enabled);
+			}
+		}
 	}
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Events;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using State.Interfaces;
 using State.States;
@@ -44,18 +45,15 @@ namespace Components
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-
-			var triggerState = TriggerState.Read(this);
-			if (triggerState != null)
-				dict[typeof(Trigger).ToString()] = JObject.FromObject(triggerState);
-
+			dict[typeof(Trigger).ToString()] = JObject.FromObject(new TriggerState(this));
+			
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(Trigger).ToString(), out var triggerState))
-				TriggerState.Apply(this, triggerState.ToObject<TriggerState>());
+			if (data.TryGetValue(typeof(Trigger).ToString(), out var triggerState) && triggerState != null)
+				triggerState.ToObject<TriggerState>().Apply(this);
 		}
 
 		public void SetState(bool triggered)
@@ -134,6 +132,39 @@ namespace Components
 			thisGo = gameObject;
 			thisTr = thisGo.transform;
 			init = true;
+		}
+		
+		[JsonObject]
+		public class TriggerState : IState
+		{
+			[JsonProperty]
+			public bool Triggered;
+
+			[JsonProperty]
+			public string EnterObjectID;
+
+			public TriggerState() { }
+			
+			public TriggerState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not Trigger trigger)
+					return;
+
+				Triggered = trigger.Triggered;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not Trigger trigger)
+					return;
+
+				trigger.SetState(Triggered);
+			}
 		}
 	}
 }

@@ -7,6 +7,7 @@ using Combat.Enums;
 using Components;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ScriptableObjects;
 using State.Interfaces;
@@ -67,7 +68,7 @@ namespace Scenes
 		#region Identify / SaveLoad
 
 		public virtual bool ShouldSave => true;
-
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -79,18 +80,15 @@ namespace Scenes
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-			
-			var world4State = World4State.Read(this);
-			if (world4State != null)
-				dict[typeof(World4).ToString()] = JObject.FromObject(world4State);
+			dict[typeof(World4).ToString()] = JObject.FromObject(new World4State(this));
 			
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(World4).ToString(), out var world4State))
-				World4State.Apply(this, world4State.ToObject<World4State>());
+			if (data.TryGetValue(typeof(World4).ToString(), out var world4State) && world4State != null)
+				world4State.ToObject<World4State>().Apply(this);
 		}
 		
 		public void SetState(float startTimeElapsed, bool timerStopped, float attackEvery, bool attacksStarted, float attacksStartTimeElapsed)
@@ -261,6 +259,54 @@ namespace Scenes
 				return;
 			
 			await SceneManager.Instance.ReloadSceneAsync(true, true, true, 1f);
+		}
+		
+		[JsonObject]
+		public class World4State : IState
+		{
+			[JsonProperty]
+			public float StartTimeElapsed;
+		
+			[JsonProperty]
+			public bool TimerStopped;
+
+			[JsonProperty]
+			public float AttackEvery;
+		
+			[JsonProperty]
+			public bool AttacksStarted;
+		
+			[JsonProperty]
+			public float AttacksStartTimeElapsed;
+
+			public World4State() { }
+			
+			public World4State(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not World4 world4)
+					return;
+				
+				var time = Time.time;
+				
+				StartTimeElapsed = time - world4.StartTime;
+				TimerStopped = world4.TimerStopped;
+				AttackEvery = world4.AttackEvery;
+				AttacksStarted = world4.AttacksStarted;
+				AttacksStartTimeElapsed = world4.AttacksStarted ? time - world4.AttacksStartTime : 0f;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not World4 world4)
+					return;
+
+				world4.SetState(StartTimeElapsed, TimerStopped, AttackEvery, AttacksStarted, AttacksStartTimeElapsed);
+			}
 		}
 	}
 }

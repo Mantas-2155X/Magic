@@ -4,6 +4,7 @@ using AI.Interfaces;
 using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using State.Interfaces;
 using State.States;
@@ -43,18 +44,15 @@ namespace World
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-			
-			var waterState = WaterState.Read(this);
-			if (waterState != null)
-				dict[typeof(Water).ToString()] = JObject.FromObject(waterState);
+			dict[typeof(Water).ToString()] = JObject.FromObject(new WaterState(this));
 			
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(Water).ToString(), out var waterState))
-				WaterState.Apply(this, waterState.ToObject<WaterState>());
+			if (data.TryGetValue(typeof(Water).ToString(), out var waterState) && waterState != null)
+				waterState.ToObject<WaterState>().Apply(this);
 		}
 
 		public void SetState(List<string> alivesObjectIDs)
@@ -146,6 +144,45 @@ namespace World
 				
 					alive.Damage(Damage, this, EElement.Unknown);
 				}
+			}
+		}
+		
+		[JsonObject]
+		public class WaterState : IState
+		{
+			[JsonProperty]
+			public List<string> AlivesObjectIDs;
+
+			public WaterState() { }
+			
+			public WaterState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not Water water)
+					return;
+
+				AlivesObjectIDs = new List<string>();
+
+				for (var i = 0; i < water.Alives.Count; i++)
+				{
+					var alive = water.Alives[i];
+					if (alive.IsNull() || !alive.IsAlive)
+						continue;
+
+					AlivesObjectIDs.Add(alive.ObjectID);
+				}
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not Water water)
+					return;
+
+				water.SetState(AlivesObjectIDs);
 			}
 		}
 	}

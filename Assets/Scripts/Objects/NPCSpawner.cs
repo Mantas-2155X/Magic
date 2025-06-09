@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
 using Objects.Enums;
 using Objects.Events;
 using ScriptableObjects;
+using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
@@ -65,14 +67,11 @@ namespace Objects
 		public int Triggered { get; private set; }
 		
 		#region Identify / SaveLoad
-
+		
 		public override Dictionary<string, JObject> Save()
 		{
 			var dict = base.Save();
-			
-			var npcSpawnerState = NPCSpawnerState.Read(this);
-			if (npcSpawnerState != null)
-				dict[typeof(NPCSpawner).ToString()] = JObject.FromObject(npcSpawnerState);
+			dict[typeof(NPCSpawner).ToString()] = JObject.FromObject(new NPCSpawnerState(this));
 			
 			return dict;
 		}
@@ -81,8 +80,8 @@ namespace Objects
 		{
 			base.Load(data);
 			
-			if (data.TryGetValue(typeof(NPCSpawner).ToString(), out var npcSpawnerState))
-				NPCSpawnerState.Apply(this, npcSpawnerState.ToObject<NPCSpawnerState>());
+			if (data.TryGetValue(typeof(NPCSpawner).ToString(), out var npcSpawnerState) && npcSpawnerState != null)
+				npcSpawnerState.ToObject<NPCSpawnerState>().Apply(this);
 		}
 		
 		public void SetState(List<string> spawned, int triggered, bool cleared)
@@ -277,6 +276,48 @@ namespace Objects
 				npc.Idle();
 
 			Spawned.Add(spawnID, npc);
+		}
+		
+		[JsonObject]
+		public class NPCSpawnerState : IState
+		{
+			[JsonProperty]
+			public List<string> Spawned;
+		
+			[JsonProperty]
+			public int Triggered;
+
+			[JsonProperty]
+			public bool Cleared;
+
+			public NPCSpawnerState() { }
+			
+			public NPCSpawnerState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not NPCSpawner npcSpawner)
+					return;
+
+				Spawned = new List<string>();
+
+				foreach (var pair in npcSpawner.Spawned)
+					Spawned.Add(pair.Key);
+
+				Triggered = npcSpawner.Triggered;
+				Cleared = npcSpawner.Cleared;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not NPCSpawner npcSpawner)
+					return;
+
+				npcSpawner.SetState(Spawned, Triggered, Cleared);
+			}
 		}
 	}
 }

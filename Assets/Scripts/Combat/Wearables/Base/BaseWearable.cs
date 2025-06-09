@@ -4,8 +4,10 @@ using AI.Interfaces;
 using Combat.Wearables.Enums;
 using Combat.Wearables.Interfaces;
 using Managers;
+using Newtonsoft.Json;
 using Objects;
 using ScriptableObjects;
+using State.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -179,6 +181,36 @@ namespace Combat.Wearables.Base
 			var renderers = Owner.Body.Containers[WearableData.WearableType].Wear.GetComponentsInChildren<Renderer>(true);
 			foreach (var rend in renderers)
 				rend.shadowCastingMode = mode;
+		}
+				
+		[JsonObject]
+		public class BaseWearableState : IState
+		{
+			[JsonProperty]
+			public string ObjectID;
+
+			public BaseWearableState() { }
+			
+			public BaseWearableState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not BaseWearable baseWearable)
+					return;
+
+				ObjectID = baseWearable.ObjectID;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not BaseWearable baseWearable)
+					return;
+
+				baseWearable.ObjectID = ObjectID;
+			}
 		}
 	}
 }

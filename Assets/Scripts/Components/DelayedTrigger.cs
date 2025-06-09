@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Events;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using State.Interfaces;
 using State.States;
@@ -48,18 +49,15 @@ namespace Components
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-
-			var triggerState = TriggerState.Read(this);
-			if (triggerState != null)
-				dict[typeof(DelayedTrigger).ToString()] = JObject.FromObject(triggerState);
-
+			dict[typeof(DelayedTrigger).ToString()] = JObject.FromObject(new DelayedTriggerState(this));
+			
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(DelayedTrigger).ToString(), out var triggerState))
-				TriggerState.Apply(this, triggerState.ToObject<TriggerState>());
+			if (data.TryGetValue(typeof(DelayedTrigger).ToString(), out var delayedTriggerState) && delayedTriggerState != null)
+				delayedTriggerState.ToObject<DelayedTriggerState>().Apply(this);
 		}
 		
 		public void SetState(bool triggered, float? enterTime, string enterObjectID)
@@ -151,6 +149,48 @@ namespace Components
 			thisGo = gameObject;
 			thisTr = thisGo.transform;
 			init = true;
+		}
+		
+		[JsonObject]
+		public class DelayedTriggerState : IState
+		{
+			[JsonProperty]
+			public bool Triggered;
+				
+			[JsonProperty]
+			public float? EnterTime;
+
+			[JsonProperty]
+			public string EnterObjectID;
+
+			public DelayedTriggerState() { }
+			
+			public DelayedTriggerState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not DelayedTrigger delayedTrigger)
+					return;
+
+				Triggered = delayedTrigger.Triggered;
+
+				if (delayedTrigger.EnterObject.NotNull())
+				{
+					EnterTime = Time.time - delayedTrigger.EnterTime;
+					EnterObjectID = delayedTrigger.EnterObject.ObjectID;
+				}
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not DelayedTrigger delayedTrigger)
+					return;
+
+				delayedTrigger.SetState(Triggered, EnterTime, EnterObjectID);
+			}
 		}
 	}
 }

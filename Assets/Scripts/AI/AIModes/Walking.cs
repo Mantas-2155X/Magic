@@ -71,7 +71,7 @@ namespace AI.AIModes
 				if (NavMeshTools.IsDoorLink(data))
 				{
 					var action = ((Component)data.owner).GetComponent<NavMeshDoorLink>();
-					if (action.Door.State != EDoorState.Open)
+					if (action.Door.DoorState != EDoorState.Open)
 					{
 						// Not usable and no buttons, likely activated by trigger so just wait for it to open
 						if (!action.Door.ObjectData.IsUsable && action.Buttons.Length == 0)
@@ -91,7 +91,7 @@ namespace AI.AIModes
 				if (NavMeshTools.IsElevatorLink(data))
 				{
 					var action = ((Component)data.owner).GetComponent<NavMeshElevatorLink>();
-					var state = action.Elevator.State;
+					var state = action.Elevator.ElevatorState;
 
 					var lowerDist = Mathf.Abs(Owner.Destination.y - action.LowerLink.position.y);
 					var upperDist = Mathf.Abs(Owner.Destination.y - action.UpperLink.position.y);

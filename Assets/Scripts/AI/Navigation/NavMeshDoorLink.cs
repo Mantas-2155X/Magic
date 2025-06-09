@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Enums;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
 using State.Interfaces;
@@ -39,7 +40,7 @@ namespace AI.Navigation
 		#region Identify / SaveLoad
 
 		public virtual bool ShouldSave => true;
-
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -51,18 +52,15 @@ namespace AI.Navigation
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-			
-			var navMeshDoorLinkState = NavMeshDoorLinkState.Read(this);
-			if (navMeshDoorLinkState != null)
-				dict[typeof(NavMeshDoorLink).ToString()] = JObject.FromObject(navMeshDoorLinkState);
+			dict[typeof(NavMeshDoorLink).ToString()] = JObject.FromObject(new NavMeshDoorLinkState(this));
 			
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(NavMeshDoorLink).ToString(), out var navMeshDoorLinkState))
-				NavMeshDoorLinkState.Apply(this, navMeshDoorLinkState.ToObject<NavMeshDoorLinkState>());
+			if (data.TryGetValue(typeof(NavMeshDoorLink).ToString(), out var navMeshDoorLinkState) && navMeshDoorLinkState != null)
+				navMeshDoorLinkState.ToObject<NavMeshDoorLinkState>().Apply(this);
 		}
 
 		public void SetState(List<string> linkUsersAlivesIDs, string userObjectID, bool partial)
@@ -240,6 +238,53 @@ namespace AI.Navigation
 					linkUser.Agent.Warp(linkUser.GetTransform().position);
 					linkUser.Agent.Destination = linkUser.Destination;
 				}
+			}
+		}
+		
+		[JsonObject]
+		public class NavMeshDoorLinkState : IState
+		{
+			[JsonProperty]
+			public List<string> LinkUsersObjectIDs;
+
+			[JsonProperty]
+			public string UserObjectID;
+
+			[JsonProperty]
+			public bool Partial;
+	
+			public NavMeshDoorLinkState() { }
+			
+			public NavMeshDoorLinkState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not NavMeshDoorLink navMeshDoorLink)
+					return;
+				
+				Partial = navMeshDoorLink.IsPartial;
+				UserObjectID = navMeshDoorLink.User != null ? navMeshDoorLink.User.ObjectID : null;
+				LinkUsersObjectIDs = new List<string>();
+
+				for (var i = 0; i < navMeshDoorLink.LinkUsers.Count; i++)
+				{
+					var npc = navMeshDoorLink.LinkUsers[i];
+					if (npc.IsNull() || !npc.IsAlive)
+						continue;
+
+					LinkUsersObjectIDs.Add(npc.ObjectID);
+				}
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not NavMeshDoorLink navMeshDoorLink)
+					return;
+
+				navMeshDoorLink.SetState(LinkUsersObjectIDs, UserObjectID, Partial);
 			}
 		}
 	}

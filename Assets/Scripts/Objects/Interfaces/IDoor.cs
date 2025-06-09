@@ -9,7 +9,7 @@ namespace Objects.Interfaces
 		public NavMeshObstacle Obstacle { get; }
 		public AnimationCurve Curve { get; }
 		
-		public EDoorState State { get; }
+		public EDoorState DoorState { get; }
 
 		public bool Interruptible { get; }
 		public bool Locked { get; }

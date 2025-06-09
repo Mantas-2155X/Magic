@@ -8,6 +8,7 @@ using Objects.Events;
 using Objects.Interfaces;
 using Tools;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Objects.Base
 {
@@ -34,8 +35,9 @@ namespace Objects.Base
 		[field: SerializeField]
 		public Parent Parent { get; private set; }
 		
+		[field: FormerlySerializedAs("<State>k__BackingField")]
 		[field: SerializeField]
-		public EElevatorState State { get; private set; } = EElevatorState.Lowered;
+		public EElevatorState ElevatorState { get; private set; } = EElevatorState.Lowered;
 
 		[field: SerializeField]
 		public bool ParentElevating { get; private set; }
@@ -76,7 +78,7 @@ namespace Objects.Base
 		{
 			base.Awake();
 			
-			switch (State)
+			switch (ElevatorState)
 			{
 				case EElevatorState.Elevated:
 					Normalized = 1f;
@@ -99,9 +101,9 @@ namespace Objects.Base
 				return;
 			
 			var yPos = GetTransform().localPosition.y;
-			AntiCrush.enabled = State == EElevatorState.Lowering && yPos < 3.5f && yPos > 1.5f;
+			AntiCrush.enabled = ElevatorState == EElevatorState.Lowering && yPos < 3.5f && yPos > 1.5f;
 			
-			if (AutoElevate != 0f && State == EElevatorState.Lowered)
+			if (AutoElevate != 0f && ElevatorState == EElevatorState.Lowered)
 			{
 				if (Time.time >= AutoElevate + lastLowered)
 				{
@@ -109,7 +111,7 @@ namespace Objects.Base
 				}
 			}
 			
-			if (AutoLower != 0f && State == EElevatorState.Elevated)
+			if (AutoLower != 0f && ElevatorState == EElevatorState.Elevated)
 			{
 				if (Time.time >= AutoLower + lastElevated)
 				{
@@ -165,7 +167,7 @@ namespace Objects.Base
 			if (Locked)
 				return;
 
-			switch (State)
+			switch (ElevatorState)
 			{
 				case EElevatorState.Elevated or EElevatorState.Elevating:
 					Lower();
@@ -180,23 +182,23 @@ namespace Objects.Base
 			if (Locked)
 				return;
 
-			if (!Interruptible && State is EElevatorState.Elevating or EElevatorState.Lowering)
+			if (!Interruptible && ElevatorState is EElevatorState.Elevating or EElevatorState.Lowering)
 				return;
 			
 			if (state)
 			{
-				if (State is EElevatorState.Elevated or EElevatorState.Elevating)
+				if (ElevatorState is EElevatorState.Elevated or EElevatorState.Elevating)
 					return;
 
-				State = EElevatorState.Elevating;
+				ElevatorState = EElevatorState.Elevating;
 				OnElevatorElevatingEvent?.Invoke();
 			}
 			else
 			{
-				if (State is EElevatorState.Lowered or EElevatorState.Lowering)
+				if (ElevatorState is EElevatorState.Lowered or EElevatorState.Lowering)
 					return;
 
-				State = EElevatorState.Lowering;
+				ElevatorState = EElevatorState.Lowering;
 				OnElevatorLoweringEvent?.Invoke();
 			}
 
@@ -238,10 +240,10 @@ namespace Objects.Base
 				if (token.IsCancellationRequested)
 					return;
 
-				switch (State)
+				switch (ElevatorState)
 				{
 					case EElevatorState.Elevating when Normalized >= 1f:
-						State = EElevatorState.Elevated;
+						ElevatorState = EElevatorState.Elevated;
 						Normalized = 1f;
 						setPosition();
 						lastElevated = Time.time;
@@ -249,7 +251,7 @@ namespace Objects.Base
 						OnElevatorElevatedEvent?.Invoke();
 						return;
 					case EElevatorState.Lowering when Normalized <= 0f:
-						State = EElevatorState.Lowered;
+						ElevatorState = EElevatorState.Lowered;
 						Normalized = 0f;
 						setPosition();
 						lastLowered = Time.time;
@@ -268,7 +270,7 @@ namespace Objects.Base
 				
 				setPosition();
 				
-				switch (State)
+				switch (ElevatorState)
 				{
 					case EElevatorState.Elevating:
 						Normalized += Time.deltaTime / Duration;

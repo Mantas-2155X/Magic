@@ -12,7 +12,7 @@ namespace Objects.Interfaces
 
 		public Parent Parent { get; }
 
-		public EElevatorState State { get; }
+		public EElevatorState ElevatorState { get; }
 
 		public bool ParentElevating { get; }
 		public bool ParentLowering { get; }

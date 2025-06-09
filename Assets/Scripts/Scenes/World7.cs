@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using State.Interfaces;
 using State.States;
@@ -65,18 +66,15 @@ namespace Scenes
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-			
-			var world7State = World7State.Read(this);
-			if (world7State != null)
-				dict[typeof(World7).ToString()] = JObject.FromObject(world7State);
+			dict[typeof(World7).ToString()] = JObject.FromObject(new World7State(this));
 			
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(World7).ToString(), out var world7State))
-				World7State.Apply(this, world7State.ToObject<World7State>());
+			if (data.TryGetValue(typeof(World7).ToString(), out var world7State) && world7State != null)
+				world7State.ToObject<World7State>().Apply(this);
 		}
 
 		public void SetState(bool activated, bool playerIncluded, float size, float bounceIntensity, float elapsedTime)
@@ -221,6 +219,52 @@ namespace Scenes
 			}
 
 			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
+		}
+		
+		[JsonObject]
+		public class World7State : IState
+		{
+			[JsonProperty]
+			public bool OrbActivated;
+
+			[JsonProperty]
+			public bool PlayerIncluded;
+		
+			[JsonProperty]
+			public float OrbSize;
+
+			[JsonProperty]
+			public float OrbLightBounceIntensity;
+
+			[JsonProperty]
+			public float ElapsedTime;
+
+			public World7State() { }
+			
+			public World7State(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not World7 world7)
+					return;
+
+				OrbActivated = world7.ActivatedTime >= 0f;
+				PlayerIncluded = world7.PlayerIncluded;
+				OrbSize = world7.CurrentSize;
+				OrbLightBounceIntensity = world7.CurrentBounceIntensity;
+				ElapsedTime = world7.ActivatedTime >= 0f ? Time.time - world7.ActivatedTime : 0f;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not World7 world7)
+					return;
+
+				world7.SetState(OrbActivated, PlayerIncluded, OrbSize, OrbLightBounceIntensity, ElapsedTime);
+			}
 		}
 	}
 }

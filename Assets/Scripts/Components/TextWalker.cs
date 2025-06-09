@@ -5,6 +5,7 @@ using Components.Enums;
 using Components.Events;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using State.Interfaces;
 using State.States;
@@ -66,20 +67,17 @@ namespace Components
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-
-			var textWalkerState = TextWalkerState.Read(this);
-			if (textWalkerState != null)
-				dict[typeof(TextWalker).ToString()] = JObject.FromObject(textWalkerState);
-
+			dict[typeof(TextWalker).ToString()] = JObject.FromObject(new TextWalkerState(this));
+			
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(TextWalker).ToString(), out var textWalkerState))
-				TextWalkerState.Apply(this, textWalkerState.ToObject<TextWalkerState>());
+			if (data.TryGetValue(typeof(TextWalker).ToString(), out var textWalkerState) && textWalkerState != null)
+				textWalkerState.ToObject<TextWalkerState>().Apply(this);
 		}
-
+		
 		public void SetState(ETextWalkerState state, float stateChangeElapsed, string text, int character, float startDelay, float endDelay, float startCharacterDelay, float endCharacterDelay)
 		{
 			if (state is ETextWalkerState.Idle or ETextWalkerState.Done)
@@ -225,6 +223,64 @@ namespace Components
 			
 			CurrentState = ETextWalkerState.Done;
 			OnTextWalkerFinishedEvent?.Invoke();
+		}
+		
+		[JsonObject]
+		public class TextWalkerState : IState
+		{
+			[JsonProperty]
+			public ETextWalkerState State;
+		
+			[JsonProperty]
+			public float StateChangeElapsed;
+
+			[JsonProperty]
+			public string Text;
+		
+			[JsonProperty]
+			public int Character;
+
+			[JsonProperty]
+			public float StartDelay;
+		
+			[JsonProperty]
+			public float EndDelay;
+		
+			[JsonProperty]
+			public float StartCharacterDelay;
+		
+			[JsonProperty]
+			public float EndCharacterDelay;
+
+			public TextWalkerState() { }
+			
+			public TextWalkerState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not TextWalker textWalker)
+					return;
+
+				State = textWalker.CurrentState;
+				StateChangeElapsed = textWalker.CurrentState is ETextWalkerState.Idle or ETextWalkerState.Done ? 0f : Time.time - textWalker.CurrentStateChangeTime;
+				Text = textWalker.CurrentText;
+				Character = textWalker.CurrentCharacter;
+				StartDelay = textWalker.CurrentStartDelay;
+				EndDelay = textWalker.CurrentEndDelay;
+				StartCharacterDelay = textWalker.CurrentStartCharacterDelay;
+				EndCharacterDelay = textWalker.CurrentEndCharacterDelay;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not TextWalker textWalker)
+					return;
+
+				textWalker.SetState(State, StateChangeElapsed, Text, Character, StartDelay, EndDelay, StartCharacterDelay, EndCharacterDelay);
+			}
 		}
 	}
 }

@@ -9,6 +9,7 @@ using AI.Enums;
 using AI.Interfaces;
 using AI.PathFinding;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
 using ScriptableObjects;
@@ -522,14 +523,11 @@ namespace AI
 		#endregion
 
 		#region Identify / SaveLoad
-
+		
 		public override Dictionary<string, JObject> Save()
 		{
 			var dict = base.Save();
-			
-			var npcState = NPCState.Read(this);
-			if (npcState != null)
-				dict[typeof(NPC).ToString()] = JObject.FromObject(npcState);
+			dict[typeof(NPC).ToString()] = JObject.FromObject(new NPCState(this));
 			
 			return dict;
 		}
@@ -538,8 +536,8 @@ namespace AI
 		{
 			base.Load(data);
 			
-			if (data.TryGetValue(typeof(NPC).ToString(), out var npcState))
-				NPCState.Apply(this, npcState.ToObject<NPCState>());
+			if (data.TryGetValue(typeof(NPC).ToString(), out var npcState) && npcState != null)
+				npcState.ToObject<NPCState>().Apply(this);
 		}
 
 		public void SetAIState(
@@ -844,5 +842,185 @@ namespace AI
 		}
 		
 		#endregion
+		
+		[JsonObject]
+		public class NPCState : IState
+		{
+			[JsonProperty]
+			public EAIMode AIMode;
+		
+			[JsonProperty]
+			public EAIMode PreviousAIMode;
+		
+			[JsonProperty]
+			public EActionMode ActionMode;
+		
+			[JsonProperty]
+			public EActionMode PreviousActionMode;
+
+			[JsonProperty]
+			public Vector3 Destination;
+		
+			[JsonProperty]
+			public Vector3 PreviousDestination;
+
+			[JsonProperty]
+			public string AttackTargetObjectID;
+		
+			[JsonProperty]
+			public string PreviousAttackTargetObjectID;
+		
+			[JsonProperty]
+			public string OtherTargetObjectID;
+		
+			[JsonProperty]
+			public string PreviousOtherTargetObjectID;
+		
+			[JsonProperty]
+			public Vector3? AgentPosition;
+		
+			[JsonProperty]
+			public bool SelfDestructed;
+
+			[JsonProperty]
+			public float SelfDestructElapsed;
+
+			[JsonProperty]
+			public Vector3? FlightMovementTarget;
+
+			[JsonProperty]
+			public float SwitchCastCooldown;
+
+			[JsonProperty]
+			public float ChaseInterruptTimer;
+		
+			[JsonProperty]
+			public float ChaseInterruptDuration;
+		
+			#region Patrol
+
+			[JsonProperty]
+			public string PatrolPath;
+		
+			[JsonProperty]
+			public int PatrolStartAt;
+
+			[JsonProperty]
+			public float PatrolAlreadyWaited;
+
+			#endregion
+
+			#region Use
+		
+			[JsonProperty]
+			public Vector3? UseWalkAfterwards;
+
+			#endregion
+
+			#region Carry
+		
+			[JsonProperty]
+			public Vector3 CarryDropAt;
+
+			#endregion
+			
+			public NPCState() { }
+			
+			public NPCState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not NPC npc)
+					return;
+
+				var npcData = (NPCData)npc.Data;
+				var time = Time.time;
+				
+				AIMode = npc.AIMode;
+				PreviousAIMode = npc.PreviousAIMode;
+				
+				ActionMode = npc.ActionMode;
+				PreviousActionMode = npc.PreviousActionMode;
+				
+				Destination = npc.Destination;
+				PreviousDestination = npc.PreviousDestination;
+				
+				AttackTargetObjectID = npc.AttackTarget.NotNull() ? npc.AttackTarget.ObjectID : null;
+				PreviousAttackTargetObjectID = npc.PreviousAttackTarget.NotNull() ? npc.PreviousAttackTarget.ObjectID : null;
+				
+				OtherTargetObjectID = npc.OtherTarget.NotNull() ? npc.OtherTarget.ObjectID : null;
+				PreviousOtherTargetObjectID = npc.PreviousOtherTarget.NotNull() ? npc.PreviousOtherTarget.ObjectID : null;
+				
+				AgentPosition = npc.Agent.NavMeshAgent != null && npc.Agent.NavMeshAgent.enabled ? npc.Agent.NavMeshAgent.nextPosition : null;
+
+				SwitchCastCooldown = npc.SwitchCastCooldown > 0f && time < npc.SwitchCastCooldown ? npc.SwitchCastCooldown - time : 0f;
+
+				ChaseInterruptTimer = npc.Chase.InterruptTimer;
+				ChaseInterruptDuration = time < npc.Chase.InterruptUntil ? npc.Chase.InterruptUntil - Time.time : 0f;
+				
+				#region Patrol
+
+				PatrolPath = npc.Patrolling.CurrentPathData != null ? npc.Patrolling.CurrentPathData.Name : null;
+				PatrolStartAt = npc.Patrolling.CurrentPoint;
+				PatrolAlreadyWaited = npc.Patrolling.CurrentPathData != null && npc.Patrolling.WaitOnArrival ? npc.Patrolling.WaitUntil - time : 0f;
+
+				#endregion
+				
+				#region Use
+
+				UseWalkAfterwards = ((Use)npc.ActionModes[EActionMode.Use]).WalkAfterwards;
+
+				#endregion
+				
+				#region Carry
+				
+				CarryDropAt = ((Carry)npc.ActionModes[EActionMode.Carry]).DropAt;
+
+				#endregion
+				
+				#region Self-Destruct
+
+				SelfDestructed = npc.SelfDestructed;
+				SelfDestructElapsed = npcData.CanSelfDestruct ? time - npc.SelfDestructStart : 0f;
+				
+				#endregion
+
+				#region Flight
+
+				FlightMovementTarget = npc.Agent.Flight != null ? npc.Agent.Flight.MovementTarget : null;
+
+				#endregion
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not NPC npc)
+					return;
+				
+				npc.SetAIState(
+					AIMode, PreviousAIMode, 
+					ActionMode, PreviousActionMode, 
+					Destination, PreviousDestination, 
+					AttackTargetObjectID, PreviousAttackTargetObjectID, 
+					OtherTargetObjectID, PreviousOtherTargetObjectID, 
+					AgentPosition,
+					PatrolPath, PatrolStartAt, PatrolAlreadyWaited,
+					UseWalkAfterwards,
+					CarryDropAt,
+					SwitchCastCooldown,
+					ChaseInterruptTimer, ChaseInterruptDuration);
+			
+				npc.SetSelfDestructState(SelfDestructed, SelfDestructElapsed);
+
+				var flight = npc.Agent.Flight;
+				if (flight == null)
+					return;
+			
+				flight.SetState(FlightMovementTarget);
+			}
+		}
 	}
 }

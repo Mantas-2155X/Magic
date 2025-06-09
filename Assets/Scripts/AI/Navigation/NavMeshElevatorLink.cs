@@ -71,7 +71,7 @@ namespace AI.Navigation
 					var tr = PlatformUser.GetTransform();
 					var targetPosition = Vector3.zero;
 				
-					switch (Elevator.State)
+					switch (Elevator.ElevatorState)
 					{
 						case EElevatorState.Elevated or EElevatorState.Elevating:
 						{
@@ -200,7 +200,7 @@ namespace AI.Navigation
 			var endPos = startPos;
 			var speed = PlatformUser.Data.Speed;
 		
-			switch (Elevator.State)
+			switch (Elevator.ElevatorState)
 			{
 				case EElevatorState.Elevated or EElevatorState.Elevating:
 					endPos = UpperLink.position + Vector3.up * (PlatformUser.Agent.BaseOffset * tr.localScale.y);

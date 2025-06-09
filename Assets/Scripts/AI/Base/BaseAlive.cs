@@ -10,12 +10,15 @@ using Combat.Enums;
 using Combat.Spells.Base;
 using Combat.Spells.Interfaces;
 using Combat.Structs;
+using Combat.Wearables.Base;
 using Combat.Wearables.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using State.States;
 using Tools;
 using UI.Hotbar;
@@ -63,32 +66,23 @@ namespace AI.Base
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-
-			var transformState = TransformState.Read(thisTr);
-			if (transformState != null)
-				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
-
-			var rigidbodyState = RigidbodyState.Read(Body.Rigidbody);
-			if (rigidbodyState != null)
-				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
-
-			var baseAliveState = BaseAliveState.Read(this);
-			if (baseAliveState != null)
-				dict[typeof(BaseAlive).ToString()] = JObject.FromObject(baseAliveState);
+			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
+			dict[typeof(Rigidbody).ToString()] = JObject.FromObject(new RigidbodyState(Body.Rigidbody));
+			dict[typeof(BaseAlive).ToString()] = JObject.FromObject(new BaseAliveState(this));
 
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
-				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
+				transformState.ToObject<TransformState>().Apply(thisTr);
 			
-			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
-				RigidbodyState.Apply(Body.Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
+			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState) && rigidbodyState != null)
+				rigidbodyState.ToObject<RigidbodyState>().Apply(Body.Rigidbody);
 			
-			if (data.TryGetValue(typeof(BaseAlive).ToString(), out var baseAliveState))
-				BaseAliveState.Apply(this, baseAliveState.ToObject<BaseAliveState>());
+			if (data.TryGetValue(typeof(BaseAlive).ToString(), out var baseAliveState) && baseAliveState != null)
+				baseAliveState.ToObject<BaseAliveState>().Apply(this);
 		}
 		
 		public virtual void Awake()
@@ -1101,5 +1095,234 @@ namespace AI.Base
 		}
 		
 		#endregion
+		
+		[JsonObject]
+		public class BaseAliveState : IState
+		{
+			[JsonProperty]
+			public Dictionary<string, BaseWearable.BaseWearableState> Wearables;
+		
+			[JsonProperty]
+			public Dictionary<string, BaseSpell.BaseSpellState> Spells;
+		
+			[JsonProperty]
+			public float CurrentHealth;
+		
+			[JsonProperty]
+			public float CurrentMana;
+		
+			[JsonProperty]
+			public float CurrentEnergy;
+		
+			[JsonProperty]
+			public EMovementType MovementType;
+
+			[JsonProperty]
+			public int RelationshipGroup;
+		
+			[JsonProperty]
+			public string Grabbing;
+		
+			[JsonProperty]
+			public Vector3? OriginalGrabSize;
+
+			[JsonProperty]
+			public bool Alive;
+		
+			[JsonProperty]
+			public bool Invulnerable;
+
+			[JsonProperty]
+			public bool Powerful;
+		
+			// objectid -> amount, remaining duration
+			[JsonProperty]
+			public Dictionary<string, Tuple<float, float>> SlowSources;
+		
+			// objectid -> remaining duration
+			[JsonProperty]
+			public Dictionary<string, float> ParalyzeSources;
+			
+			public BaseAliveState() { }
+			
+			public BaseAliveState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not BaseAlive baseAlive)
+					return;
+
+				Wearables = new Dictionary<string, BaseWearable.BaseWearableState>();
+			
+				for (var i = 0; i < baseAlive.Wearables.Count; i++)
+				{
+					var wearable = baseAlive.Wearables[i];
+					Wearables.Add(wearable.WearableData.Name, new BaseWearable.BaseWearableState(wearable));
+				}
+
+				Spells = new Dictionary<string, BaseSpell.BaseSpellState>();
+			
+				for (var i = 0; i < baseAlive.Spells.Count; i++)
+				{
+					var spell = baseAlive.Spells[i];
+					Spells.Add(spell.SpellData.Name, new BaseSpell.BaseSpellState(spell));
+				}
+			
+				CurrentHealth = baseAlive.CurrentHealth;
+				CurrentMana = baseAlive.CurrentMana;
+				CurrentEnergy = baseAlive.CurrentEnergy;
+			
+				MovementType = baseAlive.MovementType;
+				RelationshipGroup = baseAlive.RelationshipGroup;
+
+				if (baseAlive.Grabbing.NotNull())
+				{
+					Grabbing = baseAlive.Grabbing.ObjectID;
+					OriginalGrabSize = baseAlive.OriginalGrabSize;
+				}
+			
+				Alive = baseAlive.IsAlive;
+				Invulnerable = baseAlive.IsInvulnerable;
+				Powerful = baseAlive.IsPowerful;
+
+				SlowSources = new Dictionary<string, Tuple<float, float>>();
+				foreach (var pair in baseAlive.SlowSources)
+				{
+					Tuple<float, float> tuple;
+				
+					if (Mathf.Approximately(pair.Value.Item3, float.MaxValue))
+						tuple = new Tuple<float, float>(pair.Value.Item1, float.MaxValue);
+					else
+						tuple = new Tuple<float, float>(pair.Value.Item1, (pair.Value.Item2 + pair.Value.Item3) - Time.time);
+
+					SlowSources.Add(pair.Key, tuple);
+				}
+
+				ParalyzeSources = new Dictionary<string, float>();
+				foreach (var pair in baseAlive.ParalyzeSources)
+				{
+					float duration;
+				
+					if (Mathf.Approximately(pair.Value.Item2, float.MaxValue))
+						duration = float.MaxValue;
+					else
+						duration = (pair.Value.Item1 + pair.Value.Item2) - Time.time;
+
+					ParalyzeSources.Add(pair.Key, duration);
+				}
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not BaseAlive baseAlive)
+					return;
+
+				baseAlive.RemoveAllWearables();
+
+				foreach (var pair in Wearables)
+				{
+					var wearableState = pair.Value;
+
+					var wearableData = ObjectManager.Instance.GetWearable(pair.Key);
+					baseAlive.EquipWearable(wearableData);
+					
+					var wearableIndex = baseAlive.GetWearableIndex(wearableData);
+					wearableState.Apply(baseAlive.Wearables[wearableIndex]);
+				}
+				
+				baseAlive.ForgetAllSpells();
+				
+				foreach (var pair in Spells)
+				{
+					var spellState = pair.Value;
+				
+					var spellData = ObjectManager.Instance.GetSpell(pair.Key);
+					baseAlive.LearnSpell(spellData, spellState.Selected);
+
+					var spellIndex = baseAlive.GetSpellIndex(spellData);
+					spellState.Apply(baseAlive.Spells[spellIndex]);
+				}
+
+				var addHealth = CurrentHealth - baseAlive.CurrentHealth;
+				switch (addHealth)
+				{
+					case > 0:
+						baseAlive.RestoreHealth(addHealth, null);
+						break;
+					case < 0:
+						baseAlive.Damage(Mathf.Abs(addHealth), null, EElement.Unknown);
+						break;
+				}
+				
+				var addMana = CurrentMana - baseAlive.CurrentMana;
+				switch (addMana)
+				{
+					case > 0:
+						baseAlive.RestoreMana(addMana, null);
+						break;
+					case < 0:
+						baseAlive.TakeMana(Mathf.Abs(addMana), null);
+						break;
+				}
+				
+				var addEnergy = CurrentEnergy - baseAlive.CurrentEnergy;
+				switch (addEnergy)
+				{
+					case > 0:
+						baseAlive.RestoreEnergy(addEnergy, null);
+						break;
+					case < 0:
+						baseAlive.TakeEnergy(Mathf.Abs(addEnergy), null);
+						break;
+				}
+				
+				baseAlive.SetMovementType(MovementType);
+				baseAlive.SetRelationshipGroup(RelationshipGroup);
+				
+				baseAlive.ReleaseObject();
+				
+				if (!string.IsNullOrEmpty(Grabbing))
+				{
+					var world = World.World.Instance;
+					
+					var components = world.Objects.GetComponentsInChildren<Component>(true);
+					for (var i = 0; i < components.Length; i++)
+					{
+						var component = components[i];
+						if (component is not IObject iObject)
+							continue;
+						
+						if (iObject.ObjectID != Grabbing)
+							continue;
+
+						baseAlive.GrabObject(iObject);
+						
+						if (OriginalGrabSize != null)
+						{
+							iObject.GetTransform().localScale = OriginalGrabSize.Value;
+							iObject.Rigidbody.isKinematic = false;
+
+							baseAlive.ShrinkObject(true);
+						}
+						break;
+					}
+				}
+
+				if (!Alive && baseAlive.IsAlive)
+					baseAlive.Kill(null);
+
+				baseAlive.SetInvulnerable(Invulnerable);
+				baseAlive.SetPowerful(Powerful);
+
+				foreach (var pair in SlowSources)
+					baseAlive.AddSlowSource(pair.Key, pair.Value.Item1, pair.Value.Item2);
+				
+				foreach (var pair in ParalyzeSources)
+					baseAlive.AddParalyzeSource(pair.Key, pair.Value);
+			}
+		}
 	}
 }

@@ -1,10 +1,11 @@
 using Newtonsoft.Json;
+using State.Interfaces;
 using UnityEngine;
 
 namespace State.States
 {
 	[JsonObject]
-	public class RigidbodyState
+	public class RigidbodyState : IState
 	{
 		[JsonProperty]
 		public Vector3 Position;
@@ -18,32 +19,36 @@ namespace State.States
 		[JsonProperty]
 		public Vector3 AngularVelocity;
 		
-		public static RigidbodyState Read(Rigidbody rigidbody)
+		public RigidbodyState() { }
+		
+		public RigidbodyState(object obj)
 		{
-			if (rigidbody == null)
-				return null;
-			
-			return new RigidbodyState
-			{
-				Position = rigidbody.position,
-				Rotation = rigidbody.rotation,
-				LinearVelocity = rigidbody.linearVelocity,
-				AngularVelocity = rigidbody.angularVelocity,
-			};
+			Read(obj);
 		}
-
-		public static void Apply(Rigidbody rigidbody, RigidbodyState state)
+		
+		public void Read(object obj)
 		{
-			if (rigidbody == null)
+			if (obj is not Rigidbody rigidbody)
 				return;
+
+			Position = rigidbody.position;
+			Rotation = rigidbody.rotation;
+			LinearVelocity = rigidbody.linearVelocity;
+			AngularVelocity = rigidbody.angularVelocity;
+		}
 			
-			rigidbody.position = state.Position;
-			rigidbody.rotation = state.Rotation;
+		public void Apply(object obj)
+		{
+			if (obj is not Rigidbody rigidbody)
+				return;
+
+			rigidbody.position = Position;
+			rigidbody.rotation = Rotation;
 
 			if (!rigidbody.isKinematic)
 			{
-				rigidbody.linearVelocity = state.LinearVelocity;
-				rigidbody.angularVelocity = state.AngularVelocity;
+				rigidbody.linearVelocity = LinearVelocity;
+				rigidbody.angularVelocity = AngularVelocity;
 			}
 		}
 	}

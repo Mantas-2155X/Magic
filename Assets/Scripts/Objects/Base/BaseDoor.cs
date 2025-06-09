@@ -4,14 +4,17 @@ using System.Threading;
 using AI.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
+using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace Objects.Base
 {
@@ -34,8 +37,9 @@ namespace Objects.Base
 		[field: SerializeField]
 		public AnimationCurve Curve { get; private set; }
 
+		[field: FormerlySerializedAs("<State>k__BackingField")]
 		[field: SerializeField]
-		public EDoorState State { get; private set; } = EDoorState.Closed;
+		public EDoorState DoorState { get; private set; } = EDoorState.Closed;
 
 		[field: SerializeField]
 		public bool Interruptible { get; private set; }
@@ -61,14 +65,11 @@ namespace Objects.Base
 		private float lastOpened;
 
 		#region Identify / SaveLoad
-
+		
 		public override Dictionary<string, JObject> Save()
 		{
 			var dict = base.Save();
-
-			var doorState = BaseDoorState.Read(this);
-			if (doorState != null)
-				dict[typeof(BaseDoor).ToString()] = JObject.FromObject(doorState);
+			dict[typeof(BaseDoor).ToString()] = JObject.FromObject(new BaseDoorState(this));
 			
 			return dict;
 		}
@@ -77,13 +78,13 @@ namespace Objects.Base
 		{
 			base.Load(data);
 			
-			if (data.TryGetValue(typeof(BaseDoor).ToString(), out var baseDoorState))
-				BaseDoorState.Apply(this, baseDoorState.ToObject<BaseDoorState>());
+			if (data.TryGetValue(typeof(BaseDoor).ToString(), out var baseDoorState) && baseDoorState != null)
+				baseDoorState.ToObject<BaseDoorState>().Apply(this);
 		}
 		
 		public void SetState(EDoorState state, float normalized, bool locked)
 		{
-			State = state;
+			DoorState = state;
 			Normalized = normalized;
 			Locked = locked;
 
@@ -104,7 +105,7 @@ namespace Objects.Base
 
 			if (state is EDoorState.Opening or EDoorState.Closing)
 			{
-				State = state is EDoorState.Opening ? EDoorState.Closed : EDoorState.Open;
+				DoorState = state is EDoorState.Opening ? EDoorState.Closed : EDoorState.Open;
 				
 				var previousLocked = Locked;
 				var previousInterruptible = Interruptible;
@@ -127,7 +128,7 @@ namespace Objects.Base
 		{
 			base.Awake();
 			
-			switch (State)
+			switch (DoorState)
 			{
 				case EDoorState.Open:
 					SetState(EDoorState.Open, 1f, Locked);
@@ -143,7 +144,7 @@ namespace Objects.Base
 			if (PauseManager.IsPaused)
 				return;
 			
-			if (AutoClose == 0f || State != EDoorState.Open)
+			if (AutoClose == 0f || DoorState != EDoorState.Open)
 				return;
 			
 			if (Time.time < AutoClose + lastOpened)
@@ -199,7 +200,7 @@ namespace Objects.Base
 			if (Locked)
 				return;
 
-			switch (State)
+			switch (DoorState)
 			{
 				case EDoorState.Open or EDoorState.Opening:
 					Close();
@@ -214,24 +215,24 @@ namespace Objects.Base
 			if (Locked)
 				return;
 
-			if (!Interruptible && State is EDoorState.Opening or EDoorState.Closing)
+			if (!Interruptible && DoorState is EDoorState.Opening or EDoorState.Closing)
 				return;
 			
 			if (state)
 			{
-				if (State is EDoorState.Open or EDoorState.Opening)
+				if (DoorState is EDoorState.Open or EDoorState.Opening)
 					return;
 
-				State = EDoorState.Opening;
+				DoorState = EDoorState.Opening;
 				Obstacle.enabled = true;
 				OnDoorOpeningEvent?.Invoke();
 			}
 			else
 			{
-				if (State is EDoorState.Closed or EDoorState.Closing)
+				if (DoorState is EDoorState.Closed or EDoorState.Closing)
 					return;
 
-				State = EDoorState.Closing;
+				DoorState = EDoorState.Closing;
 				Obstacle.enabled = true;
 				OnDoorClosingEvent?.Invoke();
 			}
@@ -295,10 +296,10 @@ namespace Objects.Base
 				if (token.IsCancellationRequested)
 					return;
 
-				switch (State)
+				switch (DoorState)
 				{
 					case EDoorState.Opening when Normalized >= 1f:
-						State = EDoorState.Open;
+						DoorState = EDoorState.Open;
 						Normalized = 1f;
 						setPosition();
 						Obstacle.enabled = false;
@@ -306,7 +307,7 @@ namespace Objects.Base
 						OnDoorOpenedEvent?.Invoke();
 						return;
 					case EDoorState.Closing when Normalized <= 0f:
-						State = EDoorState.Closed;
+						DoorState = EDoorState.Closed;
 						Normalized = 0f;
 						setPosition();
 						Obstacle.enabled = true;
@@ -324,7 +325,7 @@ namespace Objects.Base
 				
 				setPosition();
 				
-				switch (State)
+				switch (DoorState)
 				{
 					case EDoorState.Opening:
 						Normalized += Time.deltaTime / Duration;
@@ -337,5 +338,43 @@ namespace Objects.Base
 		}
 		
 		#endregion
+		
+		[JsonObject]
+		public class BaseDoorState : IState
+		{
+			[JsonProperty]
+			public EDoorState State;
+
+			[JsonProperty]
+			public bool Locked;
+
+			[JsonProperty]
+			public float Normalized;
+			
+			public BaseDoorState() { }
+			
+			public BaseDoorState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not BaseDoor baseDoor)
+					return;
+
+				State = baseDoor.DoorState;
+				Locked = baseDoor.Locked;
+				Normalized = baseDoor.Normalized;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not BaseDoor baseDoor)
+					return;
+
+				baseDoor.SetState(State, Normalized, Locked);
+			}
+		}
 	}
 }

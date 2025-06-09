@@ -6,12 +6,15 @@ using Combat.Spells;
 using Combat.Wearables.Enums;
 using Components;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Interfaces;
 using State.States;
 using Tools;
 using UI;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -85,14 +88,11 @@ namespace AI
 		private const float maximumGroundAngle = 45.1f;
 
 		#region Identify / SaveLoad
-
+		
 		public override Dictionary<string, JObject> Save()
 		{
 			var dict = base.Save();
-			
-			var playerState = PlayerState.Read(this);
-			if (playerState != null)
-				dict[typeof(Player).ToString()] = JObject.FromObject(playerState);
+			dict[typeof(Player).ToString()] = JObject.FromObject(new PlayerState(this));
 			
 			return dict;
 		}
@@ -101,8 +101,8 @@ namespace AI
 		{
 			base.Load(data);
 			
-			if (data.TryGetValue(typeof(Player).ToString(), out var playerState))
-				PlayerState.Apply(this, playerState.ToObject<PlayerState>());
+			if (data.TryGetValue(typeof(Player).ToString(), out var playerState) && playerState != null)
+				playerState.ToObject<PlayerState>().Apply(this);
 		}
 
 		#endregion
@@ -1380,6 +1380,58 @@ namespace AI
 			}
 
 			return directions;
+		}
+		
+		[JsonObject]
+		public class PlayerState : IState
+		{
+			[JsonProperty]
+			public Vector3 CameraAngles;
+
+			[JsonProperty]
+			public ENoticePresetFlags? NoticePreset;
+		
+			[JsonProperty]
+			public float NoticeDuration;
+
+			[JsonProperty]
+			public bool Flashlight;
+			
+			public PlayerState() { }
+			
+			public PlayerState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not Player player)
+					return;
+
+				Flashlight = Components.Flashlight.Instance.Light.enabled;
+				CameraAngles = player.CameraTr.eulerAngles;
+
+				var playerUI = UI.Player.Instance;
+				if (playerUI != null && playerUI.Notice.isActiveAndEnabled)
+				{
+					NoticePreset = playerUI.Notice.CurrentPreset;
+					NoticeDuration = playerUI.Notice.EndTime - Time.time;
+				}
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not Player player)
+					return;
+
+				player.CameraTr.eulerAngles = CameraAngles;
+				Components.Flashlight.Instance.Toggle(Flashlight);
+			
+				var playerUI = UI.Player.Instance;
+				if (playerUI != null && NoticePreset != null)
+					playerUI.Notice.ShowMessage(NoticePreset.Value, NoticeDuration);
+			}
 		}
 	}
 }

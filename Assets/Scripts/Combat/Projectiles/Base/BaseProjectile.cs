@@ -7,6 +7,7 @@ using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
@@ -51,7 +52,7 @@ namespace Combat.Projectiles.Base
 		#region Identify / SaveLoad
 
 		public virtual bool ShouldSave => true;
-
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -63,32 +64,23 @@ namespace Combat.Projectiles.Base
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-
-			var transformState = TransformState.Read(thisTr);
-			if (transformState != null)
-				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
-
-			var rigidbodyState = RigidbodyState.Read(Rigidbody);
-			if (rigidbodyState != null)
-				dict[typeof(Rigidbody).ToString()] = JObject.FromObject(rigidbodyState);
-
-			var baseProjectileState = BaseProjectileState.Read(this);
-			if (baseProjectileState != null)
-				dict[typeof(BaseProjectile).ToString()] = JObject.FromObject(baseProjectileState);
+			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
+			dict[typeof(Rigidbody).ToString()] = JObject.FromObject(new RigidbodyState(Rigidbody));
+			dict[typeof(BaseProjectile).ToString()] = JObject.FromObject(new BaseProjectileState(this));
 
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
-				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
+				transformState.ToObject<TransformState>().Apply(thisTr);
 			
-			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState))
-				RigidbodyState.Apply(Rigidbody, rigidbodyState.ToObject<RigidbodyState>());
+			if (data.TryGetValue(typeof(Rigidbody).ToString(), out var rigidbodyState) && rigidbodyState != null)
+				rigidbodyState.ToObject<RigidbodyState>().Apply(Rigidbody);
 			
-			if (data.TryGetValue(typeof(BaseProjectile).ToString(), out var baseProjectileState))
-				BaseProjectileState.Apply(this, baseProjectileState.ToObject<BaseProjectileState>());
+			if (data.TryGetValue(typeof(BaseProjectile).ToString(), out var baseProjectileState) && baseProjectileState != null)
+				baseProjectileState.ToObject<BaseProjectileState>().Apply(this);
 		}
 
 		public virtual void SetState(Vector3 startingPosition)
@@ -279,6 +271,36 @@ namespace Combat.Projectiles.Base
 			
 			ObjectID = "";
 			PoolingManager.Instance.Add(ProjectileData, thisGo);
+		}
+		
+		[JsonObject]
+		public class BaseProjectileState : IState
+		{
+			[JsonProperty]
+			public Vector3 StartingPosition;
+			
+			public BaseProjectileState() { }
+			
+			public BaseProjectileState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not BaseProjectile baseProjectile)
+					return;
+
+				StartingPosition = baseProjectile.StartingPosition;
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not BaseProjectile baseProjectile)
+					return;
+
+				baseProjectile.SetState(StartingPosition);
+			}
 		}
 	}
 }

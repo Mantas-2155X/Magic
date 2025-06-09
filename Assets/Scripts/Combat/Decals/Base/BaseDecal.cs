@@ -35,7 +35,7 @@ namespace Combat.Decals.Base
 		#region Identify / SaveLoad
 		
 		public virtual bool ShouldSave => true;
-
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -47,18 +47,15 @@ namespace Combat.Decals.Base
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-
-			var transformState = TransformState.Read(thisTr);
-			if (transformState != null)
-				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
+			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
 
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
-				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
+				transformState.ToObject<TransformState>().Apply(thisTr);
 		}
 		
 		public void Awake()

@@ -6,6 +6,7 @@ using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
@@ -49,7 +50,7 @@ namespace Combat.Attacks.Base
 		#region Identify / SaveLoad
 
 		public virtual bool ShouldSave => true;
-
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -61,25 +62,19 @@ namespace Combat.Attacks.Base
 		public virtual Dictionary<string, JObject> Save()
 		{
 			var dict = new Dictionary<string, JObject>();
-
-			var transformState = TransformState.Read(thisTr);
-			if (transformState != null)
-				dict[typeof(Transform).ToString()] = JObject.FromObject(transformState);
-			
-			var baseAttackState = BaseAttackState.Read(this);
-			if (baseAttackState != null)
-				dict[typeof(BaseAttack).ToString()] = JObject.FromObject(baseAttackState);
+			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
+			dict[typeof(BaseAttack).ToString()] = JObject.FromObject(new BaseAttackState(this));
 
 			return dict;
 		}
 
 		public virtual void Load(Dictionary<string, JObject> data)
 		{
-			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState))
-				TransformState.Apply(thisTr, transformState.ToObject<TransformState>());
+			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
+				transformState.ToObject<TransformState>().Apply(thisTr);
 			
-			if (data.TryGetValue(typeof(BaseAttack).ToString(), out var baseAttackState))
-				BaseAttackState.Apply(this, baseAttackState.ToObject<BaseAttackState>());
+			if (data.TryGetValue(typeof(BaseAttack).ToString(), out var baseAttackState) && baseAttackState != null)
+				baseAttackState.ToObject<BaseAttackState>().Apply(this);
 		}
 
 		public virtual void SetState(List<string> triggeredAlivesIDs, List<string> currentAlivesIDs, List<string> triggeredObjectIDs, List<string> currentObjectIDs)
@@ -349,6 +344,84 @@ namespace Combat.Attacks.Base
 			}
 			
 			OnTriggersDisabled();
+		}
+		
+		[JsonObject]
+		public class BaseAttackState : IState
+		{
+			[JsonProperty]
+			public List<string> TriggeredAlives;
+		
+			[JsonProperty]
+			public List<string> CurrentAlives;
+		
+			[JsonProperty]
+			public List<string> TriggeredObjects;
+		
+			[JsonProperty]
+			public List<string> CurrentObjects;
+			
+			public BaseAttackState() { }
+			
+			public BaseAttackState(object obj)
+			{
+				Read(obj);
+			}
+			
+			public void Read(object obj)
+			{
+				if (obj is not BaseAttack baseAttack)
+					return;
+
+				TriggeredAlives = new List<string>();
+				TriggeredObjects = new List<string>();
+				CurrentAlives = new List<string>();
+				CurrentObjects = new List<string>();
+			
+				for (var i = 0; i < baseAttack.TriggeredAlives.Count; i++)
+				{
+					var alive = baseAttack.TriggeredAlives[i];
+					if (alive.IsNull() || !alive.IsAlive)
+						continue;
+				
+					TriggeredAlives.Add(alive.ObjectID);
+				}
+			
+				for (var i = 0; i < baseAttack.TriggeredObjects.Count; i++)
+				{
+					var aobj = baseAttack.TriggeredObjects[i];
+					if (aobj.IsNull())
+						continue;
+				
+					TriggeredObjects.Add(aobj.ObjectID);
+				}
+			
+				for (var i = 0; i < baseAttack.CurrentAlives.Count; i++)
+				{
+					var alive = baseAttack.CurrentAlives[i];
+					if (alive.IsNull() || !alive.IsAlive)
+						continue;
+				
+					CurrentAlives.Add(alive.ObjectID);
+				}
+			
+				for (var i = 0; i < baseAttack.CurrentObjects.Count; i++)
+				{
+					var aobj = baseAttack.CurrentObjects[i];
+					if (aobj.IsNull())
+						continue;
+				
+					CurrentObjects.Add(aobj.ObjectID);
+				}
+			}
+			
+			public void Apply(object obj)
+			{
+				if (obj is not BaseAttack baseAttack)
+					return;
+
+				baseAttack.SetState(TriggeredAlives, TriggeredObjects, CurrentAlives, CurrentObjects);
+			}
 		}
 	}
 }

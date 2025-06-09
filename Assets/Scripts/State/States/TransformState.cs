@@ -1,10 +1,11 @@
 using Newtonsoft.Json;
+using State.Interfaces;
 using UnityEngine;
 
 namespace State.States
 {
 	[JsonObject]
-	public class TransformState
+	public class TransformState : IState
 	{
 		[JsonProperty]
 		public Vector3 Position;
@@ -15,27 +16,31 @@ namespace State.States
 		[JsonProperty]
 		public Vector3 Scale;
 
-		public static TransformState Read(Transform transform)
+		public TransformState() { }
+		
+		public TransformState(object obj)
 		{
-			if (transform == null)
-				return null;
-
-			return new TransformState
-			{
-				Position = transform.position,
-				Rotation = transform.rotation,
-				Scale = transform.localScale
-			};
+			Read(obj);
 		}
 
-		public static void Apply(Transform transform, TransformState state)
+		public void Read(object obj)
 		{
-			if (transform == null)
+			if (obj is not Transform transform)
 				return;
 
-			transform.position = state.Position;
-			transform.rotation = state.Rotation;
-			transform.localScale = state.Scale;
+			Position = transform.position;
+			Rotation = transform.rotation;
+			Scale = transform.localScale;
+		}
+			
+		public void Apply(object obj)
+		{
+			if (obj is not Transform transform)
+				return;
+
+			transform.position = Position;
+			transform.rotation = Rotation;
+			transform.localScale = Scale;
 		}
 	}
 }
