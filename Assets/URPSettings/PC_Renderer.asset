@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Active: 1
   m_Settings:
     AOMethod: 1
-    Downsample: 0
+    Downsample: 1
     AfterOpaque: 0
     Source: 1
     NormalSamples: 1
@@ -180,5 +180,5 @@ MonoBehaviour:
     Radius: 0.2
     Samples: 0
     BlurQuality: 0
-    Falloff: 150
+    Falloff: 75
     SampleCount: -1

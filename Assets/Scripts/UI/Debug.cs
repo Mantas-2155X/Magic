@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -35,15 +37,24 @@ namespace UI
 
 		[SerializeField]
 		public TMP_Text Build;
+
+		[SerializeField]
+		public GameObject Error;
 		
 		[SerializeField]
 		public int AverageOver = 5;
 
+		[SerializeField]
+		public float ErrorDuration = 4f;
+		
 		private float time;
 		private int count;
 
+		private CancellationTokenSource cancellationToken = new ();
+		
 		public void Awake()
 		{
+			Application.logMessageReceived += logReceived;
 			Build.text = $"Build {Application.version}";
 		}
 
@@ -62,6 +73,34 @@ namespace UI
 				time = 0f;
 				count = 0;
 			}
+		}
+
+		public void OnDestroy()
+		{
+			Application.logMessageReceived -= logReceived;
+		}
+
+		private void logReceived(string logString, string stackTrace, LogType type)
+		{
+			if (type is LogType.Log or LogType.Warning)
+				return;
+
+			cancellationToken?.Cancel();
+			cancellationToken = new CancellationTokenSource();
+			
+			showError(cancellationToken.Token).Forget();
+		}
+		
+		private async UniTaskVoid showError(CancellationToken token)
+		{
+			Error.SetActive(true);
+			
+			await UniTask.WaitForSeconds(ErrorDuration, true, cancellationToken: token);
+			
+			if (this == null || !isActiveAndEnabled)
+				return;
+			
+			Error.SetActive(false);
 		}
 	}
 }
