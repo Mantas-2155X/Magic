@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using Objects.Interfaces;
 using ScriptableObjects;
 using State.Interfaces;
+using Tools;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -169,6 +170,8 @@ namespace Managers
 				Debug.LogError($"[ObjectManager] Modding on platform {Application.platform} is not supported");
 				return;
 			}
+
+			var foundMods = new Dictionary<ModInfo, Tuple<string, string>>();
 			
 			var files = Directory.GetFiles(ModsPath, "info.json", SearchOption.AllDirectories);
 			for (var i = 0; i < files.Length; i++)
@@ -220,7 +223,46 @@ namespace Managers
 						continue;
 					}
 
-					var mod = new Mod(modInfo, directory, assetPath);
+					foundMods.Add(modInfo, new Tuple<string, string>(directory, assetPath));
+					Debug.Log($"[ObjectManager] Preloaded mod {modInfo.Author}.{modInfo.Name} {modInfo.Version} ({(modInfo.Disabled ? "Disabled" : "Enabled")})");
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"[ObjectManager] Exception preloading mod at {directory}, {e}");
+				}
+			}
+
+			var excludeMods = new List<ModInfo>();
+
+			foreach (var (info, _) in foundMods)
+			{
+				var guid = info.GetGUID();
+
+				foreach (var (innerInfo, _) in foundMods)
+				{
+					if (info == innerInfo)
+						continue;
+					
+					var innerGuid = innerInfo.GetGUID();
+					if (innerGuid != guid)
+						continue;
+
+					excludeMods.AddUnique(innerInfo);
+					break;
+				}
+			}
+
+			foreach (var (info, (directory, assetPath)) in foundMods)
+			{
+				if (excludeMods.Contains(info))
+				{
+					Debug.LogWarning($"[ObjectManager] Skipping loading mod {info.GetGUID()} {info.Version} at {directory} because multiple instances of it are installed");
+					continue;
+				}
+
+				try
+				{
+					var mod = new Mod(info, directory, assetPath);
 					Mods.Add(mod);
 				}
 				catch (Exception e)
@@ -497,6 +539,11 @@ namespace Managers
 				return EModInfoValidity.Valid;
 			}
 
+			public string GetGUID()
+			{
+				return $"{Author}.{Name}";
+			}
+
 			public enum EModInfoValidity
 			{
 				InvalidAuthor,
@@ -536,8 +583,6 @@ namespace Managers
 				Bundle = new Tuple<string, AssetBundle>(assetPath, null);
 				Addresses = new List<string>();
 				CustomAssemblyLoaded = false;
-
-				Debug.Log($"[ObjectManager] Preloaded mod {Info.Author}.{Info.Name} {Info.Version} ({(Info.Disabled ? "Disabled" : "Enabled")})");
 
 				if (Info.Disabled)
 					return;
