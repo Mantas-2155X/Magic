@@ -766,11 +766,11 @@ namespace Managers
 
 				if (Addresses.Count == 0)
 				{
-					Debug.LogWarning($"[ObjectManager] Mod info at {Directory} does not contain any datas, no content added");
+					Debug.LogWarning($"[ObjectManager] Mod info at {Directory} does not contain any objects, no content added");
 					return;
 				}
 
-				Debug.Log($"[ObjectManager] Loaded mod {Info.Author}.{Info.Name} {Info.Version} with {Addresses.Count} datas {(CustomAssemblyLoaded ? "and custom assembly" : "")}");
+				Debug.Log($"[ObjectManager] Loaded mod {Info.Author}.{Info.Name} {Info.Version} with {Addresses.Count} object(s) {(CustomAssemblyLoaded ? "and custom assembly" : "")}");
 			}
 				
 			public void Unload()
