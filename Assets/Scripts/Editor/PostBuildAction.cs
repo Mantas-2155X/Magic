@@ -11,6 +11,7 @@ namespace Editor
 		public int callbackOrder { get; }
 
 		private readonly string[] copyAssets = { "data" };
+		private readonly string[] removeAfter = { "data/settings.tsv" };
 		
 		public void OnPostprocessBuild(BuildReport report)
 		{
@@ -33,6 +34,24 @@ namespace Editor
 				else
 				{
 					File.Copy(copyAsset, Path.Combine(directory, copyAsset));
+				}
+			}
+
+			foreach (var removePath in removeAfter)
+			{
+				var path = Path.Combine(directory, removePath);
+				
+				if (!File.Exists(path) && !Directory.Exists(path))
+					continue;
+				
+				var attributes = File.GetAttributes(path);
+				if ((attributes & FileAttributes.Directory) == FileAttributes.Directory)
+				{
+					Directory.Delete(path);
+				}
+				else
+				{
+					File.Delete(path);
 				}
 			}
 		}
