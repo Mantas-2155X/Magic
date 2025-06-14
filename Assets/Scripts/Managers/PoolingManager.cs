@@ -54,7 +54,7 @@ namespace Managers
 			var obj = Take(data, enablePooled);
 			
 			if (obj == null)
-				obj = Instantiate(Addressables.LoadAssetAsync<GameObject>(data.PrefabReference).WaitForCompletion());
+				obj = Addressables.InstantiateAsync(data.PrefabReference).WaitForCompletion();
 
 			return obj.GetComponent<T>();
 		}

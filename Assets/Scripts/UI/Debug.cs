@@ -17,14 +17,7 @@ namespace UI
 				if (instance != null)
 					return instance;
 
-				var prefab = Addressables.LoadAssetAsync<GameObject>("Assets/Prefabs/UI/Debug UI.prefab").WaitForCompletion();
-				if (prefab == null)
-				{
-					UnityEngine.Debug.LogError("[Debug] Failed to load base prefab");
-					return null;
-				}
-
-				var copy = Instantiate(prefab);
+				var copy = Addressables.InstantiateAsync("Assets/Prefabs/UI/Debug UI.prefab").WaitForCompletion();
 				DontDestroyOnLoad(copy);
 
 				instance = copy.GetComponent<Debug>();

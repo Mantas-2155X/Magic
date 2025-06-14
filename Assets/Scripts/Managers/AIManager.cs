@@ -138,7 +138,7 @@ namespace Managers
 		{
 			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME"), position, Vector3.zero);
 			
-			var go = Instantiate(Addressables.LoadAssetAsync<GameObject>(data.PrefabReference).WaitForCompletion());
+			var go = Addressables.InstantiateAsync(data.PrefabReference).WaitForCompletion();
 			go.name = $"NPC {NPCs.Count}";
 			
 			var tr = go.transform;
@@ -167,7 +167,7 @@ namespace Managers
 				Player = null;
 			}
 			
-			var go = Instantiate(Addressables.LoadAssetAsync<GameObject>(data.PrefabReference).WaitForCompletion());
+			var go = Addressables.InstantiateAsync(data.PrefabReference).WaitForCompletion();
 			go.name = "Player";
 			
 			var tr = go.transform;

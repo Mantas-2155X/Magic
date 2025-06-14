@@ -21,14 +21,7 @@ namespace Managers
 				if (instance != null)
 					return instance;
 
-				var prefab = Addressables.LoadAssetAsync<GameObject>("Assets/Prefabs/UI/Selection UI.prefab").WaitForCompletion();
-				if (prefab == null)
-				{
-					Debug.LogError("[SelectionManager] Failed to load base prefab");
-					return null;
-				}
-
-				var copy = Instantiate(prefab);
+				var copy = Addressables.InstantiateAsync("Assets/Prefabs/UI/Selection UI.prefab").WaitForCompletion();
 				DontDestroyOnLoad(copy);
 				
 				var go = new GameObject("SelectionManager");

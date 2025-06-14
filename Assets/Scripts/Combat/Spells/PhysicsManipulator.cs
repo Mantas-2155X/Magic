@@ -30,8 +30,7 @@ namespace Combat.Spells
 				if (end != null)
 					return end;
 
-				var asset = Addressables.LoadAssetAsync<GameObject>("Spells/Prefabs/Physics Manipulator End.prefab").WaitForCompletion();
-				end = Instantiate(asset, World.World.Instance.Ragdolls).transform;
+				end = Addressables.InstantiateAsync("Spells/Prefabs/Physics Manipulator End.prefab", World.World.Instance.Ragdolls).WaitForCompletion().transform;
 				return end;
 			}
 		}
