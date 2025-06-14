@@ -10,7 +10,9 @@ using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using ScriptableObjects;
 using Tools;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Managers
 {
@@ -136,7 +138,7 @@ namespace Managers
 		{
 			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME"), position, Vector3.zero);
 			
-			var go = Instantiate(data.Prefab);
+			var go = Instantiate(Addressables.LoadAssetAsync<GameObject>(data.PrefabReference).WaitForCompletion());
 			go.name = $"NPC {NPCs.Count}";
 			
 			var tr = go.transform;
@@ -165,7 +167,7 @@ namespace Managers
 				Player = null;
 			}
 			
-			var go = Instantiate(data.Prefab);
+			var go = Instantiate(Addressables.LoadAssetAsync<GameObject>(data.PrefabReference).WaitForCompletion());
 			go.name = "Player";
 			
 			var tr = go.transform;

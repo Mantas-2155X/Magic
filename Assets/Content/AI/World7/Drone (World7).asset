@@ -17,7 +17,14 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 2273498091929504843, guid: f87096318aaafc244997e6f00eca6740, type: 3}
+  PrefabReference:
+    m_AssetGUID: f87096318aaafc244997e6f00eca6740
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   Type: 
+  Assembly: 
   Health: 150
   Mana: 100
   Energy: 50
@@ -46,8 +53,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7b8993fdb778cb39e9054cdf7d6ae5fa, type: 2}
   Wearables: []
   BrokenBodyPrefab: {fileID: 4830008114940874397, guid: 278eb04698d4d3f27938bb9057abee25, type: 3}
+  BrokenBodyPrefabReference:
+    m_AssetGUID: 278eb04698d4d3f27938bb9057abee25
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   BrokenArmPrefab: {fileID: 0}
+  BrokenArmPrefabReference:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   BrokenFootPrefab: {fileID: 0}
+  BrokenFootPrefabReference:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   CanGrab: 0
   GrabEnergy: 5
   GrabShinkedEnergy: 7.5

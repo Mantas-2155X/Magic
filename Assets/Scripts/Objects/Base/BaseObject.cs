@@ -17,6 +17,7 @@ using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
 
 namespace Objects.Base
@@ -176,9 +177,9 @@ namespace Objects.Base
 			if (!ObjectData.IsBreakable)
 				return;
 
-			if (ObjectData.BrokenPrefab != null && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
+			if (ObjectData.BrokenPrefabReference != null && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
 			{
-				var brokenPrefab = Instantiate(ObjectData.BrokenPrefab, World.World.Instance.Ragdolls);
+				var brokenPrefab = Instantiate(Addressables.LoadAssetAsync<GameObject>(ObjectData.BrokenPrefabReference).WaitForCompletion(), World.World.Instance.Ragdolls);
 				
 				var brokenTr = brokenPrefab.transform;
 				brokenTr.position = thisTr.position;

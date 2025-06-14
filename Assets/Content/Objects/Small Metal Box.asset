@@ -17,14 +17,29 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 3388398773742202675, guid: 2f3e305adb4ab3f53a1efc892084f472, type: 3}
+  PrefabReference:
+    m_AssetGUID: 2f3e305adb4ab3f53a1efc892084f472
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   Type: 
+  Assembly: 
   IsPoolable: 0
   IsBreakable: 0
+  BreakAtCollisionPoint: 0
   MaximumHealth: 0
   BrokenPrefab: {fileID: 0}
+  BrokenPrefabReference:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   IsPickupable: 0
   PickupableAfter: 0
   PickupAction: 0
   IsUsable: 0
   UsableAfter: 0
   UseAction: 0
+  AttachDecals: 1

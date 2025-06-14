@@ -17,7 +17,14 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 3523939064151980886, guid: ce293cee19a10d949bb72e6f3b0db2b6, type: 3}
+  PrefabReference:
+    m_AssetGUID: ce293cee19a10d949bb72e6f3b0db2b6
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   Type: 
+  Assembly: 
   EnableTriggerAfter: 0
   DisableTriggerAfter: 0
   AttachToTarget: 0
@@ -26,5 +33,11 @@ MonoBehaviour:
   FollowCaster: 1
   AttachOffset: {x: 0, y: 0, z: 0}
   Damage: 0
+  Slow:
+    Amount: 0
+    Duration: 0
+  Paralyze:
+    Duration: 0
   Element: 2
   AttackAngle: 0
+  AttackOrigin: 0

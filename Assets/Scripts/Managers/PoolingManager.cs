@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Managers
 {
@@ -53,7 +54,7 @@ namespace Managers
 			var obj = Take(data, enablePooled);
 			
 			if (obj == null)
-				obj = Instantiate(data.Prefab);
+				obj = Instantiate(Addressables.LoadAssetAsync<GameObject>(data.PrefabReference).WaitForCompletion());
 
 			return obj.GetComponent<T>();
 		}

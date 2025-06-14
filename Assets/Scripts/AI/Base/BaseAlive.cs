@@ -24,6 +24,7 @@ using Tools;
 using UI.Hotbar;
 using UI.Spellbook;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -642,9 +643,9 @@ namespace AI.Base
 			{
 				var scale = thisTr.localScale;
 					
-				if (Data.BrokenBodyPrefab != null)
+				if (Data.BrokenBodyPrefabReference != null)
 				{
-					var broken = Instantiate(Data.BrokenBodyPrefab, ragdolls);
+					var broken = Instantiate(Addressables.LoadAssetAsync<GameObject>(Data.BrokenBodyPrefabReference).WaitForCompletion(), ragdolls);
 					
 					var brokenTr = broken.transform;
 					brokenTr.position = thisTr.position;
@@ -654,13 +655,13 @@ namespace AI.Base
 					broken.SetActive(true);
 				}
 
-				if (Data.BrokenArmPrefab != null)
+				if (Data.BrokenArmPrefabReference != null)
 				{
 					for (var i = 0; i < Body.Arms.Length; i++)
 					{
 						var arm = Body.Arms[i];
 					
-						var broken = Instantiate(Data.BrokenArmPrefab, ragdolls);
+						var broken = Instantiate(Addressables.LoadAssetAsync<GameObject>(Data.BrokenArmPrefabReference).WaitForCompletion(), ragdolls);
 					
 						var brokenTr = broken.transform;
 						brokenTr.position = arm.position;
@@ -671,13 +672,13 @@ namespace AI.Base
 					}
 				}
 
-				if (Data.BrokenFootPrefab != null)
+				if (Data.BrokenFootPrefabReference != null)
 				{
 					for (var i = 0; i < Body.Feet.Length; i++)
 					{
 						var foot = Body.Feet[i];
 					
-						var broken = Instantiate(Data.BrokenFootPrefab, ragdolls);
+						var broken = Instantiate(Addressables.LoadAssetAsync<GameObject>(Data.BrokenFootPrefabReference).WaitForCompletion(), ragdolls);
 					
 						var brokenTr = broken.transform;
 						brokenTr.position = foot.position;

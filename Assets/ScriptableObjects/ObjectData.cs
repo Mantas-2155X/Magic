@@ -1,5 +1,6 @@
 using Objects.Enums;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ScriptableObjects
 {
@@ -20,7 +21,7 @@ namespace ScriptableObjects
 		public float MaximumHealth;
 
 		[SerializeField]
-		public GameObject BrokenPrefab;
+		public AssetReference BrokenPrefabReference;
 		
 		[Header("Pickupable")]
 		[SerializeField]

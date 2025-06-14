@@ -17,7 +17,14 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 2026008860188843636, guid: 07724fe5bad10f89c8a8e3edf7d8e16c, type: 3}
+  PrefabReference:
+    m_AssetGUID: 07724fe5bad10f89c8a8e3edf7d8e16c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   Type: 
+  Assembly: 
   Health: 20
   Mana: 250
   Energy: 50
@@ -34,8 +41,26 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7b8993fdb778cb39e9054cdf7d6ae5fa, type: 2}
   Wearables: []
   BrokenBodyPrefab: {fileID: 382356985257509456, guid: ebb4f4d18b8966a518990904893fb7d2, type: 3}
+  BrokenBodyPrefabReference:
+    m_AssetGUID: ebb4f4d18b8966a518990904893fb7d2
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   BrokenArmPrefab: {fileID: 1653111532957052459, guid: a8544e7b639b4f3ccbd178cb4f0f22f1, type: 3}
+  BrokenArmPrefabReference:
+    m_AssetGUID: a8544e7b639b4f3ccbd178cb4f0f22f1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   BrokenFootPrefab: {fileID: 1653111532957052459, guid: a8544e7b639b4f3ccbd178cb4f0f22f1, type: 3}
+  BrokenFootPrefabReference:
+    m_AssetGUID: a8544e7b639b4f3ccbd178cb4f0f22f1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   CanGrab: 1
   GrabEnergy: 5
   GrabShinkedEnergy: 7.5
@@ -45,6 +70,9 @@ MonoBehaviour:
   GrabMass: 25
   GrabDropDistance: 5
   GrabDropAngle: 100
+  ImpactMinimumThreshold: 1800
+  ImpactDamageScale: 0.0115
+  AttachDecals: 1
   SenseRange: 50
   SpotRange: 50
   FieldOfView: 85
@@ -66,4 +94,13 @@ MonoBehaviour:
   TargetMode: 2
   AttackVerticalOffset: 0
   UseExtraCasts: 1
+  UseSightCheck: 1
+  CanTakeResources: 1
   Stationary: 0
+  CanChaseInterrupt: 0
+  ChaseInterruptEvery: 5
+  ChaseInterruptDistance: 7.5
+  ChaseInterruptDuration: 3
+  CanSelfDestruct: 0
+  SelfDestructAfter: 0
+  SelfDestructAttack: {fileID: 0}

@@ -1,5 +1,6 @@
 using ScriptableObjects.Enums;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ScriptableObjects
 {
@@ -20,7 +21,7 @@ namespace ScriptableObjects
 		
 		[Header("Instantiation")]
 		[SerializeField]
-		public GameObject Prefab;
+		public AssetReference PrefabReference;
 		
 		[SerializeField]
 		public string Type;

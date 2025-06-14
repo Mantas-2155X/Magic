@@ -17,7 +17,14 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Tags: 0
   Prefab: {fileID: 2523756766213633531, guid: 8b1ba5eb9dfdc456fb4e17c5d68d7326, type: 3}
+  PrefabReference:
+    m_AssetGUID: 8b1ba5eb9dfdc456fb4e17c5d68d7326
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   Type: 
+  Assembly: 
   EnableTriggerAfter: 1.5
   DisableTriggerAfter: 0.75
   AttachToTarget: 0
@@ -29,5 +36,8 @@ MonoBehaviour:
   Slow:
     Amount: 0.25
     Duration: 0.5
+  Paralyze:
+    Duration: 0
   Element: 4
   AttackAngle: 0
+  AttackOrigin: 0

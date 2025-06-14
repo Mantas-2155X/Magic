@@ -3,6 +3,7 @@ using AYellowpaper.SerializedCollections;
 using Combat.Enums;
 using Combat.Structs;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ScriptableObjects
 {
@@ -50,13 +51,13 @@ namespace ScriptableObjects
 		
 		[Header("Broken")]
 		[SerializeField]
-		public GameObject BrokenBodyPrefab;
+		public AssetReference BrokenBodyPrefabReference;
 		
 		[SerializeField]
-		public GameObject BrokenArmPrefab;
+		public AssetReference BrokenArmPrefabReference;
 
 		[SerializeField]
-		public GameObject BrokenFootPrefab;
+		public AssetReference BrokenFootPrefabReference;
 		
 		[Header("Grab")]
 		[SerializeField]

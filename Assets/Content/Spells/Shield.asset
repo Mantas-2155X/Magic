@@ -17,12 +17,21 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: 494fc58480bbd73af9a3bfed101c1d7f, type: 3}
   Tags: 16
   Prefab: {fileID: 0}
+  PrefabReference:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   Type: 
+  Assembly: 
   Cooldown: 12.5
   CastingTime: 1
   CastingCost: 25
   Range: 5
   IsResource: 0
+  LockWhileCasting: 0
+  LockAfterCasting: 0
   Element: 3
   Cast: {fileID: 11400000, guid: a6d0636060cf7effb8a704dfc3e62d31, type: 2}
   Projectile: {fileID: 0}
