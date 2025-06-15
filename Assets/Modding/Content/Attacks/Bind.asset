@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38265b3f53394812ab2b891cb9203b15, type: 3}
+  m_Name: Bind
+  m_EditorClassIdentifier: 
+  Name: ATTACK_BIND_NAME
+  Description: ATTACK_BIND_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 0}
+  PrefabReference:
+    m_AssetGUID: 74257bf6baf4378ab9bd4386499576f7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Type: 
+  Assembly: 
+  EnableTriggerAfter: 1
+  DisableTriggerAfter: 1.6
+  AttachToTarget: 1
+  DropToGround: 0
+  IgnoreCaster: 0
+  FollowCaster: 0
+  AttachOffset: {x: 0, y: 0, z: 0}
+  Damage: 0
+  Slow:
+    Amount: 0
+    Duration: 0
+  Paralyze:
+    Duration: 0
+  Element: 3
+  AttackAngle: 0
+  AttackOrigin: 0

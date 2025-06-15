@@ -20,6 +20,7 @@ using State.Interfaces;
 using Tools;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets.ResourceLocators;
 
 namespace Managers
 {
@@ -215,15 +216,15 @@ namespace Managers
 					}
 					
 					var bundlePath = Path.Combine(directory, platform);
-					var assetPath = Path.Combine(bundlePath, $"{modInfo.Author}.{modInfo.Name}".ToLower());
+					var catalogPath = Path.Combine(bundlePath, $"{modInfo.Author}.{modInfo.Name}.bin");
 					
-					if (!Directory.Exists(bundlePath) || !File.Exists(assetPath))
+					if (!Directory.Exists(bundlePath) || !File.Exists(catalogPath))
 					{
 						Debug.LogWarning($"[ObjectManager] Mod at {directory} does not have data for platform {platform}, skipping");
 						continue;
 					}
 
-					foundMods.Add(modInfo, new Tuple<string, string>(directory, assetPath));
+					foundMods.Add(modInfo, new Tuple<string, string>(directory, catalogPath));
 					Debug.Log($"[ObjectManager] Preloaded mod {modInfo.Author}.{modInfo.Name} {modInfo.Version} ({(modInfo.Disabled ? "Disabled" : "Enabled")})");
 				}
 				catch (Exception e)
@@ -570,17 +571,17 @@ namespace Managers
 			
 			public string Directory { get; private set; }
 			
-			public Tuple<string, AssetBundle> Bundle { get; private set; }
+			public Tuple<string, IResourceLocator> Catalog { get; private set; }
 
 			public List<string> Addresses { get; private set; }
 			
 			public bool CustomAssemblyLoaded { get; private set; }
 
-			public Mod(ModInfo info, string directory, string assetPath)
+			public Mod(ModInfo info, string directory, string catalogPath)
 			{
 				Info = info;
 				Directory = directory;
-				Bundle = new Tuple<string, AssetBundle>(assetPath, null);
+				Catalog = new Tuple<string, IResourceLocator>(catalogPath, null);
 				Addresses = new List<string>();
 				CustomAssemblyLoaded = false;
 
@@ -699,17 +700,33 @@ namespace Managers
 					Assembly.Load(bytes);
 				}
 				
-				var bundle = AssetBundle.LoadFromFile(Bundle.Item1);
-				if (bundle == null)
+				var locator = Addressables.LoadContentCatalogAsync(Catalog.Item1).WaitForCompletion();
+				if (locator == null)
 				{
 					Debug.LogWarning($"[ObjectManager] Failed to load bundle for mod at {Directory}, no content added");
 					return;
 				}
 
-				Bundle = new Tuple<string, AssetBundle>(Bundle.Item1, bundle);
+				Catalog = new Tuple<string, IResourceLocator>(Catalog.Item1, locator);
 				
 				var prefix = $"{Info.Author}.{Info.Name}.";
-				var bundleDatas = bundle.LoadAllAssets<Data>();
+				var bundleDatas = new List<Data>();
+
+				foreach (var key in locator.Keys)
+				{
+					if (!locator.Locate(key, typeof(Data), out var locations))
+						continue;
+
+					for (var i = 0; i < locations.Count; i++)
+					{
+						var location = locations[i];
+						
+						if (!location.PrimaryKey.EndsWith(".asset"))
+							continue;
+						
+						bundleDatas.Add(Addressables.LoadAssetAsync<Data>(location).WaitForCompletion());
+					}
+				}
 
 				for (var i = 0; i < Info.Objects.Count; i++)
 				{
@@ -736,7 +753,7 @@ namespace Managers
 
 					var found = false;
 
-					for (var k = 0; k < bundleDatas.Length; k++)
+					for (var k = 0; k < bundleDatas.Count; k++)
 					{
 						var bundleData = bundleDatas[k];
 						if (bundleData.Name != obj.Name || bundleData.GetType() != dataType)
@@ -780,11 +797,7 @@ namespace Managers
 
 				Addresses.Clear();
 				
-				var assetBundle = Bundle.Item2;
-				if (assetBundle != null)
-					assetBundle.Unload(true);
-				
-				Bundle = new Tuple<string, AssetBundle>(Bundle.Item1, null);
+				Catalog = new Tuple<string, IResourceLocator>(Catalog.Item1, null);
 				Debug.Log($"[ObjectManager] Unloaded mod {Info.Author}.{Info.Name} {Info.Version}");
 			}
 
@@ -804,7 +817,7 @@ namespace Managers
 				if (Info.Disabled)
 					return;
 				
-				if (Bundle.Item2 != null)
+				if (Catalog.Item2 != null)
 					Unload();
 
 				Info.Disabled = true;

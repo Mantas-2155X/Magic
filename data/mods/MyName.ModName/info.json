@@ -3,11 +3,11 @@
   "Name": "ModName",
   "Version": "1.0.0",
   "Disabled": false,
-  "UseCustomAssembly": true,
+  "UseCustomAssembly": false,
   "Objects": [
     {
       "Type": "SpellData",
-      "Name": "SPELL_WARP_NAME"
+      "Name": "SPELL_BIND_NAME"
     }
   ]
 }

@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Managers;
 using Newtonsoft.Json;
 using ScriptableObjects;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
 
 namespace Editor
@@ -131,6 +135,8 @@ namespace Editor
 				var directory = $"{Author}.{Name}";
 				var path = Path.Combine(exportPath, directory);
 				
+				var settings = AddressableAssetSettingsDefaultObject.Settings;
+
 				if (!Directory.Exists(path))
 					Directory.CreateDirectory(path);
 
@@ -153,44 +159,122 @@ namespace Editor
 					modInfo.Objects.Add(objectInfo);
 				}
 				
+				if (!string.IsNullOrWhiteSpace(CustomAssembly))
+				{
+					var fileInfo = new FileInfo(CustomAssembly);
+					File.Copy(CustomAssembly, Path.Combine(path, fileInfo.Name));
+				}
+				
 				File.WriteAllText(Path.Combine(path, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
 
+				var removedGroups = removeGroups();
+				
+				var variable = settings.profileSettings.CreateValue("Mod", $"data/mods/{Author}.{Name}/[BuildTarget]");
+
+				var group = settings.CreateGroup($"{Author}.{Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
+				settings.DefaultGroup = group;
+				
+				var schema = group.GetSchema<BundledAssetGroupSchema>();
+				schema.BuildPath.SetVariableByName(settings, "Mod");
+				schema.LoadPath.SetVariableByName(settings, "Mod");
+				schema.InternalIdNamingMode = BundledAssetGroupSchema.AssetNamingMode.GUID;
+
+				var previousRemoteCatalogBuildPath = settings.RemoteCatalogBuildPath.Id;
+				var previousRemoteCatalogLoadPath = settings.RemoteCatalogLoadPath.Id;
+				var previousBuildRemoteCatalog = settings.BuildRemoteCatalog;
+
+				settings.RemoteCatalogBuildPath.SetVariableByName(settings, "Mod");
+				settings.RemoteCatalogLoadPath.SetVariableByName(settings, "Mod");
+				settings.BuildRemoteCatalog = true;
+
+				var previousBuildTarget = EditorUserBuildSettings.activeBuildTarget;
+				
 				for (var i = 0; i < buildTargets.Length; i++)
 				{
 					var buildTarget = buildTargets[i];
 					var bundlePath = Path.Combine(path, buildTarget.ToString());
 					
-					if (!Directory.Exists(bundlePath))
-						Directory.CreateDirectory(bundlePath);
+					if (Directory.Exists(bundlePath))
+						Directory.Delete(bundlePath, true);
 
-					var assetBundleBuild = new AssetBundleBuild
-					{
-						assetBundleName = directory.ToLower(),
-						assetNames = new string[Objects.Count]
-					};
+					if (EditorUserBuildSettings.activeBuildTarget != buildTarget)
+						EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, buildTarget);
 
-					var index = 0;
 					for (var k = 0; k < Objects.Count; k++)
 					{
 						var obj = Objects[k];
 						if (obj == null)
 							continue;
 
-						assetBundleBuild.assetNames[index] = AssetDatabase.GetAssetPath(obj);
-						index++;
+						var guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj));
+						settings.CreateOrMoveEntry(guid, group, false, false);
 					}
 					
-					BuildPipeline.BuildAssetBundles(bundlePath, new [] {assetBundleBuild}, BuildAssetBundleOptions.None, buildTarget);
+					AddressableAssetSettings.BuildPlayerContent();
+
+					var binaries = Directory.GetFiles(bundlePath, "*.bin", SearchOption.TopDirectoryOnly);
+					if (binaries.Length != 1)
+					{
+						Debug.LogError($"[ModdingTool] Binary count for platform {buildTarget} is not 1, something went wrong");
+					}
+					else
+					{
+						var fileInfo = new FileInfo(binaries[0]);
+						
+						File.Move(fileInfo.FullName, Path.Combine(fileInfo.DirectoryName!, $"{Author}.{Name}.bin"));
+						File.Move($"{fileInfo.FullName[..^fileInfo.Extension.Length]}.hash", Path.Combine(fileInfo.DirectoryName!, $"{Author}.{Name}.hash"));
+					}
 				}
 
-				if (!string.IsNullOrWhiteSpace(CustomAssembly))
-				{
-					var fileInfo = new FileInfo(CustomAssembly);
-					File.Copy(CustomAssembly, Path.Combine(path, fileInfo.Name));
-				}
+				if (EditorUserBuildSettings.activeBuildTarget != previousBuildTarget)
+					EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, previousBuildTarget);
+
+				settings.RemoteCatalogBuildPath.SetVariableById(settings, previousRemoteCatalogBuildPath);
+				settings.RemoteCatalogLoadPath.SetVariableById(settings, previousRemoteCatalogLoadPath);
+				settings.BuildRemoteCatalog = previousBuildRemoteCatalog;
+
+				settings.RemoveGroup(group);
+				
+				settings.profileSettings.RemoveValue(variable);
+				
+				restoreGroups(removedGroups);
 			}
 		}
 
+		private (List<AddressableAssetGroup>, string) removeGroups()
+		{
+			var list = new List<AddressableAssetGroup>();
+			var settings = AddressableAssetSettingsDefaultObject.Settings;
+			
+			var defaultGroup = settings.DefaultGroup == null ? null : settings.DefaultGroup.Guid;
+
+			for (var i = settings.groups.Count - 1; i >= 0; i--)
+			{
+				var group = settings.groups[i];
+				if (group == null || group.ReadOnly)
+					continue;
+
+				list.Add(group);
+				settings.groups.RemoveAt(i);
+			}
+
+			return (list, defaultGroup);
+		}
+
+		private void restoreGroups((List<AddressableAssetGroup>, string) tuple)
+		{
+			var list = tuple.Item1;
+			var settings = AddressableAssetSettingsDefaultObject.Settings;
+			
+			for (var i = 0; i < list.Count; i++)
+			{
+				var group = list[i];
+				settings.groups.Add(group);
+			}
+			
+			settings.GetType().GetField("m_DefaultGroup", BindingFlags.NonPublic | BindingFlags.Instance)!.SetValue(settings, tuple.Item2);
+		}
+		
 		private bool validate()
 		{
 			if (string.IsNullOrWhiteSpace(Author))
@@ -241,42 +325,14 @@ namespace Editor
 					return false;
 				}
 
-				if (hasAssetReference(obj))
+				if (string.IsNullOrWhiteSpace(obj.Name) || string.IsNullOrWhiteSpace(obj.Description))
 				{
-					GUILayout.Label("Asset references are not supported, specify prefab instead");
+					GUILayout.Label("All objects must have a name and description");
 					return false;
 				}
 			}
 
 			return true;
-		}
-		
-		private bool hasAssetReference(Data data)
-		{
-			if (data.PrefabReference != null && !string.IsNullOrWhiteSpace(data.PrefabReference.AssetGUID))
-			{
-				Debug.Log($"Asset reference found on {data}");
-				return true;
-			}
-
-			if (data is ProjectileData projectileData)
-			{
-				if (projectileData.Decal != null && hasAssetReference(projectileData.Decal))
-					return true;
-			}
-			else if (data is SpellData spellData)
-			{
-				if (spellData.Cast != null && hasAssetReference(spellData.Cast))
-					return true;
-
-				if (spellData.Projectile != null && hasAssetReference(spellData.Projectile))
-					return true;
-				
-				if (spellData.Attack != null && hasAssetReference(spellData.Attack))
-					return true;
-			}
-
-			return false;
 		}
 	}
 }

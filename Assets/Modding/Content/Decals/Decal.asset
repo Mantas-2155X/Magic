@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15952e4bbfce4c6bb83d5d7f90cb4510, type: 3}
+  m_Name: Decal
+  m_EditorClassIdentifier: 
+  Name: DECALS_DECAL_NAME
+  Description: DECALS_DECAL_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 0}
+  PrefabReference:
+    m_AssetGUID: e84452100d826885ab880de43b8b3cec
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Type: 
+  Assembly: 
+  Size: 0.25
+  FadeAfter: 1
+  FadeDuration: 1
