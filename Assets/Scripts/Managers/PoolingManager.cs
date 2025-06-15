@@ -55,7 +55,7 @@ namespace Managers
 			var obj = Take(data, enablePooled);
 			
 			if (obj == null)
-				obj = InstantiateTools.Instantiate(data.PrefabReference, data.Prefab, null);
+				obj = Addressables.InstantiateAsync(data.PrefabReference).WaitForCompletion();
 
 			return obj.GetComponent<T>();
 		}

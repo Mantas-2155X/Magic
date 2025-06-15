@@ -179,7 +179,7 @@ namespace Objects.Base
 
 			if (ObjectData.BrokenPrefabReference != null && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
 			{
-				var brokenPrefab = InstantiateTools.Instantiate(ObjectData.BrokenPrefabReference, ObjectData.BrokenPrefab, World.World.Instance.Ragdolls);
+				var brokenPrefab = Addressables.InstantiateAsync(ObjectData.BrokenPrefabReference, World.World.Instance.Ragdolls).WaitForCompletion();
 				
 				var brokenTr = brokenPrefab.transform;
 				brokenTr.position = thisTr.position;

@@ -51,17 +51,11 @@ namespace ScriptableObjects
 		
 		[Header("Broken")]
 		[SerializeField]
-		public GameObject BrokenBodyPrefab;
-		[SerializeField]
 		public AssetReference BrokenBodyPrefabReference;
 		
 		[SerializeField]
-		public GameObject BrokenArmPrefab;
-		[SerializeField]
 		public AssetReference BrokenArmPrefabReference;
 
-		[SerializeField]
-		public GameObject BrokenFootPrefab;
 		[SerializeField]
 		public AssetReference BrokenFootPrefabReference;
 		

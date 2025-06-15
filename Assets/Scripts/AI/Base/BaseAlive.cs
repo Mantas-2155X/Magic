@@ -645,7 +645,7 @@ namespace AI.Base
 					
 				if (Data.BrokenBodyPrefabReference != null)
 				{
-					var broken = InstantiateTools.Instantiate(Data.BrokenBodyPrefabReference, Data.BrokenBodyPrefab, ragdolls);
+					var broken = Addressables.InstantiateAsync(Data.BrokenBodyPrefabReference, ragdolls).WaitForCompletion();
 					
 					var brokenTr = broken.transform;
 					brokenTr.position = thisTr.position;
@@ -661,7 +661,7 @@ namespace AI.Base
 					{
 						var arm = Body.Arms[i];
 					
-						var broken = InstantiateTools.Instantiate(Data.BrokenArmPrefabReference, Data.BrokenArmPrefab, ragdolls);
+						var broken = Addressables.InstantiateAsync(Data.BrokenArmPrefabReference, ragdolls).WaitForCompletion();
 					
 						var brokenTr = broken.transform;
 						brokenTr.position = arm.position;
@@ -678,7 +678,7 @@ namespace AI.Base
 					{
 						var foot = Body.Feet[i];
 					
-						var broken = InstantiateTools.Instantiate(Data.BrokenFootPrefabReference, Data.BrokenFootPrefab, ragdolls);
+						var broken = Addressables.InstantiateAsync(Data.BrokenFootPrefabReference, ragdolls).WaitForCompletion();
 					
 						var brokenTr = broken.transform;
 						brokenTr.position = foot.position;
