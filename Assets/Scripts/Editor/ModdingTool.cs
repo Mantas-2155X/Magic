@@ -9,6 +9,7 @@ using ScriptableObjects;
 using Tools;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Build;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
@@ -231,10 +232,18 @@ namespace Editor
 				var previousRemoteCatalogBuildPath = settings.RemoteCatalogBuildPath.Id;
 				var previousRemoteCatalogLoadPath = settings.RemoteCatalogLoadPath.Id;
 				var previousBuildRemoteCatalog = settings.BuildRemoteCatalog;
+				var previousBuiltInBundleNaming = settings.BuiltInBundleNaming;
+				var previousBuiltInBundleCustomNaming = settings.BuiltInBundleCustomNaming;
+				var previousMonoScriptBundleNaming = settings.MonoScriptBundleNaming;
+				var previousMonoScriptBundleCustomNaming = settings.MonoScriptBundleCustomNaming;
 
 				settings.RemoteCatalogBuildPath.SetVariableByName(settings, "Mod");
 				settings.RemoteCatalogLoadPath.SetVariableByName(settings, "Mod");
 				settings.BuildRemoteCatalog = true;
+				settings.BuiltInBundleNaming = BuiltInBundleNaming.Custom;
+				settings.BuiltInBundleCustomNaming = $"{Author}.{Name}".ToLower();
+				settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
+				settings.MonoScriptBundleCustomNaming = $"{Author}.{Name}".ToLower();
 
 				var previousBuildTarget = EditorUserBuildSettings.activeBuildTarget;
 				
@@ -271,6 +280,10 @@ namespace Editor
 				settings.RemoteCatalogBuildPath.SetVariableById(settings, previousRemoteCatalogBuildPath);
 				settings.RemoteCatalogLoadPath.SetVariableById(settings, previousRemoteCatalogLoadPath);
 				settings.BuildRemoteCatalog = previousBuildRemoteCatalog;
+				settings.BuiltInBundleNaming = previousBuiltInBundleNaming;
+				settings.BuiltInBundleCustomNaming = previousBuiltInBundleCustomNaming;
+				settings.MonoScriptBundleNaming = previousMonoScriptBundleNaming;
+				settings.MonoScriptBundleCustomNaming = previousMonoScriptBundleCustomNaming;
 
 				foreach (var pair in restoreAssets)
 				{
