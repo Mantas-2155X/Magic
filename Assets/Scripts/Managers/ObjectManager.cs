@@ -700,33 +700,63 @@ namespace Managers
 					Assembly.Load(bytes);
 				}
 				
-				var locator = Addressables.LoadContentCatalogAsync(Catalog.Item1).WaitForCompletion();
-				if (locator == null)
-				{
-					Debug.LogWarning($"[ObjectManager] Failed to load bundle for mod at {Directory}, no content added");
-					return;
-				}
+				var previousTransformFunction = Addressables.InternalIdTransformFunc;
 
-				Catalog = new Tuple<string, IResourceLocator>(Catalog.Item1, locator);
-				
 				var prefix = $"{Info.Author}.{Info.Name}.";
 				var bundleDatas = new List<Data>();
 
-				foreach (var key in locator.Keys)
-				{
-					if (!locator.Locate(key, typeof(Data), out var locations))
-						continue;
+				var platform = "";
 
-					for (var i = 0; i < locations.Count; i++)
+				switch (Application.platform)
+				{
+					case RuntimePlatform.LinuxPlayer or RuntimePlatform.LinuxEditor:
+						platform = "StandaloneLinux64";
+						break;
+					case RuntimePlatform.WindowsPlayer or RuntimePlatform.WindowsEditor:
+						platform = "StandaloneWindows64";
+						break;
+				}
+				
+				try
+				{
+					Addressables.InternalIdTransformFunc = location => !location.InternalId.StartsWith(platform) ? location.InternalId : $"{Directory}/{location.InternalId}";
+					
+					var locator = Addressables.LoadContentCatalogAsync(Catalog.Item1).WaitForCompletion();
+					if (locator == null)
 					{
-						var location = locations[i];
+						Addressables.InternalIdTransformFunc = previousTransformFunction;
 						
-						if (!location.PrimaryKey.EndsWith(".asset"))
+						Debug.LogWarning($"[ObjectManager] Failed to load bundle for mod at {Directory}, no content added");
+						return;
+					}
+
+					Catalog = new Tuple<string, IResourceLocator>(Catalog.Item1, locator);
+					
+					foreach (var key in locator.Keys)
+					{
+						if (!locator.Locate(key, typeof(Data), out var locations))
 							continue;
+
+						for (var i = 0; i < locations.Count; i++)
+						{
+							var location = locations[i];
 						
-						bundleDatas.Add(Addressables.LoadAssetAsync<Data>(location).WaitForCompletion());
+							if (!location.PrimaryKey.EndsWith(".asset"))
+								continue;
+						
+							bundleDatas.Add(Addressables.LoadAssetAsync<Data>(location).WaitForCompletion());
+						}
 					}
 				}
+				catch (Exception e)
+				{
+					Addressables.InternalIdTransformFunc = previousTransformFunction;
+
+					Debug.Log($"[ObjectManager] Failed grabbing locator datas for mod at {Directory}, no content added, {e}");
+					return;
+				}
+				
+				Addressables.InternalIdTransformFunc = previousTransformFunction;
 
 				for (var i = 0; i < Info.Objects.Count; i++)
 				{

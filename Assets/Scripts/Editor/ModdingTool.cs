@@ -220,7 +220,7 @@ namespace Editor
 				
 				var removedGroups = removeGroups(group);
 				
-				var variable = settings.profileSettings.CreateValue("Mod", $"data/mods/{Author}.{Name}/[BuildTarget]");
+				var variable = settings.profileSettings.CreateValue("Mod", "[BuildTarget]");
 
 				settings.DefaultGroup = group;
 				
@@ -260,6 +260,8 @@ namespace Editor
 					
 					AddressableAssetSettings.BuildPlayerContent();
 
+					Directory.Move(buildTarget.ToString(), bundlePath);
+					
 					var binaries = Directory.GetFiles(bundlePath, "*.bin", SearchOption.TopDirectoryOnly);
 					if (binaries.Length != 1)
 					{
