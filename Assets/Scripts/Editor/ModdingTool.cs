@@ -6,11 +6,13 @@ using System.Text.RegularExpressions;
 using Managers;
 using Newtonsoft.Json;
 using ScriptableObjects;
+using Tools;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Editor
 {
@@ -167,11 +169,58 @@ namespace Editor
 				
 				File.WriteAllText(Path.Combine(path, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
 
-				var removedGroups = removeGroups();
+				var group = settings.CreateGroup($"{Author}.{Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
+
+				var restoreAssets = new Dictionary<string, AddressableAssetGroup>();
+				
+				for (var i = 0; i < Objects.Count; i++)
+				{
+					var obj = Objects[i];
+					if (obj == null)
+						continue;
+
+					var references = new List<string>();
+					references.AddUnique(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj)));
+					references.AddUnique(obj.PrefabReference.AssetGUID);
+						
+					if (obj is ProjectileData projectileData)
+					{
+						references.AddUnique(projectileData.Decal.PrefabReference.AssetGUID);
+					}
+					else if (obj is SpellData spellData)
+					{
+						references.AddUnique(spellData.Cast.PrefabReference.AssetGUID);
+						
+						references.AddUnique(spellData.Projectile.PrefabReference.AssetGUID);
+						references.AddUnique(spellData.Projectile.Decal.PrefabReference.AssetGUID);
+						
+						references.AddUnique(spellData.Attack.PrefabReference.AssetGUID);
+					}
+
+					for (var k = 0; k < references.Count; k++)
+					{
+						AddressableAssetGroup parentGroup;
+						
+						var entry = settings.FindAssetEntry(references[k]);
+						if (entry != null)
+						{
+							parentGroup = entry.parentGroup;
+							settings.MoveEntry(entry, group, false, false);
+						}
+						else
+						{
+							parentGroup = null;
+							settings.CreateOrMoveEntry(references[k], group, false, false);
+						}
+						
+						restoreAssets[references[k]] = parentGroup;
+					}
+				}
+				
+				var removedGroups = removeGroups(group);
 				
 				var variable = settings.profileSettings.CreateValue("Mod", $"data/mods/{Author}.{Name}/[BuildTarget]");
 
-				var group = settings.CreateGroup($"{Author}.{Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
 				settings.DefaultGroup = group;
 				
 				var schema = group.GetSchema<BundledAssetGroupSchema>();
@@ -199,16 +248,6 @@ namespace Editor
 
 					if (EditorUserBuildSettings.activeBuildTarget != buildTarget)
 						EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, buildTarget);
-
-					for (var k = 0; k < Objects.Count; k++)
-					{
-						var obj = Objects[k];
-						if (obj == null)
-							continue;
-
-						var guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj));
-						settings.CreateOrMoveEntry(guid, group, false, false);
-					}
 					
 					AddressableAssetSettings.BuildPlayerContent();
 
@@ -233,6 +272,14 @@ namespace Editor
 				settings.RemoteCatalogLoadPath.SetVariableById(settings, previousRemoteCatalogLoadPath);
 				settings.BuildRemoteCatalog = previousBuildRemoteCatalog;
 
+				foreach (var pair in restoreAssets)
+				{
+					if (pair.Value != null)
+						settings.MoveEntry(settings.FindAssetEntry(pair.Key), pair.Value, false, false);
+					else
+						settings.RemoveAssetEntry(pair.Key);
+				}
+				
 				settings.RemoveGroup(group);
 				
 				settings.profileSettings.RemoveValue(variable);
@@ -241,7 +288,7 @@ namespace Editor
 			}
 		}
 
-		private (List<AddressableAssetGroup>, string) removeGroups()
+		private (List<AddressableAssetGroup>, string) removeGroups(AddressableAssetGroup ignoreGroup)
 		{
 			var list = new List<AddressableAssetGroup>();
 			var settings = AddressableAssetSettingsDefaultObject.Settings;
@@ -251,7 +298,7 @@ namespace Editor
 			for (var i = settings.groups.Count - 1; i >= 0; i--)
 			{
 				var group = settings.groups[i];
-				if (group == null || group.ReadOnly)
+				if (group == null || group.ReadOnly || group == ignoreGroup)
 					continue;
 
 				list.Add(group);
