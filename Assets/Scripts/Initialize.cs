@@ -14,9 +14,9 @@ public static class Initialize
 		UnityEngine.Debug.Log($"CPU: {SystemInfo.processorType} (RAM: {SystemInfo.systemMemorySize} MB)");
 		UnityEngine.Debug.Log($"GPU: {SystemInfo.graphicsDeviceName} (VRAM: {SystemInfo.graphicsMemorySize} MB)");
 
+		_ = ConsoleManager.Instance;
 		_ = ObjectManager.Instance;
 		_ = SelectionManager.Instance;
-		_ = ConsoleManager.Instance;
 		_ = SettingsManager.Instance;
 		_ = LocalizationManager.Instance;
 		_ = GameManager.Instance;

@@ -11,7 +11,7 @@ namespace Editor
 		public int callbackOrder { get; }
 
 		private readonly string[] copyAssets = { "data" };
-		private readonly string[] removeAfter = { "data/settings.tsv" };
+		private readonly string[] removeAfter = { "data/settings.tsv", "Magic_BurstDebugInformation_DoNotShip" };
 		
 		public void OnPostprocessBuild(BuildReport report)
 		{
