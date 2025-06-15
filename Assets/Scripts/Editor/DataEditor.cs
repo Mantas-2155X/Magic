@@ -1,4 +1,4 @@
-/*using ScriptableObjects;
+using ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -40,6 +40,39 @@ namespace Editor
 			}
 		}
 
+		[MenuItem("Data/Remove Data Prefab Direct References")]
+		public static void RemoveDirectPrefabReferences()
+		{
+			var assetPaths = AssetDatabase.GetAllAssetPaths();
+			for (var i = 0; i < assetPaths.Length; i++)
+			{
+				var assetPath = assetPaths[i];
+				
+				var data = AssetDatabase.LoadAssetAtPath<Data>(assetPath);
+				if (data == null)
+					continue;
+
+				if (data is AliveData aliveData)
+				{
+					aliveData.Prefab = null;
+					aliveData.BrokenBodyPrefab = null;
+					aliveData.BrokenArmPrefab = null;
+					aliveData.BrokenFootPrefab = null;
+				}
+				else if (data is ObjectData objectData)
+				{
+					objectData.Prefab = null;
+					objectData.BrokenPrefab = null;
+				}
+				else
+				{
+					data.Prefab = null;
+				}
+				
+				EditorUtility.SetDirty(data);
+			}
+		}
+		
 		private static AssetReference convertReference(GameObject prefab)
 		{
 			if (prefab == null)
@@ -51,4 +84,4 @@ namespace Editor
 			return new AssetReference(prefabGUID);
 		}
 	}
-}*/
+}

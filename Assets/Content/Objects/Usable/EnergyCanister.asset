@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: OBJECT_ENERGYCANISTER_DESC
   Icon: {fileID: 0}
   Tags: 32
-  Prefab: {fileID: 5422014121488987390, guid: e030221d431c5b271b2b9834bb7ef97e, type: 3}
+  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: e030221d431c5b271b2b9834bb7ef97e
     m_SubObjectName: 
@@ -29,7 +29,7 @@ MonoBehaviour:
   IsBreakable: 1
   BreakAtCollisionPoint: 0
   MaximumHealth: 5
-  BrokenPrefab: {fileID: 289324834980497232, guid: 137f608a460c4dbe29364d97c431907e, type: 3}
+  BrokenPrefab: {fileID: 0}
   BrokenPrefabReference:
     m_AssetGUID: 137f608a460c4dbe29364d97c431907e
     m_SubObjectName: 

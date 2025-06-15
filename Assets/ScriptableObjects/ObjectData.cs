@@ -21,6 +21,8 @@ namespace ScriptableObjects
 		public float MaximumHealth;
 
 		[SerializeField]
+		public GameObject BrokenPrefab;
+		[SerializeField]
 		public AssetReference BrokenPrefabReference;
 		
 		[Header("Pickupable")]

@@ -21,6 +21,8 @@ namespace ScriptableObjects
 		
 		[Header("Instantiation")]
 		[SerializeField]
+		public GameObject Prefab;
+		[SerializeField]
 		public AssetReference PrefabReference;
 		
 		[SerializeField]

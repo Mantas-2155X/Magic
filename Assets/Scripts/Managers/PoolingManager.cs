@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ScriptableObjects;
+using Tools;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -54,7 +55,7 @@ namespace Managers
 			var obj = Take(data, enablePooled);
 			
 			if (obj == null)
-				obj = Addressables.InstantiateAsync(data.PrefabReference).WaitForCompletion();
+				obj = InstantiateTools.Instantiate(data.PrefabReference, data.Prefab, null);
 
 			return obj.GetComponent<T>();
 		}

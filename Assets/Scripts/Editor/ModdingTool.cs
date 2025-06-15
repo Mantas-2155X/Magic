@@ -234,14 +234,49 @@ namespace Editor
 			
 			for (var i = 0; i < Objects.Count; i++)
 			{
-				if (Objects[i] != null)
-					continue;
+				var obj = Objects[i];
+				if (obj == null)
+				{
+					GUILayout.Label("Null objects are not allowed");
+					return false;
+				}
 
-				GUILayout.Label("Null objects are not allowed");
-				return false;
+				if (hasAssetReference(obj))
+				{
+					GUILayout.Label("Asset references are not supported, specify prefab instead");
+					return false;
+				}
 			}
 
 			return true;
+		}
+		
+		private bool hasAssetReference(Data data)
+		{
+			if (data.PrefabReference != null && !string.IsNullOrWhiteSpace(data.PrefabReference.AssetGUID))
+			{
+				Debug.Log($"Asset reference found on {data}");
+				return true;
+			}
+
+			if (data is ProjectileData projectileData)
+			{
+				if (projectileData.Decal != null && hasAssetReference(projectileData.Decal))
+					return true;
+			}
+			else if (data is SpellData spellData)
+			{
+				if (spellData.Cast != null && hasAssetReference(spellData.Cast))
+					return true;
+
+				if (spellData.Projectile != null && hasAssetReference(spellData.Projectile))
+					return true;
+				
+				if (spellData.Attack != null && hasAssetReference(spellData.Attack))
+					return true;
+			}
+
+			return false;
 		}
 	}
 }
