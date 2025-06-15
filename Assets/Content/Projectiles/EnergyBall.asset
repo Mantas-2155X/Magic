@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd0ae0db49104ff39ef235d001464c3a, type: 3}
+  m_Name: EnergyBall
+  m_EditorClassIdentifier: 
+  Name: PROJECTILE_ENERGYBALL_NAME
+  Description: PROJECTILE_ENERGYBALL_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  Prefab: {fileID: 0}
+  PrefabReference:
+    m_AssetGUID: 627b55fa4f9dd2d8f9e4e7e91250612a
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Type: 
+  Assembly: 
+  Force: 7.5
+  Damage: 17.5
+  Slow:
+    Amount: 0.15
+    Duration: 0.15
+  Paralyze:
+    Duration: 0.1
+  Element: 1
+  Decal: {fileID: 11400000, guid: 989cbe507e9f24fb5be2f05cd2c640be, type: 2}
