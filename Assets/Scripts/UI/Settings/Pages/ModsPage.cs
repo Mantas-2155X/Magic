@@ -128,6 +128,11 @@ namespace UI.Settings.Pages
 		
 		private void toggleMod(int index)
 		{
+			UnityEngine.Debug.LogWarning("[ModsPage] Toggling mods is disabled due to limitations. Edit the info file inside the mods directory instead");
+			Items[index].Toggle.SetIsOnWithoutNotify(!ObjectManager.Instance.Mods[index].Info.Disabled);
+			
+			return;
+			
 			if (SceneManager.Instance.GetCurrentScene() != "Title")
 				return;
 			
