@@ -140,8 +140,10 @@ namespace Editor
 				
 				var settings = AddressableAssetSettingsDefaultObject.Settings;
 
-				if (!Directory.Exists(path))
-					Directory.CreateDirectory(path);
+				if (Directory.Exists(path))
+					Directory.Delete(path, true);
+				
+				Directory.CreateDirectory(path);
 
 				var modInfo = new ObjectManager.ModInfo();
 				modInfo.Author = Author;
