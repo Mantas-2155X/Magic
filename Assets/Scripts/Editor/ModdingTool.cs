@@ -316,6 +316,10 @@ namespace Editor
 			for (var i = 0; i < list.Count; i++)
 			{
 				var group = list[i];
+				
+				if (settings.FindGroup(group.Name) != null)
+					continue;
+				
 				settings.groups.Add(group);
 			}
 			
