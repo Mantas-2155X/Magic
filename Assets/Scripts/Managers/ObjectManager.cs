@@ -55,10 +55,17 @@ namespace Managers
 
 		private readonly List<Type> allowedModdedDatas = new ()
 		{
+			//typeof(AliveData),
 			typeof(AttackData), 
 			typeof(CastData), 
+			//typeof(Data), 
 			typeof(DecalData), 
+			//typeof(NPCData), 
+			typeof(ObjectData), 
+			typeof(PathData), 
+			//typeof(PlayerData), 
 			typeof(ProjectileData), 
+			//typeof(SceneData), 
 			typeof(SpellData), 
 			typeof(WearableData)
 		};

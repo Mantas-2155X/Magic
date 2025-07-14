@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
+  m_Name: Box
+  m_EditorClassIdentifier: 
+  Name: OBJECT_BOX_NAME
+  Description: OBJECT_BOX_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  PrefabReference:
+    m_AssetGUID: 30263d09da82db3bcbc79d76569b2e9b
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Type: 
+  Assembly: 
+  IsPoolable: 0
+  IsBreakable: 1
+  BreakAtCollisionPoint: 0
+  MaximumHealth: 25
+  BrokenPrefabReference:
+    m_AssetGUID: 0271a22b889b888e9b408144ec4bd98e
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  IsPickupable: 0
+  PickupableAfter: 0
+  PickupAction: 0
+  IsUsable: 0
+  UsableAfter: 0
+  UseAction: 0
+  AttachDecals: 1

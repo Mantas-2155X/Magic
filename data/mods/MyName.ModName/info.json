@@ -3,11 +3,15 @@
   "Name": "ModName",
   "Version": "1.0.0",
   "Disabled": false,
-  "UseCustomAssembly": true,
+  "UseCustomAssembly": false,
   "Objects": [
     {
-      "Type": "SpellData",
-      "Name": "SPELL_BIND_NAME"
+      "Type": "ObjectData",
+      "Name": "OBJECT_BOX_NAME"
+    },
+    {
+      "Type": "PathData",
+      "Name": "PATH_TITLE1_NAME"
     }
   ]
 }

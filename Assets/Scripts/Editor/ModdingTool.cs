@@ -13,7 +13,6 @@ using UnityEditor.AddressableAssets.Build;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Editor
 {
@@ -43,10 +42,17 @@ namespace Editor
 		
 		private readonly List<Type> allowedModdedDatas = new ()
 		{
+			//typeof(AliveData),
 			typeof(AttackData), 
 			typeof(CastData), 
+			//typeof(Data), 
 			typeof(DecalData), 
+			//typeof(NPCData), 
+			typeof(ObjectData), 
+			typeof(PathData), 
+			//typeof(PlayerData), 
 			typeof(ProjectileData), 
+			//typeof(SceneData), 
 			typeof(SpellData), 
 			typeof(WearableData)
 		};
@@ -198,6 +204,10 @@ namespace Editor
 						references.AddUnique(spellData.Projectile.Decal.PrefabReference.AssetGUID);
 						
 						references.AddUnique(spellData.Attack.PrefabReference.AssetGUID);
+					}
+					else if (obj is ObjectData objectData)
+					{
+						references.AddUnique(objectData.BrokenPrefabReference.AssetGUID);
 					}
 
 					for (var k = 0; k < references.Count; k++)

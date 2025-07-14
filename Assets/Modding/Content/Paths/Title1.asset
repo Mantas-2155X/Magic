@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3502a9a36b9d421b87f7dd857598c6a7, type: 3}
+  m_Name: Title1
+  m_EditorClassIdentifier: 
+  Name: PATH_TITLE1_NAME
+  Description: PATH_TITLE1_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  PrefabReference:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Type: 
+  Assembly: 
+  Points:
+  - Point: {x: 1.137147, y: -2.4, z: -11.25049}
+    Pause: 2.5
+  - Point: {x: -4.483701, y: -2.4, z: -10.34144}
+    Pause: 0
+  - Point: {x: -6.9107656, y: -2.4, z: 0.015396357}
+    Pause: 0
+  - Point: {x: -14.001151, y: -2.4, z: 0.5669105}
+    Pause: 5
