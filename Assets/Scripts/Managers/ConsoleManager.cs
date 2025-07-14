@@ -389,6 +389,27 @@ namespace Managers
 				player.EquipWearable(ObjectManager.Instance.GetWearable(wearable));
 			});
 			
+			AddCommand("create", "Create an object where the player is looking", new [] {EConsoleCommandParameter.String}, args =>
+			{
+				var player = AIManager.Instance.Player;
+				if (player == null || !player.IsAlive)
+					return;
+
+				var objName = "";
+
+				for (var i = 0; i < args.Length; i++)
+					objName += (string)args[i];
+
+				var cam = Camera.main;
+				if (cam == null)
+					return;
+				
+				if (!Physics.Raycast(cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, float.MaxValue, ~LayerMaskTools.GetMaskWithAlives()))
+					return;
+				
+				ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject(objName), hit.point + Vector3.up, new Vector3(0, player.transform.eulerAngles.y, 0));
+			});
+			
 			AddCommand("timescale", "Sets the time scale", new [] {EConsoleCommandParameter.Float}, args =>
 			{
 				GameManager.TimeScale = (float)args[0];
