@@ -22,7 +22,7 @@ namespace UI.Settings.Pages
 			if (Items.Count == 0)
 				createItems();
 
-			if (Items.Count == 0 || SceneManager.Instance.GetCurrentScene() != "Title")
+			if (Items.Count == 0 || !SceneManager.Instance.IsInTitle())
 				AutoSelect = Tab.gameObject;
 			else
 				AutoSelect = Items[0].Toggle.gameObject;
@@ -65,7 +65,7 @@ namespace UI.Settings.Pages
 
 		private void setupItems()
 		{
-			var isTitle = SceneManager.Instance.GetCurrentScene() == "Title";
+			var isTitle = SceneManager.Instance.IsInTitle();
 			var mods = ObjectManager.Instance.Mods;
 			
 			for (var i = 0; i < Items.Count; i++)
@@ -133,7 +133,7 @@ namespace UI.Settings.Pages
 			
 			return;
 			
-			if (SceneManager.Instance.GetCurrentScene() != "Title")
+			if (!SceneManager.Instance.IsInTitle())
 				return;
 			
 			var mod = ObjectManager.Instance.Mods[index];

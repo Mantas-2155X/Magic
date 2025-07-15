@@ -210,28 +210,34 @@ namespace Managers
 		{
 			AddCommand("quit", "Quit the game", () =>
 			{
-				SceneManager.Instance.ChangeScene("Exit", true, false, false);
+				SceneManager.Instance.QuitGame();
 			});
 			
 			AddCommand("title", "Return to title", () =>
 			{
-				SceneManager.Instance.ChangeScene("Title", true, true, false);
+				SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
 			});
 			
 			AddCommand("scene", "Changes the scene", new [] {EConsoleCommandParameter.String}, args =>
 			{
-				var scene = (string)args[0];
+				var sceneData = ObjectManager.Instance.GetScene((string)args[0]);
 
-				if (!SceneManager.Instance.SceneExists(scene))
+				if (!SceneManager.Instance.SceneExists(sceneData) || sceneData == null)
 				{
 					Debug.LogWarning("Scene not found");
 					return;
 				}
 				
-				SceneManager.Instance.ChangeScene(scene, true, true, scene != "Title");
+				if (sceneData.Internal)
+				{
+					Debug.LogWarning("Internal scenes can not be manually loaded");
+					return;
+				}
+				
+				SceneManager.Instance.ChangeScene(sceneData, true, true, sceneData.Name != "SCENE_TITLE_NAME");
 			}, () =>
 			{
-				Debug.Log(SceneManager.Instance.GetCurrentScene());
+				Debug.Log(SceneManager.Instance.GetCurrentSceneData().Name);
 			});
 			
 			AddCommand("msens", "Changes the mouse sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
@@ -320,10 +326,10 @@ namespace Managers
 			{
 				Debug.Log("Available Scenes:");
 
-				var scenes = SceneManager.Instance.GetSceneNames();
+				var sceneDatas = SceneManager.Instance.GetSceneDatas();
 				
-				for (var i = 0; i < scenes.Count; i++)
-					Debug.Log(scenes[i]);
+				for (var i = 0; i < sceneDatas.Count; i++)
+					Debug.Log(sceneDatas[i].Name);
 			});
 			
 			AddCommand("noclip", "Toggle noclip mode", () =>

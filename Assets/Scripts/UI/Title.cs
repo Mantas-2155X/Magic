@@ -79,7 +79,7 @@ namespace UI
 
 		public void OnEnable()
 		{
-			if (SceneManager.Instance.GetCurrentScene() != "Title")
+			if (!SceneManager.Instance.IsInTitle())
 				PauseManager.Instance.Pause();
 			
 			var feature = RenderManager.Instance.BlurFeature;
@@ -203,12 +203,12 @@ namespace UI
 
 		public void OnReturnToTitle()
 		{
-			SceneManager.Instance.ChangeScene("Title", true, true, false);
+			SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
 		}
 		
 		public void OnQuitGame()
 		{
-			SceneManager.Instance.ChangeScene("Exit", true, false, false);
+			SceneManager.Instance.QuitGame();
 		}
 		
 		#endregion
@@ -217,7 +217,7 @@ namespace UI
 
 		private void onTitle(InputAction.CallbackContext ctx)
 		{
-			if (KeybindsPage.IsRebinding || SceneManager.Instance.GetCurrentScene() == "Title")
+			if (KeybindsPage.IsRebinding || SceneManager.Instance.IsInTitle())
 				return;
 			
 			Toggle();
@@ -235,19 +235,17 @@ namespace UI
 
 		public void UpdateCurrentScene()
 		{
-			var scene = SceneManager.Instance.GetCurrentScene();
-			
-			CurrentScene.Key = $"SCENE_{scene.ToUpper()}_NAME";
+			CurrentScene.Key = SceneManager.Instance.GetCurrentSceneData().Name;
 			CurrentScene.Apply();
 			
-			CurrentScene.gameObject.SetActive(scene != "Title");
+			CurrentScene.gameObject.SetActive(!SceneManager.Instance.IsInTitle());
 		}
 		
 		public void UpdateButtons()
 		{
 			var sceneManager = SceneManager.Instance;
 
-			var inTitle = sceneManager.GetCurrentScene() == "Title";
+			var inTitle = sceneManager.IsInTitle();
 			var currentSceneData = sceneManager.GetCurrentSceneData();
 			
 			ButtonObjects[0].SetActive(inTitle);

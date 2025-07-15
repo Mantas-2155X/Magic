@@ -106,7 +106,6 @@ namespace UI
 		
 		private void updateScenes()
 		{
-			var sceneNames = SceneManager.Instance.GetSceneNames();
 			var sceneDatas = SceneManager.Instance.GetSceneDatas();
 			
 			var scenesCount = sceneDatas.Count;
@@ -133,7 +132,7 @@ namespace UI
 			for (var i = 0; i < sceneDatas.Count; i++)
 			{
 				var sceneData = sceneDatas[i];
-				if (sceneData.Hidden && !ShowHiddenToggle.isOn)
+				if (sceneData.Internal || (sceneData.Hidden && !ShowHiddenToggle.isOn))
 					continue;
 
 				var container = Containers[containerIndex];
@@ -142,7 +141,7 @@ namespace UI
 				container.Button.onClick.RemoveAllListeners();
 				container.Button.onClick.AddListener(delegate
 				{
-					SceneManager.Instance.ChangeScene(sceneNames[idx], true, true, true);
+					SceneManager.Instance.ChangeScene(sceneDatas[idx], true, true, true);
 				});
 				
 				container.Image.sprite = sceneDatas[i].Icon;

@@ -174,7 +174,8 @@ namespace UI
 		
 		private void updateSaves()
 		{
-			var currentScene = SceneManager.Instance.GetCurrentScene();
+			var isInTitle = SceneManager.Instance.IsInTitle();
+			var currentSceneData = SceneManager.Instance.GetCurrentSceneData();
 
 			var allSaves = StateManager.Instance.GetSaves();
 			var availableSaves = new List<Tuple<string, SaveData>>();
@@ -182,7 +183,7 @@ namespace UI
 			foreach (var pair in allSaves)
 			{
 				// Show all saves in title, otherwise only show current scene saves
-				if (currentScene != pair.Value.Scene && currentScene != "Title")
+				if (currentSceneData.Name != pair.Value.Scene && !isInTitle)
 					continue;
 			
 				availableSaves.Add(new Tuple<string, SaveData>(pair.Key, pair.Value));
@@ -217,7 +218,7 @@ namespace UI
 			{
 				var (savePath, saveData) = availableSaves[i];
 
-				var sceneData = ObjectManager.Instance.GetScene($"SCENE_{saveData.Scene.ToUpper()}_NAME");
+				var sceneData = ObjectManager.Instance.GetScene(saveData.Scene);
 				var container = Containers[containerIndex];
 
 				container.Button.onClick.RemoveAllListeners();

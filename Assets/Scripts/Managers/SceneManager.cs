@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 namespace Managers
 {
@@ -22,32 +23,39 @@ namespace Managers
 				
 				instance = new SceneManager();
 				instance.getScenes();
+
+				if (instance.CurrentSceneIndex == -1)
+				{
+					var findScene = $"SCENE_{UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.ToUpper()}_NAME";
+
+					for (var i = 0; i < instance.sceneDatas.Count; i++)
+					{
+						var sceneData = instance.sceneDatas[i];
+						if (sceneData.Name != findScene)
+							continue;
+
+						instance.CurrentSceneIndex = i;
+						break;
+					}
+
+					if (instance.CurrentSceneIndex == -1)
+						Debug.LogError("[SceneManager] Could not find active scene");
+				}
+				
 				return instance;
 			}
 		}
 
-		public static OnPreSceneLoadEvent OnPreSceneLoadEvent = new ();
-		
-		private readonly List<string> sceneNames = new ();
-		private readonly List<SceneData> sceneDatas = new ();
+		public int CurrentSceneIndex { get; private set; } = -1;
 
-		public string GetCurrentScene()
-		{
-			return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-		}
+		public static OnPreSceneLoadEvent OnPreSceneLoadEvent = new ();
+		public static OnPostSceneLoadEvent OnPostSceneLoadEvent = new ();
+		
+		private readonly List<SceneData> sceneDatas = new ();
 		
 		public SceneData GetCurrentSceneData()
 		{
-			var index = sceneNames.IndexOf(GetCurrentScene());
-			if (index == -1)
-				return null;
-
-			return sceneDatas[index];
-		}
-		
-		public List<string> GetSceneNames()
-		{
-			return sceneNames;
+			return sceneDatas[CurrentSceneIndex];
 		}
 		
 		public List<SceneData> GetSceneDatas()
@@ -55,9 +63,23 @@ namespace Managers
 			return sceneDatas;
 		}
 		
-		public bool SceneExists(string scene)
+		public bool SceneExists(SceneData scene)
 		{
-			return sceneNames.Contains(scene);
+			return sceneDatas.Contains(scene);
+		}
+		
+		public bool IsInTitle()
+		{
+			return GetCurrentSceneData().Name == "SCENE_TITLE_NAME";
+		}
+		
+		public void QuitGame()
+		{
+#if UNITY_EDITOR
+			UnityEditor.EditorApplication.ExitPlaymode();
+#else
+			Application.Quit();
+#endif
 		}
 		
 		public void ReloadScene(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
@@ -67,15 +89,15 @@ namespace Managers
 		
 		public async UniTask ReloadSceneAsync(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
 		{
-			await ChangeSceneAsync(GetCurrentScene(), fadeIn, fadeOut, closeTitle, fadeDuration);
+			await ChangeSceneAsync(GetCurrentSceneData(), fadeIn, fadeOut, closeTitle, fadeDuration);
 		}
 		
-		public void ChangeScene(string scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
+		public void ChangeScene(SceneData scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
 		{
 			ChangeSceneAsync(scene, fadeIn, fadeOut, closeTitle, fadeDuration).Forget();
 		}
 		
-		public async UniTask ChangeSceneAsync(string scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
+		public async UniTask ChangeSceneAsync(SceneData scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
 		{
 			if (fadeIn)
 			{
@@ -83,30 +105,30 @@ namespace Managers
 				await fade(true, fadeDuration);
 			}
 
-			if (scene == "Exit")
-			{
-#if UNITY_EDITOR
-				UnityEditor.EditorApplication.ExitPlaymode();
-#else
-				Application.Quit();
-#endif
-				return;
-			}
-
 			var title = Title.Instance;
 			if (title != null)
 				title.CloseWindows();
 			
-			UnityEngine.Debug.Log($"[SceneManager] Changing scene from {GetCurrentScene()} to {scene}");
-			
+			Debug.Log($"[SceneManager] Changing scene from {GetCurrentSceneData().Name} to {scene.Name}");
 			PauseManager.Instance.Unpause();
+			
 			OnPreSceneLoadEvent?.Invoke(scene);
 
-			var handle = Addressables.LoadSceneAsync("Scenes/" + scene, LoadSceneMode.Single, false);
+			CurrentSceneIndex = sceneDatas.IndexOf(scene);
+			
+			var previousTransformFunction = Addressables.InternalIdTransformFunc;
+			setupTransformFunction(scene);
+			
+			var handle = Addressables.LoadSceneAsync(scene.Addressable.RuntimeKey, LoadSceneMode.Single, false);
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded);
+
+			Addressables.InternalIdTransformFunc = previousTransformFunction;
+			
 			await handle.Result.ActivateAsync();
 			await UniTask.WaitUntil(() => handle.IsDone);
 			await UniTask.WaitForSeconds(0.2f, true);
+
+			OnPostSceneLoadEvent?.Invoke(scene);
 
 			if (closeTitle && title != null)
 				title.Close();
@@ -153,19 +175,60 @@ namespace Managers
 
 			foreach (var sceneData in availableScenes)
 			{
-				var location = Addressables.LoadResourceLocationsAsync(sceneData.Addressable.RuntimeKey).WaitForCompletion()[0];
-				
-				var key = location.PrimaryKey;
-				if (!key.StartsWith("Scenes/"))
-					continue;
+				if (sceneData.Name != "SCENE_SPLASH_NAME")
+				{
+					var location = Addressables.LoadResourceLocationsAsync(sceneData.Addressable.RuntimeKey).WaitForCompletion()[0];
 
-				var trimmed = key.Replace("Scenes/", "");
-				if (trimmed == "")
-					continue;
-				
-				sceneNames.Add(trimmed);
+					var key = location.PrimaryKey;
+					if (!key.StartsWith("Scenes/"))
+						continue;
+				}
+
 				sceneDatas.Add(sceneData);
 			}
+		}
+
+		private ObjectManager.Mod getSceneMod(SceneData sceneData)
+		{
+			var mods = ObjectManager.Instance.Mods;
+			
+			for (var i = 0; i < mods.Count; i++)
+			{
+				var mod = mods[i];
+				
+				for (var k = 0; k < mod.Addresses.Count; k++)
+				{
+					var address = mod.Addresses[k];
+					
+					if (!address.StartsWith("Scenes/") || address[7..] != sceneData.Name)
+						continue;
+
+					return mod;
+				}
+			}
+
+			return null;
+		}
+
+		private void setupTransformFunction(SceneData sceneData)
+		{
+			var currentMod = getSceneMod(sceneData);
+			if (currentMod == null)
+				return;
+
+			var platform = "";
+
+			switch (Application.platform)
+			{
+				case RuntimePlatform.LinuxPlayer or RuntimePlatform.LinuxEditor:
+					platform = "StandaloneLinux64";
+					break;
+				case RuntimePlatform.WindowsPlayer or RuntimePlatform.WindowsEditor:
+					platform = "StandaloneWindows64";
+					break;
+			}
+
+			Addressables.InternalIdTransformFunc = location => !location.InternalId.StartsWith(platform) ? location.InternalId : $"{currentMod.Directory}/{location.InternalId}";
 		}
 	}
 }

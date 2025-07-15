@@ -151,16 +151,14 @@ namespace Managers
 			var sceneManager = SceneManager.Instance;
 			
 			var currentSceneData = sceneManager.GetCurrentSceneData();
-			var currentScene = sceneManager.GetCurrentScene();
-			
 			if (!currentSceneData.SupportsSaving)
 			{
-				Debug.LogError($"[StateManager] Not saving save data as the scene {currentScene} does not support saving");
+				Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.Name} does not support saving");
 				return;
 			}
 			
 			var data = new SaveData();
-			data.Scene = currentScene;
+			data.Scene = currentSceneData.Name;
 			data.SavedTime = DateTimeOffset.Now;
 			
 			data.DestroyedObjects = new List<string>();
@@ -404,7 +402,7 @@ namespace Managers
 				return;
 			}
 
-			File.WriteAllText(System.IO.Path.Combine(Path, $"{currentScene}_{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
+			File.WriteAllText(System.IO.Path.Combine(Path, $"{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			
 			initializeSaves();
 		}
@@ -482,7 +480,7 @@ namespace Managers
 			}
 		}
 
-		private void onPreSceneLoad(string scene)
+		private void onPreSceneLoad(SceneData scene)
 		{
 			destroyedObjects.Clear();
 			destroyedComponents.Clear();
@@ -510,7 +508,7 @@ namespace Managers
 		{
 			var sceneManager = SceneManager.Instance;
 
-			var sceneData = ObjectManager.Instance.GetScene($"SCENE_{data.Scene.ToUpper()}_NAME");
+			var sceneData = ObjectManager.Instance.GetScene(data.Scene);
 			if (!sceneData.SupportsSaving)
 			{
 				Debug.LogError($"[StateManager] Not loading save data as the scene {data.Scene} does not support saving");
@@ -519,10 +517,10 @@ namespace Managers
 
 			lastSaveData = data;
 			
-			if (data.Scene == sceneManager.GetCurrentScene())
+			if (sceneData == sceneManager.GetCurrentSceneData())
 				await sceneManager.ReloadSceneAsync(true, true, true);
 			else
-				await sceneManager.ChangeSceneAsync(data.Scene, true, true, true);
+				await sceneManager.ChangeSceneAsync(sceneData, true, true, true);
 			
 			var killAlives = new List<IAlive>();
 			

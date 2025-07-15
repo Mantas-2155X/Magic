@@ -11,6 +11,9 @@ namespace ScriptableObjects
 		public AssetReference Addressable;
 
 		[SerializeField]
+		public bool Internal;
+
+		[SerializeField]
 		public bool Hidden;
 
 		[SerializeField]

@@ -218,7 +218,7 @@ namespace Scenes
 				}
 			}
 
-			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
+			await SceneManager.Instance.ChangeSceneAsync(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
 		}
 		
 		[JsonObject]

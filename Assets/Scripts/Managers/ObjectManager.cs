@@ -65,7 +65,7 @@ namespace Managers
 			typeof(PathData), 
 			//typeof(PlayerData), 
 			typeof(ProjectileData), 
-			//typeof(SceneData), 
+			typeof(SceneData), 
 			typeof(SpellData), 
 			typeof(WearableData)
 		};

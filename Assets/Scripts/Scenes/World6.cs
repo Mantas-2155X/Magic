@@ -206,7 +206,7 @@ namespace Scenes
 		private async UniTaskVoid endWorld()
 		{
 			await UniTask.WaitForSeconds(5f);
-			await SceneManager.Instance.ChangeSceneAsync("Title", true, true, false);
+			await SceneManager.Instance.ChangeSceneAsync(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
 		}
 		
 		[Serializable]

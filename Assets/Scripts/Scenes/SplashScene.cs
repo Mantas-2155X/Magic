@@ -7,7 +7,7 @@ namespace Scenes
 	{
 		public void Awake()
 		{
-			SceneManager.Instance.ChangeScene("Title", true, true, false);
+			SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
 		}
 	}
 }

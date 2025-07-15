@@ -52,7 +52,7 @@ namespace Editor
 			typeof(PathData), 
 			//typeof(PlayerData), 
 			typeof(ProjectileData), 
-			//typeof(SceneData), 
+			typeof(SceneData), 
 			typeof(SpellData), 
 			typeof(WearableData)
 		};
@@ -181,6 +181,7 @@ namespace Editor
 				var group = settings.CreateGroup($"{Author}.{Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
 
 				var restoreAssets = new Dictionary<string, AddressableAssetGroup>();
+				var restoreScenes = new Dictionary<AddressableAssetEntry, string>();
 				
 				for (var i = 0; i < Objects.Count; i++)
 				{
@@ -188,6 +189,8 @@ namespace Editor
 					if (obj == null)
 						continue;
 
+					var sceneReferences = new List<string>();
+					
 					var references = new List<string>();
 					references.AddUnique(AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj)));
 					references.AddUnique(obj.PrefabReference.AssetGUID);
@@ -209,6 +212,11 @@ namespace Editor
 					{
 						references.AddUnique(objectData.BrokenPrefabReference.AssetGUID);
 					}
+					else if (obj is SceneData sceneData)
+					{
+						references.AddUnique(sceneData.Addressable.AssetGUID);
+						sceneReferences.AddUnique(sceneData.Addressable.AssetGUID);
+					}
 
 					for (var k = 0; k < references.Count; k++)
 					{
@@ -223,7 +231,15 @@ namespace Editor
 						else
 						{
 							parentGroup = null;
-							settings.CreateOrMoveEntry(references[k], group, false, false);
+							entry = settings.CreateOrMoveEntry(references[k], group, false, false);
+						}
+
+						if (sceneReferences.Contains(references[k]))
+						{
+							if (parentGroup != null)
+								restoreScenes[entry] = entry.address;
+							
+							entry.SetAddress($"Scenes/{Author}.{Name}.{obj.Name}");
 						}
 						
 						restoreAssets[references[k]] = parentGroup;
@@ -306,6 +322,9 @@ namespace Editor
 					else
 						settings.RemoveAssetEntry(pair.Key);
 				}
+
+				foreach (var pair in restoreScenes)
+					pair.Key.SetAddress(pair.Value);
 				
 				settings.RemoveGroup(group);
 				
