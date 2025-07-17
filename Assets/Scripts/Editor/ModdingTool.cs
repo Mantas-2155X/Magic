@@ -12,7 +12,9 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace Editor
 {
@@ -138,6 +140,9 @@ namespace Editor
 			
 			if (shouldBuild)
 			{
+				if (!validateOnBuild())
+					return;
+
 				if (!Directory.Exists(exportPath))
 					Directory.CreateDirectory(exportPath);
 
@@ -427,6 +432,68 @@ namespace Editor
 					GUILayout.Label("All objects must have a name and description");
 					return false;
 				}
+			}
+
+			return true;
+		}
+
+		private bool validateOnBuild()
+		{
+			for (var i = 0; i < Objects.Count; i++)
+			{
+				if (Objects[i] is not SceneData sceneData)
+					continue;
+
+				if (string.IsNullOrWhiteSpace(sceneData.Addressable.AssetGUID))
+				{
+					Debug.LogError("Scene addressable must be assigned");
+					return false;
+				}
+
+				World.World world = null;
+				
+				var scenePath = AssetDatabase.GUIDToAssetPath(sceneData.Addressable.AssetGUID);
+				var scene = SceneManager.GetSceneByPath(scenePath);
+				
+				var shouldClose = true;
+				
+				if (!scene.isLoaded)
+					scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
+				else
+					shouldClose = false;
+
+				var rootObjects = scene.GetRootGameObjects();
+				for (var k = 0; k < rootObjects.Length; k++)
+				{
+					var rootObject = rootObjects[k];
+					if (!rootObject.TryGetComponent(out world))
+						continue;
+
+					break;
+				}
+
+				if (world == null)
+				{
+					Debug.LogError("Scene must have a World component");
+					
+					if (shouldClose)
+						EditorSceneManager.CloseScene(scene, true);
+					
+					return false;
+				}
+				
+				if (world.SpawnPoints == null || world.Characters == null || world.Ragdolls == null || world.Attacks == null || world.Casts == null || world.Projectiles == null || world.Objects == null || world.Decals == null)
+				{
+					Debug.LogError("World component inside Scene must have all Transforms assigned");
+					
+					if (shouldClose)
+						EditorSceneManager.CloseScene(scene, true);
+					
+					return false;
+				}
+				
+				if (shouldClose)
+					EditorSceneManager.CloseScene(scene, true);
 			}
 
 			return true;
