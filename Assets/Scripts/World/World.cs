@@ -2,6 +2,7 @@ using Managers;
 using ScriptableObjects;
 using UI;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Random = UnityEngine.Random;
 
 namespace World
@@ -43,6 +44,15 @@ namespace World
 		public void Awake()
 		{
 			Instance = this;
+			
+			if (!GameObject.Find("EventSystem"))
+				Addressables.InstantiateAsync("Assets/Prefabs/Scene/EventSystem.prefab").WaitForCompletion();
+
+			if (!GameObject.Find("Main Camera"))
+				Addressables.InstantiateAsync("Assets/Prefabs/Scene/Main Camera.prefab").WaitForCompletion();
+			
+			if (!GameObject.Find("Managers"))
+				Addressables.InstantiateAsync("Assets/Prefabs/Scene/Managers.prefab").WaitForCompletion();
 		}
 
 		public void OnDestroy()
