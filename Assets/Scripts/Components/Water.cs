@@ -7,12 +7,11 @@ using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using State.Interfaces;
-using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace World
+namespace Components
 {
 	public class Water : MonoBehaviour, ISaveable
 	{

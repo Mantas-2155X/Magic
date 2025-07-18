@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
@@ -6,14 +5,13 @@ using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using State.Interfaces;
-using State.States;
 using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Scenes
+namespace World
 {
-	public class World7 : MonoBehaviour, ISaveable
+	public class World7 : World, ISaveable
 	{
 		[SerializeField]
 		public ParticleSystem Orb;
@@ -117,14 +115,18 @@ namespace Scenes
 			}
 		}
 
-		public void Awake()
+		public override void Awake()
 		{
+			base.Awake();
+			
 			StateManager.Instance.RegisterObject(this);
 			initializeObject();
 		}
 
-		public void OnDestroy()
+		public override void OnDestroy()
 		{
+			base.OnDestroy();
+			
 			StateManager.Instance.UnregisterObject(this);
 		}
 		

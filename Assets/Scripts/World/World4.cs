@@ -11,16 +11,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ScriptableObjects;
 using State.Interfaces;
-using State.States;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Player = AI.Player;
 using Random = UnityEngine.Random;
 
-namespace Scenes
+namespace World
 {
-	public class World4 : MonoBehaviour, ISaveable
+	public class World4 : World, ISaveable
 	{
 		[SerializeField]
 		public float AttackEvery = 1f;
@@ -118,16 +117,20 @@ namespace Scenes
 			updateTime();
 		}
 		
-		public void Awake()
+		public override void Awake()
 		{
+			base.Awake();
+			
 			StateManager.Instance.RegisterObject(this);
 			initializeObject();
 
 			BaseAlive.OnDeathEvent.AddListener(onDeath);
 		}
 
-		public void OnDestroy()
+		public override void OnDestroy()
 		{
+			base.OnDestroy();
+			
 			StateManager.Instance.UnregisterObject(this);
 
 			BaseAlive.OnDeathEvent.RemoveListener(onDeath);
@@ -135,11 +138,13 @@ namespace Scenes
 		
 		#endregion
 		
-		public void Start()
+		public override void Start()
 		{
+			base.Start();
+			
 			StartTime = Time.time;
 			
-			var world = World.World.Instance;
+			var world = global::World.World.Instance;
 			var spawnPoint = world.SpawnPoints.GetChild(Random.Range(0, world.SpawnPoints.childCount));
 			
 			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("AI_PLAYER_WORLD4_NAME"));

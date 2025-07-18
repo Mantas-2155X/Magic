@@ -9,14 +9,12 @@ using Newtonsoft.Json.Linq;
 using Objects;
 using Objects.Base;
 using State.Interfaces;
-using State.States;
-using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Scenes
+namespace World
 {
-	public class World6 : MonoBehaviour, ISaveable
+	public class World6 : World, ISaveable
 	{
 		[SerializeField]
 		public BaseLight[] Indicators1;
@@ -98,21 +96,27 @@ namespace Scenes
 				startWave(waveStartElapsed).Forget();
 		}
 		
-		public void Awake()
+		public override void Awake()
 		{
+			base.Awake();
+			
 			StateManager.Instance.RegisterObject(this);
 			initializeObject();
 		}
 
-		public void OnDestroy()
+		public override void OnDestroy()
 		{
+			base.OnDestroy();
+			
 			StateManager.Instance.UnregisterObject(this);
 		}
 		
 		#endregion
 
-		public void Start()
+		public override void Start()
 		{
+			base.Start();
+			
 			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE6_INFO"), 0f, 2f, 0.1f, 0.0025f);
 		}
 		

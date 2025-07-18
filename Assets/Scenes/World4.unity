@@ -845,7 +845,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 646561133}
-  - component: {fileID: 646561132}
   - component: {fileID: 646561136}
   - component: {fileID: 646561137}
   m_Layer: 0
@@ -855,28 +854,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &646561132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 646561131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cf51c4d48ea49259e6be9d746670336, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpawnPoints: {fileID: 1548703818}
-  Characters: {fileID: 544258523}
-  Ragdolls: {fileID: 1178675831}
-  Attacks: {fileID: 1393974972}
-  Casts: {fileID: 446806502}
-  Projectiles: {fileID: 13660899}
-  Objects: {fileID: 174416576}
-  Decals: {fileID: 507165553}
-  SpawnPlayer: 0
-  ReloadOnPlayerDeath: 0
 --- !u!4 &646561133
 Transform:
   m_ObjectHideFlags: 0
@@ -913,6 +890,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d181d118e3e4365a7038cd35aef5170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpawnPoints: {fileID: 1548703818}
+  Characters: {fileID: 544258523}
+  Ragdolls: {fileID: 1178675831}
+  Attacks: {fileID: 1393974972}
+  Casts: {fileID: 446806502}
+  Projectiles: {fileID: 13660899}
+  Objects: {fileID: 174416576}
+  Decals: {fileID: 507165553}
+  SpawnPlayer: 0
+  ReloadOnPlayerDeath: 0
   AttackEvery: 1
   AttackEveryCap: 0.15
   DamageEvery: 0.25

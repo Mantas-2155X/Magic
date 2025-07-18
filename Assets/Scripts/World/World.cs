@@ -41,7 +41,7 @@ namespace World
 		[SerializeField]
 		public bool ReloadOnPlayerDeath = true;
 		
-		public void Awake()
+		public virtual void Awake()
 		{
 			Instance = this;
 			
@@ -55,7 +55,7 @@ namespace World
 				Addressables.InstantiateAsync("Assets/Prefabs/Scene/Managers.prefab").WaitForCompletion();
 		}
 
-		public void OnDestroy()
+		public virtual void OnDestroy()
 		{
 			var player = Player.Instance;
 			if (player != null)
@@ -69,7 +69,7 @@ namespace World
 			renderManager.Desaturate(false);
 		}
 
-		public void Start()
+		public virtual void Start()
 		{
 			if (!SpawnPlayer)
 				return;
