@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Events;
 using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
@@ -34,6 +36,10 @@ namespace Components
 		
 		public virtual bool ShouldSave => true;
 		
+		public virtual ELoadType LoadType => ELoadType.Modify;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.Late;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -42,7 +48,12 @@ namespace Components
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 		
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(Trigger).ToString()] = JObject.FromObject(new TriggerState(this));
@@ -50,7 +61,7 @@ namespace Components
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(Trigger).ToString(), out var triggerState) && triggerState != null)
 				triggerState.ToObject<TriggerState>().Apply(this);

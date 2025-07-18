@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using AI;
 using AI.Interfaces;
 using AI.Navigation;
@@ -173,22 +174,9 @@ namespace Managers
 			for (var i = 0; i < killedAlives.Count; i++)
 				data.KilledAlives.Add(killedAlives[i]);
 			
-			data.Create = new Dictionary<string, JObject>();
-			data.DeferredCreate = new Dictionary<string, JObject>();
-			data.VeryDeferredCreate = new Dictionary<string, JObject>();
+			data.Items = new List<SaveData.SaveItem>();
 			
-			data.World = new Dictionary<string, Dictionary<string, JObject>>();
-			data.DeferredWorld = new Dictionary<string, Dictionary<string, JObject>>();
-			data.VeryDeferredWorld = new Dictionary<string, Dictionary<string, JObject>>();
-			
-			data.Objects = new Dictionary<string, Dictionary<string, JObject>>();
-			data.DeferredObjects = new Dictionary<string, Dictionary<string, JObject>>();
-			data.VeryDeferredObjects = new Dictionary<string, Dictionary<string, JObject>>();
-			
-			data.Alives = new Dictionary<string, Dictionary<string, JObject>>();
-			
-			var world = World.World.Instance;
-			var worldTr = world.transform;
+			var characters = World.World.Instance.Characters;
 
 			var components = Object.FindObjectsByType<Component>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 			for (var i = 0; i < components.Length; i++)
@@ -213,7 +201,7 @@ namespace Managers
 				}
 				
 				// Prevent saving stuff like gibs on characters
-				if (root == world.Characters && saveable is not IAlive and not IDecal)
+				if (root == characters && saveable is not IAlive and not IDecal)
 				{
 					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
 					continue;
@@ -226,173 +214,45 @@ namespace Managers
 					continue;
 				}
 
-				var saved = false;
+				// Don't save destroyed data
+				if (destroyedObjects.Contains(saveable.ObjectID))
+					continue;
+
+				// Don't save killed alives data
+				if (saveable is IAlive iAlive && (!iAlive.IsAlive || killedAlives.Contains(iAlive.ObjectID)))
+					continue;
+				
+				// Keep data of destroyed components as it might hold stuff outside of the component and be used
 				
 				try
 				{
-					if (root == worldTr)
+					var item = new SaveData.SaveItem
 					{
-						if (saveable is World7 or World6 or World4 or TextWalker)
-						{
-							data.World[saveable.ObjectID] = saveable.Save();
-							saved = true;
-						}
-						else if (saveable is Trigger or DelayedTrigger or Water)
-						{
-							data.DeferredWorld[saveable.ObjectID] = saveable.Save();
-							saved = true;
-						}
-					}
-					else
+						LoadType = saveable.LoadType,
+						LoadTiming = saveable.LoadTiming,
+						ObjectID = saveable.ObjectID
+					};
+
+					switch (saveable.LoadType)
 					{
-						// Don't save destroyed data
-						if (destroyedObjects.Contains(saveable.ObjectID))
-							continue;
-
-						// Keep data of destroyed components as it might hold stuff outside of the component and be used
-						
-						if (root == world.Ragdolls)
+						case ELoadType.Create:
 						{
-							if (saveable is BaseGib gib)
-							{
-								var createData = new CreateData
-								{
-									Type = ECreateType.Gib,
-									Name = gib.ObjectData.Name,
-									States = gib.Save()
-								};
-								
-								data.Create[gib.ObjectID] = JObject.FromObject(createData);
-								saved = true;
-							}
+							item.CreateData = new Tuple<string, JObject>(saveable.GetType().FullName, saveable.GetCreation());
+							break;
 						}
-						else if (root == world.Projectiles)
+						case ELoadType.Modify:
 						{
-							if (saveable is IProjectile projectile)
-							{
-								var projectileCreateData = new ProjectileCreateData
-								{
-									Type = ECreateType.Projectile,
-									Name = projectile.ProjectileData.Name,
-									Range = projectile.SpellRange,
-									Attack = projectile.AttackData != null ? projectile.AttackData.Name : null,
-									SourceObjectID = projectile.Source.NotNull() ? projectile.Source.ObjectID : null,
-									ElapsedTime = Time.time - projectile.CreatedTime,
-									States = projectile.Save()
-								};
-								
-								data.DeferredCreate[projectile.ObjectID] = JObject.FromObject(projectileCreateData);
-								saved = true;
-							}
-						}
-						else if (root == world.Attacks)
-						{
-							if (saveable is IAttack attack)
-							{
-								var attackCreateData = new AttackCreateData
-								{
-									Type = ECreateType.Attack,
-									Name = attack.AttackData.Name, 
-									SourceObjectID = attack.Source.NotNull() ? attack.Source.ObjectID : null,
-									TargetObjectID = attack.Target.NotNull() ? attack.Target.ObjectID : null,
-									ElapsedTime = Time.time - attack.CreatedTime,
-									States = attack.Save()
-								};
-								
-								data.VeryDeferredCreate[attack.ObjectID] = JObject.FromObject(attackCreateData);
-								saved = true;
-							}
-						}
-						else if (root == world.Objects)
-						{
-							if (saveable is IObject)
-							{
-								if (saveable is DroppedWearable droppedWearable)
-								{
-									var createData = new CreateData
-									{
-										Type = ECreateType.DroppedWearable,
-										Name = droppedWearable.Wearable.WearableData.Name, // Actual wearable name here instead of droppedwearable
-										States = droppedWearable.Save()
-									};
-									
-									data.Create[droppedWearable.ObjectID] = JObject.FromObject(createData);
-								}
-								else if (saveable is IDoor)
-								{
-									data.DeferredObjects[saveable.ObjectID] = saveable.Save();
-								}
-								else
-								{
-									data.Objects[saveable.ObjectID] = saveable.Save();
-								}
-								
-								saved = true;
-							}
-							else if (saveable is Trigger or DelayedTrigger)
-							{
-								data.DeferredObjects[saveable.ObjectID] = saveable.Save();
-								saved = true;
-							}
-							else if (saveable is NavMeshDoorLink)
-							{
-								data.VeryDeferredObjects[saveable.ObjectID] = saveable.Save();
-								saved = true;
-							}
-						}
-						else if (root == world.Characters)
-						{
-							if (saveable is IAlive iAlive)
-							{
-								// Don't save killed alives data
-								if (!iAlive.IsAlive || killedAlives.Contains(iAlive.ObjectID))
-									continue;
-
-								if (iAlive is NPC npc && npc.ExternallySpawned)
-								{
-									var createData = new CreateData
-									{
-										Type = ECreateType.NPC,
-										Name = npc.Data.Name,
-										States = npc.Save()
-									};
-									
-									data.Create[npc.ObjectID] = JObject.FromObject(createData);
-								}
-								else
-								{
-									data.Alives[iAlive.ObjectID] = iAlive.Save();
-								}
-								
-								saved = true;
-							}
+							item.ModifyData = saveable.GetModifications();
+							break;
 						}
 					}
 					
-					if (saveable is IDecal decal)
-					{
-						var decalCreateData = new DecalCreateData
-						{
-							Type = ECreateType.Decal,
-							Name = decal.DecalData.Name,
-							AttachObjectID = decal.Attach.NotNull() ? decal.Attach.ObjectID : null,
-							NormalizedTime = decal.NormalizedTime,
-							ElapsedTime = Time.time - decal.CreatedTime,
-							States = decal.Save()
-						};
-								
-						data.VeryDeferredCreate[decal.ObjectID] = JObject.FromObject(decalCreateData);
-						saved = true;
-					}
+					data.Items.Add(item);
 				}
 				catch (Exception e)
 				{
-					saved = false;
 					Debug.LogError($"[StateManager] Failed saving {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
 				}
-
-				if (!saved)
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not saved");
 			}
 
 			var saveData = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -524,409 +384,140 @@ namespace Managers
 			
 			var killAlives = new List<IAlive>();
 			
-			loadWorld(data, EDefer.Normal);
-			loadCreate(data, EDefer.Normal);
-			loadObjects(data, EDefer.Normal);
-
-			loadAlives(data, killAlives);
-				
-			loadWorld(data, EDefer.Deferred);
-			loadCreate(data, EDefer.Deferred);
-			loadObjects(data, EDefer.Deferred);
-
-			loadWorld(data, EDefer.VeryDeferred);
-			loadCreate(data, EDefer.VeryDeferred);
-			loadObjects(data, EDefer.VeryDeferred);
+			loadStage(data, ELoadTiming.Normal, killAlives);
+			loadStage(data, ELoadTiming.Alives, killAlives);
+			loadStage(data, ELoadTiming.Late, killAlives);
+			loadStage(data, ELoadTiming.VeryLate, killAlives);
 
 			for (var i = killAlives.Count - 1; i >= 0; i--)
 				killAlives[i].Kill(null, true);
 		}
 		
-		private void loadWorld(SaveData data, EDefer defer)
+		private void loadStage(SaveData data, ELoadTiming timing, List<IAlive> killAlives)
 		{
-			var world = World.World.Instance;
+			var saveables = new Dictionary<string, ISaveable>();
 
-			Dictionary<string, Dictionary<string, JObject>> dict;
-
-			switch (defer)
+			var components = Object.FindObjectsByType<Component>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+			for (var i = 0; i < components.Length; i++)
 			{
-				case EDefer.Normal:
-					dict = data.World;
-					break;
-				case EDefer.Deferred:
-					dict = data.DeferredWorld;
-					break;
-				case EDefer.VeryDeferred:
-					dict = data.VeryDeferredWorld;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(defer), defer, null);
-			}
-			
-			var worldComponents = world.GetComponentsInChildren<Component>(true);
-			for (var i = 0; i < worldComponents.Length; i++)
-			{
-				var component = worldComponents[i];
+				var component = components[i];
 				if (component is not ISaveable saveable)
 					continue;
 
 				// Leave saveables without ID as they are
 				if (string.IsNullOrEmpty(saveable.ObjectID))
 					continue;
-					
-				if (dict.TryGetValue(saveable.ObjectID, out var worldState))
-				{
-					bool loaded;
 
-					try
-					{
-						saveable.Load(worldState);
-						loaded = true;
-					}
-					catch (Exception e)
-					{
-						loaded = false;
-						Debug.LogError($"[StateManager] Failed loading {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
-					}
-					
-					if (!loaded)
-						Debug.LogWarning($"[StateManager] World Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not loaded");
-				}
+				saveables[saveable.ObjectID] = saveable;
 			}
-		}
-
-		private void loadCreate(SaveData data, EDefer defer)
-		{
-			var world = World.World.Instance;
-			var objectManager = ObjectManager.Instance;
-
-			Dictionary<string, JObject> dict;
-
-			switch (defer)
-			{
-				case EDefer.Normal:
-					dict = data.Create;
-					break;
-				case EDefer.Deferred:
-					dict = data.DeferredCreate;
-					break;
-				case EDefer.VeryDeferred:
-					dict = data.VeryDeferredCreate;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(defer), defer, null);
-			}
-
-			foreach (var pair in dict)
-			{
-				// Nothing to create if the name is empty
-				if (string.IsNullOrEmpty(pair.Key))
-					continue;
-
-				IObject iObject = null;
-				IAlive iAlive = null;
-				IProjectile iProjectile = null;
-				IDecal iDecal = null;
-				IAttack iAttack = null;
-
-				var loaded = false;
-
-				var createDataJObject = pair.Value;
-				var createData = createDataJObject.ToObject<CreateData>();
-				
-				switch (createData.Type)
-				{
-					case ECreateType.Gib:
-					{
-						// Don't create a gib if it's supposed to be destroyed already
-						if (data.DestroyedObjects.Contains(pair.Key))
-							continue;
-						
-						var gib = (BaseGib)objectManager.CreateObject(objectManager.GetObject(createData.Name), Vector3.zero, Vector3.zero);
-						gib.ObjectID = pair.Key;
-
-						var gibTr = gib.GetTransform();
-						gibTr.SetParent(world.Ragdolls);
-
-						try
-						{
-							gib.Load(createData.States);
-							loaded = true;
-						}
-						catch (Exception e)
-						{
-							loaded = false;
-							Debug.LogError($"[StateManager] Failed loading created gib state for {gib.name} ({gib.ObjectID}), {e}");
-						}
-
-						iObject = gib;
-						break;
-					}
-					case ECreateType.NPC:
-					{
-						// Don't create a npc if it's supposed to be killed already
-						if (data.KilledAlives.Contains(pair.Key))
-							continue;
-
-						var npc = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)objectManager.GetAlive(createData.Name));
-						npc.ObjectID = pair.Key;
-
-						try
-						{
-							npc.Load(createData.States);
-							loaded = true;
-						}
-						catch (Exception e)
-						{
-							loaded = false;
-							Debug.LogError($"[StateManager] Failed loading created npc state for {npc.name} ({npc.ObjectID}), {e}");
-						}
-
-						iAlive = npc;
-						break;
-					}
-					case ECreateType.DroppedWearable:
-					{
-						// Don't create a dropped wearable if it's supposed to be destroyed already
-						if (data.DestroyedObjects.Contains(pair.Key))
-							continue;
-						
-						var wearable = objectManager.CreateWearable(objectManager.GetWearable(createData.Name), Vector3.zero, Vector3.zero);
-						wearable.ObjectID = pair.Key;
-						wearable.Drop();
-
-						var droppedWearable = wearable.GetGameObject().GetComponent<DroppedWearable>();
-
-						try
-						{
-							droppedWearable.Load(createData.States);
-							loaded = true;
-						}
-						catch (Exception e)
-						{
-							loaded = false;
-							Debug.LogError($"[StateManager] Failed loading created dropped wearable state for {droppedWearable.name} ({droppedWearable.ObjectID}), {e}");
-						}
-
-						iObject = droppedWearable;
-						break;
-					}
-					case ECreateType.Projectile:
-					{
-						// Don't create a projectile if it's supposed to be destroyed already
-						if (data.DestroyedObjects.Contains(pair.Key))
-							continue;
-
-						var projectileCreateData = createDataJObject.ToObject<ProjectileCreateData>();
-						
-						var projectile = objectManager.CreateProjectile(objectManager.GetProjectile(projectileCreateData.Name), projectileCreateData.Range, objectManager.GetAttack(projectileCreateData.Attack), GetRegisteredObject(projectileCreateData.SourceObjectID), Vector3.zero, Vector3.zero, projectileCreateData.ElapsedTime);
-						projectile.ObjectID = pair.Key;
-
-						try
-						{
-							projectile.Load(projectileCreateData.States);
-							loaded = true;
-						}
-						catch (Exception e)
-						{
-							loaded = false;
-							Debug.LogError($"[StateManager] Failed loading created projectile state for {((Component)projectile).name} ({projectile.ObjectID}), {e}");
-						}
-
-						iProjectile = projectile;
-						break;
-					}
-					case ECreateType.Decal:
-					{
-						// Don't create a decal if it's supposed to be destroyed already
-						if (data.DestroyedObjects.Contains(pair.Key))
-							continue;
-
-						var decalCreateData = createDataJObject.ToObject<DecalCreateData>();
-						
-						var decal = objectManager.CreateDecal(objectManager.GetDecal(decalCreateData.Name), Vector3.zero, Quaternion.identity, GetRegisteredObject(decalCreateData.AttachObjectID), decalCreateData.ElapsedTime, decalCreateData.NormalizedTime);
-						decal.ObjectID = pair.Key;
-
-						try
-						{
-							decal.Load(decalCreateData.States);
-							loaded = true;
-						}
-						catch (Exception e)
-						{
-							loaded = false;
-							Debug.LogError($"[StateManager] Failed loading created decal state for {((Component)decal).name} ({decal.ObjectID}), {e}");
-						}
-
-						iDecal = decal;
-						break;
-					}
-					case ECreateType.Attack:
-					{
-						// Don't create an attack if it's supposed to be destroyed already
-						if (data.DestroyedObjects.Contains(pair.Key))
-							continue;
-
-						var attackCreateData = createDataJObject.ToObject<AttackCreateData>();
-						
-						var attack = objectManager.CreateAttack(objectManager.GetAttack(attackCreateData.Name), GetRegisteredObject(attackCreateData.SourceObjectID), Vector3.zero, Vector3.zero, GetRegisteredObject(attackCreateData.TargetObjectID), attackCreateData.ElapsedTime);
-						attack.ObjectID = pair.Key;
-
-						try
-						{
-							attack.Load(attackCreateData.States);
-							loaded = true;
-						}
-						catch (Exception e)
-						{
-							loaded = false;
-							Debug.LogError($"[StateManager] Failed loading created attack state for {((Component)attack).name} ({attack.ObjectID}), {e}");
-						}
-
-						iAttack = attack;
-						break;
-					}
-				}
-				
-				if (!loaded)
-					Debug.LogWarning($"[StateManager] Create Saveable {createData.Type} with ObjectID {pair.Key} was not loaded");
-
-				if (iObject.NotNull())
-				{
-					// Other potentially needed data is set so we can remove the component now
-					if (data.DestroyedComponents.Contains(iObject.ObjectID))
-					{
-						Object.Destroy((Component)iObject);
-						continue;
-					}
-				}
-
-				if (iAlive.NotNull())
-				{
-					// 
-				}
-				
-				if (iProjectile.NotNull())
-				{
-					// 
-				}
-				
-				if (iDecal.NotNull())
-				{
-					// 
-				}
-				
-				if (iAttack.NotNull())
-				{
-					// 
-				}
-			}
-		}
-
-		private void loadObjects(SaveData data, EDefer defer)
-		{
-			var world = World.World.Instance;
 			
-			Dictionary<string, Dictionary<string, JObject>> dict;
-
-			switch (defer)
+			for (var i = 0; i < data.Items.Count; i++)
 			{
-				case EDefer.Normal:
-					dict = data.Objects;
-					break;
-				case EDefer.Deferred:
-					dict = data.DeferredObjects;
-					break;
-				case EDefer.VeryDeferred:
-					dict = data.VeryDeferredObjects;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(defer), defer, null);
-			}
-
-			var objects = world.Objects.GetComponentsInChildren<Component>(true);
-			for (var i = 0; i < objects.Length; i++)
-			{
-				var component = objects[i];
-				if (component is not ISaveable saveable)
+				var item = data.Items[i];
+				if (item.LoadTiming != timing)
 					continue;
 				
-				// Leave objects without ID as they are
-				if (string.IsNullOrEmpty(saveable.ObjectID))
-					continue;
-
-				// No data for destroyed objects, just remove it
-				if (data.DestroyedObjects.Contains(saveable.ObjectID))
+				switch (item.LoadType)
 				{
-					Object.Destroy(saveable.GetGameObject());
-					continue;
-				}
-				
-				if (dict.TryGetValue(saveable.ObjectID, out var objectState))
-				{
-					bool loaded;
-
-					try
+					case ELoadType.Create:
 					{
-						saveable.Load(objectState);
-						loaded = true;
+						// Nothing to create if the object id is empty
+						if (string.IsNullOrEmpty(item.ObjectID))
+							continue;
+						
+						// Don't create if it's supposed to be destroyed already
+						if (data.DestroyedObjects.Contains(item.ObjectID) || data.KilledAlives.Contains(item.ObjectID))
+							continue;
+
+						var type = Type.GetType(item.CreateData.Item1);
+						if (type == null)
+						{
+							Debug.LogWarning($"[StateManager] Failed to get Create type {item.CreateData.Item1} for saveable with ID {item.ObjectID}");
+							continue;
+						}
+
+						var method = type.GetMethod("ApplyCreation", BindingFlags.Static | BindingFlags.Public);
+						if (method == null)
+						{
+							Debug.LogWarning($"[StateManager] Saveable with type {type} does not have ApplyCreation method");
+							continue;
+						}
+
+						ISaveable obj = null;
+						
+						try
+						{
+							obj = (ISaveable)method.Invoke(null, new object[] { item.CreateData });
+						}
+						catch (Exception e)
+						{
+							Debug.LogError($"[StateManager] Failed creating saveable with type {type} ({item.ObjectID}), {e}");
+						}
+						
+						if (obj.NotNull())
+						{
+							// Other potentially needed data is set so we can remove the component now
+							if (data.DestroyedComponents.Contains(obj.ObjectID))
+							{
+								Object.Destroy((Component)obj);
+								continue;
+							}
+						}
+						
+						break;
 					}
-					catch (Exception e)
+					case ELoadType.Modify:
 					{
-						loaded = false;
-						Debug.LogError($"[StateManager] Failed loading object state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
+						if (!saveables.TryGetValue(item.ObjectID, out var saveable))
+						{
+							Debug.LogWarning($"[StateManager] Modify saveable with ID {item.ObjectID} was not found");
+							continue;
+						}
+						
+						// No data for destroyed objects, just remove it
+						if (data.DestroyedObjects.Contains(saveable.ObjectID))
+						{
+							Object.Destroy(saveable.GetGameObject());
+							continue;
+						}
+
+						if (timing == ELoadTiming.Alives)
+						{
+							if (saveable is not IAlive alive)
+							{
+								Debug.LogWarning($"[StateManager] Saveable with ID {item.ObjectID} is not an IAlive");
+								continue;
+							}
+						
+							if (alive.IsNull() || !alive.IsAlive)
+								continue;
+							
+							// No data for killed alives, just remove it
+							if (data.KilledAlives.Contains(alive.ObjectID))
+							{
+								killAlives.Add(alive);
+								continue;
+							}
+						}
+						
+						try
+						{
+							saveable.ApplyModifications(item.ModifyData);
+						}
+						catch (Exception e)
+						{
+							Debug.LogError($"[StateManager] Failed loading {saveable.GetType().Name} state for {TransformTools.GetFullPath(saveable.GetTransform())} ({saveable.ObjectID}), {e}");
+						}
+						
+						// Other potentially needed data is set so we can remove the component now
+						if (data.DestroyedComponents.Contains(saveable.ObjectID))
+						{
+							Object.Destroy((Component)saveable);
+							continue;
+						}
+						
+						break;
 					}
-					
-					if (!loaded)
-						Debug.LogWarning($"[StateManager] Object Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} was not loaded");
-				}
-
-				// Other potentially needed data is set so we can remove the component now
-				if (data.DestroyedComponents.Contains(saveable.ObjectID))
-				{
-					Object.Destroy((Component)saveable);
-					continue;
-				}
-			}
-		}
-
-		private void loadAlives(SaveData data, List<IAlive> killAlives)
-		{
-			var currentAlives = AIManager.Instance.AlivesColliderMap.Values.ToList();
-			for (var i = currentAlives.Count - 1; i >= 0; i--)
-			{
-				var alive = currentAlives[i];
-				if (alive.IsNull() || !alive.IsAlive)
-					continue;
-
-				// Leave alives without ID as they are
-				if (string.IsNullOrEmpty(alive.ObjectID))
-					continue;
-
-				// No data for killed alives, just remove it
-				if (data.KilledAlives.Contains(alive.ObjectID))
-				{
-					killAlives.Add(alive);
-					continue;
-				}
-				
-				if (data.Alives.TryGetValue(alive.ObjectID, out var aliveState))
-				{
-					bool loaded;
-
-					try
-					{
-						alive.Load(aliveState);
-						loaded = true;
-					}
-					catch (Exception e)
-					{
-						loaded = false;
-						Debug.LogError($"[StateManager] Failed loading alive state for {TransformTools.GetFullPath(alive.GetTransform())} ({alive.ObjectID}), {e}");
-					}
-					
-					if (!loaded)
-						Debug.LogWarning($"[StateManager] Alive Saveable {alive.GetType().Name} on {TransformTools.GetFullPath(alive.GetTransform())} was not loaded");
 				}
 			}
 		}

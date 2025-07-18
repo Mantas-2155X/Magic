@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using State.Enums;
 using State.Interfaces;
 using UI;
 using UnityEngine;
@@ -52,6 +54,10 @@ namespace World
 		#region Identify / SaveLoad
 		
 		public virtual bool ShouldSave => true;
+
+		public virtual ELoadType LoadType => ELoadType.Modify;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.Normal;
 		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
@@ -61,7 +67,12 @@ namespace World
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 		
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(World7).ToString()] = JObject.FromObject(new World7State(this));
@@ -69,7 +80,7 @@ namespace World
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(World7).ToString(), out var world7State) && world7State != null)
 				world7State.ToObject<World7State>().Apply(this);

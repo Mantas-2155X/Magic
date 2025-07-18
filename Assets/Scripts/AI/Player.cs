@@ -89,17 +89,17 @@ namespace AI
 
 		#region Identify / SaveLoad
 		
-		public override Dictionary<string, JObject> Save()
+		public override Dictionary<string, JObject> GetModifications()
 		{
-			var dict = base.Save();
+			var dict = base.GetModifications();
 			dict[typeof(Player).ToString()] = JObject.FromObject(new PlayerState(this));
 			
 			return dict;
 		}
 
-		public override void Load(Dictionary<string, JObject> data)
+		public override void ApplyModifications(Dictionary<string, JObject> data)
 		{
-			base.Load(data);
+			base.ApplyModifications(data);
 			
 			if (data.TryGetValue(typeof(Player).ToString(), out var playerState) && playerState != null)
 				playerState.ToObject<PlayerState>().Apply(this);

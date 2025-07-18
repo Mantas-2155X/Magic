@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -7,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using TMPro;
@@ -56,6 +58,10 @@ namespace Components
 		
 		public virtual bool ShouldSave => true;
 		
+		public virtual ELoadType LoadType => ELoadType.Modify;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.Normal;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -64,7 +70,12 @@ namespace Components
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 		
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(TextWalker).ToString()] = JObject.FromObject(new TextWalkerState(this));
@@ -72,7 +83,7 @@ namespace Components
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(TextWalker).ToString(), out var textWalkerState) && textWalkerState != null)
 				textWalkerState.ToObject<TextWalkerState>().Apply(this);

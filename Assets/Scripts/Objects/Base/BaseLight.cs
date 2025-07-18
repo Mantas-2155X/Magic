@@ -47,17 +47,17 @@ namespace Objects.Base
 		
 		#region Identify / SaveLoad
 		
-		public override Dictionary<string, JObject> Save()
+		public override Dictionary<string, JObject> GetModifications()
 		{
-			var dict = base.Save();
+			var dict = base.GetModifications();
 			dict[typeof(BaseLight).ToString()] = JObject.FromObject(new BaseLightState(this));
 			
 			return dict;
 		}
 
-		public override void Load(Dictionary<string, JObject> data)
+		public override void ApplyModifications(Dictionary<string, JObject> data)
 		{
-			base.Load(data);
+			base.ApplyModifications(data);
 			
 			if (data.TryGetValue(typeof(BaseLight).ToString(), out var baseLightState) && baseLightState != null)
 				baseLightState.ToObject<BaseLightState>().Apply(this);

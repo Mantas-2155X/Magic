@@ -1,5 +1,6 @@
 //#define DEBUG_NPC
 
+using System;
 using System.Collections.Generic;
 using AI.ActionModes;
 using AI.ActionModes.Shared;
@@ -13,6 +14,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
 using ScriptableObjects;
+using State;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
@@ -524,17 +527,51 @@ namespace AI
 
 		#region Identify / SaveLoad
 		
-		public override Dictionary<string, JObject> Save()
+		public override ELoadType LoadType => ExternallySpawned ? ELoadType.Create : ELoadType.Modify;
+
+		public override ELoadTiming LoadTiming => ExternallySpawned ? ELoadTiming.Normal : ELoadTiming.Alives;
+		
+		public override JObject GetCreation()
 		{
-			var dict = base.Save();
+			var createData = new CreateData()
+			{
+				Name = Data.Name,
+				States = GetModifications()
+			};
+
+			return JObject.FromObject(createData);
+		}
+
+		public static ISaveable ApplyCreation(Tuple<string, JObject> data)
+		{
+			var createData = data.Item2.ToObject<CreateData>();
+			
+			var obj = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)ObjectManager.Instance.GetAlive(createData.Name));
+			obj.ObjectID = data.Item1;
+
+			try
+			{
+				obj.ApplyModifications(createData.States);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[NPC] Failed loading created object state for {obj.name} ({obj.ObjectID}), {e}");
+			}
+
+			return obj;
+		}
+		
+		public override Dictionary<string, JObject> GetModifications()
+		{
+			var dict = base.GetModifications();
 			dict[typeof(NPC).ToString()] = JObject.FromObject(new NPCState(this));
 			
 			return dict;
 		}
 
-		public override void Load(Dictionary<string, JObject> data)
+		public override void ApplyModifications(Dictionary<string, JObject> data)
 		{
-			base.Load(data);
+			base.ApplyModifications(data);
 			
 			if (data.TryGetValue(typeof(NPC).ToString(), out var npcState) && npcState != null)
 				npcState.ToObject<NPCState>().Apply(this);

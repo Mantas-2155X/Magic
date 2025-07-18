@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using State.Enums;
 
 namespace State.Interfaces
 {
@@ -7,8 +9,16 @@ namespace State.Interfaces
 	{
 		public bool ShouldSave { get; }
 		
-		public Dictionary<string, JObject> Save();
+		public ELoadType LoadType { get; }
+
+		public ELoadTiming LoadTiming { get; }
 		
-		public void Load(Dictionary<string, JObject> data);
+		public JObject GetCreation();
+
+		public static ISaveable ApplyCreation(Tuple<string, JObject> data) => throw new NotImplementedException();
+		
+		public Dictionary<string, JObject> GetModifications();
+		
+		public void ApplyModifications(Dictionary<string, JObject> data);
 	}
 }

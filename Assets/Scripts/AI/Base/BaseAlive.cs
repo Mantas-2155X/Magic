@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
@@ -56,6 +57,10 @@ namespace AI.Base
 		
 		public virtual bool ShouldSave => true;
 		
+		public virtual ELoadType LoadType => ELoadType.Modify;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.Alives;
+
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -64,7 +69,12 @@ namespace AI.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 		
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
@@ -74,7 +84,7 @@ namespace AI.Base
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
 				transformState.ToObject<TransformState>().Apply(thisTr);

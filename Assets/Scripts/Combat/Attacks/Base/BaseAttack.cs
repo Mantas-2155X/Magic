@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Interfaces;
@@ -10,6 +11,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
@@ -51,6 +54,10 @@ namespace Combat.Attacks.Base
 
 		public virtual bool ShouldSave => true;
 		
+		public virtual ELoadType LoadType => ELoadType.Create;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.VeryLate;
+
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -59,7 +66,40 @@ namespace Combat.Attacks.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 		
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			var createData = new AttackCreateData()
+			{
+				Name = AttackData.Name, 
+				SourceObjectID = Source.NotNull() ? Source.ObjectID : null,
+				TargetObjectID = Target.NotNull() ? Target.ObjectID : null,
+				ElapsedTime = Time.time - CreatedTime,
+				States = GetModifications()
+			};
+
+			return JObject.FromObject(createData);
+		}
+		
+		public static ISaveable ApplyCreation(Tuple<string, JObject> data)
+		{
+			var createData = data.Item2.ToObject<AttackCreateData>();
+			
+			var obj = (BaseAttack)ObjectManager.Instance.CreateAttack(ObjectManager.Instance.GetAttack(createData.Name), StateManager.Instance.GetRegisteredObject(createData.SourceObjectID), Vector3.zero, Vector3.zero, StateManager.Instance.GetRegisteredObject(createData.TargetObjectID), createData.ElapsedTime);
+			obj.ObjectID = data.Item1;
+			
+			try
+			{
+				obj.ApplyModifications(createData.States);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[BaseDecal] Failed loading created object state for {obj.name} ({obj.ObjectID}), {e}");
+			}
+
+			return obj;
+		}
+		
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
@@ -68,7 +108,7 @@ namespace Combat.Attacks.Base
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
 				transformState.ToObject<TransformState>().Apply(thisTr);
@@ -422,6 +462,18 @@ namespace Combat.Attacks.Base
 
 				baseAttack.SetState(TriggeredAlives, TriggeredObjects, CurrentAlives, CurrentObjects);
 			}
+		}
+		
+		public class AttackCreateData : CreateData
+		{
+			[JsonProperty]
+			public string SourceObjectID;
+		
+			[JsonProperty]
+			public string TargetObjectID;
+		
+			[JsonProperty]
+			public float ElapsedTime;
 		}
 	}
 }

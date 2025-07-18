@@ -1,16 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Combat.Decals.Interfaces;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ScriptableObjects;
+using State;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Combat.Decals.Base
 {
@@ -36,6 +41,10 @@ namespace Combat.Decals.Base
 		
 		public virtual bool ShouldSave => true;
 		
+		public virtual ELoadType LoadType => ELoadType.Create;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.VeryLate;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -44,7 +53,40 @@ namespace Combat.Decals.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 		
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			var createData = new DecalCreateData()
+			{
+				Name = DecalData.Name,
+				AttachObjectID = Attach.NotNull() ? Attach.ObjectID : null,
+				NormalizedTime = NormalizedTime,
+				ElapsedTime = Time.time - CreatedTime,
+				States = GetModifications()
+			};
+
+			return JObject.FromObject(createData);
+		}
+		
+		public static ISaveable ApplyCreation(Tuple<string, JObject> data)
+		{
+			var createData = data.Item2.ToObject<DecalCreateData>();
+			
+			var obj = (BaseDecal)ObjectManager.Instance.CreateDecal(ObjectManager.Instance.GetDecal(createData.Name), Vector3.zero, Quaternion.identity, StateManager.Instance.GetRegisteredObject(createData.AttachObjectID), createData.ElapsedTime, createData.NormalizedTime);
+			obj.ObjectID = data.Item1;
+			
+			try
+			{
+				obj.ApplyModifications(createData.States);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[BaseDecal] Failed loading created object state for {obj.name} ({obj.ObjectID}), {e}");
+			}
+
+			return obj;
+		}
+		
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
@@ -52,7 +94,7 @@ namespace Combat.Decals.Base
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
 				transformState.ToObject<TransformState>().Apply(thisTr);
@@ -131,5 +173,17 @@ namespace Combat.Decals.Base
 		public GameObject GetGameObject() => thisGo;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Transform GetTransform() => thisTr;
+		
+		public class DecalCreateData : CreateData
+		{
+			[JsonProperty]
+			public string AttachObjectID;
+		
+			[JsonProperty]
+			public float NormalizedTime;
+
+			[JsonProperty]
+			public float ElapsedTime;
+		}
 	}
 }

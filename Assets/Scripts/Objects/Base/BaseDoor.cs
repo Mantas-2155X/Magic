@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Objects.Enums;
 using Objects.Events;
 using Objects.Interfaces;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
@@ -66,17 +67,21 @@ namespace Objects.Base
 
 		#region Identify / SaveLoad
 		
-		public override Dictionary<string, JObject> Save()
+		public override ELoadType LoadType => ELoadType.Modify;
+		
+		public override ELoadTiming LoadTiming => ELoadTiming.Late;
+		
+		public override Dictionary<string, JObject> GetModifications()
 		{
-			var dict = base.Save();
+			var dict = base.GetModifications();
 			dict[typeof(BaseDoor).ToString()] = JObject.FromObject(new BaseDoorState(this));
 			
 			return dict;
 		}
 
-		public override void Load(Dictionary<string, JObject> data)
+		public override void ApplyModifications(Dictionary<string, JObject> data)
 		{
-			base.Load(data);
+			base.ApplyModifications(data);
 			
 			if (data.TryGetValue(typeof(BaseDoor).ToString(), out var baseDoorState) && baseDoorState != null)
 				baseDoorState.ToObject<BaseDoorState>().Apply(this);

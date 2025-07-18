@@ -1,6 +1,11 @@
 using System;
 using AI.Interfaces;
+using Managers;
+using Newtonsoft.Json.Linq;
 using Objects.Enums;
+using State;
+using State.Enums;
+using State.Interfaces;
 using UnityEngine;
 
 namespace Objects.Base
@@ -12,6 +17,36 @@ namespace Objects.Base
 		
 		[SerializeField]
 		public float Amount;
+		
+		#region Identify / SaveLoad
+
+		public override ELoadType LoadType => ELoadType.Create;
+		
+		public override ELoadTiming LoadTiming => ELoadTiming.Normal;
+
+		public static ISaveable ApplyCreation(Tuple<string, JObject> data)
+		{
+			var createData = data.Item2.ToObject<CreateData>();
+			
+			var obj = (BaseObject)ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject(createData.Name), Vector3.zero, Vector3.zero);
+			obj.ObjectID = data.Item1;
+
+			var tr = obj.GetTransform();
+			tr.SetParent(World.World.Instance.Ragdolls);
+
+			try
+			{
+				obj.ApplyModifications(createData.States);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[BaseGib] Failed loading created object state for {obj.name} ({obj.ObjectID}), {e}");
+			}
+
+			return obj;
+		}
+		
+		#endregion
 		
 		public override bool Use(IAlive user)
 		{

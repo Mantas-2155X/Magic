@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using State.Enums;
 
 namespace State
 {
@@ -24,33 +25,28 @@ namespace State
 		public List<string> KilledAlives;
 
 		[JsonProperty]
-		public Dictionary<string, Dictionary<string, JObject>> Alives;
+		public List<SaveItem> Items;
 
-		[JsonProperty]
-		public Dictionary<string, JObject> Create;
+		[JsonObject]
+		public class SaveItem
+		{
+			[JsonProperty]
+			public ELoadType LoadType;
+			
+			[JsonProperty]
+			public ELoadTiming LoadTiming;
 
-		[JsonProperty]
-		public Dictionary<string, JObject> DeferredCreate;
+			[JsonProperty]
+			public string ObjectID;
 
-		[JsonProperty]
-		public Dictionary<string, JObject> VeryDeferredCreate;
+			[JsonProperty]
+			public Tuple<string, JObject> CreateData;
 
-		[JsonProperty]
-		public Dictionary<string, Dictionary<string, JObject>> World;
-		
-		[JsonProperty]
-		public Dictionary<string, Dictionary<string, JObject>> DeferredWorld;
-		
-		[JsonProperty]
-		public Dictionary<string, Dictionary<string, JObject>> VeryDeferredWorld;
-
-		[JsonProperty]
-		public Dictionary<string, Dictionary<string, JObject>> Objects;
-		
-		[JsonProperty]
-		public Dictionary<string, Dictionary<string, JObject>> DeferredObjects;
-		
-		[JsonProperty]
-		public Dictionary<string, Dictionary<string, JObject>> VeryDeferredObjects;
+			[JsonProperty]
+			public Dictionary<string, JObject> ModifyData;
+			
+			[JsonProperty]
+			public Dictionary<string, JObject> AliveData;
+		}
 	}
 }

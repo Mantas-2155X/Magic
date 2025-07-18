@@ -68,17 +68,17 @@ namespace Objects
 		
 		#region Identify / SaveLoad
 		
-		public override Dictionary<string, JObject> Save()
+		public override Dictionary<string, JObject> GetModifications()
 		{
-			var dict = base.Save();
+			var dict = base.GetModifications();
 			dict[typeof(NPCSpawner).ToString()] = JObject.FromObject(new NPCSpawnerState(this));
 			
 			return dict;
 		}
 
-		public override void Load(Dictionary<string, JObject> data)
+		public override void ApplyModifications(Dictionary<string, JObject> data)
 		{
-			base.Load(data);
+			base.ApplyModifications(data);
 			
 			if (data.TryGetValue(typeof(NPCSpawner).ToString(), out var npcSpawnerState) && npcSpawnerState != null)
 				npcSpawnerState.ToObject<NPCSpawnerState>().Apply(this);

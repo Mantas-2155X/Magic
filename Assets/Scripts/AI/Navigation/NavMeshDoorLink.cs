@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AI.Enums;
@@ -5,6 +6,7 @@ using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
@@ -41,6 +43,10 @@ namespace AI.Navigation
 
 		public virtual bool ShouldSave => true;
 		
+		public virtual ELoadType LoadType => ELoadType.Modify;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.VeryLate;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -49,7 +55,12 @@ namespace AI.Navigation
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(NavMeshDoorLink).ToString()] = JObject.FromObject(new NavMeshDoorLinkState(this));
@@ -57,7 +68,7 @@ namespace AI.Navigation
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(NavMeshDoorLink).ToString(), out var navMeshDoorLinkState) && navMeshDoorLinkState != null)
 				navMeshDoorLinkState.ToObject<NavMeshDoorLinkState>().Apply(this);

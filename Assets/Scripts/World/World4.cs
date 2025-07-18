@@ -10,6 +10,7 @@ using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ScriptableObjects;
+using State.Enums;
 using State.Interfaces;
 using TMPro;
 using UnityEngine;
@@ -68,6 +69,10 @@ namespace World
 
 		public virtual bool ShouldSave => true;
 		
+		public virtual ELoadType LoadType => ELoadType.Modify;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.Normal;
+		
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -76,7 +81,12 @@ namespace World
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 		
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			throw new NotImplementedException();
+		}
+
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(World4).ToString()] = JObject.FromObject(new World4State(this));
@@ -84,7 +94,7 @@ namespace World
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(World4).ToString(), out var world4State) && world4State != null)
 				world4State.ToObject<World4State>().Apply(this);

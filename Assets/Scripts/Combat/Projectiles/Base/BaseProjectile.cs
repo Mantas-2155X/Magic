@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -11,6 +12,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
+using State;
+using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
@@ -53,6 +56,10 @@ namespace Combat.Projectiles.Base
 
 		public virtual bool ShouldSave => true;
 		
+		public virtual ELoadType LoadType => ELoadType.Create;
+		
+		public virtual ELoadTiming LoadTiming => ELoadTiming.Late;
+
 		[FormerlySerializedAs("<ObjectID>k__BackingField")][SerializeField]
 		private string objectID;
 		public string ObjectID
@@ -61,7 +68,41 @@ namespace Combat.Projectiles.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 		
-		public virtual Dictionary<string, JObject> Save()
+		public virtual JObject GetCreation()
+		{
+			var createData = new ProjectileCreateData()
+			{
+				Name = ProjectileData.Name,
+				Range = SpellRange,
+				Attack = AttackData != null ? AttackData.Name : null,
+				SourceObjectID = Source.NotNull() ? Source.ObjectID : null,
+				ElapsedTime = Time.time - CreatedTime,
+				States = GetModifications()
+			};
+
+			return JObject.FromObject(createData);
+		}
+		
+		public static ISaveable ApplyCreation(Tuple<string, JObject> data)
+		{
+			var createData = data.Item2.ToObject<ProjectileCreateData>();
+			
+			var obj = (BaseProjectile)ObjectManager.Instance.CreateProjectile(ObjectManager.Instance.GetProjectile(createData.Name), createData.Range, ObjectManager.Instance.GetAttack(createData.Attack), StateManager.Instance.GetRegisteredObject(createData.SourceObjectID), Vector3.zero, Vector3.zero, createData.ElapsedTime);
+			obj.ObjectID = data.Item1;
+			
+			try
+			{
+				obj.ApplyModifications(createData.States);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[BaseProjectile] Failed loading created object state for {obj.name} ({obj.ObjectID}), {e}");
+			}
+
+			return obj;
+		}
+		
+		public virtual Dictionary<string, JObject> GetModifications()
 		{
 			var dict = new Dictionary<string, JObject>();
 			dict[typeof(Transform).ToString()] = JObject.FromObject(new TransformState(thisTr));
@@ -71,7 +112,7 @@ namespace Combat.Projectiles.Base
 			return dict;
 		}
 
-		public virtual void Load(Dictionary<string, JObject> data)
+		public virtual void ApplyModifications(Dictionary<string, JObject> data)
 		{
 			if (data.TryGetValue(typeof(Transform).ToString(), out var transformState) && transformState != null)
 				transformState.ToObject<TransformState>().Apply(thisTr);
@@ -301,6 +342,21 @@ namespace Combat.Projectiles.Base
 
 				baseProjectile.SetState(StartingPosition);
 			}
+		}
+		
+		public class ProjectileCreateData : CreateData
+		{
+			[JsonProperty]
+			public float Range;
+
+			[JsonProperty]
+			public string Attack;
+
+			[JsonProperty]
+			public string SourceObjectID;
+		
+			[JsonProperty]
+			public float ElapsedTime;
 		}
 	}
 }
