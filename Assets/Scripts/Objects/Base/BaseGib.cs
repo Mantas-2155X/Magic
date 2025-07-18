@@ -20,11 +20,7 @@ namespace Objects.Base
 		
 		#region Identify / SaveLoad
 
-		public override ELoadType LoadType => ELoadType.Create;
-		
-		public override ELoadTiming LoadTiming => ELoadTiming.Normal;
-
-		public static ISaveable ApplyCreation(Tuple<string, JObject> data)
+		public new static ISaveable ApplyCreation(Tuple<string, JObject> data)
 		{
 			var createData = data.Item2.ToObject<CreateData>();
 			

@@ -381,6 +381,15 @@ namespace Managers
 				await sceneManager.ReloadSceneAsync(true, true, true);
 			else
 				await sceneManager.ChangeSceneAsync(sceneData, true, true, true);
+
+			for (var i = data.DestroyedObjects.Count - 1; i >= 0; i--)
+			{
+				var destroyedObject = GetRegisteredObject(data.DestroyedObjects[i]);
+				if (destroyedObject.IsNull())
+					continue;
+
+				Object.Destroy(destroyedObject.GetGameObject());
+			}
 			
 			var killAlives = new List<IAlive>();
 			
@@ -389,6 +398,15 @@ namespace Managers
 			loadStage(data, ELoadTiming.Late, killAlives);
 			loadStage(data, ELoadTiming.VeryLate, killAlives);
 
+			for (var i = data.DestroyedComponents.Count - 1; i >= 0; i--)
+			{
+				var destroyedComponent = GetRegisteredObject(data.DestroyedComponents[i]);
+				if (destroyedComponent.IsNull())
+					continue;
+
+				Object.Destroy((Component)destroyedComponent);
+			}
+			
 			for (var i = killAlives.Count - 1; i >= 0; i--)
 				killAlives[i].Kill(null, true);
 		}
@@ -442,26 +460,14 @@ namespace Managers
 							Debug.LogWarning($"[StateManager] Saveable with type {type} does not have ApplyCreation method");
 							continue;
 						}
-
-						ISaveable obj = null;
 						
 						try
 						{
-							obj = (ISaveable)method.Invoke(null, new object[] { item.CreateData });
+							method.Invoke(null, new object[] { item.CreateData });
 						}
 						catch (Exception e)
 						{
 							Debug.LogError($"[StateManager] Failed creating saveable with type {type} ({item.ObjectID}), {e}");
-						}
-						
-						if (obj.NotNull())
-						{
-							// Other potentially needed data is set so we can remove the component now
-							if (data.DestroyedComponents.Contains(obj.ObjectID))
-							{
-								Object.Destroy((Component)obj);
-								continue;
-							}
 						}
 						
 						break;
@@ -507,13 +513,6 @@ namespace Managers
 						catch (Exception e)
 						{
 							Debug.LogError($"[StateManager] Failed loading {saveable.GetType().Name} state for {TransformTools.GetFullPath(saveable.GetTransform())} ({saveable.ObjectID}), {e}");
-						}
-						
-						// Other potentially needed data is set so we can remove the component now
-						if (data.DestroyedComponents.Contains(saveable.ObjectID))
-						{
-							Object.Destroy((Component)saveable);
-							continue;
 						}
 						
 						break;

@@ -32,6 +32,8 @@ namespace Objects.Base
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; set; }
 
+		public bool ExternallySpawned { get; set; }
+
 		public Vector3? LastHitPoint { get; private set; }
 		
 		private GameObject thisGo;
@@ -43,7 +45,7 @@ namespace Objects.Base
 
 		public virtual bool ShouldSave => true;
 		
-		public virtual ELoadType LoadType => ELoadType.Modify;
+		public virtual ELoadType LoadType => ExternallySpawned ? ELoadType.Create : ELoadType.Modify;
 		
 		public virtual ELoadTiming LoadTiming => ELoadTiming.Normal;
 		
@@ -55,6 +57,25 @@ namespace Objects.Base
 			set => objectID = StateManager.Instance.ChangeObjectID(this, value);
 		}
 
+		public static ISaveable ApplyCreation(Tuple<string, JObject> data)
+		{
+			var createData = data.Item2.ToObject<CreateData>();
+			
+			var obj = (BaseObject)ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject(createData.Name), Vector3.zero, Vector3.zero);
+			obj.ObjectID = data.Item1;
+
+			try
+			{
+				obj.ApplyModifications(createData.States);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[BaseObject] Failed loading created object state for {obj.name} ({obj.ObjectID}), {e}");
+			}
+
+			return obj;
+		}
+		
 		public virtual JObject GetCreation()
 		{
 			var createData = new CreateData

@@ -413,7 +413,8 @@ namespace Managers
 				if (!Physics.Raycast(cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, float.MaxValue, ~LayerMaskTools.GetMaskWithAlives()))
 					return;
 				
-				ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject(objName), hit.point + Vector3.up, new Vector3(0, player.transform.eulerAngles.y, 0));
+				var obj = ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject(objName), hit.point + Vector3.up, new Vector3(0, player.transform.eulerAngles.y, 0));
+				obj.ExternallySpawned = true;
 			});
 			
 			AddCommand("timescale", "Sets the time scale", new [] {EConsoleCommandParameter.Float}, args =>

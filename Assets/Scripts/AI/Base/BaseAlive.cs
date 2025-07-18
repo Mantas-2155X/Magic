@@ -620,6 +620,7 @@ namespace AI.Base
 				var gib = Body.Gibs[i];
 				gib.enabled = true;
 				gib.ObjectID = Guid.NewGuid().ToString();
+				gib.ExternallySpawned = true;
 				
 				var go = gib.gameObject;
 				go.layer = objectLayer;

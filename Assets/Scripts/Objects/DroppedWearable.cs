@@ -37,7 +37,7 @@ namespace Objects
 			return JObject.FromObject(createData);
 		}
 		
-		public static ISaveable ApplyCreation(Tuple<string, JObject> data)
+		public new static ISaveable ApplyCreation(Tuple<string, JObject> data)
 		{
 			var createData = data.Item2.ToObject<CreateData>();
 			
