@@ -1,3 +1,4 @@
+using Managers;
 using ScriptableObjects.Enums;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -28,5 +29,8 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public string Assembly;
+
+		public string LocalizedName => LocalizationManager.Instance.GetLocalizedEntry(Name);
+		public string LocalizedDescription => LocalizationManager.Instance.GetLocalizedEntry(Description);
 	}
 }

@@ -26,7 +26,7 @@ namespace Editor
 			
 			foreach (var pair in pool.Pool)
 			{
-				EditorGUILayout.LabelField(pair.Key.Name, GUILayout.Width(150));
+				EditorGUILayout.LabelField(pair.Key.LocalizedName, GUILayout.Width(150));
 				
 				foreach (var go in pair.Value)
 					EditorGUILayout.ObjectField(go, typeof(GameObject), true);

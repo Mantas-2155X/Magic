@@ -109,7 +109,7 @@ namespace Managers
 			if (title != null)
 				title.CloseWindows();
 			
-			Debug.Log($"[SceneManager] Changing scene from {GetCurrentSceneData().Name} to {scene.Name}");
+			Debug.Log($"[SceneManager] Changing scene from {GetCurrentSceneData().LocalizedName} to {scene.LocalizedName}");
 			PauseManager.Instance.Unpause();
 			
 			OnPreSceneLoadEvent?.Invoke(scene);

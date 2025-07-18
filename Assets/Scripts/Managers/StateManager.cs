@@ -153,7 +153,7 @@ namespace Managers
 			var currentSceneData = sceneManager.GetCurrentSceneData();
 			if (!currentSceneData.SupportsSaving)
 			{
-				Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.Name} does not support saving");
+				Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
 				return;
 			}
 			
