@@ -80,6 +80,7 @@ namespace Managers
 			"Unity.InputSystem",
 			"UnityEngine.ParticleSystemModule",
 			"UniTask",
+			"Newtonsoft.Json"
 		};
 
 		private readonly List<string> blacklistedNamespaces = new ()

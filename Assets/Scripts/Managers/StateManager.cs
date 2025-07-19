@@ -177,6 +177,7 @@ namespace Managers
 			data.Items = new List<SaveData.SaveItem>();
 			
 			var characters = World.World.Instance.Characters;
+			var gameAssembly = typeof(StateManager).Assembly;
 
 			var components = Object.FindObjectsByType<Component>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 			for (var i = 0; i < components.Length; i++)
@@ -237,7 +238,8 @@ namespace Managers
 					{
 						case ELoadType.Create:
 						{
-							item.CreateData = new Tuple<string, JObject>(saveable.GetType().FullName, saveable.GetCreation());
+							var saveableType = saveable.GetType();
+							item.CreateData = new Tuple<string, JObject>(saveableType.Assembly == gameAssembly ? saveableType.FullName : saveableType.AssemblyQualifiedName, saveable.GetCreation());
 							break;
 						}
 						case ELoadType.Modify:
@@ -463,7 +465,7 @@ namespace Managers
 						
 						try
 						{
-							method.Invoke(null, new object[] { item.CreateData });
+							method.Invoke(null, new object[] { new Tuple<string, JObject>(item.ObjectID, item.CreateData.Item2) });
 						}
 						catch (Exception e)
 						{
