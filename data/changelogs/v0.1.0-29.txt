@@ -1,0 +1,37 @@
+[Gameplay]
+* Added saving and loading system with UI. Most current maps are supported
+* Added notice system to teach about various mechanics like flashlight, picking up objects, etc.
+* Added object impact damage to the player and NPCs
+
+[AI]
+* NPCs can now shoot breakable objects if they are in the way when aiming at a target
+* Adjusted navigation to reduce weird movement
+* Resolved case where NPC would try to take a resource that is unreachable
+
+[Spells]
+* Added physics manipulator spell to move objects
+
+[Graphics]
+* Added heat/pinch shader for some attacks
+
+[Movement]
+* Added proper stairs movement handling
+* Resolved case where the player slides on uneven surfaces when it should not
+* Adjusted movement to support standing on moving surfaces
+
+[Modding]
+* Added modding support for items and scenes
+
+[Console]
+* Added learn, give, create debug commands
+* Include failed commands in history as well
+
+[UI]
+* Added damage direction indicator
+* Added changelogs button to title menu
+* Adjusted Energy stat color
+* Title menu layout and panel improvements
+* Disabled FPS slider if VSync is enabled in settings
+
+[Other]
+* Most breakable objects now break at the collision point of the attack

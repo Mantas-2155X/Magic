@@ -47,7 +47,7 @@ namespace Editor
 				var attributes = File.GetAttributes(path);
 				if ((attributes & FileAttributes.Directory) == FileAttributes.Directory)
 				{
-					Directory.Delete(path);
+					Directory.Delete(path, true);
 				}
 				else
 				{

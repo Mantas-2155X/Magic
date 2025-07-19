@@ -45,14 +45,16 @@ namespace World
 		{
 			Instance = this;
 			
+			// this has to be resources because addressables deadlocks while loading an addressable scene
+			
 			if (!GameObject.Find("EventSystem"))
-				Addressables.InstantiateAsync("Assets/Prefabs/Scene/EventSystem.prefab").WaitForCompletion();
+				Instantiate(Resources.Load("Scene/EventSystem"));
 
 			if (!GameObject.Find("Main Camera"))
-				Addressables.InstantiateAsync("Assets/Prefabs/Scene/Main Camera.prefab").WaitForCompletion();
+				Instantiate(Resources.Load("Scene/Main Camera"));
 			
 			if (!GameObject.Find("Managers"))
-				Addressables.InstantiateAsync("Assets/Prefabs/Scene/Managers.prefab").WaitForCompletion();
+				Instantiate(Resources.Load("Scene/Managers"));
 		}
 
 		public virtual void OnDestroy()
