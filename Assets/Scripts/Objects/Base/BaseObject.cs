@@ -32,8 +32,6 @@ namespace Objects.Base
 		[field: SerializeField]
 		public Rigidbody Rigidbody { get; set; }
 
-		public bool ExternallySpawned { get; set; }
-
 		public Vector3? LastHitPoint { get; private set; }
 		
 		private GameObject thisGo;
@@ -45,6 +43,8 @@ namespace Objects.Base
 
 		public virtual bool ShouldSave => true;
 		
+		public virtual bool ExternallySpawned { get; set; }
+
 		public virtual ELoadType LoadType => ExternallySpawned ? ELoadType.Create : ELoadType.Modify;
 		
 		public virtual ELoadTiming LoadTiming => ELoadTiming.Normal;
