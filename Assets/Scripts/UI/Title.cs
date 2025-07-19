@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Managers;
 using TMPro;
 using UI.Settings.Pages;
@@ -33,6 +34,8 @@ namespace UI
 
 		public static Title WeakInstance;
 		
+		public static string ChangelogsPath => "data/changelogs";
+
 		[SerializeField]
 		public InputActionReference TitleAction;
 
@@ -68,6 +71,9 @@ namespace UI
 			UpdateCurrentScene();
 			UpdateButtons();
 
+			if (!Directory.Exists(ChangelogsPath))
+				Directory.CreateDirectory(ChangelogsPath);
+			
 			var titleAction = TitleAction.action;
 			titleAction.performed += onTitle;
 			titleAction.Enable();
@@ -210,6 +216,19 @@ namespace UI
 		{
 			SceneManager.Instance.QuitGame();
 		}
+
+		public void OnChangelogs()
+		{
+			var directoryInfo = new DirectoryInfo(ChangelogsPath);
+			if (!directoryInfo.Exists)
+			{
+				UnityEngine.Debug.LogWarning("[Title] Changelogs path not found");
+				return;
+			}
+			
+			UnityEngine.Debug.Log($"[Title] Opening path {directoryInfo.FullName}");
+			Application.OpenURL($"file:///{directoryInfo.FullName}");
+		}
 		
 		#endregion
 
@@ -255,6 +274,7 @@ namespace UI
 			ButtonObjects[5].SetActive(!inTitle);
 			ButtonObjects[6].SetActive(true);
 			ButtonObjects[7].SetActive(inTitle);
+			ButtonObjects[8].SetActive(true);
 			
 			// needs main story
 			Buttons[0].interactable = false;
