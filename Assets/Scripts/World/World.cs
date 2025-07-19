@@ -59,11 +59,11 @@ namespace World
 
 		public virtual void OnDestroy()
 		{
-			var player = Player.Instance;
+			var player = Player.WeakInstance;
 			if (player != null)
 				player.Notice.ClearMessage();
 
-			var renderManager = RenderManager.Instance;
+			var renderManager = RenderManager.WeakInstance;
 			if (renderManager == null)
 				return;
 			

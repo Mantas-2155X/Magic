@@ -23,6 +23,8 @@ namespace Managers
 			}
 		}
 
+		public static RenderManager WeakInstance => instance;
+
 		private List<string> resolutions;
 		public List<string> Resolutions
 		{

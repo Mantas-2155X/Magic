@@ -17,12 +17,11 @@ namespace UI
 				DontDestroyOnLoad(copy);
 
 				instance = copy.GetComponent<Player>();
-				WeakInstance = instance;
 				return instance;
 			}
 		}
 
-		public static Player WeakInstance;
+		public static Player WeakInstance => instance;
 		
 		[SerializeField]
 		public Stats Stats;
