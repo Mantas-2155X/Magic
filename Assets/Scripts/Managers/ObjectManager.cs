@@ -370,6 +370,7 @@ namespace Managers
 		{
 			var obj = PoolingManager.Instance.TakeOrCreate<IObject>(data, false);
 			obj.ObjectID = Guid.NewGuid().ToString();
+			obj.ExternallySpawned = true;
 			
 			obj.Spawn(position, angles);
 			
@@ -400,6 +401,7 @@ namespace Managers
 		{
 			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
 			projectile.ObjectID = Guid.NewGuid().ToString();
+			projectile.ExternallySpawned = true;
 			
 			projectile.Spawn(source, range, attack, origin, direction * data.Force, elapsedTime);
 			
@@ -425,6 +427,7 @@ namespace Managers
 		{
 			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
 			decal.ObjectID = Guid.NewGuid().ToString();
+			decal.ExternallySpawned = true;
 			
 			decal.Spawn(contact.point, Quaternion.LookRotation(-contact.normal), attach, elapsedTime, normalizedTime);
 			
@@ -445,6 +448,7 @@ namespace Managers
 		{
 			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
 			decal.ObjectID = Guid.NewGuid().ToString();
+			decal.ExternallySpawned = true;
 			
 			decal.Spawn(point, angles, attach, elapsedTime, normalizedTime);
 			
@@ -455,6 +459,7 @@ namespace Managers
 		{
 			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);
 			attack.ObjectID = Guid.NewGuid().ToString();
+			attack.ExternallySpawned = true;
 
 			Quaternion angles;
 

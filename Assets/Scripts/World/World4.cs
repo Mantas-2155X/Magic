@@ -68,6 +68,8 @@ namespace World
 		#region Identify / SaveLoad
 
 		public virtual bool ShouldSave => true;
+
+		public virtual bool ExternallySpawned { get; set; } = false;
 		
 		public virtual ELoadType LoadType => ELoadType.Modify;
 		

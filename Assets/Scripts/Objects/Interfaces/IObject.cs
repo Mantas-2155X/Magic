@@ -14,11 +14,6 @@ namespace Objects.Interfaces
 		public ObjectData ObjectData { get; set; }
 
 		public Rigidbody Rigidbody { get; set; }
-		
-		/// <summary>
-		/// Marks if this object was spawned outside of being included in a world and should be included in saves as a "create"
-		/// </summary>
-		public bool ExternallySpawned { get; set; }
 
 		#region Breakable
 

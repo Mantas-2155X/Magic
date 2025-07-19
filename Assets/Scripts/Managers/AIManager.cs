@@ -177,6 +177,7 @@ namespace Managers
 			go.SetActive(true);
 			
 			var player = go.GetComponent<Player>();
+			player.ExternallySpawned = false;
 
 			var camAngles = player.CameraTr.eulerAngles;
 			camAngles.y = angles.y;

@@ -32,11 +32,6 @@ namespace AI
 	{
 		[SerializeField]
 		public AgentCompat Agent;
-		
-		/// <summary>
-		/// Marks if this alive was spawned outside of a npc spawner and should be included in saves as a "create"
-		/// </summary>
-		public bool ExternallySpawned { get; set; }
 
 		public bool SelfDestructed { get; set; }
 		public float SelfDestructStart { get; set; }

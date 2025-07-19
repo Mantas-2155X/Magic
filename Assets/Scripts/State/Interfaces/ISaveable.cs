@@ -9,6 +9,8 @@ namespace State.Interfaces
 	{
 		public bool ShouldSave { get; }
 		
+		public bool ExternallySpawned { get; set; }
+
 		public ELoadType LoadType { get; }
 
 		public ELoadTiming LoadTiming { get; }

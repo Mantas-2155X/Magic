@@ -40,6 +40,8 @@ namespace Components
 		
 		public virtual bool ShouldSave => true;
 		
+		public virtual bool ExternallySpawned { get; set; } = false;
+
 		public virtual ELoadType LoadType => ELoadType.Modify;
 		
 		public virtual ELoadTiming LoadTiming => ELoadTiming.Late;

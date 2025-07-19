@@ -41,6 +41,8 @@ namespace Combat.Decals.Base
 		
 		public virtual bool ShouldSave => true;
 		
+		public virtual bool ExternallySpawned { get; set; }
+
 		public virtual ELoadType LoadType => ELoadType.Create;
 		
 		public virtual ELoadTiming LoadTiming => ELoadTiming.VeryLate;

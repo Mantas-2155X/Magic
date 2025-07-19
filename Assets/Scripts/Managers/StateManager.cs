@@ -72,7 +72,6 @@ namespace Managers
 			if (registeredObjects.TryGetValue(objectID, out var obj))
 				return obj;
 
-			Debug.LogWarning($"[StateManager] No registered object with ID {objectID} found");
 			return null;
 		}
 
@@ -264,6 +263,26 @@ namespace Managers
 				return;
 			}
 
+			var modifications = 0;
+			var creations = 0;
+
+			for (var i = 0; i < data.Items.Count; i++)
+			{
+				var dataItem = data.Items[i];
+
+				switch (dataItem.LoadType)
+				{
+					case ELoadType.Create:
+						creations++;
+						break;
+					case ELoadType.Modify:
+						modifications++;
+						break;
+				}
+			}
+
+			Debug.Log($"[StateManager] Save Statistics: Destroyed Components {data.DestroyedComponents.Count}, Destroyed Objects {data.DestroyedObjects.Count}, Items {data.Items.Count}, Creations {creations}, Modifications {modifications}, Killed Alives {data.KilledAlives.Count}");
+			
 			File.WriteAllText(System.IO.Path.Combine(Path, $"{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			
 			initializeSaves();
