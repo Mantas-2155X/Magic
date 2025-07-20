@@ -20,5 +20,10 @@ namespace UI.Settings
 			TabLocalizer.Text.fontStyle = state ? FontStyles.Italic : FontStyles.Normal;
 			gameObject.SetActive(state);
 		}
+
+		public virtual void ResetTab()
+		{
+			Select(true);
+		}
 	}
 }

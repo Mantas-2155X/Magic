@@ -99,6 +99,20 @@ namespace UI.Settings.Pages
 			MotionBlurToggle.SetIsOnWithoutNotify(Convert.ToBoolean(motionBlur.Value));
 		}
 
+		public override void ResetTab()
+		{
+			var settings = SettingsManager.Instance.GetSettings();
+			foreach (var pair in settings)
+			{
+				if (!pair.Key.StartsWith("graphics-"))
+					continue;
+				
+				SettingsManager.Instance.DefaultSetting(pair.Key);
+			}
+			
+			base.ResetTab();
+		}
+		
 		public void OnShadowQualityChanged(int value)
 		{
 			SettingsManager.Instance.SetSetting("graphics-shadowquality", value);

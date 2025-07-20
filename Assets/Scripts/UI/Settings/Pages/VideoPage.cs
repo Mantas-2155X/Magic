@@ -13,7 +13,7 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public Localizer ResolutionLocalizer;
 		[SerializeField]
-		public TMP_Dropdown ResolutionDropdown;
+		public DropdownLocalizer ResolutionDropdown;
 
 		[SerializeField]
 		public Localizer FullscreenLocalizer;
@@ -47,11 +47,12 @@ namespace UI.Settings.Pages
 			ResolutionLocalizer.Key = resolution.Name;
 			ResolutionLocalizer.Apply();
 			
-			var options = ResolutionDropdown.options;
 			ResolutionDropdown.ClearOptions();
-			ResolutionDropdown.AddOptions(resolutions);
+			ResolutionDropdown.SetOptions(resolutions);
 
 			var currentResolution = resolution.Value.ToString();
+			var options = ResolutionDropdown.Dropdown.options;
+
 			for (var i = 0; i < options.Count; i++)
 			{
 				var option = options[i];
@@ -89,6 +90,20 @@ namespace UI.Settings.Pages
 			updateFPSLimitSlider();
 		}
 
+		public override void ResetTab()
+		{
+			var settings = SettingsManager.Instance.GetSettings();
+			foreach (var pair in settings)
+			{
+				if (!pair.Key.StartsWith("video-"))
+					continue;
+				
+				SettingsManager.Instance.DefaultSetting(pair.Key);
+			}
+			
+			base.ResetTab();
+		}
+		
 		public void OnResolutionChanged(int value)
 		{
 			if (resolutions == null || value >= resolutions.Count)

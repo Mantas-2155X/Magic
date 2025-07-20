@@ -57,6 +57,20 @@ namespace UI.Settings.Pages
 
 			updateSizeDropdown();
 		}
+		
+		public override void ResetTab()
+		{
+			var settings = SettingsManager.Instance.GetSettings();
+			foreach (var pair in settings)
+			{
+				if (!pair.Key.StartsWith("other-"))
+					continue;
+				
+				SettingsManager.Instance.DefaultSetting(pair.Key);
+			}
+			
+			base.ResetTab();
+		}
 
 		public void OnCursorElementChanged(int value)
 		{

@@ -33,6 +33,20 @@ namespace UI.Settings.Pages
 			
 			setupItems();
 		}
+		
+		public override void ResetTab()
+		{
+			var settings = SettingsManager.Instance.GetSettings();
+			foreach (var pair in settings)
+			{
+				if (!pair.Key.StartsWith("keybinds-"))
+					continue;
+				
+				SettingsManager.Instance.DefaultSetting(pair.Key);
+			}
+			
+			base.ResetTab();
+		}
 
 		public void OnDisable()
 		{

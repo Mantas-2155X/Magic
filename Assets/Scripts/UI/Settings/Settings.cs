@@ -16,6 +16,12 @@ namespace UI.Settings
 		[SerializeField]
 		public Button CloseButton;
 
+		[SerializeField]
+		public Button ResetTabButton;
+
+		[SerializeField]
+		public Button ResetEverythingButton;
+
 		public SettingsPage CurrentPage { get; private set; }
 
 		public void Awake()
@@ -58,12 +64,18 @@ namespace UI.Settings
 				page.Tab.navigation = nav;
 			}
 
-			CloseButton.navigation = new Navigation
+			var buttons = new [] { CloseButton, ResetTabButton, ResetEverythingButton };
+			
+			for (var i = 0; i < buttons.Length; i++)
 			{
-				mode = Navigation.Mode.Explicit,
-				selectOnUp = Pages[0].Tab,
-				selectOnDown = Pages[^1].Tab
-			};
+				var button = buttons[i];
+				
+				var navigation = button.navigation;
+				navigation.selectOnUp = Pages[0].Tab;
+				navigation.selectOnDown = Pages[^1].Tab;
+
+				button.navigation = navigation;
+			}
 			
 			SelectPage(Pages[0]);
 		}
@@ -91,6 +103,28 @@ namespace UI.Settings
 			Display(false);
 		}
 
+		public void OnResetTabClicked()
+		{
+			if (CurrentPage == null)
+				return;
+			
+			UnityEngine.Debug.Log($"[Settings] Resetting {CurrentPage.TabLocalizer.Text.text} settings");
+			
+			CurrentPage.ResetTab();
+			CurrentPage.Select(true);
+		}
+		
+		public void OnResetEverythingClicked()
+		{
+			UnityEngine.Debug.Log("[Settings] Resetting all settings");
+			SettingsManager.Instance.ResetSettings();
+			
+			if (CurrentPage == null)
+				return;
+
+			CurrentPage.Select(true);
+		}
+		
 		public void Toggle()
 		{
 			Display(!isActiveAndEnabled);
