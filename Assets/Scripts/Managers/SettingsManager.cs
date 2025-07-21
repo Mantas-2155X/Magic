@@ -530,6 +530,16 @@ namespace Managers
 					Debug.LogWarning("[SettingsManager] Invalid shader quality mode provided, skipping");
 					return;
 				}
+
+				switch (setting)
+				{
+					case 0 or 1:
+						Shader.DisableKeyword("COMPLEXSHADERS_ON");
+						break;
+					case 2 or 3:
+						Shader.EnableKeyword("COMPLEXSHADERS_ON");
+						break;
+				}
 				
 				var renderAsset = RenderManager.Instance.RenderAsset;
 				if (renderAsset == null)

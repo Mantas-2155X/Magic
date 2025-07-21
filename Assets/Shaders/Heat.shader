@@ -25,6 +25,8 @@ Shader "Unlit/Heat"
             #pragma vertex vert
             #pragma fragment frag
 
+            #pragma multi_compile __ COMPLEXSHADERS_ON
+            
             #include "UnityCG.cginc"
 
             struct appdata
@@ -37,25 +39,32 @@ Shader "Unlit/Heat"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+#if COMPLEXSHADERS_ON
                 float4 screenPos : TEXCOORD1;
+#endif
             };
 
+#if COMPLEXSHADERS_ON
             float _Distortion;
             vector _Speed;
             sampler2D _Mask;
             
             sampler2D _GrabPassTransparent;
+#endif
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+#if COMPLEXSHADERS_ON
                 o.screenPos = ComputeScreenPos(o.vertex);
+#endif
                 o.uv = v.uv;
 
                 return o;
             }
             
+#if COMPLEXSHADERS_ON
             inline float unity_noise_randomValue (float2 uv)
             {
                 return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453);
@@ -106,17 +115,21 @@ Shader "Unlit/Heat"
 
                 return t;
             }
+#endif
             
             fixed4 frag (v2f i) : SV_Target
             { 
+#if COMPLEXSHADERS_ON
                 float2 movingUV = i.uv * float2(1, 1) + (_Speed * _Time.y);
                 float4 noisyTexture = Unity_SimpleNoise_float(movingUV, 50) * tex2D(_Mask, i.uv);
                 float4 screenPosition = float4(i.screenPos.xy / i.screenPos.w, 0, 0);
                 float4 screenNoisyTexture = noisyTexture + screenPosition;
                 float4 lerpedTexture = lerp(screenPosition, screenNoisyTexture, _Distortion);
                 float4 result = tex2D(_GrabPassTransparent, lerpedTexture.xy);
-                 
                 return result;
+#else
+                return float4(0, 0, 0, 0);
+#endif
             }
             
             ENDCG
