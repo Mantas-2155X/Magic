@@ -86,9 +86,7 @@ namespace UI.Settings.Pages
 
 		private void updateSizeDropdown()
 		{
-			// TODO: Windows build doesn't change size, why?
-			// Default cursor can't change size
-
+			// Windows build and default cursor can't change size
 			if (Application.platform == RuntimePlatform.WindowsPlayer || SettingsManager.Instance.GetInt("other-cursorelement") == 0)
 			{
 				CursorSizeDropdown.Dropdown.interactable = false;

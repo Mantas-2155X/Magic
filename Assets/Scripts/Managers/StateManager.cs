@@ -449,6 +449,18 @@ namespace Managers
 
 				saveables[saveable.ObjectID] = saveable;
 			}
+
+			var modNames = new List<string>();
+			
+			var mods = ObjectManager.Instance.Mods;
+			for (var i = 0; i < mods.Count; i++)
+			{
+				var mod = mods[i];
+				if (mod == null || mod.Info.Disabled)
+					continue;
+
+				modNames.AddUnique($"{mod.Info.Author}.{mod.Info.Name}");
+			}
 			
 			for (var i = 0; i < data.Items.Count; i++)
 			{
@@ -468,6 +480,17 @@ namespace Managers
 						if (data.DestroyedObjects.Contains(item.ObjectID) || data.KilledAlives.Contains(item.ObjectID))
 							continue;
 
+						// Make sure the create type assembly is for a mod that exists
+						var split = item.CreateData.Item1.Split(", ");
+						if (split.Length > 1)
+						{
+							if (!modNames.Contains(split[1]))
+							{
+								Debug.LogWarning($"[StateManager] Mod to Create type {item.CreateData.Item1} for saveable with ID {item.ObjectID} is missing");
+								continue;
+							}
+						}
+						
 						var type = Type.GetType(item.CreateData.Item1);
 						if (type == null)
 						{
