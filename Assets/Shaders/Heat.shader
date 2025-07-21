@@ -11,7 +11,7 @@ Shader "Unlit/Heat"
         Tags
         {
             "RenderType" = "Transparent"
-            "RenderPipeline" = "UniversalRenderPipeline"
+            "RenderPipeline" = "UniversalPipeline"
         }
         
         Cull Off

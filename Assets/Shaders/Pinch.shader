@@ -9,7 +9,7 @@ Shader "Unlit/Pinch"
         Tags
         {
             "RenderType" = "Transparent"
-            "RenderPipeline" = "UniversalRenderPipeline"
+            "RenderPipeline" = "UniversalPipeline"
         }
         
         Cull Off
