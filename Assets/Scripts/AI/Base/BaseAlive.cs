@@ -615,7 +615,7 @@ namespace AI.Base
 			var length = Body.Gibs.Length;
 
 			var objectLayer = LayerMask.NameToLayer("Object");
-			var force = -thisTr.forward * 0.25f;
+			var explodeList = new List<Rigidbody>();
 			
 			for (var i = 0; i < length; i++)
 			{
@@ -644,13 +644,18 @@ namespace AI.Base
 				rb.interpolation = RigidbodyInterpolation.Interpolate;
 				rb.excludeLayers = 0;
 				rb.mass = 5;
+				
+				explodeList.Add(rb);
 
 				gib.Rigidbody = rb;
 				
-				rb.AddForce(force, ForceMode.VelocityChange);
-					
 				go.transform.SetParent(ragdolls);
 			}
+
+			var bodyPos = thisTr.position;
+			
+			for (var i = 0; i < explodeList.Count; i++)
+				explodeList[i].AddExplosionForce(350f, bodyPos, 2f);
 			
 			if (!killSilently && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
 			{

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2520106227387048869}
   - component: {fileID: 8231638090954666341}
   - component: {fileID: 1448056120677301711}
-  - component: {fileID: 8978112957005800782}
+  - component: {fileID: 754471607140640281}
   m_Layer: 10
   m_Name: Health Canister
   m_TagString: Untagged
@@ -158,8 +158,8 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &8978112957005800782
-CapsuleCollider:
+--- !u!64 &754471607140640281
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -176,8 +176,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.105
-  m_Height: 0.6
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5685363115531012651, guid: e4fc2408bc990db8e907ebdd93fc7209, type: 3}
