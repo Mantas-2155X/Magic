@@ -35,6 +35,14 @@ namespace Editor
 		[SerializeField]
 		public List<Data> Objects = new ();
 		
+		[SerializeField]
+		public List<LocalizationData> Localizations = new ();
+
+		[SerializeField]
+		public int CurrentTab;
+
+		private int selectedLanguage;
+		private string addLanguage;
 		private Vector2 scrollPosition;
 		
 		private readonly Regex fileFilter = new (@"\W|_");
@@ -65,11 +73,29 @@ namespace Editor
 		public static void ShowWindow()
 		{
 			var window = GetWindow<ModdingTool>(true);
-			window.minSize = new Vector2(300, 300);
+			window.minSize = new Vector2(350, 300);
 			window.Show();
 		}
 
 		public void OnGUI()
+		{
+			CurrentTab = GUILayout.Toolbar(CurrentTab, new [] { "Setup & Build", "Localization" });
+			
+			Objects ??= new List<Data>();
+			Localizations ??= new List<LocalizationData>();
+			
+			switch (CurrentTab)
+			{
+				case 0:
+					setupAndBuild();
+					break;
+				case 1:
+					localization();
+					break;
+			}
+		}
+		
+		private void setupAndBuild()
 		{
 			Author = EditorGUILayout.TextField("Author", fileFilter.Replace(Author, ""));
 			Name = EditorGUILayout.TextField("Name", fileFilter.Replace(Name, ""));
@@ -84,8 +110,6 @@ namespace Editor
 			GUILayout.EndHorizontal();
 
 			GUILayout.Space(5);
-			
-			Objects ??= new List<Data>();
 			
 			GUILayout.BeginHorizontal();
 			
@@ -163,6 +187,7 @@ namespace Editor
 				modInfo.Disabled = false;
 				modInfo.UseCustomAssembly = !string.IsNullOrWhiteSpace(CustomAssembly);
 				modInfo.Objects = new List<ObjectManager.ModInfo.ObjectInfo>();
+				modInfo.Localizations = new List<ObjectManager.ModInfo.LocalizationInfo>();
 
 				for (var i = 0; i < Objects.Count; i++)
 				{
@@ -173,6 +198,29 @@ namespace Editor
 					objectInfo.Name = obj.Name;
 					
 					modInfo.Objects.Add(objectInfo);
+				}
+
+				for (var i = 0; i < Localizations.Count; i++)
+				{
+					var localization = Localizations[i];
+					
+					var localizationInfo = new ObjectManager.ModInfo.LocalizationInfo();
+					localizationInfo.Language = localization.Language;
+					localizationInfo.Entries = new Dictionary<string, string>();
+
+					for (var k = 0; k < localization.Entries.Count; k++)
+					{
+						if (k >= Objects.Count)
+							continue;
+						
+						var entry = localization.Entries[k];
+						var obj = Objects[k];
+
+						localizationInfo.Entries[obj.Name] = entry.Name;
+						localizationInfo.Entries[obj.Description] = entry.Description;
+					}
+					
+					modInfo.Localizations.Add(localizationInfo);
 				}
 				
 				if (!string.IsNullOrWhiteSpace(CustomAssembly))
@@ -339,6 +387,88 @@ namespace Editor
 			}
 		}
 
+		private void localization()
+		{
+			GUILayout.BeginHorizontal();
+
+			EditorGUILayout.LabelField($"Languages ({Localizations.Count})", GUILayout.Width(125));
+			
+			var selectLanguages = new string[Localizations.Count];
+			
+			for (var i = 0; i < selectLanguages.Length; i++)
+				selectLanguages[i] = Localizations[i].Language;
+			
+			selectedLanguage = EditorGUILayout.Popup(selectedLanguage, selectLanguages);
+			
+			GUI.enabled = selectLanguages.Length > 0;
+			var shouldRemove = GUILayout.Button("Remove", GUILayout.Width(85));
+			GUI.enabled = true;
+			
+			if (shouldRemove)
+			{
+				Localizations.RemoveAt(selectedLanguage);
+				selectedLanguage = 0;
+				return;
+			}
+			
+			if (GUILayout.Button("Clear", GUILayout.Width(45)))
+			{
+				Localizations.Clear();
+				return;
+			}
+			
+			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+			
+			addLanguage = GUILayout.TextField(addLanguage);
+			
+			GUI.enabled = !string.IsNullOrWhiteSpace(addLanguage) && Array.IndexOf(selectLanguages, addLanguage) == -1 && Regex.IsMatch(addLanguage, "^[a-z]+$");
+			var shouldAdd = GUILayout.Button("Add", GUILayout.Width(45));
+			GUI.enabled = true;
+			
+			if (shouldAdd)
+			{
+				Localizations.Add(new LocalizationData
+				{
+					Language = addLanguage,
+					Entries = new List<LocalizationDataEntry>()
+				});
+				
+				addLanguage = "";
+				selectedLanguage = Localizations.Count - 1;
+			}
+			
+			GUILayout.EndHorizontal();
+			
+			if (Localizations.Count == 0)
+				return;
+
+			GUILayout.Space(5);
+
+			var list = Localizations[selectedLanguage].Entries;
+			
+			for (var i = 0; i < Objects.Count; i++)
+			{
+				if (i > list.Count - 1)
+					list.Add(new LocalizationDataEntry());
+				
+				var obj = Objects[i];
+				if (obj == null)
+					continue;
+
+				EditorGUIUtility.labelWidth = position.width / 2f - 10;
+				
+				var localizationEntry = list[i];
+				localizationEntry.Name = EditorGUILayout.TextField(obj.Name, localizationEntry.Name);
+				localizationEntry.Description = EditorGUILayout.TextField(obj.Description, localizationEntry.Description);
+				
+				EditorGUIUtility.labelWidth = 0;
+
+				GUILayout.Space(5);
+			}
+		}
+		
 		private (List<AddressableAssetGroup>, string) removeGroups(AddressableAssetGroup ignoreGroup)
 		{
 			var list = new List<AddressableAssetGroup>();
@@ -497,6 +627,26 @@ namespace Editor
 			}
 
 			return true;
+		}
+
+		[Serializable]
+		public class LocalizationData
+		{
+			[SerializeField]
+			public string Language;
+			
+			[SerializeField]
+			public List<LocalizationDataEntry> Entries;
+		}
+
+		[Serializable]
+		public class LocalizationDataEntry
+		{
+			[SerializeField]
+			public string Name;
+			
+			[SerializeField]
+			public string Description;
 		}
 	}
 }

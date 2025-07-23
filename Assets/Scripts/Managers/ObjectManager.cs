@@ -536,6 +536,9 @@ namespace Managers
 			[JsonProperty]
 			public List<ObjectInfo> Objects;
 			
+			[JsonProperty]
+			public List<LocalizationInfo> Localizations;
+			
 			public EModInfoValidity Validate()
 			{
 				if (string.IsNullOrWhiteSpace(Author))
@@ -575,6 +578,16 @@ namespace Managers
 				
 				[JsonProperty]
 				public string Name;
+			}
+
+			[JsonObject]
+			public class LocalizationInfo
+			{
+				[JsonProperty]
+				public string Language;
+
+				[JsonProperty]
+				public Dictionary<string, string> Entries;
 			}
 		}
 		
@@ -824,6 +837,28 @@ namespace Managers
 					}
 				}
 
+				for (var i = 0; i < Info.Localizations.Count; i++)
+				{
+					var localization = Info.Localizations[i];
+
+					try
+					{
+						foreach (var pair in localization.Entries)
+						{
+							var key = $"{prefix}{pair.Key}";
+
+							if (LocalizationManager.Instance.AddLocalizedEntry($"{prefix}{pair.Key}", pair.Value, localization.Language))
+								continue;
+
+							Debug.LogWarning($"[ObjectManager] Failed to add localization entry for language {localization.Language} with key {key} and value {pair.Value} for mod at {Directory}");
+						}
+					}
+					catch (Exception e)
+					{
+						Debug.LogWarning($"[ObjectManager] Failed to add {localization.Language} localization entries for mod at at {Directory}, {e}");
+					}
+				}
+				
 				if (Addresses.Count == 0)
 				{
 					Debug.LogWarning($"[ObjectManager] Mod info at {Directory} does not contain any objects, no content added");

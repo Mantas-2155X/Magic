@@ -40,6 +40,37 @@ namespace Managers
 			return entry.Value;
 		}
 
+		public bool AddLocalizedEntry(string key, string value, string language)
+		{
+			if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+				return false;
+			
+			if (!languages.TryGetValue(language, out var entries))
+				return false;
+
+			for (var i = 0; i < entries.Count; i++)
+			{
+				var entry = entries[i];
+				if (entry.Key != key)
+					continue;
+
+				return false;
+			}
+
+			var newEntry = new SLanguageEntry
+			{
+				Key = key,
+				Value = value,
+			};
+			
+			entries.Add(newEntry);
+			
+			if (CurrentLanguage == language)
+				currentEntries[key] = newEntry;
+			
+			return true;
+		}
+		
 		public void SetLanguage(string language)
 		{
 			if (!languages.TryGetValue(language, out var entries))
