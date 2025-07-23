@@ -847,7 +847,7 @@ namespace Managers
 						{
 							var key = $"{prefix}{pair.Key}";
 
-							if (LocalizationManager.Instance.AddLocalizedEntry($"{prefix}{pair.Key}", pair.Value, localization.Language))
+							if (LocalizationManager.Instance.AddLocalizedEntry(key, pair.Value, localization.Language))
 								continue;
 
 							Debug.LogWarning($"[ObjectManager] Failed to add localization entry for language {localization.Language} with key {key} and value {pair.Value} for mod at {Directory}");
