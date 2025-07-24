@@ -10,7 +10,6 @@ using Combat.Projectiles.Interfaces;
 using Combat.Spells.Interfaces;
 using ScriptableObjects;
 using Tools;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -125,8 +124,14 @@ namespace Managers
 		{
 			updateTargets = true;
 
-			if (alive is Player && World.World.Instance.ReloadOnPlayerDeath)
-				SceneManager.Instance.ReloadScene(true, true, true, 1f);
+			if (alive is not AI.Player)
+				return;
+			
+			var sceneData = SceneManager.Instance.GetCurrentSceneData();
+			if (sceneData == null || !sceneData.ReloadOnPlayerDeath)
+				return;
+			
+			SceneManager.Instance.ReloadScene(true, true, true, 1f);
 		}
 
 		private void onRelationshipGroupChanged(IAlive alive, int previousRelationshipGroup, int newRelationshipGroup)

@@ -2,7 +2,6 @@ using Managers;
 using ScriptableObjects;
 using UI;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using Random = UnityEngine.Random;
 
 namespace World
@@ -34,12 +33,6 @@ namespace World
 
 		[SerializeField]
 		public Transform Decals;
-
-		[SerializeField]
-		public bool SpawnPlayer = true;
-
-		[SerializeField]
-		public bool ReloadOnPlayerDeath = true;
 		
 		public virtual void Awake()
 		{
@@ -73,7 +66,11 @@ namespace World
 
 		public virtual void Start()
 		{
-			if (!SpawnPlayer)
+			var sceneData = SceneManager.Instance.GetCurrentSceneData();
+			if (sceneData == null)
+			    return;
+			
+			if (!sceneData.SpawnPlayer)
 				return;
 			
 			var spawnPoint = SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount));

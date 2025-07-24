@@ -1,3 +1,4 @@
+using System.Reflection;
 using Managers;
 using UnityEditor;
 using UnityEngine;
@@ -49,6 +50,28 @@ namespace Editor
 					EditorGUILayout.TextField(pair.Key, GUILayout.Width(175));
 					EditorGUILayout.ObjectField((Object)pair.Value, typeof(Object), true);
 					GUILayout.EndHorizontal();
+				}
+			}
+			
+			GUILayout.Space(5);
+
+			if (GUILayout.Button("Setup Transforms"))
+			{
+				var world = (World.World)target;
+
+				var fields = typeof(World.World).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+				for (var i = 0; i < fields.Length; i++)
+				{
+					var field = fields[i];
+					if (field.FieldType != typeof(Transform))
+						continue;
+
+					var gameObject = GameObject.Find(field.Name);
+					
+					if (gameObject == null)
+						gameObject = new GameObject(field.Name);
+
+					field.SetValue(world, gameObject.transform);
 				}
 			}
 			

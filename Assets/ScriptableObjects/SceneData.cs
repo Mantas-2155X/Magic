@@ -30,5 +30,11 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public bool FlashlightInitially;
+		
+		[SerializeField]
+		public bool SpawnPlayer;
+
+		[SerializeField]
+		public bool ReloadOnPlayerDeath;
 	}
 }
