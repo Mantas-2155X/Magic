@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Combat.Spells.Interfaces;
 using Managers;
+using TMPro;
 using Tools;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +29,15 @@ namespace UI.Spellbook
 		[SerializeField]
 		public Localizer InfoDescription;
 		
+		[SerializeField]
+		public TMP_Text InfoMana;
+		
+		[SerializeField]
+		public TMP_Text InfoCharge;
+		
+		[SerializeField]
+		public TMP_Text InfoCooldown;
+
 		[NonSerialized]
 		public readonly List<SpellContainer> Containers = new ();
 

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using Combat.Spells.Interfaces;
 using Managers;
@@ -5,6 +6,7 @@ using TMPro;
 using Tools;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UI.Spellbook
@@ -105,7 +107,8 @@ namespace UI.Spellbook
 			
 			Hover.SetActive(true);
 			
-			SetInfo();
+			if (!Mouse.current.leftButton.isPressed)
+				SetInfo();
 		}
 
 		public void OnPointerExit(PointerEventData eventData)
@@ -146,6 +149,10 @@ namespace UI.Spellbook
 			
 			spellbook.InfoDescription.Key = Spell.SpellData.Description;
 			spellbook.InfoDescription.Apply();
+
+			spellbook.InfoMana.text = Spell.SpellData.CastingCost.ToString(CultureInfo.CurrentCulture);
+			spellbook.InfoCharge.text = Spell.SpellData.CastingTime.ToString(CultureInfo.CurrentCulture);
+			spellbook.InfoCooldown.text = Spell.SpellData.Cooldown.ToString(CultureInfo.CurrentCulture);
 		}
 	}
 }
