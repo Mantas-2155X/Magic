@@ -32,7 +32,11 @@ MonoBehaviour:
   RegenerateEnergy: 5
   Speed: 10
   DamageStats:
-    _serializedList: []
+    _serializedList:
+    - Key: 6
+      Value:
+        Constant: 0
+        Percentage: -20
   ProtectionStats:
     _serializedList: []
   Spells:
