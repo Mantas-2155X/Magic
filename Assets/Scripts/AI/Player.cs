@@ -698,7 +698,14 @@ namespace AI
 		private void onHotbar6(InputAction.CallbackContext ctx) => SelectSpell(5);
 		private void onHotbar7(InputAction.CallbackContext ctx) => SelectSpell(6);
 		
-		private void onSpellbook(InputAction.CallbackContext ctx) => UI.Player.Instance.HUD.Spellbook.Toggle();
+		private void onSpellbook(InputAction.CallbackContext ctx)
+		{
+			var hud = UI.Player.Instance.HUD;
+			if (!hud.gameObject.activeSelf)
+				return;
+			
+			hud.Spellbook.Toggle();
+		}
 
 		#endregion
 		
