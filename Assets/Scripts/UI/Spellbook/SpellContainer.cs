@@ -65,6 +65,8 @@ namespace UI.Spellbook
 			dragging = true;
 			newSpellIndex = Index;
 			currentTransformIndex = transform.GetSiblingIndex();
+			
+			SetInfo();
 		}
 		
 		public void OnDrag(PointerEventData eventData)
@@ -102,6 +104,8 @@ namespace UI.Spellbook
 				return;
 			
 			Hover.SetActive(true);
+			
+			SetInfo();
 		}
 
 		public void OnPointerExit(PointerEventData eventData)
@@ -119,6 +123,8 @@ namespace UI.Spellbook
 			
 			var spellbook = Player.Instance.HUD.Spellbook;
 			spellbook.ScrollRect.ScrollToCenter((RectTransform)transform, spellbook);
+			
+			SetInfo();
 		}
 
 		public void OnSubmit(BaseEventData eventData)
@@ -127,6 +133,19 @@ namespace UI.Spellbook
 				return;
 
 			Player.Instance.HUD.Spellbook.GrabContainer(this);
+			
+			SetInfo();
+		}
+
+		public void SetInfo()
+		{
+			var spellbook = Player.Instance.HUD.Spellbook;
+
+			spellbook.InfoName.Key = Spell.SpellData.Name;
+			spellbook.InfoName.Apply();
+			
+			spellbook.InfoDescription.Key = Spell.SpellData.Description;
+			spellbook.InfoDescription.Apply();
 		}
 	}
 }

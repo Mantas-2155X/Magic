@@ -21,6 +21,12 @@ namespace UI.Spellbook
 		
 		[SerializeField]
 		public ScrollRect ScrollRect;
+
+		[SerializeField]
+		public Localizer InfoName;
+		
+		[SerializeField]
+		public Localizer InfoDescription;
 		
 		[NonSerialized]
 		public readonly List<SpellContainer> Containers = new ();
@@ -97,6 +103,7 @@ namespace UI.Spellbook
 			{
 				updateNavigation();
 				SelectionManager.Instance.SetSelection(Containers[0].gameObject);
+				Containers[0].SetInfo();
 			}
 			else
 			{
