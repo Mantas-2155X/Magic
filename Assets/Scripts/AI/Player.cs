@@ -553,8 +553,16 @@ namespace AI
 		{
 			jumpPressed = true;
 			
-			if (MovementType == EMovementType.Normal && !Paralyzed && SlowAmount < 1f && IsGrounded())
-				Body.Rigidbody.AddForce(0f, ((PlayerData)Data).JumpForce, 0f, ForceMode.Impulse);
+			if (MovementType != EMovementType.Normal || Paralyzed || SlowAmount >= 1f)
+				return;
+			
+			var energyCost = ((PlayerData)Data).JumpEnergy;
+			
+			if (CurrentEnergy < energyCost || !IsGrounded())
+				return;
+			
+			TakeEnergy(energyCost, this);
+			Body.Rigidbody.AddForce(0f, ((PlayerData)Data).JumpForce, 0f, ForceMode.Impulse);
 		}
 		
 		private void onJumpCanceled(InputAction.CallbackContext ctx)

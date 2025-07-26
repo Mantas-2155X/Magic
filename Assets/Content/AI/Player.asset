@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: AI_PLAYER_DESC
   Icon: {fileID: 0}
   Tags: 0
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: 6624d910fd63315dda7f8e60b973cacf
     m_SubObjectName: 
@@ -31,7 +30,7 @@ MonoBehaviour:
   RegenerateHealth: 1
   RegenerateMana: 10
   RegenerateEnergy: 2
-  Speed: 7
+  Speed: 6.3
   DamageStats:
     _serializedList: []
   ProtectionStats:
@@ -60,21 +59,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e51e467a10e72edccb8659c0b29b9711, type: 2}
   - {fileID: 11400000, guid: 7b8993fdb778cb39e9054cdf7d6ae5fa, type: 2}
   Wearables: []
-  BrokenBodyPrefab: {fileID: 0}
   BrokenBodyPrefabReference:
     m_AssetGUID: 3888f632278c1dcb2a4f9b6ddb275b38
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  BrokenArmPrefab: {fileID: 0}
   BrokenArmPrefabReference:
     m_AssetGUID: 6b769d4d7ce6fdd75991852972882303
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  BrokenFootPrefab: {fileID: 0}
   BrokenFootPrefabReference:
     m_AssetGUID: 518a3fdcc001d4c1bb6e5a63c6a0e19e
     m_SubObjectName: 
@@ -93,10 +89,11 @@ MonoBehaviour:
   ImpactMinimumThreshold: 1800
   ImpactDamageScale: 0.0115
   AttachDecals: 0
-  SprintMultiplier: 1.25
+  SprintMultiplier: 1.15
   NoclipSpeed: 10
   Acceleration: 1.75
   AirAcceleration: 0.15
   Friction: 750
   JumpForce: 125
   SprintEnergy: 15
+  JumpEnergy: 3

@@ -26,5 +26,8 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public float SprintEnergy = 15f;
+
+		[SerializeField]
+		public float JumpEnergy = 3f;
 	}
 }
