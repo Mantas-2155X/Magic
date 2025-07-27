@@ -134,13 +134,11 @@ namespace Modding.Editor
 			
 			GUILayout.Space(5);
 			
-			CurrentPreset.CustomAssembly = (DefaultAsset)EditorGUILayout.ObjectField("Custom Assembly", CurrentPreset.CustomAssembly, typeof(DefaultAsset), false);
-
-			if (!string.IsNullOrEmpty(CurrentPreset.CustomAssemblyPath) && !CurrentPreset.CustomAssemblyPath.EndsWith(".dll"))
-			{
-				CurrentPreset.CustomAssembly = null;
-				Debug.LogWarning("[ModdingTool] Custom assembly must point to an existing .dll file");
-			}
+			GUILayout.BeginHorizontal();
+			CurrentPreset.CustomAssembly = EditorGUILayout.TextField("Custom Assembly", CurrentPreset.CustomAssembly);
+			if (GUILayout.Button("Pick", GUILayout.Width(45)))
+				CurrentPreset.CustomAssembly = EditorUtility.OpenFilePanel("Custom Assembly", "Assets", "dll");
+			GUILayout.EndHorizontal();
 
 			GUILayout.Space(5);
 			
@@ -218,7 +216,7 @@ namespace Modding.Editor
 				modInfo.Name = CurrentPreset.Name;
 				modInfo.Version = CurrentPreset.Version;
 				modInfo.Disabled = false;
-				modInfo.UseCustomAssembly = CurrentPreset.CustomAssembly != null;
+				modInfo.UseCustomAssembly = !string.IsNullOrWhiteSpace(CurrentPreset.CustomAssembly);
 				modInfo.Objects = new List<ObjectManager.ModInfo.ObjectInfo>();
 				modInfo.Localizations = new List<ObjectManager.ModInfo.LocalizationInfo>();
 
@@ -256,10 +254,10 @@ namespace Modding.Editor
 					modInfo.Localizations.Add(localizationInfo);
 				}
 				
-				if (CurrentPreset.CustomAssembly != null)
+				if (!string.IsNullOrWhiteSpace(CurrentPreset.CustomAssembly))
 				{
-					var fileInfo = new FileInfo(CurrentPreset.CustomAssemblyPath);
-					File.Copy(fileInfo.FullName, Path.Combine(path, fileInfo.Name));
+					var fileInfo = new FileInfo(CurrentPreset.CustomAssembly);
+					File.Copy(CurrentPreset.CustomAssembly, Path.Combine(path, fileInfo.Name));
 				}
 				
 				File.WriteAllText(Path.Combine(path, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
@@ -572,16 +570,15 @@ namespace Modding.Editor
 				return false;
 			}
 			
-			if (CurrentPreset.CustomAssembly != null)
+			if (!string.IsNullOrEmpty(CurrentPreset.CustomAssembly))
 			{
-				var path = CurrentPreset.CustomAssemblyPath;
-				if (!path.EndsWith($"{CurrentPreset.Author}.{CurrentPreset.Name}.dll"))
+				if (!CurrentPreset.CustomAssembly.EndsWith($"{CurrentPreset.Author}.{CurrentPreset.Name}.dll"))
 				{
 					GUILayout.Label("Custom assembly must be called Author.Name.dll");
 					return false;
 				}
 				
-				if (!File.Exists(path))
+				if (!File.Exists(CurrentPreset.CustomAssembly))
 				{
 					GUILayout.Label("Custom assembly does not exist");
 					return false;
