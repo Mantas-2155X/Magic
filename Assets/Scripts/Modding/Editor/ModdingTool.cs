@@ -205,6 +205,9 @@ namespace Modding.Editor
 				var path = Path.Combine(exportPath, directory);
 				
 				var settings = AddressableAssetSettingsDefaultObject.Settings;
+				var hashField = settings.GetType().GetField("m_currentHash", BindingFlags.NonPublic | BindingFlags.Instance);
+
+				var previousHash = hashField.GetValue(settings);
 
 				if (Directory.Exists(path))
 					Directory.Delete(path, true);
@@ -416,6 +419,8 @@ namespace Modding.Editor
 				settings.profileSettings.RemoveValue(variable);
 				
 				restoreGroups(removedGroups);
+				
+				hashField.SetValue(settings, previousHash);
 			}
 		}
 
