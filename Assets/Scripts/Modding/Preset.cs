@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ScriptableObjects;
+using UnityEditor;
 using UnityEngine;
 
 namespace Modding
@@ -18,7 +19,7 @@ namespace Modding
 		public string Version = "1.0.0";
 
 		[SerializeField]
-		public string CustomAssembly = "";
+		public DefaultAsset CustomAssembly;
 
 		[SerializeField]
 		public List<Data> Objects = new ();
@@ -32,5 +33,28 @@ namespace Modding
 				Entries = new List<LocalizationDataEntry>()
 			}
 		};
+
+		public string CustomAssemblyPath
+		{
+			get
+			{
+				if (CustomAssembly == null)
+					return "";
+
+				if (!string.IsNullOrEmpty(customAssemblyPath) && CustomAssembly == previousCustomAssembly)
+					return customAssemblyPath;
+
+				customAssemblyPath = AssetDatabase.GetAssetPath(CustomAssembly);
+				previousCustomAssembly = CustomAssembly;
+
+				return customAssemblyPath;
+			}
+		}
+		
+		[NonSerialized]
+		private DefaultAsset previousCustomAssembly;
+		
+		[NonSerialized]
+		private string customAssemblyPath;
 	}
 }
