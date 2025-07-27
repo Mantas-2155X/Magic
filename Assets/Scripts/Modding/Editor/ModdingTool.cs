@@ -16,39 +16,30 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
-namespace Editor
+namespace Modding.Editor
 {
 	public class ModdingTool : EditorWindow
 	{
 		[SerializeField]
-		public string Author = "MyName";
-		
-		[SerializeField]
-		public string Name = "ModName";
+		public Preset CurrentPreset;
 
 		[SerializeField]
-		public string Version = "1.0.0";
-
-		[SerializeField]
-		public string CustomAssembly = "";
-		
-		[SerializeField]
-		public List<Data> Objects = new ();
-		
-		[SerializeField]
-		public List<LocalizationData> Localizations = new ();
-
-		[SerializeField]
-		public int CurrentTab;
+		public int CurrentTab = 1;
 
 		private int selectedLanguage;
 		private string addLanguage;
-		private Vector2 scrollPosition;
+		
+		private Vector2 presetsScrollPosition;
+		private Vector2 setupAndBuildScrollPosition;
+		private Vector2 localizationScrollPosition;
+
+		private readonly List<Tuple<string, string>> initializedPresets = new ();
 		
 		private readonly Regex fileFilter = new (@"\W|_");
 		private readonly Regex versionFilter = new (@"^(0|[1-9]\d*)(\.(0|[1-9]\d*)){0,3}$");
 		
 		private readonly string exportPath = "data/mods";
+		private readonly string presetsPath = "Assets/Modding/Presets";
 		
 		private readonly List<Type> allowedModdedDatas = new ()
 		{
@@ -75,79 +66,119 @@ namespace Editor
 			var window = GetWindow<ModdingTool>(true);
 			window.minSize = new Vector2(350, 300);
 			window.Show();
+			
+			window.initializePresets();
 		}
 
 		public void OnGUI()
 		{
-			CurrentTab = GUILayout.Toolbar(CurrentTab, new [] { "Setup & Build", "Localization" });
-			
-			Objects ??= new List<Data>();
-			Localizations ??= new List<LocalizationData>();
+			CurrentTab = GUILayout.Toolbar(CurrentTab, new [] { "Presets", "Setup & Build", "Localization" });
+
+			if (CurrentPreset == null)
+				CurrentPreset = CreateInstance<Preset>();
 			
 			switch (CurrentTab)
 			{
 				case 0:
-					setupAndBuild();
+					presets();
 					break;
 				case 1:
+					setupAndBuild();
+					break;
+				case 2:
 					localization();
 					break;
 			}
 		}
+
+		public void OnDestroy()
+		{
+			savePreset(true);
+		}
+
+		private void presets()
+		{
+			EditorGUILayout.LabelField($"Presets ({initializedPresets.Count})");
+
+			presetsScrollPosition = GUILayout.BeginScrollView(presetsScrollPosition);
+
+			for (var i = 0; i < initializedPresets.Count; i++)
+			{
+				GUILayout.BeginHorizontal();
+
+				if (GUILayout.Button(initializedPresets[i].Item2))
+					loadPreset(initializedPresets[i].Item1);
+				
+				if (GUILayout.Button("-", GUILayout.Width(25)))
+				{
+					deletePreset(initializedPresets[i].Item1);
+					return;
+				}
+				
+				GUILayout.EndHorizontal();
+			}
+			
+			GUILayout.EndScrollView();
+			
+			GUILayout.FlexibleSpace();
+			
+			if (GUILayout.Button("Save Preset"))
+				savePreset();
+		}
 		
 		private void setupAndBuild()
 		{
-			Author = EditorGUILayout.TextField("Author", fileFilter.Replace(Author, ""));
-			Name = EditorGUILayout.TextField("Name", fileFilter.Replace(Name, ""));
-			Version = EditorGUILayout.TextField("Version", versionFilter.Match(Version).Value);
+			CurrentPreset.Author = EditorGUILayout.TextField("Author", fileFilter.Replace(CurrentPreset.Author, ""));
+			CurrentPreset.Name = EditorGUILayout.TextField("Name", fileFilter.Replace(CurrentPreset.Name, ""));
+			CurrentPreset.Version = EditorGUILayout.TextField("Version", versionFilter.Match(CurrentPreset.Version).Value);
 			
 			GUILayout.Space(5);
 			
 			GUILayout.BeginHorizontal();
-			CustomAssembly = EditorGUILayout.TextField("Custom Assembly", CustomAssembly);
+			CurrentPreset.CustomAssembly = EditorGUILayout.TextField("Custom Assembly", CurrentPreset.CustomAssembly);
 			if (GUILayout.Button("Pick", GUILayout.Width(45)))
-				CustomAssembly = EditorUtility.OpenFilePanel("Custom Assembly", "Assets", "dll");
+				CurrentPreset.CustomAssembly = EditorUtility.OpenFilePanel("Custom Assembly", "Assets", "dll");
 			GUILayout.EndHorizontal();
 
 			GUILayout.Space(5);
 			
 			GUILayout.BeginHorizontal();
 			
-			EditorGUILayout.LabelField($"Objects ({Objects.Count})");
+			EditorGUILayout.LabelField($"Objects ({CurrentPreset.Objects.Count})");
 			
 			if (GUILayout.Button("Clear", GUILayout.Width(45)))
 			{
-				Objects.Clear();
+				CurrentPreset.Objects.Clear();
 				return;
 			}
 			
 			if (GUILayout.Button("+", GUILayout.Width(25)))
-				Objects.Add(null);
+				CurrentPreset.Objects.Add(null);
 			
 			GUILayout.EndHorizontal();
 
-			scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+			setupAndBuildScrollPosition = GUILayout.BeginScrollView(setupAndBuildScrollPosition);
 			
-			for (var i = 0; i < Objects.Count; i++)
+			for (var i = 0; i < CurrentPreset.Objects.Count; i++)
 			{
 				GUILayout.BeginHorizontal();
 				
-				Objects[i] = (Data)EditorGUILayout.ObjectField(Objects[i], typeof(Data), false);
+				CurrentPreset.Objects[i] = (Data)EditorGUILayout.ObjectField(CurrentPreset.Objects[i], typeof(Data), false);
 				
 				if (GUILayout.Button("-", GUILayout.Width(25)))
 				{
-					Objects.RemoveAt(i);
+					CurrentPreset.Objects.RemoveAt(i);
 					return;
 				}
 
-				if (Objects[i] != null)
+				if (CurrentPreset.Objects[i] != null)
 				{
-					var type = Objects[i].GetType();
+					var type = CurrentPreset.Objects[i].GetType();
 					
 					if (!allowedModdedDatas.Contains(type))
 					{
-						Objects[i] = null;
-						Debug.LogWarning($"[ModdingTools] Objects of data {type} are not supported");
+						CurrentPreset.Objects[i] = null;
+						Debug.LogWarning($"[ModdingTool] Objects of data {type} are not supported");
 					}
 				}
 				
@@ -170,7 +201,7 @@ namespace Editor
 				if (!Directory.Exists(exportPath))
 					Directory.CreateDirectory(exportPath);
 
-				var directory = $"{Author}.{Name}";
+				var directory = $"{CurrentPreset.Author}.{CurrentPreset.Name}";
 				var path = Path.Combine(exportPath, directory);
 				
 				var settings = AddressableAssetSettingsDefaultObject.Settings;
@@ -181,17 +212,17 @@ namespace Editor
 				Directory.CreateDirectory(path);
 
 				var modInfo = new ObjectManager.ModInfo();
-				modInfo.Author = Author;
-				modInfo.Name = Name;
-				modInfo.Version = Version;
+				modInfo.Author = CurrentPreset.Author;
+				modInfo.Name = CurrentPreset.Name;
+				modInfo.Version = CurrentPreset.Version;
 				modInfo.Disabled = false;
-				modInfo.UseCustomAssembly = !string.IsNullOrWhiteSpace(CustomAssembly);
+				modInfo.UseCustomAssembly = !string.IsNullOrWhiteSpace(CurrentPreset.CustomAssembly);
 				modInfo.Objects = new List<ObjectManager.ModInfo.ObjectInfo>();
 				modInfo.Localizations = new List<ObjectManager.ModInfo.LocalizationInfo>();
 
-				for (var i = 0; i < Objects.Count; i++)
+				for (var i = 0; i < CurrentPreset.Objects.Count; i++)
 				{
-					var obj = Objects[i];
+					var obj = CurrentPreset.Objects[i];
 
 					var objectInfo = new ObjectManager.ModInfo.ObjectInfo();
 					objectInfo.Type = obj.GetType().Name;
@@ -200,9 +231,9 @@ namespace Editor
 					modInfo.Objects.Add(objectInfo);
 				}
 
-				for (var i = 0; i < Localizations.Count; i++)
+				for (var i = 0; i < CurrentPreset.Localizations.Count; i++)
 				{
-					var localization = Localizations[i];
+					var localization = CurrentPreset.Localizations[i];
 					
 					var localizationInfo = new ObjectManager.ModInfo.LocalizationInfo();
 					localizationInfo.Language = localization.Language;
@@ -210,11 +241,11 @@ namespace Editor
 
 					for (var k = 0; k < localization.Entries.Count; k++)
 					{
-						if (k >= Objects.Count)
+						if (k >= CurrentPreset.Objects.Count)
 							continue;
 						
 						var entry = localization.Entries[k];
-						var obj = Objects[k];
+						var obj = CurrentPreset.Objects[k];
 
 						localizationInfo.Entries[obj.Name] = entry.Name;
 						localizationInfo.Entries[obj.Description] = entry.Description;
@@ -223,22 +254,22 @@ namespace Editor
 					modInfo.Localizations.Add(localizationInfo);
 				}
 				
-				if (!string.IsNullOrWhiteSpace(CustomAssembly))
+				if (!string.IsNullOrWhiteSpace(CurrentPreset.CustomAssembly))
 				{
-					var fileInfo = new FileInfo(CustomAssembly);
-					File.Copy(CustomAssembly, Path.Combine(path, fileInfo.Name));
+					var fileInfo = new FileInfo(CurrentPreset.CustomAssembly);
+					File.Copy(CurrentPreset.CustomAssembly, Path.Combine(path, fileInfo.Name));
 				}
 				
 				File.WriteAllText(Path.Combine(path, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
 
-				var group = settings.CreateGroup($"{Author}.{Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
+				var group = settings.CreateGroup($"{CurrentPreset.Author}.{CurrentPreset.Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
 
 				var restoreAssets = new Dictionary<string, AddressableAssetGroup>();
 				var restoreScenes = new Dictionary<AddressableAssetEntry, string>();
 				
-				for (var i = 0; i < Objects.Count; i++)
+				for (var i = 0; i < CurrentPreset.Objects.Count; i++)
 				{
-					var obj = Objects[i];
+					var obj = CurrentPreset.Objects[i];
 					if (obj == null)
 						continue;
 
@@ -292,7 +323,7 @@ namespace Editor
 							if (parentGroup != null)
 								restoreScenes[entry] = entry.address;
 							
-							entry.SetAddress($"Scenes/{Author}.{Name}.{obj.Name}");
+							entry.SetAddress($"Scenes/{CurrentPreset.Author}.{CurrentPreset.Name}.{obj.Name}");
 						}
 						
 						restoreAssets[references[k]] = parentGroup;
@@ -322,9 +353,9 @@ namespace Editor
 				settings.RemoteCatalogLoadPath.SetVariableByName(settings, "Mod");
 				settings.BuildRemoteCatalog = true;
 				settings.BuiltInBundleNaming = BuiltInBundleNaming.Custom;
-				settings.BuiltInBundleCustomNaming = $"{Author}.{Name}".ToLower();
+				settings.BuiltInBundleCustomNaming = $"{CurrentPreset.Author}.{CurrentPreset.Name}".ToLower();
 				settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
-				settings.MonoScriptBundleCustomNaming = $"{Author}.{Name}".ToLower();
+				settings.MonoScriptBundleCustomNaming = $"{CurrentPreset.Author}.{CurrentPreset.Name}".ToLower();
 
 				var previousBuildTarget = EditorUserBuildSettings.activeBuildTarget;
 				
@@ -352,8 +383,8 @@ namespace Editor
 					{
 						var fileInfo = new FileInfo(binaries[0]);
 						
-						File.Move(fileInfo.FullName, Path.Combine(fileInfo.DirectoryName!, $"{Author}.{Name}.bin"));
-						File.Move($"{fileInfo.FullName[..^fileInfo.Extension.Length]}.hash", Path.Combine(fileInfo.DirectoryName!, $"{Author}.{Name}.hash"));
+						File.Move(fileInfo.FullName, Path.Combine(fileInfo.DirectoryName!, $"{CurrentPreset.Author}.{CurrentPreset.Name}.bin"));
+						File.Move($"{fileInfo.FullName[..^fileInfo.Extension.Length]}.hash", Path.Combine(fileInfo.DirectoryName!, $"{CurrentPreset.Author}.{CurrentPreset.Name}.hash"));
 					}
 				}
 
@@ -391,12 +422,12 @@ namespace Editor
 		{
 			GUILayout.BeginHorizontal();
 
-			EditorGUILayout.LabelField($"Languages ({Localizations.Count})", GUILayout.Width(125));
+			EditorGUILayout.LabelField($"Languages ({CurrentPreset.Localizations.Count})", GUILayout.Width(125));
 			
-			var selectLanguages = new string[Localizations.Count];
+			var selectLanguages = new string[CurrentPreset.Localizations.Count];
 			
 			for (var i = 0; i < selectLanguages.Length; i++)
-				selectLanguages[i] = Localizations[i].Language;
+				selectLanguages[i] = CurrentPreset.Localizations[i].Language;
 			
 			selectedLanguage = EditorGUILayout.Popup(selectedLanguage, selectLanguages);
 			
@@ -406,14 +437,14 @@ namespace Editor
 			
 			if (shouldRemove)
 			{
-				Localizations.RemoveAt(selectedLanguage);
+				CurrentPreset.Localizations.RemoveAt(selectedLanguage);
 				selectedLanguage = 0;
 				return;
 			}
 			
 			if (GUILayout.Button("Clear", GUILayout.Width(45)))
 			{
-				Localizations.Clear();
+				CurrentPreset.Localizations.Clear();
 				return;
 			}
 			
@@ -429,31 +460,35 @@ namespace Editor
 			
 			if (shouldAdd)
 			{
-				Localizations.Add(new LocalizationData
+				CurrentPreset.Localizations.Add(new LocalizationData
 				{
 					Language = addLanguage,
 					Entries = new List<LocalizationDataEntry>()
 				});
 				
 				addLanguage = "";
-				selectedLanguage = Localizations.Count - 1;
+				selectedLanguage = CurrentPreset.Localizations.Count - 1;
 			}
 			
 			GUILayout.EndHorizontal();
 			
-			if (Localizations.Count == 0)
+			if (CurrentPreset.Localizations.Count == 0)
 				return;
 
 			GUILayout.Space(5);
 
-			var list = Localizations[selectedLanguage].Entries;
+			var list = CurrentPreset.Localizations[selectedLanguage].Entries;
 			
-			for (var i = 0; i < Objects.Count; i++)
+			EditorGUILayout.LabelField($"Entries ({CurrentPreset.Objects.Count * 2})");
+
+			localizationScrollPosition = GUILayout.BeginScrollView(localizationScrollPosition);
+
+			for (var i = 0; i < CurrentPreset.Objects.Count; i++)
 			{
 				if (i > list.Count - 1)
 					list.Add(new LocalizationDataEntry());
 				
-				var obj = Objects[i];
+				var obj = CurrentPreset.Objects[i];
 				if (obj == null)
 					continue;
 
@@ -467,6 +502,8 @@ namespace Editor
 
 				GUILayout.Space(5);
 			}
+			
+			GUILayout.EndScrollView();
 		}
 		
 		private (List<AddressableAssetGroup>, string) removeGroups(AddressableAssetGroup ignoreGroup)
@@ -509,48 +546,48 @@ namespace Editor
 		
 		private bool validate()
 		{
-			if (string.IsNullOrWhiteSpace(Author))
+			if (string.IsNullOrWhiteSpace(CurrentPreset.Author))
 			{
 				GUILayout.Label("Author is empty or invalid");
 				return false;
 			}
 			
-			if (string.IsNullOrWhiteSpace(Name))
+			if (string.IsNullOrWhiteSpace(CurrentPreset.Name))
 			{
 				GUILayout.Label("Name is empty or invalid");
 				return false;
 			}
 			
-			if (string.IsNullOrWhiteSpace(Version))
+			if (string.IsNullOrWhiteSpace(CurrentPreset.Version))
 			{
 				GUILayout.Label("Version is empty or invalid");
 				return false;
 			}
 			
-			if (Objects.Count == 0)
+			if (CurrentPreset.Objects.Count == 0)
 			{
 				GUILayout.Label("No objects specified");
 				return false;
 			}
 			
-			if (!string.IsNullOrEmpty(CustomAssembly))
+			if (!string.IsNullOrEmpty(CurrentPreset.CustomAssembly))
 			{
-				if (!CustomAssembly.EndsWith($"{Author}.{Name}.dll"))
+				if (!CurrentPreset.CustomAssembly.EndsWith($"{CurrentPreset.Author}.{CurrentPreset.Name}.dll"))
 				{
 					GUILayout.Label("Custom assembly must be called Author.Name.dll");
 					return false;
 				}
 				
-				if (!File.Exists(CustomAssembly))
+				if (!File.Exists(CurrentPreset.CustomAssembly))
 				{
 					GUILayout.Label("Custom assembly does not exist");
 					return false;
 				}
 			}
 			
-			for (var i = 0; i < Objects.Count; i++)
+			for (var i = 0; i < CurrentPreset.Objects.Count; i++)
 			{
-				var obj = Objects[i];
+				var obj = CurrentPreset.Objects[i];
 				if (obj == null)
 				{
 					GUILayout.Label("Null objects are not allowed");
@@ -569,14 +606,14 @@ namespace Editor
 
 		private bool validateOnBuild()
 		{
-			for (var i = 0; i < Objects.Count; i++)
+			for (var i = 0; i < CurrentPreset.Objects.Count; i++)
 			{
-				if (Objects[i] is not SceneData sceneData)
+				if (CurrentPreset.Objects[i] is not SceneData sceneData)
 					continue;
 
 				if (string.IsNullOrWhiteSpace(sceneData.Addressable.AssetGUID))
 				{
-					Debug.LogError("Scene addressable must be assigned");
+					Debug.LogError("[ModdingTool] Scene addressable must be assigned");
 					return false;
 				}
 
@@ -604,7 +641,7 @@ namespace Editor
 
 				if (world == null)
 				{
-					Debug.LogError("Scene must have a World component");
+					Debug.LogError("[ModdingTool] Scene must have a World component");
 					
 					if (shouldClose)
 						EditorSceneManager.CloseScene(scene, true);
@@ -614,7 +651,7 @@ namespace Editor
 				
 				if (world.SpawnPoints == null || world.Characters == null || world.Ragdolls == null || world.Attacks == null || world.Casts == null || world.Projectiles == null || world.Objects == null || world.Decals == null)
 				{
-					Debug.LogError("World component inside Scene must have all Transforms assigned");
+					Debug.LogError("[ModdingTool] World component inside Scene must have all Transforms assigned");
 					
 					if (shouldClose)
 						EditorSceneManager.CloseScene(scene, true);
@@ -629,24 +666,73 @@ namespace Editor
 			return true;
 		}
 
-		[Serializable]
-		public class LocalizationData
+		private void savePreset(bool autoSave = false)
 		{
-			[SerializeField]
-			public string Language;
+			if (!Directory.Exists(presetsPath))
+				Directory.CreateDirectory(presetsPath);
+
+			var savePath = Path.Combine(presetsPath, autoSave ? "autosave.asset" : $"{CurrentPreset.Author}.{CurrentPreset.Name}.{CurrentPreset.Version}.asset");
+				
+			if (File.Exists(savePath))
+			{
+				AssetDatabase.DeleteAsset(savePath);
+				Debug.LogWarning($"[ModdingTool] Removed existing preset at {savePath}");
+			}
 			
-			[SerializeField]
-			public List<LocalizationDataEntry> Entries;
+			AssetDatabase.CreateAsset(Instantiate(CurrentPreset), savePath);
+			Debug.Log($"[ModdingTool] Saved preset to {savePath}");
+			
+			initializePresets();
+		}
+		
+		private void loadPreset(string path)
+		{
+			var preset = AssetDatabase.LoadAssetAtPath<Preset>(path);
+			if (preset == null)
+			{
+				Debug.LogWarning($"[ModdingTool] Failed to load preset at {path}");
+				return;
+			}
+			
+			CurrentPreset = Instantiate(preset);
+			Debug.Log($"[ModdingTool] Loaded preset from {path}");
+
+			initializePresets();
 		}
 
-		[Serializable]
-		public class LocalizationDataEntry
+		private void deletePreset(string path)
 		{
-			[SerializeField]
-			public string Name;
+			if (!File.Exists(path) || !path.EndsWith(".asset"))
+			{
+				Debug.LogWarning($"[ModdingTool] Failed to delete preset at {path}");
+				return;
+			}
+
+			AssetDatabase.DeleteAsset(path);
+			Debug.Log($"[ModdingTool] Deleted preset at {path}");
 			
-			[SerializeField]
-			public string Description;
+			initializePresets();
+		}
+		
+		private void initializePresets()
+		{
+			if (!Directory.Exists(presetsPath))
+				Directory.CreateDirectory(presetsPath);
+
+			initializedPresets.Clear();
+			
+			var fileNames = Directory.GetFiles(presetsPath, "*.asset", SearchOption.TopDirectoryOnly);
+			for (var i = 0; i < fileNames.Length; i++)
+			{
+				var fileInfo = new FileInfo(fileNames[i]);
+				if (!fileInfo.Exists)
+				{
+					Debug.LogWarning($"[ModdingTool] Preset at {fileNames[i]} not found");
+					continue;
+				}
+
+				initializedPresets.Add(new Tuple<string, string>(fileNames[i], fileInfo.Name[..^fileInfo.Extension.Length]));
+			}
 		}
 	}
 }
