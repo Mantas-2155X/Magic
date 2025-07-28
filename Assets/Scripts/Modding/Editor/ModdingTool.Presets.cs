@@ -8,20 +8,18 @@ namespace Modding.Editor
 {
 	public partial class ModdingTool
 	{
-		[SerializeField]
-		public Preset CurrentPreset;
-
-		private Vector2 presetsScrollPosition;
-
 		private readonly List<Tuple<string, string>> initializedPresets = new ();
 
-		private readonly string presetsPath = "Assets/Modding/Presets";
+		private const string presetsPath = "Assets/Modding/Presets";
 		
 		private void drawPresets()
 		{
+			if (!State.PresetsInitialized)
+				initializePresets();
+			
 			EditorGUILayout.LabelField($"Presets ({initializedPresets.Count})");
 
-			presetsScrollPosition = GUILayout.BeginScrollView(presetsScrollPosition);
+			State.PresetsScrollPosition = GUILayout.BeginScrollView(State.PresetsScrollPosition);
 
 			for (var i = 0; i < initializedPresets.Count; i++)
 			{
@@ -52,7 +50,7 @@ namespace Modding.Editor
 			if (!Directory.Exists(presetsPath))
 				Directory.CreateDirectory(presetsPath);
 
-			var savePath = Path.Combine(presetsPath, autoSave ? "autosave.asset" : $"{CurrentPreset.Author}.{CurrentPreset.Name}.{CurrentPreset.Version}.asset");
+			var savePath = Path.Combine(presetsPath, autoSave ? "autosave.asset" : $"{State.Preset.Author}.{State.Preset.Name}.{State.Preset.Version}.asset");
 				
 			if (File.Exists(savePath))
 			{
@@ -60,7 +58,7 @@ namespace Modding.Editor
 				Debug.LogWarning($"[ModdingTool] Removed existing preset at {savePath}");
 			}
 			
-			AssetDatabase.CreateAsset(Instantiate(CurrentPreset), savePath);
+			AssetDatabase.CreateAsset(Instantiate(State.Preset), savePath);
 			Debug.Log($"[ModdingTool] Saved preset to {savePath}");
 			
 			initializePresets();
@@ -75,7 +73,7 @@ namespace Modding.Editor
 				return;
 			}
 			
-			CurrentPreset = Instantiate(preset);
+			State.Preset = Instantiate(preset);
 			Debug.Log($"[ModdingTool] Loaded preset from {path}");
 
 			initializePresets();
@@ -114,6 +112,8 @@ namespace Modding.Editor
 
 				initializedPresets.Add(new Tuple<string, string>(fileNames[i], fileInfo.Name[..^fileInfo.Extension.Length]));
 			}
+			
+			State.PresetsInitialized = true;
 		}
 	}
 }

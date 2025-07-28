@@ -20,12 +20,10 @@ namespace Modding.Editor
 {
 	public partial class ModdingTool
 	{
-		private Vector2 setupAndBuildScrollPosition;
-		
 		private readonly Regex fileFilter = new (@"\W|_");
 		private readonly Regex versionFilter = new (@"^(0|[1-9]\d*)(\.(0|[1-9]\d*)){0,3}$");
 		
-		private readonly string exportPath = "data/mods";
+		private const string exportPath = "data/mods";
 		
 		private readonly List<Type> allowedModdedDatas = new ()
 		{
@@ -48,56 +46,56 @@ namespace Modding.Editor
 
 		private void drawSetupAndBuild()
 		{
-			CurrentPreset.Author = EditorGUILayout.TextField("Author", fileFilter.Replace(CurrentPreset.Author, ""));
-			CurrentPreset.Name = EditorGUILayout.TextField("Name", fileFilter.Replace(CurrentPreset.Name, ""));
-			CurrentPreset.Version = EditorGUILayout.TextField("Version", versionFilter.Match(CurrentPreset.Version).Value);
+			State.Preset.Author = EditorGUILayout.TextField("Author", fileFilter.Replace(State.Preset.Author, ""));
+			State.Preset.Name = EditorGUILayout.TextField("Name", fileFilter.Replace(State.Preset.Name, ""));
+			State.Preset.Version = EditorGUILayout.TextField("Version", versionFilter.Match(State.Preset.Version).Value);
 			
 			GUILayout.Space(5);
 			
 			GUILayout.BeginHorizontal();
-			CurrentPreset.CustomAssembly = EditorGUILayout.TextField("Custom Assembly", CurrentPreset.CustomAssembly);
+			State.Preset.CustomAssembly = EditorGUILayout.TextField("Custom Assembly", State.Preset.CustomAssembly);
 			if (GUILayout.Button("Pick", GUILayout.Width(45)))
-				CurrentPreset.CustomAssembly = EditorUtility.OpenFilePanel("Custom Assembly", "Assets", "dll");
+				State.Preset.CustomAssembly = EditorUtility.OpenFilePanel("Custom Assembly", "Assets", "dll");
 			GUILayout.EndHorizontal();
 
 			GUILayout.Space(5);
 			
 			GUILayout.BeginHorizontal();
 			
-			EditorGUILayout.LabelField($"Objects ({CurrentPreset.Objects.Count})");
+			EditorGUILayout.LabelField($"Objects ({State.Preset.Objects.Count})");
 			
 			if (GUILayout.Button("Clear", GUILayout.Width(45)))
 			{
-				CurrentPreset.Objects.Clear();
+				State.Preset.Objects.Clear();
 				return;
 			}
 			
 			if (GUILayout.Button("+", GUILayout.Width(25)))
-				CurrentPreset.Objects.Add(null);
+				State.Preset.Objects.Add(null);
 			
 			GUILayout.EndHorizontal();
 
-			setupAndBuildScrollPosition = GUILayout.BeginScrollView(setupAndBuildScrollPosition);
+			State.SetupAndBuildScrollPosition = GUILayout.BeginScrollView(State.SetupAndBuildScrollPosition);
 			
-			for (var i = 0; i < CurrentPreset.Objects.Count; i++)
+			for (var i = 0; i < State.Preset.Objects.Count; i++)
 			{
 				GUILayout.BeginHorizontal();
 				
-				CurrentPreset.Objects[i] = (Data)EditorGUILayout.ObjectField(CurrentPreset.Objects[i], typeof(Data), false);
+				State.Preset.Objects[i] = (Data)EditorGUILayout.ObjectField(State.Preset.Objects[i], typeof(Data), false);
 				
 				if (GUILayout.Button("-", GUILayout.Width(25)))
 				{
-					CurrentPreset.Objects.RemoveAt(i);
+					State.Preset.Objects.RemoveAt(i);
 					return;
 				}
 
-				if (CurrentPreset.Objects[i] != null)
+				if (State.Preset.Objects[i] != null)
 				{
-					var type = CurrentPreset.Objects[i].GetType();
+					var type = State.Preset.Objects[i].GetType();
 					
 					if (!allowedModdedDatas.Contains(type))
 					{
-						CurrentPreset.Objects[i] = null;
+						State.Preset.Objects[i] = null;
 						Debug.LogWarning($"[ModdingTool] Objects of data {type} are not supported");
 					}
 				}
@@ -121,7 +119,7 @@ namespace Modding.Editor
 				if (!Directory.Exists(exportPath))
 					Directory.CreateDirectory(exportPath);
 
-				var directory = $"{CurrentPreset.Author}.{CurrentPreset.Name}";
+				var directory = $"{State.Preset.Author}.{State.Preset.Name}";
 				var path = Path.Combine(exportPath, directory);
 				
 				var settings = AddressableAssetSettingsDefaultObject.Settings;
@@ -135,17 +133,17 @@ namespace Modding.Editor
 				Directory.CreateDirectory(path);
 
 				var modInfo = new ObjectManager.ModInfo();
-				modInfo.Author = CurrentPreset.Author;
-				modInfo.Name = CurrentPreset.Name;
-				modInfo.Version = CurrentPreset.Version;
+				modInfo.Author = State.Preset.Author;
+				modInfo.Name = State.Preset.Name;
+				modInfo.Version = State.Preset.Version;
 				modInfo.Disabled = false;
-				modInfo.UseCustomAssembly = !string.IsNullOrWhiteSpace(CurrentPreset.CustomAssembly);
+				modInfo.UseCustomAssembly = !string.IsNullOrWhiteSpace(State.Preset.CustomAssembly);
 				modInfo.Objects = new List<ObjectManager.ModInfo.ObjectInfo>();
 				modInfo.Localizations = new List<ObjectManager.ModInfo.LocalizationInfo>();
 
-				for (var i = 0; i < CurrentPreset.Objects.Count; i++)
+				for (var i = 0; i < State.Preset.Objects.Count; i++)
 				{
-					var obj = CurrentPreset.Objects[i];
+					var obj = State.Preset.Objects[i];
 
 					var objectInfo = new ObjectManager.ModInfo.ObjectInfo();
 					objectInfo.Type = obj.GetType().Name;
@@ -154,9 +152,9 @@ namespace Modding.Editor
 					modInfo.Objects.Add(objectInfo);
 				}
 
-				for (var i = 0; i < CurrentPreset.Localizations.Count; i++)
+				for (var i = 0; i < State.Preset.Localizations.Count; i++)
 				{
-					var localization = CurrentPreset.Localizations[i];
+					var localization = State.Preset.Localizations[i];
 					
 					var localizationInfo = new ObjectManager.ModInfo.LocalizationInfo();
 					localizationInfo.Language = localization.Language;
@@ -164,11 +162,11 @@ namespace Modding.Editor
 
 					for (var k = 0; k < localization.Entries.Count; k++)
 					{
-						if (k >= CurrentPreset.Objects.Count)
+						if (k >= State.Preset.Objects.Count)
 							continue;
 						
 						var entry = localization.Entries[k];
-						var obj = CurrentPreset.Objects[k];
+						var obj = State.Preset.Objects[k];
 
 						localizationInfo.Entries[obj.Name] = entry.Name;
 						localizationInfo.Entries[obj.Description] = entry.Description;
@@ -177,22 +175,22 @@ namespace Modding.Editor
 					modInfo.Localizations.Add(localizationInfo);
 				}
 				
-				if (!string.IsNullOrWhiteSpace(CurrentPreset.CustomAssembly))
+				if (!string.IsNullOrWhiteSpace(State.Preset.CustomAssembly))
 				{
-					var fileInfo = new FileInfo(CurrentPreset.CustomAssembly);
-					File.Copy(CurrentPreset.CustomAssembly, Path.Combine(path, fileInfo.Name));
+					var fileInfo = new FileInfo(State.Preset.CustomAssembly);
+					File.Copy(State.Preset.CustomAssembly, Path.Combine(path, fileInfo.Name));
 				}
 				
 				File.WriteAllText(Path.Combine(path, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
 
-				var group = settings.CreateGroup($"{CurrentPreset.Author}.{CurrentPreset.Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
+				var group = settings.CreateGroup($"{State.Preset.Author}.{State.Preset.Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
 
 				var restoreAssets = new Dictionary<string, AddressableAssetGroup>();
 				var restoreScenes = new Dictionary<AddressableAssetEntry, string>();
 				
-				for (var i = 0; i < CurrentPreset.Objects.Count; i++)
+				for (var i = 0; i < State.Preset.Objects.Count; i++)
 				{
-					var obj = CurrentPreset.Objects[i];
+					var obj = State.Preset.Objects[i];
 					if (obj == null)
 						continue;
 
@@ -246,7 +244,7 @@ namespace Modding.Editor
 							if (parentGroup != null)
 								restoreScenes[entry] = entry.address;
 							
-							entry.SetAddress($"Scenes/{CurrentPreset.Author}.{CurrentPreset.Name}.{obj.Name}");
+							entry.SetAddress($"Scenes/{State.Preset.Author}.{State.Preset.Name}.{obj.Name}");
 						}
 						
 						restoreAssets[references[k]] = parentGroup;
@@ -277,12 +275,14 @@ namespace Modding.Editor
 				settings.RemoteCatalogLoadPath.SetVariableByName(settings, "Mod");
 				settings.BuildRemoteCatalog = true;
 				settings.BuiltInBundleNaming = BuiltInBundleNaming.Custom;
-				settings.BuiltInBundleCustomNaming = $"{CurrentPreset.Author}.{CurrentPreset.Name}".ToLower();
+				settings.BuiltInBundleCustomNaming = $"{State.Preset.Author}.{State.Preset.Name}".ToLower();
 				settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
-				settings.MonoScriptBundleCustomNaming = $"{CurrentPreset.Author}.{CurrentPreset.Name}".ToLower();
+				settings.MonoScriptBundleCustomNaming = $"{State.Preset.Author}.{State.Preset.Name}".ToLower();
 
 				var previousBuildTarget = EditorUserBuildSettings.activeBuildTarget;
 				
+				WindowState.Save(State);
+
 				for (var i = 0; i < buildTargets.Length; i++)
 				{
 					var buildTarget = buildTargets[i];
@@ -307,10 +307,13 @@ namespace Modding.Editor
 					{
 						var fileInfo = new FileInfo(binaries[0]);
 						
-						File.Move(fileInfo.FullName, Path.Combine(fileInfo.DirectoryName!, $"{CurrentPreset.Author}.{CurrentPreset.Name}.bin"));
-						File.Move($"{fileInfo.FullName[..^fileInfo.Extension.Length]}.hash", Path.Combine(fileInfo.DirectoryName!, $"{CurrentPreset.Author}.{CurrentPreset.Name}.hash"));
+						File.Move(fileInfo.FullName, Path.Combine(fileInfo.DirectoryName!, $"{State.Preset.Author}.{State.Preset.Name}.bin"));
+						File.Move($"{fileInfo.FullName[..^fileInfo.Extension.Length]}.hash", Path.Combine(fileInfo.DirectoryName!, $"{State.Preset.Author}.{State.Preset.Name}.hash"));
 					}
 				}
+				
+				State = WindowState.Load();
+				WindowState.Delete();
 
 				if (EditorUserBuildSettings.activeBuildTarget != previousBuildTarget)
 					EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, previousBuildTarget);
@@ -384,48 +387,48 @@ namespace Modding.Editor
 		
 		private bool validate()
 		{
-			if (string.IsNullOrWhiteSpace(CurrentPreset.Author))
+			if (string.IsNullOrWhiteSpace(State.Preset.Author))
 			{
 				GUILayout.Label("Author is empty or invalid");
 				return false;
 			}
 			
-			if (string.IsNullOrWhiteSpace(CurrentPreset.Name))
+			if (string.IsNullOrWhiteSpace(State.Preset.Name))
 			{
 				GUILayout.Label("Name is empty or invalid");
 				return false;
 			}
 			
-			if (string.IsNullOrWhiteSpace(CurrentPreset.Version))
+			if (string.IsNullOrWhiteSpace(State.Preset.Version))
 			{
 				GUILayout.Label("Version is empty or invalid");
 				return false;
 			}
 			
-			if (CurrentPreset.Objects.Count == 0)
+			if (State.Preset.Objects.Count == 0)
 			{
 				GUILayout.Label("No objects specified");
 				return false;
 			}
 			
-			if (!string.IsNullOrEmpty(CurrentPreset.CustomAssembly))
+			if (!string.IsNullOrEmpty(State.Preset.CustomAssembly))
 			{
-				if (!CurrentPreset.CustomAssembly.EndsWith($"{CurrentPreset.Author}.{CurrentPreset.Name}.dll"))
+				if (!State.Preset.CustomAssembly.EndsWith($"{State.Preset.Author}.{State.Preset.Name}.dll"))
 				{
 					GUILayout.Label("Custom assembly must be called Author.Name.dll");
 					return false;
 				}
 				
-				if (!File.Exists(CurrentPreset.CustomAssembly))
+				if (!File.Exists(State.Preset.CustomAssembly))
 				{
 					GUILayout.Label("Custom assembly does not exist");
 					return false;
 				}
 			}
 			
-			for (var i = 0; i < CurrentPreset.Objects.Count; i++)
+			for (var i = 0; i < State.Preset.Objects.Count; i++)
 			{
-				var obj = CurrentPreset.Objects[i];
+				var obj = State.Preset.Objects[i];
 				if (obj == null)
 				{
 					GUILayout.Label("Null objects are not allowed");
@@ -444,9 +447,9 @@ namespace Modding.Editor
 
 		private bool validateOnBuild()
 		{
-			for (var i = 0; i < CurrentPreset.Objects.Count; i++)
+			for (var i = 0; i < State.Preset.Objects.Count; i++)
 			{
-				if (CurrentPreset.Objects[i] is not SceneData sceneData)
+				if (State.Preset.Objects[i] is not SceneData sceneData)
 					continue;
 
 				if (string.IsNullOrWhiteSpace(sceneData.Addressable.AssetGUID))

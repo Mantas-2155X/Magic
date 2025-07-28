@@ -8,23 +8,18 @@ namespace Modding.Editor
 {
 	public partial class ModdingTool
 	{
-		private int selectedLanguage;
-		private string addLanguage;
-
-		private Vector2 localizationScrollPosition;
-		
 		private void drawLocalization()
 		{
 			GUILayout.BeginHorizontal();
 
-			EditorGUILayout.LabelField($"Languages ({CurrentPreset.Localizations.Count})", GUILayout.Width(125));
+			EditorGUILayout.LabelField($"Languages ({State.Preset.Localizations.Count})", GUILayout.Width(125));
 			
-			var selectLanguages = new string[CurrentPreset.Localizations.Count];
+			var selectLanguages = new string[State.Preset.Localizations.Count];
 			
 			for (var i = 0; i < selectLanguages.Length; i++)
-				selectLanguages[i] = CurrentPreset.Localizations[i].Language;
+				selectLanguages[i] = State.Preset.Localizations[i].Language;
 			
-			selectedLanguage = EditorGUILayout.Popup(selectedLanguage, selectLanguages);
+			State.SelectedLanguage = EditorGUILayout.Popup(State.SelectedLanguage, selectLanguages);
 			
 			GUI.enabled = selectLanguages.Length > 0;
 			var shouldRemove = GUILayout.Button("Remove", GUILayout.Width(85));
@@ -32,14 +27,14 @@ namespace Modding.Editor
 			
 			if (shouldRemove)
 			{
-				CurrentPreset.Localizations.RemoveAt(selectedLanguage);
-				selectedLanguage = 0;
+				State.Preset.Localizations.RemoveAt(State.SelectedLanguage);
+				State.SelectedLanguage = 0;
 				return;
 			}
 			
 			if (GUILayout.Button("Clear", GUILayout.Width(45)))
 			{
-				CurrentPreset.Localizations.Clear();
+				State.Preset.Localizations.Clear();
 				return;
 			}
 			
@@ -47,43 +42,43 @@ namespace Modding.Editor
 			
 			GUILayout.BeginHorizontal();
 			
-			addLanguage = GUILayout.TextField(addLanguage);
+			State.AddLanguage = GUILayout.TextField(State.AddLanguage);
 			
-			GUI.enabled = !string.IsNullOrWhiteSpace(addLanguage) && Array.IndexOf(selectLanguages, addLanguage) == -1 && Regex.IsMatch(addLanguage, "^[a-z]+$");
+			GUI.enabled = !string.IsNullOrWhiteSpace(State.AddLanguage) && Array.IndexOf(selectLanguages, State.AddLanguage) == -1 && Regex.IsMatch(State.AddLanguage, "^[a-z]+$");
 			var shouldAdd = GUILayout.Button("Add", GUILayout.Width(45));
 			GUI.enabled = true;
 			
 			if (shouldAdd)
 			{
-				CurrentPreset.Localizations.Add(new LocalizationData
+				State.Preset.Localizations.Add(new LocalizationData
 				{
-					Language = addLanguage,
+					Language = State.AddLanguage,
 					Entries = new List<LocalizationDataEntry>()
 				});
 				
-				addLanguage = "";
-				selectedLanguage = CurrentPreset.Localizations.Count - 1;
+				State.AddLanguage = "";
+				State.SelectedLanguage = State.Preset.Localizations.Count - 1;
 			}
 			
 			GUILayout.EndHorizontal();
 			
-			if (CurrentPreset.Localizations.Count == 0)
+			if (State.Preset.Localizations.Count == 0)
 				return;
 
 			GUILayout.Space(5);
 
-			var list = CurrentPreset.Localizations[selectedLanguage].Entries;
+			var list = State.Preset.Localizations[State.SelectedLanguage].Entries;
 			
-			EditorGUILayout.LabelField($"Entries ({CurrentPreset.Objects.Count * 2})");
+			EditorGUILayout.LabelField($"Entries ({State.Preset.Objects.Count * 2})");
 
-			localizationScrollPosition = GUILayout.BeginScrollView(localizationScrollPosition);
+			State.LocalizationScrollPosition = GUILayout.BeginScrollView(State.LocalizationScrollPosition);
 
-			for (var i = 0; i < CurrentPreset.Objects.Count; i++)
+			for (var i = 0; i < State.Preset.Objects.Count; i++)
 			{
 				if (i > list.Count - 1)
 					list.Add(new LocalizationDataEntry());
 				
-				var obj = CurrentPreset.Objects[i];
+				var obj = State.Preset.Objects[i];
 				if (obj == null)
 					continue;
 

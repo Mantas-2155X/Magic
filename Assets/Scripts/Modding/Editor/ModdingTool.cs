@@ -6,26 +6,23 @@ namespace Modding.Editor
 	public partial class ModdingTool : EditorWindow
 	{
 		[SerializeField]
-		public int CurrentTab = 1;
+		public WindowState State;
 		
 		[MenuItem("Modding/Modding Tool")]
 		public static void ShowWindow()
 		{
 			var window = GetWindow<ModdingTool>(true);
 			window.minSize = new Vector2(350, 300);
+			window.State = CreateInstance<WindowState>();
+			window.State.Preset = CreateInstance<Preset>();
 			window.Show();
-			
-			window.initializePresets();
 		}
 
 		public void OnGUI()
 		{
-			CurrentTab = GUILayout.Toolbar(CurrentTab, new [] { "Presets", "Setup & Build", "Localization" });
+			State.Tab = GUILayout.Toolbar(State.Tab, new [] { "Presets", "Setup & Build", "Localization" });
 
-			if (CurrentPreset == null)
-				CurrentPreset = CreateInstance<Preset>();
-			
-			switch (CurrentTab)
+			switch (State.Tab)
 			{
 				case 0:
 					drawPresets();
