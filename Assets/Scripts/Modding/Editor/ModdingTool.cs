@@ -13,8 +13,7 @@ namespace Modding.Editor
 		{
 			var window = GetWindow<ModdingTool>(true);
 			window.minSize = new Vector2(350, 300);
-			window.State = CreateInstance<WindowState>();
-			window.State.Preset = CreateInstance<Preset>();
+			window.resetState();
 			window.Show();
 		}
 
@@ -39,6 +38,12 @@ namespace Modding.Editor
 		public void OnDestroy()
 		{
 			savePreset(true);
+		}
+
+		private void resetState()
+		{
+			State = CreateInstance<WindowState>();
+			State.Preset = CreateInstance<Preset>();
 		}
 	}
 }

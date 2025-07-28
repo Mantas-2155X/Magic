@@ -41,8 +41,15 @@ namespace Modding.Editor
 			
 			GUILayout.FlexibleSpace();
 			
+			GUILayout.BeginHorizontal();
+			
+			if (GUILayout.Button("Reset State", GUILayout.Width(100)))
+				resetState();
+
 			if (GUILayout.Button("Save Preset"))
 				savePreset();
+			
+			GUILayout.EndHorizontal();
 		}
 
 		private void savePreset(bool autoSave = false)

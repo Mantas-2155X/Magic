@@ -21,7 +21,7 @@ namespace Modding.Editor
 			
 			State.SelectedLanguage = EditorGUILayout.Popup(State.SelectedLanguage, selectLanguages);
 			
-			GUI.enabled = selectLanguages.Length > 0;
+			GUI.enabled = selectLanguages.Length > 0 && selectLanguages[State.SelectedLanguage] != "en";
 			var shouldRemove = GUILayout.Button("Remove", GUILayout.Width(85));
 			GUI.enabled = true;
 			
@@ -34,7 +34,16 @@ namespace Modding.Editor
 			
 			if (GUILayout.Button("Clear", GUILayout.Width(45)))
 			{
-				State.Preset.Localizations.Clear();
+				for (var i = State.Preset.Localizations.Count - 1; i >= 0; i--)
+				{
+					var localization = selectLanguages[i];
+					if (localization == "en")
+						continue;
+					
+					State.Preset.Localizations.RemoveAt(i);
+				}
+				
+				State.SelectedLanguage = 0;
 				return;
 			}
 			
