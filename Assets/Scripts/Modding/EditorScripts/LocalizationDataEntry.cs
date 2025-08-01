@@ -1,7 +1,8 @@
+#if UNITY_EDITOR
 using System;
 using UnityEngine;
 
-namespace Modding
+namespace Modding.EditorScripts
 {
 	[Serializable]
 	public class LocalizationDataEntry
@@ -13,3 +14,4 @@ namespace Modding
 		public string Description;
 	}
 }
+#endif

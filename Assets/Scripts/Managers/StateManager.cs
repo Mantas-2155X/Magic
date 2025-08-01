@@ -11,6 +11,7 @@ using Combat.Decals.Interfaces;
 using Combat.Projectiles.Interfaces;
 using Components;
 using Cysharp.Threading.Tasks;
+using Modding;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects;
@@ -452,14 +453,14 @@ namespace Managers
 
 			var modNames = new List<string>();
 			
-			var mods = ObjectManager.Instance.Mods;
-			for (var i = 0; i < mods.Count; i++)
+			var modInfos = ModLoader.Instance.GetModInfos();
+			for (var i = 0; i < modInfos.Count; i++)
 			{
-				var mod = mods[i];
-				if (mod == null || mod.Info.Disabled)
+				var mod = modInfos[i];
+				if (mod == null || mod.Disabled)
 					continue;
 
-				modNames.AddUnique($"{mod.Info.Author}.{mod.Info.Name}");
+				modNames.AddUnique($"{mod.Author}.{mod.Name}");
 			}
 			
 			for (var i = 0; i < data.Items.Count; i++)

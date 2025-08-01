@@ -1,8 +1,9 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Modding
+namespace Modding.EditorScripts
 {
 	[Serializable]
 	public class LocalizationData
@@ -14,3 +15,4 @@ namespace Modding
 		public List<LocalizationDataEntry> Entries;
 	}
 }
+#endif

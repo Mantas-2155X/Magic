@@ -4,6 +4,8 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Managers;
+using Modding.EditorScripts;
+using Modding.Infos;
 using Newtonsoft.Json;
 using ScriptableObjects;
 using Tools;
@@ -132,20 +134,20 @@ namespace Modding.Editor
 				
 				Directory.CreateDirectory(path);
 
-				var modInfo = new ObjectManager.ModInfo();
+				var modInfo = new ModInfo();
 				modInfo.Author = State.Preset.Author;
 				modInfo.Name = State.Preset.Name;
 				modInfo.Version = State.Preset.Version;
 				modInfo.Disabled = false;
 				modInfo.UseCustomAssembly = !string.IsNullOrWhiteSpace(State.Preset.CustomAssembly);
-				modInfo.Objects = new List<ObjectManager.ModInfo.ObjectInfo>();
-				modInfo.Localizations = new List<ObjectManager.ModInfo.LocalizationInfo>();
+				modInfo.Objects = new List<ObjectInfo>();
+				modInfo.Localizations = new List<LocalizationInfo>();
 
 				for (var i = 0; i < State.Preset.Objects.Count; i++)
 				{
 					var obj = State.Preset.Objects[i];
 
-					var objectInfo = new ObjectManager.ModInfo.ObjectInfo();
+					var objectInfo = new ObjectInfo();
 					objectInfo.Type = obj.GetType().Name;
 					objectInfo.Name = obj.Name;
 					
@@ -156,7 +158,7 @@ namespace Modding.Editor
 				{
 					var localization = State.Preset.Localizations[i];
 					
-					var localizationInfo = new ObjectManager.ModInfo.LocalizationInfo();
+					var localizationInfo = new LocalizationInfo();
 					localizationInfo.Language = localization.Language;
 					localizationInfo.Entries = new Dictionary<string, string>();
 

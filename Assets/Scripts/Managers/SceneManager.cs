@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers.Events;
+using Modding;
 using ScriptableObjects;
 using UI;
 using UnityEngine;
@@ -188,13 +189,13 @@ namespace Managers
 			}
 		}
 
-		private ObjectManager.Mod getSceneMod(SceneData sceneData)
+		private Mod getSceneMod(SceneData sceneData)
 		{
-			var mods = ObjectManager.Instance.Mods;
+			var modInfos = ModLoader.Instance.GetModInfos();
 			
-			for (var i = 0; i < mods.Count; i++)
+			for (var i = 0; i < modInfos.Count; i++)
 			{
-				var mod = mods[i];
+				var mod = ModLoader.Instance.GetMod(modInfos[i]);
 				
 				for (var k = 0; k < mod.Addresses.Count; k++)
 				{

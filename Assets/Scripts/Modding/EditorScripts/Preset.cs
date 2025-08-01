@@ -1,9 +1,10 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using ScriptableObjects;
 using UnityEngine;
 
-namespace Modding
+namespace Modding.EditorScripts
 {
 	[Serializable]
 	public class Preset : ScriptableObject
@@ -34,3 +35,4 @@ namespace Modding
 		};
 	}
 }
+#endif

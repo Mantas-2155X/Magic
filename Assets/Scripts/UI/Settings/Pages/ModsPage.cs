@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Managers;
+using Modding;
+using Modding.Infos;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,10 +40,10 @@ namespace UI.Settings.Pages
 
 		private void createItems()
 		{
-			var mods = ObjectManager.Instance.Mods;
+			var modInfos = ModLoader.Instance.GetModInfos();
 			var parent = Template.transform.parent;
 
-			for (var i = 0; i < mods.Count; i++)
+			for (var i = 0; i < modInfos.Count; i++)
 			{
 				var copy = Instantiate(Template, parent).transform;
 
@@ -66,18 +68,19 @@ namespace UI.Settings.Pages
 		private void setupItems()
 		{
 			var isTitle = SceneManager.Instance.IsInTitle();
-			var mods = ObjectManager.Instance.Mods;
+			var modInfos = ModLoader.Instance.GetModInfos();
 			
 			for (var i = 0; i < Items.Count; i++)
 			{
-				var mod = mods[i];
+				var modInfo = modInfos[i];
 
 				var item = Items[i];
-				item.Title.text = $"{mod.Info.Author}.{mod.Info.Name}";
-				item.Version.text = mod.Info.Version;
+				item.Title.text = $"{modInfo.Author}.{modInfo.Name}";
+				item.Version.text = modInfo.Version;
+				item.ModInfo = modInfo;
 				
 				item.Toggle.interactable = isTitle;
-				item.Toggle.SetIsOnWithoutNotify(!mod.Info.Disabled);
+				item.Toggle.SetIsOnWithoutNotify(!modInfo.Disabled);
 			}
 		}
 		
@@ -128,20 +131,21 @@ namespace UI.Settings.Pages
 		
 		private void toggleMod(int index)
 		{
+			var item = Items[index];
+			var modInfo = item.ModInfo;
+			
 			UnityEngine.Debug.LogWarning("[ModsPage] Toggling mods is disabled due to limitations. Edit the info file inside the mods directory instead");
-			Items[index].Toggle.SetIsOnWithoutNotify(!ObjectManager.Instance.Mods[index].Info.Disabled);
+			item.Toggle.SetIsOnWithoutNotify(!modInfo.Disabled);
 			
 			return;
 			
 			if (!SceneManager.Instance.IsInTitle())
 				return;
 			
-			var mod = ObjectManager.Instance.Mods[index];
-
-			if (mod.Info.Disabled)
-				mod.Enable();
+			if (modInfo.Disabled)
+				ModLoader.Instance.EnableMod(modInfo);
 			else
-				mod.Disable();
+				ModLoader.Instance.DisableMod(modInfo);
 			
 			setupItems();
 		}
@@ -157,6 +161,9 @@ namespace UI.Settings.Pages
 
 			[SerializeField]
 			public Toggle Toggle;
+
+			[NonSerialized]
+			public ModInfo ModInfo;
 		}
 	}
 }

@@ -1,8 +1,10 @@
+#if UNITY_EDITOR
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEditor;
 
-namespace Modding
+namespace Modding.EditorScripts
 {
 	[Serializable]
 	public class WindowState : ScriptableObject
@@ -43,7 +45,6 @@ namespace Modding
 		
 		#endregion
 
-#if UNITY_EDITOR
 		private const string statePath = "Assets/Modding";
 		
 		public static void Save(WindowState state)
@@ -51,8 +52,8 @@ namespace Modding
 			if (!Directory.Exists(statePath))
 				Directory.CreateDirectory(statePath);
 			
-			UnityEditor.AssetDatabase.CreateAsset(state.Preset, Path.Combine(statePath, "preset.asset"));
-			UnityEditor.AssetDatabase.CreateAsset(state, Path.Combine(statePath, "window.asset"));
+			AssetDatabase.CreateAsset(state.Preset, Path.Combine(statePath, "preset.asset"));
+			AssetDatabase.CreateAsset(state, Path.Combine(statePath, "window.asset"));
 		}
 
 		public static WindowState Load()
@@ -65,7 +66,7 @@ namespace Modding
 				return null;
 			}
 
-			var state = Instantiate(UnityEditor.AssetDatabase.LoadAssetAtPath<WindowState>(loadPath));
+			var state = Instantiate(AssetDatabase.LoadAssetAtPath<WindowState>(loadPath));
 			state.Preset = Instantiate(state.Preset);
 			
 			return state;
@@ -73,9 +74,9 @@ namespace Modding
 
 		public static void Delete()
 		{
-			UnityEditor.AssetDatabase.DeleteAsset(Path.Combine(statePath, "window.asset"));
-			UnityEditor.AssetDatabase.DeleteAsset(Path.Combine(statePath, "preset.asset"));
+			AssetDatabase.DeleteAsset(Path.Combine(statePath, "window.asset"));
+			AssetDatabase.DeleteAsset(Path.Combine(statePath, "preset.asset"));
 		}
-#endif
 	}
 }
+#endif
