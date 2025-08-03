@@ -26,7 +26,7 @@ namespace Modding
 					return instance;
 				
 				instance = new ModLoader();
-				instance.setupModdedDatasMap();
+				instance.loadMods();
 				
 				return instance;
 			}
@@ -127,6 +127,8 @@ namespace Modding
 			}}
 		};
 		
+		#region Get
+
 		public List<ModInfo> GetModInfos()
 		{
 			var list = new List<ModInfo>();
@@ -137,30 +139,49 @@ namespace Modding
 			return list;
 		}
 
-		public Mod GetMod(ModInfo modInfo)
+		public Dictionary<string, Data> GetModdedDatas()
 		{
-			for (var i = 0; i < mods.Count; i++)
-			{
-				var mod = mods[i];
-				if (mod.Info != modInfo)
-					continue;
-
-				return mod;
-			}
-
-			return null;
+			return moddedDatasMap;
 		}
 		
+		public List<string> GetAddresses(ModInfo modInfo)
+		{
+			if (modInfo == null)
+				return null;
+			
+			var mod = getMod(modInfo);
+			if (mod == null)
+				return null;
+
+			return mod.Addresses;
+		}
+
+		public string GetDirectory(ModInfo modInfo)
+		{
+			if (modInfo == null)
+				return null;
+			
+			var mod = getMod(modInfo);
+			if (mod == null)
+				return null;
+
+			return mod.Directory;
+		}
+		
+		#endregion
+
+		#region API
+
 		public bool EnableMod(ModInfo modInfo)
 		{
 			if (modInfo == null || !modInfo.Disabled)
 				return false;
 			
-			var mod = GetMod(modInfo);
+			var mod = getMod(modInfo);
 			if (mod == null)
 				return false;
 
-			LoadMod(mod);
+			loadMod(mod);
 			
 			modInfo.Disabled = false;
 			File.WriteAllText(Path.Combine(mod.Directory, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
@@ -173,12 +194,12 @@ namespace Modding
 			if (modInfo == null || modInfo.Disabled)
 				return false;
 
-			var mod = GetMod(modInfo);
+			var mod = getMod(modInfo);
 			if (mod == null)
 				return false;
 			
 			if (mod.Catalog.Item2 != null)
-				UnloadMod(mod);
+				unloadMod(mod);
 
 			modInfo.Disabled = true;
 			File.WriteAllText(Path.Combine(mod.Directory, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
@@ -186,7 +207,25 @@ namespace Modding
 			return true;
 		}
 		
-		public bool LoadMod(Mod mod)
+		#endregion
+
+		#region Internals
+
+		private Mod getMod(ModInfo modInfo)
+		{
+			for (var i = 0; i < mods.Count; i++)
+			{
+				var mod = mods[i];
+				if (mod.Info != modInfo)
+					continue;
+
+				return mod;
+			}
+
+			return null;
+		}
+
+		private bool loadMod(Mod mod)
 		{
 			var info = mod.Info;
 			
@@ -271,7 +310,7 @@ namespace Modding
 					continue;
 				}
 					
-				if (!IsAllowedModdedData(dataType))
+				if (!isAllowedModdedData(dataType))
 				{
 					Debug.LogWarning($"[ModLoader] Data type at line {i} for mod at {mod.Directory} is not supported, skipping object");
 					continue;
@@ -339,7 +378,7 @@ namespace Modding
 			return true;
 		}
 
-		public bool UnloadMod(Mod mod)
+		private bool unloadMod(Mod mod)
 		{
 			for (var i = 0; i < mod.Addresses.Count; i++)
 				moddedDatasMap.Remove(mod.Addresses[i]);
@@ -352,27 +391,7 @@ namespace Modding
 			return true;
 		}
 
-		public Dictionary<string, Data> GetModdedDatas()
-		{
-			return moddedDatasMap;
-		}
-		
-		public bool IsAllowedModdedData(Type type)
-		{
-			return allowedModdedDatas.Contains(type);
-		}
-
-		public bool IsWhitelistedReference(AssemblyNameReference reference)
-		{
-			return whitelistedReferences.Contains(reference.Name);
-		}
-
-		public bool IsBlacklistedNamespaceOrType(TypeReference type)
-		{
-			return blacklistedNamespaces.Contains(type.Namespace) || blacklistedTypes.TryGetValue(type.Namespace, out var typesList) && typesList.Contains(type.Name);
-		}
-
-		private void setupModdedDatasMap()
+		private void loadMods()
 		{
 			if (!Directory.Exists(ModsPath))
 				Directory.CreateDirectory(ModsPath);
@@ -490,7 +509,7 @@ namespace Modding
 					mods.Add(mod);
 					
 					if (!mod.Info.Disabled)
-						LoadMod(mod);
+						loadMod(mod);
 				}
 				catch (Exception e)
 				{
@@ -534,7 +553,7 @@ namespace Modding
 			{
 				var reference = references[i];
 				
-				if (IsWhitelistedReference(reference))
+				if (isWhitelistedReference(reference))
 					continue;
 
 				Debug.LogWarning($"[ModLoader] Custom assembly references non-whitelisted reference {reference.FullName} for mod at {mod.Directory}, no content added");
@@ -579,7 +598,7 @@ namespace Modding
 						if (operand is not MethodReference reference)
 							continue;
 
-						if (IsBlacklistedNamespaceOrType(reference.DeclaringType))
+						if (isBlacklistedNamespaceOrType(reference.DeclaringType))
 						{
 							Debug.LogWarning($"[ModLoader] Custom assembly uses blacklisted namespace or type {reference.DeclaringType.Namespace}.{reference.DeclaringType.Name} for mod at {mod.Directory}, no content added");
 							return false;
@@ -599,5 +618,22 @@ namespace Modding
 			
 			return true;
 		}
+		
+		private bool isAllowedModdedData(Type type)
+		{
+			return allowedModdedDatas.Contains(type);
+		}
+
+		private bool isWhitelistedReference(AssemblyNameReference reference)
+		{
+			return whitelistedReferences.Contains(reference.Name);
+		}
+
+		private bool isBlacklistedNamespaceOrType(TypeReference type)
+		{
+			return blacklistedNamespaces.Contains(type.Namespace) || blacklistedTypes.TryGetValue(type.Namespace, out var typesList) && typesList.Contains(type.Name);
+		}
+		
+		#endregion
 	}
 }

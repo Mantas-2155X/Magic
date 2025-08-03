@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers.Events;
 using Modding;
+using Modding.Infos;
 using ScriptableObjects;
 using UI;
 using UnityEngine;
@@ -189,22 +190,23 @@ namespace Managers
 			}
 		}
 
-		private Mod getSceneMod(SceneData sceneData)
+		private ModInfo getSceneModInfo(SceneData sceneData)
 		{
 			var modInfos = ModLoader.Instance.GetModInfos();
 			
 			for (var i = 0; i < modInfos.Count; i++)
 			{
-				var mod = ModLoader.Instance.GetMod(modInfos[i]);
+				var modInfo = modInfos[i];
+				var addresses = ModLoader.Instance.GetAddresses(modInfo);
 				
-				for (var k = 0; k < mod.Addresses.Count; k++)
+				for (var k = 0; k < addresses.Count; k++)
 				{
-					var address = mod.Addresses[k];
+					var address = addresses[k];
 					
 					if (!address.StartsWith("Scenes/") || address[7..] != sceneData.Name)
 						continue;
 
-					return mod;
+					return modInfo;
 				}
 			}
 
@@ -213,8 +215,8 @@ namespace Managers
 
 		private void setupTransformFunction(SceneData sceneData)
 		{
-			var currentMod = getSceneMod(sceneData);
-			if (currentMod == null)
+			var modInfo = getSceneModInfo(sceneData);
+			if (modInfo == null)
 				return;
 
 			var platform = "";
@@ -229,7 +231,7 @@ namespace Managers
 					break;
 			}
 
-			Addressables.InternalIdTransformFunc = location => !location.InternalId.StartsWith(platform) ? location.InternalId : $"{currentMod.Directory}/{location.InternalId}";
+			Addressables.InternalIdTransformFunc = location => !location.InternalId.StartsWith(platform) ? location.InternalId : $"{ModLoader.Instance.GetDirectory(modInfo)}/{location.InternalId}";
 		}
 	}
 }
