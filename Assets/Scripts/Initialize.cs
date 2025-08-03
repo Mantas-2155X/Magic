@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Managers;
+using Modding;
 using UI;
 using UnityEngine;
 using Debug = UI.Debug;
@@ -33,6 +34,7 @@ public static class Initialize
 		UnityEngine.Debug.Log($"GPU: {SystemInfo.graphicsDeviceName} (VRAM: {SystemInfo.graphicsMemorySize} MB)");
 
 		_ = ConsoleManager.Instance;
+		_ = ModLoader.Instance;
 		_ = ObjectManager.Instance;
 		_ = SelectionManager.Instance;
 		_ = SettingsManager.Instance;

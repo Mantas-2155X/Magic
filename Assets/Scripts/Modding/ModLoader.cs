@@ -36,6 +36,8 @@ namespace Modding
 		
 		private readonly List<Mod> mods = new ();
 		
+		private readonly Dictionary<string, Data> moddedDatasMap = new ();
+
 		private readonly List<Type> allowedModdedDatas = new ()
 		{
 			//typeof(AliveData),
@@ -292,7 +294,7 @@ namespace Modding
 					var address = dataType.Name[..^4] + $"s/{bundleData.Name}";
 					mod.Addresses.Add(address);
 
-					ObjectManager.Instance.SetModdedDataMap(address, bundleData);
+					moddedDatasMap[address] = bundleData;
 					
 					found = true;
 					break;
@@ -340,7 +342,7 @@ namespace Modding
 		public bool UnloadMod(Mod mod)
 		{
 			for (var i = 0; i < mod.Addresses.Count; i++)
-				ObjectManager.Instance.RemoveModdedDataMap(mod.Addresses[i]);
+				moddedDatasMap.Remove(mod.Addresses[i]);
 
 			mod.Addresses.Clear();
 			
@@ -348,6 +350,11 @@ namespace Modding
 			Debug.Log($"[ModLoader] Unloaded mod {mod.Info.Author}.{mod.Info.Name} {mod.Info.Version}");
 
 			return true;
+		}
+
+		public Dictionary<string, Data> GetModdedDatas()
+		{
+			return moddedDatasMap;
 		}
 		
 		public bool IsAllowedModdedData(Type type)

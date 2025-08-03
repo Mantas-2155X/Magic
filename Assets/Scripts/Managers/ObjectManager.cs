@@ -31,7 +31,6 @@ namespace Managers
 				
 				instance = new ObjectManager();
 				instance.setupDatasMap();
-				_ = ModLoader.Instance;
 #if PRINT_DATAS
 				instance.printDatasMap();
 #endif
@@ -41,7 +40,6 @@ namespace Managers
 		}
 
 		private readonly Dictionary<string, Data> datasMap = new ();
-		private readonly Dictionary<string, Data> moddedDatasMap = new ();
 		
 		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes", "Paths" };
 
@@ -70,30 +68,17 @@ namespace Managers
 			
 			Debug.Log("[ContentManager] Printing modded datas map");
 
-			foreach (var pair in moddedDatasMap)
+			foreach (var pair in ModLoader.Instance.GetModdedDatas())
 				Debug.Log($"[ContentManager] {pair.Value.GetType().Name} - {pair.Key}");
 		}
 		
 		#endregion
 
-		#region Modify
-
-		internal void SetModdedDataMap(string key, Data value)
-		{
-			moddedDatasMap[key] = value;
-		}
-
-		internal void RemoveModdedDataMap(string key)
-		{
-			moddedDatasMap.Remove(key);
-		}
-		
-		#endregion
-		
 		#region Get
 
 		public Data GetData(string path)
 		{
+			var moddedDatasMap = ModLoader.Instance.GetModdedDatas();
 			return datasMap.TryGetValue(path, out var data) ? data : moddedDatasMap.GetValueOrDefault(path);
 		}
 		
@@ -162,7 +147,8 @@ namespace Managers
 
 				list.Add(sceneData);
 			}
-			
+
+			var moddedDatasMap = ModLoader.Instance.GetModdedDatas();
 			foreach (var pair in moddedDatasMap)
 			{
 				if (pair.Value is not SceneData sceneData)

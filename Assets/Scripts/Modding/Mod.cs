@@ -13,7 +13,7 @@ namespace Modding
 		
 		public Tuple<string, IResourceLocator> Catalog { get; set; }
 
-		public List<string> Addresses { get; set; }
+		public List<string> Addresses { get; private set; }
 		
 		public bool CustomAssemblyLoaded { get; set; }
 
