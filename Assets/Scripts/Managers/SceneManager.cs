@@ -171,8 +171,8 @@ namespace Managers
 
 		private void getScenes()
 		{
-			var availableScenes = ObjectManager.Instance.GetAllScenes();
-			if (availableScenes == null || availableScenes.Length == 0)
+			var availableScenes = ObjectManager.Instance.GetAllDatas<SceneData>();
+			if (availableScenes == null || availableScenes.Count == 0)
 				return;
 
 			foreach (var sceneData in availableScenes)

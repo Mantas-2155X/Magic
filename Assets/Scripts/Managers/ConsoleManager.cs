@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using AI.Enums;
 using Managers.Events;
+using ScriptableObjects;
 using Tools;
 using UI;
 using UI.Settings.Pages;
@@ -218,28 +219,6 @@ namespace Managers
 				SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
 			});
 			
-			AddCommand("scene", "Changes the scene", new [] {EConsoleCommandParameter.String}, args =>
-			{
-				var sceneData = ObjectManager.Instance.GetScene((string)args[0]);
-
-				if (!SceneManager.Instance.SceneExists(sceneData) || sceneData == null)
-				{
-					Debug.LogWarning("Scene not found");
-					return;
-				}
-				
-				if (sceneData.Internal)
-				{
-					Debug.LogWarning("Internal scenes can not be manually loaded");
-					return;
-				}
-				
-				SceneManager.Instance.ChangeScene(sceneData, true, true, sceneData.Name != "SCENE_TITLE_NAME");
-			}, () =>
-			{
-				Debug.Log(SceneManager.Instance.GetCurrentSceneData().Name);
-			});
-			
 			AddCommand("msens", "Changes the mouse sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
 			{
 				var value = (float)args[0];
@@ -322,14 +301,36 @@ namespace Managers
 				}
 			});
 			
+			AddCommand("scene", "Changes the scene", new [] {EConsoleCommandParameter.String}, args =>
+			{
+				var sceneData = ObjectManager.Instance.GetScene((string)args[0]);
+
+				if (!SceneManager.Instance.SceneExists(sceneData) || sceneData == null)
+				{
+					Debug.LogWarning("Scene not found");
+					return;
+				}
+				
+				if (sceneData.Internal)
+				{
+					Debug.LogWarning("Internal scenes can not be manually loaded");
+					return;
+				}
+				
+				SceneManager.Instance.ChangeScene(sceneData, true, true, sceneData.Name != "SCENE_TITLE_NAME");
+			}, () =>
+			{
+				Debug.Log(SceneManager.Instance.GetCurrentSceneData().Name);
+			});
+			
 			AddCommand("scenes", "Lists all available scenes", () =>
 			{
 				Debug.Log("Available Scenes:");
 
-				var sceneDatas = SceneManager.Instance.GetSceneDatas();
+				var datas = ObjectManager.Instance.GetAllDatas<SceneData>();
 				
-				for (var i = 0; i < sceneDatas.Count; i++)
-					Debug.Log(sceneDatas[i].Name);
+				for (var i = 0; i < datas.Count; i++)
+					Debug.Log(datas[i].Name);
 			});
 			
 			AddCommand("noclip", "Toggle noclip mode", () =>
@@ -395,7 +396,7 @@ namespace Managers
 				player.EquipWearable(ObjectManager.Instance.GetWearable(wearable));
 			});
 			
-			AddCommand("create", "Create an object where the player is looking", new [] {EConsoleCommandParameter.String}, args =>
+			AddCommand("object", "Creates an object where the player is looking", new [] {EConsoleCommandParameter.String}, args =>
 			{
 				var player = AIManager.Instance.Player;
 				if (player == null || !player.IsAlive)
@@ -414,6 +415,16 @@ namespace Managers
 					return;
 				
 				ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject(objName), hit.point + Vector3.up, new Vector3(0, player.transform.eulerAngles.y, 0));
+			});
+			
+			AddCommand("objects", "Lists all available objects", () =>
+			{
+				Debug.Log("Available Objects:");
+
+				var datas = ObjectManager.Instance.GetAllDatas<ObjectData>();
+				
+				for (var i = 0; i < datas.Count; i++)
+					Debug.Log(datas[i].Name);
 			});
 			
 			AddCommand("timescale", "Sets the time scale", new [] {EConsoleCommandParameter.Float}, args =>

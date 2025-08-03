@@ -136,28 +136,28 @@ namespace Managers
 
 		#region Get All
 
-		public SceneData[] GetAllScenes()
+		public List<T> GetAllDatas<T>() where T : Data
 		{
-			var list = new List<SceneData>();
+			var list = new List<T>();
 
 			foreach (var pair in datasMap)
 			{
-				if (pair.Value is not SceneData sceneData)
+				if (pair.Value is not T data)
 					continue;
 
-				list.Add(sceneData);
+				list.Add(data);
 			}
 
 			var moddedDatasMap = ModLoader.Instance.GetModdedDatas();
 			foreach (var pair in moddedDatasMap)
 			{
-				if (pair.Value is not SceneData sceneData)
+				if (pair.Value is not T data)
 					continue;
 
-				list.Add(sceneData);
+				list.Add(data);
 			}
 			
-			return list.ToArray();
+			return list;
 		}
 
 		#endregion
