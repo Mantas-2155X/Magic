@@ -12,12 +12,10 @@ using AI.PathFinding;
 using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Objects.Base;
 using ScriptableObjects;
 using State;
 using State.Enums;
 using State.Interfaces;
-using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -110,7 +108,6 @@ namespace AI
 				if (prev!.Value.owner != isOnLink.Value.owner)
 				{
 					ShrinkObject(NavMeshTools.IsElevatorLink(isOnLink.Value));
-					return;
 				}
 			}
 		}
@@ -758,14 +755,14 @@ namespace AI
 		
 		public override bool IsWalking => Agent.HasPath;
 
-		public override void AddSlowSource(string objectID, float amount, float duration)
+		public override void AddSlowSource(string objID, float amount, float duration)
 		{
-			base.AddSlowSource(objectID, amount, duration);
+			base.AddSlowSource(objID, amount, duration);
 			updateAgentSpeed();
 		}
-		public override void RemoveSlowSource(string objectID)
+		public override void RemoveSlowSource(string objID)
 		{
-			base.RemoveSlowSource(objectID);
+			base.RemoveSlowSource(objID);
 			updateAgentSpeed();
 		}
 		public override void ClearSlowSources()
@@ -774,14 +771,14 @@ namespace AI
 			updateAgentSpeed();
 		}
 		
-		public override void AddParalyzeSource(string objectID, float duration)
+		public override void AddParalyzeSource(string objID, float duration)
 		{
-			base.AddParalyzeSource(objectID, duration);
+			base.AddParalyzeSource(objID, duration);
 			updateAgentSpeed();
 		}
-		public override void RemoveParalyzeSource(string objectID)
+		public override void RemoveParalyzeSource(string objID)
 		{
-			base.RemoveParalyzeSource(objectID);
+			base.RemoveParalyzeSource(objID);
 			updateAgentSpeed();
 		}
 		public override void ClearParalyzeSources()

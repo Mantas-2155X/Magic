@@ -1,17 +1,12 @@
 using System;
-using System.Collections.Generic;
 using AI.Interfaces;
-using Combat.Attacks.Base;
 using Combat.Wearables.Interfaces;
 using Managers;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
-using ScriptableObjects;
 using State;
 using State.Enums;
 using State.Interfaces;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Objects

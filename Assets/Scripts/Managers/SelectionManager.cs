@@ -7,7 +7,6 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 namespace Managers
 {

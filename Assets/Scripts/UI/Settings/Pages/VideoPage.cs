@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Managers;
-using TMPro;
 using UI.Elements;
 using UnityEngine;
 using UnityEngine.UI;

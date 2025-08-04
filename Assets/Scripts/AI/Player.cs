@@ -11,7 +11,6 @@ using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
 using State.Interfaces;
-using State.States;
 using Tools;
 using UI;
 using UI.Enums;
@@ -768,14 +767,14 @@ namespace AI
 			}
 		}
 		
-		public override void AddParalyzeSource(string objectID, float duration)
+		public override void AddParalyzeSource(string objID, float duration)
 		{
-			base.AddParalyzeSource(objectID, duration);
+			base.AddParalyzeSource(objID, duration);
 			RenderManager.Instance.Desaturate(Paralyzed);
 		}
-		public override void RemoveParalyzeSource(string objectID)
+		public override void RemoveParalyzeSource(string objID)
 		{
-			base.RemoveParalyzeSource(objectID);
+			base.RemoveParalyzeSource(objID);
 			RenderManager.Instance.Desaturate(Paralyzed);
 		}
 		public override void ClearParalyzeSources()

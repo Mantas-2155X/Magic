@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Settings

@@ -342,7 +342,6 @@ namespace Modding
 				if (!found)
 				{
 					Debug.LogWarning($"[ModLoader] Mod bundle at {mod.Directory} does not contain object described at line {i}, skipping object");
-					continue;
 				}
 			}
 

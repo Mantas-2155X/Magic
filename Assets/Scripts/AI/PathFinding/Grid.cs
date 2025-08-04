@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using AI.PathFinding.Jobs;
 using AI.PathFinding.Enums;
 using AI.PathFinding.Structs;
@@ -202,7 +201,7 @@ namespace AI.PathFinding
 							Gizmos.color = Color.red;
 						else if (neighbor.Cost >= 1.4f)
 							Gizmos.color = Color.yellow;
-						else if (neighbor.Cost == 1f)
+						else if (Mathf.Approximately(neighbor.Cost, 1f))
 							Gizmos.color = Color.green;
 						
 						Gizmos.DrawLine(nodePos, nodes[neighbor.Index].WorldPosition);

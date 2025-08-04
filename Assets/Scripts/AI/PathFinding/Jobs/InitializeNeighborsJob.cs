@@ -33,7 +33,6 @@ namespace AI.PathFinding.Jobs
 			var node = Nodes[index];
 			
 			var gridPos = node.GridPosition;
-			var worldPos = node.WorldPosition;
 			
 			var x = gridPos.x;
 			var y = gridPos.y;

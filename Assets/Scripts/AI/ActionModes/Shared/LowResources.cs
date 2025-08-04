@@ -7,7 +7,6 @@ using ScriptableObjects;
 using ScriptableObjects.Enums;
 using Tools;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace AI.ActionModes.Shared
 {

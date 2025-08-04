@@ -1,7 +1,6 @@
 using System;
 using AI;
 using AI.Base;
-using AI.Interfaces;
 using Combat.Spells.Base;
 using Managers;
 using ScriptableObjects;

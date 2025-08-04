@@ -1,6 +1,5 @@
 using ScriptableObjects;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace AI.ActionModes.Shared
 {

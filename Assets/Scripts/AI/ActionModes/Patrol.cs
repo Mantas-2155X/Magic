@@ -44,7 +44,6 @@ namespace AI.ActionModes
 						return;
 					
 					Owner.Patrolling.GoToCurrentPoint();
-					return;
 				}
 				
 				return;

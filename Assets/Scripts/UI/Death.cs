@@ -1,7 +1,5 @@
-using AI;
 using AI.Base;
 using AI.Interfaces;
-using Managers;
 using UnityEngine;
 
 namespace UI

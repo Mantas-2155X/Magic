@@ -1,7 +1,6 @@
 using AI.Enums;
 using AI.Interfaces;
 using Objects.Interfaces;
-using ScriptableObjects;
 using State.Interfaces;
 using Tools;
 using UnityEngine;

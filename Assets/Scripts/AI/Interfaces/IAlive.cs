@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using AI.Enums;
-using AYellowpaper.SerializedCollections;
 using Combat.Enums;
 using Combat.Spells.Interfaces;
 using Combat.Structs;
 using Combat.Wearables.Interfaces;
-using Newtonsoft.Json.Linq;
 using Objects.Interfaces;
 using ScriptableObjects;
 using State.Interfaces;
@@ -57,12 +55,12 @@ namespace AI.Interfaces
 		public void SetMovementType(EMovementType value);
 		public void SetRelationshipGroup(int value);
 		
-		public void AddSlowSource(string objectID, float amount, float duration);
-		public void RemoveSlowSource(string objectID);
+		public void AddSlowSource(string objID, float amount, float duration);
+		public void RemoveSlowSource(string objID);
 		public void ClearSlowSources();
 		
-		public void AddParalyzeSource(string objectID, float duration);
-		public void RemoveParalyzeSource(string objectID);
+		public void AddParalyzeSource(string objID, float duration);
+		public void RemoveParalyzeSource(string objID);
 		public void ClearParalyzeSources();
 
 		public int GetSpellIndex(SpellData data);

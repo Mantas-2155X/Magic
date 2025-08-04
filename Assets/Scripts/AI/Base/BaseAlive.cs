@@ -22,12 +22,9 @@ using State.Enums;
 using State.Interfaces;
 using State.States;
 using Tools;
-using UI.Hotbar;
-using UI.Spellbook;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 namespace AI.Base
 {
@@ -253,37 +250,37 @@ namespace AI.Base
 			OnRelationshipGroupChangedEvent?.Invoke(this, previousRelationshipGroup, RelationshipGroup);
 		}
 		
-		public virtual void AddSlowSource(string objectID, float amount, float duration)
+		public virtual void AddSlowSource(string objID, float amount, float duration)
 		{
 			if (duration <= 0f)
 				return;
 
 			if (Mathf.Approximately(duration, float.MaxValue))
 			{
-				SlowSources[objectID] = new Tuple<float, float, float>(Mathf.Clamp01(amount), Time.time, duration);
+				SlowSources[objID] = new Tuple<float, float, float>(Mathf.Clamp01(amount), Time.time, duration);
 			}
 			else
 			{
-				addTemporarySlow(objectID, amount, duration).Forget();
+				addTemporarySlow(objID, amount, duration).Forget();
 			}
 		}
-		public virtual void RemoveSlowSource(string objectID)
+		public virtual void RemoveSlowSource(string objID)
 		{
-			SlowSources.Remove(objectID);
+			SlowSources.Remove(objID);
 		}
 		public virtual void ClearSlowSources()
 		{
 			SlowSources.Clear();
 		}
 		
-		public virtual void AddParalyzeSource(string objectID, float duration)
+		public virtual void AddParalyzeSource(string objID, float duration)
 		{
 			if (duration <= 0)
 				return;
 			
 			if (Mathf.Approximately(duration, float.MaxValue))
 			{
-				ParalyzeSources[objectID] = new Tuple<float, float>(Time.time, float.MaxValue);
+				ParalyzeSources[objID] = new Tuple<float, float>(Time.time, float.MaxValue);
 			
 				if (Paralyzed)
 				{
@@ -295,12 +292,12 @@ namespace AI.Base
 			}
 			else
 			{
-				addTemporaryParalyze(objectID, duration).Forget();
+				addTemporaryParalyze(objID, duration).Forget();
 			}
 		}
-		public virtual void RemoveParalyzeSource(string objectID)
+		public virtual void RemoveParalyzeSource(string objID)
 		{
-			ParalyzeSources.Remove(objectID);
+			ParalyzeSources.Remove(objID);
 			
 			if (!Paralyzed)
 				Body.SetMalfunction(false);

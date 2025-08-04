@@ -1,5 +1,4 @@
 using System;
-using AI.Interfaces;
 using UnityEngine.Events;
 
 namespace Objects.Events

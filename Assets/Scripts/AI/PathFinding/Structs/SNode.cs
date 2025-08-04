@@ -1,5 +1,4 @@
 using System;
-using AI.PathFinding.Enums;
 using Unity.Burst;
 using Unity.Mathematics;
 
