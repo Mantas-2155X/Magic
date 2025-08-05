@@ -654,7 +654,7 @@ namespace AI.Base
 			for (var i = 0; i < explodeList.Count; i++)
 				explodeList[i].AddExplosionForce(350f, bodyPos, 2f);
 			
-			if (!killSilently && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
+			if (!killSilently && SettingsManager.Instance.GetInt("graphics-modelquality") >= 2)
 			{
 				var ragdolls = World.World.Instance.Ragdolls;
 				var scale = thisTr.localScale;

@@ -32,11 +32,6 @@ namespace UI.Settings.Pages
 		public Localizer AntialiasingLocalizer;
 		[SerializeField]
 		public DropdownLocalizer AntialiasingDropdown;
-
-		[SerializeField]
-		public Localizer ShatterObjectsLocalizer;
-		[SerializeField]
-		public Toggle ShatterObjectsToggle;
 		
 		[SerializeField]
 		public Localizer MotionBlurLocalizer;
@@ -86,12 +81,6 @@ namespace UI.Settings.Pages
 			AntialiasingDropdown.SetOptions(aaKeys);
 			AntialiasingDropdown.SetValueWithoutNotify(Convert.ToInt32(antiAliasing.Value));
 			
-			var shatterObjects = SettingsManager.Instance.GetSetting("graphics-shatterobjects");
-			ShatterObjectsLocalizer.Key = shatterObjects.Name;
-			ShatterObjectsLocalizer.Apply();
-			
-			ShatterObjectsToggle.SetIsOnWithoutNotify(Convert.ToBoolean(shatterObjects.Value));
-			
 			var motionBlur = SettingsManager.Instance.GetSetting("graphics-motionblur");
 			MotionBlurLocalizer.Key = motionBlur.Name;
 			MotionBlurLocalizer.Apply();
@@ -136,11 +125,6 @@ namespace UI.Settings.Pages
 		public void OnAntialiasingChanged(int value)
 		{
 			SettingsManager.Instance.SetSetting("graphics-antialiasing", value);
-		}
-		
-		public void OnShatterObjectsChanged(bool value)
-		{
-			SettingsManager.Instance.SetSetting("graphics-shatterobjects", value);
 		}
 		
 		public void OnMotionBlurChanged(bool value)

@@ -708,11 +708,6 @@ namespace Managers
 						break;
 				}
 			});
-
-			AddSetting("graphics-shatterobjects", "SETTINGS_GRAPHICS_SHATTEROBJECTS", "SETTINGS_GRAPHICS_SHATTEROBJECTS_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
-			{
-				
-			});
 			
 			AddSetting("graphics-motionblur", "SETTINGS_GRAPHICS_MOTIONBLUR", "SETTINGS_GRAPHICS_MOTIONBLUR_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
 			{

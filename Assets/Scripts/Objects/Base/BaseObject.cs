@@ -214,7 +214,7 @@ namespace Objects.Base
 			if (!ObjectData.IsBreakable)
 				return;
 
-			if (ObjectData.BrokenPrefabReference != null && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
+			if (ObjectData.BrokenPrefabReference != null && SettingsManager.Instance.GetInt("graphics-modelquality") >= 2)
 			{
 				var brokenPrefab = Addressables.InstantiateAsync(ObjectData.BrokenPrefabReference, World.World.Instance.Ragdolls).WaitForCompletion();
 				
