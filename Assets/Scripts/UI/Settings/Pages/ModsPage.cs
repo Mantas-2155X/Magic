@@ -75,7 +75,7 @@ namespace UI.Settings.Pages
 				var modInfo = modInfos[i];
 
 				var item = Items[i];
-				item.Title.text = $"{modInfo.Author}.{modInfo.Name}";
+				item.Title.text = modInfo.GetGUID();
 				item.Version.text = modInfo.Version;
 				item.ModInfo = modInfo;
 				

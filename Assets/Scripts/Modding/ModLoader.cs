@@ -237,7 +237,7 @@ namespace Modding
 			
 			var previousTransformFunction = Addressables.InternalIdTransformFunc;
 
-			var prefix = $"{info.Author}.{info.Name}.";
+			var prefix = $"{info.GetGUID()}.";
 			var bundleDatas = new List<Data>();
 
 			var platform = "";
@@ -328,7 +328,7 @@ namespace Modding
 					bundleData.Description = prefix + bundleData.Description;
 
 					if (!string.IsNullOrWhiteSpace(bundleData.Type))
-						bundleData.Assembly = $"{info.Author}.{info.Name}";
+						bundleData.Assembly = info.GetGUID();
 
 					var address = dataType.Name[..^4] + $"s/{bundleData.Name}";
 					mod.Addresses.Add(address);
@@ -373,7 +373,7 @@ namespace Modding
 				return false;
 			}
 
-			Debug.Log($"[ModLoader] Loaded mod {info.Author}.{info.Name} {info.Version} with {mod.Addresses.Count} object(s) {(mod.CustomAssemblyLoaded ? "and custom assembly" : "")}");
+			Debug.Log($"[ModLoader] Loaded mod {info.GetGUID()} {info.Version} with {mod.Addresses.Count} object(s) {(mod.CustomAssemblyLoaded ? "and custom assembly" : "")}");
 			return true;
 		}
 
@@ -385,7 +385,7 @@ namespace Modding
 			mod.Addresses.Clear();
 			
 			mod.Catalog = new Tuple<string, IResourceLocator>(mod.Catalog.Item1, null);
-			Debug.Log($"[ModLoader] Unloaded mod {mod.Info.Author}.{mod.Info.Name} {mod.Info.Version}");
+			Debug.Log($"[ModLoader] Unloaded mod {mod.Info.GetGUID()} {mod.Info.Version}");
 
 			return true;
 		}
@@ -457,7 +457,7 @@ namespace Modding
 					}
 					
 					var bundlePath = Path.Combine(directory, platform);
-					var catalogPath = Path.Combine(bundlePath, $"{modInfo.Author}.{modInfo.Name}.bin");
+					var catalogPath = Path.Combine(bundlePath, $"{modInfo.GetGUID()}.bin");
 					
 					if (!Directory.Exists(bundlePath) || !File.Exists(catalogPath))
 					{
@@ -466,7 +466,7 @@ namespace Modding
 					}
 
 					foundMods.Add(modInfo, new Tuple<string, string>(directory, catalogPath));
-					Debug.Log($"[ModLoader] Preloaded mod {modInfo.Author}.{modInfo.Name} {modInfo.Version} ({(modInfo.Disabled ? "Disabled" : "Enabled")})");
+					Debug.Log($"[ModLoader] Preloaded mod {modInfo.GetGUID()} {modInfo.Version} ({(modInfo.Disabled ? "Disabled" : "Enabled")})");
 				}
 				catch (Exception e)
 				{
@@ -521,7 +521,7 @@ namespace Modding
 		{
 			var info = mod.Info;
 			
-			var assemblyPath = Path.Combine(mod.Directory, $"{info.Author}.{info.Name}.dll");
+			var assemblyPath = Path.Combine(mod.Directory, $"{info.GetGUID()}.dll");
 			if (!File.Exists(assemblyPath))
 			{
 				Debug.LogWarning($"[ModLoader] Could not find custom assembly for mod at {mod.Directory}, no content added");
@@ -541,9 +541,9 @@ namespace Modding
 			}
 
 			var assemblyName = assemblyDefinition.Name.Name;
-			if (assemblyName != $"{info.Author}.{info.Name}")
+			if (assemblyName != info.GetGUID())
 			{
-				Debug.LogWarning($"[ModLoader] Invalid custom assembly name (should be {info.Author}.{info.Name}, is {assemblyName}) for mod at {mod.Directory}, no content added");
+				Debug.LogWarning($"[ModLoader] Invalid custom assembly name (should be {info.GetGUID()}, is {assemblyName}) for mod at {mod.Directory}, no content added");
 				return false;
 			}
 

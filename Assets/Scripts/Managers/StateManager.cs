@@ -454,11 +454,11 @@ namespace Managers
 			var modInfos = ModLoader.Instance.GetModInfos();
 			for (var i = 0; i < modInfos.Count; i++)
 			{
-				var mod = modInfos[i];
-				if (mod == null || mod.Disabled)
+				var modInfo = modInfos[i];
+				if (modInfo == null || modInfo.Disabled)
 					continue;
 
-				modNames.AddUnique($"{mod.Author}.{mod.Name}");
+				modNames.AddUnique(modInfo.GetGUID());
 			}
 			
 			for (var i = 0; i < data.Items.Count; i++)
