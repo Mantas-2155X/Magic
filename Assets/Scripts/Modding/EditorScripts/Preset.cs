@@ -33,6 +33,11 @@ namespace Modding.EditorScripts
 				Entries = new List<LocalizationDataEntry>()
 			}
 		};
+		
+		public string GetGUID()
+		{
+			return $"{Author}.{Name}";
+		}
 	}
 }
 #endif

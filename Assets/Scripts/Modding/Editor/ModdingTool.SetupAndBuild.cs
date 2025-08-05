@@ -120,7 +120,7 @@ namespace Modding.Editor
 				if (!Directory.Exists(exportPath))
 					Directory.CreateDirectory(exportPath);
 
-				var directory = $"{State.Preset.Author}.{State.Preset.Name}";
+				var directory = State.Preset.GetGUID();
 				var path = Path.Combine(exportPath, directory);
 				
 				var settings = AddressableAssetSettingsDefaultObject.Settings;
@@ -184,7 +184,7 @@ namespace Modding.Editor
 				
 				File.WriteAllText(Path.Combine(path, "info.json"), JsonConvert.SerializeObject(modInfo, Formatting.Indented));
 
-				var group = settings.CreateGroup($"{State.Preset.Author}.{State.Preset.Name}", false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
+				var group = settings.CreateGroup(State.Preset.GetGUID(), false, false, false, null, typeof(BundledAssetGroupSchema), typeof(ContentUpdateGroupSchema));
 
 				var restoreAssets = new Dictionary<string, AddressableAssetGroup>();
 				var restoreScenes = new Dictionary<AddressableAssetEntry, string>();
@@ -245,7 +245,7 @@ namespace Modding.Editor
 							if (parentGroup != null)
 								restoreScenes[entry] = entry.address;
 							
-							entry.SetAddress($"Scenes/{State.Preset.Author}.{State.Preset.Name}.{obj.Name}");
+							entry.SetAddress($"Scenes/{State.Preset.GetGUID()}.{obj.Name}");
 						}
 						
 						restoreAssets[references[k]] = parentGroup;
@@ -276,9 +276,9 @@ namespace Modding.Editor
 				settings.RemoteCatalogLoadPath.SetVariableByName(settings, "Mod");
 				settings.BuildRemoteCatalog = true;
 				settings.BuiltInBundleNaming = BuiltInBundleNaming.Custom;
-				settings.BuiltInBundleCustomNaming = $"{State.Preset.Author}.{State.Preset.Name}".ToLower();
+				settings.BuiltInBundleCustomNaming = State.Preset.GetGUID().ToLower();
 				settings.MonoScriptBundleNaming = MonoScriptBundleNaming.Custom;
-				settings.MonoScriptBundleCustomNaming = $"{State.Preset.Author}.{State.Preset.Name}".ToLower();
+				settings.MonoScriptBundleCustomNaming = State.Preset.GetGUID().ToLower();
 
 				var previousBuildTarget = EditorUserBuildSettings.activeBuildTarget;
 				
@@ -308,8 +308,8 @@ namespace Modding.Editor
 					{
 						var fileInfo = new FileInfo(binaries[0]);
 						
-						File.Move(fileInfo.FullName, Path.Combine(fileInfo.DirectoryName!, $"{State.Preset.Author}.{State.Preset.Name}.bin"));
-						File.Move($"{fileInfo.FullName[..^fileInfo.Extension.Length]}.hash", Path.Combine(fileInfo.DirectoryName!, $"{State.Preset.Author}.{State.Preset.Name}.hash"));
+						File.Move(fileInfo.FullName, Path.Combine(fileInfo.DirectoryName!, $"{State.Preset.GetGUID()}.bin"));
+						File.Move($"{fileInfo.FullName[..^fileInfo.Extension.Length]}.hash", Path.Combine(fileInfo.DirectoryName!, $"{State.Preset.GetGUID()}.hash"));
 					}
 				}
 				
@@ -414,7 +414,7 @@ namespace Modding.Editor
 			
 			if (!string.IsNullOrEmpty(State.Preset.CustomAssembly))
 			{
-				if (!State.Preset.CustomAssembly.EndsWith($"{State.Preset.Author}.{State.Preset.Name}.dll"))
+				if (!State.Preset.CustomAssembly.EndsWith($"{State.Preset.GetGUID()}.dll"))
 				{
 					GUILayout.Label("Custom assembly must be called Author.Name.dll");
 					return false;

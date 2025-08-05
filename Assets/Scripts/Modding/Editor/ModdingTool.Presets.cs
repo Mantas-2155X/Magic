@@ -58,7 +58,7 @@ namespace Modding.Editor
 			if (!Directory.Exists(presetsPath))
 				Directory.CreateDirectory(presetsPath);
 
-			var savePath = Path.Combine(presetsPath, autoSave ? "autosave.asset" : $"{State.Preset.Author}.{State.Preset.Name}.{State.Preset.Version}.asset");
+			var savePath = Path.Combine(presetsPath, autoSave ? "autosave.asset" : $"{State.Preset.GetGUID()}.{State.Preset.Version}.asset");
 				
 			if (File.Exists(savePath))
 			{
