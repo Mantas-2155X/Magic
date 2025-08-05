@@ -608,7 +608,7 @@ namespace AI.Base
 			if (Body.MovementCollider != null)
 				Body.MovementCollider.material = null;
 
-			var ragdolls = World.World.Instance.Ragdolls;
+			var objects = World.World.Instance.Objects;
 			var length = Body.Gibs.Length;
 
 			var objectLayer = LayerMask.NameToLayer("Object");
@@ -646,7 +646,7 @@ namespace AI.Base
 
 				gib.Rigidbody = rb;
 				
-				go.transform.SetParent(ragdolls);
+				go.transform.SetParent(objects);
 			}
 
 			var bodyPos = thisTr.position;
@@ -656,6 +656,7 @@ namespace AI.Base
 			
 			if (!killSilently && SettingsManager.Instance.GetBool("graphics-shatterobjects") == true)
 			{
+				var ragdolls = World.World.Instance.Ragdolls;
 				var scale = thisTr.localScale;
 					
 				if (Data.BrokenBodyPrefabReference != null)

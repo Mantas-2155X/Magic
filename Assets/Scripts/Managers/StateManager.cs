@@ -166,6 +166,8 @@ namespace Managers
 			data.Items = new List<SaveData.SaveItem>();
 			
 			var characters = World.World.Instance.Characters;
+			var ragdolls = World.World.Instance.Ragdolls;
+			
 			var gameAssembly = typeof(StateManager).Assembly;
 
 			var components = Object.FindObjectsByType<Component>(FindObjectsInactive.Include, FindObjectsSortMode.None);
@@ -181,12 +183,34 @@ namespace Managers
 					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
 					continue;
 				}
+				
+				// Leave saveables without ID as they are
+				if (string.IsNullOrEmpty(saveable.ObjectID))
+				{
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
+					continue;
+				}
+				
+				// Don't save destroyed data
+				if (destroyedObjects.Contains(saveable.ObjectID))
+					continue;
+
+				// Don't save killed alives data
+				if (saveable is IAlive iAlive && (!iAlive.IsAlive || killedAlives.Contains(iAlive.ObjectID)))
+					continue;
 
 				// Make sure there is a root transform
 				var root = component.transform.root;
 				if (root == null)
 				{
 					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
+					continue;
+				}
+
+				// Prevent saving ragdolls
+				if (root == ragdolls)
+				{
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is a ragdoll, skipping");
 					continue;
 				}
 				
@@ -196,21 +220,6 @@ namespace Managers
 					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
 					continue;
 				}
-				
-				// Leave saveables without ID as they are
-				if (string.IsNullOrEmpty(saveable.ObjectID))
-				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
-					continue;
-				}
-
-				// Don't save destroyed data
-				if (destroyedObjects.Contains(saveable.ObjectID))
-					continue;
-
-				// Don't save killed alives data
-				if (saveable is IAlive iAlive && (!iAlive.IsAlive || killedAlives.Contains(iAlive.ObjectID)))
-					continue;
 				
 				// Keep data of destroyed components as it might hold stuff outside of the component and be used
 				
@@ -488,7 +497,7 @@ namespace Managers
 							continue;
 						}
 
-						var method = type.GetMethod("ApplyCreation", BindingFlags.Static | BindingFlags.Public);
+						var method = ReflectionTools.GetMethodDeep(type, "ApplyCreation", BindingFlags.Static | BindingFlags.Public, typeof(MonoBehaviour));
 						if (method == null)
 						{
 							Debug.LogWarning($"[StateManager] Saveable with type {type} does not have ApplyCreation method");
