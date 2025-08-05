@@ -4,6 +4,7 @@ using Combat.Wearables.Interfaces;
 using Managers;
 using Newtonsoft.Json.Linq;
 using Objects.Base;
+using ScriptableObjects;
 using State;
 using State.Enums;
 using State.Interfaces;
@@ -36,7 +37,7 @@ namespace Objects
 		{
 			var createData = data.Item2.ToObject<CreateData>();
 			
-			var wearable = ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetWearable(createData.Name), Vector3.zero, Vector3.zero);
+			var wearable = ObjectManager.Instance.CreateWearable(ObjectManager.Instance.GetData<WearableData>(createData.Name), Vector3.zero, Vector3.zero);
 			wearable.ObjectID = data.Item1;
 			wearable.Drop();
 

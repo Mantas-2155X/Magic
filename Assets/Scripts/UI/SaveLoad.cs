@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers;
+using ScriptableObjects;
 using State;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -216,7 +217,7 @@ namespace UI
 			{
 				var (savePath, saveData) = availableSaves[i];
 
-				var sceneData = ObjectManager.Instance.GetScene(saveData.Scene);
+				var sceneData = ObjectManager.Instance.GetData<SceneData>(saveData.Scene);
 				var container = Containers[containerIndex];
 
 				container.Button.onClick.RemoveAllListeners();

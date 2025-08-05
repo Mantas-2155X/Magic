@@ -141,7 +141,7 @@ namespace Managers
 
 		public NPC CreateNPC(Vector3 position, Vector3 angles, NPCData data, int relationshipGroup = 0, bool externallySpawned = true)
 		{
-			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME"), position, Vector3.zero);
+			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetData<ObjectData>("OBJECT_PORTAL_NAME"), position, Vector3.zero);
 			
 			var go = Addressables.InstantiateAsync(data.PrefabReference).WaitForCompletion();
 			go.name = $"NPC {NPCs.Count}";

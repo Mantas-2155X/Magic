@@ -172,11 +172,9 @@ namespace Managers
 		private void getScenes()
 		{
 			var availableScenes = ObjectManager.Instance.GetAllDatas<SceneData>();
-			if (availableScenes == null || availableScenes.Count == 0)
-				return;
-
-			foreach (var sceneData in availableScenes)
+			for (var i = 0; i < availableScenes.Count; i++)
 			{
+				var sceneData = availableScenes[i];
 				if (sceneData.Name != "SCENE_SPLASH_NAME")
 				{
 					var location = Addressables.LoadResourceLocationsAsync(sceneData.Addressable.RuntimeKey).WaitForCompletion()[0];

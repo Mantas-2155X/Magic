@@ -1,4 +1,5 @@
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Scenes
@@ -7,7 +8,7 @@ namespace Scenes
 	{
 		public void Awake()
 		{
-			SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
+			SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetData<SceneData>("SCENE_TITLE_NAME"), true, true, false);
 		}
 	}
 }

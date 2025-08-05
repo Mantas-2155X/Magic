@@ -159,7 +159,7 @@ namespace World
 			var world = global::World.World.Instance;
 			var spawnPoint = world.SpawnPoints.GetChild(Random.Range(0, world.SpawnPoints.childCount));
 			
-			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("AI_PLAYER_WORLD4_NAME"));
+			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetData<AliveData>("AI_PLAYER_WORLD4_NAME"));
 			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE4_INFO"), 0f, 2f, 0.1f, 0.0025f);
 		}
 
@@ -225,7 +225,7 @@ namespace World
 		
 		private async UniTaskVoid attackLoop()
 		{
-			var incinerate = ObjectManager.Instance.GetAttack("ATTACK_INCINERATE_NAME");
+			var incinerate = ObjectManager.Instance.GetData<AttackData>("ATTACK_INCINERATE_NAME");
 			
 			while (true)
 			{

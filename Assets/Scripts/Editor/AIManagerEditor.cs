@@ -42,7 +42,7 @@ namespace Editor
 				var spawnPoints = world.SpawnPoints;
 				var spawnPoint = spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount));
 				
-				aiManager.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetAlive("AI_PLAYER_NAME"));
+				aiManager.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetData<AliveData>("AI_PLAYER_NAME"));
 			}
 			
 			if (GUILayout.Button("Kill"))
@@ -61,7 +61,7 @@ namespace Editor
 				var spawnPoints = world.SpawnPoints;
 				var spawnPoint = spawnPoints.GetChild(Random.Range(0, spawnPoints.childCount));
 				
-				aiManager.CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, (NPCData)ObjectManager.Instance.GetAlive("AI_NPC_NAME"));
+				aiManager.CreateNPC(spawnPoint.position, spawnPoint.eulerAngles, (NPCData)ObjectManager.Instance.GetData<AliveData>("AI_NPC_NAME"));
 			}
 
 			if (GUILayout.Button("Create at cam target"))
@@ -72,7 +72,7 @@ namespace Editor
 				if (Physics.Raycast(ray, out var hit, float.MaxValue, ~LayerMaskTools.GetMask(), QueryTriggerInteraction.Ignore))
 					pos = hit.point + Vector3.up * 1.5f;
 
-				aiManager.CreateNPC(pos, Vector3.zero, (NPCData)ObjectManager.Instance.GetAlive("AI_NPC_NAME"));
+				aiManager.CreateNPC(pos, Vector3.zero, (NPCData)ObjectManager.Instance.GetData<AliveData>("AI_NPC_NAME"));
 			}
 			
 			if (GUILayout.Button("Kill all"))
@@ -247,7 +247,7 @@ namespace Editor
 
 			if (GUILayout.Button("Give Player"))
 			{
-				aiManager.Player.EquipWearable(ObjectManager.Instance.GetWearable(Wearable));
+				aiManager.Player.EquipWearable(ObjectManager.Instance.GetData<WearableData>(Wearable));
 			}
 			
 			if (GUILayout.Button("Give NPCs"))
@@ -257,7 +257,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.EquipWearable(ObjectManager.Instance.GetWearable(Wearable));
+					npc.EquipWearable(ObjectManager.Instance.GetData<WearableData>(Wearable));
 				}
 			}
 			
@@ -271,7 +271,7 @@ namespace Editor
 
 			if (GUILayout.Button("Give Player"))
 			{
-				aiManager.Player.LearnSpell(ObjectManager.Instance.GetSpell(Spell), true);
+				aiManager.Player.LearnSpell(ObjectManager.Instance.GetData<SpellData>(Spell), true);
 			}
 			
 			if (GUILayout.Button("Give NPCs"))
@@ -281,7 +281,7 @@ namespace Editor
 					if (!npc.IsAlive)
 						continue;
 					
-					npc.LearnSpell(ObjectManager.Instance.GetSpell(Spell), true);
+					npc.LearnSpell(ObjectManager.Instance.GetData<SpellData>(Spell), true);
 				}
 			}
 			

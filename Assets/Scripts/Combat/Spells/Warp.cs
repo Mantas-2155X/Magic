@@ -2,6 +2,7 @@ using System;
 using AI;
 using Combat.Spells.Base;
 using Managers;
+using ScriptableObjects;
 using Tools;
 using UnityEngine;
 using UnityEngine.AI;
@@ -75,7 +76,7 @@ namespace Combat.Spells
 					throw new NotImplementedException();
 			}
 
-			var portal = ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME");
+			var portal = ObjectManager.Instance.GetData<ObjectData>("OBJECT_PORTAL_NAME");
 			
 			ObjectManager.Instance.CreateObject(portal, startPos, Vector3.zero);
 			ObjectManager.Instance.CreateObject(portal, endPos, Vector3.zero);

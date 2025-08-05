@@ -538,7 +538,7 @@ namespace AI
 		{
 			var createData = data.Item2.ToObject<CreateData>();
 			
-			var obj = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)ObjectManager.Instance.GetAlive(createData.Name));
+			var obj = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)ObjectManager.Instance.GetData<AliveData>(createData.Name));
 			obj.ObjectID = data.Item1;
 
 			try
@@ -627,7 +627,7 @@ namespace AI
 			{
 				setAttackTarget(attackTarget);
 				setOtherTarget(otherTarget);
-				Patrol(ObjectManager.Instance.GetPath(patrolPath), patrolStartAt, patrolAlreadyWaited);
+				Patrol(ObjectManager.Instance.GetData<PathData>(patrolPath), patrolStartAt, patrolAlreadyWaited);
 			}
 			else if (actionMode == EActionMode.Idle)
 			{

@@ -86,7 +86,7 @@ namespace Combat.Attacks.Base
 		{
 			var createData = data.Item2.ToObject<AttackCreateData>();
 			
-			var obj = (BaseAttack)ObjectManager.Instance.CreateAttack(ObjectManager.Instance.GetAttack(createData.Name), StateManager.Instance.GetRegisteredObject(createData.SourceObjectID), Vector3.zero, Vector3.zero, StateManager.Instance.GetRegisteredObject(createData.TargetObjectID), createData.ElapsedTime);
+			var obj = (BaseAttack)ObjectManager.Instance.CreateAttack(ObjectManager.Instance.GetData<AttackData>(createData.Name), StateManager.Instance.GetRegisteredObject(createData.SourceObjectID), Vector3.zero, Vector3.zero, StateManager.Instance.GetRegisteredObject(createData.TargetObjectID), createData.ElapsedTime);
 			obj.ObjectID = data.Item1;
 			
 			try

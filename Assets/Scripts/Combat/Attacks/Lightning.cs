@@ -3,6 +3,7 @@ using AI.Interfaces;
 using Combat.Attacks.Base;
 using Managers;
 using Objects.Interfaces;
+using ScriptableObjects;
 using State.Interfaces;
 using UnityEngine;
 
@@ -79,7 +80,7 @@ namespace Combat.Attacks
 				var clamped = Mathf.Clamp(eventsCount, 0, DecalsPerSystem - decals);
 					
 				for (var i = 0; i < clamped; i++)
-					ObjectManager.Instance.CreateDecal(ObjectManager.Instance.GetDecal("DECALS_SMALLDECAL_NAME"), collisions[i], attach);
+					ObjectManager.Instance.CreateDecal(ObjectManager.Instance.GetData<DecalData>("DECALS_SMALLDECAL_NAME"), collisions[i], attach);
 
 				systemDecals[system] = decals + clamped;
 			}

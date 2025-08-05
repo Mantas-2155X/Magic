@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ScriptableObjects;
 using State.Enums;
 using State.Interfaces;
 using UI;
@@ -233,7 +234,7 @@ namespace World
 				}
 			}
 
-			await SceneManager.Instance.ChangeSceneAsync(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
+			await SceneManager.Instance.ChangeSceneAsync(ObjectManager.Instance.GetData<SceneData>("SCENE_TITLE_NAME"), true, true, false);
 		}
 		
 		[JsonObject]

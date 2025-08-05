@@ -388,7 +388,7 @@ namespace Managers
 		{
 			var sceneManager = SceneManager.Instance;
 
-			var sceneData = ObjectManager.Instance.GetScene(data.Scene);
+			var sceneData = ObjectManager.Instance.GetData<SceneData>(data.Scene);
 			if (!sceneData.SupportsSaving)
 			{
 				Debug.LogError($"[StateManager] Not loading save data as the scene {data.Scene} does not support saving");

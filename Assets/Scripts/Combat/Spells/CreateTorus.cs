@@ -19,7 +19,7 @@ namespace Combat.Spells
 			var core = Owner.Body.Core;
 			var spawnPos = core.position + core.up;
 			
-			var torus = AIManager.Instance.CreateNPC(spawnPos, Vector3.zero, (NPCData)ObjectManager.Instance.GetAlive("AI_TORUS_NAME"), Owner.RelationshipGroup);
+			var torus = AIManager.Instance.CreateNPC(spawnPos, Vector3.zero, (NPCData)ObjectManager.Instance.GetData<AliveData>("AI_TORUS_NAME"), Owner.RelationshipGroup);
 
 			BaseAlive target = null;
 			

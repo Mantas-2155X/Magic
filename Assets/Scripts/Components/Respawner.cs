@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Managers;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Components
@@ -22,7 +23,7 @@ namespace Components
 			tr.position = SpawnPoint.position;
 			tr.rotation = SpawnPoint.rotation;
 			
-			var portal = ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME");
+			var portal = ObjectManager.Instance.GetData<ObjectData>("OBJECT_PORTAL_NAME");
 			ObjectManager.Instance.CreateObject(portal, tr.position, Vector3.zero);
 
 			var rb = other.attachedRigidbody;

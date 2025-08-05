@@ -60,7 +60,7 @@ namespace Objects.Base
 		{
 			var createData = data.Item2.ToObject<CreateData>();
 			
-			var obj = (BaseObject)ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject(createData.Name), Vector3.zero, Vector3.zero);
+			var obj = (BaseObject)ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetData<ObjectData>(createData.Name), Vector3.zero, Vector3.zero);
 			obj.ObjectID = data.Item1;
 
 			try

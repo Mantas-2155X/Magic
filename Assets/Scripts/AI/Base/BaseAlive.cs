@@ -904,7 +904,7 @@ namespace AI.Base
 				OriginalGrabSize = null;
 			}
 			
-			var portal = ObjectManager.Instance.GetObject("OBJECT_PORTAL_NAME");
+			var portal = ObjectManager.Instance.GetData<ObjectData>("OBJECT_PORTAL_NAME");
 			ObjectManager.Instance.CreateObject(portal, tr.position, Vector3.zero);
 		}
 
@@ -1243,7 +1243,7 @@ namespace AI.Base
 				{
 					var wearableState = pair.Value;
 
-					var wearableData = ObjectManager.Instance.GetWearable(pair.Key);
+					var wearableData = ObjectManager.Instance.GetData<WearableData>(pair.Key);
 					baseAlive.EquipWearable(wearableData);
 					
 					var wearableIndex = baseAlive.GetWearableIndex(wearableData);
@@ -1256,7 +1256,7 @@ namespace AI.Base
 				{
 					var spellState = pair.Value;
 				
-					var spellData = ObjectManager.Instance.GetSpell(pair.Key);
+					var spellData = ObjectManager.Instance.GetData<SpellData>(pair.Key);
 					baseAlive.LearnSpell(spellData, spellState.Selected);
 
 					var spellIndex = baseAlive.GetSpellIndex(spellData);

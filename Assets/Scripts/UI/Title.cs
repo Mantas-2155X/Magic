@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Managers;
+using ScriptableObjects;
 using TMPro;
 using UI.Settings.Pages;
 using UnityEngine;
@@ -209,7 +210,7 @@ namespace UI
 
 		public void OnReturnToTitle()
 		{
-			SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
+			SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetData<SceneData>("SCENE_TITLE_NAME"), true, true, false);
 		}
 		
 		public void OnQuitGame()

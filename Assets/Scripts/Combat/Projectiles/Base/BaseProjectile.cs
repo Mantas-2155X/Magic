@@ -89,7 +89,7 @@ namespace Combat.Projectiles.Base
 		{
 			var createData = data.Item2.ToObject<ProjectileCreateData>();
 			
-			var obj = (BaseProjectile)ObjectManager.Instance.CreateProjectile(ObjectManager.Instance.GetProjectile(createData.Name), createData.Range, ObjectManager.Instance.GetAttack(createData.Attack), StateManager.Instance.GetRegisteredObject(createData.SourceObjectID), Vector3.zero, Vector3.zero, createData.ElapsedTime);
+			var obj = (BaseProjectile)ObjectManager.Instance.CreateProjectile(ObjectManager.Instance.GetData<ProjectileData>(createData.Name), createData.Range, ObjectManager.Instance.GetData<AttackData>(createData.Attack), StateManager.Instance.GetRegisteredObject(createData.SourceObjectID), Vector3.zero, Vector3.zero, createData.ElapsedTime);
 			obj.ObjectID = data.Item1;
 			
 			try

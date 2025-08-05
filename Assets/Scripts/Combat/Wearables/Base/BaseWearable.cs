@@ -144,7 +144,7 @@ namespace Combat.Wearables.Base
 				thisGo.SetActive(false);
 				
 				droppedWearable = thisGo.AddComponent<DroppedWearable>();
-				droppedWearable.ObjectData = ObjectManager.Instance.GetObject("OBJECT_DROPPEDWEARABLE_NAME");
+				droppedWearable.ObjectData = ObjectManager.Instance.GetData<ObjectData>("OBJECT_DROPPEDWEARABLE_NAME");
 				droppedWearable.ObjectID = ObjectID;
 				droppedWearable.Rigidbody = Rigidbody;
 				droppedWearable.Wearable = this;

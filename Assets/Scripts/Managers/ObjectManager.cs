@@ -76,60 +76,42 @@ namespace Managers
 
 		#region Get
 
-		public Data GetData(string path)
+		public T GetData<T>(string path, bool appendType = true) where T : Data
 		{
-			var moddedDatasMap = ModLoader.Instance.GetModdedDatas();
-			return datasMap.TryGetValue(path, out var data) ? data : moddedDatasMap.GetValueOrDefault(path);
-		}
-		
-		public ObjectData GetObject(string path)
-		{
-			return (ObjectData)GetData($"Objects/{path}");
-		}
-		
-		public WearableData GetWearable(string path)
-		{
-			return (WearableData)GetData($"Wearables/{path}");
-		}
-		
-		public CastData GetCast(string path)
-		{
-			return (CastData)GetData($"Casts/{path}");
-		}
-		
-		public ProjectileData GetProjectile(string path)
-		{
-			return (ProjectileData)GetData($"Projectiles/{path}");
-		}
-		
-		public AttackData GetAttack(string path)
-		{
-			return (AttackData)GetData($"Attacks/{path}");
-		}
-		
-		public SpellData GetSpell(string path)
-		{
-			return (SpellData)GetData($"Spells/{path}");
-		}
-		
-		public AliveData GetAlive(string path)
-		{
-			return (AliveData)GetData($"AI/{path}");
-		}
-		
-		public DecalData GetDecal(string path)
-		{
-			return (DecalData)GetData($"Decals/{path}");
-		}
-		
-		public SceneData GetScene(string path)
-		{
-			return (SceneData)GetData($"Scenes/{path}");
-		}
-		
-		public PathData GetPath(string path)
-		{
-			return (PathData)GetData($"Paths/{path}");
+			if (appendType)
+			{
+				string append;
+				
+				var type = typeof(T);
+				if (type == typeof(AliveData))
+				{
+					append = "AI/";
+				}
+				else
+				{
+					var typeName = type.Name;
+					
+					var dataIndex = typeName.LastIndexOf("Data", StringComparison.Ordinal);
+					if (dataIndex == -1)
+					{
+						Debug.LogError($"[ObjectManager] Failed to create data path for {typeof(T)} as the data index was not found");
+						return null;
+					}
+					
+					append = typeName[..dataIndex] + "s/";
+				}
+				
+				path = append + path;
+			}
+			
+			if (datasMap.TryGetValue(path, out var data) && data is T castedData)
+				return castedData;
+
+			var moddedDatas = ModLoader.Instance.GetModdedDatas();
+			if (moddedDatas.TryGetValue(path, out var moddedData) && moddedData is T castedModdedData)
+				return castedModdedData;
+
+			return null;
 		}
 		
 		#endregion
@@ -166,6 +148,12 @@ namespace Managers
 
 		public IObject CreateObject(ObjectData data, Vector3 position, Vector3 angles)
 		{
+			if (data == null)
+			{
+				Debug.LogError("[ObjectManager] Data provided to CreateObject is null");
+				return null;
+			}
+			
 			var obj = PoolingManager.Instance.TakeOrCreate<IObject>(data, false);
 			obj.ObjectID = Guid.NewGuid().ToString();
 			obj.ExternallySpawned = true;
@@ -177,6 +165,12 @@ namespace Managers
 		
 		public IWearable CreateWearable(WearableData data, Vector3 position, Vector3 angles)
 		{
+			if (data == null)
+			{
+				Debug.LogError("[ObjectManager] Data provided to CreateWearable is null");
+				return null;
+			}
+			
 			var wearable = PoolingManager.Instance.TakeOrCreate<IWearable>(data, false);
 			wearable.ObjectID = Guid.NewGuid().ToString();
 			
@@ -187,6 +181,12 @@ namespace Managers
 		
 		public ICast CreateCast(CastData data, IIdentifiable source)
 		{
+			if (data == null)
+			{
+				Debug.LogError("[ObjectManager] Data provided to CreateCast is null");
+				return null;
+			}
+			
 			var cast = PoolingManager.Instance.TakeOrCreate<ICast>(data, false);
 			cast.ObjectID = Guid.NewGuid().ToString();
 			
@@ -197,6 +197,12 @@ namespace Managers
 		
 		public IProjectile CreateProjectile(ProjectileData data, float range, AttackData attack, IIdentifiable source, Vector3 origin, Vector3 direction, float elapsedTime = 0f)
 		{
+			if (data == null)
+			{
+				Debug.LogError("[ObjectManager] Data provided to CreateProjectile is null");
+				return null;
+			}
+			
 			var projectile = PoolingManager.Instance.TakeOrCreate<IProjectile>(data, false);
 			projectile.ObjectID = Guid.NewGuid().ToString();
 			projectile.ExternallySpawned = true;
@@ -223,6 +229,12 @@ namespace Managers
 		
 		public IDecal CreateDecal(DecalData data, ContactPoint contact, IIdentifiable attach, float elapsedTime = 0f, float normalizedTime = 0f)
 		{
+			if (data == null)
+			{
+				Debug.LogError("[ObjectManager] Data provided to CreateDecal is null");
+				return null;
+			}
+			
 			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
 			decal.ObjectID = Guid.NewGuid().ToString();
 			decal.ExternallySpawned = true;
@@ -244,6 +256,12 @@ namespace Managers
 
 		private IDecal createDecal(DecalData data, Vector3 point, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f, float normalizedTime = 0f)
 		{
+			if (data == null)
+			{
+				Debug.LogError("[ObjectManager] Data provided to createDecal is null");
+				return null;
+			}
+			
 			var decal = PoolingManager.Instance.TakeOrCreate<IDecal>(data, false);
 			decal.ObjectID = Guid.NewGuid().ToString();
 			decal.ExternallySpawned = true;
@@ -255,6 +273,12 @@ namespace Managers
 		
 		private IAttack createAttack(AttackData data, IIdentifiable source, Vector3 point, Vector3 normal, IIdentifiable attach, float elapsedTime)
 		{
+			if (data == null)
+			{
+				Debug.LogError("[ObjectManager] Data provided to createAttack is null");
+				return null;
+			}
+			
 			var attack = PoolingManager.Instance.TakeOrCreate<IAttack>(data, false);
 			attack.ObjectID = Guid.NewGuid().ToString();
 			attack.ExternallySpawned = true;

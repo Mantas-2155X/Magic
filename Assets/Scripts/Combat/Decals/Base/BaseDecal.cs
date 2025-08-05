@@ -73,7 +73,7 @@ namespace Combat.Decals.Base
 		{
 			var createData = data.Item2.ToObject<DecalCreateData>();
 			
-			var obj = (BaseDecal)ObjectManager.Instance.CreateDecal(ObjectManager.Instance.GetDecal(createData.Name), Vector3.zero, Quaternion.identity, StateManager.Instance.GetRegisteredObject(createData.AttachObjectID), createData.ElapsedTime, createData.NormalizedTime);
+			var obj = (BaseDecal)ObjectManager.Instance.CreateDecal(ObjectManager.Instance.GetData<DecalData>(createData.Name), Vector3.zero, Quaternion.identity, StateManager.Instance.GetRegisteredObject(createData.AttachObjectID), createData.ElapsedTime, createData.NormalizedTime);
 			obj.ObjectID = data.Item1;
 			
 			try

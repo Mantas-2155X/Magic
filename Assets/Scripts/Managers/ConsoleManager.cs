@@ -216,7 +216,7 @@ namespace Managers
 			
 			AddCommand("title", "Return to title", () =>
 			{
-				SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetScene("SCENE_TITLE_NAME"), true, true, false);
+				SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetData<SceneData>("SCENE_TITLE_NAME"), true, true, false);
 			});
 			
 			AddCommand("msens", "Changes the mouse sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
@@ -303,7 +303,7 @@ namespace Managers
 			
 			AddCommand("scene", "Changes the scene", new [] {EConsoleCommandParameter.String}, args =>
 			{
-				var sceneData = ObjectManager.Instance.GetScene((string)args[0]);
+				var sceneData = ObjectManager.Instance.GetData<SceneData>((string)args[0]);
 
 				if (!SceneManager.Instance.SceneExists(sceneData) || sceneData == null)
 				{
@@ -379,7 +379,7 @@ namespace Managers
 				for (var i = 0; i < args.Length; i++)
 					spell += (string)args[i];
 				
-				player.LearnSpell(ObjectManager.Instance.GetSpell(spell), false);
+				player.LearnSpell(ObjectManager.Instance.GetData<SpellData>(spell), false);
 			});
 			
 			AddCommand("give", "Give the player a wearable", new [] {EConsoleCommandParameter.String}, args =>
@@ -393,7 +393,7 @@ namespace Managers
 				for (var i = 0; i < args.Length; i++)
 					wearable += (string)args[i];
 				
-				player.EquipWearable(ObjectManager.Instance.GetWearable(wearable));
+				player.EquipWearable(ObjectManager.Instance.GetData<WearableData>(wearable));
 			});
 			
 			AddCommand("object", "Creates an object where the player is looking", new [] {EConsoleCommandParameter.String}, args =>
@@ -414,7 +414,7 @@ namespace Managers
 				if (!Physics.Raycast(cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out var hit, float.MaxValue, ~LayerMaskTools.GetMaskWithAlives()))
 					return;
 				
-				ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetObject(objName), hit.point + Vector3.up, new Vector3(0, player.transform.eulerAngles.y, 0));
+				ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetData<ObjectData>(objName), hit.point + Vector3.up, new Vector3(0, player.transform.eulerAngles.y, 0));
 			});
 			
 			AddCommand("objects", "Lists all available objects", () =>
