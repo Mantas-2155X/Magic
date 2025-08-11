@@ -58,8 +58,16 @@ namespace Managers
 			return true;
 		}
 		
-		public bool AddSetting(string key, string name, string description, InputAction inputAction, int bindingIndex, object value, UnityAction<object, object> changed)
+		public bool AddKeybind(string key, string name, string description, InputAction inputAction, int bindingIndex, object value)
 		{
+			var changed = new UnityAction<object, object>((_, newValue) =>
+			{
+				if (!keybinds.TryGetValue(name, out var keybind))
+					return;
+
+				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
+			});
+			
 			if (!AddSetting(key, name, description, ESettingType.String, value, changed))
 				return false;
 
@@ -765,131 +773,29 @@ namespace Managers
 			var playerMap = actions.FindActionMap("Player");
 			var titleMap = actions.FindActionMap("Title");
 			
-			AddSetting("keybinds-movement-forward", "SETTINGS_KEYBINDS_MOVEMENT_FORWARD", "SETTINGS_KEYBINDS_MOVEMENT_FORWARD_DESC", playerMap.FindAction("Move"), 2, "<Keyboard>/w", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-movement-forward"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
+			AddKeybind("keybinds-movement-forward", "SETTINGS_KEYBINDS_MOVEMENT_FORWARD", "SETTINGS_KEYBINDS_MOVEMENT_FORWARD_DESC", playerMap.FindAction("Move"), 2, "<Keyboard>/w");
+			AddKeybind("keybinds-movement-backward", "SETTINGS_KEYBINDS_MOVEMENT_BACKWARD", "SETTINGS_KEYBINDS_MOVEMENT_BACKWARD_DESC", playerMap.FindAction("Move"), 3, "<Keyboard>/s");
+			AddKeybind("keybinds-movement-left", "SETTINGS_KEYBINDS_MOVEMENT_LEFT", "SETTINGS_KEYBINDS_MOVEMENT_LEFT_DESC", playerMap.FindAction("Move"), 4, "<Keyboard>/a");
+			AddKeybind("keybinds-movement-right", "SETTINGS_KEYBINDS_MOVEMENT_RIGHT", "SETTINGS_KEYBINDS_MOVEMENT_RIGHT_DESC", playerMap.FindAction("Move"), 5, "<Keyboard>/d");
+			AddKeybind("keybinds-movement-sprint", "SETTINGS_KEYBINDS_MOVEMENT_SPRINT", "SETTINGS_KEYBINDS_MOVEMENT_SPRINT_DESC", playerMap.FindAction("Sprint"), 0, "<Keyboard>/leftShift");
+			AddKeybind("keybinds-movement-jump", "SETTINGS_KEYBINDS_MOVEMENT_JUMP", "SETTINGS_KEYBINDS_MOVEMENT_JUMP_DESC", playerMap.FindAction("Jump"), 0, "<Keyboard>/space");
+			AddKeybind("keybinds-movement-fall", "SETTINGS_KEYBINDS_MOVEMENT_FALL", "SETTINGS_KEYBINDS_MOVEMENT_FALL_DESC", playerMap.FindAction("Fall"), 0, "<Keyboard>/leftCtrl");
 			
-			AddSetting("keybinds-movement-backward", "SETTINGS_KEYBINDS_MOVEMENT_BACKWARD", "SETTINGS_KEYBINDS_MOVEMENT_BACKWARD_DESC", playerMap.FindAction("Move"), 3, "<Keyboard>/s", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-movement-backward"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
+			AddKeybind("keybinds-gameplay-attack", "SETTINGS_KEYBINDS_GAMEPLAY_ATTACK", "SETTINGS_KEYBINDS_GAMEPLAY_ATTACK_DESC", playerMap.FindAction("Attack"), 0, "<Mouse>/leftButton");
+			AddKeybind("keybinds-gameplay-interact", "SETTINGS_KEYBINDS_GAMEPLAY_INTERACT", "SETTINGS_KEYBINDS_GAMEPLAY_INTERACT_DESC", playerMap.FindAction("Interact"), 0, "<Keyboard>/e");
+			AddKeybind("keybinds-gameplay-grab", "SETTINGS_KEYBINDS_GAMEPLAY_GRAB", "SETTINGS_KEYBINDS_GAMEPLAY_GRAB_DESC", playerMap.FindAction("Grab"), 0, "<Mouse>/rightButton");
+			AddKeybind("keybinds-gameplay-light", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT_DESC", playerMap.FindAction("Light"), 0, "<Keyboard>/f");
+			AddKeybind("keybinds-gameplay-spellbook", "SETTINGS_KEYBINDS_GAMEPLAY_SPELLBOOK", "SETTINGS_KEYBINDS_GAMEPLAY_SPELLBOOK_DESC", playerMap.FindAction("Spellbook"), 0, "<Keyboard>/i");
+			AddKeybind("keybinds-gameplay-hotbar1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1_DESC", playerMap.FindAction("Hotbar1"), 0, "<Keyboard>/1");
+			AddKeybind("keybinds-gameplay-hotbar2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2_DESC", playerMap.FindAction("Hotbar2"), 0, "<Keyboard>/2");
+			AddKeybind("keybinds-gameplay-hotbar3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3_DESC", playerMap.FindAction("Hotbar3"), 0, "<Keyboard>/3");
+			AddKeybind("keybinds-gameplay-hotbar4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4_DESC", playerMap.FindAction("Hotbar4"), 0, "<Keyboard>/4");
+			AddKeybind("keybinds-gameplay-hotbar5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5_DESC", playerMap.FindAction("Hotbar5"), 0, "<Keyboard>/5");
+			AddKeybind("keybinds-gameplay-hotbar6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6_DESC", playerMap.FindAction("Hotbar6"), 0, "<Keyboard>/6");
+			AddKeybind("keybinds-gameplay-hotbar7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7_DESC", playerMap.FindAction("Hotbar7"), 0, "<Keyboard>/7");
 			
-			AddSetting("keybinds-movement-left", "SETTINGS_KEYBINDS_MOVEMENT_LEFT", "SETTINGS_KEYBINDS_MOVEMENT_LEFT_DESC", playerMap.FindAction("Move"), 4, "<Keyboard>/a", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-movement-left"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-movement-right", "SETTINGS_KEYBINDS_MOVEMENT_RIGHT", "SETTINGS_KEYBINDS_MOVEMENT_RIGHT_DESC", playerMap.FindAction("Move"), 5, "<Keyboard>/d", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-movement-right"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-movement-jump", "SETTINGS_KEYBINDS_MOVEMENT_JUMP", "SETTINGS_KEYBINDS_MOVEMENT_JUMP_DESC", playerMap.FindAction("Jump"), 0, "<Keyboard>/space", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-movement-jump"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-movement-sprint", "SETTINGS_KEYBINDS_MOVEMENT_SPRINT", "SETTINGS_KEYBINDS_MOVEMENT_SPRINT_DESC", playerMap.FindAction("Sprint"), 0, "<Keyboard>/leftShift", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-movement-sprint"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-movement-fall", "SETTINGS_KEYBINDS_MOVEMENT_FALL", "SETTINGS_KEYBINDS_MOVEMENT_FALL_DESC", playerMap.FindAction("Fall"), 0, "<Keyboard>/leftCtrl", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-movement-fall"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-debug-noclip", "SETTINGS_KEYBINDS_DEBUG_NOCLIP", "SETTINGS_KEYBINDS_DEBUG_NOCLIP_DESC", playerMap.FindAction("Noclip"), 0, "<Keyboard>/v", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-debug-noclip"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-attack", "SETTINGS_KEYBINDS_GAMEPLAY_ATTACK", "SETTINGS_KEYBINDS_GAMEPLAY_ATTACK_DESC", playerMap.FindAction("Attack"), 0, "<Mouse>/leftButton", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-attack"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-interact", "SETTINGS_KEYBINDS_GAMEPLAY_INTERACT", "SETTINGS_KEYBINDS_GAMEPLAY_INTERACT_DESC", playerMap.FindAction("Interact"), 0, "<Keyboard>/e", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-interact"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-grab", "SETTINGS_KEYBINDS_GAMEPLAY_GRAB", "SETTINGS_KEYBINDS_GAMEPLAY_GRAB_DESC", playerMap.FindAction("Grab"), 0, "<Mouse>/rightButton", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-grab"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-light", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT_DESC", playerMap.FindAction("Light"), 0, "<Keyboard>/f", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-light"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-spellbook", "SETTINGS_KEYBINDS_GAMEPLAY_SPELLBOOK", "SETTINGS_KEYBINDS_GAMEPLAY_SPELLBOOK_DESC", playerMap.FindAction("Spellbook"), 0, "<Keyboard>/i", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-spellbook"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-hotbar1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1_DESC", playerMap.FindAction("Hotbar1"), 0, "<Keyboard>/1", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-hotbar1"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-hotbar2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2_DESC", playerMap.FindAction("Hotbar2"), 0, "<Keyboard>/2", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-hotbar2"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-hotbar3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3_DESC", playerMap.FindAction("Hotbar3"), 0, "<Keyboard>/3", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-hotbar3"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-hotbar4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4_DESC", playerMap.FindAction("Hotbar4"), 0, "<Keyboard>/4", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-hotbar4"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-hotbar5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5_DESC", playerMap.FindAction("Hotbar5"), 0, "<Keyboard>/5", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-hotbar5"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-hotbar6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6_DESC", playerMap.FindAction("Hotbar6"), 0, "<Keyboard>/6", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-hotbar6"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-gameplay-hotbar7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7_DESC", playerMap.FindAction("Hotbar7"), 0, "<Keyboard>/7", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-gameplay-hotbar7"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
-			
-			AddSetting("keybinds-debug-console", "SETTINGS_KEYBINDS_DEBUG_CONSOLE", "SETTINGS_KEYBINDS_DEBUG_CONSOLE_DESC", titleMap.FindAction("Console"), 0, "<Keyboard>/backquote", (previousValue, newValue) =>
-			{
-				var keybind = keybinds["keybinds-debug-console"];
-				keybind.Item1.ApplyBindingOverride(keybind.Item2, (string)newValue);
-			});
+			AddKeybind("keybinds-debug-noclip", "SETTINGS_KEYBINDS_DEBUG_NOCLIP", "SETTINGS_KEYBINDS_DEBUG_NOCLIP_DESC", playerMap.FindAction("Noclip"), 0, "<Keyboard>/v");
+			AddKeybind("keybinds-debug-console", "SETTINGS_KEYBINDS_DEBUG_CONSOLE", "SETTINGS_KEYBINDS_DEBUG_CONSOLE_DESC", titleMap.FindAction("Console"), 0, "<Keyboard>/backquote");
 			
 			#endregion
 
