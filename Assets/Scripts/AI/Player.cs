@@ -81,6 +81,7 @@ namespace AI
 		private Vector3 groundPointVelocity;
 		private Vector3 groundNormal;
 		private float groundAngle;
+		private float groundMass;
 
 		private Vector3? smoothPosition;
 		
@@ -248,6 +249,12 @@ namespace AI
 			else
 				airTime += Time.fixedDeltaTime;
 
+			var copyVelocity = Vector3.zero;
+			
+			// Standing on a heavy object should take its velocity
+			if (groundMass > rb.mass / 3f)
+				copyVelocity = groundPointVelocity;
+			
 			if (moveDirection != Vector2.zero && !Paralyzed && SlowAmount < 1f)
 			{
 				var isSprinting = false;
@@ -272,7 +279,7 @@ namespace AI
 				var targetVelocity = direction * speed;
 				
 				var currentVelocity = rb.linearVelocity;
-				currentVelocity = Vector3.MoveTowards(currentVelocity, new Vector3(targetVelocity.x, isGrounded ? targetVelocity.y : currentVelocity.y, targetVelocity.z) + groundPointVelocity, acceleration);
+				currentVelocity = Vector3.MoveTowards(currentVelocity, new Vector3(targetVelocity.x, isGrounded ? targetVelocity.y : currentVelocity.y, targetVelocity.z) + copyVelocity, acceleration);
 				
 				rb.linearVelocity = currentVelocity;
 			}
@@ -292,16 +299,16 @@ namespace AI
 			switch (velocity.magnitude)
 			{
 				case <= 0f:
-					rb.linearVelocity = groundPointVelocity;
+					rb.linearVelocity = copyVelocity;
 					return;
 				case < 0.5f:
 					// prevent horizontal micro-sliding
 					if (moveDirection == Vector2.zero)
-						rb.linearVelocity = groundPointVelocity;
+						rb.linearVelocity = copyVelocity;
 					break;
 				default:
 					// apply friction
-					rb.AddForce(-(velocity - groundPointVelocity).normalized * data.Friction);
+					rb.AddForce(-(velocity - copyVelocity).normalized * data.Friction);
 					break;
 			}
 		}
@@ -907,6 +914,7 @@ namespace AI
 				groundNormal = Vector3.zero;
 				groundPoint = Vector3.zero;
 				groundAngle = float.MaxValue;
+				groundMass = 0f;
 				groundBody = null;
 				
 				return false;
@@ -926,8 +934,17 @@ namespace AI
 				if (angle <= maximumGroundAngle)
 				{
 					var rb = hit.rigidbody;
+					if (rb != null)
+					{
+						groundPointVelocity = rb.GetPointVelocity(hit.point);
+						groundMass = rb.mass;
+					}
+					else
+					{
+						groundPointVelocity = Vector3.zero;
+						groundMass = 0f;
+					}
 					
-					groundPointVelocity = rb != null ? rb.GetPointVelocity(hit.point) : Vector3.zero;
 					groundNormal = normal;
 					groundPoint = hit.point;
 					groundAngle = angle;
@@ -941,6 +958,7 @@ namespace AI
 			groundNormal = Vector3.zero;
 			groundPoint = Vector3.zero;
 			groundAngle = float.MaxValue;
+			groundMass = 0f;
 			groundBody = null;
 			
 			return false;
