@@ -27,7 +27,7 @@ namespace UI.Settings.Pages
 			if (Items.Count == 0 || !SceneManager.Instance.IsInTitle())
 				AutoSelect = Tab.gameObject;
 			else
-				AutoSelect = Items[0].Toggle.gameObject;
+				AutoSelect = Items[0].ToggleButton.transform.parent.gameObject;
 			
 			setupItems();
 		}
@@ -50,10 +50,11 @@ namespace UI.Settings.Pages
 				var item = new SModsPageItem();
 				item.Title = copy.Find("Title").GetComponent<TMP_Text>();
 				item.Version = copy.Find("Version").GetComponent<TMP_Text>();
-				item.Toggle = copy.Find("Left Toggle").GetComponent<Toggle>();
+				item.ToggleButton = copy.Find("Toggle").GetComponent<Button>();
+				item.ToggleLocalizer = item.ToggleButton.GetComponentInChildren<Localizer>();
 
 				var index = i;
-				item.Toggle.onValueChanged.AddListener(delegate
+				item.ToggleButton.onClick.AddListener(delegate
 				{
 					toggleMod(index);
 				});
@@ -79,8 +80,12 @@ namespace UI.Settings.Pages
 				item.Version.text = modInfo.Version;
 				item.ModInfo = modInfo;
 				
-				item.Toggle.interactable = isTitle;
-				item.Toggle.SetIsOnWithoutNotify(!modInfo.Disabled);
+				item.ToggleButton.interactable = isTitle;
+
+				item.ToggleLocalizer.Key = modInfo.Disabled ? "SETTINGS_MODS_DISABLED" : "SETTINGS_MODS_ENABLED";
+				item.ToggleLocalizer.Apply();
+				
+				Items[i] = item;
 			}
 		}
 		
@@ -98,7 +103,7 @@ namespace UI.Settings.Pages
 				nav.selectOnUp = Tab;
 				nav.selectOnDown = Tab;
 
-				item.Toggle.navigation = nav;
+				item.ToggleButton.navigation = nav;
 				return;
 			}
 			
@@ -112,32 +117,30 @@ namespace UI.Settings.Pages
 				if (i == 0)
 				{
 					nav.selectOnUp = Tab;
-					nav.selectOnDown = Items[i + 1].Toggle;
+					nav.selectOnDown = Items[i + 1].ToggleButton;
 				}
 				else if (i == Items.Count - 1)
 				{
-					nav.selectOnUp = Items[i - 1].Toggle;
-					nav.selectOnDown = Items[0].Toggle;
+					nav.selectOnUp = Items[i - 1].ToggleButton;
+					nav.selectOnDown = Items[0].ToggleButton;
 				}
 				else
 				{
-					nav.selectOnUp = Items[i - 1].Toggle;
-					nav.selectOnDown = Items[i + 1].Toggle;
+					nav.selectOnUp = Items[i - 1].ToggleButton;
+					nav.selectOnDown = Items[i + 1].ToggleButton;
 				}
 
-				item.Toggle.navigation = nav;
+				item.ToggleButton.navigation = nav;
 			}
 		}
 		
 		private void toggleMod(int index)
 		{
+			UnityEngine.Debug.LogWarning("[ModsPage] Toggling mods is disabled due to limitations. Edit the info file inside the mods directory instead");
+			return;
+			
 			var item = Items[index];
 			var modInfo = item.ModInfo;
-			
-			UnityEngine.Debug.LogWarning("[ModsPage] Toggling mods is disabled due to limitations. Edit the info file inside the mods directory instead");
-			item.Toggle.SetIsOnWithoutNotify(!modInfo.Disabled);
-			
-			return;
 			
 			if (!SceneManager.Instance.IsInTitle())
 				return;
@@ -160,7 +163,10 @@ namespace UI.Settings.Pages
 			public TMP_Text Version;
 
 			[SerializeField]
-			public Toggle Toggle;
+			public Button ToggleButton;
+
+			[SerializeField]
+			public Localizer ToggleLocalizer;
 
 			[NonSerialized]
 			public ModInfo ModInfo;
