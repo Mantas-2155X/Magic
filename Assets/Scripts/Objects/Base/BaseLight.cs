@@ -78,7 +78,7 @@ namespace Objects.Base
 		}
 
 #if UNITY_EDITOR
-		public void OnDrawGizmos()
+		public virtual void OnDrawGizmos()
 		{
 			EventTools.DrawListeners(transform, OnLightEnabledEvent, Color.blue);
 			EventTools.DrawListeners(transform, OnLightDisabledEvent, Color.cyan);

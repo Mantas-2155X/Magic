@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7609250375623552232
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079039514930815494, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8887100762626980028, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_Name
+      value: Blinker
+      objectReference: {fileID: 0}
+    - target: {fileID: 9110891862701272855, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_Range
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 9110891862701272855, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_Intensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9110891862701272855, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5861753956493418211, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8887100762626980028, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 4053956925141706288}
+  m_SourcePrefab: {fileID: 100100000, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+--- !u!23 &706171892986869121 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6941647360419453289, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+  m_PrefabInstance: {fileID: 7609250375623552232}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1354510263180022868 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8887100762626980028, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+  m_PrefabInstance: {fileID: 7609250375623552232}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4053956925141706288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354510263180022868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f5df844a9c147e18ce62756d003aa35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ObjectData>k__BackingField: {fileID: 11400000, guid: 39766cb065990a8eda3801c04ff4625e, type: 2}
+  <Rigidbody>k__BackingField: {fileID: 0}
+  objectID: 
+  Light: {fileID: 1722942443231560703}
+  Enabled: 0
+  Renderer: {fileID: 706171892986869121}
+  MaterialIndex: 1
+  LightColor: {r: 1, g: 0, b: 0, a: 1}
+  EmissionColor: {r: 2.1185472, g: 0, b: 0, a: 1.25}
+  OnLightEnabledEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLightDisabledEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  UpdateProbes: []
+  BlinkEvery: 1
+  OnBlinkedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4053956925141706288}
+        m_TargetAssemblyTypeName: Objects.Base.BaseLight, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!108 &1722942443231560703 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 9110891862701272855, guid: 6820c87ef07933409861f43f68edbd2c, type: 3}
+  m_PrefabInstance: {fileID: 7609250375623552232}
+  m_PrefabAsset: {fileID: 0}

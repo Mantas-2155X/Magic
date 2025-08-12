@@ -1,11 +1,12 @@
-using Components.Events;
 using Cysharp.Threading.Tasks;
+using Objects.Base;
+using Objects.Events;
 using Tools;
 using UnityEngine;
 
-namespace Components
+namespace Objects
 {
-	public class Blinker : MonoBehaviour
+	public class Blinker : BaseLight
 	{
 		[SerializeField]
 		public float BlinkEvery;
@@ -13,14 +14,21 @@ namespace Components
 		[SerializeField]
 		public OnBlinkedEvent OnBlinkedEvent;
 
-		public void Awake()
+		#region Identify / SaveLoad
+
+		public override bool ShouldSave => false;
+
+		#endregion
+		
+		public void Start()
 		{
 			processBlink().Forget();
 		}
 
 #if UNITY_EDITOR
-		public void OnDrawGizmos()
+		public override void OnDrawGizmos()
 		{
+			base.OnDrawGizmos();
 			EventTools.DrawListeners(transform, OnBlinkedEvent, Color.blue);
 		}
 #endif

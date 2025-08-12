@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.Events;
 
-namespace Components.Events
+namespace Objects.Events
 {
 	[Serializable]
 	public class OnBlinkedEvent : UnityEvent { }
