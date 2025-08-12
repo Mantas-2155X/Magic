@@ -9,6 +9,8 @@ namespace UI.Enums
 		Flashlight = 1,
 		Interact = 2,
 		Grab = 4,
-		Resource = 8
+		Resource = 8,
+		Attack = 16,
+		Spellbook = 32
 	}
 }

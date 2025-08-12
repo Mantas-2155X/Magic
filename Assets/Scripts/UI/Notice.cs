@@ -71,6 +71,12 @@ namespace UI
 					case ENoticePresetFlags.Grab:
 						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-grab")).ToDisplayString());
 						break;
+					case ENoticePresetFlags.Attack:
+						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-attack")).ToDisplayString());
+						break;
+					case ENoticePresetFlags.Spellbook:
+						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-spellbook")).ToDisplayString());
+						break;
 				}
 					
 				builder.AppendLine(text);
