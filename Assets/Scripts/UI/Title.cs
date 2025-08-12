@@ -41,7 +41,7 @@ namespace UI
 		public InputActionReference TitleAction;
 
 		[SerializeField]
-		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - saveload, 3 - unused, 4 - settings, 5 - returntotitle, 6 - quitgame, 7 - sceneselect
+		public List<Button> Buttons; // 0 - newgame, 1 - continue, 2 - saveload, 3 - unused, 4 - settings, 5 - returntotitle, 6 - quitgame, 7 - sceneselect, 8 - changelogs
 		[SerializeField]
 		public List<GameObject> ButtonObjects;
 
@@ -275,7 +275,7 @@ namespace UI
 			ButtonObjects[5].SetActive(!inTitle);
 			ButtonObjects[6].SetActive(true);
 			ButtonObjects[7].SetActive(inTitle);
-			ButtonObjects[8].SetActive(true);
+			ButtonObjects[8].SetActive(inTitle);
 			
 			// needs main story
 			Buttons[0].interactable = false;
