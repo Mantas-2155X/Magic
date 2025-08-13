@@ -68,7 +68,7 @@ namespace Managers
 		public GameObject Selection
 		{
 			get => selection;
-			set
+			private set
 			{
 				var previousSelection = selection;
 				selection = value;

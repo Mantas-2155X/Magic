@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -103,24 +104,36 @@ namespace UI.Settings
 
 		public void OnResetTabClicked()
 		{
-			if (CurrentPage == null)
-				return;
+			Title.Instance.Confirm.Show(EConfirmPreset.ResetTabSettings, result =>
+			{
+				if (!result)
+					return;
+				
+				if (CurrentPage == null)
+					return;
 			
-			UnityEngine.Debug.Log($"[Settings] Resetting {CurrentPage.TabLocalizer.Text.text} settings");
+				UnityEngine.Debug.Log($"[Settings] Resetting {CurrentPage.TabLocalizer.Text.text} settings");
 			
-			CurrentPage.ResetTab();
-			CurrentPage.Select(true);
+				CurrentPage.ResetTab();
+				CurrentPage.Select(true);
+			});
 		}
 		
 		public void OnResetEverythingClicked()
 		{
-			UnityEngine.Debug.Log("[Settings] Resetting all settings");
-			SettingsManager.Instance.ResetSettings();
+			Title.Instance.Confirm.Show(EConfirmPreset.ResetAllSettings, result =>
+			{
+				if (!result)
+					return;
+				
+				UnityEngine.Debug.Log("[Settings] Resetting all settings");
+				SettingsManager.Instance.ResetSettings();
 			
-			if (CurrentPage == null)
-				return;
+				if (CurrentPage == null)
+					return;
 
-			CurrentPage.Select(true);
+				CurrentPage.Select(true);
+			});
 		}
 		
 		public void Toggle()

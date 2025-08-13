@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
 using State;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -104,22 +105,34 @@ namespace UI
 
 		public void OnLoadClicked()
 		{
-			if (selectedContainer == null)
-				return;
+			Title.Instance.Confirm.Show(EConfirmPreset.LoadSave, result =>
+			{
+				if (!result)
+					return;
+				
+				if (selectedContainer == null)
+					return;
 
-			StateManager.Instance.Load(selectedSave.Item2);
+				StateManager.Instance.Load(selectedSave.Item2);
+			});
 		}
 
 		public void OnDeleteClicked()
 		{
-			if (selectedContainer == null)
-				return;
+			Title.Instance.Confirm.Show(EConfirmPreset.DeleteSave, result =>
+			{
+				if (!result)
+					return;
+				
+				if (selectedContainer == null)
+					return;
 			
-			StateManager.Instance.Delete(selectedSave.Item1);
+				StateManager.Instance.Delete(selectedSave.Item1);
 			
-			updateSaves();
-			updateNavigation();
-			Select();
+				updateSaves();
+				updateNavigation();
+				Select();
+			});
 		}
 
 		public void Select()

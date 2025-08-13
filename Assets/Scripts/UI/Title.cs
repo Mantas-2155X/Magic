@@ -4,6 +4,7 @@ using System.IO;
 using Managers;
 using ScriptableObjects;
 using TMPro;
+using UI.Enums;
 using UI.Settings.Pages;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -57,6 +58,9 @@ namespace UI
 		[SerializeField]
 		public SaveLoad SaveLoad;
 
+		[SerializeField]
+		public Confirm Confirm;
+		
 		[SerializeField]
 		public GameObject Blocker;
 
@@ -208,12 +212,24 @@ namespace UI
 
 		public void OnReturnToTitle()
 		{
-			SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetData<SceneData>("SCENE_TITLE_NAME"), true, true, false);
+			Confirm.Show(EConfirmPreset.ReturnToTitle, result =>
+			{
+				if (!result)
+					return;
+				
+				SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetData<SceneData>("SCENE_TITLE_NAME"), true, true, false);
+			});
 		}
 		
 		public void OnQuitGame()
 		{
-			SceneManager.Instance.QuitGame();
+			Confirm.Show(SceneManager.Instance.IsInTitle() ? EConfirmPreset.QuitGameInTitle : EConfirmPreset.QuitGame, result =>
+			{
+				if (!result)
+					return;
+				
+				SceneManager.Instance.QuitGame();
+			});
 		}
 
 		public void OnChangelogs()
@@ -235,7 +251,7 @@ namespace UI
 
 		private void onTitle(InputAction.CallbackContext ctx)
 		{
-			if (KeybindsPage.IsRebinding || SceneManager.Instance.IsInTitle())
+			if (KeybindsPage.IsRebinding || SceneManager.Instance.IsInTitle() || Confirm.isActiveAndEnabled)
 				return;
 			
 			Toggle();
@@ -243,7 +259,7 @@ namespace UI
 		
 		private void onConsole(InputAction.CallbackContext ctx)
 		{
-			if (KeybindsPage.IsRebinding || Console == null)
+			if (KeybindsPage.IsRebinding || Confirm.isActiveAndEnabled)
 				return;
 			
 			Console.Toggle();
