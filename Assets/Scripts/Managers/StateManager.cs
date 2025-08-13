@@ -331,7 +331,7 @@ namespace Managers
 
 			Debug.Log($"[StateManager] Save Statistics: Destroyed Components {data.DestroyedComponents.Count}, Destroyed Objects {data.DestroyedObjects.Count}, Items {data.Items.Count}, Creations {creations}, Modifications {modifications}, Killed Alives {data.KilledAlives.Count}");
 			
-			File.WriteAllText(System.IO.Path.Combine(Path, $"{(isAutoSave ? "autosave_" : "")}{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
+			File.WriteAllText(System.IO.Path.Combine(Path, $"{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			
 			initializeSaves();
 			return true;
