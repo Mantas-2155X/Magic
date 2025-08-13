@@ -11,6 +11,7 @@ namespace UI.Enums
 		Grab = 4,
 		Resource = 8,
 		Attack = 16,
-		Spellbook = 32
+		Spellbook = 32,
+		AutoSave = 64
 	}
 }

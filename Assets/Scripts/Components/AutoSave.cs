@@ -7,7 +7,7 @@ namespace Components
 	{
 		public void Trigger()
 		{
-			StateManager.Instance.AutoSave();
+			StateManager.Instance.AutoSave(true);
 		}
 	}
 }

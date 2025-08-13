@@ -13,7 +13,10 @@ using State;
 using State.Enums;
 using State.Interfaces;
 using Tools;
+using UI;
+using UI.Enums;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 namespace Managers
@@ -136,7 +139,7 @@ namespace Managers
 			return availableSaves;
 		}
 		
-		public void AutoSave()
+		public void AutoSave(bool notify)
 		{
 			var currentSceneData = SceneManager.Instance.GetCurrentSceneData();
 			var removeSaves = new List<string>();
@@ -155,6 +158,9 @@ namespace Managers
 			if (!Save(true))
 				return;
 
+			if (notify)
+				Player.Instance.Notice.ShowMessage(ENoticePresetFlags.AutoSave, 1.5f);
+			
 			for (var i = removeSaves.Count - 1; i >= 0; i--)
 			{
 				Debug.Log($"[StateManager] Removing previous autosave {removeSaves[i]}");
