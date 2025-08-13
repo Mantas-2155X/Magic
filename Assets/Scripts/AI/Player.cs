@@ -657,11 +657,7 @@ namespace AI
 			if (Paralyzed)
 				return;
 
-			var flashlight = Flashlight.Instance;
-			if (flashlight == null)
-				return;
-			
-			flashlight.Toggle();
+			Flashlight.Instance.Toggle();
 		}
 
 		private void onScroll(InputAction.CallbackContext ctx)
@@ -795,8 +791,6 @@ namespace AI
 			base.SetSpellIndex(data, index);
 			
 			var playerUI = UI.Player.Instance;
-			if (playerUI == null)
-				return;
 			
 			if (Spell.NotNull())
             {
@@ -814,9 +808,6 @@ namespace AI
 			base.LearnSpell(data, autoSelect);
 			
 			var playerUI = UI.Player.Instance;
-			if (playerUI == null)
-				return;
-			
 			playerUI.HUD.Hotbar.UpdateHotbar();
 			playerUI.HUD.Spellbook.UpdateSpellbook();
 		}
@@ -826,9 +817,6 @@ namespace AI
 			base.ForgetSpell(data);
 			
 			var playerUI = UI.Player.Instance;
-			if (playerUI == null)
-				return;
-			
 			playerUI.HUD.Hotbar.UpdateHotbar();
 			playerUI.HUD.Spellbook.UpdateSpellbook();
 		}
@@ -838,9 +826,6 @@ namespace AI
 			base.ForgetAllSpells();
 			
 			var playerUI = UI.Player.Instance;
-			if (playerUI == null)
-				return;
-			
 			playerUI.HUD.Hotbar.UpdateHotbar();
 			playerUI.HUD.Spellbook.UpdateSpellbook();
 		}
@@ -858,9 +843,7 @@ namespace AI
 			SetRenderMode(ShadowCastingMode.ShadowsOnly);
 			base.Spawn(data, relationshipGroup);
 			
-			var playerUI = UI.Player.Instance;
-			if (playerUI != null)
-				playerUI.HUD.Spellbook.Display(false);
+			UI.Player.Instance.HUD.Spellbook.Display(false);
 			
 			EnableInput();
 
@@ -879,9 +862,7 @@ namespace AI
 			
 			if (sceneData.FlashlightInitially)
 			{
-				var flashlight = Flashlight.Instance;
-				if (flashlight != null) 
-					flashlight.Enable();
+				Flashlight.Instance.Enable();
 			}
 		}
 		
@@ -889,13 +870,8 @@ namespace AI
 		{
 			Body.Containers[EWearableType.Weapon].Wear.SetParent(Body.Shoulders[1]);
 		
-			var flashlight = Flashlight.Instance;
-			if (flashlight != null) 
-				flashlight.Disable();
-			
-			var playerUI = UI.Player.Instance;
-			if (playerUI != null)
-				playerUI.HUD.Spellbook.Display(false);
+			Flashlight.Instance.Disable();
+			UI.Player.Instance.HUD.Spellbook.Display(false);
 			
 			DisableInput();
 			
@@ -1445,11 +1421,11 @@ namespace AI
 				CameraAngles = player.CameraTr.eulerAngles;
 
 				var playerUI = UI.Player.Instance;
-				if (playerUI != null && playerUI.Notice.isActiveAndEnabled)
-				{
-					NoticePreset = playerUI.Notice.CurrentPreset;
-					NoticeDuration = playerUI.Notice.EndTime - Time.time;
-				}
+				if (!playerUI.Notice.isActiveAndEnabled)
+					return;
+
+				NoticePreset = playerUI.Notice.CurrentPreset;
+				NoticeDuration = playerUI.Notice.EndTime - Time.time;
 			}
 			
 			public void Apply(object obj)
@@ -1460,9 +1436,8 @@ namespace AI
 				player.CameraTr.eulerAngles = CameraAngles;
 				Components.Flashlight.Instance.Toggle(Flashlight);
 			
-				var playerUI = UI.Player.Instance;
-				if (playerUI != null && NoticePreset != null)
-					playerUI.Notice.ShowMessage(NoticePreset.Value, NoticeDuration);
+				if (NoticePreset != null)
+					UI.Player.Instance.Notice.ShowMessage(NoticePreset.Value, NoticeDuration);
 			}
 		}
 	}

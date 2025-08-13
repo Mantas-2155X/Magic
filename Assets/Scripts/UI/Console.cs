@@ -169,7 +169,7 @@ namespace UI
 			if (state)
 			{
 				var title = Title.Instance;
-				if (title != null && !title.isActiveAndEnabled)
+				if (!title.isActiveAndEnabled)
 					title.Open();
 
 				if (!firstOpened)

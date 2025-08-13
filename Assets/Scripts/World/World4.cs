@@ -156,8 +156,7 @@ namespace World
 			
 			StartTime = Time.time;
 			
-			var world = global::World.World.Instance;
-			var spawnPoint = world.SpawnPoints.GetChild(Random.Range(0, world.SpawnPoints.childCount));
+			var spawnPoint = SpawnPoints.GetChild(Random.Range(0, SpawnPoints.childCount));
 			
 			AIManager.Instance.CreatePlayer(spawnPoint.position, spawnPoint.eulerAngles, (PlayerData)ObjectManager.Instance.GetData<AliveData>("AI_PLAYER_WORLD4_NAME"));
 			TextWalker.Walk(LocalizationManager.Instance.GetLocalizedEntry("SCENES_SCENE4_INFO"), 0f, 2f, 0.1f, 0.0025f);

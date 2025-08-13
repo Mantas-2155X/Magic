@@ -226,8 +226,7 @@ namespace Managers
 				
 				SettingsManager.Instance.SetSetting("controls-sensitivity-mouse", value);
 
-				var title = Title.Instance;
-				if (title == null || title.Settings.CurrentPage is not ControlsPage controlsPage)
+				if (Title.Instance.Settings.CurrentPage is not ControlsPage controlsPage)
 					return;
 
 				controlsPage.Select(true);
@@ -243,8 +242,7 @@ namespace Managers
 
 				SettingsManager.Instance.SetSetting("controls-sensitivity-controller", value);
 				
-				var title = Title.Instance;
-				if (title == null || title.Settings.CurrentPage is not ControlsPage controlsPage)
+				if (Title.Instance.Settings.CurrentPage is not ControlsPage controlsPage)
 					return;
 
 				controlsPage.Select(true);
@@ -487,7 +485,7 @@ namespace Managers
 				SettingsManager.Instance.ResetSettings();
 				
 				var title = Title.Instance;
-				if (title == null || title.Settings.CurrentPage == null)
+				if (title.Settings.CurrentPage == null)
 					return;
 
 				title.Settings.CurrentPage.Select(true);

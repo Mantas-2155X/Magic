@@ -137,12 +137,10 @@ namespace UI
 
 			if (state)
 			{
-				var playerUI = Player.Instance;
-				if (playerUI != null)
-					playerUI.HUD.Spellbook.Display(false);
+				Player.Instance.HUD.Spellbook.Display(false);
 
 				var aiManager = AIManager.Instance;
-				if (aiManager != null && aiManager.Player != null)
+				if (aiManager.Player != null)
 					aiManager.Player.DisableInput();
 				
 				UpdateCurrentScene();

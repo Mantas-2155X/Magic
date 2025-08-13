@@ -108,8 +108,7 @@ namespace Managers
 			}
 
 			var title = Title.Instance;
-			if (title != null)
-				title.CloseWindows();
+			title.CloseWindows();
 			
 			Debug.Log($"[SceneManager] Changing scene from {GetCurrentSceneData().LocalizedName} to {scene.LocalizedName}");
 			PauseManager.Instance.Unpause();
@@ -132,7 +131,7 @@ namespace Managers
 
 			OnPostSceneLoadEvent?.Invoke(scene);
 
-			if (closeTitle && title != null)
+			if (closeTitle)
 				title.Close();
 			
 			if (fadeOut)
