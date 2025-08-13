@@ -96,15 +96,45 @@ namespace UI
 
 		public void OnSaveClicked()
 		{
-			StateManager.Instance.Save();
+			if (selectedContainer == null)
+			{
+				StateManager.Instance.Save();
 						
-			updateSaves();
-			updateNavigation();
-			Select();
+				updateSaves();
+				updateNavigation();
+				Select();
+				
+				return;
+			}
+			
+			Title.Instance.Confirm.Show(EConfirmPreset.OverwriteSave, result =>
+			{
+				if (!result)
+					return;
+
+				if (selectedContainer != null)
+					StateManager.Instance.Delete(selectedSave.Item1);
+				
+				StateManager.Instance.Save();
+						
+				updateSaves();
+				updateNavigation();
+				Select();
+			});
 		}
 
 		public void OnLoadClicked()
 		{
+			if (SceneManager.Instance.IsInTitle())
+			{
+				if (selectedContainer == null)
+					return;
+
+				StateManager.Instance.Load(selectedSave.Item2);
+				
+				return;
+			}
+			
 			Title.Instance.Confirm.Show(EConfirmPreset.LoadSave, result =>
 			{
 				if (!result)

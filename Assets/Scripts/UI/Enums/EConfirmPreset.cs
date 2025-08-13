@@ -8,6 +8,7 @@ namespace UI.Enums
 		LoadSave,
 		DeleteSave,
 		ResetTabSettings,
-		ResetAllSettings
+		ResetAllSettings,
+		OverwriteSave
 	}
 }
