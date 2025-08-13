@@ -277,6 +277,8 @@ namespace UI
 
 				container.Date.text = saveData.SavedTime.ToString("yyyy-MM-dd\nHH:mm:ss");
 
+				container.AutoSave.SetActive(saveData.AutoSave);
+				
 				container.Button.gameObject.SetActive(true);
 
 				containerIndex++;

@@ -131,6 +131,13 @@ namespace Managers
 			if (sceneData == null || !sceneData.ReloadOnPlayerDeath)
 				return;
 			
+			var saveData = StateManager.Instance.GetLatestSave();
+			if (saveData != null)
+			{
+				StateManager.Instance.Load(saveData);
+				return;
+			}
+			
 			SceneManager.Instance.ReloadScene(true, true, true, 1f);
 		}
 

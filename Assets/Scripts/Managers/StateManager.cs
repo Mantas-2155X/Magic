@@ -136,7 +136,55 @@ namespace Managers
 			return availableSaves;
 		}
 		
-		public void Save()
+		public void AutoSave()
+		{
+			var currentSceneData = SceneManager.Instance.GetCurrentSceneData();
+			var removeSaves = new List<string>();
+			
+			var saves = GetSaves();
+			foreach (var (filePath, saveData) in saves)
+			{
+				if (currentSceneData.Name != saveData.Scene || !saveData.AutoSave)
+					continue;
+				
+				removeSaves.Add(filePath);
+			}
+
+			Debug.Log("[StateManager] Autosave called, saving");
+			
+			if (!Save(true))
+				return;
+
+			for (var i = removeSaves.Count - 1; i >= 0; i--)
+			{
+				Debug.Log($"[StateManager] Removing previous autosave {removeSaves[i]}");
+				Delete(removeSaves[i]);
+			}
+		}
+
+		public SaveData GetLatestSave()
+		{
+			var currentSceneData = SceneManager.Instance.GetCurrentSceneData();
+			
+			var allSaves = GetSaves();
+			var validSaves = new List<Tuple<string, SaveData>>();
+
+			foreach (var pair in allSaves)
+			{
+				if (currentSceneData.Name != pair.Value.Scene)
+					continue;
+			
+				validSaves.Add(new Tuple<string, SaveData>(pair.Key, pair.Value));
+			}
+
+			if (validSaves.Count == 0)
+				return null;
+			
+			validSaves.Sort((x, y) => y.Item2.SavedTime.CompareTo(x.Item2.SavedTime));
+			return validSaves[0].Item2;
+		}
+		
+		public bool Save(bool isAutoSave = false)
 		{
 			var sceneManager = SceneManager.Instance;
 			
@@ -144,11 +192,12 @@ namespace Managers
 			if (!currentSceneData.SupportsSaving)
 			{
 				Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
-				return;
+				return false;
 			}
 			
 			var data = new SaveData();
 			data.Scene = currentSceneData.Name;
+			data.AutoSave = isAutoSave;
 			data.SavedTime = DateTimeOffset.Now;
 			
 			data.DestroyedObjects = new List<string>();
@@ -259,7 +308,7 @@ namespace Managers
 			if (string.IsNullOrEmpty(saveData))
 			{
 				Debug.LogError("[StateManager] Not saving save data as the object failed to serialize");
-				return;
+				return false;
 			}
 
 			var modifications = 0;
@@ -282,9 +331,10 @@ namespace Managers
 
 			Debug.Log($"[StateManager] Save Statistics: Destroyed Components {data.DestroyedComponents.Count}, Destroyed Objects {data.DestroyedObjects.Count}, Items {data.Items.Count}, Creations {creations}, Modifications {modifications}, Killed Alives {data.KilledAlives.Count}");
 			
-			File.WriteAllText(System.IO.Path.Combine(Path, $"{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
+			File.WriteAllText(System.IO.Path.Combine(Path, $"{(isAutoSave ? "autosave_" : "")}{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			
 			initializeSaves();
+			return true;
 		}
 
 		public void Load(SaveData data)

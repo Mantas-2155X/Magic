@@ -13,6 +13,9 @@ namespace State
 		public string Scene;
 
 		[JsonProperty]
+		public bool AutoSave;
+
+		[JsonProperty]
 		public DateTimeOffset SavedTime;
 		
 		[JsonProperty]

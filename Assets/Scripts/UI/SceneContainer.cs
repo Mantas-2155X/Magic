@@ -19,6 +19,9 @@ namespace UI
 
 		[SerializeField]
 		public TMP_Text Date;
+
+		[SerializeField]
+		public GameObject AutoSave;
 		
 		public ScrollRect ScrollRect;
 		public MonoBehaviour Parent;
