@@ -839,6 +839,11 @@ namespace Managers
 				}
 			});
 
+			AddSetting("other-showdebug", "SETTINGS_OTHER_SHOWDEBUG", "SETTINGS_OTHER_SHOWDEBUG_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
+			{
+				UI.Debug.Instance.Text.gameObject.SetActive((bool)newValue);
+			});
+			
 			#endregion
 			
 			ResetSettings();

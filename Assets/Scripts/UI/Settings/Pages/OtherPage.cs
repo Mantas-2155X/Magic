@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Settings.Pages
 {
@@ -16,6 +17,11 @@ namespace UI.Settings.Pages
 		public Localizer CursorSizeLocalizer;
 		[SerializeField]
 		public DropdownLocalizer CursorSizeDropdown;
+
+		[SerializeField]
+		public Localizer ShowDebugLocalizer;
+		[SerializeField]
+		public Toggle ShowDebugToggle;
 
 		private readonly List<string> cursorElementKeys = new ()
 		{
@@ -55,6 +61,12 @@ namespace UI.Settings.Pages
 			CursorSizeDropdown.SetOptions(cursorSizeKeys);
 			CursorSizeDropdown.SetValueWithoutNotify(Convert.ToInt32(cursorSize.Value));
 
+			var showDebug = SettingsManager.Instance.GetSetting("other-showdebug");
+			ShowDebugLocalizer.Key = showDebug.Name;
+			ShowDebugLocalizer.Apply();
+			
+			ShowDebugToggle.SetIsOnWithoutNotify(Convert.ToBoolean(showDebug.Value));
+
 			updateSizeDropdown();
 		}
 		
@@ -82,6 +94,11 @@ namespace UI.Settings.Pages
 		public void OnCursorSizeChanged(int value)
 		{
 			SettingsManager.Instance.SetSetting("other-cursorsize", value);
+		}
+		
+		public void OnShowDebugChanged(bool value)
+		{
+			SettingsManager.Instance.SetSetting("other-showdebug", value);
 		}
 
 		private void updateSizeDropdown()

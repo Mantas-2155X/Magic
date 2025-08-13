@@ -60,8 +60,18 @@ namespace UI
 			}
 			else
 			{
-				var alive = AIManager.Instance != null ? AIManager.Instance.AlivesColliderMap.Count : 0;
-				Text.text = $"Alive: {alive}\nFPS: {(int)(count / time)}";
+				var npcs = 0;
+
+				var aiManager = AIManager.Instance;
+				if (aiManager != null)
+				{
+					npcs = aiManager.AlivesColliderMap.Count;
+
+					if (aiManager.Player != null && aiManager.Player.IsAlive)
+						npcs--;
+				}
+
+				Text.text = $"NPCs: {npcs}\nFPS: {(int)(count / time)}";
 				
 				time = 0f;
 				count = 0;
