@@ -525,11 +525,11 @@ namespace Managers
 						break;
 					case 2:
 						QualitySettings.lodBias = 2f;
-						QualitySettings.meshLodThreshold = 1f;
+						QualitySettings.meshLodThreshold = 0.9f;
 						break;
 					case 3:
 						QualitySettings.lodBias = 3f;
-						QualitySettings.meshLodThreshold = 0.5f;
+						QualitySettings.meshLodThreshold = 0.4f;
 						break;
 				}
 			});
