@@ -190,14 +190,17 @@ namespace Managers
 			return validSaves[0].Item2;
 		}
 		
-		public bool Save(bool isAutoSave = false)
+		public bool Save(bool isAutoSave = false, bool dryRun = false)
 		{
+			var startTime = Time.realtimeSinceStartup;
 			var sceneManager = SceneManager.Instance;
 			
 			var currentSceneData = sceneManager.GetCurrentSceneData();
 			if (!currentSceneData.SupportsSaving)
 			{
-				Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
+				if (!dryRun)
+					Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
+				
 				return false;
 			}
 			
@@ -235,14 +238,18 @@ namespace Managers
 				// Skip what's not supported
 				if (!saveable.ShouldSave)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
+					if (!dryRun)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
+					
 					continue;
 				}
 				
 				// Leave saveables without ID as they are
 				if (string.IsNullOrEmpty(saveable.ObjectID))
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
+					if (!dryRun)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
+					
 					continue;
 				}
 				
@@ -258,21 +265,27 @@ namespace Managers
 				var root = component.transform.root;
 				if (root == null)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
+					if (!dryRun)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
+					
 					continue;
 				}
 
 				// Prevent saving ragdolls
 				if (root == ragdolls)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is a ragdoll, skipping");
+					if (!dryRun)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is a ragdoll, skipping");
+					
 					continue;
 				}
 				
 				// Prevent saving stuff like gibs on characters
 				if (root == characters && saveable is not IAlive and not IDecal)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
+					if (!dryRun)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
+					
 					continue;
 				}
 				
@@ -306,14 +319,17 @@ namespace Managers
 				}
 				catch (Exception e)
 				{
-					Debug.LogError($"[StateManager] Failed saving {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
+					if (!dryRun)
+						Debug.LogError($"[StateManager] Failed saving {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
 				}
 			}
 
 			var saveData = JsonConvert.SerializeObject(data, Formatting.Indented);
 			if (string.IsNullOrEmpty(saveData))
 			{
-				Debug.LogError("[StateManager] Not saving save data as the object failed to serialize");
+				if (!dryRun)
+					Debug.LogError("[StateManager] Not saving save data as the object failed to serialize");
+				
 				return false;
 			}
 
@@ -335,7 +351,10 @@ namespace Managers
 				}
 			}
 
-			Debug.Log($"[StateManager] Save Statistics: Destroyed Components {data.DestroyedComponents.Count}, Destroyed Objects {data.DestroyedObjects.Count}, Items {data.Items.Count}, Creations {creations}, Modifications {modifications}, Killed Alives {data.KilledAlives.Count}");
+			if (dryRun)
+				return true;
+			
+			Debug.Log($"[StateManager] Save Statistics ({(Time.realtimeSinceStartup - startTime) * 1000}ms): Destroyed Components {data.DestroyedComponents.Count}, Destroyed Objects {data.DestroyedObjects.Count}, Items {data.Items.Count}, Creations {creations}, Modifications {modifications}, Killed Alives {data.KilledAlives.Count}");
 			
 			File.WriteAllText(System.IO.Path.Combine(Path, $"{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			

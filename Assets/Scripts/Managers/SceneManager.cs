@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers.Events;
@@ -129,6 +130,17 @@ namespace Managers
 			await UniTask.WaitUntil(() => handle.IsDone);
 			await UniTask.WaitForSeconds(0.2f, true);
 
+			// Something inside the serializer is slow when ran for the first time. Warm it up during loading screens
+			
+			try
+			{
+				StateManager.Instance.Save(false, true);
+			}
+			catch (Exception e)
+			{
+				Debug.LogWarning($"[SceneManager] Failed prewarming state save, {e}");
+			}
+			
 			OnPostSceneLoadEvent?.Invoke(scene);
 
 			if (closeTitle)
