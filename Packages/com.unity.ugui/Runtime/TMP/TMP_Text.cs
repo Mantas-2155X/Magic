@@ -7375,7 +7375,7 @@ namespace TMPro
                             if (tempFont == null)
                             {
                                 // Load Font Asset
-                                tempFont = Resources.Load<TMP_FontAsset>(TMP_Settings.defaultFontAssetPath + new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength));
+                                tempFont = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_FontAsset>("Assets/Packages/TextMesh Pro/Addressables/" + TMP_Settings.defaultFontAssetPath + new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength)).WaitForCompletion();
                             }
 
                             if (tempFont == null)
@@ -7408,7 +7408,7 @@ namespace TMPro
                             else
                             {
                                 // Load new material
-                                tempMaterial = Resources.Load<Material>(TMP_Settings.defaultFontAssetPath + new string(m_htmlTag, m_xmlAttribute[1].valueStartIndex, m_xmlAttribute[1].valueLength));
+                                tempMaterial = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<Material>("Assets/Packages/TextMesh Pro/Addressables/" + TMP_Settings.defaultFontAssetPath + new string(m_htmlTag, m_xmlAttribute[1].valueStartIndex, m_xmlAttribute[1].valueLength)).WaitForCompletion();
 
                                 if (tempMaterial == null)
                                     return false;
@@ -7472,7 +7472,7 @@ namespace TMPro
                         else
                         {
                             // Load new material
-                            tempMaterial = Resources.Load<Material>(TMP_Settings.defaultFontAssetPath + new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength));
+                            tempMaterial = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<Material>("Assets/Packages/TextMesh Pro/Addressables/" + TMP_Settings.defaultFontAssetPath + new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength)).WaitForCompletion();
 
                             if (tempMaterial == null)
                                 return false;
@@ -7762,7 +7762,7 @@ namespace TMPro
                             // Load Color Gradient Preset
                             if (tempColorGradientPreset == null)
                             {
-                                tempColorGradientPreset = Resources.Load<TMP_ColorGradient>(TMP_Settings.defaultColorGradientPresetsPath + new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength));
+                                tempColorGradientPreset = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_ColorGradient>("Assets/Packages/TextMesh Pro/Addressables/" + TMP_Settings.defaultColorGradientPresetsPath + new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength)).WaitForCompletion();
                             }
 
                             if (tempColorGradientPreset == null)
@@ -7931,7 +7931,7 @@ namespace TMPro
                                 if (TMP_Settings.defaultSpriteAsset != null)
                                     m_defaultSpriteAsset = TMP_Settings.defaultSpriteAsset;
                                 else
-                                    m_defaultSpriteAsset = Resources.Load<TMP_SpriteAsset>("Sprite Assets/Default Sprite Asset");
+                                    m_defaultSpriteAsset = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_SpriteAsset>("Assets/Packages/TextMesh Pro/Addressables/Sprite Assets/Default Sprite Asset.asset").WaitForCompletion();
 
                                 m_currentSpriteAsset = m_defaultSpriteAsset;
                             }
@@ -7956,7 +7956,7 @@ namespace TMPro
                                     tempSpriteAsset = OnSpriteAssetRequest?.Invoke(spriteAssetHashCode, new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength));
 
                                     if (tempSpriteAsset == null)
-                                        tempSpriteAsset = Resources.Load<TMP_SpriteAsset>(TMP_Settings.defaultSpriteAssetPath + new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength));
+                                        tempSpriteAsset = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_SpriteAsset>("Assets/Packages/TextMesh Pro/Addressables/" + TMP_Settings.defaultSpriteAssetPath + new string(m_htmlTag, m_xmlAttribute[0].valueStartIndex, m_xmlAttribute[0].valueLength)).WaitForCompletion();
                                 }
 
                                 if (tempSpriteAsset == null)

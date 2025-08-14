@@ -14,7 +14,7 @@ namespace TMPro
             if (target == BuildTarget.iOS)
             {
                 // Try loading the TMP Settings
-                TMP_Settings settings = Resources.Load<TMP_Settings>("TMP Settings");
+                TMP_Settings settings = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_Settings>("Assets/Packages/TextMesh Pro/Addressables/TMP Settings.asset").WaitForCompletion();
 
                 if (settings == null || TMP_Settings.enableEmojiSupport == false)
                     return;

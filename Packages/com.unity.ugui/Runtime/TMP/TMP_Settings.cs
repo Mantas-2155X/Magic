@@ -452,7 +452,7 @@ namespace TMPro
             {
                 if (isTMPSettingsNull)
                 {
-                    s_Instance = Resources.Load<TMP_Settings>("TMP Settings");
+                    s_Instance = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_Settings>("Assets/Packages/TextMesh Pro/Addressables/TMP Settings.asset").WaitForCompletion();
 
                     #if UNITY_EDITOR
                     // Make sure TextMesh Pro UPM packages resources have been added to the user project
@@ -500,7 +500,7 @@ namespace TMPro
             if (s_Instance == null)
             {
                 // Load settings from TMP_Settings file
-                TMP_Settings settings = Resources.Load<TMP_Settings>("TMP Settings");
+                TMP_Settings settings = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_Settings>("Assets/Packages/TextMesh Pro/Addressables/TMP Settings.asset").WaitForCompletion();
                 if (settings != null)
                     s_Instance = settings;
             }

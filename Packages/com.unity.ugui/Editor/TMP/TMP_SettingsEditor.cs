@@ -13,7 +13,7 @@ namespace TMPro.EditorUtilities
         internal class Styles
         {
             public static readonly GUIContent defaultFontAssetLabel = new GUIContent("Default Font Asset", "The Font Asset that will be assigned by default to newly created text objects when no Font Asset is specified.");
-            public static readonly GUIContent defaultFontAssetPathLabel = new GUIContent("Path:        Resources/", "The relative path to a Resources folder where the Font Assets and Material Presets are located.\nExample \"Fonts & Materials/\"");
+            public static readonly GUIContent defaultFontAssetPathLabel = new GUIContent("Path:", "The relative path to a Resources folder where the Font Assets and Material Presets are located.\nExample \"Fonts & Materials/\"");
 
             public static readonly GUIContent fallbackFontAssetsLabel = new GUIContent("Fallback Font Assets", "The Font Assets that will be searched to locate and replace missing characters from a given Font Asset.");
             public static readonly GUIContent fallbackFontAssetsListLabel = new GUIContent("Font Asset List", "The Font Assets that will be searched to locate and replace missing characters from a given Font Asset.");
@@ -57,13 +57,13 @@ namespace TMPro.EditorUtilities
             //public static readonly GUIContent spriteRelativeScale = new GUIContent("Relative Scaling", "Determines if the sprites will be scaled relative to the primary font asset assigned to the text object or relative to the current font asset.");
             public static readonly GUIContent emojifallbackTextAssetsListLabel = new GUIContent("Fallback Emoji Text Assets", "The Text Assets that will be searched to display characters defined as Emojis in the Unicode.");
 
-            public static readonly GUIContent spriteAssetsPathLabel = new GUIContent("Path:        Resources/", "The relative path to a Resources folder where the Sprite Assets are located.\nExample \"Sprite Assets/\"");
+            public static readonly GUIContent spriteAssetsPathLabel = new GUIContent("Path:", "The relative path to a Resources folder where the Sprite Assets are located.\nExample \"Sprite Assets/\"");
 
             public static readonly GUIContent defaultStyleSheetLabel = new GUIContent("Default Style Sheet", "The Style Sheet that will be used for all text objects in this project.");
-            public static readonly GUIContent styleSheetResourcePathLabel = new GUIContent("Path:        Resources/", "The relative path to a Resources folder where the Style Sheets are located.\nExample \"Style Sheets/\"");
+            public static readonly GUIContent styleSheetResourcePathLabel = new GUIContent("Path:", "The relative path to a Resources folder where the Style Sheets are located.\nExample \"Style Sheets/\"");
 
             public static readonly GUIContent colorGradientPresetsLabel = new GUIContent("Color Gradient Presets", "The relative path to a Resources folder where the Color Gradient Presets are located.\nExample \"Color Gradient Presets/\"");
-            public static readonly GUIContent colorGradientsPathLabel = new GUIContent("Path:        Resources/", "The relative path to a Resources folder where the Color Gradient Presets are located.\nExample \"Color Gradient Presets/\"");
+            public static readonly GUIContent colorGradientsPathLabel = new GUIContent("Path:", "The relative path to a Resources folder where the Color Gradient Presets are located.\nExample \"Color Gradient Presets/\"");
 
             public static readonly GUIContent lineBreakingLabel = new GUIContent("Line Breaking for Asian languages", "The text assets that contain the Leading and Following characters which define the rules for line breaking with Asian languages.");
             public static readonly GUIContent koreanSpecificRules = new GUIContent("Korean Language Options");
@@ -470,7 +470,7 @@ namespace TMPro.EditorUtilities
 
         static UnityEngine.Object GetTMPSettings()
         {
-            return Resources.Load<TMP_Settings>("TMP Settings");
+            return UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_Settings>("Assets/Packages/TextMesh Pro/Addressables/TMP Settings.asset").WaitForCompletion();
         }
 
         [SettingsProviderGroup]

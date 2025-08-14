@@ -20,7 +20,7 @@ namespace TMPro
             if (s_TextSettings == null)
             {
                 // Try loading the TMP Settings from a Resources folder in the user project.
-                s_TextSettings = Resources.Load<TMP_Settings>("TextSettings"); // ?? ScriptableObject.CreateInstance<TMP_Settings>();
+                s_TextSettings = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TMP_Settings>("Assets/Packages/TextMesh Pro/Addressables/TextSettings.asset").WaitForCompletion(); // ?? ScriptableObject.CreateInstance<TMP_Settings>();
 
                 #if UNITY_EDITOR
                 if (s_TextSettings == null)
