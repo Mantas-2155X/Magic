@@ -49,6 +49,10 @@ namespace UI
 			UnityEngine.SceneManagement.SceneManager.sceneLoaded += onSceneChanged;
 
 			transform.SetAsLastSibling();
+			
+			updateSaves();
+			updateNavigation();
+			updateSaveButton();
 			Select();
 		}
 
