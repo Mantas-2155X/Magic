@@ -52,4 +52,17 @@ namespace State
 			public Dictionary<string, JObject> AliveData;
 		}
 	}
+
+	[JsonObject]
+	public class PartialSaveData
+	{
+		[JsonProperty]
+		public string Scene;
+
+		[JsonProperty]
+		public bool AutoSave;
+
+		[JsonProperty]
+		public DateTimeOffset SavedTime;
+	}
 }

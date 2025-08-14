@@ -132,9 +132,9 @@ namespace Managers
 		
 		#region Save & Load
 
-		private readonly Dictionary<string, SaveData> availableSaves = new ();
+		private readonly Dictionary<string, PartialSaveData> availableSaves = new ();
 
-		public Dictionary<string, SaveData> GetSaves()
+		public Dictionary<string, PartialSaveData> GetSaves()
 		{
 			return availableSaves;
 		}
@@ -168,19 +168,19 @@ namespace Managers
 			}
 		}
 
-		public SaveData GetLatestSave()
+		public PartialSaveData GetLatestSave()
 		{
 			var currentSceneData = SceneManager.Instance.GetCurrentSceneData();
 			
 			var allSaves = GetSaves();
-			var validSaves = new List<Tuple<string, SaveData>>();
+			var validSaves = new List<Tuple<string, PartialSaveData>>();
 
 			foreach (var pair in allSaves)
 			{
 				if (currentSceneData.Name != pair.Value.Scene)
 					continue;
 			
-				validSaves.Add(new Tuple<string, SaveData>(pair.Key, pair.Value));
+				validSaves.Add(new Tuple<string, PartialSaveData>(pair.Key, pair.Value));
 			}
 
 			if (validSaves.Count == 0)
@@ -348,6 +348,42 @@ namespace Managers
 			loadAsync(data).Forget();
 		}
 
+		public void Load(PartialSaveData partialData)
+		{
+			var file = "";
+			
+			foreach (var pair in availableSaves)
+			{
+				if (partialData != pair.Value)
+					continue;
+
+				file = pair.Key;
+				break;
+			}
+			
+			if (string.IsNullOrEmpty(file) || !File.Exists(file))
+			{
+				Debug.LogWarning("[StateManager] Partial save data does not have a file");
+				return;
+			}
+			
+			var text = File.ReadAllText(file);
+			if (string.IsNullOrWhiteSpace(text))
+			{
+				Debug.LogWarning($"[StateManager] Save file {file} is empty, skipping");
+				return;
+			}
+
+			var data = JsonConvert.DeserializeObject<SaveData>(text);
+			if (data == null)
+			{
+				Debug.LogWarning($"[StateManager] Save file {file} failed to deserialize, skipping");
+				return;
+			}
+			
+			Load(data);
+		}
+
 		public void Delete(string path)
 		{
 			if (!availableSaves.ContainsKey(path))
@@ -405,7 +441,7 @@ namespace Managers
 					continue;
 				}
 
-				var data = JsonConvert.DeserializeObject<SaveData>(text);
+				var data = JsonConvert.DeserializeObject<PartialSaveData>(text);
 				if (data == null)
 				{
 					Debug.LogWarning($"[StateManager] Save file {file} failed to deserialize, skipping");

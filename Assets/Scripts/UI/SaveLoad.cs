@@ -40,7 +40,7 @@ namespace UI
 		public readonly List<SceneContainer> Containers = new ();
 
 		private SceneContainer selectedContainer;
-		private Tuple<string, SaveData> selectedSave;
+		private Tuple<string, PartialSaveData> selectedSave;
 		
 		private int activeSaves;
 
@@ -224,7 +224,7 @@ namespace UI
 			var currentSceneData = SceneManager.Instance.GetCurrentSceneData();
 
 			var allSaves = StateManager.Instance.GetSaves();
-			var availableSaves = new List<Tuple<string, SaveData>>();
+			var availableSaves = new List<Tuple<string, PartialSaveData>>();
 
 			foreach (var pair in allSaves)
 			{
@@ -232,7 +232,7 @@ namespace UI
 				if (currentSceneData.Name != pair.Value.Scene && !isInTitle)
 					continue;
 			
-				availableSaves.Add(new Tuple<string, SaveData>(pair.Key, pair.Value));
+				availableSaves.Add(new Tuple<string, PartialSaveData>(pair.Key, pair.Value));
 			}
 
 			// Sort by saved time descending
@@ -270,7 +270,7 @@ namespace UI
 				container.Button.onClick.RemoveAllListeners();
 				container.Button.onClick.AddListener(delegate
 				{
-					selectedSave = new Tuple<string, SaveData>(savePath, saveData);
+					selectedSave = new Tuple<string, PartialSaveData>(savePath, saveData);
 					onContainerClicked(container);
 				});
 
