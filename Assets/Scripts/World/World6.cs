@@ -11,6 +11,8 @@ using Objects.Base;
 using ScriptableObjects;
 using State.Enums;
 using State.Interfaces;
+using UI;
+using UI.Enums;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -47,6 +49,8 @@ namespace World
 		public bool WorldStarted { get; private set; }
 		public bool WorldEnded { get; private set; }
 
+		public bool FlashlightNotified { get; private set; }
+		
 		private GameObject thisGo;
 		private Transform thisTr;
 
@@ -89,12 +93,13 @@ namespace World
 				world6State.ToObject<World6State>().Apply(this);
 		}
 		
-		public void SetState(int currentWave, int remainingSpawners, float waveStartElapsed, bool worldStarted, bool worldEnded)
+		public void SetState(int currentWave, int remainingSpawners, float waveStartElapsed, bool worldStarted, bool worldEnded, bool flashlightNotified)
 		{
 			CurrentWave = currentWave;
 			RemainingSpawners = remainingSpawners;
 			WorldStarted = worldStarted;
 			WorldEnded = worldEnded;
+			FlashlightNotified = flashlightNotified;
 
 			if (worldEnded)
 			{
@@ -172,6 +177,15 @@ namespace World
 			}
 		}
 
+		public void OnButtonPressed()
+		{
+			if (FlashlightNotified)
+				return;
+			
+			FlashlightNotified = true;
+			Player.Instance.Notice.ShowMessage(ENoticePresetFlags.Flashlight, 1.5f);
+		}
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public GameObject GetGameObject() => thisGo;
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -213,8 +227,12 @@ namespace World
 				return;
 
 			if (wave.ToggleLight)
+			{
+				OnButtonPressed();
+				
 				for (var i = 0; i < Lights.Length; i++)
 					Lights[i].Toggle(false);
+			}
 		
 			for (var i = 0; i < wave.Spawners.Length; i++)
 				wave.Spawners[i].Trigger();
@@ -270,6 +288,9 @@ namespace World
 			[JsonProperty]
 			public bool WorldEnded;
 
+			[JsonProperty]
+			public bool FlashlightNotified;
+
 			public World6State() { }
 			
 			public World6State(object obj)
@@ -287,6 +308,7 @@ namespace World
 				WaveStartElapsed = world6.WorldStarted ? Time.time - world6.WaveStartTime : 0f;
 				WorldStarted = world6.WorldStarted;
 				WorldEnded = world6.WorldEnded;
+				FlashlightNotified = world6.FlashlightNotified;
 			}
 			
 			public void Apply(object obj)
@@ -294,7 +316,7 @@ namespace World
 				if (obj is not World6 world6)
 					return;
 
-				world6.SetState(CurrentWave, RemainingSpawners, WaveStartElapsed, WorldStarted, WorldEnded);
+				world6.SetState(CurrentWave, RemainingSpawners, WaveStartElapsed, WorldStarted, WorldEnded, FlashlightNotified);
 			}
 		}
 	}
