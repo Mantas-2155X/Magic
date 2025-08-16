@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e23e61eb06661e784ae0f5a159ad4fd1
+guid: 2bbec2f22dd7ef459a82f5a01177a4ee
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,8 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Hat
-    second: {fileID: 2100000, guid: 275907cc4eeca66768bdbe89ba52f6dc, type: 2}
+      name: Tube-Body
+    second: {fileID: 2100000, guid: 36c748dd1893a8fbdbc9409816aa4d63, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tube-Glass
+    second: {fileID: 2100000, guid: 88b4c105a18c75281bb46cdbecde1542, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -38,7 +43,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.75
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -96,7 +101,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.75
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

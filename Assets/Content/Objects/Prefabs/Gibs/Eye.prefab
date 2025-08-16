@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3260939462562074914}
   - component: {fileID: 2248593398703734327}
   - component: {fileID: -524543467807056091}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,6 +65,8 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -86,6 +88,7 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -146,7 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: 9a917996d25680bb49cdfb95651cf53c, type: 2}
   <Rigidbody>k__BackingField: {fileID: -524543467807056091}
-  <ObjectID>k__BackingField: 
+  objectID: 
   Type: 0
   Amount: 5
 --- !u!54 &-524543467807056091
