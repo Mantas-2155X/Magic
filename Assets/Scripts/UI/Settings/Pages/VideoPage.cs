@@ -34,6 +34,11 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public InputSlider RenderScaleInputSlider;
 		
+		[SerializeField]
+		public Localizer FieldOfViewLocalizer;
+		[SerializeField]
+		public InputSlider FieldOfViewInputSlider;
+
 		private List<string> resolutions;
 		
 		public override void Select(bool state)
@@ -86,6 +91,12 @@ namespace UI.Settings.Pages
 			
 			RenderScaleInputSlider.SetValueWithoutNotify(Convert.ToSingle(renderScale.Value));
 
+			var fieldOfView = SettingsManager.Instance.GetSetting("video-fieldofview");
+			FieldOfViewLocalizer.Key = fieldOfView.Name;
+			FieldOfViewLocalizer.Apply();
+			
+			FieldOfViewInputSlider.SetValueWithoutNotify(Convert.ToSingle(fieldOfView.Value));
+
 			updateFPSLimitSlider();
 		}
 
@@ -130,6 +141,11 @@ namespace UI.Settings.Pages
 		public void OnRenderScaleChanged(float value)
 		{
 			SettingsManager.Instance.SetSetting("video-renderscale", value);
+		}
+		
+		public void OnFieldOfViewChanged(float value)
+		{
+			SettingsManager.Instance.SetSetting("video-fieldofview", value);
 		}
 
 		private void updateFPSLimitSlider()

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using Combat.Enums;
 using Cysharp.Threading.Tasks;
+using Tools;
 using UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -422,6 +423,25 @@ namespace Managers
 				Application.targetFrameRate = setting;
 			});
 				
+			AddSetting("video-fieldofview", "SETTINGS_VIDEO_FIELDOFVIEW", "SETTINGS_VIDEO_FIELDOFVIEW_DESC", ESettingType.Float, 90f, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToInt32(newValue);
+				if (setting < 75f || setting > 105f)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid Field of View provided, skipping");
+					return;
+				}
+
+				if (SceneManager.Instance.IsInTitle())
+					return;
+				
+				var aiManager = AIManager.Instance;
+				if (aiManager == null || aiManager.Player == null)
+					return;
+				
+				aiManager.Player.SetupFOV();
+			});
+
 			#endregion
 			
 			#region Graphics

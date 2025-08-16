@@ -339,6 +339,11 @@ namespace AI
 
 			return "";
 		}
+
+		public void SetupFOV()
+		{
+			Camera.fieldOfView = MathTools.Remap(SettingsManager.Instance.GetFloat("video-fieldofview")!.Value, 75f, 105f, 46.69212f, 72.48763f);
+		}
 		
 		public void EnableInput()
 		{
@@ -846,6 +851,7 @@ namespace AI
 			UI.Player.Instance.HUD.Spellbook.Display(false);
 			
 			EnableInput();
+			SetupFOV();
 
 			var sceneData = SceneManager.Instance.GetCurrentSceneData();
 			if (sceneData == null)
