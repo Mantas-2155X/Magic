@@ -161,7 +161,7 @@ ReflectionProbe:
   m_Enabled: 1
   serializedVersion: 2
   m_Type: 0
-  m_Mode: 1
+  m_Mode: 0
   m_RefreshMode: 2
   m_TimeSlicingMode: 1
   m_Resolution: 512
@@ -177,9 +177,9 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 1
+  m_BlendDistance: 50
+  m_HDR: 0
+  m_BoxProjection: 0
   m_RenderDynamicObjects: 0
   m_UseOcclusionCulling: 1
   m_Importance: 1
@@ -474,21 +474,9 @@ PrefabInstance:
       value: 44bb312b-7b7e-418c-819f-3e33c3072d24
       objectReference: {fileID: 0}
     - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: UpdateProbes.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
       propertyPath: <ObjectID>k__BackingField
       value: 44bb312b-7b7e-418c-819f-3e33c3072d24
       objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1103322889}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1029569075}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2555,25 +2543,9 @@ PrefabInstance:
       value: 2dff9053-142e-4c0a-9648-f371f5b4d658
       objectReference: {fileID: 0}
     - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: UpdateProbes.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
       propertyPath: <ObjectID>k__BackingField
       value: 2dff9053-142e-4c0a-9648-f371f5b4d658
       objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 819898}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1029569075}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[2]'
-      value: 
-      objectReference: {fileID: 819898}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2917,21 +2889,9 @@ PrefabInstance:
       value: b0a67fce-c246-466d-8c46-988f3de681ef
       objectReference: {fileID: 0}
     - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: UpdateProbes.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
       propertyPath: <ObjectID>k__BackingField
       value: b0a67fce-c246-466d-8c46-988f3de681ef
       objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1103322889}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1029569075}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3030,21 +2990,9 @@ PrefabInstance:
       value: 0f68f68c-82cb-4ecc-acea-6396161105f5
       objectReference: {fileID: 0}
     - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: UpdateProbes.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
       propertyPath: <ObjectID>k__BackingField
       value: 0f68f68c-82cb-4ecc-acea-6396161105f5
       objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1103322889}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1029569075}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3116,25 +3064,9 @@ PrefabInstance:
       value: fcfa9d23-2d42-4c02-a7ec-73acf7af48d8
       objectReference: {fileID: 0}
     - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: UpdateProbes.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
       propertyPath: <ObjectID>k__BackingField
       value: fcfa9d23-2d42-4c02-a7ec-73acf7af48d8
       objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1103322889}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1029569075}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[2]'
-      value: 
-      objectReference: {fileID: 819898}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3332,7 +3264,7 @@ Transform:
   m_GameObject: {fileID: 1029569073}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.23, y: 0, z: -6.16}
+  m_LocalPosition: {x: -6.23, y: 0, z: -5.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3348,13 +3280,13 @@ ReflectionProbe:
   m_Enabled: 1
   serializedVersion: 2
   m_Type: 0
-  m_Mode: 1
+  m_Mode: 0
   m_RefreshMode: 2
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 5.2247887, y: 3.75, z: 17.321987}
-  m_BoxOffset: {x: 0.22739077, y: -0.75, z: 0.15917397}
+  m_BoxSize: {x: 5.2247887, y: 3.75, z: 17.512016}
+  m_BoxOffset: {x: 0.22739077, y: -0.75, z: -0.7003217}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -3364,9 +3296,9 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 1
+  m_BlendDistance: 50
+  m_HDR: 0
+  m_BoxProjection: 0
   m_RenderDynamicObjects: 0
   m_UseOcclusionCulling: 1
   m_Importance: 1
@@ -3444,7 +3376,7 @@ ReflectionProbe:
   m_Enabled: 1
   serializedVersion: 2
   m_Type: 0
-  m_Mode: 1
+  m_Mode: 0
   m_RefreshMode: 2
   m_TimeSlicingMode: 1
   m_Resolution: 512
@@ -3460,9 +3392,9 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 1
-  m_HDR: 1
-  m_BoxProjection: 1
+  m_BlendDistance: 50
+  m_HDR: 0
+  m_BoxProjection: 0
   m_RenderDynamicObjects: 0
   m_UseOcclusionCulling: 1
   m_Importance: 1
@@ -3775,25 +3707,9 @@ PrefabInstance:
       value: 31b3bf9b-7d36-430f-ab18-db4071eb6ac6
       objectReference: {fileID: 0}
     - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: UpdateProbes.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
       propertyPath: <ObjectID>k__BackingField
       value: 31b3bf9b-7d36-430f-ab18-db4071eb6ac6
       objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 819898}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1103322889}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[2]'
-      value: 
-      objectReference: {fileID: 819898}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3853,21 +3769,9 @@ PrefabInstance:
       value: f71a1f25-e4e7-4ef8-9a08-8abf7802d100
       objectReference: {fileID: 0}
     - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: UpdateProbes.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
       propertyPath: <ObjectID>k__BackingField
       value: f71a1f25-e4e7-4ef8-9a08-8abf7802d100
       objectReference: {fileID: 0}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[0]'
-      value: 
-      objectReference: {fileID: 819898}
-    - target: {fileID: 7701027929372534346, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
-      propertyPath: 'UpdateProbes.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1029569075}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
