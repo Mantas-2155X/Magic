@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using AI;
 using AI.Interfaces;
 using Combat.Attacks.Interfaces;
 using Combat.Projectiles.Interfaces;
@@ -19,6 +20,7 @@ using State.States;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Combat.Projectiles.Base
 {
@@ -159,6 +161,17 @@ namespace Combat.Projectiles.Base
 					alive.Damage(ProjectileData.Damage, GetAlive(), ProjectileData.Element);
 					alive.AddSlowSource(ObjectID, ProjectileData.Slow.Amount, ProjectileData.Slow.Duration);
 					alive.AddParalyzeSource(ObjectID, ProjectileData.Paralyze.Duration);
+
+					// Slight random push for flying npcs
+					if (alive is NPC npc && npc.Agent.HasFlight)
+					{
+						var direction = new Vector3(Random.Range(-1f, 1f), Random.Range(-0.25f, 0.25f), Random.Range(-1f, 1f));
+						
+						var npcRigidBody = npc.Body.Rigidbody;
+						npcRigidBody.AddForce(direction * (npcRigidBody.mass * 1.2f), ForceMode.Impulse);
+						
+						npc.Chase.ResetChaseRange(false);
+					}
 				}
 				else if (coll.TryGetComponent<IObject>(out var obj))
 				{

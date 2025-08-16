@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: AI_DRONE_WORLD7_DESC
   Icon: {fileID: 0}
   Tags: 0
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: f87096318aaafc244997e6f00eca6740
     m_SubObjectName: 
@@ -37,7 +36,7 @@ MonoBehaviour:
     - Key: 3
       Value:
         Constant: 0
-        Percentage: -10
+        Percentage: 0
   ProtectionStats:
     _serializedList:
     - Key: 3
@@ -52,21 +51,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 31a3ff1fdf8907b73b368372b5e49335, type: 2}
   - {fileID: 11400000, guid: 7b8993fdb778cb39e9054cdf7d6ae5fa, type: 2}
   Wearables: []
-  BrokenBodyPrefab: {fileID: 0}
   BrokenBodyPrefabReference:
     m_AssetGUID: 278eb04698d4d3f27938bb9057abee25
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  BrokenArmPrefab: {fileID: 0}
   BrokenArmPrefabReference:
     m_AssetGUID: 
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  BrokenFootPrefab: {fileID: 0}
   BrokenFootPrefabReference:
     m_AssetGUID: 
     m_SubObjectName: 
