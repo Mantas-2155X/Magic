@@ -1108,6 +1108,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button
       objectReference: {fileID: 0}
+    - target: {fileID: 7805608305364340548, guid: 80427a586e1d59309b7e8d89c825c77c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5712,9 +5716,9 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
-  m_BoxProjection: 0
+  m_BoxProjection: 1
   m_RenderDynamicObjects: 0
   m_UseOcclusionCulling: 1
   m_Importance: 1

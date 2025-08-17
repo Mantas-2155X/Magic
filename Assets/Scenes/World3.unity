@@ -177,7 +177,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -1854,7 +1854,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -2552,7 +2552,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -2830,6 +2830,7 @@ Transform:
   - {fileID: 777371695}
   - {fileID: 1226971609}
   - {fileID: 1029569074}
+  - {fileID: 894034373}
   - {fileID: 819897}
   - {fileID: 1667890044}
   - {fileID: 1370563481}
@@ -3464,8 +3465,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 17.399616, y: 3.75, z: 5.276728}
-  m_BoxOffset: {x: -0.108068466, y: -0.75, z: 0.0032298565}
+  m_BoxSize: {x: 7.858513, y: 3.75, z: 5.276728}
+  m_BoxOffset: {x: -0.035707474, y: -0.75, z: 0.0032298565}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -3475,7 +3476,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -3673,8 +3674,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 5.41621, y: 3.75, z: 36.55566}
-  m_BoxOffset: {x: -0.13189507, y: -0.75, z: -3.0848775}
+  m_BoxSize: {x: 5.41621, y: 3.75, z: 19.541779}
+  m_BoxOffset: {x: -0.13189507, y: -0.75, z: 0.5653286}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -3684,7 +3685,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -5702,8 +5703,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 17.44282, y: 3.75, z: 5.49961}
-  m_BoxOffset: {x: -0.2587576, y: -0.75, z: -0.040163517}
+  m_BoxSize: {x: 11.953405, y: 3.75, z: 5.49961}
+  m_BoxOffset: {x: 2.4859495, y: -0.75, z: -0.040163517}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -5713,7 +5714,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -5884,7 +5885,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -6253,6 +6254,71 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1159493338630786410, guid: b1a6fa5f7dc04b6fc94a90c61fdcc07b, type: 3}
   m_PrefabInstance: {fileID: 876138834}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &894034372
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 894034373}
+  - component: {fileID: 894034374}
+  m_Layer: 0
+  m_Name: Reflection Probes (17)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &894034373
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894034372}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -30.18, y: 0, z: -5.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 344264936}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!215 &894034374
+ReflectionProbe:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894034372}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Type: 0
+  m_Mode: 0
+  m_RefreshMode: 2
+  m_TimeSlicingMode: 1
+  m_Resolution: 512
+  m_UpdateFrequency: 0
+  m_BoxSize: {x: 5.2247887, y: 3.75, z: 7.191494}
+  m_BoxOffset: {x: 0.22739077, y: -0.75, z: -0.79055977}
+  m_NearClip: 0.3
+  m_FarClip: 1000
+  m_ShadowDistance: 100
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_IntensityMultiplier: 1
+  m_BlendDistance: 1.5
+  m_HDR: 1
+  m_BoxProjection: 0
+  m_RenderDynamicObjects: 0
+  m_UseOcclusionCulling: 1
+  m_Importance: 1
+  m_CustomBakedTexture: {fileID: 0}
 --- !u!1001 &902856541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7145,8 +7211,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 5.2247887, y: 3.75, z: 17.552338}
-  m_BoxOffset: {x: 0.22739077, y: -0.75, z: -0.7143636}
+  m_BoxSize: {x: 5.2247887, y: 3.75, z: 7.191494}
+  m_BoxOffset: {x: 0.22739077, y: -0.75, z: -0.79055977}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -7156,7 +7222,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -7642,7 +7708,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -22844,8 +22910,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 5.316723, y: 3.75, z: 17.331455}
-  m_BoxOffset: {x: -0.06581879, y: -0.75, z: -0.53190947}
+  m_BoxSize: {x: 5.316723, y: 3.75, z: 7.288266}
+  m_BoxOffset: {x: -0.06581879, y: -0.75, z: -0.59822035}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -22855,7 +22921,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -22920,7 +22986,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -23419,7 +23485,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -23896,8 +23962,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 5.4012184, y: 3.75, z: 23.373861}
-  m_BoxOffset: {x: -0.023571014, y: -0.75, z: 0.19502354}
+  m_BoxSize: {x: 5.4012184, y: 3.75, z: 18.297585}
+  m_BoxOffset: {x: -0.023571014, y: -0.75, z: 2.7331614}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -23907,7 +23973,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -24701,8 +24767,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 5.5752907, y: 3.75, z: 35.35113}
-  m_BoxOffset: {x: -0.15841103, y: -0.75, z: -11.550524}
+  m_BoxSize: {x: 5.5752907, y: 3.75, z: 12.49141}
+  m_BoxOffset: {x: -0.15841103, y: -0.75, z: -0.12066221}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -24712,7 +24778,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -24905,7 +24971,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -25757,7 +25823,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
@@ -26627,6 +26693,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button
       objectReference: {fileID: 0}
+    - target: {fileID: 7805608305364340548, guid: 80427a586e1d59309b7e8d89c825c77c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26901,8 +26971,8 @@ ReflectionProbe:
   m_TimeSlicingMode: 1
   m_Resolution: 512
   m_UpdateFrequency: 0
-  m_BoxSize: {x: 35.498333, y: 3.75, z: 5.4808283}
-  m_BoxOffset: {x: 14.007677, y: -0.75, z: -0.06223917}
+  m_BoxSize: {x: 6.957489, y: 3.75, z: 5.4808283}
+  m_BoxOffset: {x: -0.26274872, y: -0.75, z: -0.06223917}
   m_NearClip: 0.3
   m_FarClip: 1000
   m_ShadowDistance: 100
@@ -26912,7 +26982,7 @@ ReflectionProbe:
     serializedVersion: 2
     m_Bits: 1
   m_IntensityMultiplier: 1
-  m_BlendDistance: 50
+  m_BlendDistance: 1.5
   m_HDR: 1
   m_BoxProjection: 0
   m_RenderDynamicObjects: 0
