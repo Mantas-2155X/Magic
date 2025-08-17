@@ -39,6 +39,15 @@ namespace Managers
 				for (var i = 0; i < Screen.resolutions.Length; i++)
 				{
 					var screenResolution = screenResolutions[i];
+					
+					var aspectRatio = (float)screenResolution.width / (float)screenResolution.height;
+					if (aspectRatio < (5f / 4f) || aspectRatio > (32f / 9f))
+						continue;
+					
+					var pixels = screenResolution.width * screenResolution.height;
+					if (pixels < 1280 * 720)
+						continue;
+					
 					list.AddUnique($"{screenResolution.width}x{screenResolution.height}");
 				}
 
