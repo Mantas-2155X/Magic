@@ -219,38 +219,6 @@ namespace Managers
 				SceneManager.Instance.ChangeScene(ObjectManager.Instance.GetData<SceneData>("SCENE_TITLE_NAME"), true, true, false);
 			});
 			
-			AddCommand("msens", "Changes the mouse sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
-			{
-				var value = (float)args[0];
-				value = Mathf.Clamp(value, 0.001f, 2f);
-				
-				SettingsManager.Instance.SetSetting("controls-sensitivity-mouse", value);
-
-				if (Title.Instance.Settings.CurrentPage is not ControlsPage controlsPage)
-					return;
-
-				controlsPage.Select(true);
-			}, () =>
-			{
-				Debug.Log(SettingsManager.Instance.GetFloat("controls-sensitivity-mouse")?.ToString(CultureInfo.CurrentCulture));
-			});
-			
-			AddCommand("csens", "Changes the controller sensitivity", new [] {EConsoleCommandParameter.Float}, args =>
-			{
-				var value = (float)args[0];
-				value = Mathf.Clamp(value, 0.001f, 2f);
-
-				SettingsManager.Instance.SetSetting("controls-sensitivity-controller", value);
-				
-				if (Title.Instance.Settings.CurrentPage is not ControlsPage controlsPage)
-					return;
-
-				controlsPage.Select(true);
-			}, () =>
-			{
-				Debug.Log(SettingsManager.Instance.GetFloat("controls-sensitivity-controller")?.ToString(CultureInfo.CurrentCulture));
-			});
-			
 			AddCommand("log", "Create test logs", new [] {EConsoleCommandParameter.String, EConsoleCommandParameter.Int}, args =>
 			{
 				var amount = (int)args[1];
@@ -433,22 +401,6 @@ namespace Managers
 				Debug.Log(GameManager.TimeScale.ToString(CultureInfo.CurrentCulture));
 			});
 
-			AddCommand("fpslimit", "Sets the framerate limit", new [] {EConsoleCommandParameter.Int}, args =>
-			{
-				SettingsManager.Instance.SetSetting("video-fpslimit", (int)args[0]);
-			}, () =>
-			{
-				Debug.Log(SettingsManager.Instance.GetInt("video-fpslimit")?.ToString());
-			});
-			
-			AddCommand("renderscale", "Sets the render scale", new [] {EConsoleCommandParameter.Float}, args =>
-			{
-				SettingsManager.Instance.SetSetting("video-renderscale", (float)args[0]);
-			}, () =>
-			{
-				Debug.Log(SettingsManager.Instance.GetFloat("video-renderscale")?.ToString(CultureInfo.CurrentCulture));
-			});
-
 			AddCommand("clear", "Clears the console", () =>
 			{
 				ClearEntries();
@@ -478,17 +430,6 @@ namespace Managers
 					
 					npc.Kill(null);
 				}
-			});
-			
-			AddCommand("resetsettings", "Reset all settings", () =>
-			{
-				SettingsManager.Instance.ResetSettings();
-				
-				var title = Title.Instance;
-				if (title.Settings.CurrentPage == null)
-					return;
-
-				title.Settings.CurrentPage.Select(true);
 			});
 			
 			AddCommand("help", "Lists all commands", () =>
