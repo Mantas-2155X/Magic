@@ -283,6 +283,37 @@ namespace Managers
 			}
 		}
 		
+		private LiftGammaGain liftGammaGain;
+		public LiftGammaGain LiftGammaGain
+		{
+			get
+			{
+				if (liftGammaGain != null)
+					return liftGammaGain;
+				
+				if (RenderAsset == null)
+				{
+					Debug.LogError("[RenderManager] Failed to get render asset");
+					return null;
+				}
+
+				var profile = RenderAsset.volumeProfile;
+				if (profile == null)
+				{
+					Debug.LogError("[RenderManager] Failed to get volume profile");
+					return null;
+				}
+
+				if (!profile.TryGet(out liftGammaGain))
+				{
+					Debug.LogError("[RenderManager] Failed to get LiftGammaGain");
+					return null;
+				}
+				
+				return liftGammaGain;
+			}
+		}
+
 		private static readonly int invertIntensity = Shader.PropertyToID("_Intensity");
 
 		public void InvertColors(float value)
@@ -299,6 +330,15 @@ namespace Managers
 			if (ColorAdjustments != null)
 			{
 				ColorAdjustments.saturation.Override(value ? -100f : 0f);
+				VolumeManager.instance.OnVolumeProfileChanged(RenderAsset.volumeProfile);
+			}
+		}
+		
+		public void Gamma(float value)
+		{
+			if (LiftGammaGain != null)
+			{
+				LiftGammaGain.gamma.Override(new Vector4(1f, 1f, 1f, value));
 				VolumeManager.instance.OnVolumeProfileChanged(RenderAsset.volumeProfile);
 			}
 		}

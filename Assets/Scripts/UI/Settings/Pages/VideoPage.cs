@@ -39,6 +39,11 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public InputSlider FieldOfViewInputSlider;
 
+		[SerializeField]
+		public Localizer GammaLocalizer;
+		[SerializeField]
+		public InputSlider GammaInputSlider;
+
 		private List<string> resolutions;
 		
 		public override void Select(bool state)
@@ -97,6 +102,12 @@ namespace UI.Settings.Pages
 			
 			FieldOfViewInputSlider.SetValueWithoutNotify(Convert.ToSingle(fieldOfView.Value));
 
+			var gamma = SettingsManager.Instance.GetSetting("video-gamma");
+			GammaLocalizer.Key = gamma.Name;
+			GammaLocalizer.Apply();
+			
+			GammaInputSlider.SetValueWithoutNotify(Convert.ToSingle(gamma.Value));
+
 			updateFPSLimitSlider();
 		}
 
@@ -146,6 +157,11 @@ namespace UI.Settings.Pages
 		public void OnFieldOfViewChanged(float value)
 		{
 			SettingsManager.Instance.SetSetting("video-fieldofview", value);
+		}
+		
+		public void OnGammaChanged(float value)
+		{
+			SettingsManager.Instance.SetSetting("video-gamma", value);
 		}
 
 		private void updateFPSLimitSlider()

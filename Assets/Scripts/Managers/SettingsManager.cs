@@ -114,6 +114,17 @@ namespace Managers
 			saveSettings();
 		}
 
+		public void CallSetting(string key)
+		{
+			if (!settings.TryGetValue(key, out var setting))
+			{
+				Debug.LogWarning($"[SettingsManager] Setting with the key {key} does not exist");
+				return;
+			}
+			
+			setting.Changed?.Invoke(setting.Value, setting.Value);
+		}
+		
 		public void DefaultSetting(string key)
 		{
 			if (!settings.TryGetValue(key, out var setting))
@@ -394,7 +405,7 @@ namespace Managers
 			AddSetting("video-renderscale", "SETTINGS_VIDEO_RENDERSCALE", "SETTINGS_VIDEO_RENDERSCALE_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToSingle(newValue);
-				if (setting is < 0.1f or > 2f)
+				if (setting is < 0.25f or > 2f)
 				{
 					Debug.LogWarning("[SettingsManager] Invalid render scale provided, skipping");
 					return;
@@ -439,7 +450,19 @@ namespace Managers
 				if (aiManager == null || aiManager.Player == null)
 					return;
 				
-				aiManager.Player.SetupFOV();
+				aiManager.Player.Camera.fieldOfView = MathTools.Remap(setting, 75f, 105f, 46.69212f, 72.48763f);
+			});
+			
+			AddSetting("video-gamma", "SETTINGS_VIDEO_GAMMA", "SETTINGS_VIDEO_GAMMA_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToSingle(newValue);
+				if (setting < 0.5f || setting > 1.5f)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid Gamma provided, skipping");
+					return;
+				}
+				
+				RenderManager.Instance.Gamma(setting - 1f);
 			});
 
 			#endregion
