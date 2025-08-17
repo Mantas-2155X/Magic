@@ -98,7 +98,7 @@ public class GrabScreenFeatureRenderGraphAPI : ScriptableRendererFeature
     class RenderPass : ScriptableRenderPass
     {
         Settings settings;
-        List<ShaderTagId> shaderTagIds = new List<ShaderTagId>
+        ShaderTagId[] shaderTagIds = new ShaderTagId[]
     {
         new ShaderTagId("SRPDefaultUnlit"),
         new ShaderTagId("UniversalForward"),
@@ -130,7 +130,7 @@ public class GrabScreenFeatureRenderGraphAPI : ScriptableRendererFeature
             TextureHandle depthTarget = resourceData.activeDepthTexture;
 
             var rendererListDesc = new RendererListDesc(
-                shaderTagIds.ToArray(),
+                shaderTagIds,
                 renderingData.cullResults,
                 cameraData.camera)
             {

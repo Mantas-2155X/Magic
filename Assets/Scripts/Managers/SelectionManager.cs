@@ -77,12 +77,15 @@ namespace Managers
 					SelectionRect = null;
 				else
 					SelectionRect = rect;
+
+				SelectionIsBlocker = selection != null && selection.name == "Blocker";
 				
 				OnSelectionChangedEvent.Invoke(previousSelection, selection);
 			}
 		}
 
 		public RectTransform SelectionRect { get; private set; }
+		public bool SelectionIsBlocker { get; private set; }
 		
 		public GameObject Indicator { get; private set; }
 		public Image IndicatorImage { get; private set; }
@@ -100,7 +103,7 @@ namespace Managers
 			if (selected != Selection)
 				Selection = selected;
 			
-			if (SelectionRect != null && Selection.activeSelf && Selection.name != "Blocker")
+			if (SelectionRect != null && Selection.activeSelf && !SelectionIsBlocker)
 			{
 				Indicator.SetActive(true);
 				

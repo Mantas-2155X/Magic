@@ -1,3 +1,4 @@
+using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -45,6 +46,8 @@ namespace UI
 
 		private CancellationTokenSource cancellationToken = new ();
 		
+		private StringBuilder statsBuilder = new ();
+		
 		public void Awake()
 		{
 			Application.logMessageReceived += logReceived;
@@ -71,7 +74,14 @@ namespace UI
 						npcs--;
 				}
 
-				Text.text = $"NPCs: {npcs}\nFPS: {(int)(count / time)}";
+				statsBuilder.Clear();
+				statsBuilder.Append("NPCs: ");
+				statsBuilder.Append(npcs);
+				statsBuilder.AppendLine();
+				statsBuilder.Append("FPS: ");
+				statsBuilder.Append((int)(count / time));
+				
+				Text.SetText(statsBuilder);
 				
 				time = 0f;
 				count = 0;
