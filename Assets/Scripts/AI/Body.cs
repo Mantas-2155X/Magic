@@ -76,24 +76,33 @@ namespace AI
 
 		private bool swayDirection;
 
-		private Material glowMaterial;
-		private Material centerMaterial;
-
 		private EElement coreGlowElement;
 		private bool coreCenterActive;
 		
 		private bool malfunctionActive;
 
+		private Material[] instancedMaterials;
+
 		public void Awake()
 		{
-			var materials = Core.GetComponent<Renderer>().materials;
-			glowMaterial = materials[1];
-			centerMaterial = materials[2];
+			instancedMaterials = Core.GetComponent<Renderer>().materials;
 			
 			if (MovementCollider != null)
 			{
 				hasMovementCollider = true;
 				movementColliderTr = MovementCollider.transform;
+			}
+		}
+		
+		public void OnDestroy()
+		{
+			if (instancedMaterials == null)
+				return;
+
+			for (var i = 0; i < instancedMaterials.Length; i++)
+			{
+				Destroy(instancedMaterials[i]);
+				instancedMaterials[i] = null;
 			}
 		}
 
@@ -105,6 +114,8 @@ namespace AI
 			coreGlowElement = element;
 			
 			var coreColor = CoreColors[element];
+			var glowMaterial = instancedMaterials[1];
+				
 			glowMaterial.color = coreColor.Color;
 			glowMaterial.SetColor(emissionColor, coreColor.EmissionColor);
 		}
@@ -115,6 +126,8 @@ namespace AI
 				return;
 
 			coreCenterActive = active;
+			
+			var centerMaterial = instancedMaterials[2];
 			
 			if (active)
 			{

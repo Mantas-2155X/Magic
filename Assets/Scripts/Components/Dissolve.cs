@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -16,11 +17,25 @@ namespace Components
 	
 		private static readonly int dissolveAmount = Shader.PropertyToID("_DissolveAmount");
 
+		private Material[] instancedMaterials;
+		
 		public void Awake()
 		{
 			dissolve().Forget();
 		}
-	
+
+		public void OnDestroy()
+		{
+			if (instancedMaterials == null)
+				return;
+
+			for (var i = 0; i < instancedMaterials.Length; i++)
+			{
+				Destroy(instancedMaterials[i]);
+				instancedMaterials[i] = null;
+			}
+		}
+
 		private async UniTask dissolve()
 		{
 			await UniTask.WaitForSeconds(ShouldDissolve ? DissolveAfter : DissolveAfter + DissolveDuration);
@@ -30,7 +45,7 @@ namespace Components
 
 			if (ShouldDissolve)
 			{
-				var materials = GetComponent<Renderer>().materials;
+				instancedMaterials = GetComponent<Renderer>().materials;
 			
 				var normalizedTime = 0.0f;
 				while (normalizedTime < 1.0f)
@@ -40,9 +55,9 @@ namespace Components
 					if (this == null || !isActiveAndEnabled)
 						return;
 				
-					for (var i = 0; i < materials.Length; i++)
+					for (var i = 0; i < instancedMaterials.Length; i++)
 					{
-						var material = materials[i];
+						var material = instancedMaterials[i];
 						material.SetFloat(dissolveAmount, normalizedTime);
 					}
 				

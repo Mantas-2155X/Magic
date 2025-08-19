@@ -19,7 +19,7 @@ namespace Objects.Base
 
 		private CancellationTokenSource cancellationToken = new ();
 
-		private Material sideMaterial;
+		private Material[] instancedMaterials;
 		
 		#region Identify / SaveLoad
 
@@ -31,9 +31,21 @@ namespace Objects.Base
 		{
 			base.Awake();
 
-			var rend = GetComponent<Renderer>();
-			var mats = rend.materials;
-			sideMaterial = mats[1];
+			instancedMaterials = GetComponent<Renderer>().materials;
+		}
+		
+		public override void OnDestroy()
+		{
+			base.OnDestroy();
+			
+			if (instancedMaterials == null)
+				return;
+
+			for (var i = 0; i < instancedMaterials.Length; i++)
+			{
+				Destroy(instancedMaterials[i]);
+				instancedMaterials[i] = null;
+			}
 		}
 		
 		public override bool Use(IAlive user)
@@ -62,6 +74,8 @@ namespace Objects.Base
 		{
 			if (token.IsCancellationRequested)
 				return;
+			
+			var sideMaterial = instancedMaterials[1];
 			
 			sideMaterial.color = Color.green;
 			sideMaterial.SetColor(emissionColor, Color.green * 1.25f);

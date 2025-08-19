@@ -41,7 +41,7 @@ namespace Objects.Base
 		
 		private static readonly int emissionColor = Shader.PropertyToID("_EmissionColor");
 
-		private Material material;
+		private Material[] instancedMaterials;
 		
 		#region Identify / SaveLoad
 		
@@ -67,14 +67,26 @@ namespace Objects.Base
 		{
 			base.Awake();
 		
-			var materials = Renderer.materials;
-			material = materials[MaterialIndex];
-			Renderer.materials = materials;
+			instancedMaterials = Renderer.materials;
 
 			Light.color = LightColor;
-			material.SetColor(emissionColor, EmissionColor);
+			instancedMaterials[MaterialIndex].SetColor(emissionColor, EmissionColor);
 			
 			setEnabled();
+		}
+		
+		public override void OnDestroy()
+		{
+			base.OnDestroy();
+			
+			if (instancedMaterials == null)
+				return;
+
+			for (var i = 0; i < instancedMaterials.Length; i++)
+			{
+				Destroy(instancedMaterials[i]);
+				instancedMaterials[i] = null;
+			}
 		}
 
 #if UNITY_EDITOR
@@ -147,6 +159,8 @@ namespace Objects.Base
 
 		private void setEnabled()
 		{
+			var material = instancedMaterials[MaterialIndex];
+			
 			if (Enabled)
 			{
 				Light.enabled = true;
