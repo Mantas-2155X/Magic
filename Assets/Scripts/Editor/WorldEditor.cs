@@ -78,7 +78,7 @@ namespace Editor
 			GUILayout.Space(5);
 			
 			if (GUILayout.Button("Save State"))
-				StateManager.Instance.Save();
+				StateManager.Instance.Save(out _);
 			
 			var saves = StateManager.Instance.GetSaves();
 			foreach (var pair in saves)

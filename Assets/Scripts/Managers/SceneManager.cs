@@ -95,12 +95,12 @@ namespace Managers
 			await ChangeSceneAsync(GetCurrentSceneData(), fadeIn, fadeOut, closeTitle, fadeDuration);
 		}
 		
-		public void ChangeScene(SceneData scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
+		public void ChangeScene(SceneData scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f, bool waitForGI = true)
 		{
-			ChangeSceneAsync(scene, fadeIn, fadeOut, closeTitle, fadeDuration).Forget();
+			ChangeSceneAsync(scene, fadeIn, fadeOut, closeTitle, fadeDuration, waitForGI).Forget();
 		}
 		
-		public async UniTask ChangeSceneAsync(SceneData scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
+		public async UniTask ChangeSceneAsync(SceneData scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f, bool waitForGI = true)
 		{
 			if (fadeIn)
 			{
@@ -128,13 +128,15 @@ namespace Managers
 			
 			await handle.Result.ActivateAsync();
 			await UniTask.WaitUntil(() => handle.IsDone);
-			await UniTask.WaitForSeconds(0.2f, true);
+			
+			if (waitForGI)
+				await UniTask.WaitForSeconds(0.2f, true);
 
 			// Something inside the serializer is slow when ran for the first time. Warm it up during loading screens
 			
 			try
 			{
-				StateManager.Instance.Save(false, true);
+				StateManager.Instance.Save(out _, false, true);
 			}
 			catch (Exception e)
 			{

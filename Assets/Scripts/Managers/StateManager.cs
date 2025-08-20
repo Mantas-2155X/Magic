@@ -155,7 +155,7 @@ namespace Managers
 
 			Debug.Log("[StateManager] Autosave called, saving");
 			
-			if (!Save(true))
+			if (!Save(out _, true))
 				return;
 
 			if (notify)
@@ -190,7 +190,7 @@ namespace Managers
 			return validSaves[0].Item2;
 		}
 		
-		public bool Save(bool isAutoSave = false, bool dryRun = false)
+		public bool Save(out SaveData save, bool isAutoSave = false, bool dryRun = false)
 		{
 			var startTime = Time.realtimeSinceStartup;
 			var sceneManager = SceneManager.Instance;
@@ -201,6 +201,7 @@ namespace Managers
 				if (!dryRun)
 					Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
 				
+				save = null;
 				return false;
 			}
 			
@@ -330,6 +331,7 @@ namespace Managers
 				if (!dryRun)
 					Debug.LogError("[StateManager] Not saving save data as the object failed to serialize");
 				
+				save = null;
 				return false;
 			}
 
@@ -352,22 +354,27 @@ namespace Managers
 			}
 
 			if (dryRun)
+			{
+				save = data;
 				return true;
+			}
 			
 			Debug.Log($"[StateManager] Save Statistics ({(Time.realtimeSinceStartup - startTime) * 1000}ms): Destroyed Components {data.DestroyedComponents.Count}, Destroyed Objects {data.DestroyedObjects.Count}, Items {data.Items.Count}, Creations {creations}, Modifications {modifications}, Killed Alives {data.KilledAlives.Count}");
 			
 			File.WriteAllText(System.IO.Path.Combine(Path, $"{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			
 			initializeSaves();
+			
+			save = data;
 			return true;
 		}
 
-		public void Load(SaveData data)
+		public void Load(SaveData data, bool loadCorrectScene = true)
 		{
-			loadAsync(data).Forget();
+			loadAsync(data, loadCorrectScene).Forget();
 		}
 
-		public void Load(PartialSaveData partialData)
+		public void Load(PartialSaveData partialData, bool loadCorrectScene = true)
 		{
 			var file = "";
 			
@@ -400,7 +407,7 @@ namespace Managers
 				return;
 			}
 			
-			Load(data);
+			Load(data, loadCorrectScene);
 		}
 
 		public void Delete(string path)
@@ -495,7 +502,7 @@ namespace Managers
 			lastSaveData = null;
 		}
 
-		private async UniTaskVoid loadAsync(SaveData data)
+		private async UniTaskVoid loadAsync(SaveData data, bool loadCorrectScene = true)
 		{
 			var sceneManager = SceneManager.Instance;
 
@@ -508,10 +515,13 @@ namespace Managers
 
 			lastSaveData = data;
 			
-			if (sceneData == sceneManager.GetCurrentSceneData())
-				await sceneManager.ReloadSceneAsync(true, true, true);
-			else
-				await sceneManager.ChangeSceneAsync(sceneData, true, true, true);
+			if (loadCorrectScene)
+			{
+				if (sceneData == sceneManager.GetCurrentSceneData())
+					await sceneManager.ReloadSceneAsync(true, true, true);
+				else
+					await sceneManager.ChangeSceneAsync(sceneData, true, true, true);
+			}
 
 			for (var i = data.DestroyedObjects.Count - 1; i >= 0; i--)
 			{

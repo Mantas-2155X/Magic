@@ -102,7 +102,7 @@ namespace UI
 		{
 			if (selectedContainer == null)
 			{
-				StateManager.Instance.Save();
+				StateManager.Instance.Save(out _);
 						
 				updateSaves();
 				updateNavigation();
@@ -119,7 +119,7 @@ namespace UI
 				if (selectedContainer != null)
 					StateManager.Instance.Delete(selectedSave.Item1);
 				
-				StateManager.Instance.Save();
+				StateManager.Instance.Save(out _);
 						
 				updateSaves();
 				updateNavigation();
