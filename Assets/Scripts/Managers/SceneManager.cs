@@ -136,7 +136,7 @@ namespace Managers
 			
 			try
 			{
-				StateManager.Instance.Save(out _, false, true);
+				StateManager.Instance.Save(out _, false, false);
 			}
 			catch (Exception e)
 			{

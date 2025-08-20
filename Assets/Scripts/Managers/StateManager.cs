@@ -190,7 +190,7 @@ namespace Managers
 			return validSaves[0].Item2;
 		}
 		
-		public bool Save(out SaveData save, bool isAutoSave = false, bool writeToFile = false)
+		public bool Save(out SaveData save, bool isAutoSave = false, bool writeToFile = true)
 		{
 			var startTime = Time.realtimeSinceStartup;
 			var sceneManager = SceneManager.Instance;
@@ -198,8 +198,7 @@ namespace Managers
 			var currentSceneData = sceneManager.GetCurrentSceneData();
 			if (!currentSceneData.SupportsSaving)
 			{
-				if (!writeToFile)
-					Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
+				Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
 				
 				save = null;
 				return false;
@@ -239,18 +238,14 @@ namespace Managers
 				// Skip what's not supported
 				if (!saveable.ShouldSave)
 				{
-					if (!writeToFile)
-						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
-					
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
 					continue;
 				}
 				
 				// Leave saveables without ID as they are
 				if (string.IsNullOrEmpty(saveable.ObjectID))
 				{
-					if (!writeToFile)
-						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
-					
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
 					continue;
 				}
 				
@@ -266,27 +261,21 @@ namespace Managers
 				var root = component.transform.root;
 				if (root == null)
 				{
-					if (!writeToFile)
-						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
-					
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
 					continue;
 				}
 
 				// Prevent saving ragdolls
 				if (root == ragdolls)
 				{
-					if (!writeToFile)
-						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is a ragdoll, skipping");
-					
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is a ragdoll, skipping");
 					continue;
 				}
 				
 				// Prevent saving stuff like gibs on characters
 				if (root == characters && saveable is not IAlive and not IDecal)
 				{
-					if (!writeToFile)
-						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
-					
+					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
 					continue;
 				}
 				
@@ -320,16 +309,14 @@ namespace Managers
 				}
 				catch (Exception e)
 				{
-					if (!writeToFile)
-						Debug.LogError($"[StateManager] Failed saving {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
+					Debug.LogError($"[StateManager] Failed saving {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
 				}
 			}
 
 			var saveData = JsonConvert.SerializeObject(data, Formatting.Indented);
 			if (string.IsNullOrEmpty(saveData))
 			{
-				if (!writeToFile)
-					Debug.LogError("[StateManager] Not saving save data as the object failed to serialize");
+				Debug.LogError("[StateManager] Not saving save data as the object failed to serialize");
 				
 				save = null;
 				return false;
@@ -353,7 +340,7 @@ namespace Managers
 				}
 			}
 
-			if (writeToFile)
+			if (!writeToFile)
 			{
 				save = data;
 				return true;

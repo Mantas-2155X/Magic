@@ -21,7 +21,7 @@ namespace Components
 		private async UniTaskVoid doTransition()
 		{
 			// Save everything in the current scene, this includes shared data that the new scene would have
-			StateManager.Instance.Save(out var saveData, false, true);
+			StateManager.Instance.Save(out var saveData, false, false);
 			
 			// Since we're loading the save file directly, trick it into using data for the current scene for the new scene
 			saveData.Scene = Scene.Name;
