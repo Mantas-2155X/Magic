@@ -85,14 +85,14 @@ namespace Managers
 #endif
 		}
 		
-		public void ReloadScene(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
+		public void ReloadScene(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f, bool waitForGI = true)
 		{
-			ReloadSceneAsync(fadeIn, fadeOut, closeTitle, fadeDuration).Forget();
+			ReloadSceneAsync(fadeIn, fadeOut, closeTitle, fadeDuration, waitForGI).Forget();
 		}
 		
-		public async UniTask ReloadSceneAsync(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f)
+		public async UniTask ReloadSceneAsync(bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f, bool waitForGI = true)
 		{
-			await ChangeSceneAsync(GetCurrentSceneData(), fadeIn, fadeOut, closeTitle, fadeDuration);
+			await ChangeSceneAsync(GetCurrentSceneData(), fadeIn, fadeOut, closeTitle, fadeDuration, waitForGI);
 		}
 		
 		public void ChangeScene(SceneData scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f, bool waitForGI = true)

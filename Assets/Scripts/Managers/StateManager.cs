@@ -190,7 +190,7 @@ namespace Managers
 			return validSaves[0].Item2;
 		}
 		
-		public bool Save(out SaveData save, bool isAutoSave = false, bool dryRun = false)
+		public bool Save(out SaveData save, bool isAutoSave = false, bool writeToFile = false)
 		{
 			var startTime = Time.realtimeSinceStartup;
 			var sceneManager = SceneManager.Instance;
@@ -198,7 +198,7 @@ namespace Managers
 			var currentSceneData = sceneManager.GetCurrentSceneData();
 			if (!currentSceneData.SupportsSaving)
 			{
-				if (!dryRun)
+				if (!writeToFile)
 					Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
 				
 				save = null;
@@ -239,7 +239,7 @@ namespace Managers
 				// Skip what's not supported
 				if (!saveable.ShouldSave)
 				{
-					if (!dryRun)
+					if (!writeToFile)
 						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
 					
 					continue;
@@ -248,7 +248,7 @@ namespace Managers
 				// Leave saveables without ID as they are
 				if (string.IsNullOrEmpty(saveable.ObjectID))
 				{
-					if (!dryRun)
+					if (!writeToFile)
 						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
 					
 					continue;
@@ -266,7 +266,7 @@ namespace Managers
 				var root = component.transform.root;
 				if (root == null)
 				{
-					if (!dryRun)
+					if (!writeToFile)
 						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
 					
 					continue;
@@ -275,7 +275,7 @@ namespace Managers
 				// Prevent saving ragdolls
 				if (root == ragdolls)
 				{
-					if (!dryRun)
+					if (!writeToFile)
 						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is a ragdoll, skipping");
 					
 					continue;
@@ -284,7 +284,7 @@ namespace Managers
 				// Prevent saving stuff like gibs on characters
 				if (root == characters && saveable is not IAlive and not IDecal)
 				{
-					if (!dryRun)
+					if (!writeToFile)
 						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
 					
 					continue;
@@ -320,7 +320,7 @@ namespace Managers
 				}
 				catch (Exception e)
 				{
-					if (!dryRun)
+					if (!writeToFile)
 						Debug.LogError($"[StateManager] Failed saving {saveable.GetType().Name} state for {TransformTools.GetFullPath(component.transform)} ({saveable.ObjectID}), {e}");
 				}
 			}
@@ -328,7 +328,7 @@ namespace Managers
 			var saveData = JsonConvert.SerializeObject(data, Formatting.Indented);
 			if (string.IsNullOrEmpty(saveData))
 			{
-				if (!dryRun)
+				if (!writeToFile)
 					Debug.LogError("[StateManager] Not saving save data as the object failed to serialize");
 				
 				save = null;
@@ -353,7 +353,7 @@ namespace Managers
 				}
 			}
 
-			if (dryRun)
+			if (writeToFile)
 			{
 				save = data;
 				return true;
@@ -369,12 +369,64 @@ namespace Managers
 			return true;
 		}
 
-		public void Load(SaveData data, bool loadCorrectScene = true)
+		public void Load(SaveData data, bool useLoadingScreen = true)
 		{
-			loadAsync(data, loadCorrectScene).Forget();
+			LoadAsync(data, useLoadingScreen).Forget();
 		}
 
-		public void Load(PartialSaveData partialData, bool loadCorrectScene = true)
+		public async UniTask LoadAsync(SaveData data, bool useLoadingScreen = true)
+		{
+			var sceneManager = SceneManager.Instance;
+			
+			var sceneData = ObjectManager.Instance.GetData<SceneData>(data.Scene);
+			if (!sceneData.SupportsSaving)
+			{
+				Debug.LogError($"[StateManager] Not loading save data as the scene {data.Scene} does not support saving");
+				return;
+			}
+
+			lastSaveData = data;
+			
+			if (sceneData == sceneManager.GetCurrentSceneData())
+				await sceneManager.ReloadSceneAsync(useLoadingScreen, useLoadingScreen, true, waitForGI: useLoadingScreen);
+			else
+				await sceneManager.ChangeSceneAsync(sceneData, useLoadingScreen, useLoadingScreen, true, waitForGI: useLoadingScreen);
+
+			for (var i = data.DestroyedObjects.Count - 1; i >= 0; i--)
+			{
+				var destroyedObject = GetRegisteredObject(data.DestroyedObjects[i]);
+				if (destroyedObject.IsNull())
+					continue;
+
+				Object.Destroy(destroyedObject.GetGameObject());
+			}
+			
+			var killAlives = new List<IAlive>();
+			
+			loadStage(data, ELoadTiming.Normal, killAlives);
+			loadStage(data, ELoadTiming.Alives, killAlives);
+			loadStage(data, ELoadTiming.Late, killAlives);
+			loadStage(data, ELoadTiming.VeryLate, killAlives);
+
+			for (var i = data.DestroyedComponents.Count - 1; i >= 0; i--)
+			{
+				var destroyedComponent = GetRegisteredObject(data.DestroyedComponents[i]);
+				if (destroyedComponent.IsNull())
+					continue;
+
+				Object.Destroy((Component)destroyedComponent);
+			}
+			
+			for (var i = killAlives.Count - 1; i >= 0; i--)
+				killAlives[i].Kill(null, true);
+		}
+		
+		public void Load(PartialSaveData partialData, bool useLoadingScreen = true)
+		{
+			LoadAsync(partialData, useLoadingScreen).Forget();
+		}
+
+		public async UniTask LoadAsync(PartialSaveData partialData, bool useLoadingScreen = true)
 		{
 			var file = "";
 			
@@ -407,7 +459,7 @@ namespace Managers
 				return;
 			}
 			
-			Load(data, loadCorrectScene);
+			await LoadAsync(data, useLoadingScreen);
 		}
 
 		public void Delete(string path)
@@ -500,56 +552,6 @@ namespace Managers
 				killedAlives.Add(killedAlivesList[i]);
 
 			lastSaveData = null;
-		}
-
-		private async UniTaskVoid loadAsync(SaveData data, bool loadCorrectScene = true)
-		{
-			var sceneManager = SceneManager.Instance;
-
-			var sceneData = ObjectManager.Instance.GetData<SceneData>(data.Scene);
-			if (!sceneData.SupportsSaving)
-			{
-				Debug.LogError($"[StateManager] Not loading save data as the scene {data.Scene} does not support saving");
-				return;
-			}
-
-			lastSaveData = data;
-			
-			if (loadCorrectScene)
-			{
-				if (sceneData == sceneManager.GetCurrentSceneData())
-					await sceneManager.ReloadSceneAsync(true, true, true);
-				else
-					await sceneManager.ChangeSceneAsync(sceneData, true, true, true);
-			}
-
-			for (var i = data.DestroyedObjects.Count - 1; i >= 0; i--)
-			{
-				var destroyedObject = GetRegisteredObject(data.DestroyedObjects[i]);
-				if (destroyedObject.IsNull())
-					continue;
-
-				Object.Destroy(destroyedObject.GetGameObject());
-			}
-			
-			var killAlives = new List<IAlive>();
-			
-			loadStage(data, ELoadTiming.Normal, killAlives);
-			loadStage(data, ELoadTiming.Alives, killAlives);
-			loadStage(data, ELoadTiming.Late, killAlives);
-			loadStage(data, ELoadTiming.VeryLate, killAlives);
-
-			for (var i = data.DestroyedComponents.Count - 1; i >= 0; i--)
-			{
-				var destroyedComponent = GetRegisteredObject(data.DestroyedComponents[i]);
-				if (destroyedComponent.IsNull())
-					continue;
-
-				Object.Destroy((Component)destroyedComponent);
-			}
-			
-			for (var i = killAlives.Count - 1; i >= 0; i--)
-				killAlives[i].Kill(null, true);
 		}
 		
 		private void loadStage(SaveData data, ELoadTiming timing, List<IAlive> killAlives)
