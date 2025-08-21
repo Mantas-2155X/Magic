@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Reflection;
 using Managers;
+using State;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,7 +11,7 @@ namespace Editor
 	public class WorldEditor : UnityEditor.Editor
 	{
 		[SerializeField]
-		public bool[] Folds = new bool[4];
+		public bool[] Folds = new bool[5];
 		
 		public override void OnInspectorGUI()
 		{
@@ -51,6 +53,15 @@ namespace Editor
 					EditorGUILayout.ObjectField((Object)pair.Value, typeof(Object), true);
 					GUILayout.EndHorizontal();
 				}
+			}
+
+			var savedItems = (Dictionary<string, SaveData.SaveItem>)typeof(StateManager).GetField("savedItems", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(StateManager.Instance);
+			
+			Folds[4] = EditorGUILayout.Foldout(Folds[4], $"Saved Items ({savedItems.Count})", true);
+			if (Folds[4])
+			{
+				foreach (var pair in savedItems)
+					EditorGUILayout.TextField(pair.Key);
 			}
 			
 			GUILayout.Space(5);

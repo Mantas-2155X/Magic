@@ -220,6 +220,8 @@ namespace Managers
 				data.KilledAlives.Add(killedAlives[i]);
 			
 			data.Items = new Dictionary<string, SaveData.SaveItem>();
+			foreach (var pair in savedItems)
+				data.Items.Add(pair.Key, pair.Value);
 			
 			var characters = World.World.Instance.Characters;
 			var ragdolls = World.World.Instance.Ragdolls;
@@ -464,6 +466,8 @@ namespace Managers
 
 		#region Internals
 
+		private readonly Dictionary<string, SaveData.SaveItem> savedItems = new ();
+
 		private SaveData lastSaveData;
 
 		private void registerObject(IIdentifiable identifiable, string objectID)
@@ -514,6 +518,7 @@ namespace Managers
 			destroyedObjects.Clear();
 			destroyedComponents.Clear();
 			killedAlives.Clear();
+			savedItems.Clear();
 
 			if (lastSaveData == null)
 				return;
@@ -530,6 +535,10 @@ namespace Managers
 			for (var i = 0; i < killedAlivesList.Count; i++)
 				killedAlives.Add(killedAlivesList[i]);
 
+			var savedItemsDict = lastSaveData.Items;
+			foreach (var pair in savedItemsDict)
+				savedItems.Add(pair.Key, pair.Value);
+			
 			lastSaveData = null;
 		}
 		

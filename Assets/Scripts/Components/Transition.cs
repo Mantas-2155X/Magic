@@ -6,7 +6,6 @@ using UnityEngine;
 namespace Components
 {
 	// TODO: Transfer non-shared objects from one scene to another
-	// TODO: Transfer chained save datas (going from A to B to C and then back to A should remember and restore the data)
 	// TODO: Adjust scenedata to have a "chain" list which lets you view saves for C while you're in A
 	
 	public class Transition : MonoBehaviour
