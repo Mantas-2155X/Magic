@@ -28,7 +28,7 @@ namespace State
 		public List<string> KilledAlives;
 
 		[JsonProperty]
-		public List<SaveItem> Items;
+		public Dictionary<string, SaveItem> Items;
 
 		[JsonObject]
 		public class SaveItem
@@ -38,9 +38,6 @@ namespace State
 			
 			[JsonProperty]
 			public ELoadTiming LoadTiming;
-
-			[JsonProperty]
-			public string ObjectID;
 
 			[JsonProperty]
 			public Tuple<string, JObject> CreateData;

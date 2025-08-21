@@ -198,8 +198,6 @@ namespace Managers
 			var currentSceneData = sceneManager.GetCurrentSceneData();
 			if (!currentSceneData.SupportsSaving)
 			{
-				Debug.LogError($"[StateManager] Not saving save data as the scene {currentSceneData.LocalizedName} does not support saving");
-				
 				save = null;
 				return false;
 			}
@@ -221,7 +219,7 @@ namespace Managers
 			for (var i = 0; i < killedAlives.Count; i++)
 				data.KilledAlives.Add(killedAlives[i]);
 			
-			data.Items = new List<SaveData.SaveItem>();
+			data.Items = new Dictionary<string, SaveData.SaveItem>();
 			
 			var characters = World.World.Instance.Characters;
 			var ragdolls = World.World.Instance.Ragdolls;
@@ -286,8 +284,7 @@ namespace Managers
 					var item = new SaveData.SaveItem
 					{
 						LoadType = saveable.LoadType,
-						LoadTiming = saveable.LoadTiming,
-						ObjectID = saveable.ObjectID
+						LoadTiming = saveable.LoadTiming
 					};
 
 					switch (saveable.LoadType)
@@ -305,7 +302,7 @@ namespace Managers
 						}
 					}
 					
-					data.Items.Add(item);
+					data.Items[saveable.ObjectID] = item;
 				}
 				catch (Exception e)
 				{
@@ -325,11 +322,9 @@ namespace Managers
 			var modifications = 0;
 			var creations = 0;
 
-			for (var i = 0; i < data.Items.Count; i++)
+			foreach (var pair in data.Items)
 			{
-				var dataItem = data.Items[i];
-
-				switch (dataItem.LoadType)
+				switch (pair.Value.LoadType)
 				{
 					case ELoadType.Create:
 						creations++;
@@ -367,10 +362,7 @@ namespace Managers
 			
 			var sceneData = ObjectManager.Instance.GetData<SceneData>(data.Scene);
 			if (!sceneData.SupportsSaving)
-			{
-				Debug.LogError($"[StateManager] Not loading save data as the scene {data.Scene} does not support saving");
 				return;
-			}
 
 			lastSaveData = data;
 			
@@ -571,22 +563,24 @@ namespace Managers
 				modNames.AddUnique(modInfo.GetGUID());
 			}
 			
-			for (var i = 0; i < data.Items.Count; i++)
+			foreach (var pair in data.Items)
 			{
-				var item = data.Items[i];
+				var item = pair.Value;
 				if (item.LoadTiming != timing)
 					continue;
+
+				var objectID = pair.Key;
 				
 				switch (item.LoadType)
 				{
 					case ELoadType.Create:
 					{
 						// Nothing to create if the object id is empty
-						if (string.IsNullOrEmpty(item.ObjectID))
+						if (string.IsNullOrEmpty(objectID))
 							continue;
 						
 						// Don't create if it's supposed to be destroyed already
-						if (data.DestroyedObjects.Contains(item.ObjectID) || data.KilledAlives.Contains(item.ObjectID))
+						if (data.DestroyedObjects.Contains(objectID) || data.KilledAlives.Contains(objectID))
 							continue;
 
 						// Make sure the create type assembly is for a mod that exists
@@ -595,7 +589,7 @@ namespace Managers
 						{
 							if (!modNames.Contains(split[1]))
 							{
-								Debug.LogWarning($"[StateManager] Mod to Create type {item.CreateData.Item1} for saveable with ID {item.ObjectID} is missing");
+								Debug.LogWarning($"[StateManager] Mod to Create type {item.CreateData.Item1} for saveable with ID {objectID} is missing");
 								continue;
 							}
 						}
@@ -603,7 +597,7 @@ namespace Managers
 						var type = Type.GetType(item.CreateData.Item1);
 						if (type == null)
 						{
-							Debug.LogWarning($"[StateManager] Failed to get Create type {item.CreateData.Item1} for saveable with ID {item.ObjectID}");
+							Debug.LogWarning($"[StateManager] Failed to get Create type {item.CreateData.Item1} for saveable with ID {objectID}");
 							continue;
 						}
 
@@ -616,20 +610,20 @@ namespace Managers
 						
 						try
 						{
-							method.Invoke(null, new object[] { new Tuple<string, JObject>(item.ObjectID, item.CreateData.Item2) });
+							method.Invoke(null, new object[] { new Tuple<string, JObject>(objectID, item.CreateData.Item2) });
 						}
 						catch (Exception e)
 						{
-							Debug.LogError($"[StateManager] Failed creating saveable with type {type} ({item.ObjectID}), {e}");
+							Debug.LogError($"[StateManager] Failed creating saveable with type {type} ({objectID}), {e}");
 						}
 						
 						break;
 					}
 					case ELoadType.Modify:
 					{
-						if (!saveables.TryGetValue(item.ObjectID, out var saveable))
+						if (!saveables.TryGetValue(objectID, out var saveable))
 						{
-							Debug.LogWarning($"[StateManager] Modify saveable with ID {item.ObjectID} was not found");
+							Debug.LogWarning($"[StateManager] Modify saveable with ID {objectID} was not found");
 							continue;
 						}
 						
@@ -644,7 +638,7 @@ namespace Managers
 						{
 							if (saveable is not IAlive alive)
 							{
-								Debug.LogWarning($"[StateManager] Saveable with ID {item.ObjectID} is not an IAlive");
+								Debug.LogWarning($"[StateManager] Saveable with ID {objectID} is not an IAlive");
 								continue;
 							}
 						
