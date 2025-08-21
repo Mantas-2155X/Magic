@@ -61,7 +61,9 @@ namespace Components
 		
 		public virtual bool ExternallySpawned { get; set; } = false;
 
-		public virtual bool Transferred { get; set; }
+		public virtual string OriginalScene { get; set; }
+		
+		public virtual string TransferredScene { get; set; }
 		
 		public virtual ELoadType LoadType => ELoadType.Modify;
 		

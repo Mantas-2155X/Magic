@@ -8,8 +8,7 @@ using UnityEngine;
 
 namespace Components
 {
-	// TODO: Non-shared object should be removed from original scene if its taken to a different scene
-	// TODO: Non-shared object does not persist outside of shared areas
+	// TODO: Objects in shared areas are duplicated
 	
 	public class Transition : MonoBehaviour
 	{
@@ -69,8 +68,8 @@ namespace Components
 				if (saveables.Contains(saveable))
 					continue;
 				
-				saveable.Transferred = true;
 				saveable.ExternallySpawned = true;
+				saveable.TransferredScene = Scene.Name;
 				
 				saveables.Add(saveable);
 			}
@@ -80,22 +79,6 @@ namespace Components
 			
 			// Since we're loading the save file for this scene on a different scene, trick it into thinking it's on the correct scene
 			saveData.Scene = Scene.Name;
-
-			for (var i = 0; i < saveables.Count; i++)
-			{
-				var saveable = saveables[i];
-				
-				if (!saveData.Items.TryGetValue(saveable.ObjectID, out var item))
-				{
-					Debug.LogWarning($"[Transition] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(saveable.GetTransform())} is not in the save, skipping");
-					continue;
-				}
-
-				// Saveable in shared area is transferred to the new scene
-				item.Scene = Scene.Name;
-				
-				Debug.Log($"[Transition] Transferred saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(saveable.GetTransform())}");
-			}
 			
 			// Load the new scene and the save. Only the shared data is applied (and creations) since most of the stuff is outside shared space
 			await StateManager.Instance.LoadAsync(saveData, false);

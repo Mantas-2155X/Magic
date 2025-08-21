@@ -62,7 +62,9 @@ namespace Combat.Projectiles.Base
 		
 		public virtual bool ExternallySpawned { get; set; }
 
-		public virtual bool Transferred { get; set; }
+		public virtual string OriginalScene { get; set; }
+		
+		public virtual string TransferredScene { get; set; }
 		
 		public virtual ELoadType LoadType => ELoadType.Create;
 		

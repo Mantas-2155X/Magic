@@ -13,7 +13,9 @@ namespace State.Interfaces
 		
 		public bool ExternallySpawned { get; set; }
 		
-		public bool Transferred { get; set; }
+		public string OriginalScene { get; set; }
+		
+		public string TransferredScene { get; set; }
 
 		public ELoadType LoadType { get; }
 

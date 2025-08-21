@@ -34,10 +34,10 @@ namespace State
 		public class SaveItem
 		{
 			[JsonProperty]
-			public string Scene;
+			public string OriginalScene;
 
 			[JsonProperty]
-			public bool Transferred;
+			public string TransferredScene;
 			
 			[JsonProperty]
 			public ELoadType LoadType;
