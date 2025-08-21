@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers;
 using ScriptableObjects;
@@ -37,8 +36,6 @@ namespace Components
 
 		private async UniTaskVoid doTransition()
 		{
-			var saveables = new List<ISaveable>();
-			
 			var size = Physics.OverlapBoxNonAlloc(SharedCenter, SharedExtents / 2f, transferColliders);
 			for (var i = 0; i < size; i++)
 			{
@@ -65,13 +62,8 @@ namespace Components
 					continue;
 				}
 				
-				if (saveables.Contains(saveable))
-					continue;
-				
 				saveable.ExternallySpawned = true;
 				saveable.TransferredScene = Scene.Name;
-				
-				saveables.Add(saveable);
 			}
 
 			// Save everything in the current scene, this includes shared data that the new scene would have
