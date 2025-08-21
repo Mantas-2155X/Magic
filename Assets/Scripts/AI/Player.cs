@@ -89,6 +89,12 @@ namespace AI
 
 		#region Identify / SaveLoad
 		
+		public override JObject GetCreation()
+		{
+			// Player is never created from save
+			return null;
+		}
+		
 		public override Dictionary<string, JObject> GetModifications()
 		{
 			var dict = base.GetModifications();

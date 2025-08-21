@@ -9,7 +9,11 @@ namespace State.Interfaces
 	{
 		public bool ShouldSave { get; }
 		
+		public bool ShouldTransfer { get; }
+		
 		public bool ExternallySpawned { get; set; }
+		
+		public bool Transferred { get; set; }
 
 		public ELoadType LoadType { get; }
 

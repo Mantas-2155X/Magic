@@ -57,8 +57,12 @@ namespace Components
 		
 		public virtual bool ShouldSave => true;
 
+		public virtual bool ShouldTransfer => false;
+		
 		public virtual bool ExternallySpawned { get; set; } = false;
 
+		public virtual bool Transferred { get; set; }
+		
 		public virtual ELoadType LoadType => ELoadType.Modify;
 		
 		public virtual ELoadTiming LoadTiming => ELoadTiming.Normal;

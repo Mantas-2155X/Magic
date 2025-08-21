@@ -291,21 +291,33 @@ namespace Managers
 					var item = new SaveData.SaveItem
 					{
 						LoadType = saveable.LoadType,
-						LoadTiming = saveable.LoadTiming
+						LoadTiming = saveable.LoadTiming,
+						Scene = currentSceneData.Name,
+						Transferred = saveable.Transferred
 					};
 
-					switch (saveable.LoadType)
+					// If it was transferred it may or may not exist in the other scene, grab both create and modify
+					if (saveable.Transferred)
 					{
-						case ELoadType.Create:
+						var saveableType = saveable.GetType();
+						item.CreateData = new Tuple<string, JObject>(saveableType.Assembly == gameAssembly ? saveableType.FullName : saveableType.AssemblyQualifiedName, saveable.GetCreation());
+						item.ModifyData = saveable.GetModifications();
+					}
+					else
+					{
+						switch (saveable.LoadType)
 						{
-							var saveableType = saveable.GetType();
-							item.CreateData = new Tuple<string, JObject>(saveableType.Assembly == gameAssembly ? saveableType.FullName : saveableType.AssemblyQualifiedName, saveable.GetCreation());
-							break;
-						}
-						case ELoadType.Modify:
-						{
-							item.ModifyData = saveable.GetModifications();
-							break;
+							case ELoadType.Create:
+							{
+								var saveableType = saveable.GetType();
+								item.CreateData = new Tuple<string, JObject>(saveableType.Assembly == gameAssembly ? saveableType.FullName : saveableType.AssemblyQualifiedName, saveable.GetCreation());
+								break;
+							}
+							case ELoadType.Modify:
+							{
+								item.ModifyData = saveable.GetModifications();
+								break;
+							}
 						}
 					}
 					
@@ -577,13 +589,19 @@ namespace Managers
 				modNames.AddUnique(modInfo.GetGUID());
 			}
 			
+			var currentSceneName = SceneManager.Instance.GetCurrentSceneData().Name;
+
 			foreach (var pair in data.Items)
 			{
 				var item = pair.Value;
-				if (item.LoadTiming != timing)
+				if (item.LoadTiming != timing || item.Scene != currentSceneName)
 					continue;
 
 				var objectID = pair.Key;
+
+				// Transferred object is already part of the scene. If we need to create it, remove the existing one
+				if (item.Transferred && item.LoadType == ELoadType.Create && registeredObjects.TryGetValue(objectID, out var registeredObject))
+					Object.Destroy(registeredObject.GetGameObject());
 				
 				switch (item.LoadType)
 				{

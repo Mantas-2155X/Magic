@@ -58,8 +58,12 @@ namespace Combat.Projectiles.Base
 
 		public virtual bool ShouldSave => true;
 		
+		public virtual bool ShouldTransfer => true;
+		
 		public virtual bool ExternallySpawned { get; set; }
 
+		public virtual bool Transferred { get; set; }
+		
 		public virtual ELoadType LoadType => ELoadType.Create;
 		
 		public virtual ELoadTiming LoadTiming => ELoadTiming.Late;

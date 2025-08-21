@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b522204eb04802ae69b05ceea31c0e, type: 3}
-  m_Name: Transition1
+  m_Name: Transition3
   m_EditorClassIdentifier: 
-  Name: SCENE_TRANSITION1_NAME
+  Name: SCENE_TRANSITION3_NAME
   Description: 
   Icon: {fileID: 21300000, guid: 4edfebaad393344dc9cb2827a79974b8, type: 3}
   Tags: 64
@@ -25,7 +25,7 @@ MonoBehaviour:
   Type: 
   Assembly: 
   Addressable:
-    m_AssetGUID: 9fcf83320c37cb400b32c34f1ee54d2a
+    m_AssetGUID: d4ef845b0698fc90eb4fbee16475e2e0
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
@@ -40,5 +40,5 @@ MonoBehaviour:
   SpawnPlayer: 1
   ReloadOnPlayerDeath: 1
   RelatedScenes:
+  - {fileID: 11400000, guid: 8c9eaaebdaafa0aa5951efe9b8b1f5ab, type: 2}
   - {fileID: 11400000, guid: d6cd9cf0e189267268c6eec0cfa17b02, type: 2}
-  - {fileID: 11400000, guid: e6ae9389791fc415caaaffdbe758eb93, type: 2}
