@@ -604,18 +604,28 @@ namespace Managers
 
 				var objectID = pair.Key;
 
-				if (registeredObjects.TryGetValue(objectID, out var registeredObject) && !string.IsNullOrEmpty(item.TransferredScene) && item.OriginalScene == currentSceneName)
+				if (registeredObjects.TryGetValue(objectID, out var registeredObject) && !string.IsNullOrEmpty(item.TransferredScene))
 				{
-					// Object moved from original scene to another and did not come back, Destroy the original object
-					if (item.TransferredScene != currentSceneName)
+					// Moving back to original scene of the object
+					if (item.OriginalScene == currentSceneName)
 					{
-						Object.DestroyImmediate(registeredObject.GetGameObject());
-						continue;
-					}
+						// Object moved from original scene to another and did not come back, destroy the original object
+						if (item.TransferredScene != currentSceneName)
+						{
+							Object.DestroyImmediate(registeredObject.GetGameObject());
+							continue;
+						}
 					
-					// Object moved from original scene to another and came back. Destroy the original object and create/modify the moved one
-					if (item.LoadType == ELoadType.Create)
-						Object.DestroyImmediate(registeredObject.GetGameObject());
+						// Object moved from original scene to another and came back. Destroy the original object and create/modify the moved one
+						if (item.LoadType == ELoadType.Create)
+							Object.DestroyImmediate(registeredObject.GetGameObject());
+					}
+					else
+					{
+						// Object moved in already exists in this scene, destroy the original object
+						if (item.LoadType == ELoadType.Create)
+							Object.DestroyImmediate(registeredObject.GetGameObject());
+					}
 				}
 				
 				// Don't load objects that don't belong in this scene

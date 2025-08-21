@@ -7,8 +7,6 @@ using UnityEngine;
 
 namespace Components
 {
-	// TODO: Objects in shared areas are duplicated
-	
 	public class Transition : MonoBehaviour
 	{
 		[SerializeField]
