@@ -171,13 +171,18 @@ namespace Managers
 		public PartialSaveData GetLatestSave()
 		{
 			var currentSceneData = SceneManager.Instance.GetCurrentSceneData();
+
+			var searchScenes = new List<string>();
+			searchScenes.Add(currentSceneData.Name);
+
+			SceneManager.Instance.GetRelatedSceneNames(currentSceneData, searchScenes);
 			
 			var allSaves = GetSaves();
 			var validSaves = new List<Tuple<string, PartialSaveData>>();
 
 			foreach (var pair in allSaves)
 			{
-				if (currentSceneData.Name != pair.Value.Scene)
+				if (!searchScenes.Contains(pair.Value.Scene))
 					continue;
 			
 				validSaves.Add(new Tuple<string, PartialSaveData>(pair.Key, pair.Value));

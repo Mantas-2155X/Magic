@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -36,5 +37,8 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public bool ReloadOnPlayerDeath;
+
+		[SerializeField]
+		public List<SceneData> RelatedScenes;
 	}
 }

@@ -229,7 +229,7 @@ namespace UI
 			foreach (var pair in allSaves)
 			{
 				// Show all saves in title, otherwise only show current scene saves
-				if (currentSceneData.Name != pair.Value.Scene && !isInTitle)
+				if (!SceneManager.Instance.IsSceneDataRelated(currentSceneData, pair.Value.Scene) && !isInTitle)
 					continue;
 			
 				availableSaves.Add(new Tuple<string, PartialSaveData>(pair.Key, pair.Value));

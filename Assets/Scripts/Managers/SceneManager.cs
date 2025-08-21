@@ -55,6 +55,35 @@ namespace Managers
 		public static OnPostSceneLoadEvent OnPostSceneLoadEvent = new ();
 		
 		private readonly List<SceneData> sceneDatas = new ();
+
+		public bool IsSceneDataRelated(SceneData sceneData, string checkSceneName)
+		{
+			if (sceneData.Name == checkSceneName)
+				return true;
+			
+			for (var i = 0; i < sceneData.RelatedScenes.Count; i++)
+			{
+				if (!IsSceneDataRelated(sceneData.RelatedScenes[i], checkSceneName))
+					continue;
+
+				return true;
+			}
+			
+			return false;
+		}
+
+		public void GetRelatedSceneNames(SceneData sceneData, List<string> list)
+		{
+			for (var i = 0; i < sceneData.RelatedScenes.Count; i++)
+			{
+				var relatedScene = sceneData.RelatedScenes[i];
+				if (list.Contains(relatedScene.Name))
+					continue;
+				
+				list.Add(relatedScene.Name);
+				GetRelatedSceneNames(relatedScene, list);
+			}
+		}
 		
 		public SceneData GetCurrentSceneData()
 		{
