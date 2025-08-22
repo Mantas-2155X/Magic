@@ -39,6 +39,9 @@ namespace ScriptableObjects
 		public bool ReloadOnPlayerDeath;
 
 		[SerializeField]
+		public PlayerData PlayerData;
+		
+		[SerializeField]
 		public List<SceneData> RelatedScenes;
 	}
 }
