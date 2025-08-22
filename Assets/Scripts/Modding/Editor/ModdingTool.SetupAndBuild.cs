@@ -263,6 +263,7 @@ namespace Modding.Editor
 				schema.LoadPath.SetVariableByName(settings, "Mod");
 				schema.InternalIdNamingMode = BundledAssetGroupSchema.AssetNamingMode.GUID;
 				schema.BundleNaming = BundledAssetGroupSchema.BundleNamingStyle.NoHash;
+				schema.UseAssetBundleCrc = false;
 
 				var previousRemoteCatalogBuildPath = settings.RemoteCatalogBuildPath.Id;
 				var previousRemoteCatalogLoadPath = settings.RemoteCatalogLoadPath.Id;
