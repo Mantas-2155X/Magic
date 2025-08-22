@@ -17,6 +17,28 @@ namespace Objects.Base
 		[SerializeField]
 		public float Amount;
 		
+		public override void OnDestroy()
+		{
+			base.OnDestroy();
+			
+			if (ObjectData.Name != "OBJECT_CORE_NAME")
+				return;
+
+			var rend = GetComponent<Renderer>();
+			if (rend == null) 
+				return;
+
+			var mats = rend.sharedMaterials;
+			for (var i = mats.Length - 1; i >= 0; i--)
+			{
+				var mat = mats[i];
+				if (!mat.name.EndsWith("(Instance)"))
+					continue;
+
+				Destroy(mat);
+			}
+		}
+
 		public override bool Use(IAlive user)
 		{
 			var success = base.Use(user);

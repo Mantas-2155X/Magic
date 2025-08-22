@@ -93,18 +93,6 @@ namespace AI
 				movementColliderTr = MovementCollider.transform;
 			}
 		}
-		
-		public void OnDestroy()
-		{
-			if (instancedMaterials == null)
-				return;
-
-			for (var i = 0; i < instancedMaterials.Length; i++)
-			{
-				Destroy(instancedMaterials[i]);
-				instancedMaterials[i] = null;
-			}
-		}
 
 		public void SetCoreGlow(EElement element)
 		{
