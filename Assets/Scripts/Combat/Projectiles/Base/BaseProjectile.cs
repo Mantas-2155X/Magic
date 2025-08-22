@@ -231,7 +231,7 @@ namespace Combat.Projectiles.Base
 			SpellRange = range;
 			AttackData = attack;
 
-			CreatedTime = Time.time;
+			CreatedTime = Time.time - elapsedTime;
 
 			if (owner.NotNull())
 			{

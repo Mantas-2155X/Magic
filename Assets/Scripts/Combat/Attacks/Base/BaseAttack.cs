@@ -197,7 +197,7 @@ namespace Combat.Attacks.Base
 			owner = GetAlive();
 
 			Target = AttackData.AttachToTarget ? attach : null;
-			CreatedTime = Time.time;
+			CreatedTime = Time.time - elapsedTime;
 
 			if (AttackData.FollowCaster && owner.NotNull())
 				Target = owner;
