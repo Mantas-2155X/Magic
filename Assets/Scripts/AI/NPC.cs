@@ -353,7 +353,7 @@ namespace AI
 			AIModeObj.Enabled(this);
 
 #if DEBUG_NPC
-			Debug.Log($"[NPC {gameObject.name}] Changed AI Mode from {previousAIMode} to {AIMode}");
+			Debug.Log($"[NPC {gameObject.name}] Changed AI Mode from {PreviousAIMode} to {AIMode}");
 #endif
 		}
 		
@@ -373,7 +373,7 @@ namespace AI
 			ActionModeObj.Enabled(this);
 			
 #if DEBUG_NPC
-			Debug.Log($"[NPC {gameObject.name}] Changed Action Mode from {previousActionMode} to {ActionMode}");
+			Debug.Log($"[NPC {gameObject.name}] Changed Action Mode from {PreviousActionMode} to {ActionMode}");
 #endif
 		}
 
@@ -398,7 +398,7 @@ namespace AI
 				SendCommunication(ECommunication.AttackTargetLost, null);
 
 #if DEBUG_NPC
-			Debug.Log($"[NPC {gameObject.name}] Changed Attack Target from {previousAttackTarget} to {AttackTarget}");
+			Debug.Log($"[NPC {gameObject.name}] Changed Attack Target from {PreviousAttackTarget} to {AttackTarget}");
 #endif
 		}
 		
@@ -420,7 +420,7 @@ namespace AI
 				SendCommunication(ECommunication.OtherTargetLost, null);
 			
 #if DEBUG_NPC
-			Debug.Log($"[NPC {gameObject.name}] Changed Other Target from {previousOtherTarget} to {OtherTarget}");
+			Debug.Log($"[NPC {gameObject.name}] Changed Other Target from {PreviousOtherTarget} to {OtherTarget}");
 #endif
 		}
 		
@@ -436,7 +436,7 @@ namespace AI
 			AIModeObj.DestinationChanged(PreviousDestination, Destination);
 		
 #if DEBUG_NPC
-			Debug.Log($"[NPC {gameObject.name}] Changed Destination from {previousDestination} to {Destination}");
+			Debug.Log($"[NPC {gameObject.name}] Changed Destination from {PreviousDestination} to {Destination}");
 #endif
 		}
 		
