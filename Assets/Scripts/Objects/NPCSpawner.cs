@@ -64,6 +64,8 @@ namespace Objects
 		public bool Cleared { get; private set; }
 		public bool Activated { get; private set; }
 		public int Triggered { get; private set; }
+
+		private bool firstSpawn = true;
 		
 		#region Identify / SaveLoad
 		
@@ -248,12 +250,15 @@ namespace Objects
 				if (currentlyAlive >= AliveCount)
 					continue;
 				
-				spawn(spawnID, true);
+				var usePortal = !(Initialization == ESpawnerInitialization.OnStart && firstSpawn && SpawnRate < 0.3f);
+				spawn(spawnID, usePortal);
 			}
 		}
 
 		private void spawn(string spawnID, bool usePortal)
 		{
+			firstSpawn = false;
+			
 			var tr = GetTransform();
 
 			var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], ObjectID, RelationshipGroup < -1 ? Random.Range(0, 9999) : RelationshipGroup, usePortal);
