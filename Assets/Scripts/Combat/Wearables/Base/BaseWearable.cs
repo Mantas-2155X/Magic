@@ -63,6 +63,8 @@ namespace Combat.Wearables.Base
 			if (ignorePooling)
 				return;
 			
+			StateManager.Instance.UnregisterSavedItem(ObjectID);
+			
 			ObjectID = "";
 			PoolingManager.Instance.Add(WearableData, gameObject);
 		}

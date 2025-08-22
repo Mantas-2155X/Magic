@@ -4786,6 +4786,8 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4807,6 +4809,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -4856,6 +4859,7 @@ GameObject:
   - component: {fileID: -6842290158623438316}
   - component: {fileID: 1209231468606182540}
   - component: {fileID: 5115145812127813415}
+  - component: {fileID: 3273045030206429779}
   m_Layer: 1
   m_Name: ManaBlast
   m_TagString: Untagged
@@ -9623,6 +9627,8 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9644,6 +9650,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -9692,11 +9699,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <AttackData>k__BackingField: {fileID: 11400000, guid: 3cb144a88c38eb81da8d54e684d35b4a, type: 2}
-  objectID: 
   <System>k__BackingField: {fileID: 8176768647540141391}
   <Triggers>k__BackingField:
   - {fileID: 1209231468606182540}
   - {fileID: 5115145812127813415}
+  objectID: 
 --- !u!135 &1209231468606182540
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9739,3 +9746,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 1, z: 4}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!65 &3273045030206429779
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2895964246749410662}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 2, z: 5}
+  m_Center: {x: 0, y: 1, z: 0}

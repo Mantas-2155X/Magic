@@ -72,6 +72,8 @@ namespace Combat.Casts.Base
 
 		public void OnDisable()
 		{
+			StateManager.Instance.UnregisterSavedItem(ObjectID);
+			
 			ObjectID = "";
 			PoolingManager.Instance.Add(CastData, thisGo);
 		}

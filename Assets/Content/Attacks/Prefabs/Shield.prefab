@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2555801524093677636}
   - component: {fileID: 73633598313657588}
   - component: {fileID: 698735529403344138}
+  - component: {fileID: 2561441945946882059}
   m_Layer: 1
   m_Name: Shield
   m_TagString: Untagged
@@ -4809,6 +4810,8 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4830,6 +4833,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -4879,4 +4883,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <AttackData>k__BackingField: {fileID: 11400000, guid: 6c1795e77c8365f099bc517bb1c8a193, type: 2}
   <System>k__BackingField: {fileID: 806143919539197933}
-  <Trigger>k__BackingField: {fileID: 0}
+  <Triggers>k__BackingField: []
+  objectID: 
+--- !u!65 &2561441945946882059
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523756766213633531}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 2.5, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}

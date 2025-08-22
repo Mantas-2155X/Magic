@@ -241,12 +241,16 @@ namespace Combat.Attacks.Base
 
 		public virtual void OnDisable()
 		{
+			StateManager.Instance.UnregisterSavedItem(ObjectID);
+			
 			ObjectID = "";
 			PoolingManager.Instance.Add(AttackData, thisGo);
 		}
 
 		public void OnParticleSystemStopped()
 		{
+			StateManager.Instance.UnregisterSavedItem(ObjectID);
+			
 			ObjectID = "";
 			PoolingManager.Instance.Add(AttackData, thisGo);
 		}

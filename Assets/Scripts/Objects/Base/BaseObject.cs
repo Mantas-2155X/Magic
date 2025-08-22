@@ -151,6 +151,8 @@ namespace Objects.Base
 			if (ObjectData.IsPoolable != EObjectPool.OnDisable)
 				return;
 
+			StateManager.Instance.UnregisterSavedItem(ObjectID);
+			
 			ObjectID = "";
 			PoolingManager.Instance.Add(ObjectData, thisGo);
 		}
@@ -159,6 +161,8 @@ namespace Objects.Base
 		{
 			if (ObjectData.IsPoolable != EObjectPool.OnParticleSystemStopped)
 				return;
+			
+			StateManager.Instance.UnregisterSavedItem(ObjectID);
 			
 			ObjectID = "";
 			PoolingManager.Instance.Add(ObjectData, thisGo);

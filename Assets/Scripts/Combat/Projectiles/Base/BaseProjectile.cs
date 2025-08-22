@@ -331,6 +331,8 @@ namespace Combat.Projectiles.Base
 			if (this == null)
 				return;
 			
+			StateManager.Instance.UnregisterSavedItem(ObjectID);
+			
 			ObjectID = "";
 			PoolingManager.Instance.Add(ProjectileData, thisGo);
 		}
