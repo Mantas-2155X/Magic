@@ -141,7 +141,7 @@ namespace Combat.Decals.Base
 			thisTr.rotation = angles;
 			
 			Attach = attach;
-			CreatedTime = Time.time;
+			CreatedTime = Time.time - elapsedTime;
 
 			if (attach.NotNull())
 				thisTr.parent = attach.GetTransform();
