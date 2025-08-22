@@ -62,7 +62,7 @@ namespace World
 		
 		public virtual bool ShouldTransfer => false;
 
-		public virtual bool ExternallySpawned { get; set; } = false;
+		public virtual bool ExternallySpawned { get => false; set { } }
 
 		public virtual string OriginalScene { get; set; }
 		

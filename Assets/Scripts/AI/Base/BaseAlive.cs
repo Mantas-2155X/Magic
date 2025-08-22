@@ -56,7 +56,7 @@ namespace AI.Base
 		
 		public virtual bool ShouldTransfer => true;
 		
-		public virtual bool ExternallySpawned { get; set; } = false;
+		public virtual bool ExternallySpawned { get; set; }
 
 		public virtual string OriginalScene { get; set; }
 		

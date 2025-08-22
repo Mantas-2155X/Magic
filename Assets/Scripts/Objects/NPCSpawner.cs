@@ -67,6 +67,8 @@ namespace Objects
 		
 		#region Identify / SaveLoad
 		
+		public override bool ExternallySpawned { get => false; set { } }
+		
 		public override Dictionary<string, JObject> GetModifications()
 		{
 			var dict = base.GetModifications();
@@ -103,7 +105,7 @@ namespace Objects
 				if (Spawned.ContainsKey(spawnID))
 					continue;
 				
-				spawn(spawned[i]);
+				spawn(spawned[i], false);
 			}
 
 			if (Initialization == ESpawnerInitialization.OnTrigger)
@@ -246,15 +248,15 @@ namespace Objects
 				if (currentlyAlive >= AliveCount)
 					continue;
 				
-				spawn(spawnID);
+				spawn(spawnID, true);
 			}
 		}
 
-		private void spawn(string spawnID)
+		private void spawn(string spawnID, bool usePortal)
 		{
 			var tr = GetTransform();
 
-			var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], RelationshipGroup < -1 ? Random.Range(0, 9999) : RelationshipGroup, false);
+			var npc = AIManager.Instance.CreateNPC(tr.position, tr.eulerAngles, Datas[Random.Range(0, Datas.Count)], ObjectID, RelationshipGroup < -1 ? Random.Range(0, 9999) : RelationshipGroup, usePortal);
 			if (npc == null || !npc.IsAlive)
 			{
 				Debug.LogWarning($"[NPCSpawner {gameObject.name}] Failed creating NPC");

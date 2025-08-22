@@ -66,6 +66,8 @@ namespace Objects.Base
 
 		#region Identify / SaveLoad
 		
+		public override bool ExternallySpawned { get => false; set { } }
+		
 		public override ELoadType LoadType => ELoadType.Modify;
 		
 		public override ELoadTiming LoadTiming => ELoadTiming.Late;

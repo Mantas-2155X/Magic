@@ -45,6 +45,8 @@ namespace Objects.Base
 		
 		#region Identify / SaveLoad
 		
+		public override bool ExternallySpawned { get => false; set { } }
+		
 		public override Dictionary<string, JObject> GetModifications()
 		{
 			var dict = base.GetModifications();

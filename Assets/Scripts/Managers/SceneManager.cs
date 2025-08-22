@@ -165,7 +165,7 @@ namespace Managers
 			
 			try
 			{
-				StateManager.Instance.Save(out _, false, false);
+				StateManager.Instance.Save(out _, false, false, true);
 			}
 			catch (Exception e)
 			{

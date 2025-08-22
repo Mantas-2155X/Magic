@@ -10,6 +10,7 @@ namespace Combat.Decals.Interfaces
 		public DecalData DecalData { get; }
 		
 		public DecalProjector Projector { get; }
+		public BoxCollider Collider { get; }
 		
 		public IIdentifiable Attach { get; }
 		

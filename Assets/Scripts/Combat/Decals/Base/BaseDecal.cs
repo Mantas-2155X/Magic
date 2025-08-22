@@ -26,6 +26,8 @@ namespace Combat.Decals.Base
 
 		[field: SerializeField]
 		public DecalProjector Projector { get; private set; }
+		[field: SerializeField]
+		public BoxCollider Collider { get; private set; }
 		
 		public IIdentifiable Attach { get; private set; }
 		
@@ -133,6 +135,8 @@ namespace Combat.Decals.Base
 			Projector.size = new Vector3(DecalData.Size, DecalData.Size, DecalData.Size / 2f);
 			Projector.fadeFactor = 1f;
 			
+			Collider.size = Projector.size;
+
 			thisTr.position = position;
 			thisTr.rotation = angles;
 			
@@ -172,6 +176,8 @@ namespace Combat.Decals.Base
 			}
 			
 			thisTr.SetParent(World.World.Instance.Decals);
+
+			StateManager.Instance.UnregisterSavedItem(ObjectID);
 			
 			ObjectID = "";
 			PoolingManager.Instance.Add(DecalData, thisGo);

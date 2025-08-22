@@ -88,10 +88,11 @@ namespace AI
 		private const float maximumGroundAngle = 45.1f;
 
 		#region Identify / SaveLoad
+
+		public override bool ExternallySpawned { get => false; set { } }
 		
 		public override JObject GetCreation()
 		{
-			// Player is never created from save
 			return null;
 		}
 		

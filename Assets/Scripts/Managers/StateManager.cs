@@ -103,6 +103,8 @@ namespace Managers
 		
 		private readonly List<string> killedAlives = new ();
 
+		private readonly Dictionary<string, SaveData.SaveItem> savedItems = new ();
+
 		public List<string> GetDestroyedObjects()
 		{
 			return destroyedObjects;
@@ -133,6 +135,11 @@ namespace Managers
 			killedAlives.AddUnique(objectID);
 		}
 
+		public void UnregisterSavedItem(string objectID)
+		{
+			savedItems.Remove(objectID);
+		}
+		
 		#endregion
 		
 		#region Save & Load
@@ -200,7 +207,7 @@ namespace Managers
 			return validSaves[0].Item2;
 		}
 		
-		public bool Save(out SaveData save, bool isAutoSave = false, bool writeToFile = true)
+		public bool Save(out SaveData save, bool isAutoSave = false, bool writeToFile = true, bool silent = false)
 		{
 			var startTime = Time.realtimeSinceStartup;
 			var sceneManager = SceneManager.Instance;
@@ -248,14 +255,18 @@ namespace Managers
 				// Skip what's not supported
 				if (!saveable.ShouldSave)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
+					if (!silent)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not marked saveable, skipping");
+					
 					continue;
 				}
 				
 				// Leave saveables without ID as they are
 				if (string.IsNullOrEmpty(saveable.ObjectID))
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
+					if (!silent)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} has no Object ID, skipping");
+					
 					continue;
 				}
 				
@@ -271,21 +282,27 @@ namespace Managers
 				var root = component.transform.root;
 				if (root == null)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
+					if (!silent)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} does not have a root, skipping");
+					
 					continue;
 				}
 
 				// Prevent saving ragdolls
 				if (root == ragdolls)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is a ragdoll, skipping");
+					if (!silent)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is a ragdoll, skipping");
+					
 					continue;
 				}
 				
 				// Prevent saving stuff like gibs on characters
 				if (root == characters && saveable is not IAlive and not IDecal)
 				{
-					Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
+					if (!silent)
+						Debug.LogWarning($"[StateManager] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(component.transform)} is not saved on characters, skipping");
+					
 					continue;
 				}
 				
@@ -365,7 +382,8 @@ namespace Managers
 				return true;
 			}
 			
-			Debug.Log($"[StateManager] Save Statistics ({(Time.realtimeSinceStartup - startTime) * 1000}ms): Destroyed Components {data.DestroyedComponents.Count}, Destroyed Objects {data.DestroyedObjects.Count}, Items {data.Items.Count}, Creations {creations}, Modifications {modifications}, Killed Alives {data.KilledAlives.Count}");
+			if (!silent)
+				Debug.Log($"[StateManager] Save Statistics ({(Time.realtimeSinceStartup - startTime) * 1000}ms): Destroyed Components {data.DestroyedComponents.Count}, Destroyed Objects {data.DestroyedObjects.Count}, Items {data.Items.Count}, Creations {creations}, Modifications {modifications}, Killed Alives {data.KilledAlives.Count}");
 			
 			File.WriteAllText(System.IO.Path.Combine(Path, $"{data.SavedTime:yyyy_MM_dd_HH_mm_ss_fff}.json"), saveData);
 			
@@ -487,8 +505,6 @@ namespace Managers
 		#endregion
 
 		#region Internals
-
-		private readonly Dictionary<string, SaveData.SaveItem> savedItems = new ();
 
 		private SaveData lastSaveData;
 

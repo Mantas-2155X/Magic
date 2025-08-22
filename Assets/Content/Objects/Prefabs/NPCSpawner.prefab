@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1393556085422492167}
   - component: {fileID: 4712453358548831473}
-  m_Layer: 0
+  - component: {fileID: 2521870580022866817}
+  m_Layer: 1
   m_Name: NPCSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,3 +46,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ObjectData>k__BackingField: {fileID: 11400000, guid: 2dbbd40fc9e31cc8597aa673c30bf570, type: 2}
+  <Rigidbody>k__BackingField: {fileID: 0}
+  objectID: 
+  Datas: []
+  SpawnIDs: []
+  Initialization: 0
+  RelationshipGroup: 0
+  SpawnCount: 1
+  AliveCount: 1
+  SpawnRate: 0.1
+  OnSpawnerClearedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  TriggerCount: 1
+  WanderAction: 0
+  PatrolAction: {fileID: 0}
+  UseAction: {fileID: 0}
+  CarryAction: {fileID: 0}
+  DropAtLocation: {x: 0, y: 0, z: 0}
+--- !u!65 &2521870580022866817
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2766956888433377728}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

@@ -31,6 +31,9 @@ namespace AI
 		[SerializeField]
 		public AgentCompat Agent;
 
+		[NonSerialized]
+		public string ParentSpawner;
+		
 		public bool SelfDestructed { get; set; }
 		public float SelfDestructStart { get; set; }
 
@@ -519,6 +522,8 @@ namespace AI
 
 		#region Identify / SaveLoad
 		
+		public override bool ExternallySpawned { get => string.IsNullOrEmpty(ParentSpawner); set { } }
+
 		public override ELoadType LoadType => ExternallySpawned ? ELoadType.Create : ELoadType.Modify;
 
 		public override ELoadTiming LoadTiming => ExternallySpawned ? ELoadTiming.Normal : ELoadTiming.Alives;
@@ -538,7 +543,7 @@ namespace AI
 		{
 			var createData = data.Item2.ToObject<CreateData>();
 			
-			var obj = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)ObjectManager.Instance.GetData<AliveData>(createData.Name));
+			var obj = AIManager.Instance.CreateNPC(Vector3.zero, Vector3.zero, (NPCData)ObjectManager.Instance.GetData<AliveData>(createData.Name), null, 0, false);
 			obj.ObjectID = data.Item1;
 
 			try

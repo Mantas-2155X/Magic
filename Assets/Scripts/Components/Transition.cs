@@ -34,7 +34,7 @@ namespace Components
 
 		private async UniTaskVoid doTransition()
 		{
-			var size = Physics.OverlapBoxNonAlloc(SharedCenter, SharedExtents / 2f, transferColliders);
+			var size = Physics.OverlapBoxNonAlloc(SharedCenter, SharedExtents / 2f, transferColliders, Quaternion.identity, ~LayerMask.GetMask("Broken"));
 			for (var i = 0; i < size; i++)
 			{
 				var transferCollider = transferColliders[i];
@@ -49,12 +49,12 @@ namespace Components
 					saveable = transferCollider.GetComponent<ISaveable>();
 
 				if (saveable.IsNull())
-				{
-					Debug.LogWarning($"[Transition] Saveable on {TransformTools.GetFullPath(transferCollider.transform)} was not found, skipping");
 					continue;
-				}
 
-				if (!saveable!.ShouldTransfer)
+				if (!saveable!.ShouldSave)
+					continue;
+				
+				if (!saveable.ShouldTransfer)
 				{
 					Debug.LogWarning($"[Transition] Saveable {saveable.GetType().Name} on {TransformTools.GetFullPath(transferCollider.transform)} is not marked transferrable, skipping");
 					continue;

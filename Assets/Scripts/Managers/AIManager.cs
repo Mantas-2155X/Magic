@@ -146,9 +146,10 @@ namespace Managers
 			updateTargets = true;
 		}
 
-		public NPC CreateNPC(Vector3 position, Vector3 angles, NPCData data, int relationshipGroup = 0, bool externallySpawned = true)
+		public NPC CreateNPC(Vector3 position, Vector3 angles, NPCData data, string parentSpawner, int relationshipGroup = 0, bool usePortal = true)
 		{
-			ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetData<ObjectData>("OBJECT_PORTAL_NAME"), position, Vector3.zero);
+			if (usePortal)
+				ObjectManager.Instance.CreateObject(ObjectManager.Instance.GetData<ObjectData>("OBJECT_PORTAL_NAME"), position, Vector3.zero);
 			
 			var go = Addressables.InstantiateAsync(data.PrefabReference).WaitForCompletion();
 			go.name = $"NPC {NPCs.Count}";
@@ -161,7 +162,7 @@ namespace Managers
 			
 			var npc = go.GetComponent<NPC>();
 			npc.ObjectID = Guid.NewGuid().ToString();
-			npc.ExternallySpawned = externallySpawned;
+			npc.ParentSpawner = parentSpawner;
 			
 			AlivesColliderMap[npc.Body.HitboxCollider] = npc;
 			NPCs.Add(npc);
