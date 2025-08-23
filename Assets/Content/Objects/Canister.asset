@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c4c42e459840578b575d267724ee78, type: 3}
+  m_Name: Canister
+  m_EditorClassIdentifier: 
+  Name: OBJECT_CANISTER_NAME
+  Description: OBJECT_CANISTER_DESC
+  Icon: {fileID: 0}
+  Tags: 0
+  PrefabReference:
+    m_AssetGUID: e1f09168d05ac9b3f8afa1b57a212393
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Type: 
+  Assembly: 
+  IsPoolable: 0
+  IsBreakable: 1
+  BreakAtCollisionPoint: 0
+  MaximumHealth: 5
+  BrokenPrefabReference:
+    m_AssetGUID: 46fc05d6bf68f9625a7d5e0468d3e579
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  IsPickupable: 0
+  PickupableAfter: 0
+  PickupAction: 0
+  IsUsable: 0
+  UsableAfter: 0
+  UseAction: 0
+  AttachDecals: 1

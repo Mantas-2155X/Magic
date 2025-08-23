@@ -7,8 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Canister
+    second: {fileID: 2100000, guid: f274804392ea5fb73a17af390ff4ec32, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Container
     second: {fileID: 2100000, guid: f274804392ea5fb73a17af390ff4ec32, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Liquid
+    second: {fileID: 2100000, guid: ae0f52af61e3f33ccb20e7b89236db14, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
