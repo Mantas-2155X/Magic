@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4765e89324cd47459c6af95acbe3747f, type: 3}
+  m_Name: Energy Ball
+  m_EditorClassIdentifier: 
+  Name: SPELL_ENERGYBALL_NAME
+  Description: SPELL_ENERGYBALL_DESC
+  Icon: {fileID: 21300000, guid: e88ad92d5ba463665a36b5204a361f02, type: 3}
+  Tags: 4
+  PrefabReference:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Type: 
+  Assembly: 
+  Cooldown: 0.5
+  CastingTime: 0.25
+  CastingCost: 15
+  Range: 50
+  IsResource: 0
+  LockWhileCasting: 0
+  LockAfterCasting: 0
+  Element: 1
+  Cast: {fileID: 11400000, guid: 4eb8ce7400d864ef09a9fa5e2d40050c, type: 2}
+  Projectile: {fileID: 11400000, guid: 468ae705cca9a7b19b84bdb21df86aed, type: 2}
+  Attack: {fileID: 11400000, guid: 2013ff55d24879d838d01169cc6891ba, type: 2}

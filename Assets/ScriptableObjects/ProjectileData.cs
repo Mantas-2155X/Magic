@@ -15,6 +15,9 @@ namespace ScriptableObjects
 		public float Damage;
 
 		[SerializeField]
+		public int Bounces;
+
+		[SerializeField]
 		public SSlow Slow;
 		
 		[SerializeField]

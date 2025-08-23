@@ -41,6 +41,8 @@ namespace Combat.Projectiles.Base
 		public float SpellRange { get; private set; }
 
 		public float CreatedTime { get; private set; }
+		public float LowVelocity { get; private set; }
+		public int Collisions { get; private set; }
 
 		private CancellationTokenSource rangeToken;
 
@@ -87,6 +89,8 @@ namespace Combat.Projectiles.Base
 				Attack = AttackData != null ? AttackData.Name : null,
 				SourceObjectID = Source.NotNull() ? Source.ObjectID : null,
 				ElapsedTime = Time.time - CreatedTime,
+				LowVelocity = LowVelocity,
+				Collisions = Collisions,
 				States = GetModifications()
 			};
 
@@ -99,6 +103,9 @@ namespace Combat.Projectiles.Base
 			
 			var obj = (BaseProjectile)ObjectManager.Instance.CreateProjectile(ObjectManager.Instance.GetData<ProjectileData>(createData.Name), createData.Range, ObjectManager.Instance.GetData<AttackData>(createData.Attack), StateManager.Instance.GetRegisteredObject(createData.SourceObjectID), Vector3.zero, Vector3.zero, createData.ElapsedTime);
 			obj.ObjectID = data.Item1;
+			
+			obj.LowVelocity = createData.LowVelocity;
+			obj.Collisions = createData.Collisions;
 			
 			try
 			{
@@ -197,13 +204,27 @@ namespace Combat.Projectiles.Base
 				}
 			}
 				
-			clearVelocityAndPool().Forget();
+			Collisions++;
+
+			if (Collisions > ProjectileData.Bounces)
+				clearVelocityAndPool().Forget();
 		}
 
 		public void Update()
 		{
 			if (PauseManager.IsPaused)
 				return;
+
+			if (ProjectileData.Bounces > 0)
+			{
+				LowVelocity = Rigidbody.linearVelocity.magnitude < 15f ? LowVelocity + Time.deltaTime : 0f;
+
+				if (LowVelocity > 0.25f)
+				{
+					clearVelocityAndPool().Forget();
+					return;
+				}	
+			}
 			
 			var distance = Vector3.Distance(StartingPosition, thisTr.position);
 			if (distance < SpellRange)
@@ -232,6 +253,8 @@ namespace Combat.Projectiles.Base
 			AttackData = attack;
 
 			CreatedTime = Time.time - elapsedTime;
+			LowVelocity = 0f;
+			Collisions = 0;
 
 			if (owner.NotNull())
 			{
@@ -380,6 +403,12 @@ namespace Combat.Projectiles.Base
 		
 			[JsonProperty]
 			public float ElapsedTime;
+
+			[JsonProperty]
+			public float LowVelocity;
+
+			[JsonProperty]
+			public int Collisions;
 		}
 	}
 }
