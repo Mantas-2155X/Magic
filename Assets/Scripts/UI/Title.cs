@@ -66,6 +66,8 @@ namespace UI
 
 		[SerializeField]
 		public Localizer CurrentScene;
+
+		private bool firstSceneChange = true;
 		
 		#region MonoBehaviour
 
@@ -422,6 +424,12 @@ namespace UI
 		{
 			if (!isActiveAndEnabled)
 				return;
+
+			if (firstSceneChange)
+			{
+				firstSceneChange = false;
+				return;
+			}
 			
 			UpdateCurrentScene();
 			UpdateButtons();
