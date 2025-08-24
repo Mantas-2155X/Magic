@@ -1,0 +1,27 @@
+[Settings]
+* Added field of view and gamma settings
+
+[Gameplay]
+* Added slight push from projectiles hitting flying NPCs
+* Added bouncy energy ball spell
+
+[Objects]
+* Added empty canister object
+* Adjusted canister mesh
+
+[UI]
+* Adjusted energy stat color for better visibility
+* Fixed low resolution blur in title screen
+* Title screen buttons visibility improvements
+
+[Save]
+* Added seamless scene transitions
+* Fixed case where some attacks would never end if you kept saving and loading quickly
+* Fixed portal effect showing up for NPCs that already exist
+
+[Other]
+* Added steamaudio
+* Improved lighting quality
+* Removed some unused console commands
+* Removed unsupported resolutions and aspect ratios
+* Various performance improvements
