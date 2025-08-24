@@ -1,8 +1,6 @@
-using System;
 using System.IO;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
-using File = System.IO.File;
 
 namespace Editor
 {
@@ -10,7 +8,7 @@ namespace Editor
 	{
 		public int callbackOrder { get; }
 
-		private readonly string[] copyAssets = { "data" };
+		private readonly string[] copyAssets = { "data", "licenses" };
 		private readonly string[] removeAfter = { "data/settings.tsv", "Magic_BurstDebugInformation_DoNotShip" };
 		
 		public void OnPostprocessBuild(BuildReport report)
@@ -73,7 +71,6 @@ namespace Editor
 				if (file.Name.StartsWith("."))
 					continue;
 				
-				Console.WriteLine($"Copying {target.FullName}\\{file.Name}");
 				file.CopyTo(Path.Combine(target.FullName, file.Name), true);
 			}
 
