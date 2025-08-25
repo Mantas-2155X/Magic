@@ -18,6 +18,7 @@ using State.Enums;
 using State.Interfaces;
 using Tools;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 using Action = AI.AIModes.Action;
 using Idle = AI.ActionModes.Idle;
@@ -828,6 +829,16 @@ namespace AI
 			base.Spawn(data, relationshipGroup);
 			
 			SendCommunication(ECommunication.Spawned, null);
+
+			// todo: make this check part of data
+			if (Data.Name.Contains("_DRONE_"))
+			{
+				AudioManager.Instance.PlayAttached(Addressables.LoadAssetAsync<AudioData>("Audio/AI/Drone.asset").WaitForCompletion(), GetTransform());
+			}
+			else if (Data.Name.Contains("_TORUS_"))
+			{
+				AudioManager.Instance.PlayAttached(Addressables.LoadAssetAsync<AudioData>("Audio/AI/Torus.asset").WaitForCompletion(), GetTransform());
+			}
 		}
 
 		public override void Kill(object source, bool killSilently = false)

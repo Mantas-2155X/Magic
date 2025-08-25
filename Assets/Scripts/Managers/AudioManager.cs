@@ -1,14 +1,16 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using ScriptableObjects;
 using SteamAudio;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Audio;
+using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 
-namespace Audio
+namespace Managers
 {
-	public class AudioManager
+	public class AudioManager : MonoBehaviour
 	{
 		private static AudioManager instance;
 		public static AudioManager Instance
@@ -18,7 +20,10 @@ namespace Audio
 				if (instance != null)
 					return instance;
 				
-				instance = new AudioManager();
+				var go = new GameObject("AudioManager");
+				DontDestroyOnLoad(go);
+
+				instance = go.AddComponent<AudioManager>();
 				instance.loadMixerGroups();
 				
 				return instance;
@@ -28,10 +33,49 @@ namespace Audio
 		public AudioMixerGroup MasterGroup { get; private set; }
 		public AudioMixerGroup SFXGroup { get; private set; }
 		
-		public GameObject PlayAtPoint(AudioData audioData, Vector3 position)
+		// source -> target
+		private readonly Dictionary<Transform, Transform> attachedSources = new ();
+		
+		private readonly List<Transform> clearSources = new ();
+
+		#region MonoBehaviour
+
+		public void Update()
+		{
+			clearSources.Clear();
+			
+			foreach (var (source, target) in attachedSources)
+			{
+				if (target == null)
+				{
+					clearSources.Add(source);
+					continue;
+				}
+				
+				source.position = target.position;
+			}
+
+			for (var i = clearSources.Count - 1; i >= 0; i--)
+				RemoveSource(clearSources[i]);
+		}
+
+		#endregion
+		
+		#region API
+		
+		public Transform PlayAttached(AudioData audioData, Transform target)
+		{
+			var source = PlayAtPoint(audioData, target.position);
+			attachedSources[source] = target;
+			return source;
+		}
+		
+		public Transform PlayAtPoint(AudioData audioData, Vector3 position)
 		{
 			var go = new GameObject("Audio");
-			go.transform.position = position;
+			
+			var tr = go.transform;
+			tr.position = position;
 			
 			var clip = Addressables.LoadAssetAsync<AudioClip>(audioData.ClipReferences[Random.Range(0, audioData.ClipReferences.Length)]).WaitForCompletion();
 
@@ -56,10 +100,23 @@ namespace Audio
 			audioSource.Play();
 			
 			if (!audioData.Loop)
-				destroyAfterPlay(go, clip).Forget();
+				destroyAfterPlay(tr, clip).Forget();
 			
-			return go;
+			return tr;
 		}
+
+		public void RemoveSource(Transform source)
+		{
+			if (source == null)
+				return;
+			
+			attachedSources.Remove(source);
+			Destroy(source.gameObject);
+		}
+		
+		#endregion
+
+		#region Internals
 
 		private void loadMixerGroups()
 		{
@@ -67,11 +124,12 @@ namespace Audio
 			SFXGroup = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[SFX]").WaitForCompletion();
 		}
 
-		private async UniTaskVoid destroyAfterPlay(GameObject go, AudioClip clip)
+		private async UniTaskVoid destroyAfterPlay(Transform source, AudioClip clip)
 		{
 			await UniTask.WaitForSeconds(clip.length + 2.5f);
-			
-			Object.Destroy(go);
+			RemoveSource(source);
 		}
+		
+		#endregion
 	}
 }
