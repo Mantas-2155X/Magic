@@ -42,9 +42,12 @@ namespace Audio
 			audioSource.volume = audioData.Volume;
 			audioSource.loop = audioData.Loop;
 			audioSource.playOnAwake = false;
+			audioSource.maxDistance = audioData.MaximumDistance;
+			audioSource.minDistance = audioData.MinimumDistance;
 			audioSource.clip = clip;
 			
 			var steamAudioSource = go.AddComponent<SteamAudioSource>();
+			steamAudioSource.distanceAttenuation = audioData.DistanceAttenuation;
 			steamAudioSource.airAbsorption = audioData.AirAbsorption;
 			steamAudioSource.transmission = audioData.Transmission;
 			steamAudioSource.reflections = audioData.Reflections;

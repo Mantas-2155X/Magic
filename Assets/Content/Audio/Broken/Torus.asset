@@ -31,8 +31,11 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Volume: 0.55
+  MaximumDistance: 17.5
+  MinimumDistance: 3
   Loop: 0
-  Spatialize: 1
+  Spatialize: 0.9
+  DistanceAttenuation: 1
   AirAbsorption: 1
   Transmission: 1
   Reflections: 1

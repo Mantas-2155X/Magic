@@ -14,11 +14,20 @@ namespace ScriptableObjects
 		public float Volume = 1f;
 		
 		[SerializeField]
+		public float MaximumDistance = 25f;
+		
+		[SerializeField]
+		public float MinimumDistance = 1f;
+
+		[SerializeField]
 		public bool Loop;
 
 		[Header("Spatialization")]
 		[SerializeField]
 		public float Spatialize = 1f;
+
+		[SerializeField]
+		public bool DistanceAttenuation = true;
 
 		[SerializeField]
 		public bool AirAbsorption = true;

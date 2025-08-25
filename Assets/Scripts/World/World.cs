@@ -38,8 +38,6 @@ namespace World
 		{
 			Instance = this;
 			
-			SettingsManager.Instance.CallSetting("video-gamma");
-			
 			// this has to be resources because addressables deadlocks while loading an addressable scene
 			
 			if (!GameObject.Find("EventSystem"))
@@ -69,6 +67,11 @@ namespace World
 
 		public virtual void Start()
 		{
+			SettingsManager.Instance.CallSetting("video-gamma");
+
+			SettingsManager.Instance.CallSetting("audio-mastervolume");
+			SettingsManager.Instance.CallSetting("audio-sfxvolume");
+
 			var sceneData = SceneManager.Instance.GetCurrentSceneData();
 			if (sceneData == null)
 			    return;
