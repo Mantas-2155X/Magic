@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using Audio;
 using Combat.Enums;
 using Cysharp.Threading.Tasks;
 using Tools;
@@ -891,6 +892,36 @@ namespace Managers
 				UI.Debug.Instance.Text.gameObject.SetActive((bool)newValue);
 			});
 			
+			#endregion
+
+			#region Audio
+
+			AddSetting("audio-mastervolume", "SETTINGS_AUDIO_MASTERVOLUME", "SETTINGS_AUDIO_MASTERVOLUME_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToSingle(newValue);
+				if (setting is < 0f or > 1f)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid master volume provided, skipping");
+					return;
+				}
+				
+				var mixer = AudioManager.Instance.MasterGroup.audioMixer;
+				mixer.SetFloat("MasterVolume", Mathf.Log10(Mathf.Clamp(setting, 0.0001f, 1f)) * 20f);
+			});
+			
+			AddSetting("audio-sfxvolume", "SETTINGS_AUDIO_SFXVOLUME", "SETTINGS_AUDIO_SFXVOLUME_DESC", ESettingType.Float, 0.7f, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToSingle(newValue);
+				if (setting is < 0f or > 1f)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid sfx volume provided, skipping");
+					return;
+				}
+				
+				var mixer = AudioManager.Instance.SFXGroup.audioMixer;
+				mixer.SetFloat("SFXVolume", Mathf.Log10(Mathf.Clamp(setting, 0.0001f, 1f)) * 20f);
+			});
+
 			#endregion
 			
 			ResetSettings();

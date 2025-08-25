@@ -19,10 +19,15 @@ namespace Audio
 					return instance;
 				
 				instance = new AudioManager();
+				instance.loadMixerGroups();
+				
 				return instance;
 			}
 		}
 
+		public AudioMixerGroup MasterGroup { get; private set; }
+		public AudioMixerGroup SFXGroup { get; private set; }
+		
 		public GameObject PlayAtPoint(AudioData audioData, Vector3 position)
 		{
 			var go = new GameObject("Audio");
@@ -33,15 +38,10 @@ namespace Audio
 			
 			Addressables.Release(clipOperation);
 
-			var groupOperation = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[SFX]");
-			var group = groupOperation.WaitForCompletion();
-			
-			Addressables.Release(groupOperation);
-
 			var audioSource = go.AddComponent<AudioSource>();
 			audioSource.spatialize = audioData.Spatialize > 0;
 			audioSource.spatialBlend = audioData.Spatialize;
-			audioSource.outputAudioMixerGroup = group;
+			audioSource.outputAudioMixerGroup = SFXGroup;
 			audioSource.volume = audioData.Volume;
 			audioSource.loop = audioData.Loop;
 			audioSource.playOnAwake = false;
@@ -59,6 +59,17 @@ namespace Audio
 				destroyAfterPlay(go, clip).Forget();
 			
 			return go;
+		}
+
+		private void loadMixerGroups()
+		{
+			var masterOp = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[Master]");
+			MasterGroup = masterOp.WaitForCompletion();
+			Addressables.Release(masterOp);
+			
+			var sfxOp = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[SFX]");
+			SFXGroup = sfxOp.WaitForCompletion();
+			Addressables.Release(sfxOp);
 		}
 
 		private async UniTaskVoid destroyAfterPlay(GameObject go, AudioClip clip)
