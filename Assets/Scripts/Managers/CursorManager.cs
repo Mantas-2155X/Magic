@@ -46,7 +46,6 @@ namespace Managers
 				var resized = TextureTools.Resize(cursor, Size, Size);
 				
 				Cursor.SetCursor(resized, new Vector2(Size / 2f, Size / 2f), CursorMode.Auto);
-				Addressables.Release(cursor);
 			}
 			else
 			{

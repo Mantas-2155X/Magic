@@ -33,10 +33,7 @@ namespace Audio
 			var go = new GameObject("Audio");
 			go.transform.position = position;
 			
-			var clipOperation = Addressables.LoadAssetAsync<AudioClip>(audioData.ClipReference);
-			var clip = clipOperation.WaitForCompletion();
-			
-			Addressables.Release(clipOperation);
+			var clip = Addressables.LoadAssetAsync<AudioClip>(audioData.ClipReference).WaitForCompletion();
 
 			var audioSource = go.AddComponent<AudioSource>();
 			audioSource.spatialize = audioData.Spatialize > 0;
@@ -63,13 +60,8 @@ namespace Audio
 
 		private void loadMixerGroups()
 		{
-			var masterOp = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[Master]");
-			MasterGroup = masterOp.WaitForCompletion();
-			Addressables.Release(masterOp);
-			
-			var sfxOp = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[SFX]");
-			SFXGroup = sfxOp.WaitForCompletion();
-			Addressables.Release(sfxOp);
+			MasterGroup = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[Master]").WaitForCompletion();
+			SFXGroup = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[SFX]").WaitForCompletion();
 		}
 
 		private async UniTaskVoid destroyAfterPlay(GameObject go, AudioClip clip)
