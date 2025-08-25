@@ -1,5 +1,8 @@
+using Audio;
 using Objects.Base;
+using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Objects
 {
@@ -18,6 +21,8 @@ namespace Objects
 		{
 			base.Spawn(position, angles);
 			System.Play(true);
+			
+			AudioManager.Instance.PlayAtPoint(Addressables.LoadAssetAsync<AudioData>("Audio/Portal.asset").WaitForCompletion(), GetTransform().position);
 		}
 	}
 }
