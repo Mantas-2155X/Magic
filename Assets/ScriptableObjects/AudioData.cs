@@ -8,7 +8,7 @@ namespace ScriptableObjects
 	{
 		[Header("Audio Settings")]
 		[SerializeField]
-		public AssetReference ClipReference;
+		public AssetReference[] ClipReferences;
 
 		[SerializeField]
 		public float Volume = 1f;

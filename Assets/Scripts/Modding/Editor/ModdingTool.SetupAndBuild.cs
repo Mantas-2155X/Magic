@@ -226,7 +226,8 @@ namespace Modding.Editor
 					}
 					else if (obj is AudioData audioData)
 					{
-						references.AddUnique(audioData.ClipReference.AssetGUID);
+						for (var k = 0; k < audioData.ClipReferences.Length; k++)
+							references.AddUnique(audioData.ClipReferences[k].AssetGUID);
 					}
 
 					for (var k = 0; k < references.Count; k++)

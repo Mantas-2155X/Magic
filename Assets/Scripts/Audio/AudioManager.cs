@@ -33,7 +33,7 @@ namespace Audio
 			var go = new GameObject("Audio");
 			go.transform.position = position;
 			
-			var clip = Addressables.LoadAssetAsync<AudioClip>(audioData.ClipReference).WaitForCompletion();
+			var clip = Addressables.LoadAssetAsync<AudioClip>(audioData.ClipReferences[Random.Range(0, audioData.ClipReferences.Length)]).WaitForCompletion();
 
 			var audioSource = go.AddComponent<AudioSource>();
 			audioSource.spatialize = audioData.Spatialize > 0;
