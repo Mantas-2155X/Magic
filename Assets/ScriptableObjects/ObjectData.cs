@@ -46,6 +46,9 @@ namespace ScriptableObjects
 		[SerializeField]
 		public EAction UseAction;
 
+		[SerializeField]
+		public AudioData UseAudio;
+
 		[Header("Other")]
 		public bool AttachDecals = true;
 	}

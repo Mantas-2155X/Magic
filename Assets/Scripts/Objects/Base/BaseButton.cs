@@ -1,5 +1,6 @@
 using System.Threading;
 using AI.Interfaces;
+using Audio;
 using Cysharp.Threading.Tasks;
 using Objects.Events;
 using Tools;
@@ -53,6 +54,9 @@ namespace Objects.Base
 			var success = base.Use(user);
 			if (!success)
 				return false;
+
+			if (ObjectData.UseAudio != null)
+				AudioManager.Instance.PlayAtPoint(ObjectData.UseAudio, GetTransform().position);
 
 			cancellationToken?.Cancel();
 			cancellationToken = new CancellationTokenSource();
