@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4600184027381671067}
   - component: {fileID: 633421013708108176}
   - component: {fileID: -3868717353408082345}
+  - component: {fileID: -3127928379962167109}
   m_Layer: 0
   m_Name: tunnel-wall-1
   m_TagString: Untagged
@@ -113,3 +114,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5939335122987652998, guid: ed79c36ba28ea3a32a1f01f385943fe9, type: 3}
+--- !u!114 &-3127928379962167109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326521959621299998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: 9e0a6d5705eaec64ab63e6ac7132e0a7, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4424985358817989869}
   - component: {fileID: 4021049622402740625}
   - component: {fileID: -4277019410612433266}
+  - component: {fileID: 8160251187632893085}
   m_Layer: 0
   m_Name: tunnel-joint-2
   m_TagString: Untagged
@@ -113,3 +114,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4514896706388185984, guid: ed79c36ba28ea3a32a1f01f385943fe9, type: 3}
+--- !u!114 &8160251187632893085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 32765072766983273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: 9e0a6d5705eaec64ab63e6ac7132e0a7, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0

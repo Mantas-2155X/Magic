@@ -91,7 +91,48 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5957245673794995366, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
     - {fileID: 6966441122641601037, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+    - {fileID: 2020750769884463006, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+    - {fileID: 5099100652009362803, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5935207685316622328, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5481187625679568335}
+    - targetCorrespondingSourceObject: {fileID: 5935207685316622328, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6849548433277569471}
   m_SourcePrefab: {fileID: 100100000, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+--- !u!1 &5682840793575139384 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5935207685316622328, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+  m_PrefabInstance: {fileID: 2054651221306908608}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5481187625679568335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682840793575139384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
+  asset: {fileID: 11400000, guid: 6ad49fbc27c2df3228a52d2149f8cc94, type: 2}
+--- !u!114 &6849548433277569471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682840793575139384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: 9e0a6d5705eaec64ab63e6ac7132e0a7, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0

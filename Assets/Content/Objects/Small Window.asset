@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: OBJECT_SMALLWINDOW_DESC
   Icon: {fileID: 0}
   Tags: 0
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: bafab59dfeed54a208177da6d1df797c
     m_SubObjectName: 
@@ -29,9 +28,14 @@ MonoBehaviour:
   IsBreakable: 1
   BreakAtCollisionPoint: 1
   MaximumHealth: 10
-  BrokenPrefab: {fileID: 0}
   BrokenPrefabReference:
     m_AssetGUID: 39f7e8f4a5c3eecf889f531d18f521f3
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  BreakAudioReference:
+    m_AssetGUID: 7adb5552cb44f0289bc9b6a98ab64568
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

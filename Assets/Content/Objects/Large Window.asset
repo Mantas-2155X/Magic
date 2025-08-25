@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: OBJECT_LARGEWINDOW_DESC
   Icon: {fileID: 0}
   Tags: 0
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: e101e4b7af24f77ddab232ad6f979bf7
     m_SubObjectName: 
@@ -29,9 +28,14 @@ MonoBehaviour:
   IsBreakable: 1
   BreakAtCollisionPoint: 1
   MaximumHealth: 10
-  BrokenPrefab: {fileID: 0}
   BrokenPrefabReference:
     m_AssetGUID: 80f4227c7240678a8818a2c8e354d0f7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  BreakAudioReference:
+    m_AssetGUID: 52bf8e42f6a77a6059bcb8ce04013ad3
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

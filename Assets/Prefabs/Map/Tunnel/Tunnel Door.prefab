@@ -229,6 +229,8 @@ GameObject:
   - component: {fileID: 8662556667001069779}
   - component: {fileID: 7575076091143412250}
   - component: {fileID: 7750189244390477700}
+  - component: {fileID: 8635424953926646252}
+  - component: {fileID: 3297494249815657090}
   m_Layer: 11
   m_Name: Door
   m_TagString: Untagged
@@ -498,6 +500,34 @@ MonoBehaviour:
   Offset: {x: 0, y: 0, z: 0}
   Size: {x: 1, y: 1, z: 10}
   DrawBounds: 0
+--- !u!114 &8635424953926646252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459338153587922746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: 08bf73ad12cb44944875b02ce7f9d694, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0
+--- !u!114 &3297494249815657090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459338153587922746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
+  asset: {fileID: 11400000, guid: 9e04325c0815c6f129aa23d3d0b8eb16, type: 2}
 --- !u!1 &6953628659220035188
 GameObject:
   m_ObjectHideFlags: 0

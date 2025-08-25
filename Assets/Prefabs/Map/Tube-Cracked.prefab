@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6029232595964447892}
   - component: {fileID: 1162948697330227708}
   - component: {fileID: 1789247186393660916}
+  - component: {fileID: 1406839552154819989}
   m_Layer: 0
   m_Name: Tube-Cracked
   m_TagString: Untagged
@@ -113,3 +114,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2653620659998688900, guid: 2bbec2f22dd7ef459a82f5a01177a4ee, type: 3}
+--- !u!114 &1406839552154819989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980109023081498325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: 08bf73ad12cb44944875b02ce7f9d694, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0

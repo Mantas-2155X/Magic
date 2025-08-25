@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using AI.Enums;
 using AI.Events;
 using AI.Interfaces;
+using Audio;
 using Combat.Enums;
 using Combat.Spells.Base;
 using Combat.Spells.Interfaces;
@@ -660,54 +661,62 @@ namespace AI.Base
 			for (var i = 0; i < explodeList.Count; i++)
 				explodeList[i].AddExplosionForce(350f, bodyPos, 2f);
 			
-			if (!killSilently && SettingsManager.Instance.GetInt("graphics-modelquality") >= 2)
+			if (!killSilently)
 			{
-				var ragdolls = World.World.Instance.Ragdolls;
-				var scale = thisTr.localScale;
-					
-				if (Data.BrokenBodyPrefabReference != null)
+				if (Data.BreakAudioReference.RuntimeKeyIsValid())
 				{
-					var broken = Addressables.InstantiateAsync(Data.BrokenBodyPrefabReference, ragdolls).WaitForCompletion();
-					
-					var brokenTr = broken.transform;
-					brokenTr.position = thisTr.position;
-					brokenTr.rotation = thisTr.rotation;
-					brokenTr.localScale = scale;
-					
-					broken.SetActive(true);
+					AudioManager.Instance.PlayAtPoint(Data.BreakAudioReference, thisTr.position);
 				}
 
-				if (Data.BrokenArmPrefabReference != null)
+				if (SettingsManager.Instance.GetInt("graphics-modelquality") >= 2)
 				{
-					for (var i = 0; i < Body.Arms.Length; i++)
-					{
-						var arm = Body.Arms[i];
+					var ragdolls = World.World.Instance.Ragdolls;
+					var scale = thisTr.localScale;
 					
-						var broken = Addressables.InstantiateAsync(Data.BrokenArmPrefabReference, ragdolls).WaitForCompletion();
+					if (Data.BrokenBodyPrefabReference.RuntimeKeyIsValid())
+					{
+						var broken = Addressables.InstantiateAsync(Data.BrokenBodyPrefabReference, ragdolls).WaitForCompletion();
 					
 						var brokenTr = broken.transform;
-						brokenTr.position = arm.position;
-						brokenTr.rotation = arm.rotation;
+						brokenTr.position = thisTr.position;
+						brokenTr.rotation = thisTr.rotation;
 						brokenTr.localScale = scale;
 					
 						broken.SetActive(true);
 					}
-				}
 
-				if (Data.BrokenFootPrefabReference != null)
-				{
-					for (var i = 0; i < Body.Feet.Length; i++)
+					if (Data.BrokenArmPrefabReference.RuntimeKeyIsValid())
 					{
-						var foot = Body.Feet[i];
+						for (var i = 0; i < Body.Arms.Length; i++)
+						{
+							var arm = Body.Arms[i];
 					
-						var broken = Addressables.InstantiateAsync(Data.BrokenFootPrefabReference, ragdolls).WaitForCompletion();
+							var broken = Addressables.InstantiateAsync(Data.BrokenArmPrefabReference, ragdolls).WaitForCompletion();
 					
-						var brokenTr = broken.transform;
-						brokenTr.position = foot.position;
-						brokenTr.rotation = foot.rotation;
-						brokenTr.localScale = scale;
+							var brokenTr = broken.transform;
+							brokenTr.position = arm.position;
+							brokenTr.rotation = arm.rotation;
+							brokenTr.localScale = scale;
 					
-						broken.SetActive(true);
+							broken.SetActive(true);
+						}
+					}
+
+					if (Data.BrokenFootPrefabReference.RuntimeKeyIsValid())
+					{
+						for (var i = 0; i < Body.Feet.Length; i++)
+						{
+							var foot = Body.Feet[i];
+					
+							var broken = Addressables.InstantiateAsync(Data.BrokenFootPrefabReference, ragdolls).WaitForCompletion();
+					
+							var brokenTr = broken.transform;
+							brokenTr.position = foot.position;
+							brokenTr.rotation = foot.rotation;
+							brokenTr.localScale = scale;
+					
+							broken.SetActive(true);
+						}
 					}
 				}
 			}

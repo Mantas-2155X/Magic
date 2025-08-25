@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8535880395842171567}
   - component: {fileID: 6748475453330332905}
   - component: {fileID: 999454971638495119}
+  - component: {fileID: 8840145871732189258}
   m_Layer: 0
   m_Name: Control Panel
   m_TagString: Untagged
@@ -113,3 +114,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4830790218365174280, guid: 8baa9ee00b2cce99793a45aa0e7a5412, type: 3}
+--- !u!114 &8840145871732189258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944987516539184618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: d780f25df1d231d4aa9a31ab3ba935d0, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0

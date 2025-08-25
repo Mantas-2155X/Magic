@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: OBJECT_HEALTHCANISTER_DESC
   Icon: {fileID: 0}
   Tags: 1
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: 20b34c44d967289ff983d1af3a9fd892
     m_SubObjectName: 
@@ -29,9 +28,14 @@ MonoBehaviour:
   IsBreakable: 1
   BreakAtCollisionPoint: 0
   MaximumHealth: 5
-  BrokenPrefab: {fileID: 0}
   BrokenPrefabReference:
     m_AssetGUID: b41fb7be7df412b27ba62cd9b09b7a24
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  BreakAudioReference:
+    m_AssetGUID: 4ba693ae55b2cd953931c3d2904d0033
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

@@ -22,6 +22,9 @@ namespace ScriptableObjects
 
 		[SerializeField]
 		public AssetReference BrokenPrefabReference;
+
+		[SerializeField]
+		public AssetReference BreakAudioReference;
 		
 		[Header("Pickupable")]
 		[SerializeField]

@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: AI_TORUS_WORLD7_2_DESC
   Icon: {fileID: 0}
   Tags: 0
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: cda0798f1ffa180948c9abf3a013b45c
     m_SubObjectName: 
@@ -51,23 +50,26 @@ MonoBehaviour:
   Spells:
   - {fileID: 11400000, guid: 904aa1215e24b6521a8d67b2a8f52b81, type: 2}
   Wearables: []
-  BrokenBodyPrefab: {fileID: 0}
   BrokenBodyPrefabReference:
     m_AssetGUID: 36ea9556c5fc9bf41969d7692bf1cf4b
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  BrokenArmPrefab: {fileID: 0}
   BrokenArmPrefabReference:
     m_AssetGUID: 
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  BrokenFootPrefab: {fileID: 0}
   BrokenFootPrefabReference:
     m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  BreakAudioReference:
+    m_AssetGUID: 83882bb6c5721270b883527e78b14469
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

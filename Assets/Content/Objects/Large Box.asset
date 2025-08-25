@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: OBJECT_LARGEBOX_DESC
   Icon: {fileID: 0}
   Tags: 0
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: fcf5bffe1eb1fbbe2946d9ab2b589b30
     m_SubObjectName: 
@@ -29,9 +28,14 @@ MonoBehaviour:
   IsBreakable: 1
   BreakAtCollisionPoint: 0
   MaximumHealth: 50
-  BrokenPrefab: {fileID: 0}
   BrokenPrefabReference:
     m_AssetGUID: 4ff7ca61c8d34000ab2b65180516b290
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  BreakAudioReference:
+    m_AssetGUID: 4535c9ba994d1362e94f257825056d85
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

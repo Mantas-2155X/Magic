@@ -59,6 +59,9 @@ namespace ScriptableObjects
 		[SerializeField]
 		public AssetReference BrokenFootPrefabReference;
 		
+		[SerializeField]
+		public AssetReference BreakAudioReference;
+		
 		[Header("Grab")]
 		[SerializeField]
 		public bool CanGrab = true;

@@ -140,6 +140,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5769484663829117588, guid: b853f86ffcbdf09ec88a745a1fa4be71, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4853535647165109039}
+    - targetCorrespondingSourceObject: {fileID: 5769484663829117588, guid: b853f86ffcbdf09ec88a745a1fa4be71, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2194491385608395724}
+    - targetCorrespondingSourceObject: {fileID: 5769484663829117588, guid: b853f86ffcbdf09ec88a745a1fa4be71, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2149300882325642231}
   m_SourcePrefab: {fileID: 100100000, guid: b853f86ffcbdf09ec88a745a1fa4be71, type: 3}
 --- !u!1 &3660138383256309801 stripped
 GameObject:
@@ -162,6 +168,34 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &2194491385608395724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3660138383256309801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
+  asset: {fileID: 11400000, guid: 78e42984ec7f12261bf53fb4f3186bc3, type: 2}
+--- !u!114 &2149300882325642231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3660138383256309801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: 08bf73ad12cb44944875b02ce7f9d694, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0
 --- !u!1 &7934029853552531436 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b853f86ffcbdf09ec88a745a1fa4be71, type: 3}
