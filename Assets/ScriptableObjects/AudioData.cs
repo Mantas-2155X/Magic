@@ -17,14 +17,14 @@ namespace ScriptableObjects
 		public float MaximumDistance = 25f;
 		
 		[SerializeField]
-		public float MinimumDistance = 1f;
+		public float MinimumDistance = 2f;
 
 		[SerializeField]
 		public bool Loop;
 
 		[Header("Spatialization")]
 		[SerializeField]
-		public float Spatialize = 1f;
+		public float Spatialize = 0.9f;
 
 		[SerializeField]
 		public bool DistanceAttenuation = true;
@@ -36,7 +36,7 @@ namespace ScriptableObjects
 		public bool Transmission = true;
 		
 		[SerializeField]
-		public bool Reflections = true;
+		public bool Reflections;
 		
 		[SerializeField]
 		public bool Occlusion = true;
