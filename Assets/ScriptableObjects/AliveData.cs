@@ -60,7 +60,7 @@ namespace ScriptableObjects
 		public AssetReference BrokenFootPrefabReference;
 		
 		[SerializeField]
-		public AssetReference BreakAudioReference;
+		public AudioData BreakAudio;
 		
 		[Header("Grab")]
 		[SerializeField]

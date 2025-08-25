@@ -41,7 +41,7 @@ namespace Managers
 
 		private readonly Dictionary<string, Data> datasMap = new ();
 		
-		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes", "Paths" };
+		private readonly string[] dataPaths = { "Objects", "Wearables", "Casts", "Projectiles", "Attacks", "Spells", "AI", "Decals", "Scenes", "Paths", "Audio" };
 
 		#region Init
 

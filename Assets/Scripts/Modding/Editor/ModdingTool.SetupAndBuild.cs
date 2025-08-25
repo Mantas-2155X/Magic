@@ -30,6 +30,7 @@ namespace Modding.Editor
 		{
 			//typeof(AliveData),
 			typeof(AttackData), 
+			typeof(AudioData),
 			typeof(CastData), 
 			//typeof(Data), 
 			typeof(DecalData), 
@@ -222,6 +223,10 @@ namespace Modding.Editor
 					{
 						references.AddUnique(sceneData.Addressable.AssetGUID);
 						sceneReferences.AddUnique(sceneData.Addressable.AssetGUID);
+					}
+					else if (obj is AudioData audioData)
+					{
+						references.AddUnique(audioData.ClipReference.AssetGUID);
 					}
 
 					for (var k = 0; k < references.Count; k++)

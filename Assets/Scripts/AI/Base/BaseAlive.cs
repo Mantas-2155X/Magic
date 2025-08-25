@@ -663,10 +663,8 @@ namespace AI.Base
 			
 			if (!killSilently)
 			{
-				if (Data.BreakAudioReference.RuntimeKeyIsValid())
-				{
-					AudioManager.Instance.PlayAtPoint(Data.BreakAudioReference, thisTr.position);
-				}
+				if (Data.BreakAudio != null)
+					AudioManager.Instance.PlayAtPoint(Data.BreakAudio, thisTr.position);
 
 				if (SettingsManager.Instance.GetInt("graphics-modelquality") >= 2)
 				{

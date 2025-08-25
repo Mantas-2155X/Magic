@@ -42,6 +42,7 @@ namespace Modding
 		{
 			//typeof(AliveData),
 			typeof(AttackData), 
+			typeof(AudioData),
 			typeof(CastData), 
 			//typeof(Data), 
 			typeof(DecalData), 

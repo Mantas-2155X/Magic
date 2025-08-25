@@ -225,6 +225,9 @@ namespace Objects.Base
 			if (!ObjectData.IsBreakable)
 				return;
 
+			if (ObjectData.BreakAudio != null)
+				AudioManager.Instance.PlayAtPoint(ObjectData.BreakAudio, thisTr.position);
+
 			if (ObjectData.BrokenPrefabReference.RuntimeKeyIsValid() && SettingsManager.Instance.GetInt("graphics-modelquality") >= 2)
 			{
 				var brokenPrefab = Addressables.InstantiateAsync(ObjectData.BrokenPrefabReference, World.World.Instance.Ragdolls).WaitForCompletion();
@@ -238,11 +241,6 @@ namespace Objects.Base
 					explode.ExplosionPoint = LastHitPoint;
 
 				brokenPrefab.SetActive(true);
-			}
-
-			if (ObjectData.BreakAudioReference.RuntimeKeyIsValid())
-			{
-				AudioManager.Instance.PlayAtPoint(ObjectData.BreakAudioReference, thisTr.position);
 			}
 			
 			Health = 0;
