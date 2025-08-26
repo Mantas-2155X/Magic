@@ -19,6 +19,11 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public InputSlider SFXVolumeInputSlider;
 
+		[SerializeField]
+		public Localizer UIVolumeLocalizer;
+		[SerializeField]
+		public InputSlider UIVolumeInputSlider;
+
 		public override void Select(bool state)
 		{
 			base.Select(state);
@@ -34,6 +39,12 @@ namespace UI.Settings.Pages
 			SFXVolumeLocalizer.Apply();
 			
 			SFXVolumeInputSlider.SetValueWithoutNotify(Convert.ToSingle(sfxVolume.Value));
+			
+			var uiVolume = SettingsManager.Instance.GetSetting("audio-uivolume");
+			UIVolumeLocalizer.Key = uiVolume.Name;
+			UIVolumeLocalizer.Apply();
+			
+			UIVolumeInputSlider.SetValueWithoutNotify(Convert.ToSingle(uiVolume.Value));
 		}
 
 		public override void ResetTab()
@@ -58,6 +69,11 @@ namespace UI.Settings.Pages
 		public void OnSFXVolumeChanged(float value)
 		{
 			SettingsManager.Instance.SetSetting("audio-sfxvolume", value);
+		}
+		
+		public void OnUIVolumeChanged(float value)
+		{
+			SettingsManager.Instance.SetSetting("audio-uivolume", value);
 		}
 	}
 }

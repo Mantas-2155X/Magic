@@ -895,7 +895,7 @@ namespace Managers
 
 			#region Audio
 
-			AddSetting("audio-mastervolume", "SETTINGS_AUDIO_MASTERVOLUME", "SETTINGS_AUDIO_MASTERVOLUME_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
+			AddSetting("audio-mastervolume", "SETTINGS_AUDIO_MASTERVOLUME", "SETTINGS_AUDIO_MASTERVOLUME_DESC", ESettingType.Float, 0.5f, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToSingle(newValue);
 				if (setting is < 0f or > 1f)
@@ -919,6 +919,19 @@ namespace Managers
 				
 				var mixer = AudioManager.Instance.SFXGroup.audioMixer;
 				mixer.SetFloat("SFXVolume", Mathf.Log10(Mathf.Clamp(setting, 0.0001f, 1f)) * 20f);
+			});
+			
+			AddSetting("audio-uivolume", "SETTINGS_AUDIO_UIVOLUME", "SETTINGS_AUDIO_UIVOLUME_DESC", ESettingType.Float, 0.5f, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToSingle(newValue);
+				if (setting is < 0f or > 1f)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid ui volume provided, skipping");
+					return;
+				}
+				
+				var mixer = AudioManager.Instance.UIGroup.audioMixer;
+				mixer.SetFloat("UIVolume", Mathf.Log10(Mathf.Clamp(setting, 0.0001f, 1f)) * 20f);
 			});
 
 			#endregion

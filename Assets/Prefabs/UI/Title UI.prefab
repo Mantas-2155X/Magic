@@ -695,6 +695,7 @@ GameObject:
   - component: {fileID: 1950605893456135968}
   - component: {fileID: 2223007079217718846}
   - component: {fileID: 971581802112762760}
+  - component: {fileID: 4952089756286728682}
   m_Layer: 5
   m_Name: Save Load
   m_TagString: Untagged
@@ -836,6 +837,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4952089756286728682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057117038061636116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 2223007079217718846}
+  HoverEnter: 1
+  HoverExit: 0
+  Press: 0
+  Release: 0
 --- !u!1 &1127783785257806179
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,6 +908,7 @@ GameObject:
   - component: {fileID: 3958170148726814110}
   - component: {fileID: 2505191771005189709}
   - component: {fileID: 4873440240437128124}
+  - component: {fileID: 7021789039876998141}
   m_Layer: 5
   m_Name: New Game
   m_TagString: Untagged
@@ -1031,6 +1050,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7021789039876998141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532799698335945316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 2505191771005189709}
+  HoverEnter: 1
+  HoverExit: 0
+  Press: 0
+  Release: 0
 --- !u!1 &1806680255692218236
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,6 +1080,7 @@ GameObject:
   - component: {fileID: 2281304504461448745}
   - component: {fileID: 7939574188050377445}
   - component: {fileID: 6014966149238897280}
+  - component: {fileID: 4622615289861588526}
   m_Layer: 5
   m_Name: Continue
   m_TagString: Untagged
@@ -1185,6 +1222,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4622615289861588526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806680255692218236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 7939574188050377445}
+  HoverEnter: 1
+  HoverExit: 0
+  Press: 0
+  Release: 0
 --- !u!1 &2600733778521292803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,6 +1252,7 @@ GameObject:
   - component: {fileID: 801561917388743348}
   - component: {fileID: 13185902981748050}
   - component: {fileID: 2023109078934880948}
+  - component: {fileID: 5735076063865256997}
   m_Layer: 5
   m_Name: Quit Game
   m_TagString: Untagged
@@ -1339,6 +1394,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &5735076063865256997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2600733778521292803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 13185902981748050}
+  HoverEnter: 1
+  HoverExit: 0
+  Press: 0
+  Release: 0
 --- !u!1 &3562049182599273984
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,6 +2018,7 @@ GameObject:
   - component: {fileID: 8170050625804228418}
   - component: {fileID: 92619976714097898}
   - component: {fileID: 3780336063793990805}
+  - component: {fileID: 2390463360445513735}
   m_Layer: 5
   m_Name: Return to Title
   m_TagString: Untagged
@@ -2087,6 +2160,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &2390463360445513735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4965784078085953038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 92619976714097898}
+  HoverEnter: 1
+  HoverExit: 0
+  Press: 0
+  Release: 0
 --- !u!1 &5163499195582625029
 GameObject:
   m_ObjectHideFlags: 0
@@ -2553,6 +2643,7 @@ GameObject:
   - component: {fileID: 5299510745412490601}
   - component: {fileID: 910276402041244152}
   - component: {fileID: 229221543692288214}
+  - component: {fileID: 5500031997929127534}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -2694,6 +2785,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &5500031997929127534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7280064237737216131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 910276402041244152}
+  HoverEnter: 1
+  HoverExit: 0
+  Press: 0
+  Release: 0
 --- !u!1 &7473504872307146948
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,6 +2815,7 @@ GameObject:
   - component: {fileID: 1741547645769819534}
   - component: {fileID: 5270143137024148725}
   - component: {fileID: 8998643916448361392}
+  - component: {fileID: 4590550397623147062}
   m_Layer: 5
   m_Name: Changelogs
   m_TagString: Untagged
@@ -2848,6 +2957,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4590550397623147062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7473504872307146948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 5270143137024148725}
+  HoverEnter: 1
+  HoverExit: 0
+  Press: 0
+  Release: 0
 --- !u!1 &8803095051511885213
 GameObject:
   m_ObjectHideFlags: 0
@@ -2936,6 +3062,7 @@ GameObject:
   - component: {fileID: 5521922930253518098}
   - component: {fileID: 3705364062210819458}
   - component: {fileID: 5876410991879752527}
+  - component: {fileID: 4558220492557379357}
   m_Layer: 5
   m_Name: Scene Select
   m_TagString: Untagged
@@ -3077,6 +3204,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4558220492557379357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8964811880942510856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 3705364062210819458}
+  HoverEnter: 1
+  HoverExit: 0
+  Press: 0
+  Release: 0
 --- !u!1 &9136536633107344043
 GameObject:
   m_ObjectHideFlags: 0

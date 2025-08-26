@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Managers.Enums;
 using ScriptableObjects;
 using SteamAudio;
 using UnityEngine;
@@ -26,18 +28,26 @@ namespace Managers
 				instance = go.AddComponent<AudioManager>();
 				instance.loadMixerGroups();
 				
+				instance.uiSource = go.AddComponent<AudioSource>();
+				instance.uiSource.outputAudioMixerGroup = instance.UIGroup;
+				instance.uiSource.ignoreListenerPause = true;
+				instance.uiSource.playOnAwake = false;
+
 				return instance;
 			}
 		}
 
 		public AudioMixerGroup MasterGroup { get; private set; }
 		public AudioMixerGroup SFXGroup { get; private set; }
+		public AudioMixerGroup UIGroup { get; private set; }
 		
-		// source -> target
 		private readonly Dictionary<Transform, Transform> attachedSources = new ();
+		private readonly Dictionary<EUIAudio, Tuple<AudioClip, float>> uiClips = new ();
 		
 		private readonly List<Transform> clearSources = new ();
 
+		private AudioSource uiSource;
+		
 		#region MonoBehaviour
 
 		public void Update()
@@ -110,6 +120,34 @@ namespace Managers
 			return tr;
 		}
 
+		public void PlayUI(EUIAudio audioType)
+		{
+			if (!uiClips.TryGetValue(audioType, out var tuple))
+			{
+				AudioData audioData;
+
+				switch (audioType)
+				{
+					case EUIAudio.None:
+						return;
+					case EUIAudio.Hover:
+						audioData = Addressables.LoadAssetAsync<AudioData>("Audio/UI/UI Hover.asset").WaitForCompletion();
+						break;
+					default:
+						throw new NotImplementedException();
+				}
+
+				tuple = new Tuple<AudioClip, float>(Addressables.LoadAssetAsync<AudioClip>(audioData.ClipReferences[Random.Range(0, audioData.ClipReferences.Length)]).WaitForCompletion(), audioData.Volume);
+				
+				uiClips[audioType] = tuple;
+			}
+			
+			uiSource.clip = tuple.Item1;
+			uiSource.volume = tuple.Item2;
+			
+			uiSource.Play();
+		}
+		
 		public void RemoveSource(Transform source)
 		{
 			if (source == null)
@@ -127,6 +165,7 @@ namespace Managers
 		{
 			MasterGroup = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[Master]").WaitForCompletion();
 			SFXGroup = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[SFX]").WaitForCompletion();
+			UIGroup = Addressables.LoadAssetAsync<AudioMixerGroup>("Assets/Master.mixer[UI]").WaitForCompletion();
 		}
 
 		private async UniTaskVoid destroyAfterPlay(Transform source, AudioClip clip)

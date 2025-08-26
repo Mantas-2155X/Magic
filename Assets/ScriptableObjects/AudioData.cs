@@ -20,7 +20,7 @@ namespace ScriptableObjects
 		public bool Loop;
 
 		[Header("Spatialization")]
-		[SerializeField]
+		[SerializeField][Range(0f, 1f)]
 		public float Spatialize = 1f;
 
 		[SerializeField][Space(5f)]
@@ -35,7 +35,7 @@ namespace ScriptableObjects
 		[SerializeField][Space(5f)]
 		public bool Transmission = true;
 
-		[SerializeField][Range(0, 8)]
+		[SerializeField][Range(1, 8)]
 		public int TransmissionSurfaces = 4;
 		
 		[SerializeField][Range(0f, 1f)]

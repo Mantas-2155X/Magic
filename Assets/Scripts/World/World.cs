@@ -71,6 +71,7 @@ namespace World
 
 			SettingsManager.Instance.CallSetting("audio-mastervolume");
 			SettingsManager.Instance.CallSetting("audio-sfxvolume");
+			SettingsManager.Instance.CallSetting("audio-uivolume");
 
 			var sceneData = SceneManager.Instance.GetCurrentSceneData();
 			if (sceneData == null)

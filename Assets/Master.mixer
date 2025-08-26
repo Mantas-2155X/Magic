@@ -20,6 +20,20 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &-8714325852142667358
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 12dfe1dfd82c76134971bb350941a6a7
+  m_EffectName: Attenuation
+  m_MixLevel: 90917907c3ecbef72a17764fa65338ed
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-8401735355903241528
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -34,6 +48,25 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &-4364489531580981605
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UI
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 275790323698541fc812dfebd40b45d5
+  m_Children: []
+  m_Volume: 07cfe9531356d48e5bccfefbd15d1c74
+  m_Pitch: 9ecde758a954996089da4d7c281e4fe8
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -8714325852142667358}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &-4227380951729893534
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -105,11 +138,14 @@ AudioMixerController:
     name: MasterVolume
   - guid: 425f61eebfc63a10088e8ddddee6f2b9
     name: SFXVolume
+  - guid: 07cfe9531356d48e5bccfefbd15d1c74
+    name: UIVolume
   m_AudioMixerGroupViews:
   - guids:
     - a1089ef1c4f22d9189d66ebd3d77aaf6
     - cb8aa1ac3c6cc698ca34cbe3afcf651f
     - 5ea38337248576541a35539c154c2416
+    - 275790323698541fc812dfebd40b45d5
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -125,6 +161,7 @@ AudioMixerGroupController:
   m_Children:
   - {fileID: -9022800151222566443}
   - {fileID: -4227380951729893534}
+  - {fileID: -4364489531580981605}
   m_Volume: c63c01c3de32034be92125c58e2ea706
   m_Pitch: 8264bcad7d931dfe1960dd320adc7049
   m_Send: 00000000000000000000000000000000

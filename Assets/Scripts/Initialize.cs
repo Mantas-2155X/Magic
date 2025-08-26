@@ -37,6 +37,7 @@ public static class Initialize
 		_ = ModLoader.Instance;
 		_ = ObjectManager.Instance;
 		_ = SelectionManager.Instance;
+		_ = AudioManager.Instance;
 		_ = SettingsManager.Instance;
 		_ = LocalizationManager.Instance;
 		_ = GameManager.Instance;
