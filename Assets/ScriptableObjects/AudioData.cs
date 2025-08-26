@@ -10,38 +10,41 @@ namespace ScriptableObjects
 		[SerializeField]
 		public AssetReference[] ClipReferences;
 
-		[SerializeField]
+		[SerializeField][Range(0f, 1f)]
 		public float Volume = 1f;
 		
 		[SerializeField]
-		public float MaximumDistance = 25f;
-		
-		[SerializeField]
-		public float MinimumDistance = 2f;
+		public float Distance = 25f;
 
 		[SerializeField]
 		public bool Loop;
 
 		[Header("Spatialization")]
 		[SerializeField]
-		public float Spatialize = 0.9f;
+		public float Spatialize = 1f;
 
-		[SerializeField]
+		[SerializeField][Space(5f)]
 		public bool DistanceAttenuation = true;
 
 		[SerializeField]
 		public bool AirAbsorption = true;
 		
 		[SerializeField]
+		public bool Occlusion = true;
+
+		[SerializeField][Space(5f)]
 		public bool Transmission = true;
 
-		[SerializeField]
+		[SerializeField][Range(0, 8)]
 		public int TransmissionSurfaces = 4;
 		
-		[SerializeField]
-		public bool Reflections;
+		[SerializeField][Range(0f, 1f)]
+		public float TransmissionMix = 0.75f;
 		
-		[SerializeField]
-		public bool Occlusion = true;
+		[SerializeField][Space(5f)]
+		public bool Reflections = true;
+
+		[SerializeField][Range(0f, 1f)]
+		public float ReflectionsMix = 0.5f;
 	}
 }

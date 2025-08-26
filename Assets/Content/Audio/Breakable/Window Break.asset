@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 650419cba58641378c87e6e2f9124742, type: 3}
-  m_Name: Canister
+  m_Name: Window Break
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.AudioData
   Name: 
   Description: 
@@ -25,24 +25,20 @@ MonoBehaviour:
   Type: 
   Assembly: 
   ClipReferences:
-  - m_AssetGUID: 50120b59f2fca90cc97a5ffc061c953a
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 8d3f0f68e7463bbe191f1c3bb3481137
+  - m_AssetGUID: d6bbf40744be0c3aaa09b672a75821ef
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   Volume: 1
-  MaximumDistance: 50
-  MinimumDistance: 5
+  Distance: 25
   Loop: 0
-  Spatialize: 0.9
+  Spatialize: 1
   DistanceAttenuation: 1
   AirAbsorption: 1
+  Occlusion: 1
   Transmission: 1
   TransmissionSurfaces: 4
-  Reflections: 0
-  Occlusion: 1
+  TransmissionMix: 0.75
+  Reflections: 1
+  ReflectionsMix: 0.5

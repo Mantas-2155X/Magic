@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 650419cba58641378c87e6e2f9124742, type: 3}
-  m_Name: Portal
+  m_Name: Button Use
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.AudioData
   Name: 
   Description: 
@@ -25,19 +25,20 @@ MonoBehaviour:
   Type: 
   Assembly: 
   ClipReferences:
-  - m_AssetGUID: a62d2a74f98655682af8f9ced4142cdf
+  - m_AssetGUID: 98641be8ed5f29d8f9a8ed83e7f9e4d3
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  Volume: 1
-  MaximumDistance: 50
-  MinimumDistance: 5
+  Volume: 0.45
+  Distance: 25
   Loop: 0
-  Spatialize: 0.825
+  Spatialize: 1
   DistanceAttenuation: 1
   AirAbsorption: 1
+  Occlusion: 1
   Transmission: 1
   TransmissionSurfaces: 4
-  Reflections: 0
-  Occlusion: 1
+  TransmissionMix: 0.75
+  Reflections: 1
+  ReflectionsMix: 0.5

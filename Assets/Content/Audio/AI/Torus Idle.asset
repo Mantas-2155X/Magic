@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 650419cba58641378c87e6e2f9124742, type: 3}
-  m_Name: Drone
+  m_Name: Torus Idle
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.AudioData
   Name: 
   Description: 
@@ -25,19 +25,20 @@ MonoBehaviour:
   Type: 
   Assembly: 
   ClipReferences:
-  - m_AssetGUID: 90da482f4a00c00f5bf6828dc8867652
+  - m_AssetGUID: edb0693e55206b01da0cba00d921cf17
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  Volume: 1
-  MaximumDistance: 50
-  MinimumDistance: 5
+  Volume: 0.05
+  Distance: 25
   Loop: 1
-  Spatialize: 0.825
+  Spatialize: 1
   DistanceAttenuation: 1
   AirAbsorption: 1
+  Occlusion: 1
   Transmission: 1
   TransmissionSurfaces: 4
-  Reflections: 0
-  Occlusion: 1
+  TransmissionMix: 0.75
+  Reflections: 1
+  ReflectionsMix: 0.5

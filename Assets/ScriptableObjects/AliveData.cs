@@ -99,5 +99,8 @@ namespace ScriptableObjects
 		
 		[Header("Other")]
 		public bool AttachDecals = true;
+		
+		[SerializeField]
+		public AudioData IdleAudio;
 	}
 }

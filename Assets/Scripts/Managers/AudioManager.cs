@@ -86,9 +86,8 @@ namespace Managers
 			audioSource.volume = audioData.Volume;
 			audioSource.loop = audioData.Loop;
 			audioSource.playOnAwake = false;
-			audioSource.maxDistance = audioData.MaximumDistance;
-			audioSource.minDistance = audioData.MinimumDistance;
-			audioSource.rolloffMode = AudioRolloffMode.Linear;
+			audioSource.maxDistance = audioData.Distance;
+			audioSource.rolloffMode = AudioRolloffMode.Custom;
 			audioSource.clip = clip;
 			
 			var steamAudioSource = go.AddComponent<SteamAudioSource>();
@@ -96,8 +95,12 @@ namespace Managers
 			steamAudioSource.distanceAttenuation = audioData.DistanceAttenuation;
 			steamAudioSource.airAbsorption = audioData.AirAbsorption;
 			steamAudioSource.transmission = audioData.Transmission;
+			steamAudioSource.directMixLevel = audioData.TransmissionMix;
 			steamAudioSource.reflections = audioData.Reflections;
+			steamAudioSource.reflectionsMixLevel = audioData.ReflectionsMix;
 			steamAudioSource.occlusion = audioData.Occlusion;
+			steamAudioSource.occlusionType = OcclusionType.Volumetric;
+			steamAudioSource.interpolation = HRTFInterpolation.Bilinear;
 			
 			audioSource.Play();
 			

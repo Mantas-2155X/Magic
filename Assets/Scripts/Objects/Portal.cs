@@ -22,7 +22,7 @@ namespace Objects
 			base.Spawn(position, angles);
 			System.Play(true);
 			
-			AudioManager.Instance.PlayAtPoint(Addressables.LoadAssetAsync<AudioData>("Audio/Portal.asset").WaitForCompletion(), GetTransform().position);
+			AudioManager.Instance.PlayAtPoint(Addressables.LoadAssetAsync<AudioData>("Audio/Portal Spawn.asset").WaitForCompletion(), GetTransform().position);
 		}
 	}
 }

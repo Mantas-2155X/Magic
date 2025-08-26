@@ -830,15 +830,8 @@ namespace AI
 			
 			SendCommunication(ECommunication.Spawned, null);
 
-			// todo: make this check part of data
-			if (Data.Name.Contains("_DRONE_"))
-			{
-				AudioManager.Instance.PlayAttached(Addressables.LoadAssetAsync<AudioData>("Audio/AI/Drone.asset").WaitForCompletion(), GetTransform());
-			}
-			else if (Data.Name.Contains("_TORUS_"))
-			{
-				AudioManager.Instance.PlayAttached(Addressables.LoadAssetAsync<AudioData>("Audio/AI/Torus.asset").WaitForCompletion(), GetTransform());
-			}
+			if (Data.IdleAudio != null)
+				AudioManager.Instance.PlayAttached(Data.IdleAudio, GetTransform());
 		}
 
 		public override void Kill(object source, bool killSilently = false)
