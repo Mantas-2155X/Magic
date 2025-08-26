@@ -32,6 +32,7 @@ namespace Managers
 			OnPausedEvent?.Invoke();
 			
 			Time.timeScale = 0f;
+			AudioListener.pause = true;
 		}
 
 		public void Unpause()
@@ -43,6 +44,7 @@ namespace Managers
 			OnUnpausedEvent?.Invoke();
 			
 			Time.timeScale = GameManager.TimeScale;
+			AudioListener.pause = false;
 		}
 	}
 }
