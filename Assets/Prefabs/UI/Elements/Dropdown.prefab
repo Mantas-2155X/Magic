@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 8452586732749057329}
   - component: {fileID: 3749546320089098031}
   - component: {fileID: 6024054473510811448}
+  - component: {fileID: 5851939542988500025}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -178,6 +179,23 @@ MonoBehaviour:
   Element: {fileID: 3296275507599874333}
   ScrollRect: {fileID: 347731891827244807}
   ScrollOnStart: 1
+--- !u!114 &5851939542988500025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2515012370428922214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 3749546320089098031}
+  HoverEnter: 0
+  HoverExit: 0
+  Press: 2
+  Release: 3
 --- !u!1 &2801114714283453396
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,6 +209,7 @@ GameObject:
   - component: {fileID: 3296275507599874333}
   - component: {fileID: 374089271940280760}
   - component: {fileID: 2911117173458392384}
+  - component: {fileID: 5159233535214017958}
   m_Layer: 5
   m_Name: Dropdown
   m_TagString: Untagged
@@ -328,6 +347,23 @@ MonoBehaviour:
   Text: {fileID: 0}
   Key: 
   Dropdown: {fileID: 374089271940280760}
+--- !u!114 &5159233535214017958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2801114714283453396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 374089271940280760}
+  HoverEnter: 0
+  HoverExit: 0
+  Press: 2
+  Release: 3
 --- !u!1 &2827479263325788535
 GameObject:
   m_ObjectHideFlags: 0

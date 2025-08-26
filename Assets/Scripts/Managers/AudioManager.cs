@@ -133,6 +133,12 @@ namespace Managers
 					case EUIAudio.Hover:
 						audioData = Addressables.LoadAssetAsync<AudioData>("Audio/UI/UI Hover.asset").WaitForCompletion();
 						break;
+					case EUIAudio.Press:
+						audioData = Addressables.LoadAssetAsync<AudioData>("Audio/UI/UI Press.asset").WaitForCompletion();
+						break;
+					case EUIAudio.Release:
+						audioData = Addressables.LoadAssetAsync<AudioData>("Audio/UI/UI Release.asset").WaitForCompletion();
+						break;
 					default:
 						throw new NotImplementedException();
 				}

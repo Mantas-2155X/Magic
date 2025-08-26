@@ -232,6 +232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5493856078060940298}
   - component: {fileID: 6926031028520172061}
+  - component: {fileID: 6624240041280927020}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -313,6 +314,23 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   StepSizeMultiplier: 0.05
+--- !u!114 &6624240041280927020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5922019618746324325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 6926031028520172061}
+  HoverEnter: 0
+  HoverExit: 0
+  Press: 2
+  Release: 3
 --- !u!1 &7638705042242113973
 GameObject:
   m_ObjectHideFlags: 0

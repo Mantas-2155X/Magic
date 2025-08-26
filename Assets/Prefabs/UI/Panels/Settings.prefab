@@ -2960,6 +2960,7 @@ GameObject:
   - component: {fileID: 8328687065962979312}
   - component: {fileID: 2970845590094557993}
   - component: {fileID: 843827784941126999}
+  - component: {fileID: 8459505430820234798}
   m_Layer: 5
   m_Name: RebindButton
   m_TagString: Untagged
@@ -3084,6 +3085,23 @@ MonoBehaviour:
   Element: {fileID: 7451009156001518702}
   ScrollRect: {fileID: 4026188626175240143}
   ScrollOnStart: 0
+--- !u!114 &8459505430820234798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3018274191194085340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 2970845590094557993}
+  HoverEnter: 0
+  HoverExit: 0
+  Press: 2
+  Release: 3
 --- !u!1 &3067085404031207462
 GameObject:
   m_ObjectHideFlags: 0

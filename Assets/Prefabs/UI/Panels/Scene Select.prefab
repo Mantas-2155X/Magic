@@ -793,6 +793,7 @@ GameObject:
   - component: {fileID: 696236620803381450}
   - component: {fileID: 2740597514694273910}
   - component: {fileID: 1312536074448531989}
+  - component: {fileID: 265709638565589854}
   m_Layer: 5
   m_Name: Template
   m_TagString: Untagged
@@ -918,8 +919,26 @@ MonoBehaviour:
   Image: {fileID: 696236620803381450}
   Localizer: {fileID: 3760940536760606357}
   Date: {fileID: 0}
+  AutoSave: {fileID: 0}
   ScrollRect: {fileID: 5072070242229910644}
   Parent: {fileID: 5631636833446252977}
+--- !u!114 &265709638565589854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5117528242315170914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773a656eecac4a4ba99bc23715e0e0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.UIAudio
+  Selectable: {fileID: 2740597514694273910}
+  HoverEnter: 0
+  HoverExit: 0
+  Press: 2
+  Release: 3
 --- !u!1 &5664900182256578045
 GameObject:
   m_ObjectHideFlags: 0
