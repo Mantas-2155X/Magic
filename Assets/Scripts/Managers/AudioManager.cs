@@ -27,6 +27,8 @@ namespace Managers
 
 				instance = go.AddComponent<AudioManager>();
 				instance.loadMixerGroups();
+
+				instance.tempListener = go.AddComponent<AudioListener>();
 				
 				instance.uiSource = go.AddComponent<AudioSource>();
 				instance.uiSource.outputAudioMixerGroup = instance.UIGroup;
@@ -47,8 +49,14 @@ namespace Managers
 		private readonly List<Transform> clearSources = new ();
 
 		private AudioSource uiSource;
+		private AudioListener tempListener;
 		
 		#region MonoBehaviour
+
+		public void Start()
+		{
+			Destroy(tempListener);
+		}
 
 		public void Update()
 		{
