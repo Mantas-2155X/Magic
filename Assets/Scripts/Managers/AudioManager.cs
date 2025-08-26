@@ -88,6 +88,7 @@ namespace Managers
 			audioSource.playOnAwake = false;
 			audioSource.maxDistance = audioData.MaximumDistance;
 			audioSource.minDistance = audioData.MinimumDistance;
+			audioSource.rolloffMode = AudioRolloffMode.Linear;
 			audioSource.clip = clip;
 			
 			var steamAudioSource = go.AddComponent<SteamAudioSource>();
