@@ -34,6 +34,9 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public bool Transmission = true;
+
+		[SerializeField]
+		public int TransmissionSurfaces = 4;
 		
 		[SerializeField]
 		public bool Reflections;

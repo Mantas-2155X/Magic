@@ -91,6 +91,7 @@ namespace Managers
 			audioSource.clip = clip;
 			
 			var steamAudioSource = go.AddComponent<SteamAudioSource>();
+			steamAudioSource.maxTransmissionSurfaces = audioData.TransmissionSurfaces;
 			steamAudioSource.distanceAttenuation = audioData.DistanceAttenuation;
 			steamAudioSource.airAbsorption = audioData.AirAbsorption;
 			steamAudioSource.transmission = audioData.Transmission;
