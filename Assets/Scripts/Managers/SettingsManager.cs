@@ -399,7 +399,16 @@ namespace Managers
 			
 			AddSetting("video-vsync", "SETTINGS_VIDEO_VSYNC", "SETTINGS_VIDEO_VSYNC_DESC", ESettingType.Bool, true, (previousValue, newValue) =>
 			{
-				QualitySettings.vSyncCount = Convert.ToBoolean(newValue) ? 1 : 0;
+				if (Convert.ToBoolean(newValue))
+				{
+					QualitySettings.vSyncCount = 1;
+					Application.targetFrameRate = -1;
+				}
+				else
+				{
+					QualitySettings.vSyncCount = 0;
+					Application.targetFrameRate = GetInt("video-fpslimit")!.Value;
+				}
 			});
 
 			AddSetting("video-renderscale", "SETTINGS_VIDEO_RENDERSCALE", "SETTINGS_VIDEO_RENDERSCALE_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
@@ -425,13 +434,13 @@ namespace Managers
 			AddSetting("video-fpslimit", "SETTINGS_VIDEO_FPSLIMIT", "SETTINGS_VIDEO_FPSLIMIT_DESC", ESettingType.Int, 1000, (previousValue, newValue) =>
 			{
 				var setting = Convert.ToInt32(newValue);
-				if (setting < 15)
+				if (setting < 30 || setting > 2000)
 				{
 					Debug.LogWarning("[SettingsManager] Invalid FPS limit provided, skipping");
 					return;
 				}
 				
-				Application.targetFrameRate = setting;
+				Application.targetFrameRate = GetBool("video-vsync")!.Value ? -1 : setting;
 			});
 				
 			AddSetting("video-fieldofview", "SETTINGS_VIDEO_FIELDOFVIEW", "SETTINGS_VIDEO_FIELDOFVIEW_DESC", ESettingType.Float, 90f, (previousValue, newValue) =>
