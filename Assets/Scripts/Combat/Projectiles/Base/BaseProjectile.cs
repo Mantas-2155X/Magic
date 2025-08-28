@@ -17,10 +17,12 @@ using State;
 using State.Enums;
 using State.Interfaces;
 using State.States;
+using SteamAudio;
 using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Combat.Projectiles.Base
 {
@@ -163,11 +165,10 @@ namespace Combat.Projectiles.Base
 			IIdentifiable attach = null;
 			
 			var contact = collision.contacts[0];
+			var coll = collision.collider;
 			
 			if (ProjectileData.Damage > 0)
 			{
-				var coll = collision.collider;
-				
 				if (AIManager.Instance.AlivesColliderMap.TryGetValue(coll, out var alive))
 				{
 					attach = alive;
@@ -204,6 +205,13 @@ namespace Combat.Projectiles.Base
 				}
 			}
 				
+			if (ProjectileData.ImpactSound)
+			{
+				var geometry = coll.GetComponentInChildren<SteamAudioGeometry>();
+				if (geometry != null)
+					AudioManager.Instance.PlayImpact(geometry.material, contact.point);
+			}
+			
 			Collisions++;
 
 			if (Collisions > ProjectileData.Bounces)

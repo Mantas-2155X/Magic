@@ -28,5 +28,8 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public DecalData Decal;
+
+		[SerializeField]
+		public bool ImpactSound = true;
 	}
 }

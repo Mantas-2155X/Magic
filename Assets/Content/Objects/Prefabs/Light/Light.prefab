@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8729331271185628313}
   - component: {fileID: 7701027929372534346}
   - component: {fileID: 8481220608817050971}
+  - component: {fileID: -5176475536161064299}
   m_Layer: 10
   m_Name: Light
   m_TagString: Untagged
@@ -142,6 +143,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.39642558, y: 0.045836963, z: 0.39642558}
   m_Center: {x: 0, y: 0.05138393, z: 0}
+--- !u!114 &-5176475536161064299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6173962219884381016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: 08bf73ad12cb44944875b02ce7f9d694, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0
 --- !u!1 &6609213909674793635
 GameObject:
   m_ObjectHideFlags: 0

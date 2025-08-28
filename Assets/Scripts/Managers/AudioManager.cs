@@ -45,6 +45,7 @@ namespace Managers
 		
 		private readonly Dictionary<Transform, Transform> attachedSources = new ();
 		private readonly Dictionary<EUIAudio, Tuple<AudioClip, float>> uiClips = new ();
+		private readonly Dictionary<SteamAudioMaterial, AudioData> materialDatas = new ();
 		
 		private readonly List<Transform> clearSources = new ();
 
@@ -128,29 +129,25 @@ namespace Managers
 			return tr;
 		}
 
+		public Transform PlayImpact(SteamAudioMaterial material, Vector3 position)
+		{
+			if (!materialDatas.TryGetValue(material, out var audioData))
+			{
+				audioData = Addressables.LoadAssetAsync<AudioData>($"Audio/Hit/{material.name} Hit.asset").WaitForCompletion();
+				materialDatas[material] = audioData;
+			}
+
+			return PlayAtPoint(audioData, position);
+		}
+		
 		public void PlayUI(EUIAudio audioType)
 		{
+			if (audioType == EUIAudio.None)
+				return;
+			
 			if (!uiClips.TryGetValue(audioType, out var tuple))
 			{
-				AudioData audioData;
-
-				switch (audioType)
-				{
-					case EUIAudio.None:
-						return;
-					case EUIAudio.Hover:
-						audioData = Addressables.LoadAssetAsync<AudioData>("Audio/UI/UI Hover.asset").WaitForCompletion();
-						break;
-					case EUIAudio.Press:
-						audioData = Addressables.LoadAssetAsync<AudioData>("Audio/UI/UI Press.asset").WaitForCompletion();
-						break;
-					case EUIAudio.Release:
-						audioData = Addressables.LoadAssetAsync<AudioData>("Audio/UI/UI Release.asset").WaitForCompletion();
-						break;
-					default:
-						throw new NotImplementedException();
-				}
-
+				var audioData = Addressables.LoadAssetAsync<AudioData>($"Audio/UI/UI {audioType}.asset").WaitForCompletion();
 				tuple = new Tuple<AudioClip, float>(Addressables.LoadAssetAsync<AudioClip>(audioData.ClipReferences[Random.Range(0, audioData.ClipReferences.Length)]).WaitForCompletion(), audioData.Volume);
 				
 				uiClips[audioType] = tuple;
