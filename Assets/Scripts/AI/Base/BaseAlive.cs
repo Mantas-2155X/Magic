@@ -627,6 +627,12 @@ namespace AI.Base
 				gib.ObjectID = Guid.NewGuid().ToString();
 				gib.ExternallySpawned = true;
 				
+				if (gib.Geometry != null)
+					gib.Geometry.enabled = true;
+
+				if (gib.DynamicObject != null)
+					gib.DynamicObject.enabled = true;
+				
 				var go = gib.gameObject;
 				go.layer = objectLayer;
 

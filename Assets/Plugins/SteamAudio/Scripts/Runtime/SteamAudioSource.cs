@@ -153,6 +153,7 @@ namespace SteamAudio
         public bool normalizePathingEQ = false;
 
 #if STEAMAUDIO_ENABLED
+        Transform cachedTransform = null;
         Simulator mSimulator = null;
         Source mSource = null;
         AudioEngineSource mAudioEngineSource = null;
@@ -168,6 +169,7 @@ namespace SteamAudio
 
         private void Awake()
         {
+            cachedTransform = transform;
             mSimulator = SteamAudioManager.Simulator;
 
             var settings = SteamAudioManager.GetSimulationSettings(false);
@@ -283,10 +285,10 @@ namespace SteamAudio
             var listener = SteamAudioManager.GetSteamAudioListener();
 
             var inputs = new SimulationInputs { };
-            inputs.source.origin = Common.ConvertVector(transform.position);
-            inputs.source.ahead = Common.ConvertVector(transform.forward);
-            inputs.source.up = Common.ConvertVector(transform.up);
-            inputs.source.right = Common.ConvertVector(transform.right);
+            inputs.source.origin = Common.ConvertVector(cachedTransform.position);
+            inputs.source.ahead = Common.ConvertVector(cachedTransform.forward);
+            inputs.source.up = Common.ConvertVector(cachedTransform.up);
+            inputs.source.right = Common.ConvertVector(cachedTransform.right);
 
             if (mSettings.audioEngine == AudioEngineType.Unity &&
                 distanceAttenuation &&

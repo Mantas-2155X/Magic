@@ -1,10 +1,7 @@
 using System;
 using AI.Interfaces;
-using Managers;
-using Newtonsoft.Json.Linq;
 using Objects.Enums;
-using State;
-using State.Interfaces;
+using SteamAudio;
 using UnityEngine;
 
 namespace Objects.Base
@@ -16,6 +13,12 @@ namespace Objects.Base
 		
 		[SerializeField]
 		public float Amount;
+		
+		[SerializeField]
+		public SteamAudioGeometry Geometry;
+		
+		[SerializeField]
+		public SteamAudioDynamicObject DynamicObject;
 		
 		public override void OnDestroy()
 		{

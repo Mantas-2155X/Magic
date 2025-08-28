@@ -35,11 +35,11 @@ MonoBehaviour:
   Loop: 0
   Spatialize: 0
   DirectMix: 0
-  DistanceAttenuation: 0
-  AirAbsorption: 0
-  Occlusion: 0
+  DistanceAttenuation: 1
+  AirAbsorption: 1
+  Occlusion: 1
   OcclusionType: 1
-  Transmission: 0
-  TransmissionSurfaces: 1
-  Reflections: 0
-  ReflectionsMix: 0
+  Transmission: 1
+  TransmissionSurfaces: 4
+  Reflections: 1
+  ReflectionsMix: 0.5

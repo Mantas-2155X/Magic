@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 2248593398703734327}
   - component: {fileID: -524543467807056091}
   - component: {fileID: 5358933637727317664}
-  - component: {fileID: 512419537670018119}
   m_Layer: 10
   m_Name: Blue Eye
   m_TagString: Untagged
@@ -154,6 +153,7 @@ MonoBehaviour:
   objectID: 
   Type: 0
   Amount: 5
+  Geometry: {fileID: 5358933637727317664}
 --- !u!54 &-524543467807056091
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -196,16 +196,3 @@ MonoBehaviour:
   material: {fileID: 11400000, guid: 08bf73ad12cb44944875b02ce7f9d694, type: 2}
   exportAllChildren: 0
   terrainSimplificationLevel: 0
---- !u!114 &512419537670018119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4271558894320573796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
-  asset: {fileID: 11400000, guid: 71d0a194535f66e7a96c916912c98793, type: 2}

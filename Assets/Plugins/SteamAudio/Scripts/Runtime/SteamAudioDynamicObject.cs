@@ -27,6 +27,12 @@ namespace SteamAudio
 
 #if STEAMAUDIO_ENABLED
         InstancedMesh mInstancedMesh = null;
+        Transform cachedTransform = null;
+
+        private void Awake()
+        {
+            cachedTransform = transform;
+        }
 
         private void OnDestroy()
         {
@@ -70,11 +76,11 @@ namespace SteamAudio
             }
 
             // Only update the dynamic object if it has actually move this frame
-            if (transform.hasChanged)
+            if (cachedTransform.hasChanged)
             {
-                mInstancedMesh.UpdateTransform(SteamAudioManager.CurrentScene, transform);
+                mInstancedMesh.UpdateTransform(SteamAudioManager.CurrentScene, cachedTransform);
                 SteamAudioManager.ScheduleCommitScene();
-                transform.hasChanged = false;
+                cachedTransform.hasChanged = false;
             }
         }
 #endif

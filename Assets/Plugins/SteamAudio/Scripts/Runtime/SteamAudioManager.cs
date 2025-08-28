@@ -1339,9 +1339,9 @@ namespace SteamAudio
             if (dataAsset != null)
             {
                 Scene subScene = null;
-                if (sSingleton.mDynamicObjects.ContainsKey(assetName))
+                if (sSingleton.mDynamicObjects.TryGetValue(assetName, out var scene))
                 {
-                    subScene = sSingleton.mDynamicObjects[assetName];
+                    subScene = scene;
                     sSingleton.mDynamicObjectRefCounts[assetName]++;
                 }
                 else
