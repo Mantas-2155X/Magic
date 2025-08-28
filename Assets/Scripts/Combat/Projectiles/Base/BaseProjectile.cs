@@ -209,7 +209,7 @@ namespace Combat.Projectiles.Base
 			{
 				var geometry = coll.GetComponentInChildren<SteamAudioGeometry>();
 				if (geometry != null)
-					AudioManager.Instance.PlayImpact(geometry.material, contact.point);
+					AudioManager.Instance.PlayImpact(geometry.material, contact.point + (contact.normal * 0.1f));
 			}
 			
 			Collisions++;

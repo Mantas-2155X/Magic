@@ -90,12 +90,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dbb2f0b573919c75b989543422009446, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6966441122641601037}
-    - targetCorrespondingSourceObject: {fileID: 7861854473326295642, guid: dbb2f0b573919c75b989543422009446, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dbb2f0b573919c75b989543422009446, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2020750769884463006}
-    - targetCorrespondingSourceObject: {fileID: 7861854473326295642, guid: dbb2f0b573919c75b989543422009446, type: 3}
+      addedObject: {fileID: 4252260955382042403}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dbb2f0b573919c75b989543422009446, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5099100652009362803}
+      addedObject: {fileID: 8550651305020868180}
   m_SourcePrefab: {fileID: 100100000, guid: dbb2f0b573919c75b989543422009446, type: 3}
 --- !u!1 &3712537145367851251 stripped
 GameObject:
@@ -196,36 +196,31 @@ MonoBehaviour:
   Offset: {x: 0, y: 0, z: 0}
   Size: {x: 0.5, y: 0.5, z: 0.5}
   DrawBounds: 0
---- !u!1 &5935207685316622328 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7861854473326295642, guid: dbb2f0b573919c75b989543422009446, type: 3}
-  m_PrefabInstance: {fileID: 4559046954026978722}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2020750769884463006
+--- !u!114 &4252260955382042403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5935207685316622328}
+  m_GameObject: {fileID: 3712537145367851251}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
   asset: {fileID: 11400000, guid: 02ed8aa7c08113f6ab5600109b66a68e, type: 2}
---- !u!114 &5099100652009362803
+--- !u!114 &8550651305020868180
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5935207685316622328}
+  m_GameObject: {fileID: 3712537145367851251}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
   material: {fileID: 11400000, guid: 5272c55b882edd34a9d80b11bd6f240c, type: 2}
-  exportAllChildren: 0
+  exportAllChildren: 1
   terrainSimplificationLevel: 0

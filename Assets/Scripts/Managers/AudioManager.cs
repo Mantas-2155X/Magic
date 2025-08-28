@@ -114,11 +114,11 @@ namespace Managers
 			steamAudioSource.distanceAttenuation = audioData.DistanceAttenuation;
 			steamAudioSource.airAbsorption = audioData.AirAbsorption;
 			steamAudioSource.transmission = audioData.Transmission;
-			steamAudioSource.directMixLevel = audioData.TransmissionMix;
+			steamAudioSource.directMixLevel = audioData.DirectMix;
 			steamAudioSource.reflections = audioData.Reflections;
 			steamAudioSource.reflectionsMixLevel = audioData.ReflectionsMix;
 			steamAudioSource.occlusion = audioData.Occlusion;
-			steamAudioSource.occlusionType = OcclusionType.Volumetric;
+			steamAudioSource.occlusionType = audioData.OcclusionType;
 			steamAudioSource.interpolation = HRTFInterpolation.Bilinear;
 			
 			audioSource.Play();

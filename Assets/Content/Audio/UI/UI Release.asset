@@ -33,12 +33,13 @@ MonoBehaviour:
   Volume: 0.2
   Distance: 25
   Loop: 0
-  Spatialize: 1
-  DistanceAttenuation: 1
-  AirAbsorption: 1
-  Occlusion: 1
-  Transmission: 1
-  TransmissionSurfaces: 4
-  TransmissionMix: 0.75
-  Reflections: 1
-  ReflectionsMix: 0.5
+  Spatialize: 0
+  DirectMix: 0
+  DistanceAttenuation: 0
+  AirAbsorption: 0
+  Occlusion: 0
+  OcclusionType: 1
+  Transmission: 0
+  TransmissionSurfaces: 1
+  Reflections: 0
+  ReflectionsMix: 0

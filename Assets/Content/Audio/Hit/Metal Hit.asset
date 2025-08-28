@@ -50,10 +50,11 @@ MonoBehaviour:
   Loop: 0
   Spatialize: 1
   DistanceAttenuation: 1
-  AirAbsorption: 1
+  AirAbsorption: 0
   Occlusion: 1
-  Transmission: 1
-  TransmissionSurfaces: 4
-  TransmissionMix: 0.75
-  Reflections: 1
-  ReflectionsMix: 0.5
+  OcclusionType: 0
+  Transmission: 0
+  TransmissionSurfaces: 1
+  TransmissionMix: 0
+  Reflections: 0
+  ReflectionsMix: 0

@@ -486,6 +486,8 @@ GameObject:
   - component: {fileID: 779082925154528359}
   - component: {fileID: 8598778091971049270}
   - component: {fileID: 1299225429599949485}
+  - component: {fileID: 2738951252289737416}
+  - component: {fileID: 4938562031732995940}
   m_Layer: 0
   m_Name: BaseAlive
   m_TagString: Untagged
@@ -705,6 +707,34 @@ MonoBehaviour:
   Malfunction: {fileID: 607477498260355474}
   CanSway: 1
   ShouldSway: 0
+--- !u!114 &2738951252289737416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5238415708173528890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
+  material: {fileID: 11400000, guid: d780f25df1d231d4aa9a31ab3ba935d0, type: 2}
+  exportAllChildren: 0
+  terrainSimplificationLevel: 0
+--- !u!114 &4938562031732995940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5238415708173528890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
+  asset: {fileID: 11400000, guid: 90f0a6861722ad884b216a843f224653, type: 2}
 --- !u!1 &5352134489899751883
 GameObject:
   m_ObjectHideFlags: 0

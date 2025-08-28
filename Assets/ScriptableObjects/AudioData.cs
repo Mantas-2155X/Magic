@@ -1,3 +1,4 @@
+using SteamAudio;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -23,6 +24,9 @@ namespace ScriptableObjects
 		[SerializeField][Range(0f, 1f)]
 		public float Spatialize = 1f;
 
+		[SerializeField][Range(0f, 1f)]
+		public float DirectMix = 0.75f;
+		
 		[SerializeField][Space(5f)]
 		public bool DistanceAttenuation = true;
 
@@ -31,15 +35,15 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public bool Occlusion = true;
+		
+		[SerializeField]
+		public OcclusionType OcclusionType = OcclusionType.Volumetric;
 
 		[SerializeField][Space(5f)]
 		public bool Transmission = true;
 
 		[SerializeField][Range(1, 8)]
 		public int TransmissionSurfaces = 4;
-		
-		[SerializeField][Range(0f, 1f)]
-		public float TransmissionMix = 0.75f;
 		
 		[SerializeField][Space(5f)]
 		public bool Reflections = true;

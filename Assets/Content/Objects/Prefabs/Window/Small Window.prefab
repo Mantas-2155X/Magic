@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: <ObjectData>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: e8e299476c5dbb05f9250ccd5cd496f8, type: 2}
+    - target: {fileID: 2071107592366906286, guid: 51f214865c53b4c02bf707178126c6a7, type: 3}
+      propertyPath: asset
+      value: 
+      objectReference: {fileID: 11400000, guid: 185f153d7e964ae06ad868e08c5ecd74, type: 2}
     - target: {fileID: 7300483090884300118, guid: 51f214865c53b4c02bf707178126c6a7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -65,44 +69,5 @@ PrefabInstance:
     - {fileID: 2149300882325642231, guid: 51f214865c53b4c02bf707178126c6a7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3660138383256309801, guid: 51f214865c53b4c02bf707178126c6a7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8126361579762139016}
-    - targetCorrespondingSourceObject: {fileID: 3660138383256309801, guid: 51f214865c53b4c02bf707178126c6a7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5569899729947336316}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51f214865c53b4c02bf707178126c6a7, type: 3}
---- !u!1 &5752474312951457847 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3660138383256309801, guid: 51f214865c53b4c02bf707178126c6a7, type: 3}
-  m_PrefabInstance: {fileID: 9016075196603578398}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8126361579762139016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5752474312951457847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
-  asset: {fileID: 11400000, guid: 593899ba71a2989eba01fb9c9695ec0f, type: 2}
---- !u!114 &5569899729947336316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5752474312951457847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e829c87dc2a2ed2419c5f67848317fe4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioGeometry
-  material: {fileID: 11400000, guid: 08bf73ad12cb44944875b02ce7f9d694, type: 2}
-  exportAllChildren: 0
-  terrainSimplificationLevel: 0
