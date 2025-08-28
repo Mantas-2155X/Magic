@@ -26,6 +26,9 @@ namespace ScriptableObjects
 
 		[SerializeField][Range(0f, 1f)]
 		public float DirectMix = 0.75f;
+
+		[SerializeField]
+		public bool PerspectiveCorrection = true;
 		
 		[SerializeField][Space(5f)]
 		public bool DistanceAttenuation = true;

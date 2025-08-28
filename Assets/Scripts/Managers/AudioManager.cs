@@ -120,6 +120,7 @@ namespace Managers
 			steamAudioSource.occlusion = audioData.Occlusion;
 			steamAudioSource.occlusionType = audioData.OcclusionType;
 			steamAudioSource.interpolation = HRTFInterpolation.Bilinear;
+			steamAudioSource.perspectiveCorrection = audioData.PerspectiveCorrection;
 			
 			audioSource.Play();
 			

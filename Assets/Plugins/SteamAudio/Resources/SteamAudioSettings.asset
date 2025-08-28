@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioSettings
   audioEngine: 0
   hrtfDisabled: 0
-  perspectiveCorrection: 0
+  perspectiveCorrection: 1
   perspectiveCorrectionFactor: 1
   hrtfVolumeGainDB: 0
   hrtfNormalizationType: 0
   SOFAFiles: []
   defaultMaterial: {fileID: 11400000, guid: a086f686223eed942816c70be67841b0, type: 2}
-  sceneType: 0
+  sceneType: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -29,8 +29,8 @@ MonoBehaviour:
   realTimeBounces: 4
   realTimeDuration: 1
   realTimeAmbisonicOrder: 1
-  realTimeMaxSources: 32
-  realTimeCPUCoresPercentage: 5
+  realTimeMaxSources: 64
+  realTimeCPUCoresPercentage: 20
   realTimeIrradianceMinDistance: 1
   bakeConvolution: 1
   bakeParametric: 0
