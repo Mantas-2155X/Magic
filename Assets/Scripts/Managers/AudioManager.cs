@@ -33,6 +33,7 @@ namespace Managers
 				instance.uiSource = go.AddComponent<AudioSource>();
 				instance.uiSource.outputAudioMixerGroup = instance.UIGroup;
 				instance.uiSource.ignoreListenerPause = true;
+				instance.uiSource.ignoreListenerVolume = true;
 				instance.uiSource.playOnAwake = false;
 
 				return instance;

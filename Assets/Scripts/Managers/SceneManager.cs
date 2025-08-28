@@ -150,6 +150,9 @@ namespace Managers
 			var previousTransformFunction = Addressables.InternalIdTransformFunc;
 			setupTransformFunction(scene);
 			
+			AudioListener.volume = 0f;
+			AudioListener.pause = true;
+
 			var handle = Addressables.LoadSceneAsync(scene.Addressable.RuntimeKey, LoadSceneMode.Single, false);
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded);
 
@@ -158,6 +161,9 @@ namespace Managers
 			await handle.Result.ActivateAsync();
 			await UniTask.WaitUntil(() => handle.IsDone);
 			
+			AudioListener.volume = 1f;
+			AudioListener.pause = false;
+
 			if (waitForGI)
 				await UniTask.WaitForSeconds(0.2f, true);
 
