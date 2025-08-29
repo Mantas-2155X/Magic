@@ -5,7 +5,9 @@ using Managers;
 using Objects.Interfaces;
 using ScriptableObjects;
 using State.Interfaces;
+using SteamAudio;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Combat.Attacks
 {
@@ -17,11 +19,16 @@ namespace Combat.Attacks
 		[SerializeField]
 		public int DecalsPerSystem = 2;
 
+		[SerializeField]
+		public int SoundsPerSystem = 1;
+
 		private readonly List<IAlive> alives = new ();
 		private readonly List<IObject> objects = new ();
 		
 		private readonly List<ParticleCollisionEvent> collisions = new ();
+		
 		private readonly Dictionary<ParticleSystem, int> systemDecals = new ();
+		private readonly Dictionary<ParticleSystem, int> systemSounds = new ();
 
 		public override void Spawn(IIdentifiable source, Vector3 position, Quaternion angles, IIdentifiable attach, float elapsedTime = 0f)
 		{
@@ -31,7 +38,12 @@ namespace Combat.Attacks
 			objects.Clear();
 
 			for (var i = 0; i < Systems.Count; i++)
-				systemDecals[Systems[i]] = 0;
+			{
+				var system = Systems[i];
+				
+				systemDecals[system] = 0;
+				systemSounds[system] = 0;
+			}
 
 			if (elapsedTime > 0f)
 				Systems[0].Simulate(elapsedTime);
@@ -70,19 +82,40 @@ namespace Combat.Attacks
 			foreach (var system in Systems)
 			{
 				var decals = systemDecals[system];
-				if (decals >= DecalsPerSystem)
-					continue;
-				
-				var eventsCount = system.GetCollisionEvents(other, collisions);
-				if (eventsCount == 0)
-					continue;
+				if (decals < DecalsPerSystem)
+				{
+					var eventsCount = system.GetCollisionEvents(other, collisions);
+					if (eventsCount == 0)
+						continue;
 
-				var clamped = Mathf.Clamp(eventsCount, 0, DecalsPerSystem - decals);
-					
-				for (var i = 0; i < clamped; i++)
-					ObjectManager.Instance.CreateDecal(ObjectManager.Instance.GetData<DecalData>("DECALS_SMALLDECAL_NAME"), collisions[i], attach);
+					var clamped = Mathf.Clamp(eventsCount, 0, DecalsPerSystem - decals);
 
-				systemDecals[system] = decals + clamped;
+					for (var i = 0; i < clamped; i++)
+						ObjectManager.Instance.CreateDecal(ObjectManager.Instance.GetData<DecalData>("DECALS_SMALLDECAL_NAME"), collisions[i], attach);
+
+					systemDecals[system] = decals + clamped;
+				}
+
+				var sounds = systemSounds[system];
+				if (sounds < SoundsPerSystem)
+				{
+					var eventsCount = system.GetCollisionEvents(other, collisions);
+					if (eventsCount == 0)
+						continue;
+
+					var clamped = Mathf.Clamp(eventsCount, 0, SoundsPerSystem - sounds);
+
+					for (var i = 0; i < clamped; i++)
+					{
+						var collision = collisions[i];
+						
+						var geometry = collision.colliderComponent.GetComponentInChildren<SteamAudioGeometry>();
+						if (geometry != null)
+							AudioManager.Instance.PlayImpact(geometry.material, collision.intersection + (collision.normal * 0.1f));
+					}
+
+					systemSounds[system] = sounds + clamped;
+				}
 			}
 		}
 	}
