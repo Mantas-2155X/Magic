@@ -149,6 +149,9 @@ namespace Managers
 			
 			var previousTransformFunction = Addressables.InternalIdTransformFunc;
 			setupTransformFunction(scene);
+
+			var previousLoadPriority = Application.backgroundLoadingPriority;
+			Application.backgroundLoadingPriority = ThreadPriority.High;
 			
 			AudioListener.volume = 0f;
 			AudioListener.pause = true;
@@ -160,6 +163,8 @@ namespace Managers
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded);
 
 			Time.timeScale = previousTimeScale;
+
+			Application.backgroundLoadingPriority = previousLoadPriority;
 
 			Addressables.InternalIdTransformFunc = previousTransformFunction;
 			
