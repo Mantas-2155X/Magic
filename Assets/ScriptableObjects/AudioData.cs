@@ -24,6 +24,9 @@ namespace ScriptableObjects
 		[SerializeField][Range(0f, 1f)]
 		public float Spatialize = 1f;
 
+		[SerializeField][Range(0f, 2f)]
+		public float Doppler = 0.2f;
+		
 		[SerializeField][Range(0f, 1f)]
 		public float DirectMix = 0.75f;
 
