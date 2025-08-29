@@ -19,6 +19,9 @@ namespace AI.PathFinding
 		
 		public static Path Create(NativeArray<SNode> nodes, NativeHashSet<int> searchedNodes, NativeList<int> resultingPath, float radius, int identifier, Vector3 startPosition, Vector3 endPosition)
 		{
+			if (!searchedNodes.IsCreated || !resultingPath.IsCreated) 
+				return null;
+			
 			var path = new Path
 			{
 				Points = new List<Vector3>(),

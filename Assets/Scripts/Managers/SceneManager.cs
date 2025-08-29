@@ -153,8 +153,13 @@ namespace Managers
 			AudioListener.volume = 0f;
 			AudioListener.pause = true;
 
+			var previousTimeScale = Time.timeScale;
+			Time.timeScale = 0f;
+
 			var handle = Addressables.LoadSceneAsync(scene.Addressable.RuntimeKey, LoadSceneMode.Single, false);
 			await UniTask.WaitUntil(() => handle.Status == AsyncOperationStatus.Succeeded);
+
+			Time.timeScale = previousTimeScale;
 
 			Addressables.InternalIdTransformFunc = previousTransformFunction;
 			

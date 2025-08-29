@@ -19,6 +19,7 @@ namespace Components
 		public Vector3 SharedExtents;
 
 		private readonly Collider[] transferColliders = new Collider[256];
+		private bool triggered;
 		
 #if UNITY_EDITOR
 		public void OnDrawGizmos()
@@ -29,6 +30,15 @@ namespace Components
 		
 		public void Trigger()
 		{
+			triggered = true;
+		}
+		
+		public void LateUpdate()
+		{
+			if (!triggered)
+				return;
+
+			triggered = false;
 			doTransition().Forget();
 		}
 
