@@ -831,7 +831,7 @@ namespace AI
 			SendCommunication(ECommunication.Spawned, null);
 
 			if (Data.IdleAudio != null)
-				AudioManager.Instance.PlayAttached(Data.IdleAudio, GetTransform());
+				AudioManager.Instance.PlayAttached(Data.IdleAudio, GetTransform(), data.IdleAudioOffset);
 		}
 
 		public override void Kill(object source, bool killSilently = false)

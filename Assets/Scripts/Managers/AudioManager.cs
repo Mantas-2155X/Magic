@@ -44,7 +44,7 @@ namespace Managers
 		public AudioMixerGroup SFXGroup { get; private set; }
 		public AudioMixerGroup UIGroup { get; private set; }
 		
-		private readonly Dictionary<Transform, Transform> attachedSources = new ();
+		private readonly Dictionary<Transform, Tuple<Transform, Vector3>> attachedSources = new ();
 		private readonly Dictionary<EUIAudio, Tuple<AudioClip, float>> uiClips = new ();
 		private readonly Dictionary<SteamAudioMaterial, AudioData> materialDatas = new ();
 		
@@ -64,15 +64,16 @@ namespace Managers
 		{
 			clearSources.Clear();
 			
-			foreach (var (source, target) in attachedSources)
+			foreach (var (source, tuple) in attachedSources)
 			{
-				if (target == null)
+				if (tuple == null || tuple.Item1 == null)
 				{
 					clearSources.Add(source);
 					continue;
 				}
 				
-				source.position = target.position;
+				var tr = tuple.Item1;
+				source.position = tr.position + (tr.right * tuple.Item2.x + tr.up * tuple.Item2.y + tr.forward * tuple.Item2.z);
 			}
 
 			for (var i = clearSources.Count - 1; i >= 0; i--)
@@ -83,10 +84,10 @@ namespace Managers
 		
 		#region API
 		
-		public Transform PlayAttached(AudioData audioData, Transform target)
+		public Transform PlayAttached(AudioData audioData, Transform target, Vector3 offset)
 		{
-			var source = PlayAtPoint(audioData, target.position);
-			attachedSources[source] = target;
+			var source = PlayAtPoint(audioData, target.position + (target.right * offset.x + target.up * offset.y + target.forward * offset.z));
+			attachedSources[source] = new Tuple<Transform, Vector3>(target, offset);
 			return source;
 		}
 		

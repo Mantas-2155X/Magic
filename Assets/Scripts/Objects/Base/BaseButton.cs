@@ -56,7 +56,10 @@ namespace Objects.Base
 				return false;
 
 			if (ObjectData.UseAudio != null)
-				AudioManager.Instance.PlayAtPoint(ObjectData.UseAudio, GetTransform().position);
+			{
+				var tr = GetTransform();
+				AudioManager.Instance.PlayAtPoint(ObjectData.UseAudio, GetTransform().position + (tr.right * ObjectData.UseAudioOffset.x + tr.up * ObjectData.UseAudioOffset.y + tr.forward * ObjectData.UseAudioOffset.z));
+			}
 
 			cancellationToken?.Cancel();
 			cancellationToken = new CancellationTokenSource();

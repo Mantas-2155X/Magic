@@ -24,9 +24,6 @@ namespace UI
 		public static Player WeakInstance => instance;
 		
 		[SerializeField]
-		public Stats Stats;
-		
-		[SerializeField]
 		public Death Death;
 		
 		[SerializeField]

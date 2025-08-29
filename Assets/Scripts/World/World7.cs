@@ -156,7 +156,6 @@ namespace World
 		{
 			var player = Player.Instance;
 			player.HUD.gameObject.SetActive(false);
-			player.Stats.gameObject.SetActive(false);
 			player.Notice.gameObject.SetActive(false);
 			
 			var playerRigidbody = AIManager.Instance.Player.Body.Rigidbody;

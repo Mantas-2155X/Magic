@@ -49,6 +49,9 @@ namespace ScriptableObjects
 		[SerializeField]
 		public AudioData UseAudio;
 
+		[SerializeField]
+		public Vector3 UseAudioOffset;
+		
 		[Header("Other")]
 		public bool AttachDecals = true;
 	}

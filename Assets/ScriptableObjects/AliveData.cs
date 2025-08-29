@@ -102,5 +102,8 @@ namespace ScriptableObjects
 		
 		[SerializeField]
 		public AudioData IdleAudio;
+
+		[SerializeField]
+		public Vector3 IdleAudioOffset;
 	}
 }
