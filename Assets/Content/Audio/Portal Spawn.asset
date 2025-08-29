@@ -35,11 +35,12 @@ MonoBehaviour:
   Loop: 0
   Spatialize: 1
   DirectMix: 0.75
+  PerspectiveCorrection: 1
   DistanceAttenuation: 1
-  AirAbsorption: 1
+  AirAbsorption: 0
   Occlusion: 1
   OcclusionType: 1
   Transmission: 1
-  TransmissionSurfaces: 4
+  TransmissionSurfaces: 2
   Reflections: 0
   ReflectionsMix: 0.5

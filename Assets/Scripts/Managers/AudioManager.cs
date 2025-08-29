@@ -121,7 +121,6 @@ namespace Managers
 			steamAudioSource.reflectionsMixLevel = audioData.ReflectionsMix;
 			steamAudioSource.occlusion = audioData.Occlusion;
 			steamAudioSource.occlusionType = audioData.OcclusionType;
-			steamAudioSource.interpolation = HRTFInterpolation.Bilinear;
 			steamAudioSource.perspectiveCorrection = audioData.PerspectiveCorrection;
 			
 			audioSource.Play();

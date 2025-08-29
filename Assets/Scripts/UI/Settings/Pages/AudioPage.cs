@@ -24,6 +24,11 @@ namespace UI.Settings.Pages
 		[SerializeField]
 		public InputSlider UIVolumeInputSlider;
 
+		[SerializeField]
+		public Localizer PerspectiveCorrectionLocalizer;
+		[SerializeField]
+		public InputSlider PerspectiveCorrectionInputSlider;
+
 		public override void Select(bool state)
 		{
 			base.Select(state);
@@ -45,6 +50,13 @@ namespace UI.Settings.Pages
 			UIVolumeLocalizer.Apply();
 			
 			UIVolumeInputSlider.SetValueWithoutNotify(Convert.ToSingle(uiVolume.Value));
+			
+			var perspectiveCorrection = SettingsManager.Instance.GetSetting("audio-perspectivecorrection");
+			PerspectiveCorrectionLocalizer.Key = perspectiveCorrection.Name;
+			PerspectiveCorrectionLocalizer.Apply();
+			
+			PerspectiveCorrectionInputSlider.SetValueWithoutNotify(Convert.ToSingle(perspectiveCorrection.Value));
+
 		}
 
 		public override void ResetTab()
@@ -74,6 +86,11 @@ namespace UI.Settings.Pages
 		public void OnUIVolumeChanged(float value)
 		{
 			SettingsManager.Instance.SetSetting("audio-uivolume", value);
+		}
+		
+		public void OnPerspectiveCorrectionChanged(float value)
+		{
+			SettingsManager.Instance.SetSetting("audio-perspectivecorrection", value);
 		}
 	}
 }

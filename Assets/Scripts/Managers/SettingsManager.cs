@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using Combat.Enums;
 using Cysharp.Threading.Tasks;
+using SteamAudio;
 using Tools;
 using UI;
 using UnityEngine;
@@ -941,6 +942,18 @@ namespace Managers
 				
 				var mixer = AudioManager.Instance.UIGroup.audioMixer;
 				mixer.SetFloat("UIVolume", Mathf.Log10(Mathf.Clamp(setting, 0.0001f, 1f)) * 20f);
+			});
+			
+			AddSetting("audio-perspectivecorrection", "SETTINGS_AUDIO_PERSPECTIVECORRECTION", "SETTINGS_AUDIO_PERSPECTIVECORRECTION_DESC", ESettingType.Float, 1f, (previousValue, newValue) =>
+			{
+				var setting = Convert.ToSingle(newValue);
+				if (setting is < 0.25f or > 4f)
+				{
+					Debug.LogWarning("[SettingsManager] Invalid perspective correction provided, skipping");
+					return;
+				}
+
+				SteamAudioSettings.Singleton.perspectiveCorrectionFactor = setting;
 			});
 
 			#endregion
