@@ -37,6 +37,8 @@ namespace UI.Hotbar
 		[NonSerialized]
 		public readonly List<SpellContainer> Containers = new ();
 
+		private bool updateHotbar;
+
 		public void Awake()
 		{
 			BaseAlive.OnSpellSelectedEvent.AddListener(onSpellSelected);
@@ -47,6 +49,15 @@ namespace UI.Hotbar
 			BaseAlive.OnSpellSelectedEvent.RemoveListener(onSpellSelected);
 		}
 
+		public void Update()
+		{
+			if (!updateHotbar)
+				return;
+			
+			updateHotbar = false;
+			UpdateHotbar();
+		}
+		
 		public void UpdateHotbar()
 		{
 			var player = AIManager.Instance.Player;
@@ -84,6 +95,11 @@ namespace UI.Hotbar
 				
 				Containers[i].AssignSpell(spell, i);
 			}
+		}
+		
+		public void UpdateHotbarBatched()
+		{
+			updateHotbar = true;
 		}
 		
 		public void OnSpawn()

@@ -42,6 +42,7 @@ namespace UI.Spellbook
 		public readonly List<SpellContainer> Containers = new ();
 
 		private SpellContainer grabbedContainer;
+		private bool updateSpellbook;
 
 		/// <summary>
 		/// Used to move the containers via kb/ctrl
@@ -81,6 +82,15 @@ namespace UI.Spellbook
 			GrabContainer(null);
 		}
 
+		public void Update()
+		{
+			if (!updateSpellbook)
+				return;
+			
+			updateSpellbook = false;
+			UpdateSpellbook();
+		}
+		
 		public void Toggle()
 		{
 			Display(!isActiveAndEnabled);
@@ -160,6 +170,11 @@ namespace UI.Spellbook
 				updateNavigation();
 		}
 
+		public void UpdateSpellbookBatched()
+		{
+			updateSpellbook = true;
+		}
+		
 		public void OnCloseClicked()
 		{
 			Display(false);

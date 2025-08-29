@@ -815,8 +815,8 @@ namespace AI
 			base.LearnSpell(data, autoSelect);
 			
 			var playerUI = UI.Player.Instance;
-			playerUI.HUD.Hotbar.UpdateHotbar();
-			playerUI.HUD.Spellbook.UpdateSpellbook();
+			playerUI.HUD.Hotbar.UpdateHotbarBatched();
+			playerUI.HUD.Spellbook.UpdateSpellbookBatched();
 		}
 
 		public override void ForgetSpell(SpellData data)
@@ -824,8 +824,8 @@ namespace AI
 			base.ForgetSpell(data);
 			
 			var playerUI = UI.Player.Instance;
-			playerUI.HUD.Hotbar.UpdateHotbar();
-			playerUI.HUD.Spellbook.UpdateSpellbook();
+			playerUI.HUD.Hotbar.UpdateHotbarBatched();
+			playerUI.HUD.Spellbook.UpdateSpellbookBatched();
 		}
 
 		public override void ForgetAllSpells()
