@@ -9612,6 +9612,7 @@ GameObject:
   - component: {fileID: 501635265}
   - component: {fileID: 501635264}
   - component: {fileID: 501635270}
+  - component: {fileID: 501635271}
   m_Layer: 11
   m_Name: Door (3)
   m_TagString: Untagged
@@ -9822,6 +9823,19 @@ MonoBehaviour:
   material: {fileID: 11400000, guid: 08bf73ad12cb44944875b02ce7f9d694, type: 2}
   exportAllChildren: 0
   terrainSimplificationLevel: 0
+--- !u!114 &501635271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501635262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
+  asset: {fileID: 11400000, guid: 5146b970bbce862b988d67d69f89545f, type: 2}
 --- !u!1001 &502479987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12215,8 +12229,9 @@ GameObject:
   - component: {fileID: 752961557}
   - component: {fileID: 752961556}
   - component: {fileID: 752961558}
+  - component: {fileID: 752961559}
   m_Layer: 11
-  m_Name: Door (3)
+  m_Name: Door (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12425,6 +12440,19 @@ MonoBehaviour:
   material: {fileID: 11400000, guid: 08bf73ad12cb44944875b02ce7f9d694, type: 2}
   exportAllChildren: 0
   terrainSimplificationLevel: 0
+--- !u!114 &752961559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752961550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb43d10a308b2f46ad4561774f97e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SteamAudioUnity::SteamAudio.SteamAudioDynamicObject
+  asset: {fileID: 11400000, guid: d2d0403fcbcec4f0c8902945696d8045, type: 2}
 --- !u!1001 &758779389
 PrefabInstance:
   m_ObjectHideFlags: 0

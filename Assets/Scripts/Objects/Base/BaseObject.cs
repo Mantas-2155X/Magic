@@ -359,6 +359,9 @@ namespace Objects.Base
 			Debug.Log($"[Object {gameObject.name}] IObject used by {user.GetGameObject().name}");
 #endif
 			
+			if (ObjectData.UseAudio != null)
+				AudioManager.Instance.PlayAtPoint(ObjectData.UseAudio, thisTr.position + (thisTr.right * ObjectData.UseAudioOffset.x + thisTr.up * ObjectData.UseAudioOffset.y + thisTr.forward * ObjectData.UseAudioOffset.z));
+			
 			switch (ObjectData.UseAction)
 			{
 				case EAction.None:

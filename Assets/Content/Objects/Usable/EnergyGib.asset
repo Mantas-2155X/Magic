@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: OBJECT_ENERGYGIB_DESC
   Icon: {fileID: 0}
   Tags: 32
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: 
     m_SubObjectName: 
@@ -29,17 +28,19 @@ MonoBehaviour:
   IsBreakable: 0
   BreakAtCollisionPoint: 0
   MaximumHealth: 0
-  BrokenPrefab: {fileID: 0}
   BrokenPrefabReference:
     m_AssetGUID: 
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
+  BreakAudio: {fileID: 0}
   IsPickupable: 0
   PickupableAfter: 0
   PickupAction: 0
   IsUsable: 1
   UsableAfter: 0.5
   UseAction: 1
+  UseAudio: {fileID: 11400000, guid: 38d27ec824c415bc79c89fa491d75970, type: 2}
+  UseAudioOffset: {x: 0, y: 0, z: 0}
   AttachDecals: 1
