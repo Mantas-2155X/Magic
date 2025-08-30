@@ -37,22 +37,22 @@ namespace ScriptableObjects
 		public bool DistanceAttenuation = true;
 
 		[SerializeField]
-		public bool AirAbsorption = true;
+		public bool AirAbsorption = false;
 		
 		[SerializeField]
 		public bool Occlusion = true;
 		
 		[SerializeField]
-		public OcclusionType OcclusionType = OcclusionType.Volumetric;
+		public OcclusionType OcclusionType = OcclusionType.Raycast;
 
 		[SerializeField][Space(5f)]
 		public bool Transmission = true;
 
 		[SerializeField][Range(1, 8)]
-		public int TransmissionSurfaces = 4;
+		public int TransmissionSurfaces = 2;
 		
 		[SerializeField][Space(5f)]
-		public bool Reflections = true;
+		public bool Reflections = false;
 
 		[SerializeField][Range(0f, 1f)]
 		public float ReflectionsMix = 0.5f;

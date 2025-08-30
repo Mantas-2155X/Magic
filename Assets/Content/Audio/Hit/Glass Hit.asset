@@ -45,7 +45,7 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  Volume: 0.3
+  Volume: 0.6
   Distance: 25
   Loop: 0
   Spatialize: 1
@@ -53,10 +53,10 @@ MonoBehaviour:
   DirectMix: 0.75
   PerspectiveCorrection: 1
   DistanceAttenuation: 1
-  AirAbsorption: 1
+  AirAbsorption: 0
   Occlusion: 1
   OcclusionType: 0
   Transmission: 1
-  TransmissionSurfaces: 2
+  TransmissionSurfaces: 4
   Reflections: 0
   ReflectionsMix: 0.5
