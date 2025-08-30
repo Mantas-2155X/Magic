@@ -37,7 +37,7 @@ namespace ScriptableObjects
 		public bool DistanceAttenuation = true;
 
 		[SerializeField]
-		public bool AirAbsorption = false;
+		public bool AirAbsorption = true;
 		
 		[SerializeField]
 		public bool Occlusion = true;

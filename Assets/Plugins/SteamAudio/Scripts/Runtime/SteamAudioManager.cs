@@ -945,19 +945,28 @@ namespace SteamAudio
             EditorUtility.ClearProgressBar();
         }
 
-        [MenuItem("Steam Audio/Export All Scenes In Build", false, 14)]
+        [MenuItem("Steam Audio/Export All Scenes", false, 14)]
         public static void ExportAllScenesInBuild()
         {
-            for (var i = 0; i < SceneManager.sceneCountInBuildSettings; ++i)
+            var scenes = AssetDatabase.FindAssets("t:Scene");
+            
+            for (var i = 0; i < scenes.Length; ++i)
             {
-                var scene = SceneManager.GetSceneByBuildIndex(i);
+                var path = AssetDatabase.GUIDToAssetPath(scenes[i]);
+                if (!path.StartsWith("Assets"))
+                {
+                    Debug.Log($"Skipping scene at {path}");
+                    continue;
+                }
+                
+                var scene = SceneManager.GetSceneByPath(path);
 
                 EditorUtility.DisplayProgressBar("Steam Audio", string.Format("Exporting scene: {0}", scene.name), (float)i / (float)SceneManager.sceneCountInBuildSettings);
 
                 var shouldClose = false;
                 if (!scene.isLoaded)
                 {
-                    scene = EditorSceneManager.OpenScene(SceneUtility.GetScenePathByBuildIndex(i), OpenSceneMode.Additive);
+                    scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);
                     shouldClose = true;
                 }
 
