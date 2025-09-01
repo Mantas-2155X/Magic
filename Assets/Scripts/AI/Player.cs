@@ -259,7 +259,7 @@ namespace AI
 			var copyVelocity = Vector3.zero;
 			
 			// Standing on a heavy object should take its velocity
-			if (groundMass > rb.mass / 3f)
+			if (groundMass > rb.mass / 3f && groundPointVelocity.magnitude > 0.01f)
 				copyVelocity = groundPointVelocity;
 			
 			if (moveDirection != Vector2.zero && !Paralyzed && SlowAmount < 1f)

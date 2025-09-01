@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Objects;
 using Objects.Base;
 using Objects.Interfaces;
-using State.Interfaces;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,6 +10,12 @@ namespace Editor
 {
 	public class MappingTool : EditorWindow
 	{
+		[SerializeField]
+		public bool ShowCenterOfMass = true;
+
+		[SerializeField]
+		public float CenterOfMassSize = 0.15f;
+		
 		private readonly Dictionary<Type, Dictionary<string, Tuple<Vector3, Vector3, Vector3>>> transforms = new ();
 		
 		[MenuItem("Mapping/Mapping Tool")]
@@ -21,8 +26,21 @@ namespace Editor
 			window.Show();
 		}
 
+		public void OnEnable()
+		{
+			SceneView.duringSceneGui += DrawSceneGUI;
+		}
+		
+		public void OnDisable()
+		{
+			SceneView.duringSceneGui -= DrawSceneGUI;
+		}
+		
 		public void OnGUI()
 		{
+			ShowCenterOfMass = EditorGUILayout.ToggleLeft("Show Center of Mass", ShowCenterOfMass);
+			CenterOfMassSize = EditorGUILayout.Slider("Center of Mass Size", CenterOfMassSize, 0.01f, 1f);
+			
 			foreach (var pair in transforms)
 			{
 				GUILayout.BeginHorizontal();
@@ -100,6 +118,31 @@ namespace Editor
 			}
 			
 			GUILayout.EndHorizontal();
+			
+			SceneView.RepaintAll();
+		}
+
+		public void DrawSceneGUI(SceneView sceneView)
+		{
+			var previousColor = Handles.color;
+			Handles.color = Color.green;
+
+			var selection = Selection.gameObjects;
+			for (var i = 0; i < selection.Length; i++)
+			{
+				var go = selection[i];
+				
+				var rigidBodies = go.GetComponentsInChildren<Rigidbody>(false);
+				for (var k = 0; k < rigidBodies.Length; k++)
+				{
+					var rigidBody = rigidBodies[k];
+					
+					Handles.color = Color.red;
+					Handles.SphereHandleCap(1, rigidBody.transform.TransformPoint(rigidBody.centerOfMass), rigidBody.rotation, CenterOfMassSize, EventType.Repaint);
+				}
+			}
+			
+			Handles.color = previousColor;
 		}
 	}
 }

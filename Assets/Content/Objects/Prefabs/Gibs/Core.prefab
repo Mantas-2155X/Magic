@@ -24378,6 +24378,7 @@ MonoBehaviour:
   Type: 1
   Amount: 30
   Geometry: {fileID: -6106527344853361574}
+  DynamicObject: {fileID: 0}
 --- !u!54 &-2719960796659631280
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24387,7 +24388,7 @@ Rigidbody:
   m_GameObject: {fileID: 1673088261642603795}
   serializedVersion: 5
   m_Mass: 5
-  m_LinearDamping: 0
+  m_LinearDamping: 0.125
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}

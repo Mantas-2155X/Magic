@@ -92,6 +92,10 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 12.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8590110310615143507, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.25
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5957245673794995366, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
     - {fileID: 6966441122641601037, guid: 1aac1bbed4180c7d29226b207156ff7c, type: 3}
