@@ -58,24 +58,36 @@ namespace UI
 					continue;
 
 				var text = LocalizationManager.Instance.GetLocalizedEntry($"NOTICE_{value.ToString().ToUpper()}");
+				var setting = "";
 
 				switch (value)
 				{
 					case ENoticePresetFlags.Flashlight:
-						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-light")).ToDisplayString());
+						setting = SettingsManager.Instance.GetString("keybinds-gameplay-light");
 						break;
 					case ENoticePresetFlags.Resource:
 					case ENoticePresetFlags.Interact:
-						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-interact")).ToDisplayString());
+						setting = SettingsManager.Instance.GetString("keybinds-gameplay-interact");
 						break;
 					case ENoticePresetFlags.Grab:
-						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-grab")).ToDisplayString());
+						setting = SettingsManager.Instance.GetString("keybinds-gameplay-grab");
 						break;
 					case ENoticePresetFlags.Attack:
-						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-attack")).ToDisplayString());
+						setting = SettingsManager.Instance.GetString("keybinds-gameplay-attack");
 						break;
 					case ENoticePresetFlags.Spellbook:
-						text = text.Replace("$0", new InputBinding(SettingsManager.Instance.GetString("keybinds-gameplay-spellbook")).ToDisplayString());
+						setting = SettingsManager.Instance.GetString("keybinds-gameplay-spellbook");
+						break;
+				}
+
+				var split = setting.Split(",");
+				switch (split.Length)
+				{
+					case 1:
+						text = text.Replace("$0", new InputBinding(split[0]).ToDisplayString());
+						break;
+					case 2:
+						text = text.Replace("$0", new InputBinding(Gamepad.all.Count == 0 ? split[0] : split[1]).ToDisplayString());
 						break;
 				}
 					

@@ -4,6 +4,7 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 namespace UI.Settings.Pages
@@ -21,6 +22,8 @@ namespace UI.Settings.Pages
 		private SKeybindsPageItem rebindingItem;
 		private InputActionRebindingExtensions.RebindingOperation rebindingOperation;
 		private bool enableInputAction;
+		private bool isKeyboard;
+		private float lastRebindEnded;
 		
 		public override void Select(bool state)
 		{
@@ -29,7 +32,22 @@ namespace UI.Settings.Pages
 			if (Items.Count == 0)
 				createItems();
 			
-			AutoSelect = Items.Count == 0 ? Tab.gameObject : Items[0].RebindButton.gameObject;
+			if (Items.Count == 0)
+			{
+				AutoSelect = Tab.gameObject;
+			}
+			else
+			{
+				switch (Gamepad.all.Count)
+				{
+					case 0:
+						AutoSelect = Items[0].RebindButton.gameObject;
+						break;
+					case > 0:
+						AutoSelect = Items[0].ControllerRebindButton.gameObject;
+						break;
+				}
+			}
 			
 			setupItems();
 		}
@@ -78,17 +96,35 @@ namespace UI.Settings.Pages
 				item.RebindButton = copy.Find("RebindButton").GetComponent<Button>();
 				item.RebindButton.onClick.AddListener(delegate
 				{
+					if (Time.unscaledTime - lastRebindEnded < 0.15f)
+						return;
+					
 					rebindingItem = item;
+					isKeyboard = true;
+					onRebindClicked();
+				});
+				
+				item.ControllerRebindButton = copy.Find("RebindButton (Controller)").GetComponent<Button>();
+				item.ControllerRebindButton.onClick.AddListener(delegate
+				{
+					if (item.ControllerBindingIndex == -1 || Time.unscaledTime - lastRebindEnded < 0.15f)
+						return;
+					
+					rebindingItem = item;
+					isKeyboard = false;
 					onRebindClicked();
 				});
 
 				item.KeybindText = item.RebindButton.transform.Find("KeybindText").GetComponent<TextMeshProUGUI>();
+				item.ControllerKeybindText = item.ControllerRebindButton.transform.Find("KeybindText").GetComponent<TextMeshProUGUI>();
+				
 				item.Setting = pair.Key;
 
 				var keybind = settingsManager.GetKeybind(pair.Key);
 				
 				item.InputAction = keybind.Item1;
 				item.BindingIndex = keybind.Item2;
+				item.ControllerBindingIndex = keybind.Item3;
 				
 				copy.gameObject.SetActive(true);
 				Items.Add(item);
@@ -112,6 +148,7 @@ namespace UI.Settings.Pages
 				nav.selectOnDown = Tab;
 
 				item.RebindButton.navigation = nav;
+				item.ControllerRebindButton.navigation = nav;
 				return;
 			}
 
@@ -119,26 +156,39 @@ namespace UI.Settings.Pages
 			{
 				var item = Items[i];
 
-				var nav = new Navigation();
-				nav.mode = Navigation.Mode.Explicit;
+				var keyboardNav = new Navigation();
+				keyboardNav.mode = Navigation.Mode.Explicit;
+				
+				var controllerNav = new Navigation();
+				controllerNav.mode = Navigation.Mode.Explicit;
 				
 				if (i == 0)
 				{
-					nav.selectOnUp = Tab;
-					nav.selectOnDown = Items[i + 1].RebindButton;
+					keyboardNav.selectOnUp = Tab;
+					keyboardNav.selectOnDown = Items[i + 1].RebindButton;
+					
+					controllerNav.selectOnUp = Tab;
+					controllerNav.selectOnDown = Items[i + 1].ControllerRebindButton;
 				}
 				else if (i == Items.Count - 1)
 				{
-					nav.selectOnUp = Items[i - 1].RebindButton;
-					nav.selectOnDown = Items[0].RebindButton;
+					keyboardNav.selectOnUp = Items[i - 1].RebindButton;
+					keyboardNav.selectOnDown = Items[0].RebindButton;
+					
+					controllerNav.selectOnUp = Items[i - 1].ControllerRebindButton;
+					controllerNav.selectOnDown = Items[0].ControllerRebindButton;
 				}
 				else
 				{
-					nav.selectOnUp = Items[i - 1].RebindButton;
-					nav.selectOnDown = Items[i + 1].RebindButton;
+					keyboardNav.selectOnUp = Items[i - 1].RebindButton;
+					keyboardNav.selectOnDown = Items[i + 1].RebindButton;
+					
+					controllerNav.selectOnUp = Items[i - 1].ControllerRebindButton;
+					controllerNav.selectOnDown = Items[i + 1].ControllerRebindButton;
 				}
 
-				item.RebindButton.navigation = nav;
+				item.RebindButton.navigation = keyboardNav;
+				item.ControllerRebindButton.navigation = controllerNav;
 			}
 		}
 
@@ -150,8 +200,19 @@ namespace UI.Settings.Pages
 			{
 				var item = Items[i];
 				
-				var binding = new InputBinding(settingsManager.GetString(item.Setting));
-				item.KeybindText.text = binding.ToDisplayString();
+				var path = settingsManager.GetString(item.Setting);
+				
+				var split = path.Split(",");
+				switch (split.Length)
+				{
+					case 1:
+						item.KeybindText.text = new InputBinding(split[0]).ToDisplayString();
+						break;
+					case 2:
+						item.KeybindText.text = new InputBinding(split[0]).ToDisplayString();
+						item.ControllerKeybindText.text = new InputBinding(split[1]).ToDisplayString();
+						break;
+				}
 			}
 			
 			showDuplicates();
@@ -162,8 +223,12 @@ namespace UI.Settings.Pages
 			for (var i = 0; i < Items.Count; i++)
 			{
 				var item = Items[i];
+				
 				item.KeybindText.color = Color.black;
 				item.KeybindText.fontStyle = FontStyles.Normal;
+
+				item.ControllerKeybindText.color = Color.black;
+				item.ControllerKeybindText.fontStyle = FontStyles.Normal;
 
 				for (var k = 0; k < Items.Count; k++)
 				{
@@ -171,11 +236,18 @@ namespace UI.Settings.Pages
 						continue;
 					
 					var innerItem = Items[k];
-					if (innerItem.KeybindText.text != item.KeybindText.text)
-						continue;
-
-					item.KeybindText.color = Color.red;
-					innerItem.KeybindText.color = Color.red;
+					
+					if (innerItem.KeybindText.text == item.KeybindText.text)
+					{
+						item.KeybindText.color = Color.red;
+						innerItem.KeybindText.color = Color.red;
+					}
+					
+					if (innerItem.ControllerKeybindText.text == item.ControllerKeybindText.text && item.ControllerBindingIndex != -1)
+					{
+						item.ControllerKeybindText.color = Color.red;
+						innerItem.ControllerKeybindText.color = Color.red;
+					}
 				}
 			}
 		}
@@ -193,15 +265,32 @@ namespace UI.Settings.Pages
 			enableInputAction = rebindingItem.InputAction.enabled;
 			rebindingItem.InputAction.Disable();
 			
-			rebindingItem.KeybindText.fontStyle = FontStyles.Italic;
-			
-			rebindingOperation = rebindingItem.InputAction.PerformInteractiveRebinding(rebindingItem.BindingIndex)
-				.WithControlsExcluding("Gamepad")
-				.WithControlsExcluding("Joystick")
-				.WithControlsExcluding("Pointer")
-				.WithControlsExcluding("<keyboard>/anyKey")
-				.WithControlsExcluding("<keyboard>/enter")
-				.WithCancelingThrough("<Keyboard>/escape");
+			if (isKeyboard)
+			{
+				rebindingItem.KeybindText.fontStyle = FontStyles.Italic;
+
+				rebindingOperation = rebindingItem.InputAction.PerformInteractiveRebinding(rebindingItem.BindingIndex)
+					.WithExpectedControlType<ButtonControl>()
+					.WithControlsExcluding("Gamepad")
+					.WithControlsExcluding("Joystick")
+					.WithControlsExcluding("Pointer")
+					.WithControlsExcluding("<keyboard>/anyKey")
+					.WithControlsExcluding("<keyboard>/enter")
+					.WithControlsExcluding("<Keyboard>/escape")
+					.WithCancelingThrough("<Keyboard>/escape");
+			}
+			else
+			{
+				rebindingItem.ControllerKeybindText.fontStyle = FontStyles.Italic;
+
+				rebindingOperation = rebindingItem.InputAction.PerformInteractiveRebinding(rebindingItem.ControllerBindingIndex)
+					.WithExpectedControlType<ButtonControl>()
+					.WithControlsExcluding("Keyboard")
+					.WithControlsExcluding("Joystick")
+					.WithControlsExcluding("Pointer")
+					.WithControlsExcluding("<Gamepad>/start")
+					.WithCancelingThrough("<Gamepad>/start");
+			}
 			
 			rebindingOperation.OnComplete(onRebindComplete);
 			rebindingOperation.OnCancel(onRebindCanceled);
@@ -225,9 +314,15 @@ namespace UI.Settings.Pages
 			
 			Title.Instance.Blocker.SetActive(false);
 
-			SettingsManager.Instance.SetSetting(rebindingItem.Setting, rebindingItem.InputAction.bindings[rebindingItem.BindingIndex].effectivePath);
-			SelectionManager.Instance.SetSelection(rebindingItem.RebindButton.gameObject);
+			var bindings = rebindingItem.InputAction.bindings;
 			
+			var keyboardPath = bindings[rebindingItem.BindingIndex].effectivePath;
+			var actualKeybind = rebindingItem.ControllerBindingIndex == -1 ? keyboardPath : $"{keyboardPath},{bindings[rebindingItem.ControllerBindingIndex].effectivePath}";
+			
+			SettingsManager.Instance.SetSetting(rebindingItem.Setting, actualKeybind);
+			SelectionManager.Instance.SetSelection(isKeyboard ? rebindingItem.RebindButton.gameObject : rebindingItem.ControllerRebindButton.gameObject);
+
+			lastRebindEnded = Time.unscaledTime;
 			setupItems();
 		}
 		
@@ -245,8 +340,9 @@ namespace UI.Settings.Pages
 			
 			Title.Instance.Blocker.SetActive(false);
 			
-			SelectionManager.Instance.SetSelection(rebindingItem.RebindButton.gameObject);
+			SelectionManager.Instance.SetSelection(isKeyboard ? rebindingItem.RebindButton.gameObject : rebindingItem.ControllerRebindButton.gameObject);
 			
+			lastRebindEnded = Time.unscaledTime;
 			setupItems();
 		}
 
@@ -260,7 +356,13 @@ namespace UI.Settings.Pages
 			public Button RebindButton;
 
 			[SerializeField]
+			public Button ControllerRebindButton;
+
+			[SerializeField]
 			public TMP_Text KeybindText;
+
+			[SerializeField]
+			public TMP_Text ControllerKeybindText;
 
 			[SerializeField]
 			public string Setting;
@@ -270,6 +372,9 @@ namespace UI.Settings.Pages
 
 			[SerializeField]
 			public int BindingIndex;
+
+			[SerializeField]
+			public int ControllerBindingIndex;
 		}
 	}
 }
