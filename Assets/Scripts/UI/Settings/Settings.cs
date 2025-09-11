@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Managers;
 using UI.Enums;
+using UI.Settings.Pages;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,9 @@ namespace UI.Settings
 
 		[SerializeField]
 		public Button ResetEverythingButton;
+
+		[SerializeField]
+		public Button ConsoleButton;
 
 		public SettingsPage CurrentPage { get; private set; }
 
@@ -63,7 +67,7 @@ namespace UI.Settings
 				page.Tab.navigation = nav;
 			}
 
-			var buttons = new [] { CloseButton, ResetTabButton, ResetEverythingButton };
+			var buttons = new [] { CloseButton, ResetTabButton, ResetEverythingButton, ConsoleButton };
 			
 			for (var i = 0; i < buttons.Length; i++)
 			{
@@ -134,6 +138,11 @@ namespace UI.Settings
 
 				CurrentPage.Select(true);
 			});
+		}
+
+		public void OnConsoleClicked()
+		{
+			Title.Instance.ToggleConsole();
 		}
 		
 		public void Toggle()

@@ -173,6 +173,11 @@ namespace UI
 			SceneSelect.Display(false);
 			SaveLoad.Display(false);
 		}
+
+		public void ToggleConsole()
+		{
+			onConsole(new InputAction.CallbackContext());
+		}
 		
 		#endregion
 
