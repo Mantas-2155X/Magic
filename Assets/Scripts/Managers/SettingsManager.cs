@@ -68,20 +68,12 @@ namespace Managers
 					return;
 
 				var split = ((string)newValue).Split(",");
-				if (split.Length == 1)
-				{
-					keybind.Item1.ApplyBindingOverride(keybind.Item2, split[0]);
-				}
-				else if (split.Length == 2)
-				{
-					keybind.Item1.ApplyBindingOverride(keybind.Item2, split[0]);
-					keybind.Item1.ApplyBindingOverride(keybind.Item3, split[1]);
-				}
+				
+				keybind.Item1.ApplyBindingOverride(keybind.Item2, split[0]);
+				keybind.Item1.ApplyBindingOverride(keybind.Item3, split[1]);
 			});
 			
-			var actualKeybind = string.IsNullOrEmpty(controllerValue) ? value : value + $",{controllerValue}";
-
-			if (!AddSetting(key, name, description, ESettingType.String, actualKeybind, changed))
+			if (!AddSetting(key, name, description, ESettingType.String, $"{value},{controllerValue}", changed))
 				return false;
 
 			if (keybinds.ContainsKey(key))
@@ -854,16 +846,16 @@ namespace Managers
 			AddKeybind("keybinds-gameplay-grab", "SETTINGS_KEYBINDS_GAMEPLAY_GRAB", "SETTINGS_KEYBINDS_GAMEPLAY_GRAB_DESC", playerMap.FindAction("Grab"), 0, 1, "<Mouse>/rightButton", "<Gamepad>/rightStickPress");
 			AddKeybind("keybinds-gameplay-light", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT", "SETTINGS_KEYBINDS_GAMEPLAY_LIGHT_DESC", playerMap.FindAction("Light"), 0, 1, "<Keyboard>/f", "<Gamepad>/leftShoulder");
 			AddKeybind("keybinds-gameplay-spellbook", "SETTINGS_KEYBINDS_GAMEPLAY_SPELLBOOK", "SETTINGS_KEYBINDS_GAMEPLAY_SPELLBOOK_DESC", playerMap.FindAction("Spellbook"), 0, 1, "<Keyboard>/i", "<Gamepad>/rightShoulder");
-			AddKeybind("keybinds-gameplay-hotbar1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1_DESC", playerMap.FindAction("Hotbar1"), 0, -1, "<Keyboard>/1", "");
-			AddKeybind("keybinds-gameplay-hotbar2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2_DESC", playerMap.FindAction("Hotbar2"), 0, -1, "<Keyboard>/2", "");
-			AddKeybind("keybinds-gameplay-hotbar3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3_DESC", playerMap.FindAction("Hotbar3"), 0, -1, "<Keyboard>/3", "");
-			AddKeybind("keybinds-gameplay-hotbar4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4_DESC", playerMap.FindAction("Hotbar4"), 0, -1, "<Keyboard>/4", "");
-			AddKeybind("keybinds-gameplay-hotbar5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5_DESC", playerMap.FindAction("Hotbar5"), 0, -1, "<Keyboard>/5", "");
-			AddKeybind("keybinds-gameplay-hotbar6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6_DESC", playerMap.FindAction("Hotbar6"), 0, -1, "<Keyboard>/6", "");
-			AddKeybind("keybinds-gameplay-hotbar7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7_DESC", playerMap.FindAction("Hotbar7"), 0, -1, "<Keyboard>/7", "");
+			AddKeybind("keybinds-gameplay-hotbar1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR1_DESC", playerMap.FindAction("Hotbar1"), 0, 1, "<Keyboard>/1", "");
+			AddKeybind("keybinds-gameplay-hotbar2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR2_DESC", playerMap.FindAction("Hotbar2"), 0, 1, "<Keyboard>/2", "");
+			AddKeybind("keybinds-gameplay-hotbar3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR3_DESC", playerMap.FindAction("Hotbar3"), 0, 1, "<Keyboard>/3", "");
+			AddKeybind("keybinds-gameplay-hotbar4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR4_DESC", playerMap.FindAction("Hotbar4"), 0, 1, "<Keyboard>/4", "");
+			AddKeybind("keybinds-gameplay-hotbar5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR5_DESC", playerMap.FindAction("Hotbar5"), 0, 1, "<Keyboard>/5", "");
+			AddKeybind("keybinds-gameplay-hotbar6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR6_DESC", playerMap.FindAction("Hotbar6"), 0, 1, "<Keyboard>/6", "");
+			AddKeybind("keybinds-gameplay-hotbar7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7", "SETTINGS_KEYBINDS_GAMEPLAY_HOTBAR7_DESC", playerMap.FindAction("Hotbar7"), 0, 1, "<Keyboard>/7", "");
 			
-			AddKeybind("keybinds-debug-noclip", "SETTINGS_KEYBINDS_DEBUG_NOCLIP", "SETTINGS_KEYBINDS_DEBUG_NOCLIP_DESC", playerMap.FindAction("Noclip"), 0, -1, "<Keyboard>/v", "");
-			AddKeybind("keybinds-debug-console", "SETTINGS_KEYBINDS_DEBUG_CONSOLE", "SETTINGS_KEYBINDS_DEBUG_CONSOLE_DESC", titleMap.FindAction("Console"), 0, 1, "<Keyboard>/backquote", "<Gamepad>/select");
+			AddKeybind("keybinds-debug-noclip", "SETTINGS_KEYBINDS_DEBUG_NOCLIP", "SETTINGS_KEYBINDS_DEBUG_NOCLIP_DESC", playerMap.FindAction("Noclip"), 0, 1, "<Keyboard>/v", "");
+			AddKeybind("keybinds-debug-console", "SETTINGS_KEYBINDS_DEBUG_CONSOLE", "SETTINGS_KEYBINDS_DEBUG_CONSOLE_DESC", titleMap.FindAction("Console"), 0, 1, "<Keyboard>/backquote", "");
 			
 			#endregion
 

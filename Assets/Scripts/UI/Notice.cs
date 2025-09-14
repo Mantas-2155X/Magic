@@ -81,15 +81,7 @@ namespace UI
 				}
 
 				var split = setting.Split(",");
-				switch (split.Length)
-				{
-					case 1:
-						text = text.Replace("$0", new InputBinding(split[0]).ToDisplayString());
-						break;
-					case 2:
-						text = text.Replace("$0", new InputBinding(Gamepad.all.Count == 0 ? split[0] : split[1]).ToDisplayString());
-						break;
-				}
+				text = text.Replace("$0", new InputBinding(Gamepad.all.Count == 0 ? split[0] : split[1]).ToDisplayString());
 					
 				builder.AppendLine(text);
 			}

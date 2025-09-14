@@ -66,6 +66,29 @@ namespace UI.Settings.Pages
 			base.ResetTab();
 		}
 
+		public void Update()
+		{
+			if (IsRebinding)
+				return;
+
+			var gamepad = Gamepad.current;
+			if (gamepad == null || !gamepad.selectButton.wasPressedThisFrame)
+				return;
+			
+			var selection = SelectionManager.Instance.Selection;
+			if (selection == null)
+				return;
+			
+			for (var i = 0; i < Items.Count; i++)
+			{
+				var item = Items[i];
+				if (item.ControllerRebindButton.gameObject != selection)
+					continue;
+
+				onUnbindController(item);
+			}
+		}
+
 		public void OnDisable()
 		{
 			if (!IsRebinding || rebindingOperation == null)
@@ -199,20 +222,11 @@ namespace UI.Settings.Pages
 			for (var i = 0; i < Items.Count; i++)
 			{
 				var item = Items[i];
-				
 				var path = settingsManager.GetString(item.Setting);
 				
 				var split = path.Split(",");
-				switch (split.Length)
-				{
-					case 1:
-						item.KeybindText.text = new InputBinding(split[0]).ToDisplayString();
-						break;
-					case 2:
-						item.KeybindText.text = new InputBinding(split[0]).ToDisplayString();
-						item.ControllerKeybindText.text = new InputBinding(split[1]).ToDisplayString();
-						break;
-				}
+				item.KeybindText.text = new InputBinding(split[0]).ToDisplayString();
+				item.ControllerKeybindText.text = new InputBinding(split[1]).ToDisplayString();
 			}
 			
 			showDuplicates();
@@ -270,12 +284,12 @@ namespace UI.Settings.Pages
 				rebindingItem.KeybindText.fontStyle = FontStyles.Italic;
 
 				rebindingOperation = rebindingItem.InputAction.PerformInteractiveRebinding(rebindingItem.BindingIndex)
+					.OnPotentialMatch(onUnbindKeyboard)
 					.WithExpectedControlType<ButtonControl>()
 					.WithControlsExcluding("Gamepad")
 					.WithControlsExcluding("Joystick")
 					.WithControlsExcluding("Pointer")
 					.WithControlsExcluding("<keyboard>/anyKey")
-					.WithControlsExcluding("<keyboard>/enter")
 					.WithControlsExcluding("<Keyboard>/escape")
 					.WithCancelingThrough("<Keyboard>/escape");
 			}
@@ -300,6 +314,27 @@ namespace UI.Settings.Pages
 			rebindingOperation.Start();
 		}
 
+		private void onUnbindKeyboard(InputActionRebindingExtensions.RebindingOperation operation)
+		{
+			if (operation.selectedControl.path != "/Keyboard/delete")
+				return;
+
+			var setting = SettingsManager.Instance.GetString(rebindingItem.Setting);
+			var split = setting.Split(",");
+				
+			SettingsManager.Instance.SetSetting(rebindingItem.Setting, $",{split[1]}");
+			operation.Cancel();
+		}
+
+		private void onUnbindController(SKeybindsPageItem item)
+		{
+			var setting = SettingsManager.Instance.GetString(item.Setting);
+			var split = setting.Split(",");
+			
+			SettingsManager.Instance.SetSetting(item.Setting, $"{split[0]},");
+			setupItems();
+		}
+		
 		private void onRebindComplete(InputActionRebindingExtensions.RebindingOperation operation)
 		{
 			if (!IsRebinding)
