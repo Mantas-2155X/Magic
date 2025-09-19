@@ -64,7 +64,7 @@ namespace Managers
 		{
 			var changed = new UnityAction<object, object>((_, newValue) =>
 			{
-				if (!keybinds.TryGetValue(name, out var keybind))
+				if (!keybinds.TryGetValue(key, out var keybind))
 					return;
 
 				var split = ((string)newValue).Split(",");
