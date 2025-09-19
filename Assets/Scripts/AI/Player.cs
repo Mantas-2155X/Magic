@@ -558,6 +558,11 @@ namespace AI
 			
 			if (CurrentEnergy < energyCost || !IsGrounded())
 				return;
+
+			var velocity = Body.Rigidbody.linearVelocity;
+			velocity.y = 0f;
+
+			Body.Rigidbody.linearVelocity = velocity;
 			
 			TakeEnergy(energyCost, this);
 			Body.Rigidbody.AddForce(0f, ((PlayerData)Data).JumpForce, 0f, ForceMode.Impulse);
