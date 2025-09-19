@@ -326,25 +326,10 @@ namespace AI
 
 		public string GetHotbarKey(int index)
 		{
-			switch (index)
-			{
-				case 0:
-					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar1").Item1.GetBindingDisplayString();
-				case 1:
-					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar2").Item1.GetBindingDisplayString();
-				case 2:
-					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar3").Item1.GetBindingDisplayString();
-				case 3:
-					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar4").Item1.GetBindingDisplayString();
-				case 4:
-					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar5").Item1.GetBindingDisplayString();
-				case 5:
-					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar6").Item1.GetBindingDisplayString();
-				case 6:
-					return SettingsManager.Instance.GetKeybind("keybinds-gameplay-hotbar7").Item1.GetBindingDisplayString();
-			}
+			var action = SettingsManager.Instance.GetString($"keybinds-gameplay-hotbar{index + 1}");
+			var split = action.Split(",");
 
-			return "";
+			return Gamepad.all.Count == 0 ? new InputBinding(split[0]).ToDisplayString() : new InputBinding(split[1]).ToDisplayString();
 		}
 		
 		public void EnableInput()
