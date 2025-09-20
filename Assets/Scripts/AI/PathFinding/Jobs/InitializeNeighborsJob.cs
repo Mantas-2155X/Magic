@@ -17,6 +17,9 @@ namespace AI.PathFinding.Jobs
 		public NativeArray<SIndexWithCost> Neighbors;
 
 		[ReadOnly]
+		public float Accuracy;
+		
+		[ReadOnly]
 		public int XSize;
 		
 		[ReadOnly]
@@ -64,7 +67,7 @@ namespace AI.PathFinding.Jobs
 
 						SIndexWithCost neighbor;
 						neighbor.Index = neighborIndex;
-						neighbor.Cost = cost;
+						neighbor.Cost = cost * Accuracy;
 						neighbor.Connects = true;
 						
 						Neighbors[addIndex] = neighbor;

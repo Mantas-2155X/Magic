@@ -16,7 +16,6 @@ MonoBehaviour:
   Description: PATH_PATHFINDING1_DESC
   Icon: {fileID: 0}
   Tags: 0
-  Prefab: {fileID: 0}
   PrefabReference:
     m_AssetGUID: 
     m_SubObjectName: 
@@ -26,7 +25,7 @@ MonoBehaviour:
   Type: 
   Assembly: 
   Points:
-  - Point: {x: 20, y: 10, z: -15}
+  - Point: {x: 0, y: 25, z: 0}
     Pause: 0
-  - Point: {x: -20, y: 10, z: -15}
+  - Point: {x: 0, y: -25, z: 0}
     Pause: 0
