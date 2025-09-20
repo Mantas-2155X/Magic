@@ -15,9 +15,6 @@ namespace AI.PathFinding.Jobs
 
 		[WriteOnly][NativeDisableParallelForRestriction]
 		public NativeArray<SIndexWithCost> Neighbors;
-		
-		[ReadOnly]
-		public float Accuracy;
 
 		[ReadOnly]
 		public int XSize;
@@ -62,11 +59,12 @@ namespace AI.PathFinding.Jobs
 						if (neighborIndex == index)
 							continue;
 
-						var cost = math.distance(gridPos, Nodes[neighborIndex].GridPosition);
+						var neighborGridPos = Nodes[neighborIndex].GridPosition;
+						var cost = math.abs(gridPos.x - neighborGridPos.x) + math.abs(gridPos.y - neighborGridPos.y + math.abs(gridPos.z - neighborGridPos.z));
 
 						SIndexWithCost neighbor;
 						neighbor.Index = neighborIndex;
-						neighbor.Cost = cost * Accuracy;
+						neighbor.Cost = cost;
 						neighbor.Connects = true;
 						
 						Neighbors[addIndex] = neighbor;

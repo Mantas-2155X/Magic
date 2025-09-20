@@ -31,8 +31,9 @@ namespace AI.PathFinding.Jobs
 		{
 			var node = Nodes[index];
 			var nodePos = node.WorldPosition;
+			var positionsLength = Positions.Length;
 
-			for (var i = 0; i < Positions.Length; i++)
+			for (var i = 0; i < positionsLength; i++)
 			{
 				var position = Positions[i];
 				var halfSize = HalfSizes[i];

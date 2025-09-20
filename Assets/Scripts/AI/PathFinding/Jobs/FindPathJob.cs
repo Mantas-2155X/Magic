@@ -45,9 +45,10 @@ namespace AI.PathFinding.Jobs
 			var startNode = Nodes[startNodeIndex];
 			var endNode = Nodes[endNodeIndex];
 
+			var startGridPosition = startNode.GridPosition;
 			var endGridPosition = endNode.GridPosition;
 			
-			var distanceBetweenPoints = math.distance(startNode.GridPosition, endGridPosition);
+			var distanceBetweenPoints = math.abs(startGridPosition.x - endGridPosition.x) + math.abs(startGridPosition.y - endGridPosition.y + math.abs(startGridPosition.z - endGridPosition.z));
 
 			GCosts[startNodeIndex] = 0f;
 			HCosts[startNodeIndex] = distanceBetweenPoints;
@@ -66,10 +67,9 @@ namespace AI.PathFinding.Jobs
 				{
 					var searchingNodeIndex = ToSearchNodes[i];
 					
-					var searchingHCost = HCosts[searchingNodeIndex];
 					var searchingFCost = FCosts[searchingNodeIndex];
 					
-					if (searchingFCost < nodeFCost || searchingFCost == nodeFCost && searchingHCost < nodeHCost)
+					if (searchingFCost < nodeFCost || searchingFCost == nodeFCost && HCosts[searchingNodeIndex] < nodeHCost)
 						nodeIndex = searchingNodeIndex;
 				}
 
@@ -94,10 +94,12 @@ namespace AI.PathFinding.Jobs
 
 		private int findClosestNode(float3 worldPosition)
 		{
+			var nodesLength = Nodes.Length;
+			
 			var closestDistance = Mathf.Infinity;
 			var closestNode = -1;
 
-			for (var i = 0; i < Nodes.Length; i++)
+			for (var i = 0; i < nodesLength; i++)
 			{
 				if (Availabilities[i] != ENodeAvailabilityFlags.Available)
 					continue;
@@ -118,8 +120,9 @@ namespace AI.PathFinding.Jobs
 			var nodeGCost = GCosts[nodeIndex];
 
 			var startIndex = nodeIndex * 26;
+			var endIndex = startIndex + 26;
 
-			for (var i = startIndex; i < startIndex + 26; i++)
+			for (var i = startIndex; i < endIndex; i++)
 			{
 				var neighbor = Neighbors[i];
 				if (!neighbor.Connects)
@@ -136,7 +139,8 @@ namespace AI.PathFinding.Jobs
 				if (gCost >= GCosts[neighborIndex])
 					continue;
 				
-				var hCost = math.distance(neighborNode.GridPosition, endGridPosition);
+				var neighborGridPosition = neighborNode.GridPosition;
+				var hCost = math.abs(neighborGridPosition.x - endGridPosition.x) + math.abs(neighborGridPosition.y - endGridPosition.y + math.abs(neighborGridPosition.z - endGridPosition.z));
 				
 				Connections[neighborIndex] = nodeIndex;
 				GCosts[neighborIndex] = gCost;
