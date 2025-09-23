@@ -82,7 +82,7 @@ namespace UI.Settings.Pages
 			for (var i = 0; i < Items.Count; i++)
 			{
 				var item = Items[i];
-				if (item.ControllerRebindButton.gameObject != selection)
+				if (!item.ControllerRebindable || item.ControllerRebindButton.gameObject != selection)
 					continue;
 
 				onUnbindController(item);
@@ -130,7 +130,7 @@ namespace UI.Settings.Pages
 				item.ControllerRebindButton = copy.Find("RebindButton (Controller)").GetComponent<Button>();
 				item.ControllerRebindButton.onClick.AddListener(delegate
 				{
-					if (item.ControllerBindingIndex == -1 || Time.unscaledTime - lastRebindEnded < 0.15f)
+					if (!item.ControllerRebindable || Time.unscaledTime - lastRebindEnded < 0.15f)
 						return;
 					
 					rebindingItem = item;
@@ -148,6 +148,7 @@ namespace UI.Settings.Pages
 				item.InputAction = keybind.Item1;
 				item.BindingIndex = keybind.Item2;
 				item.ControllerBindingIndex = keybind.Item3;
+				item.ControllerRebindable = keybind.Item4;
 				
 				copy.gameObject.SetActive(true);
 				Items.Add(item);
@@ -257,7 +258,7 @@ namespace UI.Settings.Pages
 						innerItem.KeybindText.color = Color.red;
 					}
 					
-					if (innerItem.ControllerKeybindText.text == item.ControllerKeybindText.text && item.ControllerBindingIndex != -1)
+					if (innerItem.ControllerKeybindText.text == item.ControllerKeybindText.text && item.ControllerRebindable && innerItem.ControllerRebindable)
 					{
 						item.ControllerKeybindText.color = Color.red;
 						innerItem.ControllerKeybindText.color = Color.red;
@@ -352,9 +353,9 @@ namespace UI.Settings.Pages
 			var bindings = rebindingItem.InputAction.bindings;
 			
 			var keyboardPath = bindings[rebindingItem.BindingIndex].effectivePath;
-			var actualKeybind = rebindingItem.ControllerBindingIndex == -1 ? keyboardPath : $"{keyboardPath},{bindings[rebindingItem.ControllerBindingIndex].effectivePath}";
+			var controllerPath = bindings[rebindingItem.ControllerBindingIndex].effectivePath;
 			
-			SettingsManager.Instance.SetSetting(rebindingItem.Setting, actualKeybind);
+			SettingsManager.Instance.SetSetting(rebindingItem.Setting, $"{keyboardPath},{controllerPath}");
 			SelectionManager.Instance.SetSelection(isKeyboard ? rebindingItem.RebindButton.gameObject : rebindingItem.ControllerRebindButton.gameObject);
 
 			lastRebindEnded = Time.unscaledTime;
@@ -410,6 +411,9 @@ namespace UI.Settings.Pages
 
 			[SerializeField]
 			public int ControllerBindingIndex;
+
+			[SerializeField]
+			public bool ControllerRebindable;
 		}
 	}
 }

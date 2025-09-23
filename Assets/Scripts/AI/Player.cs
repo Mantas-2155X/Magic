@@ -326,6 +326,9 @@ namespace AI
 
 		public string GetHotbarKey(int index)
 		{
+			if (index >= UI.Player.Instance.HUD.Hotbar.Size)
+				return "";
+			
 			var action = SettingsManager.Instance.GetString($"keybinds-gameplay-hotbar{index + 1}");
 			var split = action.Split(",");
 
@@ -536,7 +539,7 @@ namespace AI
 
 		private void onMovePerformed(InputAction.CallbackContext ctx)
 		{
-			moveDirection = ctx.ReadValue<Vector2>();
+			moveDirection = Vector2.ClampMagnitude(ctx.ReadValue<Vector2>(), 1f);
 			walking = true;
 			Body.ShouldSway = true;
 		}
