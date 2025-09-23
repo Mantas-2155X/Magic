@@ -131,6 +131,9 @@ namespace Managers
 		
 		public async UniTask ChangeSceneAsync(SceneData scene, bool fadeIn, bool fadeOut, bool closeTitle, float fadeDuration = 0.3f, bool waitForGI = true)
 		{
+			var previousShowIndicator = SelectionManager.ShowIndicator;
+			SelectionManager.ShowIndicator = false;
+			
 			if (fadeIn)
 			{
 				SelectionManager.Instance.SetSelection(null);
@@ -195,6 +198,8 @@ namespace Managers
 			
 			if (fadeOut)
 				await fade(false, fadeDuration);
+
+			SelectionManager.ShowIndicator = previousShowIndicator;
 		}
 
 		private async UniTask fade(bool fadeIn, float fadeDuration)
